@@ -1,0 +1,75 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~admin-lte/dist/css/adminlte.css';
+
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+.router-link-active {
+    background-color: #1e8cad !important;
+    color: white !important;
+}
+
+.router-link-active i {
+    color: white !important;
+}
+
+.card-footer ul {
+    margin-bottom: 0;
+}
+
+.btn-info {
+    color: #ffffff !important;
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
+    box-shadow: none;
+}
+
+.btn-danger {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    box-shadow: none !important;
+}
+
+.btn-danger:hover {
+    color: #fff !important;
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+}
+
+.btn-info:hover {
+    color: #fff !important;
+    background-color: #138496 !important;
+    border-color: #117a8b !important;
+}
+
+.users-table tbody tr td, .employees-table tbody tr td {
+    vertical-align: middle;
+}
+
+.barcode-validate {
+    font-size: 1rem;
+}
+
+.employee-modal-content {
+    padding: 30px;
+    border-top: 6px solid #38c172;
+}
+
+.view-profile-container {
+    height: 650px;
+    overflow-y: auto;
+}
+
+.view-profile-container::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
