@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Barcode;
-use App\Personalinformation;
+use App\PersonalInformation;
 
 class BarcodeController extends Controller
 {
@@ -27,15 +27,15 @@ class BarcodeController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Barcode::where('personalinformation_id', $request['id'])->exists()) {
-            $employee = Personalinformation::findOrFail($request['id']);
+        if (!Barcode::where('personal_information_id', $request['id'])->exists()) {
+            $employee = PersonalInformation::findOrFail($request['id']);
         
             $code = $this->generateCode();
             while(Barcode::where('value', $code)->exists()){
                 $code = $this->generateCode();
             }
             return Barcode::create([
-                'personalinformation_id' => $employee->id,
+                'personal_information_id' => $employee->id,
                 'value' => $code
             ]);
         }
@@ -50,9 +50,9 @@ class BarcodeController extends Controller
     }
 
     public function verify(Request $request) {
-        $barcode = Barcode::where('value', $request->barcode)->where('personalinformation_id', $request->employee_id)->first();
+        $barcode = Barcode::where('value', $request->barcode)->where('personal_information_id', $request->employee_id)->first();
         if ($barcode != null) {
-            return Personalinformation::findOrFail($barcode->personalinformation_id);
+            return PersonalInformation::findOrFail($barcode->personal_information_id);
         } else {
             return null;
         }

@@ -5,9 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Personalinformation extends Model
+class PersonalInformation extends Model
 {
     public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $table = 'personal_informations';
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +25,7 @@ class Personalinformation extends Model
     ];
 
     public function barcode(){
-        return $this->hasOne('App\Barcode', 'personalinformation_id');
+        return $this->hasOne('App\Barcode', 'personal_information_id');
     }
 
     public static function boot(){

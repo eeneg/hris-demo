@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use App\Personalinformation;
+use App\PersonalInformation;
 
-class PersonalinformationController extends Controller
+class PersonalInformationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,14 +18,14 @@ class PersonalinformationController extends Controller
     public function index()
     {
         if ($search = \Request::get('query')) {
-            $users = Personalinformation::where(function($query) use ($search){
+            $users = PersonalInformation::where(function($query) use ($search){
                 $query->where('surname', 'LIKE', '%'.$search.'%')
                         ->orWhere('firstname', 'LIKE', '%'.$search.'%')
                         ->orWhere('middlename', 'LIKE', '%'.$search.'%')
                         ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%');
             })->orderBy('surname')->paginate(20);
         } else {
-            $users = Personalinformation::latest()->orderBy('surname')->paginate(20);
+            $users = PersonalInformation::latest()->orderBy('surname')->paginate(20);
         }
 
         return $users;

@@ -48332,6 +48332,5 @@ readers do not read off random characters that represent icons */
 .view-profile-container::-webkit-scrollbar {
   width: 0px;
   background: transparent;
-  /* make scrollbar transparent */
 }
 

@@ -5,22 +5,25 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Barcode extends Model
+class WorkExperience extends Model
 {
     public $incrementing = false;
 
     protected $primaryKey = 'id';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'personal_information_id', 'value'
+        'personal_information_id',
+        'InclusiveDates',
+        'Position',
+        'Department',
+        'MonthlySalary',
+        'SalaryGrade',
+        'StatusOfAppointment',
+        'GovService'
     ];
 
-    public function personalinformation(){
+    public function personalinformation()
+    {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 

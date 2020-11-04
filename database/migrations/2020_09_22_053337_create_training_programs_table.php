@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBarcodesTable extends Migration
+class CreateTrainingProgramsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,17 @@ class CreateBarcodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('barcodes', function (Blueprint $table) {
+        Schema::create('training_programs', function (Blueprint $table) {
             $table->string('id', 100)->primary();
             $table->string('personal_information_id', 100);
             $table->foreign('personal_information_id')
                     ->references('id')
                     ->on('personal_informations')
                     ->onDelete('cascade');
-            $table->string('value', 100)->nullable();
+            $table->string('title', 300)->nullable();
+            $table->string('inclusiveDates', 100)->nullable();
+            $table->string('hours', 100)->nullable();
+            $table->string('conductor', 300)->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +35,6 @@ class CreateBarcodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('barcodes');
+        Schema::dropIfExists('training_programs');
     }
 }

@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResources([
         'user' => 'API\UserController',
-        'personalinformation' => 'API\PersonalinformationController',
+        'personalinformation' => 'API\PersonalInformationController',
         'barcode' => 'API\BarcodeController'
     ]);
 

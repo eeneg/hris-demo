@@ -13,7 +13,7 @@ class CreatePersonalinformationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('personalinformations', function (Blueprint $table) {
+        Schema::create('personal_informations', function (Blueprint $table) {
             $table->string('id', 100)->primary();
             $table->string('surname', 100)->nullable();
             $table->string('firstname', 100)->nullable();
@@ -54,6 +54,6 @@ class CreatePersonalinformationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('personalinformations');
+        Schema::dropIfExists('personal_informations');
     }
 }
