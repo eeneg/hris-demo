@@ -2200,11 +2200,81 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       employees: {},
       barcode: '',
+      personalinformation: {},
       form: new Form({
         'id': '',
         'surname': '',
@@ -2212,6 +2282,27 @@ __webpack_require__.r(__webpack_exports__);
         'middlename': '',
         'nameextension': '',
         'birthdate': '',
+        'familybackground': {
+          'id': '',
+          'created_at': '',
+          'fatherFirstname': '',
+          'fatherMiddlename': '',
+          'fatherSurname': '',
+          'motherFirstname': '',
+          'motherMaidenName': '',
+          'motherMiddlename': '',
+          'motherSurname': '',
+          'personal_information_id': '',
+          'spouseBussiness': '',
+          'spouseBussinessAddress': '',
+          'spouseFirstname': '',
+          'spouseMiddlename': '',
+          'spouseOccupation': '',
+          'spouseSurname': '',
+          'spouseTelephone': '',
+          'updated_at': ''
+        },
+        'children': {},
         'birthplace': '',
         'sex': '',
         'civilstatus': '',
@@ -2317,6 +2408,20 @@ __webpack_require__.r(__webpack_exports__);
         _this4.$Progress.finish();
       })["catch"](function (error) {
         _this4.$Progress.fail();
+      });
+    },
+    generateId: function generateId(employee) {
+      axios.post('saveid', {
+        id: employee.id
+      }).then(function (response) {
+        var options = {
+          height: "500px",
+          page: '1'
+        };
+        $('#idModal').modal('show');
+        PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#id-viewer", options);
+      })["catch"](function (error) {
+        console.log(error);
       });
     }
   },
@@ -58721,6 +58826,355 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
 /***/ }),
 
+/***/ "./node_modules/pdfobject/pdfobject.js":
+/*!*********************************************!*\
+  !*** ./node_modules/pdfobject/pdfobject.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+ *  PDFObject v2.2.4
+ *  https://github.com/pipwerks/PDFObject
+ *  @license
+ *  Copyright (c) 2008-2020 Philip Hutchison
+ *  MIT-style license: http://pipwerks.mit-license.org/
+ *  UMD module pattern from https://github.com/umdjs/umd/blob/master/templates/returnExports.js
+ */
+
+(function (root, factory) {
+    if (true) {
+        // AMD. Register as an anonymous module.
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else {}
+}(this, function () {
+
+    "use strict";
+
+    //PDFObject is designed for client-side (browsers), not server-side (node)
+    //Will choke on undefined navigator and window vars when run on server
+    //Return boolean false and exit function when running server-side
+
+    if( typeof window === "undefined" || 
+        window.navigator === undefined || 
+        window.navigator.userAgent === undefined || 
+        window.navigator.mimeTypes === undefined){ 
+            return false;
+    }
+
+    let pdfobjectversion = "2.2.3";
+    let nav = window.navigator;
+    let ua = window.navigator.userAgent;
+
+    //Time to jump through hoops -- browser vendors do not make it easy to detect PDF support.
+
+    /*
+        IE11 still uses ActiveX for Adobe Reader, but IE 11 doesn't expose window.ActiveXObject the same way 
+        previous versions of IE did. window.ActiveXObject will evaluate to false in IE 11, but "ActiveXObject" 
+        in window evaluates to true.
+
+        MS Edge does not support ActiveX so this test will evaluate false
+    */
+    let isIE = ("ActiveXObject" in window);
+
+    /*
+        There is a coincidental correlation between implementation of window.promises and native PDF support in desktop browsers
+        We use this to assume if the browser supports promises it supports embedded PDFs
+        Is this fragile? Sort of. But browser vendors removed mimetype detection, so we're left to improvise
+    */
+    let isModernBrowser = (window.Promise !== undefined);
+
+    //Older browsers still expose the mimeType
+    let supportsPdfMimeType = (nav.mimeTypes["application/pdf"] !== undefined);
+
+    //Safari on iPadOS doesn't report as 'mobile' when requesting desktop site, yet still fails to embed PDFs
+    let isSafariIOSDesktopMode = (  nav.platform !== undefined && 
+                                    nav.platform === "MacIntel" && 
+                                    nav.maxTouchPoints !== undefined && 
+                                    nav.maxTouchPoints > 1 );
+
+    //Quick test for mobile devices.
+    let isMobileDevice = (isSafariIOSDesktopMode || /Mobi|Tablet|Android|iPad|iPhone/.test(ua));
+
+    //Safari desktop requires special handling 
+    let isSafariDesktop = ( !isMobileDevice && 
+                            nav.vendor !== undefined && 
+                            /Apple/.test(nav.vendor) && 
+                            /Safari/.test(ua) );
+    
+    //Firefox started shipping PDF.js in Firefox 19. If this is Firefox 19 or greater, assume PDF.js is available
+    let isFirefoxWithPDFJS = (!isMobileDevice && /irefox/.test(ua)) ? (parseInt(ua.split("rv:")[1].split(".")[0], 10) > 18) : false;
+
+
+    /* ----------------------------------------------------
+       Supporting functions
+       ---------------------------------------------------- */
+
+    let createAXO = function (type){
+        var ax;
+        try {
+            ax = new ActiveXObject(type);
+        } catch (e) {
+            ax = null; //ensure ax remains null
+        }
+        return ax;
+    };
+
+    //If either ActiveX support for "AcroPDF.PDF" or "PDF.PdfCtrl" are found, return true
+    //Constructed as a method (not a prop) to avoid unneccesarry overhead -- will only be evaluated if needed
+    let supportsPdfActiveX = function (){ return !!(createAXO("AcroPDF.PDF") || createAXO("PDF.PdfCtrl")); };
+
+    //Determines whether PDF support is available
+    let supportsPDFs = (
+        //As of Sept 2020 no mobile browsers properly support PDF embeds
+        !isMobileDevice && (
+            //Modern versions of Firefox come bundled with PDFJS
+            isFirefoxWithPDFJS ||
+            //Browsers that still support the original MIME type check
+            supportsPdfMimeType ||
+            //Pity the poor souls still using IE
+            (isIE && supportsPdfActiveX())
+        )
+    );
+
+    //Create a fragment identifier for using PDF Open parameters when embedding PDF
+    let buildURLFragmentString = function(pdfParams){
+
+        let string = "";
+        let prop;
+
+        if(pdfParams){
+
+            for (prop in pdfParams) {
+                if (pdfParams.hasOwnProperty(prop)) {
+                    string += encodeURIComponent(prop) + "=" + encodeURIComponent(pdfParams[prop]) + "&";
+                }
+            }
+
+            //The string will be empty if no PDF Params found
+            if(string){
+
+                string = "#" + string;
+
+                //Remove last ampersand
+                string = string.slice(0, string.length - 1);
+
+            }
+
+        }
+
+        return string;
+
+    };
+
+    let embedError = function (msg, suppressConsole){
+        if(!suppressConsole){
+            console.log("[PDFObject] " + msg);
+        }
+        return false;
+    };
+
+    let emptyNodeContents = function (node){
+        while(node.firstChild){
+            node.removeChild(node.firstChild);
+        }
+    };
+
+    let getTargetElement = function (targetSelector){
+
+        //Default to body for full-browser PDF
+        let targetNode = document.body;
+
+        //If a targetSelector is specified, check to see whether
+        //it's passing a selector, jQuery object, or an HTML element
+
+        if(typeof targetSelector === "string"){
+
+            //Is CSS selector
+            targetNode = document.querySelector(targetSelector);
+
+        } else if (window.jQuery !== undefined && targetSelector instanceof jQuery && targetSelector.length) {
+
+            //Is jQuery element. Extract HTML node
+            targetNode = targetSelector.get(0);
+
+        } else if (targetSelector.nodeType !== undefined && targetSelector.nodeType === 1){
+
+            //Is HTML element
+            targetNode = targetSelector;
+
+        }
+
+        return targetNode;
+
+    };
+
+    let generatePDFJSMarkup = function (targetNode, url, pdfOpenFragment, PDFJS_URL, id, omitInlineStyles){
+
+        //Ensure target element is empty first
+        emptyNodeContents(targetNode);
+
+        let fullURL = PDFJS_URL + "?file=" + encodeURIComponent(url) + pdfOpenFragment;
+        let div = document.createElement("div");
+        let iframe = document.createElement("iframe");
+        
+        iframe.src = fullURL;
+        iframe.className = "pdfobject";
+        iframe.type = "application/pdf";
+        iframe.frameborder = "0";
+        
+        if(id){
+            iframe.id = id;
+        }
+
+        if(!omitInlineStyles){
+            div.style.cssText = "position: absolute; top: 0; right: 0; bottom: 0; left: 0;";
+            iframe.style.cssText = "border: none; width: 100%; height: 100%;";
+            targetNode.style.position = "relative";
+            targetNode.style.overflow = "auto";        
+        }
+
+        div.appendChild(iframe);
+        targetNode.appendChild(div);
+        targetNode.classList.add("pdfobject-container");
+        
+        return targetNode.getElementsByTagName("iframe")[0];
+
+    };
+
+    let generatePDFObjectMarkup = function (embedType, targetNode, targetSelector, url, pdfOpenFragment, width, height, id, omitInlineStyles){
+
+        //Ensure target element is empty first
+        emptyNodeContents(targetNode);
+
+        let embed = document.createElement(embedType);
+        embed.src = url + pdfOpenFragment;
+        embed.className = "pdfobject";
+        embed.type = "application/pdf";
+
+        if(id){
+            embed.id = id;
+        }
+
+        if(!omitInlineStyles){
+
+            let style = (embedType === "embed") ? "overflow: auto;" : "border: none;";
+
+            if(targetSelector && targetSelector !== document.body){
+                style += "width: " + width + "; height: " + height + ";";
+            } else {
+                style += "position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%;";
+            }
+
+            embed.style.cssText = style; 
+
+        }
+
+        targetNode.classList.add("pdfobject-container");
+        targetNode.appendChild(embed);
+
+        return targetNode.getElementsByTagName(embedType)[0];
+
+    };
+
+    let embed = function(url, targetSelector, options){
+
+        //If targetSelector is not defined, convert to boolean
+        let selector = targetSelector || false;
+
+        //Ensure options object is not undefined -- enables easier error checking below
+        let opt = options || {};
+
+        //Get passed options, or set reasonable defaults
+        let id = (typeof opt.id === "string") ? opt.id : "";
+        let page = opt.page || false;
+        let pdfOpenParams = opt.pdfOpenParams || {};
+        let fallbackLink = opt.fallbackLink || true;
+        let width = opt.width || "100%";
+        let height = opt.height || "100%";
+        let assumptionMode = (typeof opt.assumptionMode === "boolean") ? opt.assumptionMode : true;
+        let forcePDFJS = (typeof opt.forcePDFJS === "boolean") ? opt.forcePDFJS : false;
+        let supportRedirect = (typeof opt.supportRedirect === "boolean") ? opt.supportRedirect : false;
+        let omitInlineStyles = (typeof opt.omitInlineStyles === "boolean") ? opt.omitInlineStyles : false;
+        let suppressConsole = (typeof opt.suppressConsole === "boolean") ? opt.suppressConsole : false;
+        let forceIframe = (typeof opt.forceIframe === "boolean") ? opt.forceIframe : false;
+        let PDFJS_URL = opt.PDFJS_URL || false;
+        let targetNode = getTargetElement(selector);
+        let fallbackHTML = "";
+        let pdfOpenFragment = "";
+        let fallbackHTML_default = "<p>This browser does not support inline PDFs. Please download the PDF to view it: <a href='[url]'>Download PDF</a></p>";
+
+        //Ensure URL is available. If not, exit now.
+        if(typeof url !== "string"){ return embedError("URL is not valid", suppressConsole); }
+
+        //If target element is specified but is not valid, exit without doing anything
+        if(!targetNode){ return embedError("Target element cannot be determined", suppressConsole); }
+
+        //page option overrides pdfOpenParams, if found
+        if(page){ pdfOpenParams.page = page; }
+
+        //Stringify optional Adobe params for opening document (as fragment identifier)
+        pdfOpenFragment = buildURLFragmentString(pdfOpenParams);
+
+
+        // --== Do the dance: Embed attempt #1 ==--
+
+        //If the forcePDFJS option is invoked, skip everything else and embed as directed
+        if(forcePDFJS && PDFJS_URL){
+            return generatePDFJSMarkup(targetNode, url, pdfOpenFragment, PDFJS_URL, id, omitInlineStyles);
+        }
+ 
+        // --== Embed attempt #2 ==--
+
+        //Embed PDF if traditional support is provided, or if this developer is willing to roll with assumption
+        //that modern desktop (not mobile) browsers natively support PDFs 
+        if(supportsPDFs || (assumptionMode && isModernBrowser && !isMobileDevice)){
+            
+            //Should we use <embed> or <iframe>? In most cases <embed>. 
+            //Allow developer to force <iframe>, if desired
+            //There is an edge case where Safari does not respect 302 redirect requests for PDF files when using <embed> element.
+            //Redirect appears to work fine when using <iframe> instead of <embed> (Addresses issue #210)
+            let embedtype = (forceIframe || (supportRedirect && isSafariDesktop)) ? "iframe" : "embed";
+            
+            return generatePDFObjectMarkup(embedtype, targetNode, targetSelector, url, pdfOpenFragment, width, height, id, omitInlineStyles);
+
+        }
+        
+        // --== Embed attempt #3 ==--
+        
+        //If everything else has failed and a PDFJS fallback is provided, try to use it
+        if(PDFJS_URL){
+            return generatePDFJSMarkup(targetNode, url, pdfOpenFragment, PDFJS_URL, id, omitInlineStyles);
+        }
+        
+        // --== PDF embed not supported! Use fallback ==-- 
+
+        //Display the fallback link if available
+        if(fallbackLink){
+
+            fallbackHTML = (typeof fallbackLink === "string") ? fallbackLink : fallbackHTML_default;
+            targetNode.innerHTML = fallbackHTML.replace(/\[url\]/g, url);
+
+        }
+
+        return embedError("This browser does not support embedded PDFs", suppressConsole);
+
+    };
+
+    return {
+        embed: function (a,b,c){ return embed(a,b,c); },
+        pdfobjectversion: (function () { return pdfobjectversion; })(),
+        supportsPDFs: (function (){ return supportsPDFs; })()
+    };
+
+}));
+
+
+/***/ }),
+
 /***/ "./node_modules/popper.js/dist/esm/popper.js":
 /*!***************************************************!*\
   !*** ./node_modules/popper.js/dist/esm/popper.js ***!
@@ -66910,11 +67364,15 @@ var render = function() {
                   return _c("tr", { key: employee.id }, [
                     _c("td", { staticStyle: { width: "calc(100%-150px)" } }, [
                       _vm._v(
-                        _vm._s(employee.surname + ", ") +
-                          _vm._s(employee.firstname + " ") +
-                          _vm._s(employee.nameextension + " ") +
-                          _vm._s(employee.middlename) +
-                          " "
+                        _vm._s(
+                          employee.surname +
+                            ", " +
+                            employee.firstname +
+                            " " +
+                            employee.nameextension +
+                            " " +
+                            employee.middlename
+                        ) + " "
                       )
                     ]),
                     _vm._v(" "),
@@ -66996,6 +67454,21 @@ var render = function() {
                                     }
                                   },
                                   [_vm._v("Generate Barcode")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "dropdown-item",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.generateId(employee)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Generate ID")]
                                 )
                               ]
                             )
@@ -67087,10 +67560,15 @@ var render = function() {
                 [
                   _c("b", [
                     _vm._v(
-                      _vm._s(_vm.form.firstname + " ") +
-                        _vm._s(_vm.form.middlename + " ") +
-                        _vm._s(_vm.form.surname + " ") +
-                        _vm._s(_vm.form.nameextension)
+                      _vm._s(
+                        _vm.form.firstname +
+                          " " +
+                          _vm.form.middlename +
+                          " " +
+                          _vm.form.surname +
+                          " " +
+                          _vm.form.nameextension
+                      )
                     )
                   ])
                 ]
@@ -67131,11 +67609,13 @@ var render = function() {
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
                         "\n                                    " +
-                          _vm._s(_vm.form.sex) +
-                          " / " +
-                          _vm._s(_vm.form.civilstatus) +
-                          " / " +
-                          _vm._s(_vm.form.citizenship) +
+                          _vm._s(
+                            _vm.form.sex +
+                              " / " +
+                              _vm.form.civilstatus +
+                              " / " +
+                              _vm.form.citizenship
+                          ) +
                           "\n                                "
                       )
                     ]),
@@ -67147,11 +67627,13 @@ var render = function() {
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
                         "\n                                    " +
-                          _vm._s(_vm.form.height) +
-                          " / " +
-                          _vm._s(_vm.form.weight) +
-                          " / " +
-                          _vm._s(_vm.form.bloodtype) +
+                          _vm._s(
+                            _vm.form.height +
+                              " / " +
+                              _vm.form.weight +
+                              " / " +
+                              _vm.form.bloodtype
+                          ) +
                           "\n                                "
                       )
                     ]),
@@ -67379,24 +67861,191 @@ var render = function() {
                 _vm._v(" "),
                 _vm._m(8),
                 _vm._v(" "),
-                _vm._m(9),
-                _vm._v(" "),
-                _vm._m(10),
-                _vm._v(" "),
-                _vm._m(11),
-                _vm._v(" "),
-                _vm._m(12),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _vm._m(9),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm.form.familybackground.spouseSurname
+                        ? _c("span", [
+                            _vm._v(
+                              "\n                                        Name: " +
+                                _vm._s(
+                                  _vm.form.familybackground.spouseFirstname +
+                                    " " +
+                                    _vm.form.familybackground.spouseMiddlename +
+                                    " " +
+                                    _vm.form.familybackground.spouseSurname
+                                ) +
+                                "\n                                    "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.familybackground.spouseOccupation
+                        ? _c("span", [
+                            _c("br"),
+                            _vm._v(
+                              "\n                                        Occupation: " +
+                                _vm._s(
+                                  _vm.form.familybackground.spouseOccupation
+                                ) +
+                                "\n                                    "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.familybackground.spouseBussiness
+                        ? _c("span", [
+                            _c("br"),
+                            _vm._v(
+                              "\n                                        Employer/Business Name: " +
+                                _vm._s(
+                                  _vm.form.familybackground.spouseBussiness
+                                ) +
+                                "\n                                    "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.familybackground.spouseBussinessAddress
+                        ? _c("span", [
+                            _c("br"),
+                            _vm._v(
+                              "\n                                        Employer/Business Address: " +
+                                _vm._s(
+                                  _vm.form.familybackground
+                                    .spouseBussinessAddress
+                                ) +
+                                "\n                                    "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.familybackground.spouseTelephone
+                        ? _c("span", [
+                            _c("br"),
+                            _vm._v(
+                              "\n                                        Telephone No.: " +
+                                _vm._s(
+                                  _vm.form.familybackground.spouseTelephone
+                                ) +
+                                "\n                                    "
+                            )
+                          ])
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
+                    _vm._m(10),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm._v(
+                        "\n                                    " +
+                          _vm._s(
+                            _vm.form.familybackground.fatherFirstname +
+                              " " +
+                              _vm.form.familybackground.fatherMiddlename +
+                              " " +
+                              _vm.form.familybackground.fatherSurname
+                          ) +
+                          "\n                                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
+                    _vm._m(11),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm.form.familybackground.motherMaidenName
+                        ? _c("span", [
+                            _vm._v(
+                              "Maiden Name: " +
+                                _vm._s(
+                                  _vm.form.familybackground.motherMaidenName
+                                )
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.familybackground.motherMaidenName
+                        ? _c("br")
+                        : _vm._e(),
+                      _vm._v(
+                        "\n                                    " +
+                          _vm._s(
+                            _vm.form.familybackground.motherFirstname +
+                              " " +
+                              _vm.form.familybackground.motherMiddlename +
+                              " " +
+                              _vm.form.familybackground.motherSurname
+                          ) +
+                          "\n                                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-md-6" },
+                    [
+                      _vm._m(12),
+                      _vm._v(" "),
+                      _vm._l(_vm.form.children, function(child) {
+                        return _c(
+                          "p",
+                          {
+                            key: child.id,
+                            staticClass: "text-muted",
+                            staticStyle: { "margin-bottom": "0" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Name: " +
+                                _vm._s(child.name)
+                            ),
+                            _c("br"),
+                            _vm._v(
+                              "\n                                    Birthday: " +
+                                _vm._s(child.birthday) +
+                                "\n                                "
+                            )
+                          ]
+                        )
+                      }),
+                      _vm._v(" "),
+                      _vm.form.children > 0
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm._v("No data")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("hr")
+                    ],
+                    2
+                  )
+                ]),
                 _vm._v(" "),
                 _vm._m(13),
                 _vm._v(" "),
                 _vm._m(14),
                 _vm._v(" "),
-                _vm._m(15)
+                _vm._m(15),
+                _vm._v(" "),
+                _vm._m(16),
+                _vm._v(" "),
+                _vm._m(17),
+                _vm._v(" "),
+                _vm._m(18)
               ]),
               _vm._v(" "),
-              _vm._m(16),
+              _vm._m(19),
               _vm._v(" "),
-              _vm._m(17)
+              _vm._m(20)
             ])
           ]
         )
@@ -67461,7 +68110,9 @@ var render = function() {
           ])
         ]
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _vm._m(21)
   ])
 }
 var staticRenderFns = [
@@ -67555,13 +68206,36 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _vm._v(
-          "\n                                Data..\n                                "
-        ),
-        _c("hr")
-      ])
+    return _c("strong", [
+      _c("i", { staticClass: "fas fa-user-friends mr-1" }),
+      _vm._v(" Spouse")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("strong", [
+      _c("i", { staticClass: "fas fa-male mr-1" }),
+      _vm._v(" Father")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("strong", [
+      _c("i", { staticClass: "fas fa-female mr-1" }),
+      _vm._v(" Mother")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("strong", [
+      _c("i", { staticClass: "fas fa-child mr-1" }),
+      _vm._v(" Children")
     ])
   },
   function() {
@@ -67664,6 +68338,42 @@ var staticRenderFns = [
       },
       [_c("i", { staticClass: "fas fa-times mr-2" }), _vm._v("Close")]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal", attrs: { id: "idModal" } }, [
+      _c("div", { staticClass: "modal-dialog modal-xl" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c("h4", { staticClass: "modal-title" }, [_vm._v("Employee Id")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                attrs: { type: "button", "data-dismiss": "modal" }
+              },
+              [_vm._v("×")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-body", attrs: { id: "id-viewer" } }),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-footer" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { type: "button", "data-dismiss": "modal" }
+              },
+              [_vm._v("Close")]
+            )
+          ])
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -86126,6 +86836,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _gate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./gate */ "./resources/js/gate.js");
+/* harmony import */ var pdfobject__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! pdfobject */ "./node_modules/pdfobject/pdfobject.js");
+/* harmony import */ var pdfobject__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(pdfobject__WEBPACK_IMPORTED_MODULE_6__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -86140,8 +86852,10 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 
 
+
 window.Swal = sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a;
 window.Form = vform__WEBPACK_IMPORTED_MODULE_1__["Form"];
+window.PDFObject = pdfobject__WEBPACK_IMPORTED_MODULE_6___default.a;
 Vue.component(vform__WEBPACK_IMPORTED_MODULE_1__["HasError"].name, vform__WEBPACK_IMPORTED_MODULE_1__["HasError"]);
 Vue.component(vform__WEBPACK_IMPORTED_MODULE_1__["AlertError"].name, vform__WEBPACK_IMPORTED_MODULE_1__["AlertError"]);
 Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));

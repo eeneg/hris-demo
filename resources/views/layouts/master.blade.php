@@ -14,6 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        {{-- <script src="https://unpkg.com/pdfobject@2.2.4/pdfobject.min.js"></script> --}}
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
     <body class="hold-transition sidebar-mini">

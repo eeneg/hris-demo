@@ -13,6 +13,8 @@ class PersonalInformation extends Model
 
     protected $table = 'personal_informations';
 
+    protected $with = ['barcode', 'familybackground', 'children'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,6 +28,41 @@ class PersonalInformation extends Model
 
     public function barcode(){
         return $this->hasOne('App\Barcode', 'personal_information_id');
+    }
+
+    public function workexperiences()
+    {
+        return $this->hasMany('App\WorkExperience', 'personal_information_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('App\Child', 'personal_information_id');
+    }
+
+    public function educationalbackground()
+    {
+        return $this->hasOne('App\EducationalBackground', 'personal_information_id');
+    }
+
+    public function eligibilities()
+    {
+        return $this->hasMany('App\Eligibility', 'personal_information_id');
+    }
+
+    public function familybackground()
+    {
+        return $this->hasOne('App\FamilyBackground', 'personal_information_id');
+    }
+
+    public function voluntaryworks()
+    {
+        return $this->hasMany('App\VoluntaryWork', 'personal_information_id');
+    }
+
+    public function trainingprograms()
+    {
+        return $this->hasMany('App\TrainingProgram', 'personal_information_id');
     }
 
     public static function boot(){

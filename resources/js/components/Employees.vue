@@ -21,7 +21,7 @@
                         <tbody>
                             <tr v-for="employee in employees.data" :key="employee.id">
                                 <!-- <td>{{ user.name | capitalize }}</td> -->
-                                <td style="width: calc(100%-150px);">{{ employee.surname + ', ' }}{{ employee.firstname + ' ' }}{{ employee.nameextension + ' ' }}{{ employee.middlename }} </td>
+                                <td style="width: calc(100%-150px);">{{ employee.surname + ', ' + employee.firstname + ' ' + employee.nameextension + ' ' + employee.middlename }} </td>
                                 <td style="width: 150px;">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-info">Action</button>
@@ -33,6 +33,7 @@
                                                 <a class="dropdown-item" href="#">Something else here</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
+                                                <a class="dropdown-item" @click.prevent="generateId(employee)" href="#">Generate ID</a>
                                             </div>
                                         </button>
                                     </div>
@@ -73,7 +74,7 @@
                         <img class="profile-user-img img-fluid img-circle" :src="getAvatar(form.picture)" alt="User profile picture">
                     </div>
 
-                    <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ form.firstname + ' ' }}{{ form.middlename + ' ' }}{{ form.surname + ' ' }}{{ form.nameextension }}</b></h3>
+                    <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ form.firstname + ' ' + form.middlename + ' ' + form.surname + ' ' + form.nameextension }}</b></h3>
 
                     <p class="text-muted text-center" style="font-size: 1.1rem;">Software Engineer</p>
                     <div class="view-profile-container">
@@ -93,13 +94,13 @@
 
                                 <strong><i class="fas fa-info-circle mr-1"></i> Sex / Civil Status / Citizenship</strong>
                                 <p class="text-muted">
-                                    {{ form.sex }} / {{ form.civilstatus }} / {{ form.citizenship }}
+                                    {{ form.sex + ' / ' + form.civilstatus + ' / ' + form.citizenship }}
                                 </p>
                                 <hr>
                                 
                                 <strong><i class="fas fa-balance-scale mr-1"></i> Height(m) / Weight(kg) / Bloodtype</strong>
                                 <p class="text-muted">
-                                    {{ form.height }} / {{ form.weight }} / {{ form.bloodtype }}
+                                    {{ form.height + ' / ' + form.weight + ' / ' + form.bloodtype }}
                                 </p>
                                 <hr>
 
@@ -173,13 +174,56 @@
                                 <hr style="margin: 0 0 0.5rem 0;">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                Data..
+                        <div class="row">    
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-user-friends mr-1"></i> Spouse</strong>
+                                <p class="text-muted">
+                                    <span v-if="form.familybackground.spouseSurname">
+                                        Name: {{ form.familybackground.spouseFirstname + ' ' + form.familybackground.spouseMiddlename + ' ' + form.familybackground.spouseSurname }}
+                                    </span>
+                                    <span v-if="form.familybackground.spouseOccupation">
+                                        <br>
+                                        Occupation: {{ form.familybackground.spouseOccupation }}
+                                    </span>
+                                    <span v-if="form.familybackground.spouseBussiness">
+                                        <br>
+                                        Employer/Business Name: {{ form.familybackground.spouseBussiness }}
+                                    </span>
+                                    <span v-if="form.familybackground.spouseBussinessAddress">
+                                        <br>
+                                        Employer/Business Address: {{ form.familybackground.spouseBussinessAddress }}
+                                    </span>
+                                    <span v-if="form.familybackground.spouseTelephone">
+                                        <br>
+                                        Telephone No.: {{ form.familybackground.spouseTelephone }}
+                                    </span>
+                                </p>
+                                <hr>
+
+                                <strong><i class="fas fa-male mr-1"></i> Father</strong>
+                                <p class="text-muted">
+                                    {{ form.familybackground.fatherFirstname + ' ' + form.familybackground.fatherMiddlename + ' ' + form.familybackground.fatherSurname }}
+                                </p>
+                                <hr>
+
+                                <strong><i class="fas fa-female mr-1"></i> Mother</strong>
+                                <p class="text-muted">
+                                    <span v-if="form.familybackground.motherMaidenName">Maiden Name: {{ form.familybackground.motherMaidenName }}</span>
+                                    <br v-if="form.familybackground.motherMaidenName">
+                                    {{ form.familybackground.motherFirstname + ' ' + form.familybackground.motherMiddlename + ' ' + form.familybackground.motherSurname }}
+                                </p>
+                                <hr>
+                            </div>
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-child mr-1"></i> Children</strong>
+                                <p class="text-muted" v-for="child in form.children" :key="child.id" style="margin-bottom: 0;">
+                                    Name: {{ child.name }}<br>
+                                    Birthday: {{ child.birthday }}
+                                </p>
+                                <p class="text-muted" v-if="form.children > 0">No data</p>
                                 <hr>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12">
                                 <h4>Educational Background</h4>
@@ -245,6 +289,31 @@
             </div>
         </div>
 
+        <!-- The Modal -->
+        <div class="modal" id="idModal">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Employee Id</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body" id="id-viewer">
+                    
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -254,6 +323,7 @@
             return {
                 employees: {},
                 barcode: '',
+                personalinformation: {},
                 form: new Form({
                     'id': '',
                     'surname': '',
@@ -261,6 +331,27 @@
                     'middlename': '',
                     'nameextension': '',
                     'birthdate': '',
+                    'familybackground': {
+                        'id': '',
+                        'created_at': '',
+                        'fatherFirstname': '',
+                        'fatherMiddlename': '',
+                        'fatherSurname': '',
+                        'motherFirstname': '',
+                        'motherMaidenName': '',
+                        'motherMiddlename': '',
+                        'motherSurname': '',
+                        'personal_information_id': '',
+                        'spouseBussiness': '',
+                        'spouseBussinessAddress': '',
+                        'spouseFirstname': '',
+                        'spouseMiddlename': '',
+                        'spouseOccupation': '',
+                        'spouseSurname': '',
+                        'spouseTelephone': '',
+                        'updated_at': '', 
+                    },
+                    'children': {},
                     'birthplace': '',
                     'sex': '',
                     'civilstatus': '',
@@ -366,6 +457,20 @@
                     })
                     .catch(error => {
                         this.$Progress.fail();
+                    });
+            },
+            generateId(employee) {
+                axios.post('saveid', {id: employee.id})
+                    .then(response => {                 
+                        let options = {
+                            height: "500px",
+                            page: '1'
+                        };
+                        $('#idModal').modal('show');
+                        PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#id-viewer", options);
+                    })
+                    .catch(error => {
+                        console.log(error);
                     });
             }
         },

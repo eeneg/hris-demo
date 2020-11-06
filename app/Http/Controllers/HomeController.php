@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Storage;
+use App\PersonalInformation;
 
 class HomeController extends Controller
 {
@@ -24,5 +27,20 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function saveid(Request $request) {
+        $employee = PersonalInformation::findOrFail($request['id']);
+        $data = [
+            'employee' => $employee
+        ];
+
+
+        $pdf = PDF::loadView('reports/employee-id', $data);
+
+        Storage::put('public/employee_ids/' . $employee->firstname . '.pdf', $pdf->output());
+
+        // return $pdf->download('invoice.pdf');
+        return ['title' => $employee->firstname];
     }
 }

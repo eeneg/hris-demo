@@ -13,9 +13,11 @@ import VueRouter from 'vue-router'
 import VueProgressBar from 'vue-progressbar'
 import Swal from 'sweetalert2'
 import Gate from './gate'
+import PDFObject from 'pdfobject'
 
 window.Swal = Swal;
 window.Form = Form;
+window.PDFObject = PDFObject;
 
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);

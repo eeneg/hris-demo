@@ -21,4 +21,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::post('/saveid', 'HomeController@saveid');
+
 Route::get('{path}', "HomeController@index")->where( 'path','([-a-z0-9_\s]+)' );

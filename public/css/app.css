@@ -48334,3 +48334,7 @@ readers do not read off random characters that represent icons */
   background: transparent;
 }
 
+.view-profile-container h4 {
+  color: #38c172;
+}
+
