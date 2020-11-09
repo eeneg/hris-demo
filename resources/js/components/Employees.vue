@@ -124,7 +124,7 @@
                                 <p class="text-muted" v-if="form.tin">
                                     {{ form.tin }}
                                 </p>
-                                <hr>
+                                <hr v-if="form.gsis || form.pagibig || form.philhealth || form.sss || form.tin">
                             </div>
 
                             <div class="col-md-6">
@@ -177,7 +177,7 @@
                         <div class="row">    
                             <div class="col-md-6">
                                 <strong><i class="fas fa-user-friends mr-1"></i> Spouse</strong>
-                                <p class="text-muted">
+                                <p v-if="form.familybackground.spouseSurname" class="text-muted">
                                     <span v-if="form.familybackground.spouseSurname">
                                         Name: {{ form.familybackground.spouseFirstname + ' ' + form.familybackground.spouseMiddlename + ' ' + form.familybackground.spouseSurname }}
                                     </span>
@@ -198,6 +198,7 @@
                                         Telephone No.: {{ form.familybackground.spouseTelephone }}
                                     </span>
                                 </p>
+                                <p class="text-muted" v-if="form.familybackground.spouseSurname == ''">No data</p>
                                 <hr>
 
                                 <strong><i class="fas fa-male mr-1"></i> Father</strong>
@@ -220,7 +221,7 @@
                                     Name: {{ child.name }}<br>
                                     Birthday: {{ child.birthday }}
                                 </p>
-                                <p class="text-muted" v-if="form.children > 0">No data</p>
+                                <p class="text-muted" v-if="form.children == 0">No data</p>
                                 <hr>
                             </div>
                         </div>
@@ -231,21 +232,211 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                Data..
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-graduation-cap mr-1"></i> Elementary</strong>
+                                <p class="text-muted" v-if="form.educationalbackground.elemSchoolName">
+                                    <span v-if="form.educationalbackground.elemSchoolName">
+                                        School: {{ form.educationalbackground.elemSchoolName }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.elemTo">
+                                        <br>
+                                        Period: {{ form.educationalbackground.elemFrom + ' - ' + form.educationalbackground.elemTo }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.elemHighestLevel">
+                                        <br>
+                                        Level: {{ form.educationalbackground.elemHighestLevel }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.elemYear">
+                                        <br>
+                                        Year Graduated: {{ form.educationalbackground.elemYear }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.elemSOA">
+                                        <br>
+                                        Academic Honors: {{ form.educationalbackground.elemSOA }}
+                                    </span>
+                                </p>
+                                <p class="text-muted" v-if="form.educationalbackground.elemSchoolName == ''">No data</p>
+                                <hr>
+
+                                <strong><i class="fas fa-graduation-cap mr-1"></i> College</strong>
+                                <p class="text-muted" v-if="form.educationalbackground.collSchoolName1">
+                                    <span v-if="form.educationalbackground.collSchoolName1">
+                                        School: {{ form.educationalbackground.collSchoolName1 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collTo1">
+                                        <br>
+                                        Period: {{ form.educationalbackground.collFrom1 + ' - ' + form.educationalbackground.collTo1 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collHighestLevel1">
+                                        <br>
+                                        Level: {{ form.educationalbackground.collHighestLevel1 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collYear1">
+                                        <br>
+                                        Year Graduated: {{ form.educationalbackground.collYear1 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collSOA1">
+                                        <br>
+                                        Academic Honors: {{ form.educationalbackground.collSOA1 }}
+                                    </span>
+                                </p>
+                                <p class="text-muted" v-if="form.educationalbackground.collSchoolName2">
+                                    <span v-if="form.educationalbackground.collSchoolName2">
+                                        School: {{ form.educationalbackground.collSchoolName2 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collTo2">
+                                        <br>
+                                        Period: {{ form.educationalbackground.collFrom2 + ' - ' + form.educationalbackground.collTo2 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collHighestLevel2">
+                                        <br>
+                                        Level: {{ form.educationalbackground.collHighestLevel2 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collYear2">
+                                        <br>
+                                        Year Graduated: {{ form.educationalbackground.collYear2 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collSOA2">
+                                        <br>
+                                        Academic Honors: {{ form.educationalbackground.collSOA2 }}
+                                    </span>
+                                </p>
+                                <p class="text-muted" v-if="form.educationalbackground.collSchoolName2 == '' && form.educationalbackground.collSchoolName1 == ''">No data</p>
+                                <hr>
+
+                                <strong><i class="fas fa-graduation-cap mr-1"></i> Graduate Studies</strong>
+                                <p class="text-muted" v-if="form.educationalbackground.gradSchoolName">
+                                    <span v-if="form.educationalbackground.gradSchoolName">
+                                        School: {{ form.educationalbackground.gradSchoolName }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.gradTo">
+                                        <br>
+                                        Period: {{ form.educationalbackground.gradFrom + ' - ' + form.educationalbackground.gradTo }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.gradHighestLevel">
+                                        <br>
+                                        Level: {{ form.educationalbackground.gradHighestLevel }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.gradYear">
+                                        <br>
+                                        Year Graduated: {{ form.educationalbackground.gradYear }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.gradSOA">
+                                        <br>
+                                        Academic Honors: {{ form.educationalbackground.gradSOA }}
+                                    </span>
+                                </p>
+                                <p class="text-muted" v-if="form.educationalbackground.gradSchoolName == ''">No data</p>
+                                <hr>
+                            </div>
+
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-graduation-cap mr-1"></i> Secondary</strong>
+                                <p class="text-muted" v-if="form.educationalbackground.secSchoolName">
+                                    <span v-if="form.educationalbackground.secSchoolName">
+                                        School: {{ form.educationalbackground.secSchoolName }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.secTo">
+                                        <br>
+                                        Period: {{ form.educationalbackground.secFrom + ' - ' + form.educationalbackground.secTo }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.secHighestLevel">
+                                        <br>
+                                        Level: {{ form.educationalbackground.secHighestLevel }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.secYear">
+                                        <br>
+                                        Year Graduated: {{ form.educationalbackground.secYear }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.secSOA">
+                                        <br>
+                                        Academic Honors: {{ form.educationalbackground.secSOA }}
+                                    </span>
+                                </p>
+                                <p class="text-muted" v-if="form.educationalbackground.secSchoolName == ''">No data</p>
+                                <hr>
+
+                                <strong><i class="fas fa-graduation-cap mr-1"></i> Vocational / Trade Course</strong>
+                                <p class="text-muted" v-if="form.educationalbackground.vocSchoolName">
+                                    <span v-if="form.educationalbackground.vocSchoolName">
+                                        School: {{ form.educationalbackground.vocSchoolName }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.vocTo">
+                                        <br>
+                                        Period: {{ form.educationalbackground.vocFrom + ' - ' + form.educationalbackground.vocTo }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.vocHighestLevel">
+                                        <br>
+                                        Level: {{ form.educationalbackground.vocHighestLevel }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.vocYear">
+                                        <br>
+                                        Year Graduated: {{ form.educationalbackground.vocYear }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.vocSOA">
+                                        <br>
+                                        Academic Honors: {{ form.educationalbackground.vocSOA }}
+                                    </span>
+                                </p>
+                                <p class="text-muted" v-if="form.educationalbackground.vocSchoolName == ''">No data</p>
                                 <hr>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <h4>Civil Service Eligibility</h4>
-                                <hr style="margin: 0 0 0.5rem 0;">
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Other Information</h4>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                Data..
+                                <hr style="margin: 0 0 0.5rem 0;">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-book mr-1"></i> Civil Service Eligibility</strong>
+                                <p class="text-muted" v-for="(eligibility, index) in form.eligibilities" :key="eligibility.id" style="margin-bottom: 0;">
+                                    Eligibility: {{ eligibility.careerService }}<br>
+                                    Rating: {{ eligibility.rating }}<br>
+                                    Date of Examination: {{ eligibility.dateOfExam }}<br>
+                                    Place of Examination: {{ eligibility.placeOfExam }}<br>
+                                    License Number: {{ eligibility.licenseNumber }}<br>
+                                    Date of Validity: {{ eligibility.licenseRelease }}
+                                    <br v-if="index != Object.keys(form.eligibilities).length - 1">
+                                    <br v-if="index != Object.keys(form.eligibilities).length - 1">
+                                </p>
+                                <p class="text-muted" v-if="form.eligibilities == 0">No data</p>
+                                <hr>
+                            </div>
+                            <div class="col-md-6">
+                                <strong><i class="fas fa-tools mr-1"></i> Special Skills & Hobbies</strong>
+                                <p class="text-muted" style="margin-bottom: 0;">
+                                    <span v-for="(otherinfo, index) in form.otherinfos" :key="otherinfo.id" >
+                                        <span v-if="otherinfo.skill">
+                                            {{ otherinfo.skill }}<span v-if="index != Object.keys(form.otherinfos).length - 1">, </span>
+                                        </span>
+                                    </span>
+                                </p>
+                                <strong><i class="fas fa-award mr-1"></i> NON-ACADEMIC DISTINCTIONS / RECOGNITION</strong>
+                                <p class="text-muted" style="margin-bottom: 0;">
+                                    <span v-for="(otherinfo, index) in form.otherinfos" :key="otherinfo.id" >
+                                        <span v-if="otherinfo.recognition">
+                                            {{ otherinfo.recognition }}<span v-if="index != Object.keys(form.otherinfos).length - 1">, </span>
+                                        </span>
+                                    </span>
+                                </p>
+                                <strong><i class="fas fa-users mr-1"></i> MEMBERSHIP IN ASSOCIATION/ORGANIZATION</strong>
+                                <p class="text-muted" style="margin-bottom: 0;">
+                                    <span v-for="(otherinfo, index) in form.otherinfos" :key="otherinfo.id" >
+                                        <span v-if="otherinfo.membership">
+                                            {{ otherinfo.membership }}<span v-if="index != Object.keys(form.otherinfos).length - 1">, </span>
+                                        </span>
+                                    </span>
+                                </p>
                                 <hr>
                             </div>
                         </div>
@@ -331,27 +522,6 @@
                     'middlename': '',
                     'nameextension': '',
                     'birthdate': '',
-                    'familybackground': {
-                        'id': '',
-                        'created_at': '',
-                        'fatherFirstname': '',
-                        'fatherMiddlename': '',
-                        'fatherSurname': '',
-                        'motherFirstname': '',
-                        'motherMaidenName': '',
-                        'motherMiddlename': '',
-                        'motherSurname': '',
-                        'personal_information_id': '',
-                        'spouseBussiness': '',
-                        'spouseBussinessAddress': '',
-                        'spouseFirstname': '',
-                        'spouseMiddlename': '',
-                        'spouseOccupation': '',
-                        'spouseSurname': '',
-                        'spouseTelephone': '',
-                        'updated_at': '', 
-                    },
-                    'children': {},
                     'birthplace': '',
                     'sex': '',
                     'civilstatus': '',
@@ -374,7 +544,12 @@
                     'agencynumber': '',
                     'tin': '',
                     'picture': '',
-                    'status': ''
+                    'status': '',
+                    'educationalbackground': {},
+                    'familybackground': {},
+                    'children': {},
+                    'eligibilities': {},
+                    'otherinfos': {}
                 })
             }
         },
