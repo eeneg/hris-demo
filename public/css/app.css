@@ -48338,3 +48338,12 @@ readers do not read off random characters that represent icons */
   color: #38c172;
 }
 
+.pds-table thead tr th {
+  vertical-align: middle;
+}
+
+.pds-table td,
+.pds-table th {
+  font-size: 0.8rem;
+}
+

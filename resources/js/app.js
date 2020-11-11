@@ -94,7 +94,6 @@ Vue.filter('initial', function(value){
     }
 })
 
-
 window.Fire = new Vue();
 
 /**

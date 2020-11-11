@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
 use App\PersonalInformation;
+use App\WorkExperience;
 
 class HomeController extends Controller
 {
@@ -42,5 +43,29 @@ class HomeController extends Controller
 
         // return $pdf->download('invoice.pdf');
         return ['title' => $employee->firstname];
+    }
+
+    public function workExperienceFormat() {
+        $workexps = WorkExperience::get();
+        $pos = '';
+        $on = '';
+        $count = 0;
+        foreach ($workexps as $workexp) {
+           
+            if(str_contains($workexp->position, '^*')){
+                $count++;
+                $on = explode('^*', $workexp->position)[0];
+                $pos = explode('^*', $workexp->position)[1];
+                $workexp->position = $pos;
+                $workexp->orderNo = $on;
+                $workexp->save();
+            }
+            
+            // $dates = explode(' /*/ ', $workexp->inclusiveDateFrom);
+            // $workexp->inclusiveDateFrom = $dates[0];
+            // $workexp->inclusiveDateTo = $dates[1];
+           
+        }
+        echo $pos;
     }
 }

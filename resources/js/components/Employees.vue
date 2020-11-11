@@ -68,7 +68,7 @@
 
         <!-- The Modal -->
         <div class="modal fade" id="viewProfileModal" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content employee-modal-content">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle" :src="getAvatar(form.picture)" alt="User profile picture">
@@ -167,7 +167,6 @@
                                 <hr>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12">
                                 <h4>Family Background</h4>
@@ -382,7 +381,6 @@
                                 <hr>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-6">
                                 <h4>Civil Service Eligibility</h4>
@@ -423,7 +421,7 @@
                                 </p>
                                 <strong><i class="fas fa-award mr-1"></i> NON-ACADEMIC DISTINCTIONS / RECOGNITION</strong>
                                 <p class="text-muted" style="margin-bottom: 0;">
-                                    <span v-for="(otherinfo, index) in form.otherinfos" :key="otherinfo.id" >
+                                    <span v-for="(otherinfo, index) in form.otherinfos" :key="otherinfo.id">
                                         <span v-if="otherinfo.recognition">
                                             {{ otherinfo.recognition }}<span v-if="index != Object.keys(form.otherinfos).length - 1">, </span>
                                         </span>
@@ -440,17 +438,77 @@
                                 <hr>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-12">
                                 <h4>Work Experience</h4>
-                                <hr style="margin: 0 0 0.5rem 0;">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                Data..
-                                <hr>
+                                <table class="table table-bordered table-hover pds-table">
+                                    <thead>                  
+                                        <tr class="text-center">
+                                            <th colspan="2">Inclusive Dates</th>
+                                            <th rowspan="2">Position Title</th>
+                                            <th rowspan="2">Department / Agency / Office / Company</th>
+                                            <th rowspan="2">Monthly Salary</th>
+                                            <th rowspan="2">Salary Grade</th>
+                                            <th rowspan="2">Status of Appointment</th>
+                                            <th rowspan="2">Gov't Service (Y/N)</th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th>From</th>
+                                            <th>To</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(workexperience) in workexperiences()" :key="workexperience.id">
+                                            <td class="text-center">{{ workexperience.inclusiveDateFrom }}</td>
+                                            <td class="text-center">{{ workexperience.inclusiveDateTo }}</td>
+                                            <td>{{ workexperience.position }}</td>
+                                            <td>{{ workexperience.department }}</td>
+                                            <td class="text-center">{{ workexperience.monthlySalary }}</td>
+                                            <td class="text-center">{{ workexperience.salaryGrade }}</td>
+                                            <td class="text-center">{{ workexperience.statusOfAppointment }}</td>
+                                            <td class="text-center">{{ workexperience.govService }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Voluntary Work or Involvement In Civic / Non-Government / People / Voluntary Organization/s</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-hover pds-table">
+                                    <thead>                  
+                                        <tr class="text-center">
+                                            <th rowspan="2">Name & Address of Organization</th>
+                                            <th colspan="2">Inclusive Dates</th>
+                                            <th rowspan="2">Number of Hours</th>
+                                            <th rowspan="2">Position / Nature of Work</th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th>From</th>
+                                            <th>To</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr v-for="(workexperience) in workexperiences()" :key="workexperience.id">
+                                            <td class="text-center">{{ workexperience.inclusiveDateFrom }}</td>
+                                            <td class="text-center">{{ workexperience.inclusiveDateTo }}</td>
+                                            <td>{{ workexperience.position }}</td>
+                                            <td>{{ workexperience.department }}</td>
+                                            <td class="text-center">{{ workexperience.monthlySalary }}</td>
+                                            <td class="text-center">{{ workexperience.salaryGrade }}</td>
+                                            <td class="text-center">{{ workexperience.statusOfAppointment }}</td>
+                                            <td class="text-center">{{ workexperience.govService }}</td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -549,11 +607,16 @@
                     'familybackground': {},
                     'children': {},
                     'eligibilities': {},
-                    'otherinfos': {}
+                    'otherinfos': {},
+                    'workexperiences': {},
+                    'voluntaryworks': {}
                 })
             }
         },
         methods: {
+            workexperiences() {
+                return _.orderBy(this.form.workexperiences, 'orderNo'); 
+            },
             processBarcode() {
                 axios.post('api/verifybarcode', {barcode: this.barcode, employee_id: this.form.id})
                     .then(response => {                 

@@ -21,9 +21,11 @@ class CreateVoluntaryWorksTable extends Migration
                     ->on('personal_informations')
                     ->onDelete('cascade');
             $table->string('nameAndAddress', 300)->nullable();
-            $table->string('inclusiveDates', 100)->nullable();
+            $table->string('inclusiveDateFrom', 100)->nullable();
+            $table->string('inclusiveDateTo', 100)->nullable();
             $table->string('hours', 100)->nullable();
             $table->string('position', 300)->nullable();
+            $table->integer('orderNo');
             $table->timestamps();
         });
     }

@@ -20,13 +20,15 @@ class CreateWorkExperiencesTable extends Migration
                     ->references('id')
                     ->on('personal_informations')
                     ->onDelete('cascade');
-            $table->string('inclusiveDates', 100)->nullable();
+            $table->string('inclusiveDateFrom', 100)->nullable();
+            $table->string('inclusiveDateTo', 100)->nullable();
             $table->string('position', 300)->nullable();
             $table->string('department', 300)->nullable();
             $table->string('monthlySalary', 100)->nullable();
             $table->string('salaryGrade', 100)->nullable();
             $table->string('statusOfAppointment', 300)->nullable();
             $table->string('govService', 45)->nullable();
+            $table->integer('orderNo');
             $table->timestamps();
         });
     }

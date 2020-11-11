@@ -2460,6 +2460,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2500,11 +2558,16 @@ __webpack_require__.r(__webpack_exports__);
         'familybackground': {},
         'children': {},
         'eligibilities': {},
-        'otherinfos': {}
+        'otherinfos': {},
+        'workexperiences': {},
+        'voluntaryworks': {}
       })
     };
   },
   methods: {
+    workexperiences: function workexperiences() {
+      return _.orderBy(this.form.workexperiences, 'orderNo');
+    },
     processBarcode: function processBarcode() {
       var _this = this;
 
@@ -67713,7 +67776,7 @@ var render = function() {
       [
         _c(
           "div",
-          { staticClass: "modal-dialog modal-lg modal-dialog-centered" },
+          { staticClass: "modal-dialog modal-xl modal-dialog-centered" },
           [
             _c("div", { staticClass: "modal-content employee-modal-content" }, [
               _c("div", { staticClass: "text-center" }, [
@@ -68877,12 +68940,73 @@ var render = function() {
                 _vm._v(" "),
                 _vm._m(25),
                 _vm._v(" "),
-                _vm._m(26)
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-12" }, [
+                    _c(
+                      "table",
+                      {
+                        staticClass:
+                          "table table-bordered table-hover pds-table"
+                      },
+                      [
+                        _vm._m(26),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.workexperiences(), function(
+                            workexperience
+                          ) {
+                            return _c("tr", { key: workexperience.id }, [
+                              _c("td", { staticClass: "text-center" }, [
+                                _vm._v(_vm._s(workexperience.inclusiveDateFrom))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-center" }, [
+                                _vm._v(_vm._s(workexperience.inclusiveDateTo))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(workexperience.position))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(workexperience.department))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-center" }, [
+                                _vm._v(_vm._s(workexperience.monthlySalary))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-center" }, [
+                                _vm._v(_vm._s(workexperience.salaryGrade))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-center" }, [
+                                _vm._v(
+                                  _vm._s(workexperience.statusOfAppointment)
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-center" }, [
+                                _vm._v(_vm._s(workexperience.govService))
+                              ])
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(27),
+                _vm._v(" "),
+                _vm._m(28)
               ]),
               _vm._v(" "),
-              _vm._m(27),
+              _vm._m(29),
               _vm._v(" "),
-              _vm._m(28)
+              _vm._m(30)
             ])
           ]
         )
@@ -68949,7 +69073,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(29)
+    _vm._m(31)
   ])
 }
 var staticRenderFns = [
@@ -69198,9 +69322,39 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("h4", [_vm._v("Work Experience")]),
+        _c("h4", [_vm._v("Work Experience")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticClass: "text-center" }, [
+        _c("th", { attrs: { colspan: "2" } }, [_vm._v("Inclusive Dates")]),
         _vm._v(" "),
-        _c("hr", { staticStyle: { margin: "0 0 0.5rem 0" } })
+        _c("th", { attrs: { rowspan: "2" } }, [_vm._v("Position Title")]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [
+          _vm._v("Department / Agency / Office / Company")
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [_vm._v("Monthly Salary")]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [_vm._v("Salary Grade")]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [
+          _vm._v("Status of Appointment")
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [_vm._v("Gov't Service (Y/N)")])
+      ]),
+      _vm._v(" "),
+      _c("tr", { staticClass: "text-center" }, [
+        _c("th", [_vm._v("From")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("To")])
       ])
     ])
   },
@@ -69210,10 +69364,53 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _vm._v(
-          "\n                                Data..\n                                "
-        ),
-        _c("hr")
+        _c("h4", [
+          _vm._v(
+            "Voluntary Work or Involvement In Civic / Non-Government / People / Voluntary Organization/s"
+          )
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c(
+          "table",
+          { staticClass: "table table-bordered table-hover pds-table" },
+          [
+            _c("thead", [
+              _c("tr", { staticClass: "text-center" }, [
+                _c("th", { attrs: { rowspan: "2" } }, [
+                  _vm._v("Name & Address of Organization")
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { colspan: "2" } }, [
+                  _vm._v("Inclusive Dates")
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { rowspan: "2" } }, [
+                  _vm._v("Number of Hours")
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { rowspan: "2" } }, [
+                  _vm._v("Position / Nature of Work")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("tr", { staticClass: "text-center" }, [
+                _c("th", [_vm._v("From")]),
+                _vm._v(" "),
+                _c("th", [_vm._v("To")])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("tbody")
+          ]
+        )
       ])
     ])
   },

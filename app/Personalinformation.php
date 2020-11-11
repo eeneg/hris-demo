@@ -13,7 +13,7 @@ class PersonalInformation extends Model
 
     protected $table = 'personal_informations';
 
-    protected $with = ['barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities', 'otherinfos'];
+    protected $with = ['barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities', 'otherinfos', 'workexperiences', 'voluntaryworks'];
 
     /**
      * The attributes that are mass assignable.
