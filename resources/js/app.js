@@ -30,7 +30,7 @@ Vue.use(VueProgressBar, options);
 
 
 const routes = [
-    { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+    { path: '/', component: require('./components/Dashboard.vue').default },
     { path: '/employees', component: require('./components/Employees.vue').default },
     { path: '/requests', component: require('./components/Requests.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },

@@ -21,9 +21,11 @@ class CreateTrainingProgramsTable extends Migration
                     ->on('personal_informations')
                     ->onDelete('cascade');
             $table->string('title', 300)->nullable();
-            $table->string('inclusiveDates', 100)->nullable();
+            $table->string('inclusiveDateFrom', 100)->nullable();
+            $table->string('inclusiveDateTo', 100)->nullable();
             $table->string('hours', 100)->nullable();
             $table->string('conductor', 300)->nullable();
+            $table->integer('orderNo');
             $table->timestamps();
         });
     }

@@ -13,16 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/saveid', 'HomeController@saveid');
 
-Route::get('{path}', "HomeController@index")->where( 'path','([-a-z0-9_\s]+)' );
+Route::get('{path}', 'HomeController@index')->where( 'path','([-a-z0-9_\s]+)' );
 
 // Route::get('/workExpFormat', 'HomeController@workExperienceFormat');
+// Route::get('/volWorkFormat', 'HomeController@voluntaryWorksFormat');
+Route::get('/trainingFormat', 'HomeController@trainingFormat');

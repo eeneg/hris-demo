@@ -438,12 +438,12 @@
                                 <hr>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" v-if="workexperiences().length > 0">
                             <div class="col-md-12">
                                 <h4>Work Experience</h4>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" v-if="workexperiences().length > 0">
                             <div class="col-md-12">
                                 <table class="table table-bordered table-hover pds-table">
                                     <thead>                  
@@ -463,8 +463,8 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="(workexperience) in workexperiences()" :key="workexperience.id">
-                                            <td class="text-center">{{ workexperience.inclusiveDateFrom }}</td>
-                                            <td class="text-center">{{ workexperience.inclusiveDateTo }}</td>
+                                            <td class="text-center" style="white-space: nowrap;">{{ workexperience.inclusiveDateFrom }}</td>
+                                            <td class="text-center" style="white-space: nowrap;">{{ workexperience.inclusiveDateTo }}</td>
                                             <td>{{ workexperience.position }}</td>
                                             <td>{{ workexperience.department }}</td>
                                             <td class="text-center">{{ workexperience.monthlySalary }}</td>
@@ -476,12 +476,12 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" v-if="voluntaryworks().length > 0">
                             <div class="col-md-12">
                                 <h4>Voluntary Work or Involvement In Civic / Non-Government / People / Voluntary Organization/s</h4>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" v-if="voluntaryworks().length > 0">
                             <div class="col-md-12">
                                 <table class="table table-bordered table-hover pds-table">
                                     <thead>                  
@@ -497,16 +497,47 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- <tr v-for="(workexperience) in workexperiences()" :key="workexperience.id">
-                                            <td class="text-center">{{ workexperience.inclusiveDateFrom }}</td>
-                                            <td class="text-center">{{ workexperience.inclusiveDateTo }}</td>
-                                            <td>{{ workexperience.position }}</td>
-                                            <td>{{ workexperience.department }}</td>
-                                            <td class="text-center">{{ workexperience.monthlySalary }}</td>
-                                            <td class="text-center">{{ workexperience.salaryGrade }}</td>
-                                            <td class="text-center">{{ workexperience.statusOfAppointment }}</td>
-                                            <td class="text-center">{{ workexperience.govService }}</td>
-                                        </tr> -->
+                                        <tr v-for="(voluntarywork) in voluntaryworks()" :key="voluntarywork.id">
+                                            <td>{{ voluntarywork.nameAndAddress }}</td>
+                                            <td class="text-center" style="white-space: nowrap;">{{ voluntarywork.inclusiveDateFrom }}</td>
+                                            <td class="text-center" style="white-space: nowrap;">{{ voluntarywork.inclusiveDateTo }}</td>
+                                            <td class="text-center">{{ voluntarywork.hours }}</td>
+                                            <td>{{ voluntarywork.position }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" v-if="trainingprograms().length > 0">
+                            <div class="col-md-12">
+                                <h4>Learning & Development (L&D) Interventions / Training Programs Attended</h4>
+                            </div>
+                        </div>
+                        <div class="row" v-if="trainingprograms().length > 0">
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-hover pds-table">
+                                    <thead>                  
+                                        <tr class="text-center">
+                                            <th rowspan="2">Learning & Development Interventions / Training Program</th>
+                                            <th colspan="2">Inclusive Dates of Attendance</th>
+                                            <th rowspan="2">Number of Hours</th>
+                                            <th rowspan="2">Type of LD (Managerial / Supervisory / Technical / etc)</th>
+                                            <th rowspan="2">Conducted/Sponsored by</th>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <th>From</th>
+                                            <th>To</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(trainingprogram) in trainingprograms()" :key="trainingprogram.id">
+                                            <td>{{ trainingprogram.title }}</td>
+                                            <td class="text-center" style="white-space: nowrap;">{{ trainingprogram.inclusiveDateFrom }}</td>
+                                            <td class="text-center" style="white-space: nowrap;">{{ trainingprogram.inclusiveDateTo }}</td>
+                                            <td class="text-center">{{ trainingprogram.hours }}</td>
+                                            <td></td>
+                                            <td>{{ trainingprogram.conductor }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -609,13 +640,20 @@
                     'eligibilities': {},
                     'otherinfos': {},
                     'workexperiences': {},
-                    'voluntaryworks': {}
+                    'voluntaryworks': {},
+                    'trainingprograms': {}
                 })
             }
         },
         methods: {
             workexperiences() {
                 return _.orderBy(this.form.workexperiences, 'orderNo'); 
+            },
+            voluntaryworks() {
+                return _.orderBy(this.form.voluntaryworks, 'orderNo'); 
+            },
+            trainingprograms() {
+                return _.orderBy(this.form.trainingprograms, 'orderNo'); 
             },
             processBarcode() {
                 axios.post('api/verifybarcode', {barcode: this.barcode, employee_id: this.form.id})

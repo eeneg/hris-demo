@@ -2518,6 +2518,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2560,13 +2591,20 @@ __webpack_require__.r(__webpack_exports__);
         'eligibilities': {},
         'otherinfos': {},
         'workexperiences': {},
-        'voluntaryworks': {}
+        'voluntaryworks': {},
+        'trainingprograms': {}
       })
     };
   },
   methods: {
     workexperiences: function workexperiences() {
       return _.orderBy(this.form.workexperiences, 'orderNo');
+    },
+    voluntaryworks: function voluntaryworks() {
+      return _.orderBy(this.form.voluntaryworks, 'orderNo');
+    },
+    trainingprograms: function trainingprograms() {
+      return _.orderBy(this.form.trainingprograms, 'orderNo');
     },
     processBarcode: function processBarcode() {
       var _this = this;
@@ -67559,7 +67597,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" })
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("h3", [_vm._v("Dashboard")])
+      ])
     ])
   }
 ]
@@ -68938,75 +68978,235 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(25),
+                _vm.workexperiences().length > 0
+                  ? _c("div", { staticClass: "row" }, [_vm._m(25)])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-12" }, [
-                    _c(
-                      "table",
-                      {
-                        staticClass:
-                          "table table-bordered table-hover pds-table"
-                      },
-                      [
-                        _vm._m(26),
-                        _vm._v(" "),
+                _vm.workexperiences().length > 0
+                  ? _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
                         _c(
-                          "tbody",
-                          _vm._l(_vm.workexperiences(), function(
-                            workexperience
-                          ) {
-                            return _c("tr", { key: workexperience.id }, [
-                              _c("td", { staticClass: "text-center" }, [
-                                _vm._v(_vm._s(workexperience.inclusiveDateFrom))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "text-center" }, [
-                                _vm._v(_vm._s(workexperience.inclusiveDateTo))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(workexperience.position))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(workexperience.department))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "text-center" }, [
-                                _vm._v(_vm._s(workexperience.monthlySalary))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "text-center" }, [
-                                _vm._v(_vm._s(workexperience.salaryGrade))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "text-center" }, [
-                                _vm._v(
-                                  _vm._s(workexperience.statusOfAppointment)
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "text-center" }, [
-                                _vm._v(_vm._s(workexperience.govService))
-                              ])
-                            ])
-                          }),
-                          0
+                          "table",
+                          {
+                            staticClass:
+                              "table table-bordered table-hover pds-table"
+                          },
+                          [
+                            _vm._m(26),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.workexperiences(), function(
+                                workexperience
+                              ) {
+                                return _c("tr", { key: workexperience.id }, [
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "text-center",
+                                      staticStyle: { "white-space": "nowrap" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(workexperience.inclusiveDateFrom)
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "text-center",
+                                      staticStyle: { "white-space": "nowrap" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(workexperience.inclusiveDateTo)
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(_vm._s(workexperience.position))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(_vm._s(workexperience.department))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(workexperience.monthlySalary))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(workexperience.salaryGrade))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(
+                                      _vm._s(workexperience.statusOfAppointment)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(workexperience.govService))
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
+                          ]
                         )
-                      ]
-                    )
-                  ])
-                ]),
+                      ])
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
-                _vm._m(27),
+                _vm.voluntaryworks().length > 0
+                  ? _c("div", { staticClass: "row" }, [_vm._m(27)])
+                  : _vm._e(),
                 _vm._v(" "),
-                _vm._m(28)
+                _vm.voluntaryworks().length > 0
+                  ? _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c(
+                          "table",
+                          {
+                            staticClass:
+                              "table table-bordered table-hover pds-table"
+                          },
+                          [
+                            _vm._m(28),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.voluntaryworks(), function(
+                                voluntarywork
+                              ) {
+                                return _c("tr", { key: voluntarywork.id }, [
+                                  _c("td", [
+                                    _vm._v(_vm._s(voluntarywork.nameAndAddress))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "text-center",
+                                      staticStyle: { "white-space": "nowrap" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(voluntarywork.inclusiveDateFrom)
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "text-center",
+                                      staticStyle: { "white-space": "nowrap" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(voluntarywork.inclusiveDateTo)
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(voluntarywork.hours))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(_vm._s(voluntarywork.position))
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.trainingprograms().length > 0
+                  ? _c("div", { staticClass: "row" }, [_vm._m(29)])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.trainingprograms().length > 0
+                  ? _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c(
+                          "table",
+                          {
+                            staticClass:
+                              "table table-bordered table-hover pds-table"
+                          },
+                          [
+                            _vm._m(30),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.trainingprograms(), function(
+                                trainingprogram
+                              ) {
+                                return _c("tr", { key: trainingprogram.id }, [
+                                  _c("td", [
+                                    _vm._v(_vm._s(trainingprogram.title))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "text-center",
+                                      staticStyle: { "white-space": "nowrap" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          trainingprogram.inclusiveDateFrom
+                                        )
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "text-center",
+                                      staticStyle: { "white-space": "nowrap" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(trainingprogram.inclusiveDateTo)
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(trainingprogram.hours))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td"),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(_vm._s(trainingprogram.conductor))
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  : _vm._e()
               ]),
               _vm._v(" "),
-              _vm._m(29),
+              _vm._m(31),
               _vm._v(" "),
-              _vm._m(30)
+              _vm._m(32)
             ])
           ]
         )
@@ -69073,7 +69273,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(31)
+    _vm._m(33)
   ])
 }
 var staticRenderFns = [
@@ -69320,10 +69520,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("h4", [_vm._v("Work Experience")])
-      ])
+    return _c("div", { staticClass: "col-md-12" }, [
+      _c("h4", [_vm._v("Work Experience")])
     ])
   },
   function() {
@@ -69362,13 +69560,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("h4", [
-          _vm._v(
-            "Voluntary Work or Involvement In Civic / Non-Government / People / Voluntary Organization/s"
-          )
-        ])
+    return _c("div", { staticClass: "col-md-12" }, [
+      _c("h4", [
+        _vm._v(
+          "Voluntary Work or Involvement In Civic / Non-Government / People / Voluntary Organization/s"
+        )
       ])
     ])
   },
@@ -69376,41 +69572,69 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c(
-          "table",
-          { staticClass: "table table-bordered table-hover pds-table" },
-          [
-            _c("thead", [
-              _c("tr", { staticClass: "text-center" }, [
-                _c("th", { attrs: { rowspan: "2" } }, [
-                  _vm._v("Name & Address of Organization")
-                ]),
-                _vm._v(" "),
-                _c("th", { attrs: { colspan: "2" } }, [
-                  _vm._v("Inclusive Dates")
-                ]),
-                _vm._v(" "),
-                _c("th", { attrs: { rowspan: "2" } }, [
-                  _vm._v("Number of Hours")
-                ]),
-                _vm._v(" "),
-                _c("th", { attrs: { rowspan: "2" } }, [
-                  _vm._v("Position / Nature of Work")
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", { staticClass: "text-center" }, [
-                _c("th", [_vm._v("From")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("To")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("tbody")
-          ]
+    return _c("thead", [
+      _c("tr", { staticClass: "text-center" }, [
+        _c("th", { attrs: { rowspan: "2" } }, [
+          _vm._v("Name & Address of Organization")
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { colspan: "2" } }, [_vm._v("Inclusive Dates")]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [_vm._v("Number of Hours")]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [
+          _vm._v("Position / Nature of Work")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("tr", { staticClass: "text-center" }, [
+        _c("th", [_vm._v("From")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("To")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-12" }, [
+      _c("h4", [
+        _vm._v(
+          "Learning & Development (L&D) Interventions / Training Programs Attended"
         )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticClass: "text-center" }, [
+        _c("th", { attrs: { rowspan: "2" } }, [
+          _vm._v("Learning & Development Interventions / Training Program")
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { colspan: "2" } }, [
+          _vm._v("Inclusive Dates of Attendance")
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [_vm._v("Number of Hours")]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [
+          _vm._v("Type of LD (Managerial / Supervisory / Technical / etc)")
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { rowspan: "2" } }, [
+          _vm._v("Conducted/Sponsored by")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("tr", { staticClass: "text-center" }, [
+        _c("th", [_vm._v("From")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("To")])
       ])
     ])
   },
@@ -87964,7 +88188,7 @@ Vue.prototype.$gate = new _gate__WEBPACK_IMPORTED_MODULE_5__["default"](window.u
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
 Vue.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_3___default.a, options);
 var routes = [{
-  path: '/dashboard',
+  path: '/',
   component: __webpack_require__(/*! ./components/Dashboard.vue */ "./resources/js/components/Dashboard.vue")["default"]
 }, {
   path: '/employees',
