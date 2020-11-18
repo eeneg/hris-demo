@@ -107,6 +107,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </router-link>
                         </li>
                         @can('isAdministratorORAuthor')
+                        <li class="nav-item has-treeview">
+                            <a href="" class="nav-link">
+                                <i class="nav-icon fas fa-book orange"></i>
+                                <p>
+                                    Plantilla
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <router-link to="/plantilla" class="nav-link">
+                                        <i class="fas fa-book-open nav-icon"></i>
+                                        <p>Annual Plantilla</p>
+                                    </router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <router-link to="/salaryschedule" class="nav-link">
+                                        <i class="fas fa-coins nav-icon"></i>
+                                        <p>Salary Schedule</p>
+                                    </router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <router-link to="/departments" class="nav-link">
+                                        <i class="fas fa-building nav-icon"></i>
+                                        <p>Departments & Positions</p>
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
                             <router-link to="/requests" class="nav-link">
                                 <i class="nav-icon fas fa-file-signature pink"></i>

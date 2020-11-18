@@ -27,7 +27,7 @@ class CreatePlantillaContentsTable extends Migration
             $table->foreign('personal_information_id')->references('id')->on('personal_informations')->onDelete('cascade');
             $table->string('old_number', 100);
             $table->string('new_number', 100);
-            $table->decimal('difference_amount', 82);
+            $table->decimal('difference_amount', 8, 2);
             $table->string('working_time', 100);
             $table->string('appointment_status', 100);
             $table->integer('order_number');

@@ -9,6 +9,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Position</th>
                                 <th></th>
                                 <!-- <th>Email</th>
                                 <th>Landline</th>
@@ -22,6 +23,7 @@
                             <tr v-for="employee in employees.data" :key="employee.id">
                                 <!-- <td>{{ user.name | capitalize }}</td> -->
                                 <td style="width: calc(100%-150px);">{{ employee.surname + ', ' + employee.firstname + ' ' + employee.nameextension + ' ' + employee.middlename }} </td>
+                                <td></td>
                                 <td style="width: 150px;">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-info">Action</button>
