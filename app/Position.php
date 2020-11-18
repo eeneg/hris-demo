@@ -3,35 +3,29 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Webpatser\Uuid\Uuid;
 
 class Position extends Model
 {
-    protected $primaryKey = 'PK_PositionId';
+    public $incrementing = false;
 
-    protected $fillable = ['Title'];
+    protected $primaryKey = 'id';
 
-    public function posPersonalInformation()
+    protected $fillable = [ 'department_id', 'title' ];
+
+    public function department()
     {
-        return $this->hasMany('App\PersonalInformation');
+        return $this->belongsTo('App\Department', 'department_id');
     }
 
-    public function posPlantilla()
-    {
-        return $this->hasMany('App\Plantilla');
+    public static function boot(){
+        parent::boot();
+        self::creating(function($model){
+            $model->id = self::generateUuid();
+        });
     }
 
-    public function posSalarygrade()
-    {
-        return $this->hasOne('App\SalaryGrade');
-    }
-
-    public function posDepartment()
-    {
-        return $this->hasOne('App\Department');
-    }
-
-    public function posAllocation()
-    {
-        return $this->hasMany('App\Allocation');
+    public static function generateUuid(){
+        return Uuid::generate()->string;
     }
 }
