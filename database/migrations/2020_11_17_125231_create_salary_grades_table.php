@@ -17,7 +17,7 @@ class CreateSalaryGradesTable extends Migration
             $table->string('id', 100)->primary();
             $table->string('tranche', 500);
             $table->integer('grade');
-            $table->integer('name');
+            $table->integer('step');
             $table->decimal('amount', 8, 2);
             $table->timestamps();
         });
