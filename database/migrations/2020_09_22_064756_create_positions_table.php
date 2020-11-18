@@ -14,7 +14,7 @@ class CreatePositionsTable extends Migration
     public function up()
     {
         Schema::create('positions', function (Blueprint $table) {
-            $table->string('id', 100)->primary();
+            $table->string('id', 100)->primary()->unique();
             $table->string('department_id', 100);
             $table->foreign('department_id')
                     ->references('id')

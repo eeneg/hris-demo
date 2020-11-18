@@ -16,8 +16,8 @@ class CreatePlantillasTable extends Migration
         Schema::create('plantillas', function (Blueprint $table) {
             $table->string('id', 100)->primary()->unique();
             $table->string('year');
-            $table->date('date_prepared');
-            $table->date('date_approved');
+            $table->date('date_prepared')->nullable();
+            $table->date('date_approved')->nullable();
             $table->timestamps();
         });
     }

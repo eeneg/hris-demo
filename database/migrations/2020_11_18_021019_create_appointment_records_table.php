@@ -14,7 +14,7 @@ class CreateAppointmentRecordsTable extends Migration
     public function up()
     {
         Schema::create('appointment_records', function (Blueprint $table) {
-            $table->string('id')->primary()->unique();
+            $table->string('id', 100)->primary()->unique();
             $table->string('personal_information_id', 100);
             $table->foreign('personal_information_id')
                   ->references('id')
@@ -30,9 +30,9 @@ class CreateAppointmentRecordsTable extends Migration
                   ->references('id')
                   ->on('salary_grades')
                   ->onDelete('cascade');
-            $table->string('status', 100);
-            $table->string('nature_of_appointment', 100);
-            $table->date('reckoning_date');
+            $table->string('status', 100)->nullable();
+            $table->string('nature_of_appointment', 100)->nullable();
+            $table->date('reckoning_date')->nullable();
             $table->timestamps();
         });
     }

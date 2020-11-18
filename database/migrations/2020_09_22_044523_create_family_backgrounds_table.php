@@ -14,26 +14,26 @@ class CreateFamilyBackgroundsTable extends Migration
     public function up()
     {
         Schema::create('family_backgrounds', function (Blueprint $table) {
-            $table->string('id', 100)->primary();
+            $table->string('id', 100)->primary()->unique();
             $table->string('personal_information_id', 100);
             $table->foreign('personal_information_id')
                     ->references('id')
                     ->on('personal_informations')
                     ->onDelete('cascade');
-            $table->string('spouseSurname', 100);
-            $table->string('spouseFirstname', 100);
-            $table->string('spouseMiddlename', 100);
-            $table->string('spouseOccupation', 100);
-            $table->string('spouseBussiness', 100);
-            $table->string('spouseBussinessAddress', 100);
-            $table->string('spouseTelephone', 100);
-            $table->string('fatherSurname', 100);
-            $table->string('fatherFirstname', 100);
-            $table->string('fatherMiddlename', 100);
-            $table->string('motherSurname', 100);
-            $table->string('motherFirstname', 100);
-            $table->string('motherMiddlename', 100);
-            $table->string('motherMaidenName', 100);
+            $table->string('spouseSurname', 100)->nullable();
+            $table->string('spouseFirstname', 100)->nullable();
+            $table->string('spouseMiddlename', 100)->nullable();
+            $table->string('spouseOccupation', 100)->nullable();
+            $table->string('spouseBussiness', 100)->nullable();
+            $table->string('spouseBussinessAddress', 100)->nullable();
+            $table->string('spouseTelephone', 100)->nullable();
+            $table->string('fatherSurname', 100)->nullable();
+            $table->string('fatherFirstname', 100)->nullable();
+            $table->string('fatherMiddlename', 100)->nullable();
+            $table->string('motherSurname', 100)->nullable();
+            $table->string('motherFirstname', 100)->nullable();
+            $table->string('motherMiddlename', 100)->nullable();
+            $table->string('motherMaidenName', 100)->nullable();
             $table->timestamps();
         });
     }

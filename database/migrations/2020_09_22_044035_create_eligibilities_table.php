@@ -14,7 +14,7 @@ class CreateEligibilitiesTable extends Migration
     public function up()
     {
         Schema::create('eligibilities', function (Blueprint $table) {
-            $table->string('id', 100)->primary();
+            $table->string('id', 100)->primary()->unique();
             $table->string('personal_information_id', 100);
             $table->foreign('personal_information_id')
                     ->references('id')

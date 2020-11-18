@@ -14,11 +14,12 @@ class CreateSalaryGradesTable extends Migration
     public function up()
     {
         Schema::create('salary_grades', function (Blueprint $table) {
-            $table->string('id', 100)->primary();
+            $table->string('id', 100)->primary()->unique();
             $table->string('tranche', 500);
             $table->integer('grade');
-            $table->integer('name');
+            $table->integer('step');
             $table->decimal('amount', 8, 2);
+            $table->date('effective_date');
             $table->timestamps();
         });
     }

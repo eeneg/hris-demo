@@ -14,7 +14,7 @@ class CreatePlantillaContentsTable extends Migration
     public function up()
     {
         Schema::create('plantilla_contents', function (Blueprint $table) {
-            $table->string('id')->primary()->unique();
+            $table->string('id', 100)->primary()->unique();
             $table->string('plantilla_id', 100);
             $table->foreign('plantilla_id')->references('id')->on('plantillas')->onDelete('cascade');
             $table->string('salary_grade_auth_id', 100);
@@ -28,8 +28,8 @@ class CreatePlantillaContentsTable extends Migration
             $table->string('old_number', 100);
             $table->string('new_number', 100);
             $table->decimal('difference_amount', 8, 2);
-            $table->string('working_time', 100);
-            $table->string('appointment_status', 100);
+            $table->string('working_time', 100)->nullable();
+            $table->string('appointment_status', 100)->nullable();
             $table->integer('order_number');
             $table->timestamps();
         });

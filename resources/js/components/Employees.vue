@@ -11,12 +11,6 @@
                                 <th>Name</th>
                                 <th>Position</th>
                                 <th></th>
-                                <!-- <th>Email</th>
-                                <th>Landline</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Registered At</th>
-                                <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -40,20 +34,6 @@
                                         </button>
                                     </div>
                                 </td>
-                                <!-- <td>{{ user.email }}</td>
-                                <td>{{ user.landline }}</td>
-                                <td><span class="tag tag-success">{{ user.role }}</span></td>
-                                <td>{{ user.status }}</td>
-                                <td>{{ user.created_at | myDate }}</td>
-                                <td>
-                                    <a href="" @click.prevent="editUserModal(user)">
-                                        <i class="fas fa-edit blue"></i>
-                                    </a>
-                                    /
-                                    <a href="" @click.prevent="deleteUser(user.id)">
-                                        <i class="fas fa-trash red"></i>
-                                    </a>
-                                </td> -->
                             </tr>
                         </tbody>
                     </table>
