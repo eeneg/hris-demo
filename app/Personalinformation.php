@@ -15,7 +15,7 @@ class PersonalInformation extends Model
 
     protected $with = [
         'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities', 
-        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms'
+        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'plantillacontents'
     ];
 
     /**
@@ -58,6 +58,11 @@ class PersonalInformation extends Model
         return $this->hasOne('App\FamilyBackground', 'personal_information_id');
     }
 
+    public function pdsquestion()
+    {
+        return $this->hasOne('App\PDSQuestion', 'personal_information_id');
+    }
+
     public function voluntaryworks()
     {
         return $this->hasMany('App\VoluntaryWork', 'personal_information_id');
@@ -71,6 +76,11 @@ class PersonalInformation extends Model
     public function otherinfos()
     {
         return $this->hasMany('App\OtherInfo', 'personal_information_id');
+    }
+
+    public function plantillacontents()
+    {
+        return $this->hasMany('App\PlantillaContent', 'personal_information_id');
     }
 
     public static function boot(){

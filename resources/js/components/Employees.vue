@@ -16,8 +16,20 @@
                         <tbody>
                             <tr v-for="employee in employees.data" :key="employee.id">
                                 <!-- <td>{{ user.name | capitalize }}</td> -->
-                                <td style="width: calc(100%-150px);">{{ employee.surname + ', ' + employee.firstname + ' ' + employee.nameextension + ' ' + employee.middlename }} </td>
-                                <td></td>
+                                <td style="width: calc(100%-150px);">
+                                    <img style="width: 45px;height: 45px;" class="img-circle mr-2" :src="getAvatar(employee.picture)" alt="User Avatar">
+                                    <div style="display: inline-block;vertical-align: middle;line-height: 1.2rem;height: 35px;">
+                                        <span style="font-size: 1.1rem;">{{ employee.surname + ', ' + employee.firstname + ' ' + employee.nameextension + ' ' + employee.middlename }}</span>
+                                        <br>
+                                        <span style="font-size: 0.9rem;" class="text-muted"><i>{{ employee.status }}</i></span>
+                                    </div>
+                                    
+                                </td>
+                                <td v-if="employee.plantillacontents.length > 0">
+                                    {{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.title }}<br>
+                                    <span class="text-muted">{{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.department.description }}</span>
+                                </td>
+                                <td v-else></td>
                                 <td style="width: 150px;">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-info">Action</button>
@@ -26,7 +38,7 @@
                                             <div class="dropdown-menu" role="menu">
                                                 <a class="dropdown-item" @click.prevent="viewProfileModal(employee)" href="#">View Profile</a>
                                                 <a class="dropdown-item" href="#">Basic Information</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
+                                                <a class="dropdown-item" href="#">Latest Plantilla Record</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
                                                 <a class="dropdown-item" @click.prevent="generateId(employee)" href="#">Generate ID</a>
@@ -58,7 +70,14 @@
 
                     <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ form.firstname + ' ' + form.middlename + ' ' + form.surname + ' ' + form.nameextension }}</b></h3>
 
-                    <p class="text-muted text-center" style="font-size: 1.1rem;">Software Engineer</p>
+                    <span v-if="form.plantillacontents.length > 0">
+                        <p class="text-muted text-center mt-1" style="font-size: 1.1rem;line-height: 1.1rem;">
+                            {{ form.plantillacontents[0].position && form.plantillacontents[0].position.title }}<br>
+                            {{ form.plantillacontents[0].position && form.plantillacontents[0].position.department.title }}
+                        </p>
+                    </span>
+                    <span v-else><br></span>
+                    
                     <div class="view-profile-container">
                         <div class="row">
                             <div class="col-md-12">
@@ -526,7 +545,7 @@
                         </div>
                     </div>
 
-                    <a href="#" class="btn btn-primary btn-block"><i class="fas fa-print mr-2"></i>Generate Personal Data Sheet</a>
+                    <a href="#" class="btn btn-primary btn-block" @click.prevent="generatePDS(form.id)"><i class="fas fa-print mr-2"></i>Generate Personal Data Sheet</a>
                     <button class="btn btn-danger btn-block" data-dismiss="modal"><i class="fas fa-times mr-2"></i>Close</button>
                 </div>
             </div>
@@ -552,18 +571,18 @@
         </div>
 
         <!-- The Modal -->
-        <div class="modal" id="idModal">
+        <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Employee Id</h4>
+                    <h4 class="modal-title">Print Report</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
-                <div class="modal-body" id="id-viewer">
+                <div class="modal-body" id="pdf-viewer">
                     
                 </div>
 
@@ -623,7 +642,8 @@
                     'otherinfos': {},
                     'workexperiences': {},
                     'voluntaryworks': {},
-                    'trainingprograms': {}
+                    'trainingprograms': {},
+                    'plantillacontents': {}
                 })
             }
         },
@@ -671,7 +691,7 @@
             },
             getAvatar(picture) {
                 if (picture != null) {
-                    let prefix = (picture.match(/\//) ? '' : '/storage/user_avatars/');
+                    let prefix = (picture.match(/\//) ? '' : '/storage/employee_pictures/');
                     return prefix + picture;
                 } else {
                     return '/storage/project_files/profile.png';
@@ -717,15 +737,30 @@
                         this.$Progress.fail();
                     });
             },
-            generateId(employee) {
-                axios.post('saveid', {id: employee.id})
+            generatePDS(id){
+                axios.post('generatePDS', {id: id})
                     .then(response => {                 
                         let options = {
-                            height: "500px",
+                            height: screen.height * 0.75 + 'px',
                             page: '1'
                         };
-                        $('#idModal').modal('show');
-                        PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#id-viewer", options);
+                        $('#viewProfileModal').modal('hide');
+                        $('#pdfModal').modal('show');
+                        PDFObject.embed("/storage/employee_pds/" + response.data.title + ".pdf", "#pdf-viewer", options);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+            generateId(employee) {
+                axios.post('generateId', {id: employee.id})
+                    .then(response => {                 
+                        let options = {
+                            height: screen.height * 0.75 + 'px',
+                            page: '1'
+                        };
+                        $('#pdfModal').modal('show');
+                        PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#pdf-viewer", options);
                     })
                     .catch(error => {
                         console.log(error);

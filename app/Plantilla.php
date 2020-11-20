@@ -5,21 +5,17 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Position extends Model
+class Plantilla extends Model
 {
     public $incrementing = false;
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'department_id', 'title' ];
+    protected $fillable = [ 'year', 'date_prepared', 'date_approved' ];
 
-    protected $with = [
-        'department'
-    ];
-
-    public function department()
+    public function plantilla_contents()
     {
-        return $this->belongsTo('App\Department', 'department_id');
+        return $this->hasMany('App\PlantillaContent', 'plantilla_id');
     }
 
     public static function boot(){

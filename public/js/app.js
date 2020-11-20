@@ -2531,6 +2531,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2574,7 +2593,8 @@ __webpack_require__.r(__webpack_exports__);
         'otherinfos': {},
         'workexperiences': {},
         'voluntaryworks': {},
-        'trainingprograms': {}
+        'trainingprograms': {},
+        'plantillacontents': {}
       })
     };
   },
@@ -2624,7 +2644,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getAvatar: function getAvatar(picture) {
       if (picture != null) {
-        var prefix = picture.match(/\//) ? '' : '/storage/user_avatars/';
+        var prefix = picture.match(/\//) ? '' : '/storage/employee_pictures/';
         return prefix + picture;
       } else {
         return '/storage/project_files/profile.png';
@@ -2668,16 +2688,31 @@ __webpack_require__.r(__webpack_exports__);
         _this4.$Progress.fail();
       });
     },
+    generatePDS: function generatePDS(id) {
+      axios.post('generatePDS', {
+        id: id
+      }).then(function (response) {
+        var options = {
+          height: screen.height * 0.75 + 'px',
+          page: '1'
+        };
+        $('#viewProfileModal').modal('hide');
+        $('#pdfModal').modal('show');
+        PDFObject.embed("/storage/employee_pds/" + response.data.title + ".pdf", "#pdf-viewer", options);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     generateId: function generateId(employee) {
-      axios.post('saveid', {
+      axios.post('generateId', {
         id: employee.id
       }).then(function (response) {
         var options = {
-          height: "500px",
+          height: screen.height * 0.75 + 'px',
           page: '1'
         };
-        $('#idModal').modal('show');
-        PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#id-viewer", options);
+        $('#pdfModal').modal('show');
+        PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#pdf-viewer", options);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -67716,20 +67751,80 @@ var render = function() {
                 _vm._l(_vm.employees.data, function(employee) {
                   return _c("tr", { key: employee.id }, [
                     _c("td", { staticStyle: { width: "calc(100%-150px)" } }, [
-                      _vm._v(
-                        _vm._s(
-                          employee.surname +
-                            ", " +
-                            employee.firstname +
-                            " " +
-                            employee.nameextension +
-                            " " +
-                            employee.middlename
-                        ) + " "
+                      _c("img", {
+                        staticClass: "img-circle mr-2",
+                        staticStyle: { width: "45px", height: "45px" },
+                        attrs: {
+                          src: _vm.getAvatar(employee.picture),
+                          alt: "User Avatar"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticStyle: {
+                            display: "inline-block",
+                            "vertical-align": "middle",
+                            "line-height": "1.2rem",
+                            height: "35px"
+                          }
+                        },
+                        [
+                          _c(
+                            "span",
+                            { staticStyle: { "font-size": "1.1rem" } },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  employee.surname +
+                                    ", " +
+                                    employee.firstname +
+                                    " " +
+                                    employee.nameextension +
+                                    " " +
+                                    employee.middlename
+                                )
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "text-muted",
+                              staticStyle: { "font-size": "0.9rem" }
+                            },
+                            [_c("i", [_vm._v(_vm._s(employee.status))])]
+                          )
+                        ]
                       )
                     ]),
                     _vm._v(" "),
-                    _c("td"),
+                    employee.plantillacontents.length > 0
+                      ? _c("td", [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(
+                                employee.plantillacontents[0].position &&
+                                  employee.plantillacontents[0].position.title
+                              )
+                          ),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "text-muted" }, [
+                            _vm._v(
+                              _vm._s(
+                                employee.plantillacontents[0].position &&
+                                  employee.plantillacontents[0].position
+                                    .department.description
+                              )
+                            )
+                          ])
+                        ])
+                      : _c("td"),
                     _vm._v(" "),
                     _c("td", { staticStyle: { width: "150px" } }, [
                       _c("div", { staticClass: "btn-group" }, [
@@ -67791,7 +67886,7 @@ var render = function() {
                                     staticClass: "dropdown-item",
                                     attrs: { href: "#" }
                                   },
-                                  [_vm._v("Something else here")]
+                                  [_vm._v("Latest Plantilla Record")]
                                 ),
                                 _vm._v(" "),
                                 _c("div", { staticClass: "dropdown-divider" }),
@@ -67929,14 +68024,39 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _c(
-                "p",
-                {
-                  staticClass: "text-muted text-center",
-                  staticStyle: { "font-size": "1.1rem" }
-                },
-                [_vm._v("Software Engineer")]
-              ),
+              _vm.form.plantillacontents.length > 0
+                ? _c("span", [
+                    _c(
+                      "p",
+                      {
+                        staticClass: "text-muted text-center mt-1",
+                        staticStyle: {
+                          "font-size": "1.1rem",
+                          "line-height": "1.1rem"
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(
+                              _vm.form.plantillacontents[0].position &&
+                                _vm.form.plantillacontents[0].position.title
+                            )
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(
+                              _vm.form.plantillacontents[0].position &&
+                                _vm.form.plantillacontents[0].position
+                                  .department.title
+                            ) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  ])
+                : _c("span", [_c("br")]),
               _vm._v(" "),
               _c("div", { staticClass: "view-profile-container" }, [
                 _vm._m(1),
@@ -69281,9 +69401,25 @@ var render = function() {
                   : _vm._e()
               ]),
               _vm._v(" "),
-              _vm._m(31),
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-primary btn-block",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.generatePDS(_vm.form.id)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-print mr-2" }),
+                  _vm._v("Generate Personal Data Sheet")
+                ]
+              ),
               _vm._v(" "),
-              _vm._m(32)
+              _vm._m(31)
             ])
           ]
         )
@@ -69350,7 +69486,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(33)
+    _vm._m(32)
   ])
 }
 var staticRenderFns = [
@@ -69726,19 +69862,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "a",
-      { staticClass: "btn btn-primary btn-block", attrs: { href: "#" } },
-      [
-        _c("i", { staticClass: "fas fa-print mr-2" }),
-        _vm._v("Generate Personal Data Sheet")
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
       "button",
       {
         staticClass: "btn btn-danger btn-block",
@@ -69751,11 +69874,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal", attrs: { id: "idModal" } }, [
+    return _c("div", { staticClass: "modal", attrs: { id: "pdfModal" } }, [
       _c("div", { staticClass: "modal-dialog modal-xl" }, [
         _c("div", { staticClass: "modal-content" }, [
           _c("div", { staticClass: "modal-header" }, [
-            _c("h4", { staticClass: "modal-title" }, [_vm._v("Employee Id")]),
+            _c("h4", { staticClass: "modal-title" }, [_vm._v("Print Report")]),
             _vm._v(" "),
             _c(
               "button",
@@ -69767,7 +69890,7 @@ var staticRenderFns = [
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "modal-body", attrs: { id: "id-viewer" } }),
+          _c("div", { staticClass: "modal-body", attrs: { id: "pdf-viewer" } }),
           _vm._v(" "),
           _c("div", { staticClass: "modal-footer" }, [
             _c(

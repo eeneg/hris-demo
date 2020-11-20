@@ -23,7 +23,7 @@ class CreatePlantillaContentsTable extends Migration
             $table->foreign('salary_grade_prop_id')->references('id')->on('salary_grades')->onDelete('cascade');
             $table->string('position_id', 100);
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
-            $table->string('personal_information_id', 100);
+            $table->string('personal_information_id', 100)->nullable();
             $table->foreign('personal_information_id')->references('id')->on('personal_informations')->onDelete('cascade');
             $table->string('old_number', 100);
             $table->string('new_number', 100);

@@ -17,12 +17,14 @@ Route::get('/', 'HomeController@index');
 
 Auth::routes(['register' => false]);
 
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/generateId', 'PDFcontroller@employeeId');
 
-Route::post('/saveid', 'HomeController@saveid');
+Route::post('/generatePDS', 'PDFcontroller@pds');
 
 Route::get('{path}', 'HomeController@index')->where( 'path','([-a-z0-9_\s]+)' );
 
-// Route::get('/workExpFormat', 'HomeController@workExperienceFormat');
-// Route::get('/volWorkFormat', 'HomeController@voluntaryWorksFormat');
-Route::get('/trainingFormat', 'HomeController@trainingFormat');
+
+// Route::get('/workExpFormat', 'Helpers@workExperienceFormat');
+// Route::get('/volWorkFormat', 'Helpers@voluntaryWorksFormat');
+// Route::get('/trainingFormat', 'Helpers@trainingFormat');
+// Route::get('/makePlantilla', 'Helpers@makePlantilla');
