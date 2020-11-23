@@ -22,12 +22,18 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResources([
         'user' => 'API\UserController',
         'personalinformation' => 'API\PersonalInformationController',
-        'barcode' => 'API\BarcodeController'
+        'barcode' => 'API\BarcodeController',
+        'salarygrade' => 'API\SalaryGradeController'
     ]);
-
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
 
     Route::post('verifybarcode', 'Api\BarcodeController@verify');
+
+    Route::patch('salarygrade', 'Api\SalaryGradeController@update');
 });
+
+//api test
+Route::get('per', 'API\PersonalInformationController@index');
+Route::get('salary', 'API\SalaryGradeController@index');
 
