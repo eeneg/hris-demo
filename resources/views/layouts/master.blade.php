@@ -37,16 +37,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </ul>
 
                 <!-- SEARCH FORM -->
-                <div class="form-inline ml-3">
+                {{-- <div class="form-inline ml-3">
                     <div class="input-group input-group-md" style="width: 400px;">
-                        <input class="form-control form-control-navbar" @keyup.prevent="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
                         <div class="input-group-append">
-                            <button class="btn btn-navbar" @click="searchit" type="submit">
+                            <button class="btn btn-navbar" type="submit">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
@@ -182,7 +182,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="nav-link">
+                                @click.prevent="logout"
+                                {{-- onclick="event.preventDefault();document.getElementById('logout-form').submit();" --}}
+                                class="nav-link">
                                 <i class="nav-icon fas fa-power-off red"></i>
                                 <p>{{ __('Logout') }}</p>
                             </a>

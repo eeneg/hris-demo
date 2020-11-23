@@ -1,27 +1,31 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h2 class="card-title" style="margin-bottom: 0;font-size: 1.8rem;">System Users</h2>
-
-                    <div class="card-tools">
-                        <!-- <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                    <h2>System Users</h2>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input v-model="search" @keyup.prevent="searchit" type="text" class="form-control" placeholder="Search">
                             </div>
-                        </div> -->
-                        <button v-if="$gate.isAdministrator()" class="btn btn-success" @click="newUserModal">
-                            <i class="fas fa-user-plus"></i>
-                            Add New
-                        </button>
+                        </div>
+                        <div class="col-md-6"></div>
+                        <div class="col-md-3">
+                            <button v-if="$gate.isAdministrator()" class="btn btn-success" @click="newUserModal" style="float: right;">
+                                <i class="fas fa-user-plus"></i>
+                                Add New
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap users-table">
+                    <table class="table text-nowrap table-striped users-table">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -36,7 +40,10 @@
                         <tbody>
                             <tr v-for="user in users.data" :key="user.id">
                                 <!-- <td>{{ user.name | capitalize }}</td> -->
-                                <td><img style="width: 35px;" class="img-circle mr-2" :src="getAvatar(user.avatar)" alt="User Avatar">{{ user.name }}</td>
+                                <td>
+                                    <img style="width: 35px; height: 35px;" class="img-circle mr-2" :src="getAvatar(user.avatar)" alt="User Avatar">
+                                    <span style="vertical-align: middle;">{{ user.name }}</span>
+                                </td>
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.landline }}</td>
                                 <td><span class="tag tag-success">{{ user.role }}</span></td>
@@ -135,6 +142,7 @@
             return {
                 editmode: false,
                 users: {},
+                search: '',
                 form: new Form({
                     'id': '',
                     'name': '',
@@ -148,8 +156,11 @@
             }
         },
         methods: {
+            searchit: _.debounce(function(){
+                this.getResults();
+            }, 400),
             getResults(page = 1) {
-                axios.get('api/user?page=' + page + '&query=' + this.$parent.search)
+                axios.get('api/user?page=' + page + '&query=' + this.search)
                     .then(response => {
                         this.users = response.data;
                     })
@@ -254,9 +265,6 @@
             }
         },
         created() {
-            Fire.$on('searching', () => {
-                this.getResults();
-            });
             this.$Progress.start();
             this.loadUsers();
             Fire.$on('ReloadUsers', () => {

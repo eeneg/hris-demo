@@ -1,11 +1,24 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <h2 class="card-header">Employees</h2>
+            <div class="card card-primary card-outline">
 
+                <div class="card-header">
+                    <h2>Employees</h2>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input v-model="search" @keyup.prevent="searchit" type="text" class="form-control" placeholder="Search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap employees-table">
+                    <table class="table table-striped text-nowrap employees-table">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -604,6 +617,7 @@
             return {
                 employees: {},
                 barcode: '',
+                search: '',
                 personalinformation: {},
                 form: new Form({
                     'id': '',
@@ -680,12 +694,14 @@
             focusBarcode: _.debounce(function(){
                 this.$refs.barcodeField.focus();
             }, 200),
+            searchit: _.debounce(function(){
+                this.getResults();
+            }, 400),
             viewProfileModal(employee) {
                 $('#scanModal').modal('show');
                 $('#barcodeField').val('');
                 $('.barcode-validate').hide();
                 
-
                 this.form.fill(employee);
                 this.focusBarcode();
             },
@@ -698,7 +714,7 @@
                 }
             },
             getResults(page = 1) {
-                axios.get('api/personalinformation?page=' + page + '&query=' + this.$parent.search)
+                axios.get('api/personalinformation?page=' + page + '&query=' + this.search)
                     .then(response => {
                         this.employees = response.data;
                     }).catch(error => {
@@ -768,9 +784,9 @@
             }
         },
         created() {
-            Fire.$on('searching', () => {
-                this.getResults();
-            });
+            // Fire.$on('searching', () => {
+            //     this.getResults();
+            // });
             this.$Progress.start();
             this.loadEmployees();
             this.$Progress.finish();

@@ -142,12 +142,26 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
     router,
-    data: {
-        search: ''
-    },
+    // data: {
+    //     search: ''
+    // },
     methods: {
-        searchit: _.debounce(() => {
-            Fire.$emit('searching');
-        }, 400)
+        logout() {
+            Swal.fire({
+                title: 'Logout Account',
+                text: "Are you sure you want to logout?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Proceed'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$Progress.start();
+                    document.getElementById('logout-form').submit()
+                    this.$Progress.finish();
+                }
+            });
+        }
     }
 });

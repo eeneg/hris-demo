@@ -2550,11 +2550,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       employees: {},
       barcode: '',
+      search: '',
       personalinformation: {},
       form: new Form({
         'id': '',
@@ -2635,6 +2649,9 @@ __webpack_require__.r(__webpack_exports__);
     focusBarcode: _.debounce(function () {
       this.$refs.barcodeField.focus();
     }, 200),
+    searchit: _.debounce(function () {
+      this.getResults();
+    }, 400),
     viewProfileModal: function viewProfileModal(employee) {
       $('#scanModal').modal('show');
       $('#barcodeField').val('');
@@ -2654,7 +2671,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      axios.get('api/personalinformation?page=' + page + '&query=' + this.$parent.search).then(function (response) {
+      axios.get('api/personalinformation?page=' + page + '&query=' + this.search).then(function (response) {
         _this2.employees = response.data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
@@ -2719,11 +2736,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this5 = this;
-
-    Fire.$on('searching', function () {
-      _this5.getResults();
-    });
+    // Fire.$on('searching', () => {
+    //     this.getResults();
+    // });
     this.$Progress.start();
     this.loadEmployees();
     this.$Progress.finish();
@@ -3379,11 +3394,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       editmode: false,
       users: {},
+      search: '',
       form: new Form({
         'id': '',
         'name': '',
@@ -3397,11 +3420,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    searchit: _.debounce(function () {
+      this.getResults();
+    }, 400),
     getResults: function getResults() {
       var _this = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      axios.get('api/user?page=' + page + '&query=' + this.$parent.search).then(function (response) {
+      axios.get('api/user?page=' + page + '&query=' + this.search).then(function (response) {
         _this.users = response.data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
@@ -3507,9 +3533,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this6 = this;
 
-    Fire.$on('searching', function () {
-      _this6.getResults();
-    });
     this.$Progress.start();
     this.loadUsers();
     Fire.$on('ReloadUsers', function () {
@@ -67706,10 +67729,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("h3", [_vm._v("Dashboard")])
-      ])
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [_c("h2", [_vm._v("Dashboard")])])
     ])
   }
 ]
@@ -67736,15 +67757,51 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row justify-content-center" }, [
     _c("div", { staticClass: "col-md-12" }, [
-      _c("div", { staticClass: "card" }, [
-        _c("h2", { staticClass: "card-header" }, [_vm._v("Employees")]),
+      _c("div", { staticClass: "card card-primary card-outline" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _c("h2", [_vm._v("Employees")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-3" }, [
+              _c("div", { staticClass: "input-group" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search,
+                      expression: "search"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Search" },
+                  domProps: { value: _vm.search },
+                  on: {
+                    keyup: function($event) {
+                      $event.preventDefault()
+                      return _vm.searchit($event)
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.search = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body table-responsive p-0" }, [
           _c(
             "table",
-            { staticClass: "table table-hover text-nowrap employees-table" },
+            { staticClass: "table table-striped text-nowrap employees-table" },
             [
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -68059,11 +68116,11 @@ var render = function() {
                 : _c("span", [_c("br")]),
               _vm._v(" "),
               _c("div", { staticClass: "view-profile-container" }, [
-                _vm._m(1),
+                _vm._m(2),
                 _vm._v(" "),
                 _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(2),
+                    _vm._m(3),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
@@ -68079,7 +68136,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(3),
+                    _vm._m(4),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
@@ -68097,7 +68154,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(4),
+                    _vm._m(5),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
@@ -68302,7 +68359,7 @@ var render = function() {
                     _vm._v(" "),
                     _vm.form.permanentaddress ? _c("hr") : _vm._e(),
                     _vm._v(" "),
-                    _vm._m(5),
+                    _vm._m(6),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
@@ -68314,7 +68371,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(6),
+                    _vm._m(7),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
@@ -68326,7 +68383,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(7),
+                    _vm._m(8),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
@@ -68340,11 +68397,11 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(8),
+                _vm._m(9),
                 _vm._v(" "),
                 _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(9),
+                    _vm._m(10),
                     _vm._v(" "),
                     _vm.form.familybackground.spouseSurname
                       ? _c("p", { staticClass: "text-muted" }, [
@@ -68429,7 +68486,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(10),
+                    _vm._m(11),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm._v(
@@ -68447,7 +68504,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(11),
+                    _vm._m(12),
                     _vm._v(" "),
                     _c("p", { staticClass: "text-muted" }, [
                       _vm.form.familybackground.motherMaidenName
@@ -68484,7 +68541,7 @@ var render = function() {
                     "div",
                     { staticClass: "col-md-6" },
                     [
-                      _vm._m(12),
+                      _vm._m(13),
                       _vm._v(" "),
                       _vm._l(_vm.form.children, function(child) {
                         return _c(
@@ -68521,11 +68578,11 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm._m(13),
+                _vm._m(14),
                 _vm._v(" "),
                 _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(14),
+                    _vm._m(15),
                     _vm._v(" "),
                     _vm.form.educationalbackground.elemSchoolName
                       ? _c("p", { staticClass: "text-muted" }, [
@@ -68607,7 +68664,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(15),
+                    _vm._m(16),
                     _vm._v(" "),
                     _vm.form.educationalbackground.collSchoolName1
                       ? _c("p", { staticClass: "text-muted" }, [
@@ -68762,7 +68819,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(16),
+                    _vm._m(17),
                     _vm._v(" "),
                     _vm.form.educationalbackground.gradSchoolName
                       ? _c("p", { staticClass: "text-muted" }, [
@@ -68846,7 +68903,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(17),
+                    _vm._m(18),
                     _vm._v(" "),
                     _vm.form.educationalbackground.secSchoolName
                       ? _c("p", { staticClass: "text-muted" }, [
@@ -68928,7 +68985,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(18),
+                    _vm._m(19),
                     _vm._v(" "),
                     _vm.form.educationalbackground.vocSchoolName
                       ? _c("p", { staticClass: "text-muted" }, [
@@ -69012,16 +69069,16 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(19),
-                _vm._v(" "),
                 _vm._m(20),
+                _vm._v(" "),
+                _vm._m(21),
                 _vm._v(" "),
                 _c("div", { staticClass: "row" }, [
                   _c(
                     "div",
                     { staticClass: "col-md-6" },
                     [
-                      _vm._m(21),
+                      _vm._m(22),
                       _vm._v(" "),
                       _vm._l(_vm.form.eligibilities, function(
                         eligibility,
@@ -69090,7 +69147,7 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(22),
+                    _vm._m(23),
                     _vm._v(" "),
                     _c(
                       "p",
@@ -69117,7 +69174,7 @@ var render = function() {
                       0
                     ),
                     _vm._v(" "),
-                    _vm._m(23),
+                    _vm._m(24),
                     _vm._v(" "),
                     _c(
                       "p",
@@ -69144,7 +69201,7 @@ var render = function() {
                       0
                     ),
                     _vm._v(" "),
-                    _vm._m(24),
+                    _vm._m(25),
                     _vm._v(" "),
                     _c(
                       "p",
@@ -69176,7 +69233,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _vm.workexperiences().length > 0
-                  ? _c("div", { staticClass: "row" }, [_vm._m(25)])
+                  ? _c("div", { staticClass: "row" }, [_vm._m(26)])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.workexperiences().length > 0
@@ -69189,7 +69246,7 @@ var render = function() {
                               "table table-bordered table-hover pds-table"
                           },
                           [
-                            _vm._m(26),
+                            _vm._m(27),
                             _vm._v(" "),
                             _c(
                               "tbody",
@@ -69259,7 +69316,7 @@ var render = function() {
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.voluntaryworks().length > 0
-                  ? _c("div", { staticClass: "row" }, [_vm._m(27)])
+                  ? _c("div", { staticClass: "row" }, [_vm._m(28)])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.voluntaryworks().length > 0
@@ -69272,7 +69329,7 @@ var render = function() {
                               "table table-bordered table-hover pds-table"
                           },
                           [
-                            _vm._m(28),
+                            _vm._m(29),
                             _vm._v(" "),
                             _c(
                               "tbody",
@@ -69328,7 +69385,7 @@ var render = function() {
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.trainingprograms().length > 0
-                  ? _c("div", { staticClass: "row" }, [_vm._m(29)])
+                  ? _c("div", { staticClass: "row" }, [_vm._m(30)])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.trainingprograms().length > 0
@@ -69341,7 +69398,7 @@ var render = function() {
                               "table table-bordered table-hover pds-table"
                           },
                           [
-                            _vm._m(30),
+                            _vm._m(31),
                             _vm._v(" "),
                             _c(
                               "tbody",
@@ -69419,7 +69476,7 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _vm._m(31)
+              _vm._m(32)
             ])
           ]
         )
@@ -69486,10 +69543,20 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(32)
+    _vm._m(33)
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [
+        _c("i", { staticClass: "fas fa-search" })
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -71440,40 +71507,72 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-md-12" }, [
-      _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card card-primary card-outline" }, [
         _c("div", { staticClass: "card-header" }, [
-          _c(
-            "h2",
-            {
-              staticClass: "card-title",
-              staticStyle: { "margin-bottom": "0", "font-size": "1.8rem" }
-            },
-            [_vm._v("System Users")]
-          ),
+          _c("h2", [_vm._v("System Users")]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-tools" }, [
-            _vm.$gate.isAdministrator()
-              ? _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-success",
-                    on: { click: _vm.newUserModal }
-                  },
-                  [
-                    _c("i", { staticClass: "fas fa-user-plus" }),
-                    _vm._v(
-                      "\n                            Add New\n                        "
-                    )
-                  ]
-                )
-              : _vm._e()
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-3" }, [
+              _c("div", { staticClass: "input-group" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search,
+                      expression: "search"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Search" },
+                  domProps: { value: _vm.search },
+                  on: {
+                    keyup: function($event) {
+                      $event.preventDefault()
+                      return _vm.searchit($event)
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.search = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-3" }, [
+              _vm.$gate.isAdministrator()
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      staticStyle: { float: "right" },
+                      on: { click: _vm.newUserModal }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-user-plus" }),
+                      _vm._v(
+                        "\n                                Add New\n                            "
+                      )
+                    ]
+                  )
+                : _vm._e()
+            ])
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body table-responsive p-0" }, [
           _c(
             "table",
-            { staticClass: "table table-hover text-nowrap users-table" },
+            { staticClass: "table text-nowrap table-striped users-table" },
             [
               _c("thead", [
                 _c("tr", [
@@ -71502,13 +71601,18 @@ var render = function() {
                     _c("td", [
                       _c("img", {
                         staticClass: "img-circle mr-2",
-                        staticStyle: { width: "35px" },
+                        staticStyle: { width: "35px", height: "35px" },
                         attrs: {
                           src: _vm.getAvatar(user.avatar),
                           alt: "User Avatar"
                         }
                       }),
-                      _vm._v(_vm._s(user.name))
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        { staticStyle: { "vertical-align": "middle" } },
+                        [_vm._v(_vm._s(user.name))]
+                      )
                     ]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(user.email))]),
@@ -71650,7 +71754,7 @@ var render = function() {
                   [_vm._v(_vm._s(_vm.editmode ? "Update User" : "Create User"))]
                 ),
                 _vm._v(" "),
-                _vm._m(0)
+                _vm._m(1)
               ]),
               _vm._v(" "),
               _c(
@@ -71952,6 +72056,16 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [
+        _c("i", { staticClass: "fas fa-search" })
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -88626,13 +88740,31 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app',
   router: router,
-  data: {
-    search: ''
-  },
+  // data: {
+  //     search: ''
+  // },
   methods: {
-    searchit: _.debounce(function () {
-      Fire.$emit('searching');
-    }, 400)
+    logout: function logout() {
+      var _this = this;
+
+      sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
+        title: 'Logout Account',
+        text: "Are you sure you want to logout?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Proceed'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this.$Progress.start();
+
+          document.getElementById('logout-form').submit();
+
+          _this.$Progress.finish();
+        }
+      });
+    }
   }
 });
 

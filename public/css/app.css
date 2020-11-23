@@ -48347,3 +48347,11 @@ readers do not read off random characters that represent icons */
   font-size: 0.8rem;
 }
 
+.card-header {
+  background-color: transparent;
+}
+
+.card-primary.card-outline {
+  border-top: 4px solid #007bff;
+}
+

@@ -116,7 +116,7 @@
                         <div class="login-logo">
                           <img src="/storage/project_files/davsur.png" alt="logo" width="120px" height="120px">
                         </div>
-                        <p class="login-box-msg" style="font-size: 1rem"><b> Human Resource</b> Information System</p>
+                        <p class="login-box-msg" style="font-size: 1.1rem">Human Resource Information System</p>
                   
                         <form class="form-signin" method="POST" action="{{ route('login') }}">
                           @csrf
