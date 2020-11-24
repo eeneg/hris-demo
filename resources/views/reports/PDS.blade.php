@@ -16,7 +16,7 @@
 	.ft19{font-size:11px;font-family: Arial, Helvetica, sans-serif;color:#000000;}
 	.ft110{font-size:30px; font-family:Arial, Helvetica, sans-serif; font-weight: 800; color :#000000;}
 	.ft112{font-size:11px;font-family: Arial, Helvetica, sans-serif;color:#000000;font-weight:bold;}
-    .inputs{font-size: 10px;font-family: Arial, Helvetica, sans-serif; line-height: 12px;}
+    .inputs{font-size: 9.5px;font-family: Arial, Helvetica, sans-serif; line-height: 0.9;}
     .f-inputs{font-size: 12px;font-family: Arial, Helvetica, sans-serif; line-height: 12px;}
     .page-break {page-break-after: always;}
     #educ_back { display:flex; justify-content: center;align-items: center; }
@@ -935,7 +935,7 @@
         <p style="position:absolute;top:385px;left:720px;white-space:nowrap" class="ft11"> CONDUCTED/ SPONSORED BY   </p>
         <p style="position:absolute;top:400px;left:755px;white-space:nowrap" class="ft11">(Write in full)</p>
 
-        <table style="width:875px;position:absolute;top:429px;left:24px; border-collapse:separate;border-spacing:0px;table-layout: fixed; text-align:center;">
+        <table style="width:887px;position:absolute;top:429px;left:17px; border-collapse:separate;border-spacing:0px;table-layout: fixed; text-align:center;">
             <tr>
                 <th style="width: 39%;"></th>
                 <th style="width: 7%;"></th>
