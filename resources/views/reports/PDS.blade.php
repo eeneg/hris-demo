@@ -18,6 +18,7 @@
 	.ft112{font-size:11px;font-family: Arial, Helvetica, sans-serif;color:#000000;font-weight:bold;}
     .inputs{font-size: 9.5px;font-family: Arial, Helvetica, sans-serif; line-height: 0.9;}
     .f-inputs{font-size: 12px;font-family: Arial, Helvetica, sans-serif; line-height: 12px;}
+    .c-inputs{font-size: 9.5px;font-family: Arial, Helvetica, sans-serif; line-height: 0.8;}
     .page-break {page-break-after: always;}
     #educ_back { display:flex; justify-content: center;align-items: center; }
 </style>
@@ -838,7 +839,7 @@
                                     {{ @$workexperience->inclusiveDateTo }}
                                 </p>
                             </td>
-                            <td style="border-collapse:collapse;height:29px;border-spacing:0px;">
+                            <td style="border-collapse:collapse;height:29px;border-spacing:0;">
                                 <p class="inputs">
                                     {{ @$workexperience->position }}
                                 </p>

@@ -38,50 +38,50 @@
                 <th class="" style="width: 7%;"></th>
                 <th class="" style="width: 5%;"></th>
             </tr>
-                @foreach ($chunks as $workexperience)
-                <tr>
-                    <td style="border-collapse:collapse;height:29px;border-spacing:0;">
-                        <p class="inputs">
-                            {{ Str::before(@$workexperience->InclusiveDates, '/*/') }}
-                        </p>
-                    </td>
+            @foreach ($workExperiences as $workexperience)
+            <tr>
                 <td style="border-collapse:collapse;height:29px;border-spacing:0;">
-                        <p class="inputs">
-                            {{ Str::after(@$workexperience->InclusiveDates, '/*/') }}
-                        </p>
-                    </td>
-                    <td style="border-collapse:collapse;height:29px;border-spacing:0px;">
-                        <p class="inputs">
-                            {{ @$workexperience->Position }}
-                        </p>
-                    </td>
-                    <td style="border-collapse:collapse;height:29px;border-spacing:0;">
-                        <p class="inputs">
-                            {{ @$workexperience->Department }}
-                        </p>
-                    </td>
-                    <td style="border-collapse:collapse;height:29px;border-spacing:0;">
-                        <p class="inputs">
-                            {{ @$workexperience->MonthlySalary }}
-                        </p>
-                    </td>
-                    <td style="border-collapse:collapse;height:29px;border-spacing:0;">
-                        <p class="inputs">
-                            {{ @$workexperience->SalaryGrade }}
-                        </p>
-                    </td>
-                    <td style="border-collapse:collapse;height:29px;border-spacing:0;">
-                        <p class="inputs">
-                            {{ @$workexperience->StatusOfAppointment }}
-                        </p>
-                    </td>
-                    <td style="border-collapse:collapse;height:29px;border-spacing:0;">
-                        <p class="inputs">
-                            {{ @$workexperience->GovService }}
-                        </p>
-                    </td>
-                </tr>
-                @endforeach
+                    <p class="inputs">
+                        {{ @$workexperience->inclusiveDateFrom }}
+                    </p>
+                </td>
+                <td style="border-collapse:collapse;height:29px;border-spacing:0;">
+                    <p class="inputs">
+                        {{ @$workexperience->inclusiveDateTo }}
+                    </p>
+                </td>
+                <td style="border-collapse:collapse;height:29px;border-spacing:0;">
+                    <p class="inputs">
+                        {{ @$workexperience->position }}
+                    </p>
+                </td>
+                <td style="border-collapse:collapse;height:29px;border-spacing:0;">
+                    <p class="inputs">
+                        {{ @$workexperience->department }}
+                    </p>
+                </td>
+                <td style="border-collapse:collapse;height:29px;border-spacing:0;">
+                    <p class="inputs">
+                        {{ @$workexperience->monthlySalary }}
+                    </p>
+                </td>
+                <td style="border-collapse:collapse;height:29px;border-spacing:0;">
+                    <p class="inputs">
+                        {{ @$workexperience->salaryGrade }}
+                    </p>
+                </td>
+                <td style="border-collapse:collapse;height:29px;border-spacing:0;">
+                    <p class="inputs">
+                        {{ @$workexperience->statusOfAppointment }}
+                    </p>
+                </td>
+                <td style="border-collapse:collapse;height:29px;border-spacing:0;">
+                    <p class="inputs">
+                        {{ @$workexperience->govService }}
+                    </p>
+                </td>
+            </tr>
+            @endforeach
         </tbody>
     </table>
     <p style="position:absolute;top:1353px;left:55px;white-space:nowrap" class="ft112"><i><b>SIGNATURE</b></i></p>

@@ -19,7 +19,7 @@
     <p style="position:absolute;top:70px;left:718px;white-space:nowrap" class="ft11">&#160;CONDUCTED/&#160;SPONSORED&#160;BY &#160;&#160;</p>
     <p style="position:absolute;top:85px;left:758px;white-space:nowrap" class="ft11">(Write&#160;in&#160;full)</p>
 
-    <table style="width:875px;position:absolute;top:113px;left:24px; border-collapse:separate;border-spacing:0px;table-layout: fixed; text-align:center;">
+    <table style="width:887px;position:absolute;top:113px;left:17px; border-collapse:separate;border-spacing:0px;table-layout: fixed; text-align:center;">
         <tr>
             <th style="width: 39%;"></th>
             <th style="width: 7%;"></th>
@@ -31,12 +31,12 @@
         <tbody>
             @foreach ($chunks as $trainingprogram)
             <tr>
-                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="inputs">{{@$trainingprogram->Title}}</p></td>
-                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="inputs">{{ Str::before(@$trainingprogram->InclusiveDates, '/*/')}}</p></td>
-                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="inputs">{{ Str::after(@$trainingprogram->InclusiveDates, '/*/')}}</p></td>
-                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="inputs">{{@$trainingprogram->Hours}}</p></td>
-                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="inputs"> </p></td>
-                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="inputs">{{@$trainingprogram->Conductor}}</p></td>
+                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="c-inputs">{{@$trainingprogram->title}}</p></td>
+                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="c-inputs">{{ @$trainingprogram->inclusiveDateFrom }}</p></td>
+                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="c-inputs">{{ @$trainingprogram->inclusiveDateTo }}</p></td>
+                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="c-inputs">{{@$trainingprogram->hours}}</p></td>
+                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="c-inputs"></p></td>
+                <td style="border-collapse:collapse;height:27.2px;border-spacing:0;"><p class="c-inputs">{{@$trainingprogram->conductor}}</p></td>
             </tr>
             @endforeach
         </tbody>
