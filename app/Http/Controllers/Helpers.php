@@ -8,6 +8,7 @@ use App\WorkExperience;
 use App\VoluntaryWork;
 use App\TrainingProgram;
 use App\Plantilla;
+use App\Setting;
 
 class Helpers extends Controller
 {
@@ -94,5 +95,24 @@ class Helpers extends Controller
             'year' => 'CY 2021',
             'date_prepared' => '2020-03-01',
         ]);
+    }
+
+    public function initSettings() {
+        $settings = [];
+        $default_plantilla = [
+            'user_id' => auth()->user()->id,
+            'title' => 'Default Plantilla',
+            'value' => ''
+        ];
+        array_push($settings, $default_plantilla);
+        // $test = [
+        //     'user_id' => auth()->user()->id,
+        //     'title' => 'Default Plantilla2',
+        //     'value' => ''
+        // ];
+        // array_push($settings, $test);
+        foreach ($settings as $key => $setting) {
+            Setting::create($setting);
+        }
     }
 }

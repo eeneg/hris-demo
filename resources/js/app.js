@@ -142,9 +142,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
     router,
-    // data: {
-    //     search: ''
-    // },
+    data: {
+        
+    },
     methods: {
         logout() {
             Swal.fire({
@@ -163,5 +163,8 @@ const app = new Vue({
                 }
             });
         }
+    },
+    created() {
+        
     }
 });

@@ -3246,9 +3246,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      plantillas: {},
+      settings: {},
+      form: new Form({
+        'plantilla': ''
+      })
+    };
+  },
+  methods: {
+    load_plantillas: function load_plantillas() {
+      var _this = this;
+
+      axios.get('api/plantilla').then(function (_ref) {
+        var data = _ref.data;
+        _this.plantillas = data;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      });
+    },
+    load_settings: function load_settings() {
+      var _this2 = this;
+
+      axios.get('api/setting').then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.settings = data;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      });
+    },
+    save_settings: function save_settings() {
+      axios.post('api/setting', {
+        form: this.form
+      }).then(function (response) {})["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  created: function created() {
+    this.$Progress.start();
+    this.load_plantillas();
+    this.load_settings();
+    this.$Progress.finish();
   }
 });
 
@@ -68031,7 +68090,7 @@ var render = function() {
                     _c("td", { staticStyle: { width: "calc(100%-150px)" } }, [
                       _c("img", {
                         staticClass: "img-circle mr-2",
-                        staticStyle: { width: "45px", height: "45px" },
+                        staticStyle: { width: "38px", height: "38px" },
                         attrs: {
                           src: _vm.getAvatar(employee.picture),
                           alt: "User Avatar"
@@ -68049,23 +68108,19 @@ var render = function() {
                           }
                         },
                         [
-                          _c(
-                            "span",
-                            { staticStyle: { "font-size": "1.1rem" } },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  employee.surname +
-                                    ", " +
-                                    employee.firstname +
-                                    " " +
-                                    employee.nameextension +
-                                    " " +
-                                    employee.middlename
-                                )
+                          _c("span", { staticStyle: { "font-size": "1rem" } }, [
+                            _vm._v(
+                              _vm._s(
+                                employee.surname +
+                                  ", " +
+                                  employee.firstname +
+                                  " " +
+                                  employee.nameextension +
+                                  " " +
+                                  employee.middlename
                               )
-                            ]
-                          ),
+                            )
+                          ]),
                           _vm._v(" "),
                           _c("br"),
                           _vm._v(" "),
@@ -68073,7 +68128,7 @@ var render = function() {
                             "span",
                             {
                               staticClass: "text-muted",
-                              staticStyle: { "font-size": "0.9rem" }
+                              staticStyle: { "font-size": "0.8rem" }
                             },
                             [_c("i", [_vm._v(_vm._s(employee.status))])]
                           )
@@ -68083,24 +68138,43 @@ var render = function() {
                     _vm._v(" "),
                     employee.plantillacontents.length > 0
                       ? _c("td", [
-                          _vm._v(
-                            "\n                                    " +
-                              _vm._s(
-                                employee.plantillacontents[0].position &&
-                                  employee.plantillacontents[0].position.title
+                          _c(
+                            "p",
+                            {
+                              staticStyle: {
+                                margin: "0",
+                                "line-height": "1.2rem"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  employee.plantillacontents[0].position &&
+                                    employee.plantillacontents[0].position.title
+                                )
                               )
+                            ]
                           ),
-                          _c("br"),
                           _vm._v(" "),
-                          _c("span", { staticClass: "text-muted" }, [
-                            _vm._v(
-                              _vm._s(
-                                employee.plantillacontents[0].position &&
-                                  employee.plantillacontents[0].position
-                                    .department.description
+                          _c(
+                            "p",
+                            {
+                              staticClass: "text-muted",
+                              staticStyle: {
+                                margin: "0",
+                                "line-height": "1.2rem"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  employee.plantillacontents[0].position &&
+                                    employee.plantillacontents[0].position
+                                      .department.description
+                                )
                               )
-                            )
-                          ])
+                            ]
+                          )
                         ])
                       : _c("td"),
                     _vm._v(" "),
@@ -68109,7 +68183,7 @@ var render = function() {
                         _c(
                           "button",
                           {
-                            staticClass: "btn btn-info",
+                            staticClass: "btn btn-sm btn-info",
                             attrs: { type: "button" }
                           },
                           [_vm._v("Action")]
@@ -68119,7 +68193,7 @@ var render = function() {
                           "button",
                           {
                             staticClass:
-                              "btn btn-info dropdown-toggle dropdown-icon",
+                              "btn btn-sm btn-info dropdown-toggle dropdown-icon",
                             attrs: { type: "button", "data-toggle": "dropdown" }
                           },
                           [
@@ -68266,1439 +68340,1473 @@ var render = function() {
       [
         _c(
           "div",
-          { staticClass: "modal-dialog modal-xl modal-dialog-centered" },
+          {
+            staticClass: "modal-dialog modal-xl modal-dialog-centered",
+            staticStyle: { height: "100%", "margin-top": "0px" }
+          },
           [
-            _c("div", { staticClass: "modal-content employee-modal-content" }, [
-              _c("div", { staticClass: "text-center" }, [
-                _c("img", {
-                  staticClass: "profile-user-img img-fluid img-circle",
-                  attrs: {
-                    src: _vm.getAvatar(_vm.form.picture),
-                    alt: "User profile picture"
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c(
-                "h3",
-                {
-                  staticClass: "text-center mt-1",
-                  staticStyle: { "margin-bottom": "0" }
-                },
-                [
-                  _c("b", [
-                    _vm._v(
-                      _vm._s(
-                        _vm.form.firstname +
-                          " " +
-                          _vm.form.middlename +
-                          " " +
-                          _vm.form.surname +
-                          " " +
-                          _vm.form.nameextension
+            _c(
+              "div",
+              {
+                staticClass: "modal-content employee-modal-content",
+                staticStyle: { height: "95%" }
+              },
+              [
+                _c("div", { staticClass: "text-center" }, [
+                  _c("img", {
+                    staticClass: "profile-user-img img-fluid img-circle",
+                    attrs: {
+                      src: _vm.getAvatar(_vm.form.picture),
+                      alt: "User profile picture"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "h3",
+                  {
+                    staticClass: "text-center mt-1",
+                    staticStyle: { "margin-bottom": "0" }
+                  },
+                  [
+                    _c("b", [
+                      _vm._v(
+                        _vm._s(
+                          _vm.form.firstname +
+                            " " +
+                            _vm.form.middlename +
+                            " " +
+                            _vm.form.surname +
+                            " " +
+                            _vm.form.nameextension
+                        )
                       )
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _vm.form.plantillacontents.length > 0
-                ? _c("span", [
-                    _c(
-                      "p",
-                      {
-                        staticClass: "text-muted text-center mt-1",
-                        staticStyle: {
-                          "font-size": "1.1rem",
-                          "line-height": "1.1rem"
-                        }
-                      },
-                      [
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _vm.form.plantillacontents.length > 0
+                  ? _c("span", [
+                      _c(
+                        "p",
+                        {
+                          staticClass: "text-muted text-center mt-1",
+                          staticStyle: {
+                            "font-size": "1rem",
+                            "line-height": "1.2rem"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(
+                                _vm.form.plantillacontents[0].position &&
+                                  _vm.form.plantillacontents[0].position.title
+                              )
+                          ),
+                          _c("br"),
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(
+                                _vm.form.plantillacontents[0].position &&
+                                  _vm.form.plantillacontents[0].position
+                                    .department.title
+                              ) +
+                              "\n                        "
+                          )
+                        ]
+                      )
+                    ])
+                  : _c("span", [_c("br")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "view-profile-container" }, [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _vm._m(3),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
-                          "\n                            " +
-                            _vm._s(
-                              _vm.form.plantillacontents[0].position &&
-                                _vm.form.plantillacontents[0].position.title
-                            )
+                          "\n                                    " +
+                            _vm._s(_vm._f("myDate")(_vm.form.birthdate))
                         ),
                         _c("br"),
                         _vm._v(
-                          "\n                            " +
+                          _vm._s(_vm.form.birthplace) +
+                            "\n                                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(4),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
+                        _vm._v(
+                          "\n                                    " +
                             _vm._s(
-                              _vm.form.plantillacontents[0].position &&
-                                _vm.form.plantillacontents[0].position
-                                  .department.title
+                              _vm.form.sex +
+                                " / " +
+                                _vm.form.civilstatus +
+                                " / " +
+                                _vm.form.citizenship
                             ) +
-                            "\n                        "
+                            "\n                                "
                         )
-                      ]
-                    )
-                  ])
-                : _c("span", [_c("br")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "view-profile-container" }, [
-                _vm._m(2),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(3),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(_vm._f("myDate")(_vm.form.birthdate))
-                      ),
-                      _c("br"),
-                      _vm._v(
-                        _vm._s(_vm.form.birthplace) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(4),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(
-                            _vm.form.sex +
-                              " / " +
-                              _vm.form.civilstatus +
-                              " / " +
-                              _vm.form.citizenship
-                          ) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(5),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(
-                            _vm.form.height +
-                              " / " +
-                              _vm.form.weight +
-                              " / " +
-                              _vm.form.bloodtype
-                          ) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm.form.gsis
-                      ? _c("strong", [
-                          _c("i", { staticClass: "fas fa-id-badge mr-1" }),
-                          _vm._v(" GSIS ID No.")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.gsis
-                      ? _c(
-                          "p",
-                          {
-                            staticClass: "text-muted",
-                            staticStyle: { "margin-bottom": "0" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(_vm.form.gsis) +
-                                "\n                                "
-                            )
-                          ]
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(5),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(
+                              _vm.form.height +
+                                " / " +
+                                _vm.form.weight +
+                                " / " +
+                                _vm.form.bloodtype
+                            ) +
+                            "\n                                "
                         )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.pagibig
-                      ? _c("strong", [
-                          _c("i", { staticClass: "fas fa-id-badge mr-1" }),
-                          _vm._v(" Pag-ibig ID No.")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.pagibig
-                      ? _c(
-                          "p",
-                          {
-                            staticClass: "text-muted",
-                            staticStyle: { "margin-bottom": "0" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(_vm.form.pagibig) +
-                                "\n                                "
-                            )
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.philhealth
-                      ? _c("strong", [
-                          _c("i", { staticClass: "fas fa-id-badge mr-1" }),
-                          _vm._v(" PhilHealth No.")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.philhealth
-                      ? _c(
-                          "p",
-                          {
-                            staticClass: "text-muted",
-                            staticStyle: { "margin-bottom": "0" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(_vm.form.philhealth) +
-                                "\n                                "
-                            )
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.sss
-                      ? _c("strong", [
-                          _c("i", { staticClass: "fas fa-id-badge mr-1" }),
-                          _vm._v(" SSS No.")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.sss
-                      ? _c(
-                          "p",
-                          {
-                            staticClass: "text-muted",
-                            staticStyle: { "margin-bottom": "0" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(_vm.form.sss) +
-                                "\n                                "
-                            )
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.tin
-                      ? _c("strong", [
-                          _c("i", { staticClass: "fas fa-id-badge mr-1" }),
-                          _vm._v(" TIN No.")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.tin
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v(
-                            "\n                                    " +
-                              _vm._s(_vm.form.tin) +
-                              "\n                                "
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm.form.gsis
+                        ? _c("strong", [
+                            _c("i", { staticClass: "fas fa-id-badge mr-1" }),
+                            _vm._v(" GSIS ID No.")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.gsis
+                        ? _c(
+                            "p",
+                            {
+                              staticClass: "text-muted",
+                              staticStyle: { "margin-bottom": "0" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(_vm.form.gsis) +
+                                  "\n                                "
+                              )
+                            ]
                           )
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.gsis ||
-                    _vm.form.pagibig ||
-                    _vm.form.philhealth ||
-                    _vm.form.sss ||
-                    _vm.form.tin
-                      ? _c("hr")
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _vm.form.residentialaddress
-                      ? _c("strong", [
-                          _c("i", {
-                            staticClass: "fas fa-map-marker-alt mr-1"
-                          }),
-                          _vm._v(" Residential Address")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.residentialaddress
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v(
-                            "\n                                    " +
-                              _vm._s(_vm.form.residentialaddress) +
-                              "\n                                    "
-                          ),
-                          _vm.form.residentialaddress ? _c("br") : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.residentialaddress
-                            ? _c("span", [_vm._v(_vm._s(_vm.form.zipcode1))])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.residentialaddress ? _c("br") : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.residentialaddress
-                            ? _c("span", [_vm._v(_vm._s(_vm.form.telephone1))])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.residentialaddress ? _c("hr") : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.permanentaddress
-                      ? _c("strong", [
-                          _c("i", {
-                            staticClass: "fas fa-map-marker-alt mr-1"
-                          }),
-                          _vm._v(" Permanent Address")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.permanentaddress
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v(
-                            "\n                                    " +
-                              _vm._s(_vm.form.permanentaddress) +
-                              "\n                                    "
-                          ),
-                          _vm.form.permanentaddress ? _c("br") : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.permanentaddress
-                            ? _c("span", [_vm._v(_vm._s(_vm.form.zipcode2))])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.permanentaddress ? _c("br") : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.permanentaddress
-                            ? _c("span", [_vm._v(_vm._s(_vm.form.telephone2))])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.permanentaddress ? _c("hr") : _vm._e(),
-                    _vm._v(" "),
-                    _vm._m(6),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(_vm.form.cellphone) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(7),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(_vm.form.email) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(8),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(_vm.form.agencynumber) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr")
-                  ])
-                ]),
-                _vm._v(" "),
-                _vm._m(9),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(10),
-                    _vm._v(" "),
-                    _vm.form.familybackground.spouseSurname
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm.form.familybackground.spouseSurname
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                        Name: " +
-                                    _vm._s(
-                                      _vm.form.familybackground
-                                        .spouseFirstname +
-                                        " " +
-                                        _vm.form.familybackground
-                                          .spouseMiddlename +
-                                        " " +
-                                        _vm.form.familybackground.spouseSurname
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.familybackground.spouseOccupation
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Occupation: " +
-                                    _vm._s(
-                                      _vm.form.familybackground.spouseOccupation
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.familybackground.spouseBussiness
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Employer/Business Name: " +
-                                    _vm._s(
-                                      _vm.form.familybackground.spouseBussiness
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.familybackground.spouseBussinessAddress
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Employer/Business Address: " +
-                                    _vm._s(
-                                      _vm.form.familybackground
-                                        .spouseBussinessAddress
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.familybackground.spouseTelephone
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Telephone No.: " +
-                                    _vm._s(
-                                      _vm.form.familybackground.spouseTelephone
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.familybackground.spouseSurname == ""
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v("No data")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(11),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(
-                            _vm.form.familybackground.fatherFirstname +
-                              " " +
-                              _vm.form.familybackground.fatherMiddlename +
-                              " " +
-                              _vm.form.familybackground.fatherSurname
-                          ) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(12),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-muted" }, [
-                      _vm.form.familybackground.motherMaidenName
-                        ? _c("span", [
-                            _vm._v(
-                              "Maiden Name: " +
-                                _vm._s(
-                                  _vm.form.familybackground.motherMaidenName
-                                )
-                            )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.pagibig
+                        ? _c("strong", [
+                            _c("i", { staticClass: "fas fa-id-badge mr-1" }),
+                            _vm._v(" Pag-ibig ID No.")
                           ])
                         : _vm._e(),
                       _vm._v(" "),
-                      _vm.form.familybackground.motherMaidenName
-                        ? _c("br")
+                      _vm.form.pagibig
+                        ? _c(
+                            "p",
+                            {
+                              staticClass: "text-muted",
+                              staticStyle: { "margin-bottom": "0" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(_vm.form.pagibig) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
                         : _vm._e(),
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(
-                            _vm.form.familybackground.motherFirstname +
-                              " " +
-                              _vm.form.familybackground.motherMiddlename +
-                              " " +
-                              _vm.form.familybackground.motherSurname
-                          ) +
-                          "\n                                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("hr")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "col-md-6" },
-                    [
-                      _vm._m(13),
                       _vm._v(" "),
-                      _vm._l(_vm.form.children, function(child) {
-                        return _c(
-                          "p",
-                          {
-                            key: child.id,
-                            staticClass: "text-muted",
-                            staticStyle: { "margin-bottom": "0" }
-                          },
-                          [
+                      _vm.form.philhealth
+                        ? _c("strong", [
+                            _c("i", { staticClass: "fas fa-id-badge mr-1" }),
+                            _vm._v(" PhilHealth No.")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.philhealth
+                        ? _c(
+                            "p",
+                            {
+                              staticClass: "text-muted",
+                              staticStyle: { "margin-bottom": "0" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(_vm.form.philhealth) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.sss
+                        ? _c("strong", [
+                            _c("i", { staticClass: "fas fa-id-badge mr-1" }),
+                            _vm._v(" SSS No.")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.sss
+                        ? _c(
+                            "p",
+                            {
+                              staticClass: "text-muted",
+                              staticStyle: { "margin-bottom": "0" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(_vm.form.sss) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.tin
+                        ? _c("strong", [
+                            _c("i", { staticClass: "fas fa-id-badge mr-1" }),
+                            _vm._v(" TIN No.")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.tin
+                        ? _c("p", { staticClass: "text-muted" }, [
                             _vm._v(
-                              "\n                                    Name: " +
-                                _vm._s(child.name)
-                            ),
-                            _c("br"),
-                            _vm._v(
-                              "\n                                    Birthday: " +
-                                _vm._s(child.birthday) +
+                              "\n                                    " +
+                                _vm._s(_vm.form.tin) +
                                 "\n                                "
                             )
-                          ]
-                        )
-                      }),
-                      _vm._v(" "),
-                      _vm.form.children == 0
-                        ? _c("p", { staticClass: "text-muted" }, [
-                            _vm._v("No data")
                           ])
                         : _vm._e(),
                       _vm._v(" "),
-                      _c("hr")
-                    ],
-                    2
-                  )
-                ]),
-                _vm._v(" "),
-                _vm._m(14),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(15),
+                      _vm.form.gsis ||
+                      _vm.form.pagibig ||
+                      _vm.form.philhealth ||
+                      _vm.form.sss ||
+                      _vm.form.tin
+                        ? _c("hr")
+                        : _vm._e()
+                    ]),
                     _vm._v(" "),
-                    _vm.form.educationalbackground.elemSchoolName
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm.form.educationalbackground.elemSchoolName
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                        School: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .elemSchoolName
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.elemTo
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Period: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.elemFrom +
-                                        " - " +
-                                        _vm.form.educationalbackground.elemTo
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.elemHighestLevel
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Level: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .elemHighestLevel
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.elemYear
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Year Graduated: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.elemYear
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.elemSOA
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Academic Honors: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.elemSOA
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.elemSchoolName == ""
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v("No data")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(16),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.collSchoolName1
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm.form.educationalbackground.collSchoolName1
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                        School: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .collSchoolName1
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collTo1
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Period: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.collFrom1 +
-                                        " - " +
-                                        _vm.form.educationalbackground.collTo1
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collHighestLevel1
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Level: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .collHighestLevel1
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collYear1
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Year Graduated: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.collYear1
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collSOA1
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Academic Honors: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.collSOA1
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.collSchoolName2
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm.form.educationalbackground.collSchoolName2
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                        School: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .collSchoolName2
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collTo2
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Period: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.collFrom2 +
-                                        " - " +
-                                        _vm.form.educationalbackground.collTo2
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collHighestLevel2
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Level: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .collHighestLevel2
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collYear2
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Year Graduated: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.collYear2
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.collSOA2
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Academic Honors: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.collSOA2
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.collSchoolName2 == "" &&
-                    _vm.form.educationalbackground.collSchoolName1 == ""
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v("No data")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(17),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.gradSchoolName
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm.form.educationalbackground.gradSchoolName
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                        School: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .gradSchoolName
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.gradTo
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Period: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.gradFrom +
-                                        " - " +
-                                        _vm.form.educationalbackground.gradTo
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.gradHighestLevel
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Level: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .gradHighestLevel
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.gradYear
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Year Graduated: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.gradYear
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.gradSOA
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Academic Honors: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.gradSOA
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.gradSchoolName == ""
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v("No data")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("hr")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(18),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.secSchoolName
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm.form.educationalbackground.secSchoolName
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                        School: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .secSchoolName
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.secTo
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Period: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.secFrom +
-                                        " - " +
-                                        _vm.form.educationalbackground.secTo
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.secHighestLevel
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Level: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .secHighestLevel
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.secYear
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Year Graduated: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.secYear
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.secSOA
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Academic Honors: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.secSOA
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.secSchoolName == ""
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v("No data")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(19),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.vocSchoolName
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm.form.educationalbackground.vocSchoolName
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                        School: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .vocSchoolName
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.vocTo
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Period: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.vocFrom +
-                                        " - " +
-                                        _vm.form.educationalbackground.vocTo
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.vocHighestLevel
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Level: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground
-                                        .vocHighestLevel
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.vocYear
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Year Graduated: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.vocYear
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.form.educationalbackground.vocSOA
-                            ? _c("span", [
-                                _c("br"),
-                                _vm._v(
-                                  "\n                                        Academic Honors: " +
-                                    _vm._s(
-                                      _vm.form.educationalbackground.vocSOA
-                                    ) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e()
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.form.educationalbackground.vocSchoolName == ""
-                      ? _c("p", { staticClass: "text-muted" }, [
-                          _vm._v("No data")
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("hr")
-                  ])
-                ]),
-                _vm._v(" "),
-                _vm._m(20),
-                _vm._v(" "),
-                _vm._m(21),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "col-md-6" },
-                    [
-                      _vm._m(22),
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _vm.form.residentialaddress
+                        ? _c("strong", [
+                            _c("i", {
+                              staticClass: "fas fa-map-marker-alt mr-1"
+                            }),
+                            _vm._v(" Residential Address")
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
-                      _vm._l(_vm.form.eligibilities, function(
-                        eligibility,
-                        index
-                      ) {
-                        return _c(
-                          "p",
-                          {
-                            key: eligibility.id,
-                            staticClass: "text-muted",
-                            staticStyle: { "margin-bottom": "0" }
-                          },
-                          [
+                      _vm.form.residentialaddress
+                        ? _c("p", { staticClass: "text-muted" }, [
                             _vm._v(
-                              "\n                                    Eligibility: " +
-                                _vm._s(eligibility.careerService)
-                            ),
-                            _c("br"),
-                            _vm._v(
-                              "\n                                    Rating: " +
-                                _vm._s(eligibility.rating)
-                            ),
-                            _c("br"),
-                            _vm._v(
-                              "\n                                    Date of Examination: " +
-                                _vm._s(eligibility.dateOfExam)
-                            ),
-                            _c("br"),
-                            _vm._v(
-                              "\n                                    Place of Examination: " +
-                                _vm._s(eligibility.placeOfExam)
-                            ),
-                            _c("br"),
-                            _vm._v(
-                              "\n                                    License Number: " +
-                                _vm._s(eligibility.licenseNumber)
-                            ),
-                            _c("br"),
-                            _vm._v(
-                              "\n                                    Date of Validity: " +
-                                _vm._s(eligibility.licenseRelease) +
+                              "\n                                    " +
+                                _vm._s(_vm.form.residentialaddress) +
                                 "\n                                    "
                             ),
-                            index !=
-                            Object.keys(_vm.form.eligibilities).length - 1
-                              ? _c("br")
+                            _vm.form.residentialaddress ? _c("br") : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.residentialaddress
+                              ? _c("span", [_vm._v(_vm._s(_vm.form.zipcode1))])
                               : _vm._e(),
                             _vm._v(" "),
-                            index !=
-                            Object.keys(_vm.form.eligibilities).length - 1
-                              ? _c("br")
+                            _vm.form.residentialaddress ? _c("br") : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.residentialaddress
+                              ? _c("span", [
+                                  _vm._v(_vm._s(_vm.form.telephone1))
+                                ])
                               : _vm._e()
-                          ]
-                        )
-                      }),
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
-                      _vm.form.eligibilities == 0
+                      _vm.form.residentialaddress ? _c("hr") : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.permanentaddress
+                        ? _c("strong", [
+                            _c("i", {
+                              staticClass: "fas fa-map-marker-alt mr-1"
+                            }),
+                            _vm._v(" Permanent Address")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.permanentaddress
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(_vm.form.permanentaddress) +
+                                "\n                                    "
+                            ),
+                            _vm.form.permanentaddress ? _c("br") : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.permanentaddress
+                              ? _c("span", [_vm._v(_vm._s(_vm.form.zipcode2))])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.permanentaddress ? _c("br") : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.permanentaddress
+                              ? _c("span", [
+                                  _vm._v(_vm._s(_vm.form.telephone2))
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.permanentaddress ? _c("hr") : _vm._e(),
+                      _vm._v(" "),
+                      _vm._m(6),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.form.cellphone) +
+                            "\n                                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(7),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.form.email) +
+                            "\n                                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(8),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.form.agencynumber) +
+                            "\n                                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(9),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _vm._m(10),
+                      _vm._v(" "),
+                      _vm.form.familybackground.spouseSurname
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm.form.familybackground.spouseSurname
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                        Name: " +
+                                      _vm._s(
+                                        _vm.form.familybackground
+                                          .spouseFirstname +
+                                          " " +
+                                          _vm.form.familybackground
+                                            .spouseMiddlename +
+                                          " " +
+                                          _vm.form.familybackground
+                                            .spouseSurname
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.familybackground.spouseOccupation
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Occupation: " +
+                                      _vm._s(
+                                        _vm.form.familybackground
+                                          .spouseOccupation
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.familybackground.spouseBussiness
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Employer/Business Name: " +
+                                      _vm._s(
+                                        _vm.form.familybackground
+                                          .spouseBussiness
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.familybackground.spouseBussinessAddress
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Employer/Business Address: " +
+                                      _vm._s(
+                                        _vm.form.familybackground
+                                          .spouseBussinessAddress
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.familybackground.spouseTelephone
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Telephone No.: " +
+                                      _vm._s(
+                                        _vm.form.familybackground
+                                          .spouseTelephone
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.familybackground.spouseSurname == ""
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm._v("No data")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(11),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(
+                              _vm.form.familybackground.fatherFirstname +
+                                " " +
+                                _vm.form.familybackground.fatherMiddlename +
+                                " " +
+                                _vm.form.familybackground.fatherSurname
+                            ) +
+                            "\n                                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(12),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "text-muted" }, [
+                        _vm.form.familybackground.motherMaidenName
+                          ? _c("span", [
+                              _vm._v(
+                                "Maiden Name: " +
+                                  _vm._s(
+                                    _vm.form.familybackground.motherMaidenName
+                                  )
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.form.familybackground.motherMaidenName
+                          ? _c("br")
+                          : _vm._e(),
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(
+                              _vm.form.familybackground.motherFirstname +
+                                " " +
+                                _vm.form.familybackground.motherMiddlename +
+                                " " +
+                                _vm.form.familybackground.motherSurname
+                            ) +
+                            "\n                                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-md-6" },
+                      [
+                        _vm._m(13),
+                        _vm._v(" "),
+                        _vm._l(_vm.form.children, function(child) {
+                          return _c(
+                            "p",
+                            {
+                              key: child.id,
+                              staticClass: "text-muted",
+                              staticStyle: { "margin-bottom": "0" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    Name: " +
+                                  _vm._s(child.name)
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                                    Birthday: " +
+                                  _vm._s(child.birthday) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        }),
+                        _vm._v(" "),
+                        _vm.form.children == 0
+                          ? _c("p", { staticClass: "text-muted" }, [
+                              _vm._v("No data")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("hr")
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(14),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _vm._m(15),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.elemSchoolName
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm.form.educationalbackground.elemSchoolName
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                        School: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .elemSchoolName
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.elemTo
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Period: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .elemFrom +
+                                          " - " +
+                                          _vm.form.educationalbackground.elemTo
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.elemHighestLevel
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Level: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .elemHighestLevel
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.elemYear
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Year Graduated: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.elemYear
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.elemSOA
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Academic Honors: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.elemSOA
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.elemSchoolName == ""
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm._v("No data")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(16),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.collSchoolName1
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm.form.educationalbackground.collSchoolName1
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                        School: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .collSchoolName1
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collTo1
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Period: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .collFrom1 +
+                                          " - " +
+                                          _vm.form.educationalbackground.collTo1
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collHighestLevel1
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Level: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .collHighestLevel1
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collYear1
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Year Graduated: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.collYear1
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collSOA1
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Academic Honors: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.collSOA1
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.collSchoolName2
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm.form.educationalbackground.collSchoolName2
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                        School: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .collSchoolName2
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collTo2
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Period: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .collFrom2 +
+                                          " - " +
+                                          _vm.form.educationalbackground.collTo2
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collHighestLevel2
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Level: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .collHighestLevel2
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collYear2
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Year Graduated: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.collYear2
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.collSOA2
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Academic Honors: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.collSOA2
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.collSchoolName2 == "" &&
+                      _vm.form.educationalbackground.collSchoolName1 == ""
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm._v("No data")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(17),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.gradSchoolName
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm.form.educationalbackground.gradSchoolName
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                        School: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .gradSchoolName
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.gradTo
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Period: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .gradFrom +
+                                          " - " +
+                                          _vm.form.educationalbackground.gradTo
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.gradHighestLevel
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Level: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .gradHighestLevel
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.gradYear
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Year Graduated: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.gradYear
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.gradSOA
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Academic Honors: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.gradSOA
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.gradSchoolName == ""
                         ? _c("p", { staticClass: "text-muted" }, [
                             _vm._v("No data")
                           ])
                         : _vm._e(),
                       _vm._v(" "),
                       _c("hr")
-                    ],
-                    2
-                  ),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _vm._m(18),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.secSchoolName
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm.form.educationalbackground.secSchoolName
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                        School: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .secSchoolName
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.secTo
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Period: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.secFrom +
+                                          " - " +
+                                          _vm.form.educationalbackground.secTo
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.secHighestLevel
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Level: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .secHighestLevel
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.secYear
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Year Graduated: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.secYear
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.secSOA
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Academic Honors: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.secSOA
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.secSchoolName == ""
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm._v("No data")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(19),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.vocSchoolName
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm.form.educationalbackground.vocSchoolName
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                        School: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .vocSchoolName
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.vocTo
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Period: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.vocFrom +
+                                          " - " +
+                                          _vm.form.educationalbackground.vocTo
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.vocHighestLevel
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Level: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground
+                                          .vocHighestLevel
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.vocYear
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Year Graduated: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.vocYear
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.form.educationalbackground.vocSOA
+                              ? _c("span", [
+                                  _c("br"),
+                                  _vm._v(
+                                    "\n                                        Academic Honors: " +
+                                      _vm._s(
+                                        _vm.form.educationalbackground.vocSOA
+                                      ) +
+                                      "\n                                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.form.educationalbackground.vocSchoolName == ""
+                        ? _c("p", { staticClass: "text-muted" }, [
+                            _vm._v("No data")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("hr")
+                    ])
+                  ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6" }, [
-                    _vm._m(23),
-                    _vm._v(" "),
+                  _vm._m(20),
+                  _vm._v(" "),
+                  _vm._m(21),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
                     _c(
-                      "p",
-                      {
-                        staticClass: "text-muted",
-                        staticStyle: { "margin-bottom": "0" }
-                      },
-                      _vm._l(_vm.form.otherinfos, function(otherinfo, index) {
-                        return _c("span", { key: otherinfo.id }, [
-                          otherinfo.skill
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                            " +
-                                    _vm._s(otherinfo.skill)
-                                ),
-                                index !=
-                                Object.keys(_vm.form.otherinfos).length - 1
-                                  ? _c("span", [_vm._v(", ")])
-                                  : _vm._e()
-                              ])
-                            : _vm._e()
-                        ])
-                      }),
-                      0
+                      "div",
+                      { staticClass: "col-md-6" },
+                      [
+                        _vm._m(22),
+                        _vm._v(" "),
+                        _vm._l(_vm.form.eligibilities, function(
+                          eligibility,
+                          index
+                        ) {
+                          return _c(
+                            "p",
+                            {
+                              key: eligibility.id,
+                              staticClass: "text-muted",
+                              staticStyle: { "margin-bottom": "0" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                    Eligibility: " +
+                                  _vm._s(eligibility.careerService)
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                                    Rating: " +
+                                  _vm._s(eligibility.rating)
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                                    Date of Examination: " +
+                                  _vm._s(eligibility.dateOfExam)
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                                    Place of Examination: " +
+                                  _vm._s(eligibility.placeOfExam)
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                                    License Number: " +
+                                  _vm._s(eligibility.licenseNumber)
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                                    Date of Validity: " +
+                                  _vm._s(eligibility.licenseRelease) +
+                                  "\n                                    "
+                              ),
+                              index !=
+                              Object.keys(_vm.form.eligibilities).length - 1
+                                ? _c("br")
+                                : _vm._e(),
+                              _vm._v(" "),
+                              index !=
+                              Object.keys(_vm.form.eligibilities).length - 1
+                                ? _c("br")
+                                : _vm._e()
+                            ]
+                          )
+                        }),
+                        _vm._v(" "),
+                        _vm.form.eligibilities == 0
+                          ? _c("p", { staticClass: "text-muted" }, [
+                              _vm._v("No data")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("hr")
+                      ],
+                      2
                     ),
                     _vm._v(" "),
-                    _vm._m(24),
-                    _vm._v(" "),
-                    _c(
-                      "p",
-                      {
-                        staticClass: "text-muted",
-                        staticStyle: { "margin-bottom": "0" }
-                      },
-                      _vm._l(_vm.form.otherinfos, function(otherinfo, index) {
-                        return _c("span", { key: otherinfo.id }, [
-                          otherinfo.recognition
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                            " +
-                                    _vm._s(otherinfo.recognition)
-                                ),
-                                index !=
-                                Object.keys(_vm.form.otherinfos).length - 1
-                                  ? _c("span", [_vm._v(", ")])
-                                  : _vm._e()
-                              ])
-                            : _vm._e()
-                        ])
-                      }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _vm._m(25),
-                    _vm._v(" "),
-                    _c(
-                      "p",
-                      {
-                        staticClass: "text-muted",
-                        staticStyle: { "margin-bottom": "0" }
-                      },
-                      _vm._l(_vm.form.otherinfos, function(otherinfo, index) {
-                        return _c("span", { key: otherinfo.id }, [
-                          otherinfo.membership
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                            " +
-                                    _vm._s(otherinfo.membership)
-                                ),
-                                index !=
-                                Object.keys(_vm.form.otherinfos).length - 1
-                                  ? _c("span", [_vm._v(", ")])
-                                  : _vm._e()
-                              ])
-                            : _vm._e()
-                        ])
-                      }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _c("hr")
-                  ])
-                ]),
-                _vm._v(" "),
-                _vm.workexperiences().length > 0
-                  ? _c("div", { staticClass: "row" }, [_vm._m(26)])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.workexperiences().length > 0
-                  ? _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "table",
-                          {
-                            staticClass:
-                              "table table-bordered table-hover pds-table"
-                          },
-                          [
-                            _vm._m(27),
-                            _vm._v(" "),
-                            _c(
-                              "tbody",
-                              _vm._l(_vm.workexperiences(), function(
-                                workexperience
-                              ) {
-                                return _c("tr", { key: workexperience.id }, [
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass: "text-center",
-                                      staticStyle: { "white-space": "nowrap" }
-                                    },
-                                    [
-                                      _vm._v(
-                                        _vm._s(workexperience.inclusiveDateFrom)
-                                      )
-                                    ]
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _vm._m(23),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticClass: "text-muted",
+                          staticStyle: { "margin-bottom": "0" }
+                        },
+                        _vm._l(_vm.form.otherinfos, function(otherinfo, index) {
+                          return _c("span", { key: otherinfo.id }, [
+                            otherinfo.skill
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                            " +
+                                      _vm._s(otherinfo.skill)
                                   ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass: "text-center",
-                                      staticStyle: { "white-space": "nowrap" }
-                                    },
-                                    [
-                                      _vm._v(
-                                        _vm._s(workexperience.inclusiveDateTo)
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(_vm._s(workexperience.position))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(_vm._s(workexperience.department))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", { staticClass: "text-center" }, [
-                                    _vm._v(_vm._s(workexperience.monthlySalary))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", { staticClass: "text-center" }, [
-                                    _vm._v(_vm._s(workexperience.salaryGrade))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", { staticClass: "text-center" }, [
-                                    _vm._v(
-                                      _vm._s(workexperience.statusOfAppointment)
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", { staticClass: "text-center" }, [
-                                    _vm._v(_vm._s(workexperience.govService))
-                                  ])
+                                  index !=
+                                  Object.keys(_vm.form.otherinfos).length - 1
+                                    ? _c("span", [_vm._v(", ")])
+                                    : _vm._e()
                                 ])
-                              }),
-                              0
-                            )
-                          ]
-                        )
-                      ])
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.voluntaryworks().length > 0
-                  ? _c("div", { staticClass: "row" }, [_vm._m(28)])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.voluntaryworks().length > 0
-                  ? _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "table",
-                          {
-                            staticClass:
-                              "table table-bordered table-hover pds-table"
-                          },
-                          [
-                            _vm._m(29),
-                            _vm._v(" "),
-                            _c(
-                              "tbody",
-                              _vm._l(_vm.voluntaryworks(), function(
-                                voluntarywork
-                              ) {
-                                return _c("tr", { key: voluntarywork.id }, [
-                                  _c("td", [
-                                    _vm._v(_vm._s(voluntarywork.nameAndAddress))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass: "text-center",
-                                      staticStyle: { "white-space": "nowrap" }
-                                    },
-                                    [
-                                      _vm._v(
-                                        _vm._s(voluntarywork.inclusiveDateFrom)
-                                      )
-                                    ]
+                              : _vm._e()
+                          ])
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _vm._m(24),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticClass: "text-muted",
+                          staticStyle: { "margin-bottom": "0" }
+                        },
+                        _vm._l(_vm.form.otherinfos, function(otherinfo, index) {
+                          return _c("span", { key: otherinfo.id }, [
+                            otherinfo.recognition
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                            " +
+                                      _vm._s(otherinfo.recognition)
                                   ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass: "text-center",
-                                      staticStyle: { "white-space": "nowrap" }
-                                    },
-                                    [
-                                      _vm._v(
-                                        _vm._s(voluntarywork.inclusiveDateTo)
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("td", { staticClass: "text-center" }, [
-                                    _vm._v(_vm._s(voluntarywork.hours))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(_vm._s(voluntarywork.position))
-                                  ])
+                                  index !=
+                                  Object.keys(_vm.form.otherinfos).length - 1
+                                    ? _c("span", [_vm._v(", ")])
+                                    : _vm._e()
                                 ])
-                              }),
-                              0
-                            )
-                          ]
-                        )
-                      ])
+                              : _vm._e()
+                          ])
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _vm._m(25),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticClass: "text-muted",
+                          staticStyle: { "margin-bottom": "0" }
+                        },
+                        _vm._l(_vm.form.otherinfos, function(otherinfo, index) {
+                          return _c("span", { key: otherinfo.id }, [
+                            otherinfo.membership
+                              ? _c("span", [
+                                  _vm._v(
+                                    "\n                                            " +
+                                      _vm._s(otherinfo.membership)
+                                  ),
+                                  index !=
+                                  Object.keys(_vm.form.otherinfos).length - 1
+                                    ? _c("span", [_vm._v(", ")])
+                                    : _vm._e()
+                                ])
+                              : _vm._e()
+                          ])
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c("hr")
                     ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.trainingprograms().length > 0
-                  ? _c("div", { staticClass: "row" }, [_vm._m(30)])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.trainingprograms().length > 0
-                  ? _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "table",
-                          {
-                            staticClass:
-                              "table table-bordered table-hover pds-table"
-                          },
-                          [
-                            _vm._m(31),
-                            _vm._v(" "),
-                            _c(
-                              "tbody",
-                              _vm._l(_vm.trainingprograms(), function(
-                                trainingprogram
-                              ) {
-                                return _c("tr", { key: trainingprogram.id }, [
-                                  _c("td", [
-                                    _vm._v(_vm._s(trainingprogram.title))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass: "text-center",
-                                      staticStyle: { "white-space": "nowrap" }
-                                    },
-                                    [
+                  ]),
+                  _vm._v(" "),
+                  _vm.workexperiences().length > 0
+                    ? _c("div", { staticClass: "row" }, [_vm._m(26)])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.workexperiences().length > 0
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _c(
+                            "table",
+                            {
+                              staticClass:
+                                "table table-bordered table-hover pds-table"
+                            },
+                            [
+                              _vm._m(27),
+                              _vm._v(" "),
+                              _c(
+                                "tbody",
+                                _vm._l(_vm.workexperiences(), function(
+                                  workexperience
+                                ) {
+                                  return _c("tr", { key: workexperience.id }, [
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "text-center",
+                                        staticStyle: { "white-space": "nowrap" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            workexperience.inclusiveDateFrom
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "text-center",
+                                        staticStyle: { "white-space": "nowrap" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(workexperience.inclusiveDateTo)
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(workexperience.position))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(workexperience.department))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", { staticClass: "text-center" }, [
+                                      _vm._v(
+                                        _vm._s(workexperience.monthlySalary)
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", { staticClass: "text-center" }, [
+                                      _vm._v(_vm._s(workexperience.salaryGrade))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", { staticClass: "text-center" }, [
                                       _vm._v(
                                         _vm._s(
-                                          trainingprogram.inclusiveDateFrom
+                                          workexperience.statusOfAppointment
                                         )
                                       )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass: "text-center",
-                                      staticStyle: { "white-space": "nowrap" }
-                                    },
-                                    [
-                                      _vm._v(
-                                        _vm._s(trainingprogram.inclusiveDateTo)
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("td", { staticClass: "text-center" }, [
-                                    _vm._v(_vm._s(trainingprogram.hours))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(_vm._s(trainingprogram.conductor))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", { staticClass: "text-center" }, [
+                                      _vm._v(_vm._s(workexperience.govService))
+                                    ])
                                   ])
-                                ])
-                              }),
-                              0
-                            )
-                          ]
-                        )
+                                }),
+                                0
+                              )
+                            ]
+                          )
+                        ])
                       ])
-                    ])
-                  : _vm._e()
-              ]),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "btn btn-primary btn-block",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.generatePDS(_vm.form.id)
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.voluntaryworks().length > 0
+                    ? _c("div", { staticClass: "row" }, [_vm._m(28)])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.voluntaryworks().length > 0
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _c(
+                            "table",
+                            {
+                              staticClass:
+                                "table table-bordered table-hover pds-table"
+                            },
+                            [
+                              _vm._m(29),
+                              _vm._v(" "),
+                              _c(
+                                "tbody",
+                                _vm._l(_vm.voluntaryworks(), function(
+                                  voluntarywork
+                                ) {
+                                  return _c("tr", { key: voluntarywork.id }, [
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(voluntarywork.nameAndAddress)
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "text-center",
+                                        staticStyle: { "white-space": "nowrap" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            voluntarywork.inclusiveDateFrom
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "text-center",
+                                        staticStyle: { "white-space": "nowrap" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(voluntarywork.inclusiveDateTo)
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("td", { staticClass: "text-center" }, [
+                                      _vm._v(_vm._s(voluntarywork.hours))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(voluntarywork.position))
+                                    ])
+                                  ])
+                                }),
+                                0
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.trainingprograms().length > 0
+                    ? _c("div", { staticClass: "row" }, [_vm._m(30)])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.trainingprograms().length > 0
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _c(
+                            "table",
+                            {
+                              staticClass:
+                                "table table-bordered table-hover pds-table"
+                            },
+                            [
+                              _vm._m(31),
+                              _vm._v(" "),
+                              _c(
+                                "tbody",
+                                _vm._l(_vm.trainingprograms(), function(
+                                  trainingprogram
+                                ) {
+                                  return _c("tr", { key: trainingprogram.id }, [
+                                    _c("td", [
+                                      _vm._v(_vm._s(trainingprogram.title))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "text-center",
+                                        staticStyle: { "white-space": "nowrap" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            trainingprogram.inclusiveDateFrom
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "text-center",
+                                        staticStyle: { "white-space": "nowrap" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            trainingprogram.inclusiveDateTo
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("td", { staticClass: "text-center" }, [
+                                      _vm._v(_vm._s(trainingprogram.hours))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(trainingprogram.conductor))
+                                    ])
+                                  ])
+                                }),
+                                0
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-primary btn-block",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.generatePDS(_vm.form.id)
+                      }
                     }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fas fa-print mr-2" }),
-                  _vm._v("Generate Personal Data Sheet")
-                ]
-              ),
-              _vm._v(" "),
-              _vm._m(32)
-            ])
+                  },
+                  [
+                    _c("i", { staticClass: "fas fa-print mr-2" }),
+                    _vm._v("Generate Personal Data Sheet")
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(32)
+              ]
+            )
           ]
         )
       ]
@@ -71681,26 +71789,109 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "row justify-content-center" }, [
+    _c("div", { staticClass: "col-md-12" }, [
+      _c("div", { staticClass: "card" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.save_settings()
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "card-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-md-4" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _c("label", [
+                        _vm._v("Select latest approved Annual Plantilla")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.plantilla,
+                              expression: "form.plantilla"
+                            }
+                          ],
+                          staticClass: "custom-select",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("plantilla")
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.form,
+                                "plantilla",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.plantillas, function(plantilla) {
+                          return _c("option", { key: plantilla.id }, [
+                            _vm._v(_vm._s(plantilla.year))
+                          ])
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "plantilla" }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(1)
+          ]
+        )
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Settings")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h2", [_vm._v("Settings")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-footer" }, [
+      _c("button", { staticClass: "btn btn-info", attrs: { type: "submit" } }, [
+        _vm._v("Save Changes")
       ])
     ])
   }
@@ -89596,9 +89787,7 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app',
   router: router,
-  // data: {
-  //     search: ''
-  // },
+  data: {},
   methods: {
     logout: function logout() {
       var _this = this;
@@ -89621,7 +89810,8 @@ var app = new Vue({
         }
       });
     }
-  }
+  },
+  created: function created() {}
 });
 
 /***/ }),
@@ -90919,8 +91109,8 @@ var Gate = /*#__PURE__*/function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

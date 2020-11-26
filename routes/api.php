@@ -23,7 +23,9 @@ Route::group(['middleware' => 'auth:api'], function() {
         'user' => 'API\UserController',
         'personalinformation' => 'API\PersonalInformationController',
         'barcode' => 'API\BarcodeController',
-        'salarygrade' => 'API\SalaryGradeController'
+        'plantilla' => 'API\PlantillaController',
+        'salarygrade' => 'API\SalaryGradeController',
+        'setting' => 'API\SettingsController',
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');

@@ -30,23 +30,23 @@
                             <tr v-for="employee in employees.data" :key="employee.id">
                                 <!-- <td>{{ user.name | capitalize }}</td> -->
                                 <td style="width: calc(100%-150px);">
-                                    <img style="width: 45px;height: 45px;" class="img-circle mr-2" :src="getAvatar(employee.picture)" alt="User Avatar">
+                                    <img style="width: 38px;height: 38px;" class="img-circle mr-2" :src="getAvatar(employee.picture)" alt="User Avatar">
                                     <div style="display: inline-block;vertical-align: middle;line-height: 1.2rem;height: 35px;">
-                                        <span style="font-size: 1.1rem;">{{ employee.surname + ', ' + employee.firstname + ' ' + employee.nameextension + ' ' + employee.middlename }}</span>
+                                        <span style="font-size: 1rem;">{{ employee.surname + ', ' + employee.firstname + ' ' + employee.nameextension + ' ' + employee.middlename }}</span>
                                         <br>
-                                        <span style="font-size: 0.9rem;" class="text-muted"><i>{{ employee.status }}</i></span>
+                                        <span style="font-size: 0.8rem;" class="text-muted"><i>{{ employee.status }}</i></span>
                                     </div>
                                     
                                 </td>
                                 <td v-if="employee.plantillacontents.length > 0">
-                                    {{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.title }}<br>
-                                    <span class="text-muted">{{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.department.description }}</span>
+                                    <p style="margin: 0;line-height: 1.2rem;">{{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.title }}</p>
+                                    <p style="margin: 0;line-height: 1.2rem;" class="text-muted">{{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.department.description }}</p>
                                 </td>
                                 <td v-else></td>
                                 <td style="width: 150px;">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-info">Action</button>
-                                        <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                        <button type="button" class="btn btn-sm btn-info">Action</button>
+                                        <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                             <span class="sr-only">Toggle Dropdown</span>
                                             <div class="dropdown-menu" role="menu">
                                                 <a class="dropdown-item" @click.prevent="viewProfileModal(employee)" href="#">View Profile</a>
@@ -75,8 +75,8 @@
 
         <!-- The Modal -->
         <div class="modal fade" id="viewProfileModal" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-                <div class="modal-content employee-modal-content">
+            <div class="modal-dialog modal-xl modal-dialog-centered" style="height: 100%; margin-top: 0px;">
+                <div class="modal-content employee-modal-content" style="height: 95%;">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle" :src="getAvatar(form.picture)" alt="User profile picture">
                     </div>
@@ -84,7 +84,7 @@
                     <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ form.firstname + ' ' + form.middlename + ' ' + form.surname + ' ' + form.nameextension }}</b></h3>
 
                     <span v-if="form.plantillacontents.length > 0">
-                        <p class="text-muted text-center mt-1" style="font-size: 1.1rem;line-height: 1.1rem;">
+                        <p class="text-muted text-center mt-1" style="font-size: 1rem;line-height: 1.2rem;">
                             {{ form.plantillacontents[0].position && form.plantillacontents[0].position.title }}<br>
                             {{ form.plantillacontents[0].position && form.plantillacontents[0].position.department.title }}
                         </p>

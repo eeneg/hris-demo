@@ -48325,7 +48325,7 @@ readers do not read off random characters that represent icons */
 }
 
 .view-profile-container {
-  height: 650px;
+  height: 80%;
   overflow-y: auto;
 }
 
@@ -48353,5 +48353,13 @@ readers do not read off random characters that represent icons */
 
 .card-primary.card-outline {
   border-top: 4px solid #007bff;
+}
+
+.nav-treeview .nav-item {
+  margin-left: 10px;
+}
+
+.table td {
+  padding: 0.55rem;
 }
 
