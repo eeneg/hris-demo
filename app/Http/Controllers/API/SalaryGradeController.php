@@ -20,9 +20,11 @@ class SalaryGradeController extends Controller
 
         foreach($sg->keys() as $key)
         {
-            for ($i=0; $i < $sg[$key]->max('grade') + 1; $i++)
+            $maxG = $sg[$key]->max('grade');
+            $maxS = $sg[$key]->max('step');
+            for ($i=0; $i < $maxG + 1; $i++)
             {
-                for ($x=0; $x < $sg[$key]->max('step') + 1; $x++)
+                for ($x=0; $x < $maxS + 1; $x++)
                 {
                     $temp = $sg[$key]->where('grade', $i)->where('step', $x)->first();
                     isset($temp) ? $cl->push($temp) : '';
@@ -41,7 +43,9 @@ class SalaryGradeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(['amount' => 'numeric', 'tranche' => 'string', 'effectiv_date' => 'date']);
+
+        SalaryGrade::create($request->all());
     }
 
     /**
@@ -65,6 +69,8 @@ class SalaryGradeController extends Controller
     public function update(Request $request, $id)
     {
         $salarysched = SalaryGrade::findOrFail($id);
+
+        $this->validate($request, ['amount' => 'required|numeric']);
 
         if($request->amount == null)
         {

@@ -4423,9 +4423,230 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      editMode: false,
+      selected: {
+        tranche: "SSL V First Tranche"
+      },
+      steps: {},
+      salarygrades: {},
+      tranches: {},
+      form: {
+        amount: [],
+        effective_date: []
+      }
+    };
+  },
+  watch: {
+    selected: function selected() {
+      this.debouncedgetSalaryGrades();
+    }
+  },
+  created: function created() {
+    this.getSalaryGrade();
+    this.debouncedgetSalaryGrades = _.debounce(this.getSalaryGrade, 500);
+  },
+  methods: {
+    getSalaryGrade: function getSalaryGrade() {
+      var _this = this;
+
+      var select = this.selected.tranche;
+      axios.get('api/salarygrade').then(function (_ref) {
+        var data = _ref.data;
+        _this.tranches = Object.keys(data);
+
+        var step = _.map(data[select], 'step');
+
+        var max = _.max(step);
+
+        _this.salarygrades = _.chunk(data[select], max);
+        _this.steps = max;
+      })["catch"](function (error) {// do something
+      });
+    },
+    createSalaryGradeModal: function createSalaryGradeModal() {
+      this.editMode = false;
+      this.form = {
+        amount: [],
+        effective_date: []
+      };
+    },
+    editSalaryGradeModal: function editSalaryGradeModal(salarygrade) {
+      this.editMode = true;
+      $('#modal-grade').text("Grade " + salarygrade[0]['grade']);
+      this.form = salarygrade;
+    },
+    closed: function closed() {
+      this.getSalaryGrade();
+    },
+    createSalaryGrade: function createSalaryGrade() {
+      var _this2 = this;
+
+      this.form.amount.forEach(function (e, index) {
+        axios.post('api/salarygrade', {
+          tranche: _this2.form.tranche,
+          step: index,
+          grade: _this2.form.grade,
+          amount: e,
+          effective_date: _this2.form.effective_date[index]
+        }).then(function (response) {
+          if (index === _this2.form.length - 1) {
+            toast.fire({
+              icon: 'success',
+              title: 'Updated successfully'
+            });
+            _this2.selected = {
+              tranche: _this2.form.tranche
+            };
+            $('#modalCreate').modal('hide');
+          }
+        })["catch"](function (error) {//do something
+        });
+      });
+    },
+    updateSalaryGrade: function updateSalaryGrade() {
+      var _this3 = this;
+
+      this.form.forEach(function (e, index) {
+        axios.patch('api/salarygrade/' + e.id, e).then(function (response) {
+          if (index === _this3.form.length - 1) {
+            toast.fire({
+              icon: 'success',
+              title: 'Updated successfully'
+            });
+            $('#modalUpdate').modal('hide');
+          }
+        })["catch"](function (error) {//do something
+        });
+      });
+    }
+  },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    console.log('mounted');
   }
 });
 
@@ -73323,28 +73544,663 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("Salary Schedule")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _vm._v("\n                I'm an example component.\n            ")
+  return _c("div", { staticClass: "row justify-content-center" }, [
+    _c("div", { staticClass: "col-md-12" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("label", { attrs: { for: "custom-select" } }, [
+                _vm._v("Salary Schedule")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "btn-group" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.selected,
+                        expression: "selected"
+                      }
+                    ],
+                    staticClass: "custom-select",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.selected = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  _vm._l(_vm.tranches, function(tranche) {
+                    return _c(
+                      "option",
+                      {
+                        key: tranche.id,
+                        domProps: { value: { tranche: tranche } }
+                      },
+                      [_vm._v(" " + _vm._s(tranche) + " ")]
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "btn-group float-right" }, [
+                _vm.$gate.isAdministrator()
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: {
+                          type: "button",
+                          "data-toggle": "modal",
+                          "data-target": "#modalCreate"
+                        },
+                        on: { click: _vm.createSalaryGradeModal }
+                      },
+                      [
+                        _vm._v("\n                              Add "),
+                        _c("i", { staticClass: "fa fa-plus" })
+                      ]
+                    )
+                  : _vm._e()
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("table", { staticClass: "table table-striped" }, [
+            _c("thead", [
+              _c(
+                "tr",
+                { staticClass: "text-center" },
+                [
+                  _c(
+                    "td",
+                    {
+                      staticStyle: {
+                        width: "calc(100%-150px)",
+                        "font-weight": "bold"
+                      }
+                    },
+                    [_vm._v("Grade")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.steps, function(step) {
+                    return _c(
+                      "td",
+                      {
+                        key: step.id,
+                        staticStyle: {
+                          width: "calc(100%-150px)",
+                          "font-weight": "bold"
+                        }
+                      },
+                      [_vm._v("Step " + _vm._s(step))]
+                    )
+                  }),
+                  _vm._v(" "),
+                  _vm.$gate.isAdministrator()
+                    ? _c(
+                        "td",
+                        {
+                          staticStyle: {
+                            width: "calc(100%-150px)",
+                            "font-weight": "bold"
+                          }
+                        },
+                        [_vm._v("Action")]
+                      )
+                    : _vm._e()
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.salarygrades, function(salarygrade) {
+                return _c(
+                  "tr",
+                  { key: salarygrade.id, staticClass: "text-center" },
+                  [
+                    _c("td", {
+                      staticStyle: { width: "calc(100%-150px)" },
+                      domProps: { textContent: _vm._s(salarygrade[0].grade) }
+                    }),
+                    _vm._v(" "),
+                    _vm._l(salarygrade, function(amount) {
+                      return _c(
+                        "td",
+                        {
+                          key: amount.id,
+                          staticStyle: { width: "calc(100%-150px)" }
+                        },
+                        [_vm._v(_vm._s(amount.amount))]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _vm.$gate.isAdministrator()
+                      ? _c(
+                          "td",
+                          { staticStyle: { width: "calc(100%-150px)" } },
+                          [
+                            _vm.$gate.isAdministrator()
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary",
+                                    attrs: {
+                                      type: "button",
+                                      "data-toggle": "modal",
+                                      "data-target": "#modalUpdate"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.editSalaryGradeModal(
+                                          salarygrade
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                   Edit "
+                                    ),
+                                    _c("i", { staticClass: "fa fa-edit" })
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        )
+                      : _vm._e()
+                  ],
+                  2
+                )
+              }),
+              0
+            )
           ])
         ])
       ])
-    ])
-  }
-]
+    ]),
+    _vm._v(" "),
+    _vm.editMode == false
+      ? _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: {
+              id: "modalCreate",
+              "data-backdrop": "static",
+              "data-keyboard": "false",
+              tabindex: "-1",
+              "aria-labelledby": "staticBackdropLabel",
+              "aria-hidden": "true"
+            }
+          },
+          [
+            _c("div", { staticClass: "modal-dialog modal-lg" }, [
+              _c("div", { staticClass: "modal-content" }, [
+                _c("div", { staticClass: "modal-header" }, [
+                  _c("h5", { staticClass: "modal-title" }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: {
+                        type: "button",
+                        "data-dismiss": "modal",
+                        "aria-label": "Close"
+                      },
+                      on: { click: _vm.closed }
+                    },
+                    [
+                      _c("span", { attrs: { "aria-hidden": "true" } }, [
+                        _vm._v("×")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "form",
+                  {
+                    attrs: { action: "", id: "1" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.createSalaryGrade()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "forms p-0 col-md-12" }, [
+                        _c(
+                          "div",
+                          { staticClass: "row justify-content-center" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "form-group col-md-6 text-center"
+                              },
+                              [
+                                _c("label", { attrs: { for: "tranche" } }, [
+                                  _vm._v("Tranche")
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.tranche,
+                                      expression: "form.tranche"
+                                    }
+                                  ],
+                                  attrs: {
+                                    type: "text",
+                                    list: "tranche",
+                                    required: ""
+                                  },
+                                  domProps: { value: _vm.form.tranche },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.form,
+                                        "tranche",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "datalist",
+                                  { attrs: { id: "tranche" } },
+                                  _vm._l(_vm.tranches, function(tranche) {
+                                    return _c("option", { key: tranche.id }, [
+                                      _vm._v(_vm._s(tranche))
+                                    ])
+                                  }),
+                                  0
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "form-group col-md-6 text-center"
+                              },
+                              [
+                                _c("label", { attrs: { for: "grade" } }, [
+                                  _vm._v("Grade")
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.grade,
+                                      expression: "form.grade"
+                                    }
+                                  ],
+                                  attrs: {
+                                    type: "number",
+                                    name: "grade",
+                                    required: ""
+                                  },
+                                  domProps: { value: _vm.form.grade },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.form,
+                                        "grade",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(8, function(index) {
+                              return _c(
+                                "div",
+                                {
+                                  key: index.id,
+                                  staticClass: "form-group col-md-6"
+                                },
+                                [
+                                  _c("div", { staticClass: "row" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "input-group col-md-6" },
+                                      [
+                                        _c(
+                                          "label",
+                                          { attrs: { for: "step" } },
+                                          [_vm._v("Step " + _vm._s(index))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.form.amount[index],
+                                              expression: "form.amount[index]"
+                                            }
+                                          ],
+                                          attrs: {
+                                            type: "number",
+                                            required: ""
+                                          },
+                                          domProps: {
+                                            value: _vm.form.amount[index]
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.form.amount,
+                                                index,
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "input-group col-md-6" },
+                                      [
+                                        _c(
+                                          "label",
+                                          { attrs: { for: "date" } },
+                                          [_vm._v("Effective Date:")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.form.effective_date[index],
+                                              expression:
+                                                "form.effective_date[index]"
+                                            }
+                                          ],
+                                          attrs: {
+                                            type: "date",
+                                            name: "effective_date",
+                                            required: ""
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.form.effective_date[index]
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.form.effective_date,
+                                                index,
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ])
+                                ]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                          on: { click: _vm.closed }
+                        },
+                        [_vm._v("Close")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v("Save")]
+                      )
+                    ])
+                  ]
+                )
+              ])
+            ])
+          ]
+        )
+      : _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: {
+              id: "modalUpdate",
+              "data-backdrop": "static",
+              "data-keyboard": "false",
+              tabindex: "-1",
+              "aria-labelledby": "staticBackdropLabel",
+              "aria-hidden": "true"
+            }
+          },
+          [
+            _c("div", { staticClass: "modal-dialog modal-lg" }, [
+              _c("div", { staticClass: "modal-content" }, [
+                _c("div", { staticClass: "modal-header" }, [
+                  _c("h5", {
+                    staticClass: "modal-title",
+                    attrs: { id: "modal-grade" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: {
+                        type: "button",
+                        "data-dismiss": "modal",
+                        "aria-label": "Close"
+                      },
+                      on: { click: _vm.closed }
+                    },
+                    [
+                      _c("span", { attrs: { "aria-hidden": "true" } }, [
+                        _vm._v("×")
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "form",
+                  {
+                    attrs: { action: "", id: "2" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.updateSalaryGrade()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c(
+                        "div",
+                        { staticClass: "row" },
+                        _vm._l(_vm.form, function(data, index) {
+                          return _c(
+                            "div",
+                            {
+                              key: data.id,
+                              staticClass: "form-group col-md-6"
+                            },
+                            [
+                              _c("div", { staticClass: "row" }, [
+                                _c(
+                                  "div",
+                                  { staticClass: "input-group col-md-6" },
+                                  [
+                                    _c("label", { attrs: { for: "amount" } }, [
+                                      _vm._v("Step " + _vm._s(data.step))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: data.amount,
+                                          expression: "data.amount"
+                                        }
+                                      ],
+                                      attrs: {
+                                        type: "number",
+                                        name: "amount",
+                                        required: ""
+                                      },
+                                      domProps: { value: data.amount },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            data,
+                                            "amount",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "input-group col-md-6" },
+                                  [
+                                    _c("label", { attrs: { for: "date" } }, [
+                                      _vm._v("Effective Date")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: data.effective_date,
+                                          expression: "data.effective_date"
+                                        }
+                                      ],
+                                      attrs: {
+                                        type: "date",
+                                        name: "date",
+                                        required: ""
+                                      },
+                                      domProps: { value: data.effective_date },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            data,
+                                            "effective_date",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                          on: { click: _vm.closed }
+                        },
+                        [_vm._v("Close")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v("Save")]
+                      )
+                    ])
+                  ]
+                )
+              ])
+            ])
+          ]
+        )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -90063,8 +90919,8 @@ var Gate = /*#__PURE__*/function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('verifybarcode', 'Api\BarcodeController@verify');
 
+    Route::post('salarygrade', 'Api\SalaryGradeController@store');
     Route::patch('salarygrade', 'Api\SalaryGradeController@update');
 });
 

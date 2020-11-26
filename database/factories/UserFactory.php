@@ -4,6 +4,7 @@
 
 use App\User;
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /*
@@ -26,3 +27,15 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+$factory->state(User::class, 'admin', function($faker){
+    return [
+        'name'     => 'admin',
+        'email'    => 'admin@local.com',
+        'landline' => '09XXXXXX',
+        'role'     => 'Administrator',
+        'status'   => 'unknown',
+        'password' => Hash::make('root')
+    ];
+});
+
