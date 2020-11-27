@@ -2566,6 +2566,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      settings: {},
       employees: {},
       barcode: '',
       search: '',
@@ -2677,18 +2678,62 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response.data.message);
       });
     },
-    loadEmployees: function loadEmployees() {
+    getPosition: function getPosition(employee) {
       var _this3 = this;
+
+      if (employee.plantillacontents.length > 0) {
+        var position = '';
+
+        _.forEach(employee.plantillacontents, function (value) {
+          if (_this3.settings.plantilla == value.plantilla.year) {
+            position = value.position && value.position.title;
+          }
+        });
+
+        return position;
+      } else {
+        return '';
+      }
+    },
+    getDepartment: function getDepartment(employee) {
+      var _this4 = this;
+
+      if (employee.plantillacontents.length > 0) {
+        var department = '';
+
+        _.forEach(employee.plantillacontents, function (value) {
+          if (_this4.settings.plantilla == value.plantilla.year) {
+            department = value.position && value.position.department.description;
+          }
+        });
+
+        return department;
+      } else {
+        return '';
+      }
+    },
+    loadEmployees: function loadEmployees() {
+      var _this5 = this;
 
       axios.get('api/personalinformation').then(function (_ref) {
         var data = _ref.data;
-        _this3.employees = data;
+        _this5.employees = data;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      });
+    },
+    getSettings: function getSettings() {
+      var _this6 = this;
+
+      axios.get('api/setting').then(function (_ref2) {
+        var data = _ref2.data;
+        _this6.settings = data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
     },
     generateBarcode: function generateBarcode(employee) {
-      var _this4 = this;
+      var _this7 = this;
 
       this.$Progress.start();
       axios.post('api/barcode', {
@@ -2700,9 +2745,9 @@ __webpack_require__.r(__webpack_exports__);
           Swal.fire('Success', 'Barcode is generated successfully.', 'success');
         }
 
-        _this4.$Progress.finish();
+        _this7.$Progress.finish();
       })["catch"](function (error) {
-        _this4.$Progress.fail();
+        _this7.$Progress.fail();
       });
     },
     generatePDS: function generatePDS(id) {
@@ -2740,6 +2785,7 @@ __webpack_require__.r(__webpack_exports__);
     //     this.getResults();
     // });
     this.$Progress.start();
+    this.getSettings();
     this.loadEmployees();
     this.$Progress.finish();
   },
@@ -3265,7 +3311,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       plantillas: {},
-      settings: {},
       form: new Form({
         'plantilla': ''
       })
@@ -3287,15 +3332,26 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('api/setting').then(function (_ref2) {
         var data = _ref2.data;
-        _this2.settings = data;
+
+        _this2.form.fill(data);
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
     },
     save_settings: function save_settings() {
-      axios.post('api/setting', {
-        form: this.form
-      }).then(function (response) {})["catch"](function (error) {
+      var _this3 = this;
+
+      this.$Progress.start();
+      this.form.post('api/setting').then(function (response) {
+        toast.fire({
+          icon: 'success',
+          title: 'Settings updated successfully'
+        });
+
+        _this3.$Progress.finish();
+      })["catch"](function (error) {
+        _this3.$Progress.fail();
+
         console.log(error);
       });
     }
@@ -68039,9 +68095,21 @@ var render = function() {
     _c("div", { staticClass: "col-md-12" }, [
       _c("div", { staticClass: "card card-primary card-outline" }, [
         _c("div", { staticClass: "card-header" }, [
-          _c("h2", [_vm._v("Employees")]),
+          _c(
+            "h2",
+            {
+              staticStyle: { margin: "0.5rem 0 0 0", "line-height": "1.2rem" }
+            },
+            [_vm._v("Employees")]
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
+          _c("small", { staticStyle: { "margin-left": "2px" } }, [
+            _vm._v(
+              "Based on Annual Plantilla " + _vm._s(_vm.settings.plantilla)
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row mt-1" }, [
             _c("div", { staticClass: "col-md-3" }, [
               _c("div", { staticClass: "input-group" }, [
                 _vm._m(0),
@@ -68136,47 +68204,24 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    employee.plantillacontents.length > 0
-                      ? _c("td", [
-                          _c(
-                            "p",
-                            {
-                              staticStyle: {
-                                margin: "0",
-                                "line-height": "1.2rem"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  employee.plantillacontents[0].position &&
-                                    employee.plantillacontents[0].position.title
-                                )
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "p",
-                            {
-                              staticClass: "text-muted",
-                              staticStyle: {
-                                margin: "0",
-                                "line-height": "1.2rem"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  employee.plantillacontents[0].position &&
-                                    employee.plantillacontents[0].position
-                                      .department.description
-                                )
-                              )
-                            ]
-                          )
-                        ])
-                      : _c("td"),
+                    _c("td", [
+                      _c(
+                        "p",
+                        {
+                          staticStyle: { margin: "0", "line-height": "1.2rem" }
+                        },
+                        [_vm._v(_vm._s(_vm.getPosition(employee)))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticClass: "text-muted",
+                          staticStyle: { margin: "0", "line-height": "1.2rem" }
+                        },
+                        [_vm._v(_vm._s(_vm.getDepartment(employee)))]
+                      )
+                    ]),
                     _vm._v(" "),
                     _c("td", { staticStyle: { width: "150px" } }, [
                       _c("div", { staticClass: "btn-group" }, [

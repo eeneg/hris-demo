@@ -15,7 +15,11 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        return Setting::all();
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $data = [
+            'plantilla' => $default_plantilla->value
+        ];
+        return $data;
     }
 
     /**
@@ -26,7 +30,12 @@ class SettingsController extends Controller
      */
     public function store(Request $request)
     {
-        return ['message', $request['form.plantilla']];
+        $this->validate($request, [
+            'plantilla' => 'required'
+        ]);
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $default_plantilla->value = $request['plantilla'];
+        $default_plantilla->save();
     }
 
     /**

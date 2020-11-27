@@ -34,7 +34,6 @@
         data() {
             return {
                 plantillas: {},
-                settings: {},
                 form: new Form({
                     'plantilla': '',
                 })
@@ -53,18 +52,24 @@
             load_settings() {
                 axios.get('api/setting')
                     .then(({data}) => {
-                        this.settings = data;
+                        this.form.fill(data);
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
                     });
             },
             save_settings() {
-                axios.post('api/setting', {form: this.form})
+                this.$Progress.start();
+                this.form.post('api/setting')
                     .then(response => {                 
-                        
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Settings updated successfully'
+                        });
+                        this.$Progress.finish();
                     })
                     .catch(error => {
+                        this.$Progress.fail();
                         console.log(error);
                     });
             }

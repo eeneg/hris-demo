@@ -4,8 +4,9 @@
             <div class="card card-primary card-outline">
 
                 <div class="card-header">
-                    <h2>Employees</h2>
-                    <div class="row">
+                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Employees</h2>
+                    <small style="margin-left: 2px;">Based on Annual Plantilla {{ settings.plantilla }}</small>
+                    <div class="row mt-1">
                         <div class="col-md-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -38,11 +39,10 @@
                                     </div>
                                     
                                 </td>
-                                <td v-if="employee.plantillacontents.length > 0">
-                                    <p style="margin: 0;line-height: 1.2rem;">{{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.title }}</p>
-                                    <p style="margin: 0;line-height: 1.2rem;" class="text-muted">{{ employee.plantillacontents[0].position && employee.plantillacontents[0].position.department.description }}</p>
+                                <td>
+                                    <p style="margin: 0;line-height: 1.2rem;">{{ getPosition(employee) }}</p>
+                                    <p style="margin: 0;line-height: 1.2rem;" class="text-muted">{{ getDepartment(employee) }}</p>
                                 </td>
-                                <td v-else></td>
                                 <td style="width: 150px;">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-info">Action</button>
@@ -615,6 +615,7 @@
     export default {
         data() {
             return {
+                settings: {},
                 employees: {},
                 barcode: '',
                 search: '',
@@ -721,10 +722,47 @@
                         console.log(error.response.data.message);
                     });
             },
+            getPosition(employee) {
+                if (employee.plantillacontents.length > 0) {
+                    let position = '';
+                    _.forEach(employee.plantillacontents, (value) => {
+                        if (this.settings.plantilla == value.plantilla.year) {
+                            position = value.position && value.position.title;
+                        }
+                    });
+                    return position;
+                } else {
+                    return '';
+                }
+                
+            },
+            getDepartment(employee) {
+                if (employee.plantillacontents.length > 0) {
+                    let department = '';
+                    _.forEach(employee.plantillacontents, (value) => {
+                        if (this.settings.plantilla == value.plantilla.year) {
+                            department = value.position && value.position.department.description;
+                        }
+                    });
+                    return department;
+                } else {
+                    return '';
+                }
+                
+            },
             loadEmployees() {
                 axios.get('api/personalinformation')
                     .then(({data}) => {
                         this.employees = data;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+            },
+            getSettings() {
+                axios.get('api/setting')
+                    .then(({data}) => {
+                        this.settings = data;
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -788,6 +826,7 @@
             //     this.getResults();
             // });
             this.$Progress.start();
+            this.getSettings();
             this.loadEmployees();
             this.$Progress.finish();
         },
