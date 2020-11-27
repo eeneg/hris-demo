@@ -40,8 +40,8 @@
                                     
                                 </td>
                                 <td>
-                                    <p style="margin: 0;line-height: 1.2rem;">{{ getPosition(employee) }}</p>
-                                    <p style="margin: 0;line-height: 1.2rem;" class="text-muted">{{ getDepartment(employee) }}</p>
+                                    <p style="margin: 0;line-height: 1.2rem;">{{ getPosition(employee).designation }}</p>
+                                    <p style="margin: 0;line-height: 1.2rem;" class="text-muted">{{ getPosition(employee).department }}</p>
                                 </td>
                                 <td style="width: 150px;">
                                     <div class="btn-group">
@@ -724,27 +724,14 @@
             },
             getPosition(employee) {
                 if (employee.plantillacontents.length > 0) {
-                    let position = '';
+                    let position = {designation: '', department: ''};
                     _.forEach(employee.plantillacontents, (value) => {
                         if (this.settings.plantilla == value.plantilla.year) {
-                            position = value.position && value.position.title;
+                            position.designation = value.position && value.position.title;
+                            position.department = value.position && value.position.department.description;
                         }
                     });
                     return position;
-                } else {
-                    return '';
-                }
-                
-            },
-            getDepartment(employee) {
-                if (employee.plantillacontents.length > 0) {
-                    let department = '';
-                    _.forEach(employee.plantillacontents, (value) => {
-                        if (this.settings.plantilla == value.plantilla.year) {
-                            department = value.position && value.position.department.description;
-                        }
-                    });
-                    return department;
                 } else {
                     return '';
                 }

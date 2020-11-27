@@ -2682,11 +2682,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       if (employee.plantillacontents.length > 0) {
-        var position = '';
+        var position = {
+          designation: '',
+          department: ''
+        };
 
         _.forEach(employee.plantillacontents, function (value) {
           if (_this3.settings.plantilla == value.plantilla.year) {
-            position = value.position && value.position.title;
+            position.designation = value.position && value.position.title;
+            position.department = value.position && value.position.department.description;
           }
         });
 
@@ -2695,45 +2699,28 @@ __webpack_require__.r(__webpack_exports__);
         return '';
       }
     },
-    getDepartment: function getDepartment(employee) {
-      var _this4 = this;
-
-      if (employee.plantillacontents.length > 0) {
-        var department = '';
-
-        _.forEach(employee.plantillacontents, function (value) {
-          if (_this4.settings.plantilla == value.plantilla.year) {
-            department = value.position && value.position.department.description;
-          }
-        });
-
-        return department;
-      } else {
-        return '';
-      }
-    },
     loadEmployees: function loadEmployees() {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.get('api/personalinformation').then(function (_ref) {
         var data = _ref.data;
-        _this5.employees = data;
+        _this4.employees = data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
     },
     getSettings: function getSettings() {
-      var _this6 = this;
+      var _this5 = this;
 
       axios.get('api/setting').then(function (_ref2) {
         var data = _ref2.data;
-        _this6.settings = data;
+        _this5.settings = data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
     },
     generateBarcode: function generateBarcode(employee) {
-      var _this7 = this;
+      var _this6 = this;
 
       this.$Progress.start();
       axios.post('api/barcode', {
@@ -2745,9 +2732,9 @@ __webpack_require__.r(__webpack_exports__);
           Swal.fire('Success', 'Barcode is generated successfully.', 'success');
         }
 
-        _this7.$Progress.finish();
+        _this6.$Progress.finish();
       })["catch"](function (error) {
-        _this7.$Progress.fail();
+        _this6.$Progress.fail();
       });
     },
     generatePDS: function generatePDS(id) {
@@ -68210,7 +68197,7 @@ var render = function() {
                         {
                           staticStyle: { margin: "0", "line-height": "1.2rem" }
                         },
-                        [_vm._v(_vm._s(_vm.getPosition(employee)))]
+                        [_vm._v(_vm._s(_vm.getPosition(employee).designation))]
                       ),
                       _vm._v(" "),
                       _c(
@@ -68219,7 +68206,7 @@ var render = function() {
                           staticClass: "text-muted",
                           staticStyle: { margin: "0", "line-height": "1.2rem" }
                         },
-                        [_vm._v(_vm._s(_vm.getDepartment(employee)))]
+                        [_vm._v(_vm._s(_vm.getPosition(employee).department))]
                       )
                     ]),
                     _vm._v(" "),
