@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'auth:api'], function() {
+// Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResources([
         'user' => 'API\UserController',
         'personalinformation' => 'API\PersonalInformationController',
@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('salarygrade', 'Api\SalaryGradeController@store');
     Route::patch('salarygrade', 'Api\SalaryGradeController@update');
-});
+// });
 
 //api test
 Route::get('per', 'API\PersonalInformationController@index');

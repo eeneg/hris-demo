@@ -49,7 +49,7 @@
                                         <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                             <span class="sr-only">Toggle Dropdown</span>
                                             <div class="dropdown-menu" role="menu">
-                                                <a class="dropdown-item" @click.prevent="viewProfileModal(employee)" href="#">View Profile</a>
+                                                <a class="dropdown-item" @click.prevent="viewProfileModal(employee.id)" href="#">View Profile</a>
                                                 <a class="dropdown-item" href="#">Basic Information</a>
                                                 <a class="dropdown-item" href="#">Latest Plantilla Record</a>
                                                 <div class="dropdown-divider"></div>
@@ -698,12 +698,13 @@
             searchit: _.debounce(function(){
                 this.getResults();
             }, 400),
-            viewProfileModal(employee) {
+            viewProfileModal(id) {
+                this.form.id = id;
                 $('#scanModal').modal('show');
                 $('#barcodeField').val('');
                 $('.barcode-validate').hide();
                 
-                this.form.fill(employee);
+                
                 this.focusBarcode();
             },
             getAvatar(picture) {
@@ -716,10 +717,10 @@
             },
             getResults(page = 1) {
                 axios.get('api/personalinformation?page=' + page + '&query=' + this.search)
-                    .then(response => {
-                        this.employees = response.data;
+                    .then(({data}) => {
+                        this.employees = data;
                     }).catch(error => {
-                        console.log(error.response.data.message);
+                        console.log(error.reponse.data.message);
                     });
             },
             getPlantillaDetails(employee) {

@@ -1934,8 +1934,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  mounted: function mounted() {// console.log('Component mounted.')
   }
 });
 
@@ -2653,11 +2652,11 @@ __webpack_require__.r(__webpack_exports__);
     searchit: _.debounce(function () {
       this.getResults();
     }, 400),
-    viewProfileModal: function viewProfileModal(employee) {
+    viewProfileModal: function viewProfileModal(id) {
+      this.form.id = id;
       $('#scanModal').modal('show');
       $('#barcodeField').val('');
       $('.barcode-validate').hide();
-      this.form.fill(employee);
       this.focusBarcode();
     },
     getAvatar: function getAvatar(picture) {
@@ -2672,10 +2671,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      axios.get('api/personalinformation?page=' + page + '&query=' + this.search).then(function (response) {
-        _this2.employees = response.data;
+      axios.get('api/personalinformation?page=' + page + '&query=' + this.search).then(function (_ref) {
+        var data = _ref.data;
+        _this2.employees = data;
       })["catch"](function (error) {
-        console.log(error.response.data.message);
+        console.log(error.reponse.data.message);
       });
     },
     getPlantillaDetails: function getPlantillaDetails(employee) {
@@ -2704,8 +2704,8 @@ __webpack_require__.r(__webpack_exports__);
     loadEmployees: function loadEmployees() {
       var _this4 = this;
 
-      axios.get('api/personalinformation').then(function (_ref) {
-        var data = _ref.data;
+      axios.get('api/personalinformation').then(function (_ref2) {
+        var data = _ref2.data;
         _this4.employees = data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
@@ -2714,8 +2714,8 @@ __webpack_require__.r(__webpack_exports__);
     getSettings: function getSettings() {
       var _this5 = this;
 
-      axios.get('api/setting').then(function (_ref2) {
-        var data = _ref2.data;
+      axios.get('api/setting').then(function (_ref3) {
+        var data = _ref3.data;
         _this5.settings = data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
@@ -3345,8 +3345,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  mounted: function mounted() {// console.log('Component mounted.')
   },
   created: function created() {
     this.$Progress.start();
@@ -68299,7 +68298,9 @@ var render = function() {
                                       on: {
                                         click: function($event) {
                                           $event.preventDefault()
-                                          return _vm.viewProfileModal(employee)
+                                          return _vm.viewProfileModal(
+                                            employee.id
+                                          )
                                         }
                                       }
                                     },

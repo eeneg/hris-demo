@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\PersonalInformation;
+use App\PlantillaContent;
+use App\Http\Resources\EmployeesListResource;
 
 class PersonalInformationController extends Controller
 {
@@ -18,17 +20,16 @@ class PersonalInformationController extends Controller
     public function index()
     {
         if ($search = \Request::get('query')) {
-            $users = PersonalInformation::where(function($query) use ($search){
+            $personalinformations = PersonalInformation::where(function($query) use ($search){
                 $query->where('surname', 'LIKE', '%'.$search.'%')
                         ->orWhere('firstname', 'LIKE', '%'.$search.'%')
                         ->orWhere('middlename', 'LIKE', '%'.$search.'%')
                         ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%');
             })->orderBy('surname')->paginate(20);
         } else {
-            $users = PersonalInformation::orderBy('surname')->paginate(20);
+            $personalinformations = PersonalInformation::orderBy('surname')->paginate(20);
         }
-
-        return $users;
+        return EmployeesListResource::collection($personalinformations);
     }
 
     /**

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\PersonalInformation;
 use App\WorkExperience;
 use App\VoluntaryWork;
 use App\TrainingProgram;
 use App\Plantilla;
 use App\Setting;
+use App\User;
 
 class Helpers extends Controller
 {
@@ -97,10 +99,21 @@ class Helpers extends Controller
         ]);
     }
 
-    public function initSettings() {
+    public function initialize() {
+        // System User
+        $user = User::create([
+            'name' => 'Default System User',
+            'avatar' => 'profile.png',
+            'email' => 'administrator@hris.com',
+            'password' => Hash::make('12345678'),
+            'role' => 'Administrator',
+            'status' => 'Active'
+        ]);
+
+        // System Settings
         $settings = [];
         $default_plantilla = [
-            'user_id' => auth()->user()->id,
+            'user_id' => $user->id,
             'title' => 'Default Plantilla',
             'value' => ''
         ];
@@ -114,5 +127,7 @@ class Helpers extends Controller
         foreach ($settings as $key => $setting) {
             Setting::create($setting);
         }
+
+        return 'Successful!';
     }
 }
