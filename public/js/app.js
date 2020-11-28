@@ -2678,23 +2678,25 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response.data.message);
       });
     },
-    getPosition: function getPosition(employee) {
+    getPlantillaDetails: function getPlantillaDetails(employee) {
       var _this3 = this;
 
       if (employee.plantillacontents.length > 0) {
-        var position = {
+        var details = {
           designation: '',
-          department: ''
+          department: '',
+          sg: ''
         };
 
         _.forEach(employee.plantillacontents, function (value) {
           if (_this3.settings.plantilla == value.plantilla.year) {
-            position.designation = value.position && value.position.title;
-            position.department = value.position && value.position.department.description;
+            details.designation = value.position && value.position.title;
+            details.department = value.position && value.position.department.description;
+            details.sg = value.salaryproposed && value.salaryproposed.grade;
           }
         });
 
-        return position;
+        return details;
       } else {
         return '';
       }
@@ -68092,7 +68094,8 @@ var render = function() {
           _vm._v(" "),
           _c("small", { staticStyle: { "margin-left": "2px" } }, [
             _vm._v(
-              "Based on Annual Plantilla " + _vm._s(_vm.settings.plantilla)
+              "Positions are based on Annual Plantilla " +
+                _vm._s(_vm.settings.plantilla)
             )
           ]),
           _vm._v(" "),
@@ -68136,7 +68139,20 @@ var render = function() {
             "table",
             { staticClass: "table table-striped text-nowrap employees-table" },
             [
-              _vm._m(1),
+              _c("thead", [
+                _c("tr", [
+                  _c("th", [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("th", [
+                    _vm._v("Position "),
+                    _c("span", { staticStyle: { "font-weight": "100" } }, [
+                      _vm._v("(" + _vm._s(_vm.settings.plantilla) + ")")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("th")
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -68192,123 +68208,161 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("td", [
-                      _c(
-                        "p",
-                        {
-                          staticStyle: { margin: "0", "line-height": "1.2rem" }
-                        },
-                        [_vm._v(_vm._s(_vm.getPosition(employee).designation))]
-                      ),
+                      _vm.getPlantillaDetails(employee)
+                        ? _c(
+                            "p",
+                            {
+                              staticStyle: {
+                                margin: "0",
+                                "line-height": "1.2rem"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.getPlantillaDetails(employee)
+                                    .designation +
+                                    " (SG-" +
+                                    _vm.getPlantillaDetails(employee).sg +
+                                    ")"
+                                )
+                              )
+                            ]
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c(
-                        "p",
-                        {
-                          staticClass: "text-muted",
-                          staticStyle: { margin: "0", "line-height": "1.2rem" }
-                        },
-                        [_vm._v(_vm._s(_vm.getPosition(employee).department))]
-                      )
+                      _vm.getPlantillaDetails(employee)
+                        ? _c(
+                            "p",
+                            {
+                              staticClass: "text-muted",
+                              staticStyle: {
+                                margin: "0",
+                                "line-height": "1.2rem"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.getPlantillaDetails(employee).department
+                                )
+                              )
+                            ]
+                          )
+                        : _vm._e()
                     ]),
                     _vm._v(" "),
                     _c("td", { staticStyle: { width: "150px" } }, [
-                      _c("div", { staticClass: "btn-group" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-sm btn-info",
-                            attrs: { type: "button" }
-                          },
-                          [_vm._v("Action")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "btn btn-sm btn-info dropdown-toggle dropdown-icon",
-                            attrs: { type: "button", "data-toggle": "dropdown" }
-                          },
-                          [
-                            _c("span", { staticClass: "sr-only" }, [
-                              _vm._v("Toggle Dropdown")
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass: "dropdown-menu",
-                                attrs: { role: "menu" }
-                              },
-                              [
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "dropdown-item",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.viewProfileModal(employee)
+                      _c(
+                        "div",
+                        {
+                          staticClass: "btn-group",
+                          staticStyle: { float: "right" }
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-info",
+                              attrs: { type: "button" }
+                            },
+                            [_vm._v("Action")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "btn btn-sm btn-info dropdown-toggle dropdown-icon",
+                              attrs: {
+                                type: "button",
+                                "data-toggle": "dropdown"
+                              }
+                            },
+                            [
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("Toggle Dropdown")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "dropdown-menu",
+                                  attrs: { role: "menu" }
+                                },
+                                [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "dropdown-item",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.viewProfileModal(employee)
+                                        }
                                       }
-                                    }
-                                  },
-                                  [_vm._v("View Profile")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "dropdown-item",
-                                    attrs: { href: "#" }
-                                  },
-                                  [_vm._v("Basic Information")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "dropdown-item",
-                                    attrs: { href: "#" }
-                                  },
-                                  [_vm._v("Latest Plantilla Record")]
-                                ),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "dropdown-divider" }),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "dropdown-item",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.generateBarcode(employee)
+                                    },
+                                    [_vm._v("View Profile")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "dropdown-item",
+                                      attrs: { href: "#" }
+                                    },
+                                    [_vm._v("Basic Information")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "dropdown-item",
+                                      attrs: { href: "#" }
+                                    },
+                                    [_vm._v("Latest Plantilla Record")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("div", {
+                                    staticClass: "dropdown-divider"
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "dropdown-item",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.generateBarcode(employee)
+                                        }
                                       }
-                                    }
-                                  },
-                                  [_vm._v("Generate Barcode")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "dropdown-item",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.generateId(employee)
+                                    },
+                                    [_vm._v("Generate Barcode")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "dropdown-item",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.generateId(employee)
+                                        }
                                       }
-                                    }
-                                  },
-                                  [_vm._v("Generate ID")]
-                                )
-                              ]
-                            )
-                          ]
-                        )
-                      ])
+                                    },
+                                    [_vm._v("Generate ID")]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
                     ])
                   ])
                 }),
@@ -68417,7 +68471,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm.form.plantillacontents.length > 0
+                _vm.getPlantillaDetails(_vm.form)
                   ? _c("span", [
                       _c(
                         "p",
@@ -68432,17 +68486,14 @@ var render = function() {
                           _vm._v(
                             "\n                            " +
                               _vm._s(
-                                _vm.form.plantillacontents[0].position &&
-                                  _vm.form.plantillacontents[0].position.title
+                                _vm.getPlantillaDetails(_vm.form).designation
                               )
                           ),
                           _c("br"),
                           _vm._v(
                             "\n                            " +
                               _vm._s(
-                                _vm.form.plantillacontents[0].position &&
-                                  _vm.form.plantillacontents[0].position
-                                    .department.title
+                                _vm.getPlantillaDetails(_vm.form).department
                               ) +
                               "\n                        "
                           )
@@ -68452,11 +68503,11 @@ var render = function() {
                   : _c("span", [_c("br")]),
                 _vm._v(" "),
                 _c("div", { staticClass: "view-profile-container" }, [
-                  _vm._m(2),
+                  _vm._m(1),
                   _vm._v(" "),
                   _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-6" }, [
-                      _vm._m(3),
+                      _vm._m(2),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
@@ -68472,7 +68523,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(4),
+                      _vm._m(3),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
@@ -68490,7 +68541,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(5),
+                      _vm._m(4),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
@@ -68699,7 +68750,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm.form.permanentaddress ? _c("hr") : _vm._e(),
                       _vm._v(" "),
-                      _vm._m(6),
+                      _vm._m(5),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
@@ -68711,7 +68762,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(7),
+                      _vm._m(6),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
@@ -68723,7 +68774,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(8),
+                      _vm._m(7),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
@@ -68737,11 +68788,11 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(9),
+                  _vm._m(8),
                   _vm._v(" "),
                   _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-6" }, [
-                      _vm._m(10),
+                      _vm._m(9),
                       _vm._v(" "),
                       _vm.form.familybackground.spouseSurname
                         ? _c("p", { staticClass: "text-muted" }, [
@@ -68830,7 +68881,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(11),
+                      _vm._m(10),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm._v(
@@ -68848,7 +68899,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(12),
+                      _vm._m(11),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [
                         _vm.form.familybackground.motherMaidenName
@@ -68885,7 +68936,7 @@ var render = function() {
                       "div",
                       { staticClass: "col-md-6" },
                       [
-                        _vm._m(13),
+                        _vm._m(12),
                         _vm._v(" "),
                         _vm._l(_vm.form.children, function(child) {
                           return _c(
@@ -68922,11 +68973,11 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm._m(14),
+                  _vm._m(13),
                   _vm._v(" "),
                   _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-md-6" }, [
-                      _vm._m(15),
+                      _vm._m(14),
                       _vm._v(" "),
                       _vm.form.educationalbackground.elemSchoolName
                         ? _c("p", { staticClass: "text-muted" }, [
@@ -69009,7 +69060,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(16),
+                      _vm._m(15),
                       _vm._v(" "),
                       _vm.form.educationalbackground.collSchoolName1
                         ? _c("p", { staticClass: "text-muted" }, [
@@ -69166,7 +69217,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(17),
+                      _vm._m(16),
                       _vm._v(" "),
                       _vm.form.educationalbackground.gradSchoolName
                         ? _c("p", { staticClass: "text-muted" }, [
@@ -69251,7 +69302,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-6" }, [
-                      _vm._m(18),
+                      _vm._m(17),
                       _vm._v(" "),
                       _vm.form.educationalbackground.secSchoolName
                         ? _c("p", { staticClass: "text-muted" }, [
@@ -69333,7 +69384,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(19),
+                      _vm._m(18),
                       _vm._v(" "),
                       _vm.form.educationalbackground.vocSchoolName
                         ? _c("p", { staticClass: "text-muted" }, [
@@ -69417,16 +69468,16 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(20),
+                  _vm._m(19),
                   _vm._v(" "),
-                  _vm._m(21),
+                  _vm._m(20),
                   _vm._v(" "),
                   _c("div", { staticClass: "row" }, [
                     _c(
                       "div",
                       { staticClass: "col-md-6" },
                       [
-                        _vm._m(22),
+                        _vm._m(21),
                         _vm._v(" "),
                         _vm._l(_vm.form.eligibilities, function(
                           eligibility,
@@ -69495,7 +69546,7 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-6" }, [
-                      _vm._m(23),
+                      _vm._m(22),
                       _vm._v(" "),
                       _c(
                         "p",
@@ -69522,7 +69573,7 @@ var render = function() {
                         0
                       ),
                       _vm._v(" "),
-                      _vm._m(24),
+                      _vm._m(23),
                       _vm._v(" "),
                       _c(
                         "p",
@@ -69549,7 +69600,7 @@ var render = function() {
                         0
                       ),
                       _vm._v(" "),
-                      _vm._m(25),
+                      _vm._m(24),
                       _vm._v(" "),
                       _c(
                         "p",
@@ -69581,7 +69632,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _vm.workexperiences().length > 0
-                    ? _c("div", { staticClass: "row" }, [_vm._m(26)])
+                    ? _c("div", { staticClass: "row" }, [_vm._m(25)])
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.workexperiences().length > 0
@@ -69594,7 +69645,7 @@ var render = function() {
                                 "table table-bordered table-hover pds-table"
                             },
                             [
-                              _vm._m(27),
+                              _vm._m(26),
                               _vm._v(" "),
                               _c(
                                 "tbody",
@@ -69670,7 +69721,7 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.voluntaryworks().length > 0
-                    ? _c("div", { staticClass: "row" }, [_vm._m(28)])
+                    ? _c("div", { staticClass: "row" }, [_vm._m(27)])
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.voluntaryworks().length > 0
@@ -69683,7 +69734,7 @@ var render = function() {
                                 "table table-bordered table-hover pds-table"
                             },
                             [
-                              _vm._m(29),
+                              _vm._m(28),
                               _vm._v(" "),
                               _c(
                                 "tbody",
@@ -69743,7 +69794,7 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.trainingprograms().length > 0
-                    ? _c("div", { staticClass: "row" }, [_vm._m(30)])
+                    ? _c("div", { staticClass: "row" }, [_vm._m(29)])
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.trainingprograms().length > 0
@@ -69756,7 +69807,7 @@ var render = function() {
                                 "table table-bordered table-hover pds-table"
                             },
                             [
-                              _vm._m(31),
+                              _vm._m(30),
                               _vm._v(" "),
                               _c(
                                 "tbody",
@@ -69836,7 +69887,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(32)
+                _vm._m(31)
               ]
             )
           ]
@@ -69904,7 +69955,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(33)
+    _vm._m(32)
   ])
 }
 var staticRenderFns = [
@@ -69915,20 +69966,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "input-group-prepend" }, [
       _c("span", { staticClass: "input-group-text" }, [
         _c("i", { staticClass: "fas fa-search" })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Position")]),
-        _vm._v(" "),
-        _c("th")
       ])
     ])
   },

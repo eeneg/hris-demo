@@ -12,7 +12,7 @@ class PlantillaContent extends Model
     protected $primaryKey = 'id';
 
     protected $with = [
-        'position', 'plantilla'
+        'position', 'plantilla', 'salaryauthorized', 'salaryproposed'
     ];
 
     protected $fillable = [ 

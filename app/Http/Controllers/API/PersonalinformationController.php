@@ -25,7 +25,7 @@ class PersonalInformationController extends Controller
                         ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%');
             })->orderBy('surname')->paginate(20);
         } else {
-            $users = PersonalInformation::latest()->orderBy('surname')->paginate(20);
+            $users = PersonalInformation::orderBy('surname')->paginate(20);
         }
 
         return $users;

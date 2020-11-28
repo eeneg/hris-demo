@@ -14,7 +14,7 @@ class CreatePlantillasTable extends Migration
     public function up()
     {
         Schema::create('plantillas', function (Blueprint $table) {
-            $table->string('id', 100)->primary()->unique();
+            $table->uuid('id')->primary()->unique();
             $table->string('year');
             $table->date('date_prepared')->nullable();
             $table->date('date_approved')->nullable();

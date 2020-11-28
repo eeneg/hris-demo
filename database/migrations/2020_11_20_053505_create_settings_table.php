@@ -14,8 +14,8 @@ class CreateSettingsTable extends Migration
     public function up()
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->string('id', 100)->primary()->unique();
-            $table->string('user_id', 100);
+            $table->uuid('id')->primary()->unique();
+            $table->uuid('user_id');
             $table->foreign('user_id')
                     ->references('id')
                     ->on('users')

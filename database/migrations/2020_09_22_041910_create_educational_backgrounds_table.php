@@ -14,8 +14,8 @@ class CreateEducationalBackgroundsTable extends Migration
     public function up()
     {
         Schema::create('educational_backgrounds', function (Blueprint $table) {
-            $table->string('id', 100)->primary()->unique();
-            $table->string('personal_information_id', 100);
+            $table->uuid('id')->primary()->unique();
+            $table->uuid('personal_information_id');
             $table->foreign('personal_information_id')
                     ->references('id')
                     ->on('personal_informations')

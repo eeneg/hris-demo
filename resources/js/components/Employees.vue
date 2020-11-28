@@ -5,7 +5,7 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Employees</h2>
-                    <small style="margin-left: 2px;">Based on Annual Plantilla {{ settings.plantilla }}</small>
+                    <small style="margin-left: 2px;">Positions are based on Annual Plantilla {{ settings.plantilla }}</small>
                     <div class="row mt-1">
                         <div class="col-md-3">
                             <div class="input-group">
@@ -23,7 +23,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Position</th>
+                                <th>Position <span style="font-weight: 100;">({{ settings.plantilla }})</span></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -40,11 +40,11 @@
                                     
                                 </td>
                                 <td>
-                                    <p style="margin: 0;line-height: 1.2rem;">{{ getPosition(employee).designation }}</p>
-                                    <p style="margin: 0;line-height: 1.2rem;" class="text-muted">{{ getPosition(employee).department }}</p>
+                                    <p style="margin: 0;line-height: 1.2rem;" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).designation + ' (SG-' + getPlantillaDetails(employee).sg + ')' }}</p>
+                                    <p style="margin: 0;line-height: 1.2rem;" class="text-muted" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).department }}</p>
                                 </td>
                                 <td style="width: 150px;">
-                                    <div class="btn-group">
+                                    <div class="btn-group" style="float:right;">
                                         <button type="button" class="btn btn-sm btn-info">Action</button>
                                         <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                             <span class="sr-only">Toggle Dropdown</span>
@@ -83,10 +83,10 @@
 
                     <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ form.firstname + ' ' + form.middlename + ' ' + form.surname + ' ' + form.nameextension }}</b></h3>
 
-                    <span v-if="form.plantillacontents.length > 0">
+                    <span v-if="getPlantillaDetails(form)">
                         <p class="text-muted text-center mt-1" style="font-size: 1rem;line-height: 1.2rem;">
-                            {{ form.plantillacontents[0].position && form.plantillacontents[0].position.title }}<br>
-                            {{ form.plantillacontents[0].position && form.plantillacontents[0].position.department.title }}
+                            {{ getPlantillaDetails(form).designation }}<br>
+                            {{ getPlantillaDetails(form).department }}
                         </p>
                     </span>
                     <span v-else><br></span>
@@ -722,16 +722,17 @@
                         console.log(error.response.data.message);
                     });
             },
-            getPosition(employee) {
+            getPlantillaDetails(employee) {
                 if (employee.plantillacontents.length > 0) {
-                    let position = {designation: '', department: ''};
+                    let details = {designation: '', department: '', sg: ''};
                     _.forEach(employee.plantillacontents, (value) => {
                         if (this.settings.plantilla == value.plantilla.year) {
-                            position.designation = value.position && value.position.title;
-                            position.department = value.position && value.position.department.description;
+                            details.designation = value.position && value.position.title;
+                            details.department = value.position && value.position.department.description;
+                            details.sg = value.salaryproposed && value.salaryproposed.grade;
                         }
                     });
-                    return position;
+                    return details;
                 } else {
                     return '';
                 }

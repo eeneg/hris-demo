@@ -14,18 +14,18 @@ class CreateAppointmentRecordsTable extends Migration
     public function up()
     {
         Schema::create('appointment_records', function (Blueprint $table) {
-            $table->string('id', 100)->primary()->unique();
-            $table->string('personal_information_id', 100);
+            $table->uuid('id')->primary()->unique();
+            $table->uuid('personal_information_id');
             $table->foreign('personal_information_id')
                   ->references('id')
                   ->on('personal_informations')
                   ->onDelete('cascade');
-            $table->string('position_id', 100);
+            $table->uuid('position_id');
             $table->foreign('position_id')
                   ->references('id')
                   ->on('positions')
                   ->onDelete('cascade');
-            $table->string('salary_grade_id', 100);
+            $table->uuid('salary_grade_id');
             $table->foreign('salary_grade_id')
                   ->references('id')
                   ->on('salary_grades')

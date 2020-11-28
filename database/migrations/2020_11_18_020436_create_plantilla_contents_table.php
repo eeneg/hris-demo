@@ -14,16 +14,16 @@ class CreatePlantillaContentsTable extends Migration
     public function up()
     {
         Schema::create('plantilla_contents', function (Blueprint $table) {
-            $table->string('id', 100)->primary()->unique();
-            $table->string('plantilla_id', 100);
+            $table->uuid('id')->primary()->unique();
+            $table->uuid('plantilla_id');
             $table->foreign('plantilla_id')->references('id')->on('plantillas')->onDelete('cascade');
-            $table->string('salary_grade_auth_id', 100);
+            $table->uuid('salary_grade_auth_id');
             $table->foreign('salary_grade_auth_id')->references('id')->on('salary_grades')->onDelete('cascade');
-            $table->string('salary_grade_prop_id', 100);
+            $table->uuid('salary_grade_prop_id');
             $table->foreign('salary_grade_prop_id')->references('id')->on('salary_grades')->onDelete('cascade');
-            $table->string('position_id', 100);
+            $table->uuid('position_id');
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
-            $table->string('personal_information_id', 100)->nullable();
+            $table->uuid('personal_information_id')->nullable();
             $table->foreign('personal_information_id')->references('id')->on('personal_informations')->onDelete('cascade');
             $table->string('old_number', 100);
             $table->string('new_number', 100);
