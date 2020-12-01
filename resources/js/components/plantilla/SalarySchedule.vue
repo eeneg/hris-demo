@@ -171,8 +171,8 @@
                 axios.get('api/salaryschedule')
                 .then(({data}) => {
                     this.salaryschedules = data
-                    this.selected = this.salaryschedules[0].tranche
-                    // this.getSalaryGrade()
+                    this.selected = this.salarySchedForm.tranche != null ? this.salarySchedForm.tranche : this.salaryschedules[0].tranche
+                    this.getSalaryGrade()
                 })
                 .catch(error => {
 
@@ -186,7 +186,6 @@
                         icon: 'success',
                         title: 'Created successfully'
                     });
-                    this.selected = this.salarySchedForm.tranche
                     this.getSalarySchedule()
                     $('#salarySchedModal').modal('hide')
                 })
@@ -270,7 +269,6 @@
                 .catch(error => {
                     // do something
                 })
-                console.log(this.salaryGradeForm.amount)
             },
             updateSalaryGrade: function()
             {
