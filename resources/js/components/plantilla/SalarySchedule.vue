@@ -5,48 +5,71 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12">
-                            <label for="custom-select">Salary Schedule</label>
+                            <label for="custom-select">Salary Schedule: </label>
                             <div class="btn-group">
                                 <select class="custom-select" v-model="selected">
-                                    <option v-for="tranche in tranches" v-bind:value="{tranche}" :key="tranche.id"> {{ tranche }} </option>
+                                    <option v-for="salaryschedule in salaryschedules" v-bind:value="salaryschedule.tranche" :key="salaryschedule.id"> {{ salaryschedule.tranche }} </option>
                                 </select>
                             </div>
+                            <div class="btn-group">
+                                <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryScheduleModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salarySchedModal">
+                                Edit Salary Schedule <i class="fa fa-edit"></i>
+                                </button>
+                            </div>
                             <div class="btn-group float-right">
-                                <button v-if="$gate.isAdministrator()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreate" v-on:click="createSalaryGradeModal">
-                                  Add <i class="fa fa-plus"></i>
+                                <button v-if="$gate.isAdministrator()" @click="createSalaryScheduleModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salarySchedModal">
+                                  Add Salary Schedule <i class="fa fa-plus"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr class="text-center">
-                                <td style="width: calc(100%-150px); font-weight:bold">Grade</td>
-                                <td style="width: calc(100%-150px); font-weight:bold" v-for="step in steps" :key="step.id">Step {{ step }}</td>
-                                <td style="width: calc(100%-150px); font-weight:bold" v-if="$gate.isAdministrator()">Action</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="salarygrade in salarygrades" :key="salarygrade.id" class="text-center">
-                                <td style="width: calc(100%-150px);" v-text="salarygrade[0].grade"></td>
-                                <td style="width: calc(100%-150px);" v-for="amount in salarygrade" :key="amount.id">{{ amount.amount }}</td>
-                                <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
-                                    <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalUpdate">
-                                       Edit <i class="fa fa-edit"></i>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex mb-1">
+                                <div class="d-flex flex-column bd-highlight">
+                                    <div class="bd-highlight">Tranche: {{ display.tranche }}</div>
+                                    <div class="bd-highlight">Effective Date: {{ display.effective_date }}</div>
+                                </div>
+                                <div class="ml-auto p-1">
+                                    <button v-if="$gate.isAdministrator()" @click.prevent="createSalaryGradeModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salaryGradeModal">
+                                    Create <i class="fa fa-edit"></i>
                                     </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <td style="width: calc(100%-150px); font-weight:bold">Grade</td>
+                                        <td style="width: calc(100%-150px); font-weight:bold" v-for="n in 8" :key="n.id">Step {{ n }}</td>
+                                        <td style="width: calc(100%-150px); font-weight:bold" v-if="$gate.isAdministrator()">Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(salarygrade, index) in salarygrades" :key="salarygrade.id" class="text-center">
+                                        <td style="width: calc(100%-150px);"> {{ salarygrade[index].grade }} </td>
+                                        <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">{{ amounts.amount }}</td>
+                                        <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
+                                            <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salaryGradeModal">
+                                            Edit <i class="fa fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- create modal -->
-         <div v-if="editMode == false" class="modal fade" id="modalCreate" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+        <!-- salary sched modal -->
+         <div class="modal fade" id="salarySchedModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
@@ -54,34 +77,19 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="createSalaryGrade()" action="" id="1">
+                <form @submit.prevent="editMode == false ? createSalarySchedule() : updateSalarySchedule()" action="" id="1">
                     <div class="modal-body">
                         <div class="forms p-0 col-md-12">
-                            <div class="row justify-content-center">
-                                <div class="form-group col-md-6 text-center">
+                           <div class="row">
+                                <div class="form-group col">
                                     <label for="tranche">Tranche</label>
-                                    <input type="text" v-model="form.tranche" list="tranche" required>
-                                    <datalist id="tranche">
-                                        <option v-for="tranche in tranches" :key="tranche.id">{{ tranche }}</option>
-                                    </datalist>
+                                    <input type="text" class="form-control" name="tranche" id="tranche" v-model="salarySchedForm.tranche">
                                 </div>
-                                <div class="form-group col-md-6 text-center">
-                                    <label for="grade">Grade</label>
-                                    <input type="number" name="grade" v-model="form.grade" required>
+                                <div class="form-group col">
+                                    <label for="effective_date">Effective Date</label>
+                                    <input type="date" class="form-control" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date">
                                 </div>
-                                <div class="form-group col-md-6" v-for="index in 8" :key="index.id">
-                                    <div class="row">
-                                        <div class="input-group col-md-6">
-                                            <label for="step">Step {{ index }}</label>
-                                            <input type="number" v-model="form.amount[index]" required>
-                                        </div>
-                                        <div class="input-group col-md-6">
-                                            <label for="date">Effective Date:</label>
-                                            <input type="date" name="effective_date" v-model="form.effective_date[index]" required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                           </div>
                        </div>
                     </div>
                     <div class="modal-footer">
@@ -92,11 +100,11 @@
                 </div>
             </div>
         </div>
-        <!-- end create modal -->
+        <!-- end sc modal -->
 
-        <!-- update modal -->
-        <div v-else class="modal fade" id="modalUpdate" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+        <!-- salaryGradeModal modal -->
+        <div class="modal fade" id="salaryGradeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-grade"></h5>
@@ -104,21 +112,18 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="updateSalaryGrade()" action="" id="2">
+                <form @submit.prevent=" editMode == false ? createSalaryGrade() : updateSalaryGrade()" action="" id="2">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="form-group col-md-6" v-for="(data, index) in form" :key="data.id">
-                                <div class="row">
-                                    <div class="input-group col-md-6">
-                                        <label for="amount">Step {{ data.step }}</label>
-                                        <input type="number" name="amount" v-model="data.amount" required>
-                                    </div>
-
-                                    <div class="input-group col-md-6">
-                                        <label for="date">Effective Date</label>
-                                        <input type="date" name="date" v-model="data.effective_date" required>
-                                    </div>
-                                </div>
+                            <div class="form-group col-md-12">
+                                <label for="grade">Grade</label>
+                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade">
+                                    <option v-for="grade in 33" v-bind:value="grade" :key="grade.id">Grade: {{ grade }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6" v-for="(n, index) in 8" :key="index.id">
+                                <label for="amount">Step {{ index+1 }}</label>
+                                <input type="number" class="form-control" v-model="salaryGradeForm.amount[index]" required>
                             </div>
                         </div>
                     </div>
@@ -130,7 +135,7 @@
                 </div>
             </div>
         </div>
-        <!-- end update modal -->
+        <!-- end sg modal -->
     </div>
 </template>
 
@@ -139,104 +144,147 @@
         data () {
             return {
                 editMode: false,
-                selected: {tranche:"SSL V First Tranche"},
-                steps:{},
+                salaryschedules: {},
                 salarygrades: {},
-                tranches: {},
-                form: {amount: [], effective_date: []},
+                selected: '',
+                salarySchedForm: {},
+                salaryGradeForm: {amount:[]},
+                display: {},
             }
         },
         watch:
         {
             selected: function()
             {
-                this.debouncedgetSalaryGrades();
+                this.debouncedgetSalaryGrade();
             },
         },
         created: function()
         {
-            this.getSalaryGrade()
-            this.debouncedgetSalaryGrades = _.debounce(this.getSalaryGrade, 500);
+            this.getSalarySchedule()
+            this.debouncedgetSalaryGrade = _.debounce(this.getSalaryGrade, 500);
         },
         methods:
         {
-            getSalaryGrade: function()
+            getSalarySchedule: function()
             {
-                var select = this.selected.tranche
-                axios.get('api/salarygrade')
-                .then(({data}) =>
-                {
-                    this.tranches = Object.keys(data)
-                    var step = _.map(data[select], 'step')
-                    var max = _.max(step)
-                    this.salarygrades = _.chunk(data[select], max)
-                    this.steps = max
+                axios.get('api/salaryschedule')
+                .then(({data}) => {
+                    this.salaryschedules = data
+                    this.selected = this.salaryschedules[0].tranche
+                    // this.getSalaryGrade()
                 })
-                .catch(error =>
-                {
+                .catch(error => {
+
+                })
+            },
+            createSalarySchedule: function()
+            {
+                axios.post('api/salaryschedule', this.salarySchedForm)
+                .then(response => {
+                   toast.fire({
+                        icon: 'success',
+                        title: 'Created successfully'
+                    });
+                    this.selected = this.salarySchedForm.tranche
+                    this.getSalarySchedule()
+                    $('#salarySchedModal').modal('hide')
+                })
+                .catch(error => {
                     // do something
-                });
+                })
             },
-            createSalaryGradeModal: function()
+            createSalaryScheduleModal: function()
             {
+                this.salarySchedForm = {}
                 this.editMode = false
-                this.form = {amount: [], effective_date: []}
             },
-            editSalaryGradeModal: function(salarygrade)
+            editSalaryScheduleModal: function()
             {
+                var ar =  _.find(this.salaryschedules, ['tranche', this.selected])
+
+                this.salarySchedForm = {id: ar.id, tranche: ar.tranche, effective_date:ar.effective_date}
                 this.editMode = true
-                $('#modal-grade').text("Grade "+ salarygrade[0]['grade'])
-                this.form = salarygrade
+            },
+            updateSalarySchedule: function()
+            {
+                axios.patch('api/salaryschedule/'+this.salarySchedForm.id, this.salarySchedForm)
+                .then(response => {
+                   toast.fire({
+                        icon: 'success',
+                        title: 'Updated successfully'
+                    });
+                    this.getSalarySchedule()
+                    this.selected = this.salarySchedForm.tranche
+                    $('#salarySchedModal').modal('hide')
+                })
+                .catch(error => {
+                    // do something
+                })
             },
             closed: function()
             {
-                this.getSalaryGrade();
+
             },
-            createSalaryGrade()
+            getSalaryGrade: function()
             {
-               this.form.amount.forEach((e, index) => {
-                   axios.post('api/salarygrade', {
-                       tranche: this.form.tranche,
-                       step:    index,
-                       grade:   this.form.grade,
-                       amount:  e,
-                       effective_date: this.form.effective_date[index]
-                   })
-                   .then(response => {
-                        if(index === this.form.length - 1)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Updated successfully'
-                            });
-                            this.selected = { tranche: this.form.tranche }
-                            $('#modalCreate').modal('hide')
-                        }
-                    })
-                    .catch(error => {
-                        //do something
-                    })
-               })
+                var sched = _.find(this.salaryschedules, ['tranche', this.selected])
+                axios.get('api/salarygrade?id='+ sched.id)
+                .then(({data}) => {
+                    this.salarygrades = _.chunk(data, 8)
+                    this.display = _.find(this.salaryschedules, ['tranche', this.selected])
+                })
+                .catch(error => {
+                    // do something
+                })
+            },
+            createSalaryGradeModal: function()
+            {
+                this.salaryGradeForm = {amount: []}
+                this.editMode = false
+            },
+            editSalaryGradeModal: function(salarygrade)
+            {
+                var ar = {id: [], grade: salarygrade[0].grade, amount: []}
+                salarygrade.forEach(e=>{
+                   ar.id.push(e.id)
+                   ar.amount.push(e.amount)
+                })
+
+                this.salaryGradeForm = ar
+                this.editMode = true
+
+            },
+            createSalaryGrade: function()
+            {
+                var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]))
+                axios.post('api/salarygrade', ar)
+                .then(response => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Created successfully'
+                    });
+                    this.getSalaryGrade()
+                    $('#salaryGradeModal').modal('hide')
+                })
+                .catch(error => {
+                    // do something
+                })
+                console.log(this.salaryGradeForm.amount)
             },
             updateSalaryGrade: function()
             {
-                this.form.forEach((e, index)=> {
-                    axios.patch('api/salarygrade/'+ e.id, e)
+                this.salaryGradeForm.id.forEach((e,index)=>{
+                    axios.patch('api/salarygrade/'+e, { amount: this.salaryGradeForm.amount[index]})
                     .then(response => {
-                        if(index === this.form.length - 1)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Updated successfully'
-                            });
-                            $('#modalUpdate').modal('hide')
-                        }
+
                     })
-                    .catch(error =>{
-                        //do something
+                    .catch(error => {
+                        // do something
                     })
-                });
-            },
+                })
+                // console.log(this.salaryGradeForm)
+            }
         },
         mounted() {
             console.log('mounted');

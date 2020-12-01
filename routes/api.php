@@ -18,25 +18,30 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-// Route::middleware(['auth:api'])->group(function () {
+Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResources([
         'user' => 'API\UserController',
         'personalinformation' => 'API\PersonalInformationController',
         'barcode' => 'API\BarcodeController',
-        'plantilla' => 'API\PlantillaController',
-        'salarygrade' => 'API\SalaryGradeController',
-        'setting' => 'API\SettingsController',
+        'salaryschedule' => 'API\SalaryScheduleController',
+        'salarygrade' => 'API\SalaryGradeController'
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
 
     Route::post('verifybarcode', 'Api\BarcodeController@verify');
 
-    Route::post('salarygrade', 'Api\SalaryGradeController@store');
-    Route::patch('salarygrade', 'Api\SalaryGradeController@update');
-// });
+    Route::post('salaryschedule', 'Api\SalaryScheduleController@store');
+    Route::patch('salaryschedule', 'Api\SalaryScheduleController@update');
+
+    Route::post('salarygrade', 'API\SalaryGradeController@store');
+    Route::patch('salarygrade', 'API\SalaryGradeController@update');
+});
 
 //api test
-Route::get('per', 'API\PersonalInformationController@index');
-Route::get('salary', 'API\SalaryGradeController@index');
+// Route::get('per', 'API\PersonalInformationController@index');
+// Route::get('salary', 'API\SalaryGradeController@index');
+// Route::get('salarygrade', 'API\SalaryScheduleController@index');
+
+
 

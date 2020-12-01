@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalaryGradesTable extends Migration
+class CreateSalarySchedulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateSalaryGradesTable extends Migration
      */
     public function up()
     {
-        Schema::create('salary_grades', function (Blueprint $table) {
+        Schema::create('salary_schedules', function (Blueprint $table) {
             $table->string('id', 100)->primary()->unique();
-            $table->string('salary_sched_id', 100);
-            $table->foreign('salary_sched_id')->references('id')->on('salary_schedules')->onDelete('cascade');
-            $table->integer('grade');
-            $table->integer('step');
-            $table->decimal('amount', 8, 2);
+            $table->string('tranche', 100);
+            $table->date('effective_date');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateSalaryGradesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salary_grades');
+        Schema::dropIfExists('salary_schedules');
     }
 }

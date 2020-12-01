@@ -10,9 +10,7 @@ class SalaryGrade extends Model
 
     public $incrementing = false;
 
-    protected $primaryKey = 'id';
-
-    protected $fillable = ['tranche', 'grade', 'tranche', 'step', 'amount', 'effective_date'];
+    protected $fillable = ['grade', 'step', 'amount'];
 
     public function position()
     {
@@ -32,6 +30,11 @@ class SalaryGrade extends Model
     public function allocation()
     {
         return $this->hasMany('App\Allocation');
+    }
+
+    public function salaryschedule()
+    {
+        return $this->belongsTo('App\SalarySchedule');
     }
 
     public static function boot(){

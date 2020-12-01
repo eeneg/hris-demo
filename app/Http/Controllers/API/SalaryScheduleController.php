@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\SalaryGrade;
 use App\SalarySchedule;
 use Illuminate\Http\Request;
 
-class SalaryGradeController extends Controller
+class SalaryScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,21 +15,16 @@ class SalaryGradeController extends Controller
      */
     public function index(Request $request)
     {
-        $sg = SalarySchedule::findOrFail($request->id)->salarygrades;
-        $cl = collect();
+        $sc = SalarySchedule::all();
 
-        $maxG = $sg->max('grade');
-        $maxS = $sg->max('step');
-        for ($i=0; $i < $maxG + 1; $i++)
-        {
-            for ($x=0; $x < $maxS + 1; $x++)
-            {
-                $temp = $sg->where('grade', $i)->where('step', $x)->first();
-                isset($temp) ? $cl->push($temp) : '';
-            }
-        }
+        return $sc;
+    }
 
-        return $cl;
+    public function getSalaryGrades(Request $request)
+    {
+        // $sg = SalarySchedule::findOrFail($request)->salarygrade;
+
+        return 'fuck';
     }
 
     /**
@@ -41,15 +35,9 @@ class SalaryGradeController extends Controller
      */
     public function store(Request $request)
     {
-        $salarysched = SalarySchedule::find($request->id);
+        $request->validate(['tranche' => 'string|required', 'effective_date' => 'date|required']);
 
-        foreach($request->amount as $key => $amount)
-        {
-            $request->validate([$amount => 'numeric', $request->grade => 'numeric', $key+1 => 'numeric']);
-
-            $salarysched->salarygrades()->create(['amount' => $amount, 'grade' => $request->grade, 'step' => $key + 1]);
-        }
-
+        SalarySchedule::create($request->all());
     }
 
     /**
@@ -72,9 +60,11 @@ class SalaryGradeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $salarysched = SalaryGrade::findOrFail($id);
+        $sc = SalarySchedule::findOrFail($id);
 
-        $salarysched->update($request->all());
+        $request->validate(['tranche' => 'string|required', 'effective_date' => 'date|required']);
+
+        $sc->update($request->all());
     }
 
     /**

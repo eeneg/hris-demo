@@ -4648,104 +4648,149 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       editMode: false,
-      selected: {
-        tranche: "SSL V First Tranche"
-      },
-      steps: {},
+      salaryschedules: {},
       salarygrades: {},
-      tranches: {},
-      form: {
-        amount: [],
-        effective_date: []
-      }
+      selected: '',
+      salarySchedForm: {},
+      salaryGradeForm: {
+        amount: []
+      },
+      display: {}
     };
   },
   watch: {
     selected: function selected() {
-      this.debouncedgetSalaryGrades();
+      this.debouncedgetSalaryGrade();
     }
   },
   created: function created() {
-    this.getSalaryGrade();
-    this.debouncedgetSalaryGrades = _.debounce(this.getSalaryGrade, 500);
+    this.getSalarySchedule();
+    this.debouncedgetSalaryGrade = _.debounce(this.getSalaryGrade, 500);
   },
   methods: {
-    getSalaryGrade: function getSalaryGrade() {
+    getSalarySchedule: function getSalarySchedule() {
       var _this = this;
 
-      var select = this.selected.tranche;
-      axios.get('api/salarygrade').then(function (_ref) {
+      axios.get('api/salaryschedule').then(function (_ref) {
         var data = _ref.data;
-        _this.tranches = Object.keys(data);
+        _this.salaryschedules = data;
+        _this.selected = _this.salaryschedules[0].tranche; // this.getSalaryGrade()
+      })["catch"](function (error) {});
+    },
+    createSalarySchedule: function createSalarySchedule() {
+      var _this2 = this;
 
-        var step = _.map(data[select], 'step');
+      axios.post('api/salaryschedule', this.salarySchedForm).then(function (response) {
+        toast.fire({
+          icon: 'success',
+          title: 'Created successfully'
+        });
+        _this2.selected = _this2.salarySchedForm.tranche;
 
-        var max = _.max(step);
+        _this2.getSalarySchedule();
 
-        _this.salarygrades = _.chunk(data[select], max);
-        _this.steps = max;
+        $('#salarySchedModal').modal('hide');
+      })["catch"](function (error) {// do something
+      });
+    },
+    createSalaryScheduleModal: function createSalaryScheduleModal() {
+      this.salarySchedForm = {};
+      this.editMode = false;
+    },
+    editSalaryScheduleModal: function editSalaryScheduleModal() {
+      var ar = _.find(this.salaryschedules, ['tranche', this.selected]);
+
+      this.salarySchedForm = {
+        id: ar.id,
+        tranche: ar.tranche,
+        effective_date: ar.effective_date
+      };
+      this.editMode = true;
+    },
+    updateSalarySchedule: function updateSalarySchedule() {
+      var _this3 = this;
+
+      axios.patch('api/salaryschedule/' + this.salarySchedForm.id, this.salarySchedForm).then(function (response) {
+        toast.fire({
+          icon: 'success',
+          title: 'Updated successfully'
+        });
+
+        _this3.getSalarySchedule();
+
+        _this3.selected = _this3.salarySchedForm.tranche;
+        $('#salarySchedModal').modal('hide');
+      })["catch"](function (error) {// do something
+      });
+    },
+    closed: function closed() {},
+    getSalaryGrade: function getSalaryGrade() {
+      var _this4 = this;
+
+      var sched = _.find(this.salaryschedules, ['tranche', this.selected]);
+
+      axios.get('api/salarygrade?id=' + sched.id).then(function (_ref2) {
+        var data = _ref2.data;
+        _this4.salarygrades = _.chunk(data, 8);
+        _this4.display = _.find(_this4.salaryschedules, ['tranche', _this4.selected]);
       })["catch"](function (error) {// do something
       });
     },
     createSalaryGradeModal: function createSalaryGradeModal() {
-      this.editMode = false;
-      this.form = {
-        amount: [],
-        effective_date: []
+      this.salaryGradeForm = {
+        amount: []
       };
+      this.editMode = false;
     },
     editSalaryGradeModal: function editSalaryGradeModal(salarygrade) {
+      var ar = {
+        id: [],
+        grade: salarygrade[0].grade,
+        amount: []
+      };
+      salarygrade.forEach(function (e) {
+        ar.id.push(e.id);
+        ar.amount.push(e.amount);
+      });
+      this.salaryGradeForm = ar;
       this.editMode = true;
-      $('#modal-grade').text("Grade " + salarygrade[0]['grade']);
-      this.form = salarygrade;
-    },
-    closed: function closed() {
-      this.getSalaryGrade();
     },
     createSalaryGrade: function createSalaryGrade() {
-      var _this2 = this;
+      var _this5 = this;
 
-      this.form.amount.forEach(function (e, index) {
-        axios.post('api/salarygrade', {
-          tranche: _this2.form.tranche,
-          step: index,
-          grade: _this2.form.grade,
-          amount: e,
-          effective_date: _this2.form.effective_date[index]
-        }).then(function (response) {
-          if (index === _this2.form.length - 1) {
-            toast.fire({
-              icon: 'success',
-              title: 'Updated successfully'
-            });
-            _this2.selected = {
-              tranche: _this2.form.tranche
-            };
-            $('#modalCreate').modal('hide');
-          }
-        })["catch"](function (error) {//do something
+      var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]));
+
+      axios.post('api/salarygrade', ar).then(function (response) {
+        toast.fire({
+          icon: 'success',
+          title: 'Created successfully'
         });
+
+        _this5.getSalaryGrade();
+
+        $('#salaryGradeModal').modal('hide');
+      })["catch"](function (error) {// do something
       });
+      console.log(this.salaryGradeForm.amount);
     },
     updateSalaryGrade: function updateSalaryGrade() {
-      var _this3 = this;
+      var _this6 = this;
 
-      this.form.forEach(function (e, index) {
-        axios.patch('api/salarygrade/' + e.id, e).then(function (response) {
-          if (index === _this3.form.length - 1) {
-            toast.fire({
-              icon: 'success',
-              title: 'Updated successfully'
-            });
-            $('#modalUpdate').modal('hide');
-          }
-        })["catch"](function (error) {//do something
+      this.salaryGradeForm.id.forEach(function (e, index) {
+        axios.patch('api/salarygrade/' + e, {
+          amount: _this6.salaryGradeForm.amount[index]
+        }).then(function (response) {})["catch"](function (error) {// do something
         });
-      });
+      }); // console.log(this.salaryGradeForm)
     }
   },
   mounted: function mounted() {
@@ -73826,7 +73871,7 @@ var render = function() {
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-md-12" }, [
               _c("label", { attrs: { for: "custom-select" } }, [
-                _vm._v("Salary Schedule")
+                _vm._v("Salary Schedule: ")
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "btn-group" }, [
@@ -73858,18 +73903,46 @@ var render = function() {
                       }
                     }
                   },
-                  _vm._l(_vm.tranches, function(tranche) {
+                  _vm._l(_vm.salaryschedules, function(salaryschedule) {
                     return _c(
                       "option",
                       {
-                        key: tranche.id,
-                        domProps: { value: { tranche: tranche } }
+                        key: salaryschedule.id,
+                        domProps: { value: salaryschedule.tranche }
                       },
-                      [_vm._v(" " + _vm._s(tranche) + " ")]
+                      [_vm._v(" " + _vm._s(salaryschedule.tranche) + " ")]
                     )
                   }),
                   0
                 )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "btn-group" }, [
+                _vm.$gate.isAdministrator()
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: {
+                          type: "button",
+                          "data-toggle": "modal",
+                          "data-target": "#salarySchedModal"
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.editSalaryScheduleModal()
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Edit Salary Schedule "
+                        ),
+                        _c("i", { staticClass: "fa fa-edit" })
+                      ]
+                    )
+                  : _vm._e()
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "btn-group float-right" }, [
@@ -73881,12 +73954,18 @@ var render = function() {
                         attrs: {
                           type: "button",
                           "data-toggle": "modal",
-                          "data-target": "#modalCreate"
+                          "data-target": "#salarySchedModal"
                         },
-                        on: { click: _vm.createSalaryGradeModal }
+                        on: {
+                          click: function($event) {
+                            return _vm.createSalaryScheduleModal()
+                          }
+                        }
                       },
                       [
-                        _vm._v("\n                              Add "),
+                        _vm._v(
+                          "\n                              Add Salary Schedule "
+                        ),
                         _c("i", { staticClass: "fa fa-plus" })
                       ]
                     )
@@ -73897,39 +73976,57 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
-          _c("table", { staticClass: "table table-striped" }, [
-            _c("thead", [
-              _c(
-                "tr",
-                { staticClass: "text-center" },
-                [
-                  _c(
-                    "td",
-                    {
-                      staticStyle: {
-                        width: "calc(100%-150px)",
-                        "font-weight": "bold"
-                      }
-                    },
-                    [_vm._v("Grade")]
-                  ),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("div", { staticClass: "d-flex mb-1" }, [
+                _c("div", { staticClass: "d-flex flex-column bd-highlight" }, [
+                  _c("div", { staticClass: "bd-highlight" }, [
+                    _vm._v("Tranche: " + _vm._s(_vm.display.tranche))
+                  ]),
                   _vm._v(" "),
-                  _vm._l(_vm.steps, function(step) {
-                    return _c(
-                      "td",
-                      {
-                        key: step.id,
-                        staticStyle: {
-                          width: "calc(100%-150px)",
-                          "font-weight": "bold"
-                        }
-                      },
-                      [_vm._v("Step " + _vm._s(step))]
+                  _c("div", { staticClass: "bd-highlight" }, [
+                    _vm._v(
+                      "Effective Date: " + _vm._s(_vm.display.effective_date)
                     )
-                  }),
-                  _vm._v(" "),
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "ml-auto p-1" }, [
                   _vm.$gate.isAdministrator()
                     ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: {
+                            type: "button",
+                            "data-toggle": "modal",
+                            "data-target": "#salaryGradeModal"
+                          },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.createSalaryGradeModal()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("\n                                Create "),
+                          _c("i", { staticClass: "fa fa-edit" })
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-12" }, [
+              _c("table", { staticClass: "table table-striped" }, [
+                _c("thead", [
+                  _c(
+                    "tr",
+                    { staticClass: "text-center" },
+                    [
+                      _c(
                         "td",
                         {
                           staticStyle: {
@@ -73937,542 +74034,450 @@ var render = function() {
                             "font-weight": "bold"
                           }
                         },
-                        [_vm._v("Action")]
-                      )
-                    : _vm._e()
-                ],
-                2
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.salarygrades, function(salarygrade) {
-                return _c(
-                  "tr",
-                  { key: salarygrade.id, staticClass: "text-center" },
-                  [
-                    _c("td", {
-                      staticStyle: { width: "calc(100%-150px)" },
-                      domProps: { textContent: _vm._s(salarygrade[0].grade) }
-                    }),
-                    _vm._v(" "),
-                    _vm._l(salarygrade, function(amount) {
-                      return _c(
-                        "td",
-                        {
-                          key: amount.id,
-                          staticStyle: { width: "calc(100%-150px)" }
-                        },
-                        [_vm._v(_vm._s(amount.amount))]
-                      )
-                    }),
-                    _vm._v(" "),
-                    _vm.$gate.isAdministrator()
-                      ? _c(
+                        [_vm._v("Grade")]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(8, function(n) {
+                        return _c(
+                          "td",
+                          {
+                            key: n.id,
+                            staticStyle: {
+                              width: "calc(100%-150px)",
+                              "font-weight": "bold"
+                            }
+                          },
+                          [_vm._v("Step " + _vm._s(n))]
+                        )
+                      }),
+                      _vm._v(" "),
+                      _vm.$gate.isAdministrator()
+                        ? _c(
+                            "td",
+                            {
+                              staticStyle: {
+                                width: "calc(100%-150px)",
+                                "font-weight": "bold"
+                              }
+                            },
+                            [_vm._v("Action")]
+                          )
+                        : _vm._e()
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.salarygrades, function(salarygrade, index) {
+                    return _c(
+                      "tr",
+                      { key: salarygrade.id, staticClass: "text-center" },
+                      [
+                        _c(
                           "td",
                           { staticStyle: { width: "calc(100%-150px)" } },
-                          [
-                            _vm.$gate.isAdministrator()
-                              ? _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-primary",
-                                    attrs: {
-                                      type: "button",
-                                      "data-toggle": "modal",
-                                      "data-target": "#modalUpdate"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.editSalaryGradeModal(
-                                          salarygrade
-                                        )
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                   Edit "
-                                    ),
-                                    _c("i", { staticClass: "fa fa-edit" })
-                                  ]
-                                )
-                              : _vm._e()
-                          ]
-                        )
-                      : _vm._e()
-                  ],
-                  2
+                          [_vm._v(" " + _vm._s(salarygrade[index].grade) + " ")]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(salarygrade, function(amounts) {
+                          return _c(
+                            "td",
+                            {
+                              key: amounts.id,
+                              staticStyle: { width: "calc(100%-150px)" }
+                            },
+                            [_vm._v(_vm._s(amounts.amount))]
+                          )
+                        }),
+                        _vm._v(" "),
+                        _vm.$gate.isAdministrator()
+                          ? _c(
+                              "td",
+                              { staticStyle: { width: "calc(100%-150px)" } },
+                              [
+                                _vm.$gate.isAdministrator()
+                                  ? _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-primary",
+                                        attrs: {
+                                          type: "button",
+                                          "data-toggle": "modal",
+                                          "data-target": "#salaryGradeModal"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.editSalaryGradeModal(
+                                              salarygrade
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Edit "
+                                        ),
+                                        _c("i", { staticClass: "fa fa-edit" })
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            )
+                          : _vm._e()
+                      ],
+                      2
+                    )
+                  }),
+                  0
                 )
-              }),
-              0
-            )
+              ])
+            ])
           ])
         ])
       ])
     ]),
     _vm._v(" "),
-    _vm.editMode == false
-      ? _c(
-          "div",
-          {
-            staticClass: "modal fade",
-            attrs: {
-              id: "modalCreate",
-              "data-backdrop": "static",
-              "data-keyboard": "false",
-              tabindex: "-1",
-              "aria-labelledby": "staticBackdropLabel",
-              "aria-hidden": "true"
-            }
-          },
-          [
-            _c("div", { staticClass: "modal-dialog modal-lg" }, [
-              _c("div", { staticClass: "modal-content" }, [
-                _c("div", { staticClass: "modal-header" }, [
-                  _c("h5", { staticClass: "modal-title" }),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "close",
-                      attrs: {
-                        type: "button",
-                        "data-dismiss": "modal",
-                        "aria-label": "Close"
-                      },
-                      on: { click: _vm.closed }
-                    },
-                    [
-                      _c("span", { attrs: { "aria-hidden": "true" } }, [
-                        _vm._v("×")
-                      ])
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "form",
-                  {
-                    attrs: { action: "", id: "1" },
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.createSalaryGrade()
-                      }
-                    }
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "salarySchedModal",
+          "data-backdrop": "static",
+          "data-keyboard": "false",
+          tabindex: "-1",
+          "aria-labelledby": "staticBackdropLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c("h5", { staticClass: "modal-title" }),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "close",
+                  attrs: {
+                    type: "button",
+                    "data-dismiss": "modal",
+                    "aria-label": "Close"
                   },
-                  [
-                    _c("div", { staticClass: "modal-body" }, [
-                      _c("div", { staticClass: "forms p-0 col-md-12" }, [
-                        _c(
-                          "div",
-                          { staticClass: "row justify-content-center" },
-                          [
-                            _c(
-                              "div",
-                              {
-                                staticClass: "form-group col-md-6 text-center"
-                              },
-                              [
-                                _c("label", { attrs: { for: "tranche" } }, [
-                                  _vm._v("Tranche")
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.form.tranche,
-                                      expression: "form.tranche"
-                                    }
-                                  ],
-                                  attrs: {
-                                    type: "text",
-                                    list: "tranche",
-                                    required: ""
-                                  },
-                                  domProps: { value: _vm.form.tranche },
-                                  on: {
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.form,
-                                        "tranche",
-                                        $event.target.value
-                                      )
-                                    }
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "datalist",
-                                  { attrs: { id: "tranche" } },
-                                  _vm._l(_vm.tranches, function(tranche) {
-                                    return _c("option", { key: tranche.id }, [
-                                      _vm._v(_vm._s(tranche))
-                                    ])
-                                  }),
-                                  0
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass: "form-group col-md-6 text-center"
-                              },
-                              [
-                                _c("label", { attrs: { for: "grade" } }, [
-                                  _vm._v("Grade")
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.form.grade,
-                                      expression: "form.grade"
-                                    }
-                                  ],
-                                  attrs: {
-                                    type: "number",
-                                    name: "grade",
-                                    required: ""
-                                  },
-                                  domProps: { value: _vm.form.grade },
-                                  on: {
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.form,
-                                        "grade",
-                                        $event.target.value
-                                      )
-                                    }
-                                  }
-                                })
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _vm._l(8, function(index) {
-                              return _c(
-                                "div",
-                                {
-                                  key: index.id,
-                                  staticClass: "form-group col-md-6"
-                                },
-                                [
-                                  _c("div", { staticClass: "row" }, [
-                                    _c(
-                                      "div",
-                                      { staticClass: "input-group col-md-6" },
-                                      [
-                                        _c(
-                                          "label",
-                                          { attrs: { for: "step" } },
-                                          [_vm._v("Step " + _vm._s(index))]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("input", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value: _vm.form.amount[index],
-                                              expression: "form.amount[index]"
-                                            }
-                                          ],
-                                          attrs: {
-                                            type: "number",
-                                            required: ""
-                                          },
-                                          domProps: {
-                                            value: _vm.form.amount[index]
-                                          },
-                                          on: {
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.$set(
-                                                _vm.form.amount,
-                                                index,
-                                                $event.target.value
-                                              )
-                                            }
-                                          }
-                                        })
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "input-group col-md-6" },
-                                      [
-                                        _c(
-                                          "label",
-                                          { attrs: { for: "date" } },
-                                          [_vm._v("Effective Date:")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("input", {
-                                          directives: [
-                                            {
-                                              name: "model",
-                                              rawName: "v-model",
-                                              value:
-                                                _vm.form.effective_date[index],
-                                              expression:
-                                                "form.effective_date[index]"
-                                            }
-                                          ],
-                                          attrs: {
-                                            type: "date",
-                                            name: "effective_date",
-                                            required: ""
-                                          },
-                                          domProps: {
-                                            value:
-                                              _vm.form.effective_date[index]
-                                          },
-                                          on: {
-                                            input: function($event) {
-                                              if ($event.target.composing) {
-                                                return
-                                              }
-                                              _vm.$set(
-                                                _vm.form.effective_date,
-                                                index,
-                                                $event.target.value
-                                              )
-                                            }
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ])
-                                ]
-                              )
-                            })
-                          ],
-                          2
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "modal-footer" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: { type: "button", "data-dismiss": "modal" },
-                          on: { click: _vm.closed }
-                        },
-                        [_vm._v("Close")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { type: "submit" }
-                        },
-                        [_vm._v("Save")]
-                      )
-                    ])
-                  ]
-                )
-              ])
-            ])
-          ]
-        )
-      : _c(
-          "div",
-          {
-            staticClass: "modal fade",
-            attrs: {
-              id: "modalUpdate",
-              "data-backdrop": "static",
-              "data-keyboard": "false",
-              tabindex: "-1",
-              "aria-labelledby": "staticBackdropLabel",
-              "aria-hidden": "true"
-            }
-          },
-          [
-            _c("div", { staticClass: "modal-dialog modal-lg" }, [
-              _c("div", { staticClass: "modal-content" }, [
-                _c("div", { staticClass: "modal-header" }, [
-                  _c("h5", {
-                    staticClass: "modal-title",
-                    attrs: { id: "modal-grade" }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "close",
-                      attrs: {
-                        type: "button",
-                        "data-dismiss": "modal",
-                        "aria-label": "Close"
-                      },
-                      on: { click: _vm.closed }
-                    },
-                    [
-                      _c("span", { attrs: { "aria-hidden": "true" } }, [
-                        _vm._v("×")
-                      ])
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "form",
-                  {
-                    attrs: { action: "", id: "2" },
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.updateSalaryGrade()
-                      }
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "modal-body" }, [
-                      _c(
-                        "div",
-                        { staticClass: "row" },
-                        _vm._l(_vm.form, function(data, index) {
-                          return _c(
-                            "div",
+                  on: { click: _vm.closed }
+                },
+                [
+                  _c("span", { attrs: { "aria-hidden": "true" } }, [
+                    _vm._v("×")
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                attrs: { action: "", id: "1" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    _vm.editMode == false
+                      ? _vm.createSalarySchedule()
+                      : _vm.updateSalarySchedule()
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("div", { staticClass: "forms p-0 col-md-12" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "form-group col" }, [
+                        _c("label", { attrs: { for: "tranche" } }, [
+                          _vm._v("Tranche")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
                             {
-                              key: data.id,
-                              staticClass: "form-group col-md-6"
-                            },
-                            [
-                              _c("div", { staticClass: "row" }, [
-                                _c(
-                                  "div",
-                                  { staticClass: "input-group col-md-6" },
-                                  [
-                                    _c("label", { attrs: { for: "amount" } }, [
-                                      _vm._v("Step " + _vm._s(data.step))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: data.amount,
-                                          expression: "data.amount"
-                                        }
-                                      ],
-                                      attrs: {
-                                        type: "number",
-                                        name: "amount",
-                                        required: ""
-                                      },
-                                      domProps: { value: data.amount },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            data,
-                                            "amount",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "input-group col-md-6" },
-                                  [
-                                    _c("label", { attrs: { for: "date" } }, [
-                                      _vm._v("Effective Date")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: data.effective_date,
-                                          expression: "data.effective_date"
-                                        }
-                                      ],
-                                      attrs: {
-                                        type: "date",
-                                        name: "date",
-                                        required: ""
-                                      },
-                                      domProps: { value: data.effective_date },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            data,
-                                            "effective_date",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    })
-                                  ]
-                                )
-                              ])
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "modal-footer" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: { type: "button", "data-dismiss": "modal" },
-                          on: { click: _vm.closed }
-                        },
-                        [_vm._v("Close")]
-                      ),
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.salarySchedForm.tranche,
+                              expression: "salarySchedForm.tranche"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            name: "tranche",
+                            id: "tranche"
+                          },
+                          domProps: { value: _vm.salarySchedForm.tranche },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.salarySchedForm,
+                                "tranche",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { type: "submit" }
-                        },
-                        [_vm._v("Save")]
-                      )
+                      _c("div", { staticClass: "form-group col" }, [
+                        _c("label", { attrs: { for: "effective_date" } }, [
+                          _vm._v("Effective Date")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.salarySchedForm.effective_date,
+                              expression: "salarySchedForm.effective_date"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "date",
+                            name: "effective_date",
+                            id: "effective_date"
+                          },
+                          domProps: {
+                            value: _vm.salarySchedForm.effective_date
+                          },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.salarySchedForm,
+                                "effective_date",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
                     ])
-                  ]
-                )
-              ])
-            ])
-          ]
-        )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: { click: _vm.closed }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Save")]
+                  )
+                ])
+              ]
+            )
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "salaryGradeModal",
+          "data-backdrop": "static",
+          "data-keyboard": "false",
+          tabindex: "-1",
+          "aria-labelledby": "staticBackdropLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c("h5", {
+                staticClass: "modal-title",
+                attrs: { id: "modal-grade" }
+              }),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "close",
+                  attrs: {
+                    type: "button",
+                    "data-dismiss": "modal",
+                    "aria-label": "Close"
+                  },
+                  on: { click: _vm.closed }
+                },
+                [
+                  _c("span", { attrs: { "aria-hidden": "true" } }, [
+                    _vm._v("×")
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                attrs: { action: "", id: "2" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    _vm.editMode == false
+                      ? _vm.createSalaryGrade()
+                      : _vm.updateSalaryGrade()
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "modal-body" }, [
+                  _c(
+                    "div",
+                    { staticClass: "row" },
+                    [
+                      _c("div", { staticClass: "form-group col-md-12" }, [
+                        _c("label", { attrs: { for: "grade" } }, [
+                          _vm._v("Grade")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.salaryGradeForm.grade,
+                                expression: "salaryGradeForm.grade"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { id: "grade" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.salaryGradeForm,
+                                  "grade",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          _vm._l(33, function(grade) {
+                            return _c(
+                              "option",
+                              { key: grade.id, domProps: { value: grade } },
+                              [_vm._v("Grade: " + _vm._s(grade))]
+                            )
+                          }),
+                          0
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(8, function(n, index) {
+                        return _c(
+                          "div",
+                          { key: index.id, staticClass: "form-group col-md-6" },
+                          [
+                            _c("label", { attrs: { for: "amount" } }, [
+                              _vm._v("Step " + _vm._s(index + 1))
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.salaryGradeForm.amount[index],
+                                  expression: "salaryGradeForm.amount[index]"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "number", required: "" },
+                              domProps: {
+                                value: _vm.salaryGradeForm.amount[index]
+                              },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.salaryGradeForm.amount,
+                                    index,
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: { click: _vm.closed }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Save")]
+                  )
+                ])
+              ]
+            )
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -91207,8 +91212,8 @@ var Gate = /*#__PURE__*/function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
