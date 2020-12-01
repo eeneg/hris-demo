@@ -11,6 +11,8 @@ class Position extends Model
 
     protected $primaryKey = 'id';
 
+    protected $table = 'positions';
+
     protected $fillable = [ 'department_id', 'title' ];
 
     protected $with = [

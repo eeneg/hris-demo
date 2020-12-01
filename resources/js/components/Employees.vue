@@ -5,7 +5,7 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Employees</h2>
-                    <small style="margin-left: 2px;">Positions are based on Annual Plantilla {{ settings.plantilla }}</small>
+                    <small style="margin-left: 2px;">Positions are based on Annual Plantilla {{ this.$parent.settings.plantilla }}</small>
                     <div class="row mt-1">
                         <div class="col-md-3">
                             <div class="input-group">
@@ -23,7 +23,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Position <span style="font-weight: 100;">({{ settings.plantilla }})</span></th>
+                                <th>Position <span style="font-weight: 100;">({{ this.$parent.settings.plantilla }})</span></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -68,7 +68,7 @@
                         <span slot="prev-nav">&lt; Previous</span>
 	                    <span slot="next-nav">Next &gt;</span>
                     </pagination>
-                    <span style="margin-left: 10px;">Showing {{ employees.from | validateCount }} to {{ employees.to | validateCount }} of {{ employees.total }} records</span>
+                    <span style="margin-left: 10px;">Showing {{ employees.meta && employees.meta.from | validateCount }} to {{ employees.meta && employees.meta.to | validateCount }} of {{ employees.meta && employees.meta.total }} records</span>
                 </div>
             </div>
         </div>
@@ -615,7 +615,6 @@
     export default {
         data() {
             return {
-                settings: {},
                 employees: {},
                 barcode: '',
                 search: '',
@@ -727,7 +726,7 @@
                 if (employee.plantillacontents.length > 0) {
                     let details = {designation: '', department: '', sg: ''};
                     _.forEach(employee.plantillacontents, (value) => {
-                        if (this.settings.plantilla == value.plantilla.year) {
+                        if (this.$parent.settings.plantilla == value.plantilla.year) {
                             details.designation = value.position && value.position.title;
                             details.department = value.position && value.position.department.description;
                             details.sg = value.salaryproposed && value.salaryproposed.grade;
@@ -743,15 +742,6 @@
                 axios.get('api/personalinformation')
                     .then(({data}) => {
                         this.employees = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-            },
-            getSettings() {
-                axios.get('api/setting')
-                    .then(({data}) => {
-                        this.settings = data;
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -784,7 +774,7 @@
                 axios.post('generatePDS', {id: id})
                     .then(response => {                 
                         let options = {
-                            height: screen.height * 0.75 + 'px',
+                            height: screen.height * 0.65 + 'px',
                             page: '1'
                         };
                         $('#viewProfileModal').modal('hide');
@@ -799,7 +789,7 @@
                 axios.post('generateId', {id: employee.id})
                     .then(response => {                 
                         let options = {
-                            height: screen.height * 0.75 + 'px',
+                            height: screen.height * 0.65 + 'px',
                             page: '1'
                         };
                         $('#pdfModal').modal('show');
@@ -815,7 +805,6 @@
             //     this.getResults();
             // });
             this.$Progress.start();
-            this.getSettings();
             this.loadEmployees();
             this.$Progress.finish();
         },

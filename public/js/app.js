@@ -2565,7 +2565,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      settings: {},
       employees: {},
       barcode: '',
       search: '',
@@ -2689,7 +2688,7 @@ __webpack_require__.r(__webpack_exports__);
         };
 
         _.forEach(employee.plantillacontents, function (value) {
-          if (_this3.settings.plantilla == value.plantilla.year) {
+          if (_this3.$parent.settings.plantilla == value.plantilla.year) {
             details.designation = value.position && value.position.title;
             details.department = value.position && value.position.department.description;
             details.sg = value.salaryproposed && value.salaryproposed.grade;
@@ -2711,18 +2710,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response.data.message);
       });
     },
-    getSettings: function getSettings() {
-      var _this5 = this;
-
-      axios.get('api/setting').then(function (_ref3) {
-        var data = _ref3.data;
-        _this5.settings = data;
-      })["catch"](function (error) {
-        console.log(error.response.data.message);
-      });
-    },
     generateBarcode: function generateBarcode(employee) {
-      var _this6 = this;
+      var _this5 = this;
 
       this.$Progress.start();
       axios.post('api/barcode', {
@@ -2734,9 +2723,9 @@ __webpack_require__.r(__webpack_exports__);
           Swal.fire('Success', 'Barcode is generated successfully.', 'success');
         }
 
-        _this6.$Progress.finish();
+        _this5.$Progress.finish();
       })["catch"](function (error) {
-        _this6.$Progress.fail();
+        _this5.$Progress.fail();
       });
     },
     generatePDS: function generatePDS(id) {
@@ -2744,7 +2733,7 @@ __webpack_require__.r(__webpack_exports__);
         id: id
       }).then(function (response) {
         var options = {
-          height: screen.height * 0.75 + 'px',
+          height: screen.height * 0.65 + 'px',
           page: '1'
         };
         $('#viewProfileModal').modal('hide');
@@ -2759,7 +2748,7 @@ __webpack_require__.r(__webpack_exports__);
         id: employee.id
       }).then(function (response) {
         var options = {
-          height: screen.height * 0.75 + 'px',
+          height: screen.height * 0.65 + 'px',
           page: '1'
         };
         $('#pdfModal').modal('show');
@@ -2774,7 +2763,6 @@ __webpack_require__.r(__webpack_exports__);
     //     this.getResults();
     // });
     this.$Progress.start();
-    this.getSettings();
     this.loadEmployees();
     this.$Progress.finish();
   },
@@ -4464,9 +4452,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  data: function data() {
+    return {};
+  },
+  methods: {
+    loadContents: function loadContents() {}
+  },
+  created: function created() {
+    this.$Progress.start();
+    this.loadContents();
+    this.$Progress.finish();
+  },
+  mounted: function mounted() {// console.log('Component mounted.')
   }
 });
 
@@ -68094,7 +68094,7 @@ var render = function() {
           _c("small", { staticStyle: { "margin-left": "2px" } }, [
             _vm._v(
               "Positions are based on Annual Plantilla " +
-                _vm._s(_vm.settings.plantilla)
+                _vm._s(this.$parent.settings.plantilla)
             )
           ]),
           _vm._v(" "),
@@ -68145,7 +68145,9 @@ var render = function() {
                   _c("th", [
                     _vm._v("Position "),
                     _c("span", { staticStyle: { "font-weight": "100" } }, [
-                      _vm._v("(" + _vm._s(_vm.settings.plantilla) + ")")
+                      _vm._v(
+                        "(" + _vm._s(this.$parent.settings.plantilla) + ")"
+                      )
                     ])
                   ]),
                   _vm._v(" "),
@@ -68400,11 +68402,19 @@ var render = function() {
             _c("span", { staticStyle: { "margin-left": "10px" } }, [
               _vm._v(
                 "Showing " +
-                  _vm._s(_vm._f("validateCount")(_vm.employees.from)) +
+                  _vm._s(
+                    _vm._f("validateCount")(
+                      _vm.employees.meta && _vm.employees.meta.from
+                    )
+                  ) +
                   " to " +
-                  _vm._s(_vm._f("validateCount")(_vm.employees.to)) +
+                  _vm._s(
+                    _vm._f("validateCount")(
+                      _vm.employees.meta && _vm.employees.meta.to
+                    )
+                  ) +
                   " of " +
-                  _vm._s(_vm.employees.total) +
+                  _vm._s(_vm.employees.meta && _vm.employees.meta.total) +
                   " records"
               )
             ])
@@ -73728,14 +73738,18 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card card-primary card-outline" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("Annual Plantilla")
+            _c(
+              "h2",
+              {
+                staticStyle: { margin: "0.5rem 0 0 0", "line-height": "1.2rem" }
+              },
+              [_vm._v("Annual Plantilla")]
+            )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _vm._v("\n                I'm an example component.\n            ")
-          ])
+          _c("div", { staticClass: "card-body" })
         ])
       ])
     ])
@@ -89857,7 +89871,9 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app',
   router: router,
-  data: {},
+  data: {
+    settings: {}
+  },
   methods: {
     logout: function logout() {
       var _this = this;
@@ -89879,9 +89895,21 @@ var app = new Vue({
           _this.$Progress.finish();
         }
       });
+    },
+    getSettings: function getSettings() {
+      var _this2 = this;
+
+      axios.get('api/setting').then(function (_ref) {
+        var data = _ref.data;
+        _this2.settings = data;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      });
     }
   },
-  created: function created() {}
+  created: function created() {
+    this.getSettings();
+  }
 });
 
 /***/ }),

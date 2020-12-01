@@ -143,7 +143,7 @@ const app = new Vue({
     el: '#app',
     router,
     data: {
-        
+        settings: {}
     },
     methods: {
         logout() {
@@ -162,9 +162,18 @@ const app = new Vue({
                     this.$Progress.finish();
                 }
             });
-        }
+        },
+        getSettings() {
+            axios.get('api/setting')
+                .then(({data}) => {
+                    this.settings = data;
+                })
+                .catch(error => {
+                    console.log(error.response.data.message);
+                });
+        },
     },
     created() {
-        
+        this.getSettings();
     }
 });

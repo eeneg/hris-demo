@@ -19,7 +19,7 @@
                 <div style="position: absolute;">
                     <img class="img-id" src="./storage/employee_id_files/prof.jpg" alt="logo" style="position: absolute; border-radius: 40px; width: 80px; height: 80px;">
                 </div>
-                <div class="centered">Gene Philip L. Rellanos
+                <div class="centered">{!! $employee->firstname.' '.$employee->middlename[0].'. '.$employee->surname.($employee->nameextension !== '' ? ' '.$employee->nameextension : '') !!}
                     <br>
                     <p style="margin-top: 0px; font-weight:400 !important; font-size: 8px !important; color: #1f1f1f;"> Programmer </p>
                 </div>
@@ -36,12 +36,12 @@
                 <img class="qr-code" src="./storage/employee_id_files/qr.png" alt="qr-code" style="position: absolute; width: 72px; height: 72px;">
                 <div class="centered-big-firstname">
                     <span style="margin-top: 0px;">
-                        Gene Philip
+                        {{ $employee->firstname }}
                     </span>
                 </div>
                 <div class="centered-big-surname">
                     <span style="margin-top: 0px;">
-                        L. Rellanos 
+                        {{ $employee->middlename.' '.$employee->surname.($employee->nameextension !== '' ? ' '.$employee->nameextension : '') }}
                     </span>
                 </div>
                 <div class="centered-big-position">
@@ -66,12 +66,12 @@
                 <img class="qr-code" src="./storage/employee_id_files/qr.png" alt="qr-code" style="position: absolute; width: 72px; height: 72px;">
                 <div class="centered-big-firstname">
                     <span style="margin-top: 0px;">
-                        Gene Philip
+                        {{ $employee->firstname }}
                     </span>
                 </div>
                 <div class="centered-big-surname">
                     <span style="margin-top: 0px;">
-                        L. Rellanos 
+                        {{ $employee->middlename.' '.$employee->surname.($employee->nameextension !== '' ? ' '.$employee->nameextension : '') }} 
                     </span>
                 </div>
                 <div class="centered-big-position">
@@ -92,7 +92,7 @@
                 <img src="./storage/employee_id_files/sign.png" alt="sign" style="position: absolute; width: 100%; height: 100%; ">
             </div>
             <div class="centered-back" style="text-align: center;">
-                Gene Philip L. Rellanos
+                {!! $employee->firstname.' '.$employee->middlename[0].'. '.$employee->surname.($employee->nameextension !== '' ? ' '.$employee->nameextension : '') !!}
                 <br>
                 <p style="margin-bottom: 0px; margin-top: 0px; font-weight:400 !important; font-size: 8px !important; color: #1f1f1f;"> Programmer </p>
             </div>

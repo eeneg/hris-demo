@@ -11,8 +11,10 @@ class PlantillaContent extends Model
 
     protected $primaryKey = 'id';
 
+    protected $table = 'plantilla_contents';
+
     protected $with = [
-        'position', 'plantilla', 'salaryauthorized', 'salaryproposed'
+        'plantilla', 'salaryauthorized', 'salaryproposed', 'position'
     ];
 
     protected $fillable = [ 

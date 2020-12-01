@@ -26,10 +26,11 @@ class EmployeesListResource extends JsonResource
         ];
     }
 
-    public function with($request){
+    public function with($request)
+    {
         return [
-            // 'version' => '1.0.0',
-            // 'author_url' => url('http://www.davsurians.com.ph/')
+            'version' => '1.0.0',
+            'author_url' => url('http://www.davsurians.com.ph/')
         ];
     }
 }
