@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         'personalinformation' => 'API\PersonalInformationController',
         'barcode' => 'API\BarcodeController',
         'plantilla' => 'API\PlantillaController',
+        'salaryschedule' => 'API\SalaryScheduleController',
         'salarygrade' => 'API\SalaryGradeController',
         'setting' => 'API\SettingsController',
         'department' => 'API\DepartmentController'
