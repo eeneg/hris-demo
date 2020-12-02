@@ -312,21 +312,16 @@
             },
             updateSalaryGrade: function()
             {
-                this.salaryGradeForm.id.forEach((e,index, array)=>{
-                    axios.patch('api/salarygrade/'+e, {grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount[index]})
-                    .then(response => {
-                        if (index === array.length - 1){
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Updated successfully'
-                            });
-                            this.getSalaryGrade()
-                            $('#salaryGradeModal').modal('hide')
-                        }
-                    })
-                    .catch(error => this.errors.record(error.response.data.errors))
+                axios.patch('api/salarygrade/', {id: this.salaryGradeForm.id, grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount})
+                .then(response => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Updated successfully'
+                    });
+                    this.getSalaryGrade()
+                    $('#salaryGradeModal').modal('hide')
                 })
-                // console.log(this.salaryGradeForm)
+                .catch(error => this.errors.record(error.response.data.errors))
             }
         },
         mounted() {
