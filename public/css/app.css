@@ -48311,8 +48311,15 @@ readers do not read off random characters that represent icons */
 }
 
 .users-table tbody tr td,
-.employees-table tbody tr td {
+.employees-table tbody tr td,
+.plantilla-table tbody tr td {
   vertical-align: middle;
+}
+
+.plantilla-table thead tr th {
+  vertical-align: middle;
+  text-align: center;
+  padding: 0.2rem !important;
 }
 
 .barcode-validate {

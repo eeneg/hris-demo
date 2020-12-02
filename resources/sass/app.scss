@@ -51,8 +51,16 @@
     border-color: #117a8b !important;
 }
 
-.users-table tbody tr td, .employees-table tbody tr td {
+.users-table tbody tr td,
+.employees-table tbody tr td,
+.plantilla-table tbody tr td {
     vertical-align: middle;
+}
+
+.plantilla-table thead tr th {
+    vertical-align: middle;
+    text-align: center;
+    padding: 0.2rem !important;
 }
 
 .barcode-validate {

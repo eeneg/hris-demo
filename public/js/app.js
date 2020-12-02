@@ -3325,6 +3325,8 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Settings updated successfully'
         });
 
+        _this3.$parent.getSettings();
+
         _this3.$Progress.finish();
       })["catch"](function (error) {
         _this3.$Progress.fail();
@@ -4454,15 +4456,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      departments: {}
+    };
   },
   methods: {
+    loadDepartments: function loadDepartments() {
+      var _this = this;
+
+      axios.get('api/department').then(function (_ref) {
+        var data = _ref.data;
+        _this.departments = data.data;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      });
+    },
     loadContents: function loadContents() {}
   },
   created: function created() {
     this.$Progress.start();
+    this.loadDepartments();
     this.loadContents();
     this.$Progress.finish();
   },
@@ -4512,6 +4561,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 //
 //
 //
@@ -4653,6 +4708,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+var Errors = /*#__PURE__*/function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        console.log(this.errors[field]);
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "has",
+    value: function has(field) {
+      return this.errors.hasOwnProperty(field);
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      delete this.errors[field];
+    }
+  }, {
+    key: "deleteV",
+    value: function deleteV() {
+      return this.errors = new Errors();
+    }
+  }]);
+
+  return Errors;
+}();
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4664,7 +4762,8 @@ __webpack_require__.r(__webpack_exports__);
       salaryGradeForm: {
         amount: []
       },
-      display: {}
+      display: {},
+      errors: new Errors()
     };
   },
   watch: {
@@ -4683,7 +4782,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('api/salaryschedule').then(function (_ref) {
         var data = _ref.data;
         _this.salaryschedules = data;
-        _this.selected = _this.salaryschedules[0].tranche; // this.getSalaryGrade()
+        _this.selected = _this.salarySchedForm.tranche != null ? _this.salarySchedForm.tranche : _this.salaryschedules[0].tranche;
+
+        _this.getSalaryGrade();
       })["catch"](function (error) {});
     },
     createSalarySchedule: function createSalarySchedule() {
@@ -4694,13 +4795,14 @@ __webpack_require__.r(__webpack_exports__);
           icon: 'success',
           title: 'Created successfully'
         });
-        _this2.selected = _this2.salarySchedForm.tranche;
 
         _this2.getSalarySchedule();
 
         $('#salarySchedModal').modal('hide');
-      })["catch"](function (error) {// do something
-      });
+      })["catch"](function (error) {
+        return _this2.errors.record(error.response.data.errors);
+      }); // console.log(error.response.data.errors)
+      // do something
     },
     createSalaryScheduleModal: function createSalaryScheduleModal() {
       this.salarySchedForm = {};
@@ -4727,9 +4829,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this3.getSalarySchedule();
 
-        _this3.selected = _this3.salarySchedForm.tranche;
         $('#salarySchedModal').modal('hide');
-      })["catch"](function (error) {// do something
+      })["catch"](function (error) {
+        return _this3.errors.record(error.response.data.errors);
       });
     },
     closed: function closed() {},
@@ -4742,7 +4844,7 @@ __webpack_require__.r(__webpack_exports__);
         var data = _ref2.data;
         _this4.salarygrades = _.chunk(data, 8);
         _this4.display = _.find(_this4.salaryschedules, ['tranche', _this4.selected]);
-      })["catch"](function (error) {// do something
+      })["catch"](function (error) {//do something
       });
     },
     createSalaryGradeModal: function createSalaryGradeModal() {
@@ -4778,19 +4880,29 @@ __webpack_require__.r(__webpack_exports__);
         _this5.getSalaryGrade();
 
         $('#salaryGradeModal').modal('hide');
-      })["catch"](function (error) {// do something
+      })["catch"](function (error) {
+        return _this5.errors.record(error.response.data.errors);
       });
-      console.log(this.salaryGradeForm.amount);
     },
     updateSalaryGrade: function updateSalaryGrade() {
       var _this6 = this;
 
-      this.salaryGradeForm.id.forEach(function (e, index) {
-        axios.patch('api/salarygrade/' + e, {
-          amount: _this6.salaryGradeForm.amount[index]
-        }).then(function (response) {})["catch"](function (error) {// do something
+      axios.patch('api/salarygrade/', {
+        id: this.salaryGradeForm.id,
+        grade: this.salaryGradeForm.grade,
+        amount: this.salaryGradeForm.amount
+      }).then(function (response) {
+        toast.fire({
+          icon: 'success',
+          title: 'Updated successfully'
         });
-      }); // console.log(this.salaryGradeForm)
+
+        _this6.getSalaryGrade();
+
+        $('#salaryGradeModal').modal('hide');
+      })["catch"](function (error) {
+        return _this6.errors.record(error.response.data.errors);
+      });
     }
   },
   mounted: function mounted() {
@@ -73774,29 +73886,154 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "row justify-content-center" }, [
+    _c("div", { staticClass: "col-md-12" }, [
+      _c("div", { staticClass: "card card-primary card-outline" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _c(
+            "h2",
+            {
+              staticStyle: { margin: "0.5rem 0 0 0", "line-height": "1.2rem" }
+            },
+            [
+              _vm._v(
+                "Annual Plantilla " + _vm._s(this.$parent.settings.plantilla)
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", [_vm._v("Select Department")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                { staticClass: "custom-select" },
+                _vm._l(_vm.departments, function(department) {
+                  return _c("option", { key: department.id }, [
+                    _vm._v(_vm._s(department.description))
+                  ])
+                }),
+                0
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body table-responsive p-0" }, [
+          _c(
+            "table",
+            {
+              staticClass:
+                "table table-bordered table-striped text-nowrap plantilla-table"
+            },
+            [
+              _c("thead", [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("tr", [
+                  _c(
+                    "th",
+                    {
+                      staticStyle: { "font-weight": "normal" },
+                      attrs: { colspan: "2" }
+                    },
+                    [_vm._v("Rate/Annum Previous")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticStyle: { "font-weight": "normal" },
+                      attrs: { colspan: "2" }
+                    },
+                    [
+                      _vm._v(
+                        "Rate/Annum " + _vm._s(this.$parent.settings.plantilla)
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
+              _vm._v(" "),
+              _c("tbody")
+            ]
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card card-primary card-outline" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c(
-              "h2",
-              {
-                staticStyle: { margin: "0.5rem 0 0 0", "line-height": "1.2rem" }
-              },
-              [_vm._v("Annual Plantilla")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" })
-        ])
-      ])
+    return _c("tr", [
+      _c(
+        "th",
+        {
+          staticStyle: { "font-size": "1rem" },
+          attrs: { colspan: "2", rowspan: "2" }
+        },
+        [_vm._v("Item No.")]
+      ),
+      _vm._v(" "),
+      _c(
+        "th",
+        { staticStyle: { "font-size": "1rem" }, attrs: { rowspan: "3" } },
+        [_vm._v("Position Title")]
+      ),
+      _vm._v(" "),
+      _c(
+        "th",
+        { staticStyle: { "font-size": "1rem" }, attrs: { rowspan: "3" } },
+        [_vm._v("Name of Incumbent")]
+      ),
+      _vm._v(" "),
+      _c(
+        "th",
+        { staticStyle: { "font-size": "1rem" }, attrs: { colspan: "2" } },
+        [_vm._v("Current Year Authorized")]
+      ),
+      _vm._v(" "),
+      _c(
+        "th",
+        { staticStyle: { "font-size": "1rem" }, attrs: { colspan: "2" } },
+        [_vm._v("Budget Year Proposed")]
+      ),
+      _vm._v(" "),
+      _c(
+        "th",
+        { staticStyle: { "font-size": "1rem" }, attrs: { rowspan: "3" } },
+        [_vm._v("Increase / Decrease")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", { staticStyle: { "font-weight": "normal" } }, [_vm._v("Old")]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { "font-weight": "normal" } }, [_vm._v("New")]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { "font-weight": "normal" } }, [
+        _vm._v("Salary Grade/Step")
+      ]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { "font-weight": "normal" } }, [
+        _vm._v("Amount")
+      ]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { "font-weight": "normal" } }, [
+        _vm._v("Salary Grade/Step")
+      ]),
+      _vm._v(" "),
+      _c("th", { staticStyle: { "font-weight": "normal" } }, [_vm._v("Amount")])
     ])
   }
 ]
@@ -74011,7 +74248,7 @@ var render = function() {
                         },
                         [
                           _vm._v("\n                                Create "),
-                          _c("i", { staticClass: "fa fa-edit" })
+                          _c("i", { staticClass: "fa fa-plus" })
                         ]
                       )
                     : _vm._e()
@@ -74168,7 +74405,11 @@ var render = function() {
                     "data-dismiss": "modal",
                     "aria-label": "Close"
                   },
-                  on: { click: _vm.closed }
+                  on: {
+                    click: function($event) {
+                      return _vm.errors.deleteV()
+                    }
+                  }
                 },
                 [
                   _c("span", { attrs: { "aria-hidden": "true" } }, [
@@ -74188,6 +74429,9 @@ var render = function() {
                     _vm.editMode == false
                       ? _vm.createSalarySchedule()
                       : _vm.updateSalarySchedule()
+                  },
+                  keydown: function($event) {
+                    return _vm.errors.clear($event.target.name)
                   }
                 }
               },
@@ -74228,7 +74472,16 @@ var render = function() {
                               )
                             }
                           }
-                        })
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("tranche")
+                          ? _c("span", {
+                              staticClass: "text-danger",
+                              domProps: {
+                                textContent: _vm._s(_vm.errors.get("tranche"))
+                              }
+                            })
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group col" }, [
@@ -74266,7 +74519,18 @@ var render = function() {
                               )
                             }
                           }
-                        })
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("effective_date")
+                          ? _c("span", {
+                              staticClass: "text-danger",
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.errors.get("effective_date")
+                                )
+                              }
+                            })
+                          : _vm._e()
                       ])
                     ])
                   ])
@@ -74278,7 +74542,11 @@ var render = function() {
                     {
                       staticClass: "btn btn-secondary",
                       attrs: { type: "button", "data-dismiss": "modal" },
-                      on: { click: _vm.closed }
+                      on: {
+                        click: function($event) {
+                          return _vm.errors.deleteV()
+                        }
+                      }
                     },
                     [_vm._v("Close")]
                   ),
@@ -74330,7 +74598,11 @@ var render = function() {
                     "data-dismiss": "modal",
                     "aria-label": "Close"
                   },
-                  on: { click: _vm.closed }
+                  on: {
+                    click: function($event) {
+                      return _vm.errors.deleteV()
+                    }
+                  }
                 },
                 [
                   _c("span", { attrs: { "aria-hidden": "true" } }, [
@@ -74350,6 +74622,9 @@ var render = function() {
                     _vm.editMode == false
                       ? _vm.createSalaryGrade()
                       : _vm.updateSalaryGrade()
+                  },
+                  keydown: function($event) {
+                    return _vm.errors.clear($event.target.name)
                   }
                 }
               },
@@ -74376,7 +74651,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { id: "grade" },
+                            attrs: { id: "grade", required: "" },
                             on: {
                               change: function($event) {
                                 var $$selectedVal = Array.prototype.filter
@@ -74405,7 +74680,16 @@ var render = function() {
                             )
                           }),
                           0
-                        )
+                        ),
+                        _vm._v(" "),
+                        _vm.errors.has("grade")
+                          ? _c("span", {
+                              staticClass: "text-danger",
+                              domProps: {
+                                textContent: _vm._s(_vm.errors.get("grade"))
+                              }
+                            })
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _vm._l(8, function(n, index) {
@@ -74427,7 +74711,7 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "number", required: "" },
+                              attrs: { type: "number", min: "0", required: "" },
                               domProps: {
                                 value: _vm.salaryGradeForm.amount[index]
                               },
@@ -74458,7 +74742,11 @@ var render = function() {
                     {
                       staticClass: "btn btn-secondary",
                       attrs: { type: "button", "data-dismiss": "modal" },
-                      on: { click: _vm.closed }
+                      on: {
+                        click: function($event) {
+                          return _vm.errors.deleteV()
+                        }
+                      }
                     },
                     [_vm._v("Close")]
                   ),
@@ -91212,8 +91500,8 @@ var Gate = /*#__PURE__*/function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\HRIS-Client\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

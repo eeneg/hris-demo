@@ -94,8 +94,8 @@ class Helpers extends Controller
 
     public function makePlantilla() {
         return Plantilla::create([
-            'year' => 'CY 2021',
-            'date_prepared' => '2020-03-01',
+            'year' => 'Amended CY 2020',
+            'date_prepared' => '2019-03-01',
         ]);
     }
 

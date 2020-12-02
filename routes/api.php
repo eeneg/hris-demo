@@ -23,8 +23,10 @@ Route::group(['middleware' => 'auth:api'], function() {
         'user' => 'API\UserController',
         'personalinformation' => 'API\PersonalInformationController',
         'barcode' => 'API\BarcodeController',
-        'salaryschedule' => 'API\SalaryScheduleController',
-        'salarygrade' => 'API\SalaryGradeController'
+        'plantilla' => 'API\PlantillaController',
+        'salarygrade' => 'API\SalaryGradeController',
+        'setting' => 'API\SettingsController',
+        'department' => 'API\DepartmentController'
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');

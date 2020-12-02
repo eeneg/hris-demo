@@ -66,6 +66,7 @@
                             icon: 'success',
                             title: 'Settings updated successfully'
                         });
+                        this.$parent.getSettings();
                         this.$Progress.finish();
                     })
                     .catch(error => {
