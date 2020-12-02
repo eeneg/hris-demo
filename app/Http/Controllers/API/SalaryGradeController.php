@@ -70,13 +70,16 @@ class SalaryGradeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $salarysched = SalaryGrade::findOrFail($id);
+        $request->validate(['grade' => 'required|numeric']);
 
-        $request->validate(['amount' => 'required|numeric', 'grade' => 'required|numeric']);
+        foreach($request->id as $key => $id)
+        {
+            $salarysched = SalaryGrade::findOrFail($id);
 
-        $salarysched->update($request->all());
+            $salarysched->update(['amount' => $request->amount[$key], 'grade' => $request->grade]);
+        }
     }
 
     /**
