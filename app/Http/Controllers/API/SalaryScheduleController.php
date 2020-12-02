@@ -20,12 +20,6 @@ class SalaryScheduleController extends Controller
         return $sc;
     }
 
-    public function getSalaryGrades(Request $request)
-    {
-        // $sg = SalarySchedule::findOrFail($request)->salarygrade;
-
-        return 'fuck';
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +29,7 @@ class SalaryScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['tranche' => 'string|required', 'effective_date' => 'date|required']);
+        $request->validate(['tranche' => 'required|string', 'effective_date' => 'required|date']);
 
         SalarySchedule::create($request->all());
     }
@@ -62,7 +56,7 @@ class SalaryScheduleController extends Controller
     {
         $sc = SalarySchedule::findOrFail($id);
 
-        $request->validate(['tranche' => 'string|required', 'effective_date' => 'date|required']);
+        $request->validate(['tranche' => 'required|string', 'effective_date' => 'required|date']);
 
         $sc->update($request->all());
     }

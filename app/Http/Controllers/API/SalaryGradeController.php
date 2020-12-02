@@ -43,10 +43,10 @@ class SalaryGradeController extends Controller
     {
         $salarysched = SalarySchedule::find($request->id);
 
+        $request->validate(['grade' => 'required|numeric']);
+
         foreach($request->amount as $key => $amount)
         {
-            $request->validate([$amount => 'numeric', $request->grade => 'numeric', $key+1 => 'numeric']);
-
             $salarysched->salarygrades()->create(['amount' => $amount, 'grade' => $request->grade, 'step' => $key + 1]);
         }
 
@@ -73,6 +73,8 @@ class SalaryGradeController extends Controller
     public function update(Request $request, $id)
     {
         $salarysched = SalaryGrade::findOrFail($id);
+
+        $request->validate(['amount' => 'required|numeric', 'grade' => 'required|numeric']);
 
         $salarysched->update($request->all());
     }

@@ -73,27 +73,29 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="closed">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="errors.deleteV()">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="editMode == false ? createSalarySchedule() : updateSalarySchedule()" action="" id="1">
+                <form @submit.prevent="editMode == false ? createSalarySchedule() : updateSalarySchedule()" action="" id="1" @keydown="errors.clear($event.target.name)">
                     <div class="modal-body">
                         <div class="forms p-0 col-md-12">
                            <div class="row">
                                 <div class="form-group col">
                                     <label for="tranche">Tranche</label>
                                     <input type="text" class="form-control" name="tranche" id="tranche" v-model="salarySchedForm.tranche">
+                                    <span class="text-danger" v-if="errors.has('tranche')" v-text="errors.get('tranche')"></span>
                                 </div>
                                 <div class="form-group col">
                                     <label for="effective_date">Effective Date</label>
                                     <input type="date" class="form-control" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date">
+                                    <span class="text-danger" v-if="errors.has('effective_date')" v-text="errors.get('effective_date')"></span>
                                 </div>
                            </div>
                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="closed">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
@@ -108,27 +110,28 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-grade"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="closed">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="errors.deleteV()">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent=" editMode == false ? createSalaryGrade() : updateSalaryGrade()" action="" id="2">
+                <form @submit.prevent=" editMode == false ? createSalaryGrade() : updateSalaryGrade()" action="" id="2" @keydown="errors.clear($event.target.name)">
                     <div class="modal-body">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="grade">Grade</label>
-                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade">
+                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade" required>
                                     <option v-for="grade in 33" v-bind:value="grade" :key="grade.id">Grade: {{ grade }}</option>
                                 </select>
+                                <span class="text-danger" v-if="errors.has('grade')" v-text="errors.get('grade')"></span>
                             </div>
                             <div class="form-group col-md-6" v-for="(n, index) in 8" :key="index.id">
                                 <label for="amount">Step {{ index+1 }}</label>
-                                <input type="number" class="form-control" v-model="salaryGradeForm.amount[index]" required>
+                                <input type="number" class="form-control" v-model="salaryGradeForm.amount[index]" min="0" required>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="closed">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
@@ -140,6 +143,44 @@
 </template>
 
 <script>
+
+    class Errors
+    {
+        constructor()
+        {
+            this.errors = {};
+        }
+
+        get(field)
+        {
+            if(this.errors[field])
+            {
+                console.log(this.errors[field]);
+                return this.errors[field][0];
+            }
+        }
+
+        has(field)
+        {
+            return this.errors.hasOwnProperty(field);
+        }
+
+        record(errors)
+        {
+            this.errors = errors
+        }
+
+        clear(field)
+        {
+            delete this.errors[field]
+        }
+
+        deleteV()
+        {
+            return this.errors = new Errors()
+        }
+    }
+
     export default {
         data () {
             return {
@@ -150,6 +191,7 @@
                 salarySchedForm: {},
                 salaryGradeForm: {amount:[]},
                 display: {},
+                errors: new Errors()
             }
         },
         watch:
@@ -189,9 +231,11 @@
                     this.getSalarySchedule()
                     $('#salarySchedModal').modal('hide')
                 })
-                .catch(error => {
+                .catch(error => this.errors.record(error.response.data.errors))
+                    // console.log(error.response.data.errors)
+
                     // do something
-                })
+
             },
             createSalaryScheduleModal: function()
             {
@@ -214,12 +258,10 @@
                         title: 'Updated successfully'
                     });
                     this.getSalarySchedule()
-                    this.selected = this.salarySchedForm.tranche
                     $('#salarySchedModal').modal('hide')
                 })
-                .catch(error => {
-                    // do something
-                })
+                .catch(error => this.errors.record(error.response.data.errors))
+
             },
             closed: function()
             {
@@ -266,9 +308,7 @@
                     this.getSalaryGrade()
                     $('#salaryGradeModal').modal('hide')
                 })
-                .catch(error => {
-                    // do something
-                })
+               .catch(error => this.errors.record(error.response.data.errors))
             },
             updateSalaryGrade: function()
             {
@@ -277,9 +317,7 @@
                     .then(response => {
 
                     })
-                    .catch(error => {
-                        // do something
-                    })
+                    .catch(error => this.errors.record(error.response.data.errors))
                 })
                 // console.log(this.salaryGradeForm)
             }
