@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="ml-auto p-1">
                                     <button v-if="$gate.isAdministrator()" @click.prevent="createSalaryGradeModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salaryGradeModal">
-                                    Create <i class="fa fa-edit"></i>
+                                    Create <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
@@ -276,7 +276,7 @@
                     this.display = _.find(this.salaryschedules, ['tranche', this.selected])
                 })
                 .catch(error => {
-                    // do something
+                    //do something
                 })
             },
             createSalaryGradeModal: function()
@@ -312,10 +312,17 @@
             },
             updateSalaryGrade: function()
             {
-                this.salaryGradeForm.id.forEach((e,index)=>{
-                    axios.patch('api/salarygrade/'+e, { amount: this.salaryGradeForm.amount[index]})
+                this.salaryGradeForm.id.forEach((e,index, array)=>{
+                    axios.patch('api/salarygrade/'+e, {grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount[index]})
                     .then(response => {
-
+                        if (index === array.length - 1){
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Updated successfully'
+                            });
+                            this.getSalaryGrade()
+                            $('#salaryGradeModal').modal('hide')
+                        }
                     })
                     .catch(error => this.errors.record(error.response.data.errors))
                 })
