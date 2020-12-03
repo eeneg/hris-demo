@@ -51,7 +51,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(salarygrade, index) in salarygrades" :key="salarygrade.id" class="text-center">
-                                        <td style="width: calc(100%-150px);"> {{ salarygrade[index].grade }} </td>
+                                         <td style="width: calc(100%-150px);"> {{ salarygrade[0].grade }} </td>
                                         <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">{{ amounts.amount }}</td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
                                             <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salaryGradeModal">
@@ -216,7 +216,7 @@
                 .then(({data}) => {
                     this.salaryschedules = data
                     this.selected = this.salarySchedForm.tranche != null ? this.salarySchedForm.tranche : this.salaryschedules[0].tranche
-                    this.getSalaryGrade()
+                    // this.getSalaryGrade()
                 })
                 .catch(error => {
 
