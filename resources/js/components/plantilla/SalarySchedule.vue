@@ -119,14 +119,17 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="grade">Grade</label>
-                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade" required>
+                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade">
                                     <option v-for="grade in 33" v-bind:value="grade" :key="grade.id">Grade: {{ grade }}</option>
                                 </select>
                                 <span class="text-danger" v-if="errors.has('grade')" v-text="errors.get('grade')"></span>
                             </div>
                             <div class="form-group col-md-6" v-for="(n, index) in 8" :key="index.id">
                                 <label for="amount">Step {{ index+1 }}</label>
-                                <input type="number" class="form-control" v-model="salaryGradeForm.amount[index]" min="0" required>
+                                <input type="number" class="form-control" @keypress="onlyNumber" v-model="salaryGradeForm.amount[index]" min="0">
+                            </div>
+                            <div class="form-group col-md-12 text-center">
+                                <span class="text-danger" v-if="errors.has('amount')" v-text="errors.get('amount')"></span>
                             </div>
                         </div>
                     </div>
@@ -155,7 +158,6 @@
         {
             if(this.errors[field])
             {
-                console.log(this.errors[field]);
                 return this.errors[field][0];
             }
         }
@@ -263,10 +265,6 @@
                 .catch(error => this.errors.record(error.response.data.errors))
 
             },
-            closed: function()
-            {
-
-            },
             getSalaryGrade: function()
             {
                 var sched = _.find(this.salaryschedules, ['tranche', this.selected])
@@ -298,30 +296,47 @@
             },
             createSalaryGrade: function()
             {
-                var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]))
-                axios.post('api/salarygrade', ar)
-                .then(response => {
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Created successfully'
-                    });
-                    this.getSalaryGrade()
-                    $('#salaryGradeModal').modal('hide')
-                })
-               .catch(error => this.errors.record(error.response.data.errors))
+                if(this.salaryGradeForm.amount.length < 8 || this.salaryGradeForm.amount.includes(''))
+                {
+                    this.errors.record({ amount: ['Amount Required']})
+                }else{
+                    var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]))
+                    axios.post('api/salarygrade', ar)
+                    .then(response => {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Created successfully'
+                        });
+                        this.getSalaryGrade()
+                        $('#salaryGradeModal').modal('hide')
+                    })
+                .catch(error => this.errors.record(error.response.data.errors))
+                }
+
             },
             updateSalaryGrade: function()
             {
-                axios.patch('api/salarygrade/', {id: this.salaryGradeForm.id, grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount})
-                .then(response => {
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Updated successfully'
-                    });
-                    this.getSalaryGrade()
-                    $('#salaryGradeModal').modal('hide')
-                })
-                .catch(error => this.errors.record(error.response.data.errors))
+                if(this.salaryGradeForm.amount.length < 8 || this.salaryGradeForm.amount.includes(''))
+                {
+                    this.errors.record({ amount: ['Amount Required']})
+                }else{
+                    axios.patch('api/salarygrade/', {id: this.salaryGradeForm.id, grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount})
+                    .then(response => {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Updated successfully'
+                        });
+                        this.getSalaryGrade()
+                        $('#salaryGradeModal').modal('hide')
+                    })
+                    .catch(error => this.errors.record(error.response.data.errors))
+                }
+            },
+            onlyNumber: function($event) {
+            let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+                if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+                    $event.preventDefault();
+                }
             }
         },
         mounted() {
