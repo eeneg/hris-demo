@@ -83,12 +83,12 @@
                            <div class="row">
                                 <div class="form-group col">
                                     <label for="tranche">Tranche</label>
-                                    <input type="text" class="form-control" name="tranche" id="tranche" v-model="salarySchedForm.tranche">
+                                    <input type="text" class="form-control" name="tranche" id="tranche" v-model="salarySchedForm.tranche" required>
                                     <span class="text-danger" v-if="errors.has('tranche')" v-text="errors.get('tranche')"></span>
                                 </div>
                                 <div class="form-group col">
                                     <label for="effective_date">Effective Date</label>
-                                    <input type="date" class="form-control" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date">
+                                    <input type="date" class="form-control" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date" required>
                                     <span class="text-danger" v-if="errors.has('effective_date')" v-text="errors.get('effective_date')"></span>
                                 </div>
                            </div>
@@ -119,14 +119,14 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="grade">Grade</label>
-                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade">
+                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade" required>
                                     <option v-for="grade in 33" v-bind:value="grade" :key="grade.id">Grade: {{ grade }}</option>
                                 </select>
                                 <span class="text-danger" v-if="errors.has('grade')" v-text="errors.get('grade')"></span>
                             </div>
                             <div class="form-group col-md-6" v-for="(n, index) in 8" :key="index.id">
                                 <label for="amount">Step {{ index+1 }}</label>
-                                <input type="number" class="form-control" @keypress="onlyNumber" v-model="salaryGradeForm.amount[index]" min="0">
+                                <input type="number" class="form-control" @keypress="onlyNumber" v-model="salaryGradeForm.amount[index]" min="0" required>
                             </div>
                             <div class="form-group col-md-12 text-center">
                                 <span class="text-danger" v-if="errors.has('amount')" v-text="errors.get('amount')"></span>
