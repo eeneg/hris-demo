@@ -4490,29 +4490,144 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      departments: {}
+      departments: {},
+      selectedDepartment: '',
+      records: {},
+      test: {},
+      form: new Form({
+        'firstname': '',
+        'middlename': '',
+        'nameextension': '',
+        'new_number': '',
+        'old_number': '',
+        'position': '',
+        'surname': '',
+        'salaryauthorized': {},
+        'salaryproposed': {}
+      })
     };
   },
   methods: {
-    loadDepartments: function loadDepartments() {
+    showEditModal: function showEditModal(record) {
       var _this = this;
 
-      axios.get('api/department').then(function (_ref) {
+      $('#plantilla-content-modal').modal('show');
+      this.form.fill(record);
+      axios.get('api/forvacants').then(function (_ref) {
         var data = _ref.data;
-        _this.departments = data.data;
+        _this.test = data;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      }); // let countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
+      // this.$parent.autocomplete(document.getElementById("nameInput"), countries);
+    },
+    updatePlantillaRecord: function updatePlantillaRecord() {},
+    loadDepartments: function loadDepartments() {
+      var _this2 = this;
+
+      axios.get('api/department').then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.departments = data.data;
+        _this2.selectedDepartment = data.data[0].title;
+
+        _this2.loadContents();
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
     },
-    loadContents: function loadContents() {}
+    loadContents: function loadContents() {
+      var _this3 = this;
+
+      axios.post('api/plantilladepartmentcontent', {
+        department: this.selectedDepartment
+      }).then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.records = data.data;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      });
+    }
   },
   created: function created() {
     this.$Progress.start();
     this.loadDepartments();
-    this.loadContents();
     this.$Progress.finish();
   },
   mounted: function mounted() {// console.log('Component mounted.')
@@ -4711,6 +4826,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
+//
+//
 var Errors = /*#__PURE__*/function () {
   function Errors() {
     _classCallCheck(this, Errors);
@@ -4722,7 +4840,6 @@ var Errors = /*#__PURE__*/function () {
     key: "get",
     value: function get(field) {
       if (this.errors[field]) {
-        console.log(this.errors[field]);
         return this.errors[field][0];
       }
     }
@@ -4782,9 +4899,7 @@ var Errors = /*#__PURE__*/function () {
       axios.get('api/salaryschedule').then(function (_ref) {
         var data = _ref.data;
         _this.salaryschedules = data;
-        _this.selected = _this.salarySchedForm.tranche != null ? _this.salarySchedForm.tranche : _this.salaryschedules[0].tranche;
-
-        _this.getSalaryGrade();
+        _this.selected = _this.salarySchedForm.tranche != null ? _this.salarySchedForm.tranche : _this.salaryschedules[0].tranche; // this.getSalaryGrade()
       })["catch"](function (error) {});
     },
     createSalarySchedule: function createSalarySchedule() {
@@ -4834,7 +4949,6 @@ var Errors = /*#__PURE__*/function () {
         return _this3.errors.record(error.response.data.errors);
       });
     },
-    closed: function closed() {},
     getSalaryGrade: function getSalaryGrade() {
       var _this4 = this;
 
@@ -4843,7 +4957,7 @@ var Errors = /*#__PURE__*/function () {
       axios.get('api/salarygrade?id=' + sched.id).then(function (_ref2) {
         var data = _ref2.data;
         _this4.salarygrades = _.chunk(data, 8);
-        _this4.display = _.find(_this4.salaryschedules, ['tranche', _this4.selected]);
+        _this4.display = sched;
       })["catch"](function (error) {//do something
       });
     },
@@ -4869,40 +4983,59 @@ var Errors = /*#__PURE__*/function () {
     createSalaryGrade: function createSalaryGrade() {
       var _this5 = this;
 
-      var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]));
-
-      axios.post('api/salarygrade', ar).then(function (response) {
-        toast.fire({
-          icon: 'success',
-          title: 'Created successfully'
+      if (this.salaryGradeForm.amount.length < 8 || this.salaryGradeForm.amount.includes('')) {
+        this.errors.record({
+          amount: ['Amount Required']
         });
+      } else {
+        var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]));
 
-        _this5.getSalaryGrade();
+        axios.post('api/salarygrade', ar).then(function (response) {
+          toast.fire({
+            icon: 'success',
+            title: 'Created successfully'
+          });
 
-        $('#salaryGradeModal').modal('hide');
-      })["catch"](function (error) {
-        return _this5.errors.record(error.response.data.errors);
-      });
+          _this5.getSalaryGrade();
+
+          $('#salaryGradeModal').modal('hide');
+        })["catch"](function (error) {
+          return _this5.errors.record(error.response.data.errors);
+        });
+      }
     },
     updateSalaryGrade: function updateSalaryGrade() {
       var _this6 = this;
 
-      axios.patch('api/salarygrade/', {
-        id: this.salaryGradeForm.id,
-        grade: this.salaryGradeForm.grade,
-        amount: this.salaryGradeForm.amount
-      }).then(function (response) {
-        toast.fire({
-          icon: 'success',
-          title: 'Updated successfully'
+      if (this.salaryGradeForm.amount.length < 8 || this.salaryGradeForm.amount.includes('')) {
+        this.errors.record({
+          amount: ['Amount Required']
         });
+      } else {
+        axios.patch('api/salarygrade/', {
+          id: this.salaryGradeForm.id,
+          grade: this.salaryGradeForm.grade,
+          amount: this.salaryGradeForm.amount
+        }).then(function (response) {
+          toast.fire({
+            icon: 'success',
+            title: 'Updated successfully'
+          });
 
-        _this6.getSalaryGrade();
+          _this6.getSalaryGrade();
 
-        $('#salaryGradeModal').modal('hide');
-      })["catch"](function (error) {
-        return _this6.errors.record(error.response.data.errors);
-      });
+          $('#salaryGradeModal').modal('hide');
+        })["catch"](function (error) {
+          return _this6.errors.record(error.response.data.errors);
+        });
+      }
+    },
+    onlyNumber: function onlyNumber($event) {
+      var keyCode = $event.keyCode ? $event.keyCode : $event.which;
+
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+        $event.preventDefault();
+      }
     }
   },
   mounted: function mounted() {
@@ -73902,19 +74035,62 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "col-md-4" }, [
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", [_vm._v("Select Department")]),
-              _vm._v(" "),
+          _c("div", { staticClass: "row mt-3" }, [
+            _c("div", { staticClass: "col-md-3" }, [
               _c(
-                "select",
-                { staticClass: "custom-select" },
-                _vm._l(_vm.departments, function(department) {
-                  return _c("option", { key: department.id }, [
-                    _vm._v(_vm._s(department.description))
-                  ])
-                }),
-                0
+                "div",
+                {
+                  staticClass: "form-group",
+                  staticStyle: { "margin-bottom": "0" }
+                },
+                [
+                  _c(
+                    "label",
+                    { staticStyle: { margin: "0", "font-weight": "normal" } },
+                    [_vm._v("Select Department")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selectedDepartment,
+                          expression: "selectedDepartment"
+                        }
+                      ],
+                      staticClass: "custom-select",
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selectedDepartment = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          function($event) {
+                            return _vm.loadContents()
+                          }
+                        ]
+                      }
+                    },
+                    _vm._l(_vm.departments, function(department) {
+                      return _c("option", { key: department.id }, [
+                        _vm._v(_vm._s(department.title))
+                      ])
+                    }),
+                    0
+                  )
+                ]
               )
             ])
           ])
@@ -73958,12 +74134,169 @@ var render = function() {
                 _vm._m(1)
               ]),
               _vm._v(" "),
-              _c("tbody")
+              _c(
+                "tbody",
+                _vm._l(_vm.records, function(record) {
+                  return _c("tr", { key: record.id }, [
+                    _c("td", { staticStyle: { "text-align": "center" } }, [
+                      _vm._v(_vm._s(record.old_number))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { "text-align": "center" } }, [
+                      _vm._v(_vm._s(record.new_number))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(record.position))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(
+                          record.surname
+                            ? record.surname +
+                                ", " +
+                                record.firstname +
+                                " " +
+                                record.nameextension +
+                                " " +
+                                record.middlename
+                            : "VACANT"
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { "text-align": "center" } }, [
+                      _vm._v(
+                        _vm._s(
+                          record.salaryauthorized !== null
+                            ? record.salaryauthorized.grade +
+                                " / " +
+                                record.salaryauthorized.step
+                            : ""
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { "text-align": "right" } }, [
+                      _vm._v(
+                        _vm._s(
+                          record.salaryauthorized !== null
+                            ? record.salaryauthorized.amount
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            : ""
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { "text-align": "center" } }, [
+                      _vm._v(
+                        _vm._s(
+                          record.salaryproposed !== null
+                            ? record.salaryproposed.grade +
+                                " / " +
+                                record.salaryproposed.step
+                            : ""
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { "text-align": "right" } }, [
+                      _vm._v(
+                        _vm._s(
+                          record.salaryproposed !== null
+                            ? record.salaryproposed.amount
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            : ""
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { "text-align": "right" } }, [
+                      _vm._v(
+                        _vm._s(
+                          (
+                            (record.salaryproposed !== null
+                              ? record.salaryproposed.amount
+                              : 0) -
+                            (record.salaryauthorized !== null
+                              ? record.salaryauthorized.amount
+                              : 0)
+                          )
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        )
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { "text-align": "center" } }, [
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.showEditModal(record)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-edit" })]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
             ]
           )
-        ])
+        ]),
+        _vm._v(" "),
+        _vm._m(2)
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "plantilla-content-modal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  attrs: { autocomplete: "off" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.updatePlantillaRecord()
+                    }
+                  }
+                },
+                [_vm._m(4), _vm._v(" "), _vm._m(5)]
+              )
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -74009,7 +74342,9 @@ var staticRenderFns = [
         "th",
         { staticStyle: { "font-size": "1rem" }, attrs: { rowspan: "3" } },
         [_vm._v("Increase / Decrease")]
-      )
+      ),
+      _vm._v(" "),
+      _c("th", { attrs: { rowspan: "3" } })
     ])
   },
   function() {
@@ -74034,6 +74369,77 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("th", { staticStyle: { "font-weight": "normal" } }, [_vm._v("Amount")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-footer" }, [
+      _c("button", { staticClass: "btn btn-info", attrs: { type: "button" } }, [
+        _c("i", { staticClass: "fas fa-print" }),
+        _vm._v(" Print")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Edit Record")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-body" }, [
+      _c("div", { staticClass: "form-group autocomplete" }, [
+        _c("input", {
+          staticClass: "form-control",
+          attrs: {
+            id: "nameInput",
+            type: "text",
+            name: "name",
+            placeholder: "Name"
+          }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-success", attrs: { type: "submit" } },
+        [_vm._v("Update")]
+      )
     ])
   }
 ]
@@ -74315,7 +74721,7 @@ var render = function() {
                         _c(
                           "td",
                           { staticStyle: { width: "calc(100%-150px)" } },
-                          [_vm._v(" " + _vm._s(salarygrade[index].grade) + " ")]
+                          [_vm._v(" " + _vm._s(salarygrade[0].grade) + " ")]
                         ),
                         _vm._v(" "),
                         _vm._l(salarygrade, function(amounts) {
@@ -74457,7 +74863,8 @@ var render = function() {
                           attrs: {
                             type: "text",
                             name: "tranche",
-                            id: "tranche"
+                            id: "tranche",
+                            required: ""
                           },
                           domProps: { value: _vm.salarySchedForm.tranche },
                           on: {
@@ -74502,7 +74909,8 @@ var render = function() {
                           attrs: {
                             type: "date",
                             name: "effective_date",
-                            id: "effective_date"
+                            id: "effective_date",
+                            required: ""
                           },
                           domProps: {
                             value: _vm.salarySchedForm.effective_date
@@ -74716,6 +75124,7 @@ var render = function() {
                                 value: _vm.salaryGradeForm.amount[index]
                               },
                               on: {
+                                keypress: _vm.onlyNumber,
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
@@ -74730,7 +75139,22 @@ var render = function() {
                             })
                           ]
                         )
-                      })
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "form-group col-md-12 text-center" },
+                        [
+                          _vm.errors.has("amount")
+                            ? _c("span", {
+                                staticClass: "text-danger",
+                                domProps: {
+                                  textContent: _vm._s(_vm.errors.get("amount"))
+                                }
+                              })
+                            : _vm._e()
+                        ]
+                      )
                     ],
                     2
                   )
@@ -90059,6 +90483,11 @@ Vue.component(vform__WEBPACK_IMPORTED_MODULE_1__["AlertError"].name, vform__WEBP
 Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
 Vue.prototype.$gate = new _gate__WEBPACK_IMPORTED_MODULE_5__["default"](window.user);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
+var options = {
+  color: '#17a2b8',
+  failedColor: '#874b4b',
+  thickness: '3px'
+};
 Vue.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_3___default.a, options);
 var routes = [{
   path: '/',
@@ -90099,11 +90528,6 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
   routes: routes // short for `routes: routes`
 
 });
-var options = {
-  color: '#a50d75',
-  failedColor: '#874b4b',
-  thickness: '3px'
-};
 var toast = sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.mixin({
   toast: true,
   position: 'top-end',
@@ -90197,6 +90621,133 @@ var app = new Vue({
         _this2.settings = data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
+      });
+    },
+    autocomplete: function autocomplete(inp, arr) {
+      /*the autocomplete function takes two arguments,
+      the text field element and an array of possible autocompleted values:*/
+      var currentFocus;
+      /*execute a function when someone writes in the text field:*/
+
+      inp.addEventListener("input", function (e) {
+        var a,
+            b,
+            i,
+            val = this.value;
+        /*close any already open lists of autocompleted values*/
+
+        closeAllLists();
+
+        if (!val) {
+          return false;
+        }
+
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+
+        this.parentNode.appendChild(a);
+        /*for each item in the array...*/
+
+        for (i = 0; i < arr.length; i++) {
+          /*check if the item starts with the same letters as the text field value:*/
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+            /*insert a input field that will hold the current array item's value:*/
+
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            /*execute a function when someone clicks on the item value (DIV element):*/
+
+            b.addEventListener("click", function (e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+
+              closeAllLists();
+            });
+            a.appendChild(b);
+          }
+        }
+      });
+      /*execute a function presses a key on the keyboard:*/
+
+      inp.addEventListener("keydown", function (e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+
+        if (e.keyCode == 40) {
+          /*If the arrow DOWN key is pressed,
+          increase the currentFocus variable:*/
+          currentFocus++;
+          /*and and make the current item more visible:*/
+
+          addActive(x);
+        } else if (e.keyCode == 38) {
+          //up
+
+          /*If the arrow UP key is pressed,
+          decrease the currentFocus variable:*/
+          currentFocus--;
+          /*and and make the current item more visible:*/
+
+          addActive(x);
+        } else if (e.keyCode == 13) {
+          /*If the ENTER key is pressed, prevent the form from being submitted,*/
+          e.preventDefault();
+
+          if (currentFocus > -1) {
+            /*and simulate a click on the "active" item:*/
+            if (x) x[currentFocus].click();
+          }
+        }
+      });
+
+      function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = x.length - 1;
+        /*add class "autocomplete-active":*/
+
+        x[currentFocus].classList.add("autocomplete-active");
+      }
+
+      function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+
+      function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            x[i].parentNode.removeChild(x[i]);
+          }
+        }
+      }
+      /*execute a function when someone clicks in the document:*/
+
+
+      document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
       });
     }
   },

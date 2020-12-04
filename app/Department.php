@@ -20,11 +20,6 @@ class Department extends Model
         'title', 'description', 'address', 'function', 'projectactivity', 'fund'
     ];
 
-    public function workexperiences()
-    {
-        return $this->hasMany('App\Position', 'department_id');
-    }
-
     public static function boot(){
         parent::boot();
         self::creating(function($model){

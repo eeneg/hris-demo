@@ -14,7 +14,7 @@ class CreateSalarySchedulesTable extends Migration
     public function up()
     {
         Schema::create('salary_schedules', function (Blueprint $table) {
-            $table->string('id', 100)->primary()->unique();
+            $table->uuid('id', 100)->primary()->unique();
             $table->string('tranche', 100);
             $table->date('effective_date');
             $table->timestamps();

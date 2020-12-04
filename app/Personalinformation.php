@@ -15,7 +15,7 @@ class PersonalInformation extends Model
 
     protected $with = [
         'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities', 
-        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'plantillacontents'
+        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms'
     ];
 
     /**

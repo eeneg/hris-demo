@@ -1,16 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Department;
 use App\PlantillaContent;
-use App\Plantilla;
-use App\Setting;
-use App\Http\Resources\SortedDepartmentsResource;
+use App\Http\Resources\PlantillaContentResource;
 
-class DepartmentController extends Controller
+class PlantillaContentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,14 +16,16 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)
-            ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
-            ->groupBy('positions.department_id')
-            ->orderBy('new_number')
+        
+    }
+
+    public function plantilladepartmentcontent(Request $request) {
+        $plantillacontents = PlantillaContent::join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->join('departments', 'positions.department_id', '=', 'departments.id')
+            ->where('departments.title', $request->department)
+            ->orderBY('order_number')
             ->get();
-        return SortedDepartmentsResource::collection($plantillacontents);
+        return PlantillaContentResource::collection($plantillacontents);
     }
 
     /**

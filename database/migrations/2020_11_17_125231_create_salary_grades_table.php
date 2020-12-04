@@ -14,8 +14,8 @@ class CreateSalaryGradesTable extends Migration
     public function up()
     {
         Schema::create('salary_grades', function (Blueprint $table) {
-            $table->string('id', 100)->primary()->unique();
-            $table->string('salary_sched_id', 100);
+            $table->uuid('id', 100)->primary()->unique();
+            $table->uuid('salary_sched_id', 100);
             $table->foreign('salary_sched_id')->references('id')->on('salary_schedules')->onDelete('cascade');
             $table->integer('grade');
             $table->integer('step');

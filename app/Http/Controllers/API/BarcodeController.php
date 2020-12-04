@@ -52,7 +52,7 @@ class BarcodeController extends Controller
     public function verify(Request $request) {
         $barcode = Barcode::where('value', $request->barcode)->where('personal_information_id', $request->employee_id)->first();
         if ($barcode != null) {
-            return PersonalInformation::findOrFail($barcode->personal_information_id);
+            return PersonalInformation::with('plantillacontents')->findOrFail($barcode->personal_information_id);
         } else {
             return null;
         }

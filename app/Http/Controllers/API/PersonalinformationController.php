@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Gate;
 use App\PersonalInformation;
 use App\PlantillaContent;
 use App\Http\Resources\EmployeesListResource;
+use App\Setting;
+use App\Plantilla;
 
 class PersonalInformationController extends Controller
 {
@@ -20,7 +22,7 @@ class PersonalInformationController extends Controller
     public function index()
     {
         if ($search = \Request::get('query')) {
-            $personalinformations = PersonalInformation::where(function($query) use ($search){
+            $personalinformations = PersonalInformation::with('plantillacontents')->where(function($query) use ($search){
                 $query->where('surname', 'LIKE', '%'.$search.'%')
                         ->orWhere('firstname', 'LIKE', '%'.$search.'%')
                         ->orWhere('middlename', 'LIKE', '%'.$search.'%')
@@ -31,6 +33,18 @@ class PersonalInformationController extends Controller
             $personalinformations = PersonalInformation::orderBy('surname')->paginate(20);
         }
         return EmployeesListResource::collection($personalinformations);
+    }
+
+    public function forvacants() {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        // $plantillaPersonnel = PlantillaContent::select('id')->whereNotNull('personal_information_id')->where('plantilla_id', $plantilla->id)->get();
+
+        // $personalinformations = PersonalInformation::with('plantillacontents')
+        //     ->where('plantillacontents.plantilla_id', $default_plantilla->id)
+        //     ->get();
+        $plantillaPersonnel = PlantillaContent::all();
+        return $plantillaPersonnel;
     }
 
     /**
