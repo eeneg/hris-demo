@@ -116,14 +116,16 @@
                         <div class="login-logo">
                           <img src="/storage/project_files/davsur.png" alt="logo" width="120px" height="120px">
                         </div>
-                        <p class="login-box-msg" style="font-size: 1.1rem">Human Resource Information System</p>
-                  
+                        <div class="title-container">
+                        <p class="logo-title">Human Resource<br></p>
+                        <span class="logo-title2">Information System</span>
+                    </div>    
                         <form class="form-signin" method="POST" action="{{ route('login') }}">
                           @csrf
                           <div class="form-label-group">
                             <input type="email" id="inputEmail" class="form-control input @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email address" required autofocus>
                             <span class="underline"></span>
-                            <label for="inputEmail">{{ __('E-mail Address') }}</label>
+                            <label class="text-muted label-input" for="inputEmail">{{ __('E-mail Address') }}</label>
                               @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -134,7 +136,7 @@
                           <div class="form-label-group">
                             <input type="password" id="inputPassword" class="form-control input @error('password') is-invalid @enderror" name="password" placeholder="Password" required>
                             <span class="underline"></span>
-                            <label for="inputPassword">{{ __('Password') }}</label>
+                            <label class="text-muted label-input" for="inputPassword">{{ __('Password') }}</label>
                             @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

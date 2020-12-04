@@ -37,12 +37,12 @@
 
                     <!-- /.login-logo -->
                     <div class="">
-                      <div class="card-body login-card-body">
-                        <div class="login-logo">
+                      <div class="card-body login-card-body">s
                           <img src="/storage/project_files/davsur.png" alt="logo" width="120px" height="120px">
                         </div>
-                        <p class="login-box-msg" style="font-size: 1rem"><b> Human Resource</b> Information System</p>
-                  
+                        <p class="login-box-msg" style="font-size: 1rem"><b>Human Resource</b></p>
+                          <br>
+                        <span>Information System</span>
                         <form class="form-signin" method="POST" action="{{ route('login') }}">
                           @csrf
                           <div class="form-label-group">
