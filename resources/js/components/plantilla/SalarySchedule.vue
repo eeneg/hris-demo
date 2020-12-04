@@ -271,7 +271,7 @@
                 axios.get('api/salarygrade?id='+ sched.id)
                 .then(({data}) => {
                     this.salarygrades = _.chunk(data, 8)
-                    this.display = _.find(this.salaryschedules, ['tranche', this.selected])
+                    this.display = sched
                 })
                 .catch(error => {
                     //do something
