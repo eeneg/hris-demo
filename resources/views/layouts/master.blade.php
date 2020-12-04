@@ -16,6 +16,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         {{-- <script src="https://unpkg.com/pdfobject@2.2.4/pdfobject.min.js"></script> --}}
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/master.css') }}" rel="stylesheet">
     </head>
     <body class="hold-transition sidebar-mini">
         @auth
@@ -66,7 +67,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- /.navbar -->
 
             <!-- Main Sidebar Container -->
-            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <aside class="main-sidebar sidebar-dark-primary elevation-4 fix">
                 <!-- Brand Logo -->
                 <a href="/" class="brand-link">
                     <img src="{{ asset('/storage/project_files/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
