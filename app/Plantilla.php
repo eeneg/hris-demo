@@ -9,7 +9,10 @@ class Plantilla extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $primaryKey = 'id';
+
 
     protected $fillable = [ 'year', 'date_prepared', 'date_approved' ];
 

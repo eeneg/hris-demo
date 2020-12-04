@@ -9,6 +9,8 @@ class OtherInfo extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $primaryKey = 'id';
 
     protected $fillable = [ 'personal_information_id', 'Skill', 'Recognition', 'Membership' ];

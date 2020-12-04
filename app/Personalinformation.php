@@ -9,12 +9,18 @@ class PersonalInformation extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string'
+    ];
 
     protected $table = 'personal_informations';
 
     protected $with = [
-        'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities', 
+        'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities',
         'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms'
     ];
 

@@ -9,6 +9,8 @@ class PlantillaContent extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $primaryKey = 'id';
 
     protected $table = 'plantilla_contents';
@@ -17,7 +19,7 @@ class PlantillaContent extends Model
         'plantilla', 'salaryauthorized', 'salaryproposed', 'position'
     ];
 
-    protected $fillable = [ 
+    protected $fillable = [
         'plantilla_id',
         'salary_grade_auth_id',
         'salary_grade_prop_id',

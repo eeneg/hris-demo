@@ -9,6 +9,8 @@ class Setting extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $primaryKey = 'id';
 
     protected $fillable = [ 'user_id', 'title', 'value' ];

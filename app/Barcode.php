@@ -9,6 +9,8 @@ class Barcode extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $primaryKey = 'id';
 
     /**

@@ -9,6 +9,8 @@ class SalarySchedule extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $fillable = ['tranche', 'effective_date'];
 
 

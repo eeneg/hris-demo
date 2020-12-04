@@ -9,6 +9,8 @@ class VoluntaryWork extends Model
 {
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $primaryKey = 'id';
 
     protected $fillable = [ 'personal_information_id', 'NameAndAddress', 'InclusiveDates', 'Hours', 'Position' ];

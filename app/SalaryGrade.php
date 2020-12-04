@@ -10,6 +10,8 @@ class SalaryGrade extends Model
 
     public $incrementing = false;
 
+    protected $keyType = 'string';
+
     protected $fillable = ['grade', 'step', 'amount'];
 
     public function position()
