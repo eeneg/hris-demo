@@ -4778,13 +4778,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       departments: {},
       selectedDepartment: '',
       records: {},
-      test: {},
+      forvacants: {},
+      forvacantsNames: [],
+      forvacantsIds: [],
       form: new Form({
         'firstname': '',
         'middlename': '',
@@ -4806,11 +4845,22 @@ __webpack_require__.r(__webpack_exports__);
       this.form.fill(record);
       axios.get('api/forvacants').then(function (_ref) {
         var data = _ref.data;
-        _this.test = data;
+        _this.forvacants = data;
+        var names = [];
+        var ids = [];
+
+        _.forEach(_this.forvacants, function (value) {
+          names.push(value.firstname + ' ' + (value.middlename.charAt(0).toUpperCase() + '. ') + value.surname + (value.nameextension != '' ? ' ' + value.nameextension : ''));
+          ids.push(value.id);
+        });
+
+        _this.forvacantsNames = names;
+        _this.forvacantsIds = ids;
+
+        _this.$parent.autocomplete(document.getElementById("nameInput"), names);
       })["catch"](function (error) {
         console.log(error.response.data.message);
-      }); // let countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
-      // this.$parent.autocomplete(document.getElementById("nameInput"), countries);
+      });
     },
     updatePlantillaRecord: function updatePlantillaRecord() {},
     loadDepartments: function loadDepartments() {
@@ -68727,9 +68777,11 @@ var render = function() {
                                 _vm._s(
                                   _vm.getPlantillaDetails(employee)
                                     .designation +
-                                    " (SG-" +
-                                    _vm.getPlantillaDetails(employee).sg +
-                                    ")"
+                                    (_vm.getPlantillaDetails(employee).sg
+                                      ? " (SG-" +
+                                        _vm.getPlantillaDetails(employee).sg +
+                                        ")"
+                                      : "")
                                 )
                               )
                             ]
@@ -74810,7 +74862,7 @@ var render = function() {
                       _vm._v(
                         _vm._s(
                           record.salaryauthorized !== null
-                            ? record.salaryauthorized.amount
+                            ? (record.salaryauthorized.amount * 12)
                                 .toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                             : ""
@@ -74834,7 +74886,7 @@ var render = function() {
                       _vm._v(
                         _vm._s(
                           record.salaryproposed !== null
-                            ? record.salaryproposed.amount
+                            ? (record.salaryproposed.amount * 12)
                                 .toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                             : ""
@@ -74847,10 +74899,10 @@ var render = function() {
                         _vm._s(
                           (
                             (record.salaryproposed !== null
-                              ? record.salaryproposed.amount
+                              ? record.salaryproposed.amount * 12
                               : 0) -
                             (record.salaryauthorized !== null
-                              ? record.salaryauthorized.amount
+                              ? record.salaryauthorized.amount * 12
                               : 0)
                           )
                             .toString()
@@ -75017,7 +75069,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title" }, [_vm._v("Edit Record")]),
+      _c("h5", { staticClass: "modal-title" }, [
+        _vm._v("Edit Plantilla Record")
+      ]),
       _vm._v(" "),
       _c(
         "button",
@@ -75038,16 +75092,228 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-body" }, [
-      _c("div", { staticClass: "form-group autocomplete" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            id: "nameInput",
-            type: "text",
-            name: "name",
-            placeholder: "Name"
-          }
-        })
+      _c(
+        "div",
+        {
+          staticClass: "form-group",
+          staticStyle: { position: "relative", "margin-bottom": "0.3rem" }
+        },
+        [
+          _c(
+            "label",
+            {
+              staticStyle: { "font-weight": "normal", margin: "0" },
+              attrs: { for: "nameInput" }
+            },
+            [_vm._v("Employee name")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              id: "nameInput",
+              type: "text",
+              name: "name",
+              placeholder: "Employee"
+            }
+          })
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "form-group",
+          staticStyle: { "margin-bottom": "0.3rem" }
+        },
+        [
+          _c(
+            "label",
+            {
+              staticStyle: { "font-weight": "normal", margin: "0" },
+              attrs: { for: "new_number" }
+            },
+            [_vm._v("Item No. (new)")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              id: "new_number",
+              step: "1",
+              min: "1",
+              max: "10",
+              type: "number",
+              name: "new_number",
+              placeholder: "New Item Number"
+            }
+          })
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "form-group",
+          staticStyle: { "margin-bottom": "0.3rem" }
+        },
+        [
+          _c(
+            "label",
+            {
+              staticStyle: { "font-weight": "normal", margin: "0" },
+              attrs: { for: "position" }
+            },
+            [_vm._v("Position")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              id: "position",
+              type: "text",
+              name: "position",
+              placeholder: "Position",
+              required: ""
+            }
+          })
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-6" }, [
+          _c(
+            "div",
+            {
+              staticClass: "form-group",
+              staticStyle: { "margin-bottom": "0.3rem" }
+            },
+            [
+              _c(
+                "label",
+                {
+                  staticStyle: { "font-weight": "normal", margin: "0" },
+                  attrs: { for: "current-grade" }
+                },
+                [_vm._v("Current Year Salary Grade")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  id: "current-grade",
+                  step: "1",
+                  min: "1",
+                  max: "30",
+                  type: "number",
+                  name: "current-grade",
+                  placeholder: "Grade"
+                }
+              })
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-6" }, [
+          _c(
+            "div",
+            {
+              staticClass: "form-group",
+              staticStyle: { "margin-bottom": "0.3rem" }
+            },
+            [
+              _c(
+                "label",
+                {
+                  staticStyle: { "font-weight": "normal", margin: "0" },
+                  attrs: { for: "current-step" }
+                },
+                [_vm._v("Current Year Salary Step")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  id: "current-step",
+                  step: "1",
+                  min: "1",
+                  max: "8",
+                  type: "number",
+                  name: "current-step",
+                  placeholder: "Step"
+                }
+              })
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-6" }, [
+          _c(
+            "div",
+            {
+              staticClass: "form-group",
+              staticStyle: { "margin-bottom": "0.3rem" }
+            },
+            [
+              _c(
+                "label",
+                {
+                  staticStyle: { "font-weight": "normal", margin: "0" },
+                  attrs: { for: "budget-grade" }
+                },
+                [_vm._v("Budget Year Salary Grade")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  id: "budget-grade",
+                  step: "1",
+                  min: "1",
+                  max: "30",
+                  type: "number",
+                  name: "budget-grade",
+                  placeholder: "Grade"
+                }
+              })
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-6" }, [
+          _c(
+            "div",
+            {
+              staticClass: "form-group",
+              staticStyle: { "margin-bottom": "0.3rem" }
+            },
+            [
+              _c(
+                "label",
+                {
+                  staticStyle: { "font-weight": "normal", margin: "0" },
+                  attrs: { for: "budget-step" }
+                },
+                [_vm._v("Budget Year Salary Step")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: {
+                  id: "budget-step",
+                  step: "1",
+                  min: "1",
+                  max: "8",
+                  type: "number",
+                  name: "budget-step",
+                  placeholder: "Step"
+                }
+              })
+            ]
+          )
+        ])
       ])
     ])
   },

@@ -24,7 +24,7 @@ class DepartmentController extends Controller
         $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)
             ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
             ->groupBy('positions.department_id')
-            ->orderBy('new_number')
+            ->orderBy('order_number')
             ->get();
         return SortedDepartmentsResource::collection($plantillacontents);
     }

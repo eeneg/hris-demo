@@ -38,13 +38,10 @@ class PersonalInformationController extends Controller
     public function forvacants() {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        // $plantillaPersonnel = PlantillaContent::select('id')->whereNotNull('personal_information_id')->where('plantilla_id', $plantilla->id)->get();
-
-        // $personalinformations = PersonalInformation::with('plantillacontents')
-        //     ->where('plantillacontents.plantilla_id', $default_plantilla->id)
-        //     ->get();
-        $plantillaPersonnel = PlantillaContent::all();
-        return $plantillaPersonnel;
+        $allEmployees = DB::select('SELECT id,firstname,middlename,surname,nameextension FROM personal_informations
+            WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id`) = 0
+            ORDER BY surname');
+        return $allEmployees;
     }
 
     /**

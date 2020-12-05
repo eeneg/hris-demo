@@ -48,10 +48,10 @@
                                 <td>{{ record.position }}</td>
                                 <td>{{ record.surname ? (record.surname + ', ' + record.firstname + ' ' + record.nameextension + ' ' + record.middlename) : 'VACANT' }}</td>
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
-                                <td style="text-align: right;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
+                                <td style="text-align: right;">{{ record.salaryauthorized !== null ? ((record.salaryauthorized.amount * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
                                 <td style="text-align: center;">{{ record.salaryproposed !== null ? (record.salaryproposed.grade + ' / ' + record.salaryproposed.step) : '' }}</td>
-                                <td style="text-align: right;">{{ record.salaryproposed !== null ? (record.salaryproposed.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
-                                <td style="text-align: right;">{{ ((record.salaryproposed !== null ? record.salaryproposed.amount : 0) - (record.salaryauthorized !== null ? record.salaryauthorized.amount : 0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
+                                <td style="text-align: right;">{{ record.salaryproposed !== null ? ((record.salaryproposed.amount * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
+                                <td style="text-align: right;">{{ ((record.salaryproposed !== null ? record.salaryproposed.amount * 12 : 0) - (record.salaryauthorized !== null ? record.salaryauthorized.amount * 12 : 0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
                                 <td style="text-align: center;"><a href="#" @click.prevent="showEditModal(record)"><i class="fas fa-edit"></i></a></td>
                             </tr>
                         </tbody>
@@ -67,15 +67,52 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Record</h5>
+                        <h5 class="modal-title">Edit Plantilla Record</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <form autocomplete="off" @submit.prevent="updatePlantillaRecord()">
                         <div class="modal-body">
-                            <div class="form-group autocomplete">
-                                <input class="form-control" id="nameInput" type="text" name="name" placeholder="Name">
+                            <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
+                                <label for="nameInput" style="font-weight: normal; margin: 0;">Employee name</label>
+                                <input class="form-control" id="nameInput" type="text" name="name" placeholder="Employee">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label for="new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
+                                <input id="new_number" class="form-control" step="1" min="1" max="10" type="number" name="new_number" placeholder="New Item Number">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label for="position" style="font-weight: normal; margin: 0;">Position</label>
+                                <input id="position" class="form-control" type="text" name="position" placeholder="Position" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="current-grade" style="font-weight: normal; margin: 0;">Current Year Salary Grade</label>
+                                        <input id="current-grade" class="form-control" step="1" min="1" max="30" type="number" name="current-grade" placeholder="Grade">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="current-step" style="font-weight: normal; margin: 0;">Current Year Salary Step</label>
+                                        <input id="current-step" class="form-control" step="1" min="1" max="8" type="number" name="current-step" placeholder="Step">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
+                                        <input id="budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
+                                        <input id="budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step">
+                                    </div>
+                                </div>
                             </div>
                             <!-- <div class="form-group">
                                 <select name="role" v-model="form.role" class="form-control"
@@ -129,7 +166,9 @@
                 departments: {},
                 selectedDepartment: '',
                 records: {},
-                test: {},
+                forvacants: {},
+                forvacantsNames: [],
+                forvacantsIds: [],
                 form: new Form( {
                     'firstname': '',
                     'middlename': '',
@@ -150,14 +189,21 @@
 
                 axios.get('api/forvacants')
                     .then(({data}) => {
-                        this.test = data;
+                        this.forvacants = data;
+
+                        let names = [];
+                        let ids = [];
+                        _.forEach(this.forvacants, (value) => {
+                            names.push(value.firstname + ' ' + (value.middlename.charAt(0).toUpperCase() + '. ') + value.surname + (value.nameextension != '' ? ' ' +  value.nameextension : ''));
+                            ids.push(value.id);
+                        });
+                        this.forvacantsNames = names;
+                        this.forvacantsIds = ids;
+                        this.$parent.autocomplete(document.getElementById("nameInput"), names);
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
                     });
-
-                // let countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
-                // this.$parent.autocomplete(document.getElementById("nameInput"), countries);
             },
             updatePlantillaRecord() {
 
