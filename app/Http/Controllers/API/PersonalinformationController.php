@@ -35,13 +35,18 @@ class PersonalInformationController extends Controller
         return EmployeesListResource::collection($personalinformations);
     }
 
-    public function forvacants() {
+    public function forvacants(Request $request) {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $allEmployees = DB::select('SELECT id,firstname,middlename,surname,nameextension FROM personal_informations
             WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id`) = 0
             ORDER BY surname');
-        return $allEmployees;
+        $collection = collect($allEmployees);
+        $personalinformation = PersonalInformation::select('id','firstname','middlename','surname','nameextension')->where('id', $request->personal_information_id)->first();
+        if ($personalinformation != null) {
+            $collection->add($personalinformation);
+        }
+        return $collection;
     }
 
     /**

@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\Route;
     Route::patch('salarygrade', 'API\SalaryGradeController@update');
 
     Route::post('plantilladepartmentcontent', 'API\PlantillaContentController@plantilladepartmentcontent');
-    Route::get('forvacants', 'API\PersonalInformationController@forvacants');
+    Route::post('forvacants', 'API\PersonalInformationController@forvacants');
 // });
 
 //api test

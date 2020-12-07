@@ -76,27 +76,27 @@
                         <div class="modal-body">
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
                                 <label for="nameInput" style="font-weight: normal; margin: 0;">Employee name</label>
-                                <input class="form-control" id="nameInput" type="text" name="name" placeholder="Employee">
+                                <input v-model="plantillaNameForEdit" class="form-control" id="nameInput" type="text" name="name" placeholder="Employee">
                             </div>
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
-                                <input id="new_number" class="form-control" step="1" min="1" max="10" type="number" name="new_number" placeholder="New Item Number">
+                                <input v-model="form.new_number" id="new_number" class="form-control" step="1" min="1" max="10" type="number" name="new_number" placeholder="New Item Number">
                             </div>
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="position" style="font-weight: normal; margin: 0;">Position</label>
-                                <input id="position" class="form-control" type="text" name="position" placeholder="Position" required>
+                                <input v-model="form.position" id="position" class="form-control" type="text" name="position" placeholder="Position" required>
                             </div>
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="current-grade" style="font-weight: normal; margin: 0;">Current Year Salary Grade</label>
-                                        <input id="current-grade" class="form-control" step="1" min="1" max="30" type="number" name="current-grade" placeholder="Grade">
+                                        <input v-model="form.salaryauthorized.grade" id="current-grade" class="form-control" step="1" min="1" max="30" type="number" name="current-grade" placeholder="Grade">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="current-step" style="font-weight: normal; margin: 0;">Current Year Salary Step</label>
-                                        <input id="current-step" class="form-control" step="1" min="1" max="8" type="number" name="current-step" placeholder="Step">
+                                        <input v-model="form.salaryauthorized.step" id="current-step" class="form-control" step="1" min="1" max="8" type="number" name="current-step" placeholder="Step">
                                     </div>
                                 </div>
                             </div>
@@ -104,48 +104,16 @@
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
-                                        <input id="budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade">
+                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade">
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
-                                        <input id="budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step">
+                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step">
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="form-group">
-                                <select name="role" v-model="form.role" class="form-control"
-                                    :class="{ 'is-invalid': form.errors.has('role') }">
-                                    <option value="">Select User Role</option>
-                                    <option value="Administrator">Administrator</option>
-                                    <option value="Office User">Office User</option>
-                                    <option value="Author">Author</option>
-                                </select>
-                                <has-error :form="form" field="role"></has-error>
-                            </div>
-
-                            
-
-                            <div class="form-group">
-                                <input v-model="form.email" type="text" name="email" placeholder="Email Address"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                                <has-error :form="form" field="email"></has-error>
-                            </div>
-
-                            <div class="form-group">
-                                <input v-model="form.password" type="password" name="password" placeholder="Password"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                                <has-error :form="form" field="password"></has-error>
-                            </div>
-
-                            <div class="form-group">
-                                <input v-model="form.landline" type="text" name="landline" placeholder="Landline"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('landline') }">
-                                <has-error :form="form" field="landline"></has-error>
-                            </div> -->
-
-                            <!-- <button :disabled="form.busy" type="submit" class="btn btn-primary">Log In</button> -->
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -169,7 +137,9 @@
                 forvacants: {},
                 forvacantsNames: [],
                 forvacantsIds: [],
+                plantillaNameForEdit: '',
                 form: new Form( {
+                    'personal_information_id': '',
                     'firstname': '',
                     'middlename': '',
                     'nameextension': '',
@@ -186,15 +156,15 @@
             showEditModal(record) {
                 $('#plantilla-content-modal').modal('show');
                 this.form.fill(record);
-
-                axios.get('api/forvacants')
+                this.plantillaNameForEdit =  record.surname ? (record.surname + ', ' + record.firstname + ' ' + record.nameextension + ' ' + record.middlename) : 'VACANT';
+                axios.post('api/forvacants', {personal_information_id: this.form.personal_information_id})
                     .then(({data}) => {
                         this.forvacants = data;
 
                         let names = [];
                         let ids = [];
                         _.forEach(this.forvacants, (value) => {
-                            names.push(value.firstname + ' ' + (value.middlename.charAt(0).toUpperCase() + '. ') + value.surname + (value.nameextension != '' ? ' ' +  value.nameextension : ''));
+                            names.push(value.surname + ', ' + value.firstname + ' ' + value.nameextension + ' ' + value.middlename);
                             ids.push(value.id);
                         });
                         this.forvacantsNames = names;

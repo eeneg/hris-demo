@@ -16,6 +16,7 @@ class PlantillaContentResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
+            'personal_information_id' => $this->personal_information_id,
             'old_number' => $this->old_number,
             'new_number' => $this->new_number,
             'position' => $this->position ? $this->position->title : '',
