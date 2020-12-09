@@ -903,7 +903,20 @@
                     $('#pdfModal').modal('show');
                     PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#pdf-viewer", options);
                 })
-                .catch(error => this.errors.record(error.response.data.errors))
+                .catch(error => {
+
+                    this.errors.record(error.response.data.errors)
+
+                    if(error.response.status == 404 || error.response.status == 500)
+                    {
+                        Swal.fire(
+                                'Failed',
+                                'Try generating a barcode first',
+                                'warning'
+                        )
+                    }
+
+                })
             }
         },
         created() {

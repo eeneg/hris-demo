@@ -7,7 +7,6 @@
         <title>Laravel</title>
 
         <link href="{{ asset('css/id.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     </head>
     <body>
@@ -26,7 +25,7 @@
                 </div>
 
                 <div class="centered4">
-                    <img class="img-id2" src="./storage/employee_id_files/ss.png" alt="barcode" style="width: 100%; height: 100%;">
+                    <img class="img-id2" src="data:image/png;base64,'{{ DNS1D::getBarcodePNG(str_replace(' ', '%0A', $code), 'C93') }}'" alt="barcode" style="width: 100%; height: 100%;">
                 </div>
 
             </div>
@@ -34,7 +33,7 @@
             <div class="big" style=" border: solid 1px; width: 355.2px; height: 499.2px; text-align: center;">
                 <img src="./storage/employee_id_files/big-id/{{ $dept }}.jpg" alt="logo" width="100%" height="100%" style="position: absolute">
                 <img class="big-id" src="./storage/employee_id_files/prof.jpg" alt="logo" style="position: absolute; border-radius: 61px; width: 122px; height: 122px;">
-                <img class="qr-code" src="./storage/employee_id_files/qr.png" alt="qr-code" style="position: absolute; width: 72px; height: 72px;">
+                <img class="qr-code" src="data:image/png;base64,'{{ DNS2D::getBarcodePNG($qrcode, 'QRCODE') }}'" alt="qr-code" style="position: absolute; width: 72px; height: 72px;">
                 <div class="centered-big-firstname">
                     <span style="margin-top: 0px;">
                         {{ $employee->firstname }}
@@ -64,7 +63,7 @@
             <div style=" border: solid 1px; width: 355.2px; height: 499.2px; text-align: center;">
                 <img src="./storage/employee_id_files/big-id/{{ $dept }}.jpg" alt="logo" width="100%" height="100%" style="position: absolute">
                 <img class="big-id" src="./storage/employee_id_files/prof.jpg" alt="logo" style="position: absolute; border-radius: 61px; width: 122px; height: 122px;">
-                <img class="qr-code" src="./storage/employee_id_files/qr.png" alt="qr-code" style="position: absolute; width: 72px; height: 72px;">
+                <img class="qr-code" src="data:image/png;base64,'{{ DNS2D::getBarcodePNG($qrcode, 'QRCODE') }}'" alt="qr-code" style="position: absolute; width: 72px; height: 72px;">
                 <div class="centered-big-firstname">
                     <span style="margin-top: 0px;">
                         {{ $employee->firstname }}

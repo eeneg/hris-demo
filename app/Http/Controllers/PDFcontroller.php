@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Barcode;
 use App\Department;
 use App\PersonalInformation;
 use App\Position;
-use App\SalaryGrade;
+use \Milon\Barcode\DNS1D;
+use \Milon\Barcode\DNS2D;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -49,12 +51,13 @@ class PDFcontroller extends Controller
     }
 
     public function employeeId(Request $request) {
+
+        $request->validate(['name' => 'required|string', 'address' => 'required|string', 'signature' => 'required|file|image']);
+
         $employee = PersonalInformation::findOrFail($request['id']);
         $id = PersonalInformation::findOrFail($employee->id)->plantillacontents;
         $position = Position::findOrFail($id[0]->position_id);
         $dept = Department::findOrFail($position->department_id);
-
-        $request->validate(['name' => 'required|string', 'address' => 'required|string', 'signature' => 'required|file|image']);
 
         $img = $request->file('signature')->storeAs('/public/employee_id_files/signatures' , $employee->id . '.png');
 
@@ -62,7 +65,9 @@ class PDFcontroller extends Controller
             'employee'  => $employee,
             'position'  => $position,
             'dept'      => str_replace([' - ', ' / ', ' '], '-', $dept->title),
-            'contact'   => (object)['name' => $request->name, 'address' => $request->address, 'signature' => $employee->id]
+            'contact'   => (object)['name' => $request->name, 'address' => $request->address, 'signature' => $employee->id],
+            'code'      => $employee->barcode->value,
+            'qrcode'    => $employee->firstname . ' ' . $employee->middlename[0] . '. ' . $employee->surname . ' ' . $position->title . ' ' . 'Provincial Capitol of Davao Del Sur'
         ];
 
         $pdf = PDF::loadView('reports/employee-id', $data);
@@ -71,5 +76,6 @@ class PDFcontroller extends Controller
 
         // return $pdf->download('invoice.pdf');
         return ['title' => $employee->firstname];
+
     }
 }
