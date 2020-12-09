@@ -17,7 +17,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card-body table-responsive p-0">
                     <table class="table table-striped text-nowrap employees-table">
                         <thead>
@@ -37,7 +37,7 @@
                                         <br>
                                         <span style="font-size: 0.8rem;" class="text-muted"><i>{{ employee.status }}</i></span>
                                     </div>
-                                    
+
                                 </td>
                                 <td>
                                     <p style="margin: 0;line-height: 1.2rem;" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).designation + (getPlantillaDetails(employee).sg ? ' (SG-' + getPlantillaDetails(employee).sg + ')' : '')  }}</p>
@@ -54,7 +54,7 @@
                                                 <a class="dropdown-item" href="#">Latest Plantilla Record</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
-                                                <a class="dropdown-item" @click.prevent="generateId(employee)" href="#">Generate ID</a>
+                                                <a class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
                                             </div>
                                         </button>
                                     </div>
@@ -90,7 +90,7 @@
                         </p>
                     </span>
                     <span v-else><br></span>
-                    
+
                     <div class="view-profile-container">
                         <div class="row">
                             <div class="col-md-12">
@@ -111,7 +111,7 @@
                                     {{ form.sex + ' / ' + form.civilstatus + ' / ' + form.citizenship }}
                                 </p>
                                 <hr>
-                                
+
                                 <strong><i class="fas fa-balance-scale mr-1"></i> Height(m) / Weight(kg) / Bloodtype</strong>
                                 <p class="text-muted">
                                     {{ form.height + ' / ' + form.weight + ' / ' + form.bloodtype }}
@@ -187,7 +187,7 @@
                                 <hr style="margin: 0 0 0.5rem 0;">
                             </div>
                         </div>
-                        <div class="row">    
+                        <div class="row">
                             <div class="col-md-6">
                                 <strong><i class="fas fa-user-friends mr-1"></i> Spouse</strong>
                                 <p v-if="form.familybackground.spouseSurname" class="text-muted">
@@ -460,7 +460,7 @@
                         <div class="row" v-if="workexperiences().length > 0">
                             <div class="col-md-12">
                                 <table class="table table-bordered table-hover pds-table">
-                                    <thead>                  
+                                    <thead>
                                         <tr class="text-center">
                                             <th colspan="2">Inclusive Dates</th>
                                             <th rowspan="2">Position Title</th>
@@ -498,7 +498,7 @@
                         <div class="row" v-if="voluntaryworks().length > 0">
                             <div class="col-md-12">
                                 <table class="table table-bordered table-hover pds-table">
-                                    <thead>                  
+                                    <thead>
                                         <tr class="text-center">
                                             <th rowspan="2">Name & Address of Organization</th>
                                             <th colspan="2">Inclusive Dates</th>
@@ -530,7 +530,7 @@
                         <div class="row" v-if="trainingprograms().length > 0">
                             <div class="col-md-12">
                                 <table class="table table-bordered table-hover pds-table">
-                                    <thead>                  
+                                    <thead>
                                         <tr class="text-center">
                                             <th rowspan="2">Learning & Development Interventions / Training Program</th>
                                             <th colspan="2">Inclusive Dates of Attendance</th>
@@ -568,7 +568,7 @@
         <div class="modal fade" id="scanModal">
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
-                    
+
                     <!-- Modal body -->
                     <div class="modal-body text-center">
                         <h4 class="modal-title">Scan barcode from ID</h4>
@@ -578,7 +578,7 @@
                         <!-- <img src="/storage/project_files/barcode.png" alt="" width="80%"> -->
                         <button type="button" class="btn btn-danger mt-2" data-dismiss="modal">Close</button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -596,7 +596,7 @@
 
                 <!-- Modal body -->
                 <div class="modal-body" id="pdf-viewer">
-                    
+
                 </div>
 
                 <!-- Modal footer -->
@@ -608,10 +608,94 @@
             </div>
         </div>
 
+        <!-- ID MODAL -->
+        <div class="modal" id="idModal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">In Case Of Emergency Please Notify:</h4>
+                    <button type="button" class="close" v-on:click="errors.deleteV()" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <form @submit.prevent="generateId()" action="" @keydown="errors.clear($event.target.name)">
+                    <div class="modal-body" id="pdf-viewer">
+                        <div class="row">
+                            <div class="form-group col">
+                                <label for="name">Name:</label>
+                                <input class="form-control" type="text" name="name" id="name" v-model="contact.name">
+                                <span class="text-danger" v-if="errors.has('name')" v-text="errors.get('name')"></span>
+                            </div>
+                            <div class="form-group col">
+                                <label for="address">Address:</label>
+                                <input class="form-control" type="text" name="address" id="address" v-model="contact.address">
+                                <span class="text-danger" v-if="errors.has('address')" v-text="errors.get('address')"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                           <div class="form-group col">
+                               <label for="signature">Signature:</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="signature" id="signature" v-on:change="uploadSignature">
+                                    <label class="custom-file-label" for="signature">Choose File</label>
+                                    <span class="text-danger" v-if="errors.has('signature')" v-text="errors.get('signature')"></span>
+                                </div>
+                           </div>
+                        </div>
+                    </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" v-on:click="errors.deleteV()" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+        <!-- END ID MODAL -->
     </div>
 </template>
 
 <script>
+    class Errors
+    {
+        constructor()
+        {
+            this.errors = {};
+        }
+
+        get(field)
+        {
+            if(this.errors[field])
+            {
+                return this.errors[field][0];
+            }
+        }
+
+        has(field)
+        {
+            return this.errors.hasOwnProperty(field);
+        }
+
+        record(errors)
+        {
+            this.errors = errors
+        }
+
+        clear(field)
+        {
+            delete this.errors[field]
+        }
+
+        deleteV()
+        {
+            return this.errors = new Errors()
+        }
+    }
     export default {
         data() {
             return {
@@ -619,6 +703,8 @@
                 barcode: '',
                 search: '',
                 personalinformation: {},
+                contact: {signature: null},
+                errors: new Errors(),
                 form: new Form({
                     'id': '',
                     'surname': '',
@@ -663,17 +749,17 @@
         },
         methods: {
             workexperiences() {
-                return _.orderBy(this.form.workexperiences, 'orderNo'); 
+                return _.orderBy(this.form.workexperiences, 'orderNo');
             },
             voluntaryworks() {
-                return _.orderBy(this.form.voluntaryworks, 'orderNo'); 
+                return _.orderBy(this.form.voluntaryworks, 'orderNo');
             },
             trainingprograms() {
-                return _.orderBy(this.form.trainingprograms, 'orderNo'); 
+                return _.orderBy(this.form.trainingprograms, 'orderNo');
             },
             processBarcode() {
                 axios.post('api/verifybarcode', {barcode: this.barcode, employee_id: this.form.id})
-                    .then(response => {                 
+                    .then(response => {
                         if (response.data != '') {
                             this.form.fill(response.data);
                             $('#scanModal').modal('hide');
@@ -702,8 +788,8 @@
                 $('#scanModal').modal('show');
                 $('#barcodeField').val('');
                 $('.barcode-validate').hide();
-                
-                
+
+
                 this.focusBarcode();
             },
             getAvatar(picture) {
@@ -736,7 +822,7 @@
                 } else {
                     return '';
                 }
-                
+
             },
             loadEmployees() {
                 axios.get('api/personalinformation')
@@ -772,7 +858,7 @@
             },
             generatePDS(id){
                 axios.post('generatePDS', {id: id})
-                    .then(response => {                 
+                    .then(response => {
                         let options = {
                             height: screen.height * 0.65 + 'px',
                             page: '1'
@@ -785,19 +871,39 @@
                         console.log(error);
                     });
             },
-            generateId(employee) {
-                axios.post('generateId', {id: employee.id})
-                    .then(response => {                 
-                        let options = {
-                            height: screen.height * 0.65 + 'px',
-                            page: '1'
-                        };
-                        $('#pdfModal').modal('show');
-                        PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#pdf-viewer", options);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
+            generateIDModal(employee)
+            {
+                $('.custom-file-input').prop('value', '')
+                this.contact = {id: employee.id, name: '', address: '', signature: null}
+                $('.custom-file-label').html('Choose File')
+                $('#idModal').modal('show');
+            },
+            uploadSignature(event)
+            {
+                this.contact.signature = event.target.files[0];
+                $('.custom-file-label').html(event.target.files[0].name)
+            }
+            ,
+            generateId() {
+                let idForm = new FormData()
+
+                idForm.append('id', this.contact.id)
+                idForm.append('name', this.contact.name)
+                idForm.append('address', this.contact.address)
+                idForm.append('signature', this.contact.signature)
+
+                axios.post('generateId', idForm)
+                .then(response => {
+                    $('#idModal').modal('hide')
+                    this.errors = new Errors()
+                    let options = {
+                        height: screen.height * 0.65 + 'px',
+                        page: '1'
+                    };
+                    $('#pdfModal').modal('show');
+                    PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#pdf-viewer", options);
+                })
+                .catch(error => this.errors.record(error.response.data.errors))
             }
         },
         created() {

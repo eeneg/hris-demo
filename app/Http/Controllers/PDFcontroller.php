@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Child;
-use App\EducationalBackground;
-use App\Eligibility;
-use App\FamilyBackground;
+use App\Department;
 use App\PersonalInformation;
+use App\Position;
+use App\SalaryGrade;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
-use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+
+
+use function GuzzleHttp\Promise\unwrap;
+
 // use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class PDFcontroller extends Controller
@@ -48,10 +50,20 @@ class PDFcontroller extends Controller
 
     public function employeeId(Request $request) {
         $employee = PersonalInformation::findOrFail($request['id']);
-        $data = [
-            'employee' => $employee
-        ];
+        $id = PersonalInformation::findOrFail($employee->id)->plantillacontents;
+        $position = Position::findOrFail($id[0]->position_id);
+        $dept = Department::findOrFail($position->department_id);
 
+        $request->validate(['name' => 'required|string', 'address' => 'required|string', 'signature' => 'required|file|image']);
+
+        $img = $request->file('signature')->storeAs('/public/employee_id_files/signatures' , $employee->id . '.png');
+
+        $data = [
+            'employee'  => $employee,
+            'position'  => $position,
+            'dept'      => str_replace([' - ', ' / ', ' '], '-', $dept->title),
+            'contact'   => (object)['name' => $request->name, 'address' => $request->address, 'signature' => $employee->id]
+        ];
 
         $pdf = PDF::loadView('reports/employee-id', $data);
 
