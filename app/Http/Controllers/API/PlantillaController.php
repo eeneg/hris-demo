@@ -15,7 +15,11 @@ class PlantillaController extends Controller
      */
     public function index()
     {
-        return Plantilla::orderBy('date_prepared')->get();
+        return Plantilla::orderBy('date_prepared', 'desc')->get();
+    }
+
+    public function previousplantilla(Request $request) {
+        return Plantilla::where('year', '!=', $request->current)->latest('date_prepared')->first();
     }
 
     /**

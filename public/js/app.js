@@ -1949,6 +1949,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 //
 //
 //
@@ -2562,6 +2568,94 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var Errors = /*#__PURE__*/function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "has",
+    value: function has(field) {
+      return this.errors.hasOwnProperty(field);
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      delete this.errors[field];
+    }
+  }, {
+    key: "deleteV",
+    value: function deleteV() {
+      return this.errors = new Errors();
+    }
+  }]);
+
+  return Errors;
+}();
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2569,6 +2663,10 @@ __webpack_require__.r(__webpack_exports__);
       barcode: '',
       search: '',
       personalinformation: {},
+      contact: {
+        signature: null
+      },
+      errors: new Errors(),
       form: new Form({
         'id': '',
         'surname': '',
@@ -2743,10 +2841,32 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    generateId: function generateId(employee) {
-      axios.post('generateId', {
-        id: employee.id
-      }).then(function (response) {
+    generateIDModal: function generateIDModal(employee) {
+      $('.custom-file-input').prop('value', '');
+      this.contact = {
+        id: employee.id,
+        name: '',
+        address: '',
+        signature: null
+      };
+      $('.custom-file-label').html('Choose File');
+      $('#idModal').modal('show');
+    },
+    uploadSignature: function uploadSignature(event) {
+      this.contact.signature = event.target.files[0];
+      $('.custom-file-label').html(event.target.files[0].name);
+    },
+    generateId: function generateId() {
+      var _this6 = this;
+
+      var idForm = new FormData();
+      idForm.append('id', this.contact.id);
+      idForm.append('name', this.contact.name);
+      idForm.append('address', this.contact.address);
+      idForm.append('signature', this.contact.signature);
+      axios.post('generateId', idForm).then(function (response) {
+        $('#idModal').modal('hide');
+        _this6.errors = new Errors();
         var options = {
           height: screen.height * 0.65 + 'px',
           page: '1'
@@ -2754,7 +2874,11 @@ __webpack_require__.r(__webpack_exports__);
         $('#pdfModal').modal('show');
         PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#pdf-viewer", options);
       })["catch"](function (error) {
-        console.log(error);
+        _this6.errors.record(error.response.data.errors);
+
+        if (error.response.status == 404 || error.response.status == 500) {
+          Swal.fire('Failed', 'Try generating a barcode first', 'warning');
+        }
       });
     }
   },
@@ -4671,28 +4795,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       departments: {},
+      itemMin: '',
+      itemMax: '',
       selectedDepartment: '',
       records: {},
       forvacants: {},
-      forvacantsNames: [],
-      forvacantsIds: [],
       plantillaNameForEdit: '',
+      previousPlantilla: '',
       form: new Form({
+        'id': '',
         'personal_information_id': '',
         'firstname': '',
         'middlename': '',
@@ -4700,6 +4815,7 @@ __webpack_require__.r(__webpack_exports__);
         'new_number': '',
         'old_number': '',
         'position': '',
+        'position_id': '',
         'surname': '',
         'salaryauthorized': {},
         'salaryproposed': {}
@@ -4711,51 +4827,77 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       $('#plantilla-content-modal').modal('show');
+      this.form.reset();
       this.form.fill(record);
-      this.plantillaNameForEdit = record.surname ? record.surname + ', ' + record.firstname + ' ' + record.nameextension + ' ' + record.middlename : 'VACANT';
+      this.plantillaNameForEdit = record.surname ? record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename : 'VACANT';
       axios.post('api/forvacants', {
         personal_information_id: this.form.personal_information_id
       }).then(function (_ref) {
         var data = _ref.data;
         _this.forvacants = data;
-        var names = [];
-        var ids = [];
-
-        _.forEach(_this.forvacants, function (value) {
-          names.push(value.surname + ', ' + value.firstname + ' ' + value.nameextension + ' ' + value.middlename);
-          ids.push(value.id);
-        });
-
-        _this.forvacantsNames = names;
-        _this.forvacantsIds = ids;
-
-        _this.$parent.autocomplete(document.getElementById("nameInput"), names);
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
     },
-    updatePlantillaRecord: function updatePlantillaRecord() {},
-    loadDepartments: function loadDepartments() {
+    getDifference: function getDifference(authorized, proposed) {
+      var difference = (proposed !== null ? proposed.amount * 12 : 0) - (authorized !== null ? authorized.amount * 12 : 0);
+      return difference < 0 ? '(' + (difference * -1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')' : difference.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    getPreviousPlantilla: function getPreviousPlantilla() {
       var _this2 = this;
 
-      axios.get('api/department').then(function (_ref2) {
+      axios.post('api/previousplantilla', {
+        current: this.$parent.settings.plantilla
+      }).then(function (_ref2) {
         var data = _ref2.data;
-        _this2.departments = data.data;
-        _this2.selectedDepartment = data.data[0].title;
+        _this2.previousPlantilla = data.year;
+      })["catch"](function (error) {
+        console.log(error.response.data.message);
+      });
+    },
+    updatePlantillaRecord: function updatePlantillaRecord() {
+      var _this3 = this;
 
-        _this2.loadContents();
+      this.$Progress.start();
+      this.form.put('api/plantillacontent/' + this.form.id).then(function () {
+        _this3.loadContents();
+
+        toast.fire({
+          icon: 'success',
+          title: 'Record updated successfully'
+        });
+        $('#plantilla-content-modal').modal('hide');
+
+        _this3.$Progress.finish();
+      })["catch"](function () {
+        _this3.$Progress.fail();
+      });
+    },
+    loadDepartments: function loadDepartments() {
+      var _this4 = this;
+
+      axios.get('api/department').then(function (_ref3) {
+        var data = _ref3.data;
+        _this4.departments = data.data;
+        _this4.selectedDepartment = data.data[0].title;
+
+        _this4.loadContents();
+
+        _this4.getPreviousPlantilla();
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
     },
     loadContents: function loadContents() {
-      var _this3 = this;
+      var _this5 = this;
 
       axios.post('api/plantilladepartmentcontent', {
         department: this.selectedDepartment
-      }).then(function (_ref3) {
-        var data = _ref3.data;
-        _this3.records = data.data;
+      }).then(function (_ref4) {
+        var data = _ref4.data;
+        _this5.records = data.data;
+        _this5.itemMin = data.data[0].new_number;
+        _this5.itemMax = data.data[data.data.length - 1].new_number;
       })["catch"](function (error) {
         console.log(error.response.data.message);
       });
@@ -68778,11 +68920,15 @@ var render = function() {
                                     "a",
                                     {
                                       staticClass: "dropdown-item",
-                                      attrs: { href: "#" },
+                                      attrs: {
+                                        href: "#",
+                                        "data-toggle": "modal",
+                                        "data-target": "#exampleModal"
+                                      },
                                       on: {
                                         click: function($event) {
                                           $event.preventDefault()
-                                          return _vm.generateId(employee)
+                                          return _vm.generateIDModal(employee)
                                         }
                                       }
                                     },
@@ -70394,7 +70540,217 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(32)
+    _vm._m(32),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal",
+        attrs: {
+          id: "idModal",
+          tabindex: "-1",
+          "data-backdrop": "static",
+          "data-keyboard": "false"
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c("h4", { staticClass: "modal-title" }, [
+                _vm._v("In Case Of Emergency Please Notify:")
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "close",
+                  attrs: { type: "button", "data-dismiss": "modal" },
+                  on: {
+                    click: function($event) {
+                      return _vm.errors.deleteV()
+                    }
+                  }
+                },
+                [_vm._v("×")]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                attrs: { action: "" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.generateId()
+                  },
+                  keydown: function($event) {
+                    return _vm.errors.clear($event.target.name)
+                  }
+                }
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "modal-body", attrs: { id: "pdf-viewer" } },
+                  [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "form-group col" }, [
+                        _c("label", { attrs: { for: "name" } }, [
+                          _vm._v("Name:")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.contact.name,
+                              expression: "contact.name"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text", name: "name", id: "name" },
+                          domProps: { value: _vm.contact.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.contact, "name", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("name")
+                          ? _c("span", {
+                              staticClass: "text-danger",
+                              domProps: {
+                                textContent: _vm._s(_vm.errors.get("name"))
+                              }
+                            })
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group col" }, [
+                        _c("label", { attrs: { for: "address" } }, [
+                          _vm._v("Address:")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.contact.address,
+                              expression: "contact.address"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            name: "address",
+                            id: "address"
+                          },
+                          domProps: { value: _vm.contact.address },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.contact,
+                                "address",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("address")
+                          ? _c("span", {
+                              staticClass: "text-danger",
+                              domProps: {
+                                textContent: _vm._s(_vm.errors.get("address"))
+                              }
+                            })
+                          : _vm._e()
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "form-group col" }, [
+                        _c("label", { attrs: { for: "signature" } }, [
+                          _vm._v("Signature:")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "custom-file" }, [
+                          _c("input", {
+                            staticClass: "custom-file-input",
+                            attrs: {
+                              type: "file",
+                              name: "signature",
+                              id: "signature"
+                            },
+                            on: { change: _vm.uploadSignature }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "label",
+                            {
+                              staticClass: "custom-file-label",
+                              attrs: { for: "signature" }
+                            },
+                            [_vm._v("Choose File")]
+                          ),
+                          _vm._v(" "),
+                          _vm.errors.has("signature")
+                            ? _c("span", {
+                                staticClass: "text-danger",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.errors.get("signature")
+                                  )
+                                }
+                              })
+                            : _vm._e()
+                        ])
+                      ])
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: {
+                        click: function($event) {
+                          return _vm.errors.deleteV()
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Save")]
+                  )
+                ])
+              ]
+            )
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -74437,7 +74793,7 @@ var render = function() {
                       staticStyle: { "font-weight": "normal" },
                       attrs: { colspan: "2" }
                     },
-                    [_vm._v("Rate/Annum Previous")]
+                    [_vm._v("Rate/Annum " + _vm._s(this.previousPlantilla))]
                   ),
                   _vm._v(" "),
                   _c(
@@ -74479,8 +74835,9 @@ var render = function() {
                                 ", " +
                                 record.firstname +
                                 " " +
-                                record.nameextension +
-                                " " +
+                                (record.nameextension != ""
+                                  ? record.nameextension + " "
+                                  : "") +
                                 record.middlename
                             : "VACANT"
                         )
@@ -74538,16 +74895,10 @@ var render = function() {
                     _c("td", { staticStyle: { "text-align": "right" } }, [
                       _vm._v(
                         _vm._s(
-                          (
-                            (record.salaryproposed !== null
-                              ? record.salaryproposed.amount * 12
-                              : 0) -
-                            (record.salaryauthorized !== null
-                              ? record.salaryauthorized.amount * 12
-                              : 0)
+                          _vm.getDifference(
+                            record.salaryauthorized,
+                            record.salaryproposed
                           )
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         )
                       )
                     ]),
@@ -74631,38 +74982,75 @@ var render = function() {
                             staticStyle: {
                               "font-weight": "normal",
                               margin: "0"
-                            },
-                            attrs: { for: "nameInput" }
+                            }
                           },
                           [_vm._v("Employee name")]
                         ),
                         _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.plantillaNameForEdit,
-                              expression: "plantillaNameForEdit"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            id: "nameInput",
-                            type: "text",
-                            name: "name",
-                            placeholder: "Employee"
-                          },
-                          domProps: { value: _vm.plantillaNameForEdit },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.personal_information_id,
+                                expression: "form.personal_information_id"
                               }
-                              _vm.plantillaNameForEdit = $event.target.value
+                            ],
+                            staticClass: "custom-select",
+                            attrs: { id: "employeesDropdown" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.form,
+                                  "personal_information_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
                             }
-                          }
-                        })
+                          },
+                          [
+                            _c("option", { attrs: { value: "null" } }, [
+                              _vm._v("VACANT")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.forvacants, function(forvacant) {
+                              return _c(
+                                "option",
+                                {
+                                  key: forvacant.id,
+                                  domProps: { value: forvacant.id }
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(
+                                      forvacant.surname +
+                                        ", " +
+                                        forvacant.firstname +
+                                        " " +
+                                        (forvacant.nameextension != ""
+                                          ? forvacant.nameextension + " "
+                                          : "") +
+                                        forvacant.middlename
+                                    )
+                                  )
+                                ]
+                              )
+                            })
+                          ],
+                          2
+                        )
                       ]
                     ),
                     _vm._v(" "),
@@ -74698,11 +75086,12 @@ var render = function() {
                           attrs: {
                             id: "new_number",
                             step: "1",
-                            min: "1",
-                            max: "10",
+                            min: _vm.itemMin,
+                            max: _vm.itemMax,
                             type: "number",
                             name: "new_number",
-                            placeholder: "New Item Number"
+                            placeholder: "New Item Number",
+                            required: ""
                           },
                           domProps: { value: _vm.form.new_number },
                           on: {
@@ -74790,126 +75179,6 @@ var render = function() {
                                   "font-weight": "normal",
                                   margin: "0"
                                 },
-                                attrs: { for: "current-grade" }
-                              },
-                              [_vm._v("Current Year Salary Grade")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.salaryauthorized.grade,
-                                  expression: "form.salaryauthorized.grade"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                id: "current-grade",
-                                step: "1",
-                                min: "1",
-                                max: "30",
-                                type: "number",
-                                name: "current-grade",
-                                placeholder: "Grade"
-                              },
-                              domProps: {
-                                value: _vm.form.salaryauthorized.grade
-                              },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form.salaryauthorized,
-                                    "grade",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "form-group",
-                            staticStyle: { "margin-bottom": "0.3rem" }
-                          },
-                          [
-                            _c(
-                              "label",
-                              {
-                                staticStyle: {
-                                  "font-weight": "normal",
-                                  margin: "0"
-                                },
-                                attrs: { for: "current-step" }
-                              },
-                              [_vm._v("Current Year Salary Step")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.salaryauthorized.step,
-                                  expression: "form.salaryauthorized.step"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                id: "current-step",
-                                step: "1",
-                                min: "1",
-                                max: "8",
-                                type: "number",
-                                name: "current-step",
-                                placeholder: "Step"
-                              },
-                              domProps: {
-                                value: _vm.form.salaryauthorized.step
-                              },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form.salaryauthorized,
-                                    "step",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-6" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "form-group",
-                            staticStyle: { "margin-bottom": "0.3rem" }
-                          },
-                          [
-                            _c(
-                              "label",
-                              {
-                                staticStyle: {
-                                  "font-weight": "normal",
-                                  margin: "0"
-                                },
                                 attrs: { for: "budget-grade" }
                               },
                               [_vm._v("Budget Year Salary Grade")]
@@ -74932,7 +75201,8 @@ var render = function() {
                                 max: "30",
                                 type: "number",
                                 name: "budget-grade",
-                                placeholder: "Grade"
+                                placeholder: "Grade",
+                                required: ""
                               },
                               domProps: {
                                 value: _vm.form.salaryproposed.grade
@@ -74991,7 +75261,8 @@ var render = function() {
                                 max: "8",
                                 type: "number",
                                 name: "budget-step",
-                                placeholder: "Step"
+                                placeholder: "Step",
+                                required: ""
                               },
                               domProps: { value: _vm.form.salaryproposed.step },
                               on: {
@@ -91329,133 +91600,6 @@ var app = new Vue({
         _this2.settings = data;
       })["catch"](function (error) {
         console.log(error.response.data.message);
-      });
-    },
-    autocomplete: function autocomplete(inp, arr) {
-      /*the autocomplete function takes two arguments,
-      the text field element and an array of possible autocompleted values:*/
-      var currentFocus;
-      /*execute a function when someone writes in the text field:*/
-
-      inp.addEventListener("input", function (e) {
-        var a,
-            b,
-            i,
-            val = this.value;
-        /*close any already open lists of autocompleted values*/
-
-        closeAllLists();
-
-        if (!val) {
-          return false;
-        }
-
-        currentFocus = -1;
-        /*create a DIV element that will contain the items (values):*/
-
-        a = document.createElement("DIV");
-        a.setAttribute("id", this.id + "autocomplete-list");
-        a.setAttribute("class", "autocomplete-items");
-        /*append the DIV element as a child of the autocomplete container:*/
-
-        this.parentNode.appendChild(a);
-        /*for each item in the array...*/
-
-        for (i = 0; i < arr.length; i++) {
-          /*check if the item starts with the same letters as the text field value:*/
-          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-            /*create a DIV element for each matching element:*/
-            b = document.createElement("DIV");
-            /*make the matching letters bold:*/
-
-            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-            b.innerHTML += arr[i].substr(val.length);
-            /*insert a input field that will hold the current array item's value:*/
-
-            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-            /*execute a function when someone clicks on the item value (DIV element):*/
-
-            b.addEventListener("click", function (e) {
-              /*insert the value for the autocomplete text field:*/
-              inp.value = this.getElementsByTagName("input")[0].value;
-              /*close the list of autocompleted values,
-              (or any other open lists of autocompleted values:*/
-
-              closeAllLists();
-            });
-            a.appendChild(b);
-          }
-        }
-      });
-      /*execute a function presses a key on the keyboard:*/
-
-      inp.addEventListener("keydown", function (e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
-
-        if (e.keyCode == 40) {
-          /*If the arrow DOWN key is pressed,
-          increase the currentFocus variable:*/
-          currentFocus++;
-          /*and and make the current item more visible:*/
-
-          addActive(x);
-        } else if (e.keyCode == 38) {
-          //up
-
-          /*If the arrow UP key is pressed,
-          decrease the currentFocus variable:*/
-          currentFocus--;
-          /*and and make the current item more visible:*/
-
-          addActive(x);
-        } else if (e.keyCode == 13) {
-          /*If the ENTER key is pressed, prevent the form from being submitted,*/
-          e.preventDefault();
-
-          if (currentFocus > -1) {
-            /*and simulate a click on the "active" item:*/
-            if (x) x[currentFocus].click();
-          }
-        }
-      });
-
-      function addActive(x) {
-        /*a function to classify an item as "active":*/
-        if (!x) return false;
-        /*start by removing the "active" class on all items:*/
-
-        removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = x.length - 1;
-        /*add class "autocomplete-active":*/
-
-        x[currentFocus].classList.add("autocomplete-active");
-      }
-
-      function removeActive(x) {
-        /*a function to remove the "active" class from all autocomplete items:*/
-        for (var i = 0; i < x.length; i++) {
-          x[i].classList.remove("autocomplete-active");
-        }
-      }
-
-      function closeAllLists(elmnt) {
-        /*close all autocomplete lists in the document,
-        except the one passed as an argument:*/
-        var x = document.getElementsByClassName("autocomplete-items");
-
-        for (var i = 0; i < x.length; i++) {
-          if (elmnt != x[i] && elmnt != inp) {
-            x[i].parentNode.removeChild(x[i]);
-          }
-        }
-      }
-      /*execute a function when someone clicks in the document:*/
-
-
-      document.addEventListener("click", function (e) {
-        closeAllLists(e.target);
       });
     }
   },

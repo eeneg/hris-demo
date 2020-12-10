@@ -67,7 +67,7 @@ class PDFcontroller extends Controller
             'dept'      => str_replace([' - ', ' / ', ' '], '-', $dept->title),
             'contact'   => (object)['name' => $request->name, 'address' => $request->address, 'signature' => $employee->id],
             'code'      => $employee->barcode->value,
-            'qrcode'    => $employee->firstname . ' ' . $employee->middlename[0] . '. ' . $employee->surname . ' ' . $position->title . ' ' . 'Provincial Capitol of Davao Del Sur'
+            'qrcode'    => $employee->firstname . ' ' . $employee->middlename[0] . '. ' . $employee->surname . PHP_EOL . $position->title . PHP_EOL . 'Provincial Government of Davao del Sur'
         ];
 
         $pdf = PDF::loadView('reports/employee-id', $data);

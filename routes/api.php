@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-// Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:api'], function() {
     Route::apiResources([
         'user' => 'API\UserController',
         'personalinformation' => 'API\PersonalInformationController',
@@ -42,8 +42,9 @@ use Illuminate\Support\Facades\Route;
     Route::patch('salarygrade', 'API\SalaryGradeController@update');
 
     Route::post('plantilladepartmentcontent', 'API\PlantillaContentController@plantilladepartmentcontent');
+    Route::post('previousplantilla', 'API\PlantillaController@previousplantilla');
     Route::post('forvacants', 'API\PersonalInformationController@forvacants');
-// });
+});
 
 //api test
 // Route::get('per', 'API\PersonalInformationController@index');

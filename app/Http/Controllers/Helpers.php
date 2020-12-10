@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Webpatser\Uuid\Uuid;
 use App\PersonalInformation;
 use App\WorkExperience;
 use App\VoluntaryWork;
@@ -11,6 +12,8 @@ use App\TrainingProgram;
 use App\Plantilla;
 use App\Setting;
 use App\User;
+use App\SalaryGrade;
+use App\PlantillaContent;
 
 class Helpers extends Controller
 {
@@ -129,5 +132,27 @@ class Helpers extends Controller
         }
 
         return 'Successful!';
+    }
+
+    public function updateIds() {
+        $salaryGrades = SalaryGrade::all();
+        foreach ($salaryGrades as $key => $value) {
+            $value->id = Uuid::generate()->string;
+            $value->save();
+        }
+    }
+
+    public function updateSalaryGrades() {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)->get();
+        foreach ($plantillacontents as $value) {
+            $salaryGrade = SalaryGrade::where('grade', $value->salaryproposed->grade)
+                ->where('step', $value->salaryproposed->step)
+                ->where('salary_sched_id', '05699080-3832-11eb-aaac-e7512d9321d1')
+                ->first();
+            $value->salary_grade_prop_id = $salaryGrade->id;
+            $value->save();
+        }
     }
 }

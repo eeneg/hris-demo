@@ -29,7 +29,7 @@
                                 <th rowspan="3"></th>
                             </tr>
                             <tr>
-                                <th colspan="2" style="font-weight: normal;">Rate/Annum Previous</th>
+                                <th colspan="2" style="font-weight: normal;">Rate/Annum {{ this.previousPlantilla }}</th>
                                 <th colspan="2" style="font-weight: normal;">Rate/Annum {{ this.$parent.settings.plantilla }}</th>
                             </tr>
                             <tr>
@@ -46,12 +46,12 @@
                                 <td style="text-align: center;">{{ record.old_number }}</td>
                                 <td style="text-align: center;">{{ record.new_number }}</td>
                                 <td>{{ record.position }}</td>
-                                <td>{{ record.surname ? (record.surname + ', ' + record.firstname + ' ' + record.nameextension + ' ' + record.middlename) : 'VACANT' }}</td>
+                                <td>{{ record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT' }}</td>
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
                                 <td style="text-align: right;">{{ record.salaryauthorized !== null ? ((record.salaryauthorized.amount * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
                                 <td style="text-align: center;">{{ record.salaryproposed !== null ? (record.salaryproposed.grade + ' / ' + record.salaryproposed.step) : '' }}</td>
                                 <td style="text-align: right;">{{ record.salaryproposed !== null ? ((record.salaryproposed.amount * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
-                                <td style="text-align: right;">{{ ((record.salaryproposed !== null ? record.salaryproposed.amount * 12 : 0) - (record.salaryauthorized !== null ? record.salaryauthorized.amount * 12 : 0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
+                                <td style="text-align: right;">{{ getDifference(record.salaryauthorized, record.salaryproposed) }}</td>
                                 <td style="text-align: center;"><a href="#" @click.prevent="showEditModal(record)"><i class="fas fa-edit"></i></a></td>
                             </tr>
                         </tbody>
@@ -75,12 +75,15 @@
                     <form autocomplete="off" @submit.prevent="updatePlantillaRecord()">
                         <div class="modal-body">
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
-                                <label for="nameInput" style="font-weight: normal; margin: 0;">Employee name</label>
-                                <input v-model="plantillaNameForEdit" class="form-control" id="nameInput" type="text" name="name" placeholder="Employee">
+                                <label style="font-weight: normal; margin: 0;">Employee name</label>
+                                <select v-model="form.personal_information_id" class="custom-select" id="employeesDropdown">
+                                    <option value="null">VACANT</option>
+                                    <option :value="forvacant.id" v-for="forvacant in forvacants" :key="forvacant.id">{{ forvacant.surname + ', ' + forvacant.firstname + ' ' + (forvacant.nameextension != '' ? forvacant.nameextension + ' ' : '') + forvacant.middlename }}</option>
+                                </select>
                             </div>
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
-                                <input v-model="form.new_number" id="new_number" class="form-control" step="1" min="1" max="10" type="number" name="new_number" placeholder="New Item Number">
+                                <input v-model="form.new_number" id="new_number" class="form-control" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
                             </div>
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="position" style="font-weight: normal; margin: 0;">Position</label>
@@ -89,28 +92,14 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="current-grade" style="font-weight: normal; margin: 0;">Current Year Salary Grade</label>
-                                        <input v-model="form.salaryauthorized.grade" id="current-grade" class="form-control" step="1" min="1" max="30" type="number" name="current-grade" placeholder="Grade">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="current-step" style="font-weight: normal; margin: 0;">Current Year Salary Step</label>
-                                        <input v-model="form.salaryauthorized.step" id="current-step" class="form-control" step="1" min="1" max="8" type="number" name="current-step" placeholder="Step">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
-                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade">
+                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
-                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step">
+                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
                                     </div>
                                 </div>
                             </div>
@@ -132,13 +121,15 @@
         data() {
             return {
                 departments: {},
+                itemMin: '',
+                itemMax: '',
                 selectedDepartment: '',
                 records: {},
                 forvacants: {},
-                forvacantsNames: [],
-                forvacantsIds: [],
                 plantillaNameForEdit: '',
+                previousPlantilla: '',
                 form: new Form( {
+                    'id': '',
                     'personal_information_id': '',
                     'firstname': '',
                     'middlename': '',
@@ -146,6 +137,7 @@
                     'new_number': '',
                     'old_number': '',
                     'position': '',
+                    'position_id': '',
                     'surname': '',
                     'salaryauthorized': {},
                     'salaryproposed': {}
@@ -155,28 +147,45 @@
         methods: {
             showEditModal(record) {
                 $('#plantilla-content-modal').modal('show');
+                this.form.reset();
                 this.form.fill(record);
-                this.plantillaNameForEdit =  record.surname ? (record.surname + ', ' + record.firstname + ' ' + record.nameextension + ' ' + record.middlename) : 'VACANT';
+                this.plantillaNameForEdit =  record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT';
                 axios.post('api/forvacants', {personal_information_id: this.form.personal_information_id})
                     .then(({data}) => {
                         this.forvacants = data;
-
-                        let names = [];
-                        let ids = [];
-                        _.forEach(this.forvacants, (value) => {
-                            names.push(value.surname + ', ' + value.firstname + ' ' + value.nameextension + ' ' + value.middlename);
-                            ids.push(value.id);
-                        });
-                        this.forvacantsNames = names;
-                        this.forvacantsIds = ids;
-                        this.$parent.autocomplete(document.getElementById("nameInput"), names);
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+            },
+            getDifference(authorized, proposed) {
+                let difference = ((proposed !== null ? proposed.amount * 12 : 0) - (authorized !== null ? authorized.amount * 12 : 0));
+                return difference < 0 ? '(' + (difference * -1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')' : difference.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            },
+            getPreviousPlantilla() {
+                axios.post('api/previousplantilla', {current: this.$parent.settings.plantilla})
+                    .then(({data}) => {
+                        this.previousPlantilla = data.year;
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
                     });
             },
             updatePlantillaRecord() {
-
+                this.$Progress.start();
+                this.form.put('api/plantillacontent/' + this.form.id)
+                    .then(() => {
+                        this.loadContents();
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Record updated successfully'
+                        });
+                        $('#plantilla-content-modal').modal('hide');    
+                        this.$Progress.finish();
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
+                    });
             },
             loadDepartments() {
                 axios.get('api/department')
@@ -184,6 +193,7 @@
                         this.departments = data.data;
                         this.selectedDepartment = data.data[0].title;
                         this.loadContents();
+                        this.getPreviousPlantilla();
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -193,6 +203,8 @@
                 axios.post('api/plantilladepartmentcontent', {department: this.selectedDepartment})
                     .then(({data}) => {
                         this.records = data.data;
+                        this.itemMin = data.data[0].new_number;
+                        this.itemMax = data.data[data.data.length - 1].new_number;
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
