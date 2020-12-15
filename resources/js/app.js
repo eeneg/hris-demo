@@ -40,6 +40,7 @@ const routes = [
     { path: '/salaryschedule', component: require('./components/plantilla/SalarySchedule.vue').default },
     { path: '/departments', component: require('./components/plantilla/Departments.vue').default },
     { path: '/employees', component: require('./components/Employees.vue').default },
+    { path: '/employees-pds', component: require('./components/employees/pds-form.vue').default },
     { path: '/requests', component: require('./components/Requests.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/settings', component: require('./components/management/Settings.vue').default },
@@ -80,7 +81,7 @@ Vue.filter('validateCount', function(value){
     } else {
         return value
     }
-    
+
     // return value.charAt(0).toUpperCase() + value.slice(1)
 })
 

@@ -11,6 +11,8 @@ use App\PlantillaContent;
 use App\Http\Resources\EmployeesListResource;
 use App\Setting;
 use App\Plantilla;
+use App\Events\PersonalInfoRegistered;
+use App\Events\PersonalInfoUpdated;
 
 class PersonalInformationController extends Controller
 {
@@ -58,7 +60,17 @@ class PersonalInformationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'surname'               => 'required|string',
+            'firstname'             => 'required|string',
+            'birthdate'             => 'required|string',
+            'permanentaddress'      => 'required|string',
+            'cellphone'             => 'required|string',
+        ]);
+
+        $pi = PersonalInformation::create($request->all());
+
+        event(new PersonalInfoRegistered($pi));
     }
 
     /**
@@ -67,9 +79,14 @@ class PersonalInformationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+
+    }
+
+    public function edit(Request $request)
+    {
+        return PersonalInformation::findOrFail($request->id);
     }
 
     /**
@@ -81,7 +98,19 @@ class PersonalInformationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'surname'               => 'required|string',
+            'firstname'             => 'required|string',
+            'birthdate'             => 'required|string',
+            'permanentaddress'      => 'required|string',
+            'cellphone'             => 'required|string',
+        ]);
+
+        $pi = PersonalInformation::findOrFail($id);
+
+        $pi->update($request->all());
+
+        event(new PersonalInfoUpdated($pi));
     }
 
     /**

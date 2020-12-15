@@ -18,6 +18,26 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'App\Events\PersonalInfoRegistered' => [
+            'App\Listeners\CreatePersonalInfo\FamilyBackgroundCreateListener',
+            'App\Listeners\CreatePersonalInfo\EducationalBackgroundCreateListener',
+            'App\Listeners\CreatePersonalInfo\EligibilityCreateListener',
+            'App\Listeners\CreatePersonalInfo\WorkExperienceCreateListener',
+            'App\Listeners\CreatePersonalInfo\VoluntaryWorkCreateListener',
+            'App\Listeners\CreatePersonalInfo\LearningAndDevelopmentCreateListener',
+            'App\Listeners\CreatePersonalInfo\OtherInformationCreateListener',
+            'App\Listeners\CreatePersonalInfo\PDSQuestionCreateListener',
+        ],
+        'App\Events\PersonalInfoUpdated' => [
+            'App\Listeners\UpdatePersonalInfo\FamilyBackgroundUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\EducationalBackgroundUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\EligibilityUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\WorkExperienceUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\VoluntaryWorkUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\LearningAndDevelopmentUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\OtherInformationUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\PDSQuestionUpdateListener',
+        ],
     ];
 
     /**

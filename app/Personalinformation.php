@@ -21,7 +21,7 @@ class PersonalInformation extends Model
 
     protected $with = [
         'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities',
-        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms'
+        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion'
     ];
 
     /**
@@ -31,7 +31,7 @@ class PersonalInformation extends Model
      */
     protected $fillable = [
         'surname', 'firstname', 'middlename', 'nameextension', 'birthdate', 'birthplace', 'sex', 'civilstatus', 'citizenship', 'height',
-        'weight', 'bloodtype', 'gsis', 'pagibig', 'philhealth', 'sss', 'residentialaddress', 'zipcode1', 'telephone1', 'permanentAddress',
+        'weight', 'bloodtype', 'gsis', 'pagibig', 'philhealth', 'sss', 'residentialaddress', 'zipcode1', 'telephone1', 'permanentaddress',
         'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status'
     ];
 

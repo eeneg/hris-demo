@@ -13,7 +13,7 @@ class Eligibility extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'personal_information_id', 'CareerService', 'Rating', 'DateOfExam', 'PlaceOfExam', 'LicenseNumber', 'LicenseRelease' ];
+    protected $fillable = [ 'personal_information_id', 'careerService', 'rating', 'dateOfExam', 'placeOfExam', 'licenseNumber', 'licenseRelease' ];
 
     public function personalinformation()
     {

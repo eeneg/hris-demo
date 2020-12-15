@@ -13,7 +13,7 @@ class OtherInfo extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'personal_information_id', 'Skill', 'Recognition', 'Membership' ];
+    protected $fillable = [ 'personal_information_id', 'skill', 'recognition', 'membership' ];
 
     public function personalinformation()
     {

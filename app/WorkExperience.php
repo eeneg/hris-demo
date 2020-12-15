@@ -15,13 +15,14 @@ class WorkExperience extends Model
 
     protected $fillable = [
         'personal_information_id',
-        'InclusiveDates',
-        'Position',
-        'Department',
-        'MonthlySalary',
-        'SalaryGrade',
-        'StatusOfAppointment',
-        'GovService'
+        'inclusiveDateFrom',
+        'inclusiveDateTo',
+        'position',
+        'department',
+        'monthlySalary',
+        'salaryGrade',
+        'statusOfAppointment',
+        'govService'
     ];
 
     public function personalinformation()

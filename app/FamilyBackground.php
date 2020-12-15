@@ -15,20 +15,20 @@ class FamilyBackground extends Model
 
     protected $fillable = [
                     'personal_information_id',
-                    'SpouseSurname',
-                    'SpouseFirstname',
-                    'SpouseMiddlename',
-                    'SpouseOccupation',
-                    'SpouseBussiness',
-                    'SpouseBussinessAddress',
-                    'SpouseTelephone',
-                    'FatherSurname',
-                    'FatherFirstname',
-                    'FatherMiddlename',
-                    'MotherSurname',
-                    'MotherFirstname',
-                    'MotherMiddlename',
-                    'MotherMaidenName'
+                    'spouseSurname',
+                    'spouseFirstname',
+                    'spouseMiddlename',
+                    'spouseOccupation',
+                    'spouseBussiness',
+                    'spouseBussinessAddress',
+                    'spouseTelephone',
+                    'fatherSurname',
+                    'fatherFirstname',
+                    'fatherMiddlename',
+                    'motherSurname',
+                    'motherFirstname',
+                    'motherMiddlename',
+                    'motherMaidenName'
     ];
 
     public function personalinformation()

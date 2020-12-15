@@ -44,12 +44,18 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('plantilladepartmentcontent', 'API\PlantillaContentController@plantilladepartmentcontent');
     Route::post('previousplantilla', 'API\PlantillaController@previousplantilla');
     Route::post('forvacants', 'API\PersonalInformationController@forvacants');
-});
+
+    Route::get('edit', 'API\PersonalInformationController@edit');
+    Route::patch('personalinformation', 'API\PersonalInformationController@update');
+// });
 
 //api test
 // Route::get('per', 'API\PersonalInformationController@index');
 // Route::get('salary', 'API\SalaryGradeController@index');
 // Route::get('salarygrade', 'API\SalaryScheduleController@index');
+Route::get('edit', 'API\PersonalInformationController@edit');
+
+
 
 
 

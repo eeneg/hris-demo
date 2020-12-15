@@ -61,7 +61,7 @@ class PDSQuestion extends Model
     public static function boot(){
         parent::boot();
         self::creating(function($model){
-            $model->PK_PDSQuestionId = self::generateUuid();
+            $model->id = self::generateUuid();
         });
     }
 

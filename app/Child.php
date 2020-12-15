@@ -14,7 +14,7 @@ class Child extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'personal_information_id', 'Name', 'Birthday' ];
+    protected $fillable = [ 'personal_information_id', 'name', 'birthday' ];
 
     public function personalinformation(){
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
