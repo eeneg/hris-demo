@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::get('edit', 'API\PersonalInformationController@edit');
     Route::patch('personalinformation', 'API\PersonalInformationController@update');
-// });
+});
 
 //api test
 // Route::get('per', 'API\PersonalInformationController@index');
