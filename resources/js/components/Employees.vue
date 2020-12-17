@@ -915,7 +915,7 @@
                     {
                         Swal.fire(
                                 'Failed',
-                                'Try generating a barcode first',
+                                'Missing Barcode or Employee Department/Position',
                                 'warning'
                         )
                     }

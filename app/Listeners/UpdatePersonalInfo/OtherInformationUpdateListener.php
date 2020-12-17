@@ -35,9 +35,9 @@ class OtherInformationUpdateListener
 
             foreach($this->request->otherinfos as $key => $value)
             {
-                array_push($arr, data_get($value, 'id'));
                 if(count($value) > 0)
                 {
+                    array_push($arr, data_get($value, 'id'));
                     $event->pi->otherinfos()->updateOrCreate(['id'=> data_get($value, 'id')],$value);
                 }
             }

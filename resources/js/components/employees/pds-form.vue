@@ -158,7 +158,7 @@
 
             <div class="row">
                 <div class="form-group  col-md-6">
-                    <label for="citizenship">citizenship</label>
+                    <label for="citizenship">Citizenship</label>
                     <select name="citizenship" id="citizenship" class="form-control" v-model="form.citizenship">
                         <option>Filipino</option>
                         <option>Dual citizenship (By Birth)</option>

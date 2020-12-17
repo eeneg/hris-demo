@@ -34,9 +34,9 @@ class VoluntaryWorkUpdateListener
 
             foreach($this->request->voluntaryworks as $key => $value)
             {
-                array_push($arr, data_get($value, 'id'));
                 if(count($value) > 0)
                 {
+                    array_push($arr, data_get($value, 'id'));
                     $event->pi->voluntaryworks()->updateOrCreate(['id'=> data_get($value, 'id')],$value);
                 }
             }

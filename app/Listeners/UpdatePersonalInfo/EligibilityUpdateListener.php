@@ -35,9 +35,9 @@ class EligibilityUpdateListener
 
             foreach($this->request->eligibilities as $key => $value)
             {
-                array_push($arr, data_get($value, 'id'));
                 if(count($value) > 0)
                 {
+                    array_push($arr, data_get($value, 'id'));
                     $event->pi->eligibilities()->updateOrCreate(['id' => data_get($value, 'id')], $value);
                 }
             }
