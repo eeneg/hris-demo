@@ -1604,7 +1604,7 @@ export default {
 
             if(!data.educationalbackground)
             {
-                data.pdsquestion = {}
+                data.educationalbackground = {}
             }
 
             if(!data.pdsquestion)
