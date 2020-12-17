@@ -12,7 +12,6 @@
     <body>
 
         <div class="container-fluid" style="display: flex;" >
-            {{-- {{ $employee->firstname }} --}}
 
             <div style=" border: solid 1px; width: 204px; height: 324.768px; text-align: center;">
                 <img src="./storage/employee_id_files/small-id/{{ $dept }}.jpg" alt="logo" width="100%" height="100%" style="position: absolute">

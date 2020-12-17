@@ -1567,7 +1567,6 @@ export default {
                 case data = 'otherinfos':
                       this.form.otherinfos.push({})
                 break;
-
             }
         },
         deleteFields: function(data, index)
@@ -1597,7 +1596,23 @@ export default {
         fetchData: function(data)
         {
             this.editMode = true
-            this.form = data
+
+            if(!data.familybackground)
+            {
+                data.familybackground = {}
+            }
+
+            if(!data.educationalbackground)
+            {
+                data.pdsquestion = {}
+            }
+
+            if(!data.pdsquestion)
+            {
+                data.pdsquestion = {}
+            }
+
+            this.form.fill(data)
         }
 
     },

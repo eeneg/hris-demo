@@ -14,6 +14,7 @@ use App\Plantilla;
 use App\Events\PersonalInfoRegistered;
 use App\Events\PersonalInfoUpdated;
 
+
 class PersonalInformationController extends Controller
 {
     /**

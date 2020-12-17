@@ -27,6 +27,6 @@ class EducationalBackgroundUpdateListener
      */
     public function handle(PersonalInfoUpdated $event)
     {
-        $event->pi->educationalbackground()->first()->update($this->request->educationalbackground);
+        $event->pi->educationalbackground()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->educationalbackground);
     }
 }

@@ -35,10 +35,17 @@ class OtherInformationUpdateListener
 
             foreach($this->request->otherinfos as $key => $value)
             {
-                if(count($value) > 0)
-                {
+                $bool = !is_null(data_get($value, 'id')) && !data_get($value, 'skill') && !data_get($value, 'recognition') && !data_get($value, 'membership');
+
+                if($bool){
+
+                    DB::table('other_infos')->where('id', data_get($value, 'id'))->delete();
+
+                }else if(count($value) > 0){
+
                     array_push($arr, data_get($value, 'id'));
                     $event->pi->otherinfos()->updateOrCreate(['id'=> data_get($value, 'id')],$value);
+
                 }
             }
 

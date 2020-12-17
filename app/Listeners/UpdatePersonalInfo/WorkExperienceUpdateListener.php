@@ -35,8 +35,15 @@ class WorkExperienceUpdateListener
 
             foreach($this->request->workexperiences as $key => $value)
             {
-                if(count($value) > 0)
-                {
+                $bool = !is_null(data_get($value, 'id')) && !data_get($value, 'inclusiveDateFrom') && !data_get($value, 'inclusiveDateTo') && !data_get($value, 'position')
+                        && !data_get($value, 'department') && !data_get($value, 'monthlySalary') && !data_get($value, 'salaryGrade') && !data_get($value, 'statusOfAppointment')
+                        && !data_get($value, 'govService');
+
+                if($bool){
+
+                    DB::table('voluntary_works')->where('id', data_get($value, 'id'))->delete();
+
+                }else if(count($value) > 0){
                     array_push($arr, data_get($value, 'id'));
                     $event->pi->workexperiences()->updateOrCreate(['id' => data_get($value, 'id')], $value);
                 }

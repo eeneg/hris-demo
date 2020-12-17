@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Child;
 
 
 class FamilyBackgroundUpdateListener
@@ -30,7 +31,7 @@ class FamilyBackgroundUpdateListener
      */
     public function handle(PersonalInfoUpdated $event)
     {
-        $event->pi->familybackground()->first()->update($this->request->familybackground);
+        $event->pi->familybackground()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->familybackground);
 
         if($this->request->children !== null)
         {
@@ -40,12 +41,17 @@ class FamilyBackgroundUpdateListener
             foreach($this->request->children as $key => $value)
             {
 
-                if(count($value) > 0)
+                if(!is_null(data_get($value, 'id')) && !data_get($value, 'name') && !data_get($value, 'birthday'))
                 {
+
+                    DB::table('children')->where('id', data_get($value, 'id'))->delete();
+
+                }else if(count($value) > 0){
+
                     array_push($arr, data_get($value, 'id'));
                     $event->pi->children()->updateOrCreate(['id' => data_get($value, 'id')], $value);
-                }
 
+                }
             }
 
             DB::table('children')->whereNotIn('id', $arr)->delete();

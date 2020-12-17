@@ -27,6 +27,6 @@ class PDSQuestionUpdateListener
      */
     public function handle(PersonalInfoUpdated $event)
     {
-        $event->pi->pdsquestion()->first()->update($this->request->pdsquestion);
+        $event->pi->pdsquestion()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->pdsquestion);
     }
 }

@@ -53,7 +53,7 @@ class PDSQuestion extends Model
         'dateissued',
     ];
 
-    public function pdsquestionpersonalinformation()
+    public function personalinformation()
     {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
