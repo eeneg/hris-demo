@@ -253,7 +253,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Resize</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closed">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -324,14 +324,8 @@
                 const canvas = this.$refs.clipper.clip();
                 this.form.avatar = canvas.toDataURL("image/jpeg", 1);
             },
-            closed: function()
-            {
-                this.getAvatar()
-                console.log('asd')
-            },
             updateUser() {
                 this.$Progress.start();
-                console.log(this.form)
                 this.form.put('api/profile')
                     .then(({ data }) => {
                         toast.fire({
