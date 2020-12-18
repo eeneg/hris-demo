@@ -15,6 +15,20 @@ import Swal from 'sweetalert2'
 import Gate from './gate'
 import PDFObject from 'pdfobject'
 
+import Vue from "vue";
+import VueRx from "vue-rx";
+import VuejsClipper from "vuejs-clipper/dist/vuejs-clipper.umd";
+import "vuejs-clipper/dist/vuejs-clipper.css";
+
+Vue.use(VueRx);
+Vue.use(VuejsClipper,{
+    components: {
+        clipperPreview: true,
+        clipperFixed: true,
+        clipperUpload: true
+     }
+});
+
 window.Swal = Swal;
 window.Form = Form;
 window.PDFObject = PDFObject;

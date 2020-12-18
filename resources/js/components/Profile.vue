@@ -245,7 +245,40 @@
             </div>
             <!-- /.card -->
           </div>
-        
+
+          <!-- image resize modal -->
+
+            <div class="modal" id="image-modal" data-backdrop="static" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Resize</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closed">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <clipper-fixed  class="my-clipper" :round="true" ref="clipper" preview="my-preview" :src="getAvatar()" ><div class="placeholder" slot="placeholder">No image</div></clipper-fixed>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <clipper-preview name="my-preview" class="my-clipper">
+                                        <div class="placeholder" slot="placeholder">preview area</div>
+                                    </clipper-preview>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="getResult">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     </div>
 </template>
 
@@ -274,6 +307,7 @@
                     reader.onloadend = (file) => {
                         // console.log('RESULT', reader.result)
                         this.form.avatar = reader.result;
+                        $('#image-modal').modal('show')
                     }
                     reader.readAsDataURL(file);
                 } else {
@@ -285,10 +319,19 @@
                         'error'
                     )
                 }
-                
+            },
+            getResult: function () {
+                const canvas = this.$refs.clipper.clip();
+                this.form.avatar = canvas.toDataURL("image/jpeg", 1);
+            },
+            closed: function()
+            {
+                this.getAvatar()
+                console.log('asd')
             },
             updateUser() {
                 this.$Progress.start();
+                console.log(this.form)
                 this.form.put('api/profile')
                     .then(({ data }) => {
                         toast.fire({
@@ -311,7 +354,7 @@
                     let prefix = (this.form.avatar.match(/\//) ? '' : '/storage/project_files/');
                     return prefix + this.form.avatar;
                 }
-            }, 
+            },
             loadProfile() {
                 axios.get('api/profile')
                 .then( ({ data }) => {
