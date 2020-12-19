@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
+    Route::put('plantillacontentabolish', 'Api\PlantillaContentController@plantillacontentabolish');
 
     Route::post('verifybarcode', 'Api\BarcodeController@verify');
 

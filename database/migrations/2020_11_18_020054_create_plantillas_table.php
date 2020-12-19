@@ -15,6 +15,10 @@ class CreatePlantillasTable extends Migration
     {
         Schema::create('plantillas', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
+            $table->uuid('salary_schedule_auth_id');
+            $table->foreign('salary_schedule_auth_id')->references('id')->on('salary_schedules')->onDelete('cascade');
+            $table->uuid('salary_schedule_prop_id');
+            $table->foreign('salary_schedule_prop_id')->references('id')->on('salary_schedules')->onDelete('cascade');
             $table->string('year');
             $table->date('date_prepared')->nullable();
             $table->date('date_approved')->nullable();

@@ -13,12 +13,17 @@ class Plantilla extends Model
 
     protected $primaryKey = 'id';
 
+    protected $with = ['salaryproposedschedule'];
 
     protected $fillable = [ 'year', 'date_prepared', 'date_approved' ];
 
     public function plantilla_contents()
     {
         return $this->hasMany('App\PlantillaContent', 'plantilla_id');
+    }
+
+    public function salaryproposedschedule(){
+        return $this->belongsTo('App\SalarySchedule', 'salary_schedule_prop_id');
     }
 
     public static function boot(){

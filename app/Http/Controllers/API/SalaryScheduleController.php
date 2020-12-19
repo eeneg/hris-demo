@@ -15,8 +15,7 @@ class SalaryScheduleController extends Controller
      */
     public function index(Request $request)
     {
-        $sc = SalarySchedule::all();
-
+        $sc = SalarySchedule::orderBy('effective_date', 'desc')->get();
         return $sc;
     }
 

@@ -5,19 +5,22 @@
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Annual Plantilla {{ this.$parent.settings.plantilla }}</h2>
                     <div class="row mt-3">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group" style="margin-bottom:0;">
-                                <label style="margin: 0;font-weight: normal;">Select Department</label>
+                                <label style="margin: 0;font-weight: normal;line-height:25px;">Select Department</label>
                                 <select class="custom-select" v-model="selectedDepartment" @change="loadContents()">
-                                    <option v-for="department in departments" :key="department.id">{{ department.title }}</option>
+                                    <option v-for="department in departments" :key="department.id">{{ department.address }}</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-8">
+                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="addItemModal()">Create New Item</button>
+                        </div>                        
                     </div>
                 </div>
 
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-bordered table-striped text-nowrap plantilla-table">
+                    <table class="table table-hover table-bordered table-striped text-nowrap plantilla-table">
                         <thead>
                             <tr>
                                 <th colspan="2" rowspan="2" style="font-size: 1rem;">Item No.</th>
@@ -45,13 +48,13 @@
                             <tr v-for="record in records" :key="record.id">
                                 <td style="text-align: center;">{{ record.old_number }}</td>
                                 <td style="text-align: center;">{{ record.new_number }}</td>
-                                <td>{{ record.position }}</td>
+                                <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td>
                                 <td>{{ record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT' }}</td>
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
-                                <td style="text-align: right;">{{ record.salaryauthorized !== null ? ((record.salaryauthorized.amount * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
+                                <td style="text-align: right;">{{ record.salaryauthorized !== null ? ((record.working_time == 'Full-time' ? record.salaryauthorized.amount * 12 : (record.salaryauthorized.amount / 2) * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
                                 <td style="text-align: center;">{{ record.salaryproposed !== null ? (record.salaryproposed.grade + ' / ' + record.salaryproposed.step) : '' }}</td>
-                                <td style="text-align: right;">{{ record.salaryproposed !== null ? ((record.salaryproposed.amount * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
-                                <td style="text-align: right;">{{ getDifference(record.salaryauthorized, record.salaryproposed) }}</td>
+                                <td style="text-align: right;">{{ record.salaryproposed !== null ? ((record.working_time == 'Full-time' ? record.salaryproposed.amount * 12 : (record.salaryproposed.amount / 2) * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
+                                <td style="text-align: right;">{{ getDifference(record) }}</td>
                                 <td style="text-align: center;"><a href="#" @click.prevent="showEditModal(record)"><i class="fas fa-edit"></i></a></td>
                             </tr>
                         </tbody>
@@ -63,6 +66,7 @@
             </div>
         </div>
 
+        <!-- Edit Modal -->
         <div class="modal fade" id="plantilla-content-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -81,13 +85,19 @@
                                     <option :value="forvacant.id" v-for="forvacant in forvacants" :key="forvacant.id">{{ forvacant.surname + ', ' + forvacant.firstname + ' ' + (forvacant.nameextension != '' ? forvacant.nameextension + ' ' : '') + forvacant.middlename }}</option>
                                 </select>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0.3rem;">
-                                <label for="new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
-                                <input v-model="form.new_number" id="new_number" class="form-control" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0.3rem;">
-                                <label for="position" style="font-weight: normal; margin: 0;">Position</label>
-                                <input v-model="form.position" id="position" class="form-control" type="text" name="position" placeholder="Position" required>
+                            <div class="row">
+                                <div class="col-3" style="padding-right: 5px;">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="new_number" style="font-weight: normal; margin: 0;">Item No.</label>
+                                        <input v-model="form.new_number" id="new_number" value="" class="form-control" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
+                                    </div>
+                                </div>
+                                <div class="col-9" style="padding-left: 5px;">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="position" style="font-weight: normal; margin: 0;">Position</label>
+                                        <input v-model="form.position" id="position" class="form-control" type="text" name="position" placeholder="Position" required>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
@@ -104,9 +114,70 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-footer" style="display: block;">
+                            <button v-if="form.surname == '' && form.salaryauthorized" type="button" class="btn btn-danger" @click="abolishItem()">Abolish Item</button>
+                            <button v-if="form.surname == '' && form.salaryauthorized == null" type="button" class="btn btn-danger" @click="removeItem()">Remove</button>
+                            <button type="submit" class="btn btn-success mb-3" style="float: right;">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Item Modal -->
+        <div class="modal fade" id="add-item-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Plantilla Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form autocomplete="off" @submit.prevent="addPlantillaItem()">
+                        <div class="modal-body">
+                            <p style="margin-bottom: 5px;"><b>Department: </b>{{ selectedDepartment }}</p>
+                            <div class="row">
+                                <div class="col-3" style="padding-right: 5px;">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
+                                        <input v-model="form.new_number" id="add_new_number" class="form-control" step="1" :min="itemMin" :max="(parseInt(itemMax) + 1)" type="number" name="new_number" placeholder="New Item Number" required>
+                                    </div>
+                                </div>
+                                <div class="col-9" style="padding-left: 5px;">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_position" style="font-weight: normal; margin: 0;">Position</label>
+                                        <input v-model="form.position" id="add_position" class="form-control" type="text" name="position" placeholder="Position" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <div class="custom-control custom-radio mr-2" style="display: inline;">
+                                    <input class="custom-control-input" type="radio" id="customRadio1" value="Full-time" v-model="form.working_time" name="working_time" checked>
+                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal; margin: 0;">Full-time</label>
+                                </div>
+                                <div class="custom-control custom-radio" style="display: inline;">
+                                    <input class="custom-control-input" type="radio" id="customRadio2" value="Part-time" v-model="form.working_time" name="working_time">
+                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal; margin: 0;">Part-time</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
+                                        <input v-model="form.salaryproposed.grade" id="add_budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
+                                        <input v-model="form.salaryproposed.step" id="add_budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Update</button>
+                            <button type="submit" class="btn btn-success">Create</button>
                         </div>
                     </form>
                 </div>
@@ -121,8 +192,8 @@
         data() {
             return {
                 departments: {},
-                itemMin: '',
-                itemMax: '',
+                itemMin: 0,
+                itemMax: 0,
                 selectedDepartment: '',
                 records: {},
                 forvacants: {},
@@ -131,24 +202,91 @@
                 form: new Form( {
                     'id': '',
                     'personal_information_id': '',
+                    'department': '',
                     'firstname': '',
                     'middlename': '',
                     'nameextension': '',
                     'new_number': '',
                     'old_number': '',
+                    'original_position': '',
+                    'original_item_number': '',
                     'position': '',
                     'position_id': '',
                     'surname': '',
+                    'working_time': 'Full-time',
                     'salaryauthorized': {},
                     'salaryproposed': {}
                 })
             }
         },
         methods: {
+            addItemModal() {
+                $('#add-item-modal').modal('show');
+                this.form.reset();
+                this.form.department = this.selectedDepartment;
+            },
+            removeItem() {
+                $('#plantilla-content-modal').modal('hide');
+                Swal.fire({
+                    title: 'Are you sure you want to remove this item?',
+                    text: this.form.original_position + ' (Item No. ' + this.form.original_item_number + ')',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Remove'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$Progress.start();
+                        axios.delete('api/plantillacontent/' + this.form.id)
+                            .then(({data}) => {
+                                this.loadContents();
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Record removed successfully'
+                                });
+                                this.$Progress.finish();
+                            })
+                            .catch(error => {
+                                this.$Progress.fail();
+                            });
+                    }
+                });
+            },
+            abolishItem() {
+                $('#plantilla-content-modal').modal('hide');
+                Swal.fire({
+                    title: 'Are you sure you want to abolish this item?',
+                    text: this.form.original_position + ' (Item No. ' + this.form.original_item_number + ')',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Proceed'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$Progress.start();
+                        this.form.put('api/plantillacontentabolish')
+                            .then(() => {
+                                this.loadContents();
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Record updated successfully'
+                                });
+                                this.$Progress.finish();
+                            })
+                            .catch(() => {
+                                this.$Progress.fail();
+                            });
+                    }
+                });
+            },
             showEditModal(record) {
                 $('#plantilla-content-modal').modal('show');
                 this.form.reset();
                 this.form.fill(record);
+                this.form.original_position = record.position;
+                this.form.original_item_number = record.new_number;
                 this.plantillaNameForEdit =  record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT';
                 axios.post('api/forvacants', {personal_information_id: this.form.personal_information_id})
                     .then(({data}) => {
@@ -158,8 +296,11 @@
                         console.log(error.response.data.message);
                     });
             },
-            getDifference(authorized, proposed) {
-                let difference = ((proposed !== null ? proposed.amount * 12 : 0) - (authorized !== null ? authorized.amount * 12 : 0));
+            getDifference(record) {
+                let difference = ((record.salaryproposed !== null ? record.salaryproposed.amount * 12 : 0) - (record.salaryauthorized !== null ? record.salaryauthorized.amount * 12 : 0));
+                if (record.working_time == 'Part-time') {
+                    difference = difference / 2;
+                }
                 return difference < 0 ? '(' + (difference * -1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')' : difference.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             },
             getPreviousPlantilla() {
@@ -169,6 +310,21 @@
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
+                    });
+            },
+            addPlantillaItem() {
+                this.form.post('api/plantillacontent')
+                    .then(() => {
+                        this.loadContents();
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Item added successfully'
+                        });
+                        $('#add-item-modal').modal('hide');     
+                        this.$Progress.finish();
+                    })
+                    .catch(error => {
+                        this.$Progress.fail();
                     });
             },
             updatePlantillaRecord() {
@@ -191,7 +347,7 @@
                 axios.get('api/department')
                     .then(({data}) => {
                         this.departments = data.data;
-                        this.selectedDepartment = data.data[0].title;
+                        this.selectedDepartment = data.data[0].address;
                         this.loadContents();
                         this.getPreviousPlantilla();
                     })

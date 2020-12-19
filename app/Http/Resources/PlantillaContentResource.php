@@ -21,6 +21,7 @@ class PlantillaContentResource extends JsonResource
             'old_number' => $this->old_number,
             'new_number' => $this->new_number,
             'order_number' => $this->order_number,
+            'working_time' => $this->working_time,
             'position' => $this->position ? $this->position->title : '',
             'position_id' =>$this->position ? $this->position->id : '',
             'firstname' => $this->personalinformation ? $this->personalinformation->firstname : '',

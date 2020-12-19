@@ -9,6 +9,7 @@ use App\Setting;
 use App\Plantilla;
 use App\Position;
 use App\SalaryGrade;
+use App\Department;
 use App\Http\Resources\PlantillaContentResource;
 
 class PlantillaContentController extends Controller
@@ -29,7 +30,7 @@ class PlantillaContentController extends Controller
         $plantillacontents = PlantillaContent::select('plantilla_contents.*')
             ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
             ->join('departments', 'positions.department_id', '=', 'departments.id')
-            ->where('departments.title', $request->department)
+            ->where('departments.address', $request->department)
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->orderBy('order_number')
             ->get();
@@ -44,7 +45,35 @@ class PlantillaContentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $newPosition = Position::create([
+            'department_id' => Department::where('address', $request->department)->first()->id,
+            'title' => $request->position
+        ]);
+        
+        $newPositionOrder = PlantillaContent::where('plantilla_id', $plantilla->id)->where('new_number', $request->new_number)->first();
+        if ($newPositionOrder != null) {
+            $contentUpdates = PlantillaContent::where('plantilla_id', $plantilla->id)->where('order_number', '>=', $newPositionOrder->order_number)->get();
+            foreach ($contentUpdates as $key => $value) {
+                $value->order_number = $value->order_number + 1;
+                $value->new_number = $value->new_number != null ? intval($value->new_number) + 1 : $value->new_number;
+                $value->save();
+            }
+        }
+        
+        $salaryproposed = SalaryGrade::where('salary_sched_id', $plantilla->salaryproposedschedule->id)
+                ->where('grade', intval(((object) $request->salaryproposed)->grade))->where('step', intval(((object) $request->salaryproposed)->step))
+                ->first();
+        
+        $lastOrderNumber = PlantillaContent::where('plantilla_id', $plantilla->id)->orderBy('order_number', 'desc')->first()->order_number;        
+        return PlantillaContent::create([
+            'plantilla_id' => $plantilla->id,
+            'salary_grade_prop_id' => $salaryproposed->id,
+            'position_id' => $newPosition->id,
+            'new_number' => $request->new_number,
+            'order_number' => $newPositionOrder == null ? ($lastOrderNumber + 1) : $newPositionOrder->order_number
+        ]);
     }
 
     /**
@@ -56,6 +85,24 @@ class PlantillaContentController extends Controller
     public function show($id)
     {
         //
+    }
+
+    public function plantillacontentabolish(Request $request) {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        $plantillacontent = PlantillaContent::findOrFail($request->id);
+        $plantillacontent->new_number = null;
+        $plantillacontent->salary_grade_prop_id = null;
+        $plantillacontent->save();
+
+        $toUpdate = PlantillaContent::where('plantilla_id', $plantilla->id)->where('order_number', '>', $plantillacontent->order_number)->get();
+        foreach ($toUpdate as $key => $value) {
+            $value->new_number = $value->new_number != '' ? (intval($value->new_number) - 1) : $value->new_number;
+            $value->save();
+        }
+
+        return $plantillacontent;
     }
 
     /**
@@ -135,6 +182,9 @@ class PlantillaContentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $plantillacontent = PlantillaContent::findOrFail($id);
+        $position = Position::findOrFail($plantillacontent->position_id);
+        $plantillacontent->delete();
+        $position->delete();
     }
 }

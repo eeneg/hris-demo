@@ -17,7 +17,8 @@ class SortedDepartmentsResource extends JsonResource
         // return parent::toArray($request);
         return [
             'title' => $this->position->department->title,
-            'description' => $this->position->department->description
+            'description' => $this->position->department->description,
+            'address' => $this->position->department->address,
         ];
     }
 }
