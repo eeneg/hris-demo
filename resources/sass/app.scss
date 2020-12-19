@@ -161,3 +161,30 @@
     background-color: DodgerBlue !important; 
     color: #ffffff; 
 }
+
+.nav-link2{
+    padding: 0.5rem 0rem 0.5rem 0rem;
+    display: block;
+}
+.nav-link2:hover, .nav-link2:focus{
+    text-decoration: none;
+}
+.badge2{
+    color: black;
+    padding: 0.5rem;
+}
+.badge3{
+    color: white;
+    padding: 0.5rem;
+}
+.div-menu{
+    height: 42px !important;
+}
+.div-row{
+    height: 50px !important;
+}
+// table
+.td-notif{
+    font-size: 13px; 
+    vertical-align: middle;
+}

@@ -7,89 +7,265 @@
 </style>
 
 <template>
-    <div class="row">
-      <div class="col-md-3">
-          <div class="card card-primary card-outline">
-            <div class="card-body box-profile">
-              <div class="text-center">
-                <img class="profile-user-img img-fluid img-circle" :src="getAvatar()" alt="User profile picture">
+            <div class="row">
+              <div class="col-md-3">
+                  <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                      <div class="text-center">
+                        <img class="profile-user-img img-fluid img-circle" :src="getAvatar()" alt="User profile picture">
+                      </div>
+
+                      <h3 class="profile-username text-center">{{ form.name }}</h3>
+
+                      <p class="text-muted text-center">{{ form.role }}</p>
+
+                      <ul class="nav list-group list-group-unbordered mb-3">
+                        <li class="list-group-item">
+                          <a class="nav-link2 active" href="#timeline" data-toggle="tab">Timeline</a>
+                        </li>
+                        <li class="list-group-item ">
+                          <a class="nav-link2" href="#activity" data-toggle="tab">Messages<span class="badge2 badge badge-warning float-right">69</span></a>
+                          
+                        </li>
+                        <li class="list-group-item">
+                          <a class="nav-link2" href="#notification" data-toggle="tab">Notifications<span class="badge3 badge badge-danger float-right">69</span></a>
+                        </li>
+                        <li class="list-group-item">
+                          <a class="nav-link2" href="#settings" data-toggle="tab">Settings</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+
+                  <!-- About Me Box -->
+                  <div class="card card-primary">
+                    <div class="card-header">
+                      <h3 class="card-title">About Me</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                      <strong><i class="fas fa-book mr-1"></i> Education</strong>
+
+                      <p class="text-muted">
+                        B.S. in Computer Science from the University of Tennessee at Knoxville
+                      </p>
+
+                      <hr>
+
+                      <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                      <p class="text-muted">Malibu, California</p>
+
+                      <hr>
+
+                      <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+
+                      <p class="text-muted">
+                        <span class="tag tag-danger">UI Design</span>
+                        <span class="tag tag-success">Coding</span>
+                        <span class="tag tag-info">Javascript</span>
+                        <span class="tag tag-warning">PHP</span>
+                        <span class="tag tag-primary">Node.js</span>
+                      </p>
+
+                      <hr>
+
+                      <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+
+                      <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
               </div>
-
-              <h3 class="profile-username text-center">{{ form.name }}</h3>
-
-              <p class="text-muted text-center">{{ form.role }}</p>
-
-              <ul class="list-group list-group-unbordered mb-3">
-                <li class="list-group-item">
-                  <a class="nav-link active" href="#activity" data-toggle="tab">Activity</a>
-                </li>
-                <li class="list-group-item">
-                  <a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a>
-                </li>
-                <li class="list-group-item">
-                  <a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
-                </li>
-              </ul>
-
-              <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-
-          <!-- About Me Box -->
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">About Me</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <strong><i class="fas fa-book mr-1"></i> Education</strong>
-
-              <p class="text-muted">
-                B.S. in Computer Science from the University of Tennessee at Knoxville
-              </p>
-
-              <hr>
-
-              <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
-
-              <p class="text-muted">Malibu, California</p>
-
-              <hr>
-
-              <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
-
-              <p class="text-muted">
-                <span class="tag tag-danger">UI Design</span>
-                <span class="tag tag-success">Coding</span>
-                <span class="tag tag-info">Javascript</span>
-                <span class="tag tag-warning">PHP</span>
-                <span class="tag tag-primary">Node.js</span>
-              </p>
-
-              <hr>
-
-              <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-
-              <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-      </div>
-      <div class="col-md-9">
-            <div class="card">
-              <div class="card-body">
-                <div class="tab-content">
-                  <div class="tab-pane active" id="activity">
-                    <h3>Activity</h3>
+              <div class="col-md-9">
+                
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="activity">
+                                  <div class="row mb-2">
+                            <div class="col-md-6 align-middle">
+                              <h3>Messages</h3>
+                      <!-- <ul class="nav">
+                        <li class="nav-item">
+                          <a href="compose.html" class="nav-link btn btn-success btn-block">Compose <i class="nav-icon fas fa-edit"></i></a>
+                          
+                        </li>
+                        <li class="nav-item active">
+                          <a href="#" class="nav-link">
+                            <i class="fas fa-inbox"></i> Inbox
+                            <span class="badge bg-warning float-right">12</span>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#" class="nav-link">
+                            <i class="far fa-envelope"></i> Sent
+                          </a>
+                        </li>
+                      </ul> -->
+          
+                            </div>
+                            <div class="col-md-6">
+                              <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/profile">Profile</a></li>
+                                <li class="breadcrumb-item active">Messages</li>
+                              </ol>
+                            </div>
+                            </div>
+                              <section class="content">
+              <div class="row">
+                <!-- message menu -->
+        
+              
+                <!-- end message menu -->
+                
+                <div class="col-md-12">
+                  <div class="card card-primary card-outline">
+                    <div class="card-header">
+                      <div class="card-tools">
+                        <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" placeholder="Search Contact">
+                          <div class="input-group-append">
+                            <div class="btn btn-primary">
+                              <i class="fas fa-search"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /.card-tools -->
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+                      <div class="mailbox-controls">
+                        <!-- Check all button -->
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
+                        </button>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default btn-sm"><i class="far fa-trash-alt"></i></button>
+                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-reply"></i></button>
+                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i></button>
+                        </div>
+                        <!-- /.btn-group -->
+                        <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                        <div class="float-right">
+                          1-50/200
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                          </div>
+                          <!-- /.btn-group -->
+                        </div>
+                        <!-- /.float-right -->
+                      </div>
+                      <div class="table-responsive mailbox-messages">
+                        <table class="table table-hover table-striped">
+                          <tbody>
+                          <tr>
+                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
+                            <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
+                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                            </td>
+                            <td class="mailbox-attachment"></td>
+                            <td class="mailbox-date">5 mins ago</td>
+                          </tr>
+                          <tr>
+                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
+                            <td class="mailbox-name"><a href="read-mail.html">{{form.name}}</a></td>
+                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                            </td>
+                            <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                            <td class="mailbox-date">28 mins ago</td>
+                          </tr>   
+                          <tr>
+                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
+                            <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
+                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                            </td>
+                            <td class="mailbox-attachment"></td>
+                            <td class="mailbox-date">5 mins ago</td>
+                          </tr>
+                          <tr>
+                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
+                            <td class="mailbox-name"><a href="read-mail.html">{{form.name}}</a></td>
+                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                            </td>
+                            <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                            <td class="mailbox-date">28 mins ago</td>
+                          </tr>                 
+                          <tr>
+                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
+                            <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
+                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                            </td>
+                            <td class="mailbox-attachment"></td>
+                            <td class="mailbox-date">5 mins ago</td>
+                          </tr>
+                          <tr>
+                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
+                            <td class="mailbox-name"><a href="read-mail.html">{{form.name}}</a></td>
+                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
+                            </td>
+                            <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
+                            <td class="mailbox-date">28 mins ago</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                        <!-- /.table -->
+                      </div>
+                      <!-- /.mail-box-messages -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer p-0">
+                      <div class="mailbox-controls">
+                        <!-- Check all button -->
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
+                        </button>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default btn-sm"><i class="far fa-trash-alt"></i></button>
+                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-reply"></i></button>
+                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i></button>
+                        </div>
+                        <!-- /.btn-group -->
+                        <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+                        <div class="float-right">
+                          1-50/200
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
+                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
+                          </div>
+                          <!-- /.btn-group -->
+                        </div>
+                        <!-- /.float-right -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.card -->
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </section>
                     <!-- /.post -->
                   </div>
                   <!-- /.tab-pane -->
                   <div class="tab-pane" id="timeline">
+                     <div class="row mb-2">
+                     <div class="col-md-6">
+                       <h3>Timeline</h3>
+                     </div>
+                     <div class="col-md-6">
+                       <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/profile">Profile</a></li>
+                        <li class="breadcrumb-item active">Timeline</li>
+                      </ol>
+                     </div>
+                     </div>
                     <!-- The timeline -->
                     <div class="timeline timeline-inverse">
+                     
                       <!-- timeline time label -->
                       <div class="time-label">
                         <span class="bg-danger">
@@ -239,6 +415,78 @@
                     </form>
                   </div>
                   <!-- /.tab-pane -->
+                  <!-- tab pane Notif -->
+                  <div class="tab-pane" id="notification">
+                    <div class="">
+                      <div class="row mb-2">
+                            <div class="col-md-6 align-middle">
+                              <h3>Notifications</h3>
+                            </div>
+                            <div class="col-md-6">
+                              <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/profile">Profile</a></li>
+                                <li class="breadcrumb-item active">Notifications</li>
+                              </ol>
+                            </div>
+                      </div>
+                      <ul class="list-group">
+                        
+                        <a href="" class="list-group-item list-group-item-action border-top-0 border-left-0 border-right-0">
+                          <span class="float-left" style="margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                          <li class="d-flex justify-content-between align-items-center">
+                          Cras justo odio
+                            <span >08/08/08</span>
+                          </li>
+                        </a>
+                        <a href="" class="list-group-item list-group-item-action border-top-0 border-left-0 border-right-0">
+                          <span class="float-left" style="margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                          <li class="d-flex justify-content-between align-items-center">
+                          Cras justo odio
+                            <span >08/08/08</span>
+                          </li>
+                        </a>
+                        <a href="" class="list-group-item list-group-item-action border-top-0 border-left-0 border-right-0">
+                          <span class="float-left" style="margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                          <li class="d-flex justify-content-between align-items-center">
+                          Cras justo odio
+                            <span >08/08/08</span>
+                          </li>
+                        </a>
+                        <a href="" class="list-group-item list-group-item-action border-top-0 border-left-0 border-right-0">
+                          <span class="float-left" style="margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                          <li class="d-flex justify-content-between align-items-center">
+                          Cras justo odio
+                            <span >08/08/08</span>
+                          </li>
+                        </a>
+                        <a href="" class="list-group-item list-group-item-action border-top-0 border-left-0 border-right-0">
+                          <span class="float-left" style="margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                          <li class="d-flex justify-content-between align-items-center">
+                          Cras justo odio
+                            <span >08/08/08</span>
+                          </li>
+                        </a>
+                        <a href="" class="list-group-item list-group-item-action border-top-0 border-left-0 border-right-0">
+                         <span class="float-left" style="margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                         <li class="d-flex justify-content-between align-items-center">
+                          Cras justo odio
+                            <span >08/08/08</span>
+                          </li>
+                        </a>
+                      </ul>
+                            <div class="card-tools" style="margin-top: 20px;">
+                              <ul class="pagination pagination-sm float-right">
+                                <li class="page-item"><a class="page-link" href="#">«</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">»</a></li>
+                              </ul>
+                            </div>
+                    </div>
+                  </div>
+                  <!-- end tab pane -->
+
                 </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
