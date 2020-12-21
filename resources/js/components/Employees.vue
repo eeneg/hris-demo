@@ -55,10 +55,10 @@
                                                 <a class="dropdown-item" @click.prevent="viewProfileModal(employee.id)" href="#">View Profile</a>
                                                 <a class="dropdown-item" href="#">Basic Information</a>
                                                 <a class="dropdown-item" href="#">Latest Plantilla Record</a>
-                                                <router-link class="dropdown-item" :to="{path: '/employees-pds', query: {id: employee.id}}" href="#">Edit</router-link>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
-                                                <a class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
+                                                <router-link class="dropdown-item" :to="{path: '/employees-pds', query: {id: employee.id}}" href="#">Edit Information</router-link>
+                                                <div v-if="$gate.isAdministrator()" class="dropdown-divider"></div>
+                                                <a v-if="$gate.isAdministrator()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
+                                                <a v-if="$gate.isAdministrator()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
                                             </div>
                                         </button>
                                     </div>

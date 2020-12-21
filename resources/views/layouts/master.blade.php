@@ -83,10 +83,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <img src="{{ auth()->user()->avatar == "profile.png" ?  asset('/storage/project_files/profile.png') : asset('/storage/user_avatars/' . auth()->user()->avatar) }}" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="" class="d-block">
+                        <router-link to="/profile" class="d-block" style="background-color: unset !important;color: #C2C7D0 !important;">
                             {{ auth()->user()->name }}
                             <p style="margin: 0;line-height: 0.6rem;font-size: 0.7rem;">{{ auth()->user()->role }}</p>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
 
@@ -145,6 +145,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </router-link>
                         </li>
                         @endcan
+                        @can('isAdministrator')
                         <li class="nav-item has-treeview">
                             <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-users-cog orange"></i>
@@ -166,16 +167,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <p>Users</p>
                                     </router-link>
                                 </li>
-                                @can('isAdministrator')
+                                
                                 <li class="nav-item">
                                     <router-link to="/developer" class="nav-link">
                                         <i class="fas fa-laptop-code nav-icon"></i>
                                         <p>Developer</p>
                                     </router-link>
                                 </li>
-                                @endcan
                             </ul>
                         </li>
+                        @endcan
                         <li class="nav-item">
                             <router-link to="/profile" class="nav-link">
                                 <i class="nav-icon fas fa-user blue"></i>

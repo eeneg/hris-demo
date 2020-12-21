@@ -24,7 +24,7 @@
                           <a class="nav-link2 active" href="#timeline" data-toggle="tab">Timeline</a>
                         </li>
                         <li class="list-group-item ">
-                          <a class="nav-link2" href="#activity" data-toggle="tab">Messages<span class="badge2 badge badge-warning float-right">69</span></a>
+                          <a class="nav-link2" href="#messages" data-toggle="tab">Messages<span class="badge2 badge badge-warning float-right">69</span></a>
                           
                         </li>
                         <li class="list-group-item">
@@ -85,7 +85,7 @@
                     <div class="card">
                       <div class="card-body">
                         <div class="tab-content">
-                          <div class="tab-pane active" id="activity">
+                          <div class="tab-pane" id="messages">
                                   <div class="row mb-2">
                             <div class="col-md-6 align-middle">
                               <h3>Messages</h3>
@@ -251,7 +251,7 @@
                     <!-- /.post -->
                   </div>
                   <!-- /.tab-pane -->
-                  <div class="tab-pane" id="timeline">
+                  <div class="tab-pane active" id="timeline">
                      <div class="row mb-2">
                      <div class="col-md-6">
                        <h3>Timeline</h3>
@@ -616,7 +616,7 @@
             this.$Progress.finish();
         },
         mounted() {
-            console.log('Component mounted.')
+            // console.log('Component mounted.')
         }
     }
 </script>
