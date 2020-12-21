@@ -69,6 +69,13 @@ class PersonalInformationController extends Controller
             'cellphone'             => 'required|string',
         ]);
 
+        if ($request->picture != null) {
+            $name = time() . '.' . explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
+            \Image::make($request->picture)->save(public_path('storage/pds_employeePictures/').$name);
+
+            $request->merge(['picture' => $name]);
+        }
+
         $pi = PersonalInformation::create($request->all());
 
         event(new PersonalInfoRegistered($pi));
@@ -108,6 +115,20 @@ class PersonalInformationController extends Controller
         ]);
 
         $pi = PersonalInformation::findOrFail($id);
+
+        $currentPhoto = $pi->picture;
+
+        if ($request->picture != null) {
+            $name = time() . '.' . explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
+            \Image::make($request->picture)->save(public_path('storage/pds_employeePictures/').$name);
+
+            $request->merge(['picture' => $name]);
+
+            $userPhoto = public_path('storage/pds_employeePictures/').$currentPhoto;
+            if (file_exists($userPhoto)) {
+                @unlink($userPhoto);
+            }
+        }
 
         $pi->update($request->all());
 

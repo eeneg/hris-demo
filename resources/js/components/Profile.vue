@@ -25,7 +25,7 @@
                         </li>
                         <li class="list-group-item ">
                           <a class="nav-link2" href="#messages" data-toggle="tab">Messages<span class="badge2 badge badge-warning float-right">69</span></a>
-                          
+
                         </li>
                         <li class="list-group-item">
                           <a class="nav-link2" href="#notification" data-toggle="tab">Notifications<span class="badge3 badge badge-danger float-right">69</span></a>
@@ -81,7 +81,7 @@
                   <!-- /.card -->
               </div>
               <div class="col-md-9">
-                
+
                     <div class="card">
                       <div class="card-body">
                         <div class="tab-content">
@@ -92,7 +92,7 @@
                       <!-- <ul class="nav">
                         <li class="nav-item">
                           <a href="compose.html" class="nav-link btn btn-success btn-block">Compose <i class="nav-icon fas fa-edit"></i></a>
-                          
+
                         </li>
                         <li class="nav-item active">
                           <a href="#" class="nav-link">
@@ -106,7 +106,7 @@
                           </a>
                         </li>
                       </ul> -->
-          
+
                             </div>
                             <div class="col-md-6">
                               <ol class="breadcrumb float-sm-right">
@@ -118,10 +118,10 @@
                               <section class="content">
               <div class="row">
                 <!-- message menu -->
-        
-              
+
+
                 <!-- end message menu -->
-                
+
                 <div class="col-md-12">
                   <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -178,7 +178,7 @@
                             </td>
                             <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
                             <td class="mailbox-date">28 mins ago</td>
-                          </tr>   
+                          </tr>
                           <tr>
                             <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
                             <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
@@ -194,7 +194,7 @@
                             </td>
                             <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
                             <td class="mailbox-date">28 mins ago</td>
-                          </tr>                 
+                          </tr>
                           <tr>
                             <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
                             <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
@@ -265,7 +265,7 @@
                      </div>
                     <!-- The timeline -->
                     <div class="timeline timeline-inverse">
-                     
+
                       <!-- timeline time label -->
                       <div class="time-label">
                         <span class="bg-danger">
@@ -430,7 +430,7 @@
                             </div>
                       </div>
                       <ul class="list-group">
-                        
+
                         <a href="" class="list-group-item list-group-item-action border-top-0 border-left-0 border-right-0">
                           <span class="float-left" style="margin-right: 20px;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
                           <li class="d-flex justify-content-between align-items-center">
@@ -570,7 +570,7 @@
             },
             getResult: function () {
                 const canvas = this.$refs.clipper.clip();
-                this.form.avatar = canvas.toDataURL("image/jpeg", 1);
+                this.form.avatar = canvas.toDataURL("image/png", 1);
             },
             updateUser() {
                 this.$Progress.start();

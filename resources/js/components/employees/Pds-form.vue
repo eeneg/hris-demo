@@ -1396,6 +1396,22 @@
                 </div>
             </div>
 
+            <div class="flex border-left text-white" style="background-color: #01579b">
+                <h3>ID Picture</h3>
+            </div>
+            <div class="col-md-12 p-0">
+                <div class="form-group col-md-3">
+                    <label for="picture" class="col-sm-2 col-form-label">Picture</label>
+                    <div class="col-sm-10">
+                        <input type="file" @change="uploadPicture" name="picture" ref="picture" id="picture" accept="image/jpeg, image/png">
+                    </div>
+                </div>
+                <div class="form-group col-md-9">
+                    <div>
+                        <img class="result" style="height: 100%; width: 100%;" :src="getAvatar()" alt="">
+                    </div>
+                </div>
+            </div>
 
             <div class="flex">
                 <div class="col-md-12">
@@ -1407,7 +1423,39 @@
 
         </form>
     </div>
+<!-- image resize modal -->
+<div class="modal" id="image-modal" data-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Resize</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <clipper-fixed  class="my-clipper" :ratio="132/170" ref="clipper" preview="my-preview" :src="getAvatar()"><div class="placeholder" slot="placeholder">No image</div></clipper-fixed>
+                    </div>
+
+                    <div class="col-md-6">
+                        <clipper-preview name="my-preview" class="my-clipper">
+                            <div class="placeholder" slot="placeholder">preview area</div>
+                        </clipper-preview>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="getResult">Confirm</button>
+            </div>
+        </div>
+    </div>
 </div>
+</div>
+
 </template>
 
 <script>
@@ -1518,6 +1566,34 @@ export default {
     },
     methods:
     {
+        uploadPicture:function (e) {
+            let file = e.target.files[0];
+            let reader = new FileReader();
+            if (file.size < 2111775) {
+                reader.onloadend = (file) => {
+                    // console.log('RESULT', reader.result)
+                    this.form.picture = reader.result;
+                    $('#image-modal').modal('show')
+                }
+                reader.readAsDataURL(file);
+            } else {
+                // this.form.avatar = null;
+                this.$refs.picture.value = null;
+                Swal.fire(
+                    'Oops...',
+                    'You are uploading a large file',
+                    'error'
+                )
+            }
+        },
+        getResult: function () {
+            const canvas = this.$refs.clipper.clip();
+            this.form.picture = canvas.toDataURL("image/png", 1);
+        },
+        getAvatar: function() {
+            let prefix = (this.form.picture.match(/\//) ? '' : '/storage/pds_employeePictures/');
+            return prefix + this.form.picture;
+        },
         storePersonalInformation: function()
         {
             console.log(this.form)
