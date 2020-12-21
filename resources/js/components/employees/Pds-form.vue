@@ -1403,7 +1403,7 @@
                 <div class="form-group col-md-3">
                     <label for="picture" class="col-sm-2 col-form-label">Picture</label>
                     <div class="col-sm-10">
-                        <input type="file" @change="uploadPicture" name="picture" ref="picture" id="picture" accept="image/jpeg, image/png">
+                        <input type="file" @click="reset()" @change="uploadPicture" name="picture" ref="picture" id="picture" accept="image/jpeg, image/png">
                     </div>
                 </div>
                 <div class="form-group col-md-9">
@@ -1566,6 +1566,10 @@ export default {
     },
     methods:
     {
+        reset: function()
+        {
+            $('#picture').val('');
+        },
         uploadPicture:function (e) {
             let file = e.target.files[0];
             let reader = new FileReader();
