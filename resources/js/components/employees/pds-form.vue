@@ -1412,7 +1412,7 @@
 
 <script>
 
-  class Errors
+    class Errors
     {
         constructor()
         {
@@ -1550,22 +1550,58 @@ export default {
             switch(data)
             {
                 case data = 'children':
-                    this.form.children.push({})
+                    if(this.form.children.length < 12)
+                    {
+                        this.form.children.push({})
+                    }else{
+                        Swal.fire(
+                            'Failed',
+                            'Limit Reached',
+                            'warning'
+                        )
+                    }
                 break;
                 case data = 'eligibility':
-                    this.form.eligibilities.push({})
+                    if(this.form.eligibilities.length < 7)
+                    {
+                        this.form.eligibilities.push({})
+                    }else{
+                        Swal.fire(
+                            'Failed',
+                            'Limit Reached',
+                            'warning'
+                        )
+                    }
                 break;
                 case data = 'workexperience':
                     this.form.workexperiences.push({})
                 break;
                 case data = 'voluntaryworks':
-                    this.form.voluntaryworks.push({})
+                    if(this.form.voluntaryworks.length < 7)
+                    {
+                        this.form.voluntaryworks.push({})
+                    }else{
+                        Swal.fire(
+                            'Failed',
+                            'Limit Reached',
+                            'warning'
+                        )
+                    }
                 break;
                 case data = 'trainingprograms':
                     this.form.trainingprograms.push({})
                 break;
                 case data = 'otherinfos':
-                      this.form.otherinfos.push({})
+                    if(this.form.otherinfos.length < 7)
+                    {
+                        this.form.otherinfos.push({})
+                    }else{
+                        Swal.fire(
+                            'Failed',
+                            'Limit Reached',
+                            'warning'
+                        )
+                    }
                 break;
             }
         },

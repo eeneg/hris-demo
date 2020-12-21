@@ -42,9 +42,8 @@
         </tbody>
     </table>
 
-    <p style="position:absolute;top:1348px;left:104px;white-space:nowrap" class="ft112"><i><b>SIGNATURE</b></i></p>
-    <p style="position:absolute;top:1348px;left:593px;white-space:nowrap" class="ft112"><i><b>DATE</b></i></p>
+    <p style="position:absolute;top:1357px;left:104px;white-space:nowrap" class="ft112"><i><b>SIGNATURE</b></i></p>
+    <p style="position:absolute;top:1357px;left:593px;white-space:nowrap" class="ft112"><i><b>DATE</b></i></p>
     <p style="position:absolute;top:1340px;left:386px;white-space:nowrap" class="ft15"><i><b>(Continue&#160;on&#160;separate&#160;sheet&#160;if&#160;necessary)</b></i></p>
-    {{-- <p style="position:absolute;top:1346px;left:725px;white-space:nowrap" class="ft11"><i>CS&#160;FORM&#160;212&#160;(Revised&#160;2017),&#160;Page&#160;3&#160;of&#160;4</i></p> --}}
 </div>
 @endforeach

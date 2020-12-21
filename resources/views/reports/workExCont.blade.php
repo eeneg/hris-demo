@@ -1,6 +1,6 @@
 @foreach($workExperiences_cont->chunk(39) as $chunks)
 <div class="page-break" id="workexcont-div" style="position:relative;width:918px;height:1404px; margin-top: 20px;">
-    @include('pdf.images.workExBackground')
+    @include('reports.pds_images.workExBackground')
     {{-- Work Ex --}}
         <p style="position:absolute;top:23px;left:22px;white-space:nowrap" class="ft14"><i><b>V.&#160;&#160;WORK&#160;EXPERIENCE</b></i></p>
         <p style="position:absolute;top:40px;left:22px;white-space:nowrap" class="ft11"><i><b>(Include&#160;private&#160;employment.&#160;&#160;Start&#160;from&#160;your&#160;recent&#160;work)&#160;Description&#160;of&#160;duties&#160;should&#160;be&#160;indicated&#160;in&#160;the&#160;attached&#160;Work&#160;Experience&#160;sheet.)</b></i></p>
@@ -38,7 +38,7 @@
                 <th class="" style="width: 7%;"></th>
                 <th class="" style="width: 5%;"></th>
             </tr>
-            @foreach ($workExperiences as $workexperience)
+            @foreach ($chunks as $workexperience)
             <tr>
                 <td style="border-collapse:collapse;height:29px;border-spacing:0;">
                     <p class="inputs">
