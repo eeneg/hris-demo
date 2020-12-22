@@ -205,7 +205,8 @@
         },
         created: function()
         {
-            this.getSalarySchedule()
+            this.$Progress.start();
+            this.getSalarySchedule();
             this.debouncedgetSalaryGrade = _.debounce(this.getSalaryGrade, 500);
         },
         methods:
@@ -270,10 +271,13 @@
                 var sched = _.find(this.salaryschedules, ['tranche', this.selected])
                 axios.get('api/salarygrade?id='+ sched.id)
                 .then(({data}) => {
+                    
                     this.salarygrades = _.chunk(data, 8)
                     this.display = sched
+                    this.$Progress.finish();
                 })
                 .catch(error => {
+                    this.$Progress.fail();
                     //do something
                 })
             },
@@ -340,7 +344,7 @@
             }
         },
         mounted() {
-            console.log('mounted');
+            // console.log('mounted');
         }
     }
 </script>

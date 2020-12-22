@@ -182,9 +182,19 @@ class PlantillaContentController extends Controller
      */
     public function destroy($id)
     {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
         $plantillacontent = PlantillaContent::findOrFail($id);
         $position = Position::findOrFail($plantillacontent->position_id);
         $plantillacontent->delete();
         $position->delete();
+
+        $contentUpdates = PlantillaContent::where('plantilla_id', $plantilla->id)->where('order_number', '>', $plantillacontent->order_number)->get();
+        foreach ($contentUpdates as $key => $value) {
+            $value->order_number = $value->order_number - 1;
+            $value->new_number = $value->new_number != null ? intval($value->new_number) - 1 : $value->new_number;
+            $value->save();
+        }
     }
 }

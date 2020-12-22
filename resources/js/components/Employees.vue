@@ -15,7 +15,7 @@
                                 <input v-model="search" @keyup.prevent="searchit" type="text" class="form-control" placeholder="Search">
                             </div>
                         </div>
-                        <div class="col-md-9">
+                        <div v-if="$gate.isAdministratorORAuthor()" class="col-md-9">
                             <router-link class="btn btn-primary float-right" to="/employees-pds">Create</router-link>
                         </div>
                     </div>
@@ -56,9 +56,9 @@
                                                 <a class="dropdown-item" href="#">Basic Information</a>
                                                 <a class="dropdown-item" href="#">Latest Plantilla Record</a>
                                                 <router-link class="dropdown-item" :to="{path: '/employees-pds', query: {id: employee.id}}" href="#">Edit Information</router-link>
-                                                <div v-if="$gate.isAdministrator()" class="dropdown-divider"></div>
-                                                <a v-if="$gate.isAdministrator()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
-                                                <a v-if="$gate.isAdministrator()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
+                                                <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
+                                                <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
+                                                <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
                                             </div>
                                         </button>
                                     </div>

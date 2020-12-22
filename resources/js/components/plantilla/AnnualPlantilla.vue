@@ -284,10 +284,26 @@
             showEditModal(record) {
                 $('#plantilla-content-modal').modal('show');
                 this.form.reset();
-                this.form.fill(record);
-                this.form.original_position = record.position;
-                this.form.original_item_number = record.new_number;
-                this.plantillaNameForEdit =  record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT';
+                if (record.salaryproposed) {
+                    this.form.fill(record);
+                    this.form.original_position = record.position;
+                    this.form.original_item_number = record.new_number;
+                    this.plantillaNameForEdit =  record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT';
+                } else {
+                    this.form.id = record.id;
+                    this.form.new_number = '';
+                    this.form.surname = '';
+                    this.form.original_item_number = '';
+                    this.form.original_position = record.position;
+                    this.form.personal_information_id = null;
+                    this.form.position = record.position;
+                    this.form.position_id = record.position_id;
+                    this.form.salaryauthorized = record.salaryauthorized;
+                    this.form.salaryproposed.grade = '';
+                    this.form.salaryproposed.step = '';
+                    this.form.working_time = record.working_time;
+                    this.plantillaNameForEdit = 'VACANT';
+                }
                 axios.post('api/forvacants', {personal_information_id: this.form.personal_information_id})
                     .then(({data}) => {
                         this.forvacants = data;
