@@ -116,134 +116,150 @@
                             </div>
                             </div>
                               <section class="content">
-              <div class="row">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="chat_container">
+                              <div class="job-box" style="padding-bottom: 0 !important;">
+                                <div class="job-box-filter" style="margin-bottom: 5px !important;">
+                                  <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                    <label>Show 
+                                    <select name="datatable_length" class="form-control input-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    </select>
+                                    entries</label>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                      <div class="filter-search-box text-right">
+                                        <label>Search:<input type="search" class="form-control input-sm" placeholder=""></label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="inbox-message">
+                                  <ul>
+                                    <li>
+                                      <a href="#">
+                                        <div class="message-avatar">
+                                          <img :src="getAvatar()" alt="User Profile">
+                                        </div>
+                                        <div class="message-body">
+                                          <div class="message-body-heading">
+                                            <strong>Daniel Dock</strong>
+                                            <span>7 hours ago</span>
+                                          </div>
+                                          <p>Hello, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor....</p>
+                                        </div>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <div class="message-avatar">
+                                          <img :src="getAvatar()" alt="User Profile">
+                                        </div>
+                                        <div class="message-body">
+                                          <div class="message-body-heading">
+                                            <strong>Daniel Dock</strong>
+                                            <span>7 hours ago</span>
+                                          </div>
+                                          <p>Hello, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor....</p>
+                                        </div>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <div class="message-avatar">
+                                          <img :src="getAvatar()" alt="User Profile">
+                                        </div>
+                                        <div class="message-body">
+                                          <div class="message-body-heading">
+                                            <strong>Daniel Dock</strong>
+                                            <span>7 hours ago</span>
+                                          </div>
+                                          <p>Hello, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor....</p>
+                                        </div>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <div class="message-avatar">
+                                          <img :src="getAvatar()" alt="User Profile">
+                                        </div>
+                                        <div class="message-body">
+                                          <div class="message-body-heading">
+                                            <strong>Daniel Dock</strong>
+                                            <span>7 hours ago</span>
+                                          </div>
+                                          <p>Hello, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor....</p>
+                                        </div>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <div class="message-avatar">
+                                          <img :src="getAvatar()" alt="User Profile">
+                                        </div>
+                                        <div class="message-body">
+                                          <div class="message-body-heading">
+                                            <strong>Daniel Dock</strong>
+                                            <span>7 hours ago</span>
+                                          </div>
+                                          <p>Hello, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor....</p>
+                                        </div>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <div class="message-avatar">
+                                          <img :src="getAvatar()" alt="User Profile">
+                                        </div>
+                                        <div class="message-body">
+                                          <div class="message-body-heading">
+                                            <strong>Daniel Dock</strong>
+                                            <span>7 hours ago</span>
+                                          </div>
+                                          <p>Hello, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor....</p>
+                                        </div>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <div class="message-avatar">
+                                          <img :src="getAvatar()" alt="User Profile">
+                                        </div>
+                                        <div class="message-body">
+                                          <div class="message-body-heading">
+                                            <strong>Daniel Dock</strong>
+                                            <span>7 hours ago</span>
+                                          </div>
+                                          <p>Hello, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor....</p>
+                                        </div>
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                                  
+                            </div>
+                            <div class="card-tools" style="margin-top: 20px;">
+                                    <ul class="pagination pagination-sm float-right">
+                                      <li class="page-item"><a class="page-link" href="#">«</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">»</a></li>
+                                    </ul>
+                                  </div>
+                              </div>
+                </div>
                 <!-- message menu -->
 
 
                 <!-- end message menu -->
-
-                <div class="col-md-12">
-                  <div class="card card-primary card-outline">
-                    <div class="card-header">
-                      <div class="card-tools">
-                        <div class="input-group input-group-sm">
-                          <input type="text" class="form-control" placeholder="Search Contact">
-                          <div class="input-group-append">
-                            <div class="btn btn-primary">
-                              <i class="fas fa-search"></i>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- /.card-tools -->
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body p-0">
-                      <div class="mailbox-controls">
-                        <!-- Check all button -->
-                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
-                        </button>
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-default btn-sm"><i class="far fa-trash-alt"></i></button>
-                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-reply"></i></button>
-                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i></button>
-                        </div>
-                        <!-- /.btn-group -->
-                        <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
-                        <div class="float-right">
-                          1-50/200
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
-                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
-                          </div>
-                          <!-- /.btn-group -->
-                        </div>
-                        <!-- /.float-right -->
-                      </div>
-                      <div class="table-responsive mailbox-messages">
-                        <table class="table table-hover table-striped">
-                          <tbody>
-                          <tr>
-                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
-                            <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
-                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                            </td>
-                            <td class="mailbox-attachment"></td>
-                            <td class="mailbox-date">5 mins ago</td>
-                          </tr>
-                          <tr>
-                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
-                            <td class="mailbox-name"><a href="read-mail.html">{{form.name}}</a></td>
-                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                            </td>
-                            <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                            <td class="mailbox-date">28 mins ago</td>
-                          </tr>
-                          <tr>
-                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
-                            <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
-                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                            </td>
-                            <td class="mailbox-attachment"></td>
-                            <td class="mailbox-date">5 mins ago</td>
-                          </tr>
-                          <tr>
-                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
-                            <td class="mailbox-name"><a href="read-mail.html">{{form.name}}</a></td>
-                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                            </td>
-                            <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                            <td class="mailbox-date">28 mins ago</td>
-                          </tr>
-                          <tr>
-                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
-                            <td class="mailbox-name"><a href="#chat" data-toggle="tab">{{form.name}}</a></td>
-                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                            </td>
-                            <td class="mailbox-attachment"></td>
-                            <td class="mailbox-date">5 mins ago</td>
-                          </tr>
-                          <tr>
-                            <td class="mailbox-star"><a href="#"><img class="direct-chat-img" :src="getAvatar()" alt="message user image"></a></td>
-                            <td class="mailbox-name"><a href="read-mail.html">{{form.name}}</a></td>
-                            <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                            </td>
-                            <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                            <td class="mailbox-date">28 mins ago</td>
-                          </tr>
-                          </tbody>
-                        </table>
-                        <!-- /.table -->
-                      </div>
-                      <!-- /.mail-box-messages -->
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer p-0">
-                      <div class="mailbox-controls">
-                        <!-- Check all button -->
-                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
-                        </button>
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-default btn-sm"><i class="far fa-trash-alt"></i></button>
-                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-reply"></i></button>
-                          <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i></button>
-                        </div>
-                        <!-- /.btn-group -->
-                        <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
-                        <div class="float-right">
-                          1-50/200
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i></button>
-                            <button type="button" class="btn btn-default btn-sm"><i class="fas fa-chevron-right"></i></button>
-                          </div>
-                          <!-- /.btn-group -->
-                        </div>
-                        <!-- /.float-right -->
-                      </div>
-                    </div>
-                  </div>
-                  <!-- /.card -->
-                </div>
+                
+                
                 <!-- /.col -->
               </div>
               <!-- /.row -->
