@@ -1595,8 +1595,11 @@ export default {
             this.form.picture = canvas.toDataURL("image/png", 1);
         },
         getAvatar: function() {
-            let prefix = (this.form.picture.match(/\//) ? '' : '/storage/pds_employeePictures/');
-            return prefix + this.form.picture;
+            if(this.form.picture != null)
+            {
+                let prefix = (this.form.picture.match(/\//) ? '' : '/storage/pds_employeePictures/');
+                return prefix + this.form.picture;
+            }
         },
         storePersonalInformation: function()
         {
@@ -1728,7 +1731,7 @@ export default {
                 data.pdsquestion = {}
             }
 
-            this.form.fill(data)
+            this.form = data
         }
 
     },
