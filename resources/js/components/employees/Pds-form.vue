@@ -1437,7 +1437,7 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <clipper-fixed  class="my-clipper" :ratio="132/170" ref="clipper" preview="my-preview" :src="getAvatar()"><div class="placeholder" slot="placeholder">No image</div></clipper-fixed>
+                        <clipper-fixed  class="my-clipper" :round="true" ref="clipper" preview="my-preview" :src="getAvatar()"><div class="placeholder" slot="placeholder">No image</div></clipper-fixed>
                     </div>
 
                     <div class="col-md-6">
@@ -1603,7 +1603,6 @@ export default {
         },
         storePersonalInformation: function()
         {
-            console.log(this.form)
             axios.post('api/personalinformation', this.form)
             .then(respose => {
                 Swal.fire(
@@ -1626,7 +1625,6 @@ export default {
                 )
             })
             .catch(error => this.errors.record(error.response.data.errors))
-            console.log(this.form);
         },
         addFields: function(data)
         {
@@ -1731,7 +1729,7 @@ export default {
                 data.pdsquestion = {}
             }
 
-            this.form = data
+            this.form.fill(data)
         }
 
     },

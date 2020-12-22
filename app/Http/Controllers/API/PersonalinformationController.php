@@ -118,7 +118,7 @@ class PersonalInformationController extends Controller
 
         $currentPhoto = $pi->picture;
 
-        if ($request->picture != null) {
+        if ($request->picture != $currentPhoto) {
             $name = time() . '.' . explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
             \Image::make($request->picture)->save(public_path('storage/pds_employeePictures/').$name);
 
