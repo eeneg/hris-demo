@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class SortedDepartmentsResource extends JsonResource
+class SortedDepartmentsResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +14,20 @@ class SortedDepartmentsResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
+        return $this->collection->map(function ($item) {
+            return [
+                'title' => $item->position->department->title,
+                'description' => $item->position->department->description,
+                'address' => $item->position->department->address,
+            ];
+        });
+    }
+
+    public function with($request)
+    {
         return [
-            'title' => $this->position->department->title,
-            'description' => $this->position->department->description,
-            'address' => $this->position->department->address,
+            'version' => '1.0.0',
+            'author_url' => url('http://www.davsurians.com.ph/')
         ];
     }
 }

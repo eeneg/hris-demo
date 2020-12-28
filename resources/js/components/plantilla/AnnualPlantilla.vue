@@ -14,6 +14,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
+                            <button style="float: right;margin-top: 25px;" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="addItemModal()">Create New Item</button>
                         </div>                        
                     </div>
@@ -55,7 +56,7 @@
                                 <td style="text-align: center;">{{ record.salaryproposed !== null ? (record.salaryproposed.grade + ' / ' + record.salaryproposed.step) : '' }}</td>
                                 <td style="text-align: right;">{{ record.salaryproposed !== null ? ((record.working_time == 'Full-time' ? record.salaryproposed.amount * 12 : (record.salaryproposed.amount / 2) * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
                                 <td style="text-align: right;">{{ getDifference(record) }}</td>
-                                <td style="text-align: center;"><a href="#" @click.prevent="showEditModal(record)"><i class="fas fa-edit"></i></a></td>
+                                <td style="text-align: center;"><a href="#" @click.prevent="record.new_number ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.new_number ?'fas fa-edit' : 'fas fa-history'"></i></a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -184,6 +185,66 @@
             </div>
         </div>
 
+        <!-- Duplicate Plantilla Modal -->
+        <div class="modal fade" id="duplicate-plantilla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Duplicate Annual Plantilla {{ this.$parent.settings.plantilla }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form autocomplete="off" @submit.prevent="duplicatePlantilla()">
+                        <div class="modal-body">
+                            <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ selectedDepartment }}</p>
+                            <div class="row">
+                                <div class="col-3" style="padding-right: 5px;">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
+                                        <input v-model="form.new_number" id="add_new_number" class="form-control" step="1" :min="itemMin" :max="(parseInt(itemMax) + 1)" type="number" name="new_number" placeholder="New Item Number" required>
+                                    </div>
+                                </div>
+                                <div class="col-9" style="padding-left: 5px;">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_position" style="font-weight: normal; margin: 0;">Position</label>
+                                        <input v-model="form.position" id="add_position" class="form-control" type="text" name="position" placeholder="Position" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <div class="custom-control custom-radio mr-2" style="display: inline;">
+                                    <input class="custom-control-input" type="radio" id="customRadio1" value="Full-time" v-model="form.working_time" name="working_time" checked>
+                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal; margin: 0;">Full-time</label>
+                                </div>
+                                <div class="custom-control custom-radio" style="display: inline;">
+                                    <input class="custom-control-input" type="radio" id="customRadio2" value="Part-time" v-model="form.working_time" name="working_time">
+                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal; margin: 0;">Part-time</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
+                                        <input v-model="form.salaryproposed.grade" id="add_budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="add_budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
+                                        <input v-model="form.salaryproposed.step" id="add_budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -224,6 +285,45 @@
                 $('#add-item-modal').modal('show');
                 this.form.reset();
                 this.form.department = this.selectedDepartment;
+            },
+            duplicatePlantilla() {
+                
+            },
+            duplicatePlantillaModal() {
+                $('duplicate-plantilla-modal').modal('show');
+            },
+            showRevertConfirmation(record) {
+                axios.get('api/abolisheditem/' + record.id)
+                    .then(({data}) => {
+                        Swal.fire({
+                            title: 'Revert abolished item?',
+                            text: record.position + ' (Item No. ' + data.data.new_number + ')',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Proceed'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.$Progress.start();
+                                axios.put('api/abolisheditem/' + data.data.id)
+                                    .then(({data}) => {
+                                        this.loadContents();
+                                        toast.fire({
+                                            icon: 'success',
+                                            title: 'Record updated successfully'
+                                        });
+                                        this.$Progress.finish();
+                                    })
+                                    .catch(error => {
+                                        this.$Progress.fail();
+                                    });
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
             },
             removeItem() {
                 $('#plantilla-content-modal').modal('hide');

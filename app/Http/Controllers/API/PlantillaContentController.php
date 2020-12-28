@@ -10,6 +10,7 @@ use App\Plantilla;
 use App\Position;
 use App\SalaryGrade;
 use App\Department;
+use App\AbolishedItem;
 use App\Http\Resources\PlantillaContentResource;
 
 class PlantillaContentController extends Controller
@@ -34,7 +35,7 @@ class PlantillaContentController extends Controller
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->orderBy('order_number')
             ->get();
-        return PlantillaContentResource::collection($plantillacontents);
+        return new PlantillaContentResource($plantillacontents);
     }
 
     /**
@@ -92,6 +93,15 @@ class PlantillaContentController extends Controller
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
         $plantillacontent = PlantillaContent::findOrFail($request->id);
+
+        // Create Abolished Record
+        AbolishedItem::create([
+            'plantilla_content_id' => $plantillacontent->id,
+            'salary_grade_prop_id' => $plantillacontent->salary_grade_prop_id,
+            'new_number' => $plantillacontent->new_number
+        ]);
+
+
         $plantillacontent->new_number = null;
         $plantillacontent->salary_grade_prop_id = null;
         $plantillacontent->save();

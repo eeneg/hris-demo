@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class EmployeesListResource extends JsonResource
+class EmployeesListResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
@@ -14,16 +14,18 @@ class EmployeesListResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
-        return [
-            'id' => $this->id,
-            'firstname' => $this->firstname,
-            'middlename' => $this->middlename,
-            'nameextension' => $this->nameextension,
-            'surname' => $this->surname,
-            'status' => $this->status,
-            'plantillacontents' => $this->plantillacontents
-        ];
+        return $this->collection->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'firstname' => $item->firstname,
+                'middlename' => $item->middlename,
+                'nameextension' => $item->nameextension,
+                'surname' => $item->surname,
+                'status' => $item->status,
+                'plantillacontents' => $item->plantillacontents
+            ];
+        });
+        
     }
 
     public function with($request)

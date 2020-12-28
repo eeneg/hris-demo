@@ -26,7 +26,7 @@ class DepartmentController extends Controller
             ->groupBy('positions.department_id')
             ->orderBy('order_number')
             ->get();
-        return SortedDepartmentsResource::collection($plantillacontents);
+        return new SortedDepartmentsResource($plantillacontents);
     }
 
     /**

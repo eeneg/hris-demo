@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PlantillaContentResource extends JsonResource
+class PlantillaContentResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
@@ -14,22 +14,31 @@ class PlantillaContentResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
+        return $this->collection->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'personal_information_id' => $item->personal_information_id,
+                'old_number' => $item->old_number,
+                'new_number' => $item->new_number,
+                'order_number' => $item->order_number,
+                'working_time' => $item->working_time,
+                'position' => $item->position ? $item->position->title : '',
+                'position_id' =>$item->position ? $item->position->id : '',
+                'firstname' => $item->personalinformation ? $item->personalinformation->firstname : '',
+                'middlename' => $item->personalinformation ? $item->personalinformation->middlename : '',
+                'surname' => $item->personalinformation ? $item->personalinformation->surname : '',
+                'nameextension' => $item->personalinformation ? $item->personalinformation->nameextension : '',
+                'salaryauthorized' => $item->salaryauthorized,
+                'salaryproposed' => $item->salaryproposed,
+            ];
+        });
+    }
+
+    public function with($request)
+    {
         return [
-            'id' => $this->id,
-            'personal_information_id' => $this->personal_information_id,
-            'old_number' => $this->old_number,
-            'new_number' => $this->new_number,
-            'order_number' => $this->order_number,
-            'working_time' => $this->working_time,
-            'position' => $this->position ? $this->position->title : '',
-            'position_id' =>$this->position ? $this->position->id : '',
-            'firstname' => $this->personalinformation ? $this->personalinformation->firstname : '',
-            'middlename' => $this->personalinformation ? $this->personalinformation->middlename : '',
-            'surname' => $this->personalinformation ? $this->personalinformation->surname : '',
-            'nameextension' => $this->personalinformation ? $this->personalinformation->nameextension : '',
-            'salaryauthorized' => $this->salaryauthorized,
-            'salaryproposed' => $this->salaryproposed,
+            'version' => '1.0.0',
+            'author_url' => url('http://www.davsurians.com.ph/')
         ];
     }
 }

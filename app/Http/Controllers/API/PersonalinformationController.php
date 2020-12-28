@@ -35,7 +35,7 @@ class PersonalInformationController extends Controller
         } else {
             $personalinformations = PersonalInformation::orderBy('surname')->paginate(20);
         }
-        return EmployeesListResource::collection($personalinformations);
+        return new EmployeesListResource($personalinformations);
     }
 
     public function forvacants(Request $request) {
