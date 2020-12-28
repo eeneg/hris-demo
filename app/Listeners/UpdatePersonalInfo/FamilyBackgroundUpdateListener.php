@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Child;
-
+use App\FamilyBackground;
 
 class FamilyBackgroundUpdateListener
 {
@@ -31,7 +31,20 @@ class FamilyBackgroundUpdateListener
      */
     public function handle(PersonalInfoUpdated $event)
     {
-        $event->pi->familybackground()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->familybackground);
+
+        $familyBackground = array_filter(collect($this->request->familybackground)->except('id', 'personal_information_id', 'created_at', 'updated_at')->toArray());
+
+        if(count($familyBackground) > 0)
+        {
+
+            $event->pi->familybackground()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->familybackground);
+
+        }
+        else if(!count($familyBackground) && array_key_exists('id', $this->request->familybackground)){
+
+            FamilyBackground::find($this->request->familybackground['id'])->delete();
+
+        }
 
         if($this->request->children !== null)
         {

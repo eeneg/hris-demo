@@ -293,7 +293,7 @@
             <i>Subdivision/Village</i>
         </p>
         <p style="position:absolute;top:511px;left:569px;white-space:nowrap" class="ft13">
-            {{ @$personalinfos->permanentAddress }}
+            {{ @$personalinfos->permanentaddress }}
         </p>
         <p style="position:absolute;top:526px;left:776px;white-space:nowrap" class="ft13">
             <i>Barangay</i>
@@ -384,8 +384,8 @@
         </p>
 
         <p style="position:absolute;top:923px;left:390px;white-space:nowrap" class="ft10">NAME EXTENSION (JR., SR)</p>
-        <p style="position:absolute;top:920px;left:390px;white-space:nowrap" class="inputs">
-            {{-- {{ @$fb->FatherMiddlename }} --}}
+        <p style="position:absolute;top:933px;left:390px;white-space:nowrap" class="inputs">
+            {{-- {{ @$fb->fatherNameExtension }} --}}
         </p>
 
         <p style="position:absolute;top:955px;left:41px;white-space:nowrap" class="ft13">MIDDLE NAME</p>
