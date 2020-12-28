@@ -12,12 +12,12 @@
                                 </select>
                             </div>
                             <div class="btn-group">
-                                <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryScheduleModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salarySchedModal">
+                                <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryScheduleModal()" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salarySchedModal">
                                 Edit Salary Schedule <i class="fa fa-edit"></i>
                                 </button>
                             </div>
                             <div class="btn-group float-right">
-                                <button v-if="$gate.isAdministrator()" @click="createSalaryScheduleModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salarySchedModal">
+                                <button v-if="$gate.isAdministrator()" @click="createSalaryScheduleModal()" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salarySchedModal">
                                   Add Salary Schedule <i class="fa fa-plus"></i>
                                 </button>
                             </div>
@@ -33,7 +33,7 @@
                                     <div class="bd-highlight">Effective Date: {{ display.effective_date }}</div>
                                 </div>
                                 <div class="ml-auto p-1">
-                                    <button v-if="$gate.isAdministrator()" @click.prevent="createSalaryGradeModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salaryGradeModal">
+                                    <button v-if="$gate.isAdministrator()" @click.prevent="createSalaryGradeModal()" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salaryGradeModal">
                                     Create <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
@@ -54,9 +54,9 @@
                                          <td style="width: calc(100%-150px);"> {{ salarygrade[0].grade }} </td>
                                         <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">{{ amounts.amount }}</td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
-                                            <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#salaryGradeModal">
-                                            Edit <i class="fa fa-edit"></i>
-                                            </button>
+                                            <a href="#" v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" data-toggle="modal" data-target="#salaryGradeModal">
+                                            <i class="fa fa-edit"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -69,10 +69,10 @@
 
         <!-- salary sched modal -->
          <div class="modal fade" id="salarySchedModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-sm">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"></h5>
+                <div class="modal-header kuz-header">
+                    <h5 class="modal-title">Salary Schedule</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="errors.deleteV()">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -81,22 +81,22 @@
                     <div class="modal-body">
                         <div class="forms p-0 col-md-12">
                            <div class="row">
-                                <div class="form-group col">
+                                <div class="form-group col-md-12">
                                     <label for="tranche">Tranche</label>
-                                    <input type="text" class="form-control" name="tranche" id="tranche" v-model="salarySchedForm.tranche" required>
+                                    <input type="text" class="form-control kuz-control" name="tranche" id="tranche" v-model="salarySchedForm.tranche" required>
                                     <span class="text-danger" v-if="errors.has('tranche')" v-text="errors.get('tranche')"></span>
                                 </div>
-                                <div class="form-group col">
+                                <div class="form-group col-md-12">
                                     <label for="effective_date">Effective Date</label>
-                                    <input type="date" class="form-control" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date" required>
+                                    <input type="date" class="form-control kuz-control" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date" required>
                                     <span class="text-danger" v-if="errors.has('effective_date')" v-text="errors.get('effective_date')"></span>
                                 </div>
                            </div>
                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                    <div class="modal-footer kuz-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
                     </div>
                 </form>
                 </div>
@@ -108,34 +108,34 @@
         <div class="modal fade" id="salaryGradeModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-grade"></h5>
+                <div class="modal-header kuz-header">
+                    <h5 class="modal-title" id="modal-grade">Create Salary Grade</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="errors.deleteV()">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <form @submit.prevent=" editMode == false ? createSalaryGrade() : updateSalaryGrade()" action="" id="2" @keydown="errors.clear($event.target.name)">
-                    <div class="modal-body">
+                    <div class="modal-body" style="padding: 2.5rem !important;">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="grade">Grade</label>
-                                <select class="form-control" id="grade" v-model="salaryGradeForm.grade" required>
+                                <select class="form-control kuz-control" id="grade" v-model="salaryGradeForm.grade" required>
                                     <option v-for="grade in 33" v-bind:value="grade" :key="grade.id">Grade: {{ grade }}</option>
                                 </select>
                                 <span class="text-danger" v-if="errors.has('grade')" v-text="errors.get('grade')"></span>
                             </div>
                             <div class="form-group col-md-6" v-for="(n, index) in 8" :key="index.id">
                                 <label for="amount">Step {{ index+1 }}</label>
-                                <input type="number" class="form-control" @keypress="onlyNumber" v-model="salaryGradeForm.amount[index]" min="0" required>
+                                <input type="number" class="form-control kuz-control" @keypress="onlyNumber" v-model="salaryGradeForm.amount[index]" min="0" required>
                             </div>
                             <div class="form-group col-md-12 text-center">
                                 <span class="text-danger" v-if="errors.has('amount')" v-text="errors.get('amount')"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                    <div class="modal-footer kuz-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
+                        <button type="submit" class="btn btn-success btn-sm">Save</button>
                     </div>
                 </form>
                 </div>

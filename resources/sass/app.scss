@@ -309,3 +309,18 @@ Inbox Message Style
 a:hover{
     text-decoration:none;
 }
+
+// modal inputs
+
+.kuz-control{
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    border-radius: 0px;
+}
+.kuz-header{
+    border-bottom: none;
+}
+.kuz-footer{
+    border-top: none;
+}
