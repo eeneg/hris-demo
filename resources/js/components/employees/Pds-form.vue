@@ -1,5 +1,6 @@
 <template>
 
+
 <div class="row justify-content-center">
     <div class="col-md-12">
 
@@ -32,7 +33,7 @@
                     <label for="surname">Surname</label>
                     <input type="text" placeholder="surname" name="surname" class="form-control" id="surname" v-model="form.surname">
                     <span>
-                        <strong class="text-danger" v-if="errors.has('surname')">Required</strong>
+                        <strong class="text-danger" v-if="errors.has('surname')">Field Required</strong>
                     </span>
 
                 </div>
@@ -42,7 +43,7 @@
                     <label for="firstname">Firstname</label>
                     <input type="text" placeholder="firstname" name="firstname" class="form-control" id="firstname" v-model="form.firstname">
                     <span>
-                        <strong class="text-danger" v-if="errors.has('firstname')">Required</strong>
+                        <strong class="text-danger" v-if="errors.has('firstname')">Field Required</strong>
                     </span>
 
                 </div>
@@ -67,7 +68,7 @@
                     <label for="birthdate">Birth Date</label>
                     <input type="date" name="birthdate" class="form-control" id="birthdate" v-model="form.birthdate">
                     <span>
-                        <strong class="text-danger" v-if="errors.has('birthdate')">Required</strong>
+                        <strong class="text-danger" v-if="errors.has('birthdate')">Field Required</strong>
                     </span>
                 </div>
 
@@ -192,7 +193,7 @@
                     <label for="permanentaddress">Permanent Address</label>
                     <input type="text" name="permanentaddress" placeholder="Permanent Address" class="form-control" id="permanentaddress" v-model="form.permanentaddress">
                     <span>
-                        <strong class="text-danger" v-if="errors.has('permanentaddress')">Required</strong>
+                        <strong class="text-danger" v-if="errors.has('permanentaddress')">Field Required</strong>
                     </span>
                 </div>
 
@@ -214,7 +215,7 @@
                     <label for="cellphone">Mobile No.</label>
                     <input type="text" placeholder="Mobile No." name="cellphone" class="form-control" id="cellphone" v-model="form.cellphone">
                     <span>
-                        <strong class="text-danger" v-if="errors.has('cellphone')">Required</strong>
+                        <strong class="text-danger" v-if="errors.has('cellphone')">Field Required</strong>
                     </span>
                 </div>
 
@@ -347,13 +348,13 @@
                             <tr v-for="(child, index) in form.children" :key="child.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="name" id="name" class="form-control" v-model="child.name">
+                                        <input type="text" :name="'name'+index" :id="'name'+index" class="form-control" v-model="child.name">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" name="birthday" id="birthday" class="form-control" v-model="child.birthday">
+                                        <input type="date" :name="'birthday'+index" :id="'birthday'+index" class="form-control" v-model="child.birthday">
                                     </div>
                                 </td>
 
@@ -609,39 +610,39 @@
                             <tr v-for="(eligibility, index) in form.eligibilities" :key="eligibility.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="careerService" id="careerService" class="form-control" v-model="eligibility.careerService">
+                                        <input type="text" :name="'careerService'+index" :id="'careerService'+index" class="form-control" v-model="eligibility.careerService">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="rating" id="rating" class="form-control" v-model="eligibility.rating">
+                                        <input type="text" :name="'rating'+index" :id="'rating'+index" class="form-control" v-model="eligibility.rating">
 
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" name="dateOfExam" id="dateOfExam" class="form-control" v-model="eligibility.dateOfExam">
-
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="form-group input-group-sm">
-                                        <input type="text" name="placeOfExam" id="placeOfExam" class="form-control" v-model="eligibility.placeOfExam">
-
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group input-group-sm">
-                                        <input type="text" name="licenseNumber" id="licenseNumber" class="form-control" v-model="eligibility.licenseNumber">
+                                        <input type="date" :name="'dateOfExam'+index" :id="'dateOfExam'+index" class="form-control" v-model="eligibility.dateOfExam">
 
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="licenseRelease" id="licenseRelease" class="form-control" v-model="eligibility.licenseRelease">
+                                        <input type="text" :name="'placeOfExam'+index" :id="'placeOfExam'+index" class="form-control" v-model="eligibility.placeOfExam">
+
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" :name="'licenseNumber'+index" :id="'licenseNumber'+index" class="form-control" v-model="eligibility.licenseNumber">
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" :name="'licenseRelease'+index" :id="'licenseRelease'+index" class="form-control" v-model="eligibility.licenseRelease">
 
                                     </div>
                                 </td>
@@ -681,47 +682,47 @@
                         <tr v-for="(workexperience, index) in form.workexperiences" :key="workexperience.id">
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="date" name="inclusiveDateFrom" id="inclusiveDateFrom" class="form-control" v-model="workexperience.inclusiveDateFrom">
+                                    <input type="date" :name="'we_inclusiveDateFrom'+index" :id="'we_inclusiveDateFrom'+index" class="form-control" v-model="workexperience.inclusiveDateFrom">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="date" name="inclusiveDateTo" id="inclusiveDateTo" class="form-control" v-model="workexperience.inclusiveDateTo">
+                                    <input type="date" :name="'we_inclusiveDateTo'+index" :id="'we_inclusiveDateTo'+index" class="form-control" v-model="workexperience.inclusiveDateTo">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="position" id="position" class="form-control" v-model="workexperience.position">
+                                    <input type="text" :name="'we_position'+index" :id="'we_position'+index" class="form-control" v-model="workexperience.position">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="department" id="department" class="form-control" v-model="workexperience.department">
+                                    <input type="text" :name="'department'+index" :id="'department'+index" class="form-control" v-model="workexperience.department">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="monthlySalary" id="monthlySalary" class="form-control" v-model="workexperience.monthlySalary">
+                                    <input type="text" :name="'monthlySalary'+index" :id="'monthlySalary'+index" class="form-control" v-model="workexperience.monthlySalary">
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="salaryGrade" id="salaryGrade" class="form-control" v-model="workexperience.salaryGrade">
+                                    <input type="text" :name="'salaryGrade'+index" :id="'salaryGrade'+index" class="form-control" v-model="workexperience.salaryGrade">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="statusOfAppointment" id="statusOfAppointment" class="form-control" v-model="workexperience.statusOfAppointment">
+                                    <input type="text" :name="'statusOfAppointment'+index" :id="'statusOfAppointment'+index" class="form-control" v-model="workexperience.statusOfAppointment">
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <select name="govService" id="govService" class="form-control" v-model="workexperience.govService">
+                                    <select :name="'govService'+index" :id="'govService'+index" class="form-control" v-model="workexperience.govService">
                                         <option>YES</option>
                                         <option>NO</option>
                                     </select>
@@ -760,31 +761,31 @@
                             <tr v-for="(voluntarywork, index) in form.voluntaryworks" :key="voluntarywork.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="nameAndAddress" id="nameAndAddress" class="form-control" v-model="voluntarywork.nameAndAddress">
+                                        <input type="text" :name="'nameAndAddress'+index" :id="'nameAndAddress'+index" class="form-control" v-model="voluntarywork.nameAndAddress">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" name="inclusiveDateFrom" id="inclusiveDateFrom" class="form-control" v-model="voluntarywork.inclusiveDateFrom">
+                                        <input type="date" :name="'vw_inclusiveDateFrom'+index" :id="'vw_inclusiveDateFrom'+index" class="form-control" v-model="voluntarywork.inclusiveDateFrom">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" name="inclusiveDateTo" id="inclusiveDateTo" class="form-control" v-model="voluntarywork.inclusiveDateTo">
+                                        <input type="date" :name="'vw_inclusiveDateTo'+index" :id="'vw_inclusiveDateTo'+index" class="form-control" v-model="voluntarywork.inclusiveDateTo">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="hours" id="hours" class="form-control" v-model="voluntarywork.hours">
+                                        <input type="text" :name="'vw_hours'+index" :id="'vw_hours'+index" class="form-control" v-model="voluntarywork.hours">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="position" id="position" class="form-control" v-model="voluntarywork.position">
+                                        <input type="text" :name="'vw_position'+index" :id="'vw_position'+index" class="form-control" v-model="voluntarywork.position">
                                     </div>
                                 </td>
                                 <td>
@@ -820,31 +821,31 @@
                             <tr v-for="(trainingprogram, index) in form.trainingprograms" :key="trainingprogram.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="title" id="title" class="form-control" v-model="trainingprogram.title">
+                                        <input type="text" :name="'title'+index" :id="'title'+index" class="form-control" v-model="trainingprogram.title">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" name="inclusiveDateFrom" id="inclusiveDateFrom" class="form-control" v-model="trainingprogram.inclusiveDateFrom">
+                                        <input type="date" :name="'tp_inclusiveDateFrom'+index" :id="'tp_inclusiveDateFrom'+index" class="form-control" v-model="trainingprogram.inclusiveDateFrom">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" name="inclusiveDateTo" id="inclusiveDateTo" class="form-control" v-model="trainingprogram.inclusiveDateTo">
+                                        <input type="date" :name="'tp_inclusiveDateTo'+index" :id="'tp_inclusiveDateTo'+index" class="form-control" v-model="trainingprogram.inclusiveDateTo">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="number" name="hours" id="hours" class="form-control" v-model="trainingprogram.hours">
+                                        <input type="number" :name="'tp_hours'+index" :id="'tp_hours'+index" class="form-control" v-model="trainingprogram.hours">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="conductor" id="conductor" class="form-control" v-model="trainingprogram.conductor">
+                                        <input type="text" :name="'conductor'+index" :id="'conductor'+index" class="form-control" v-model="trainingprogram.conductor">
                                     </div>
                                 </td>
                                 <td>
@@ -878,19 +879,19 @@
                         <tr v-for="(otherinfo, index) in form.otherinfos" :key="otherinfo.id">
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="skill" id="skill" class="form-control" v-model="otherinfo.skill">
+                                    <input type="text" :name="'skill'+index" :id="'skill'+index" class="form-control" v-model="otherinfo.skill">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="recognition" id="recognition" class="form-control" v-model="otherinfo.recognition">
+                                    <input type="text" :name="'recognition'+index" :id="'recognition'+index" class="form-control" v-model="otherinfo.recognition">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group input-group-sm">
-                                    <input type="text" name="membership" id="membership" class="form-control" v-model="otherinfo.membership">
+                                    <input type="text" :name="'membership'+index" :id="'membership'+index" class="form-control" v-model="otherinfo.membership">
                                 </div>
                             </td>
                             <td>
@@ -931,24 +932,24 @@
                     <div class="col" style="width:100%; padding-top:8%;">
                         <div class="input-group d-flex justify-content-around">
                             <label for="q34a">
-                                <input class="q34a" name="q34a" id="q34a" type="radio" value="1" v-model="form.pdsquestion.q34a">
+                                <input class="q34a_yes" name="q34a_yes" id="q34a_yes" type="radio" value="1" v-model="form.pdsquestion.q34a">
                                 YES
                             </label>
 
                             <label for="q34a">
-                                <input class="q34a" name="q34a" id="q34a" type="radio" value="0" v-model="form.pdsquestion.q34a">
+                                <input class="q34a_no" name="q34a_no" id="q34a_no" type="radio" value="0" v-model="form.pdsquestion.q34a">
                                 NO
                             </label>
                         </div>
 
                         <div class="input-group d-flex justify-content-around">
                             <label for="q34b">
-                                <input class="q34b" name="q34b" id="q34b" type="radio" value="1" v-model="form.pdsquestion.q34b">
+                                <input class="q34b_yes" name="q34b_yes" id="q34b_yes" type="radio" value="1" v-model="form.pdsquestion.q34b">
                                 YES
                             </label>
 
                             <label for="q34b">
-                                <input class="q34b" name="q34b" id="q34b" type="radio" value="0" v-model="form.pdsquestion.q34b">
+                                <input class="q34b_no" name="q34b_no" id="q34b_no" type="radio" value="0" v-model="form.pdsquestion.q34b">
                                 NO
                             </label>
                         </div>
@@ -974,13 +975,13 @@
                     </div>
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
-                            <label for="q35a">
-                                <input type="radio" class="q35a" name="q35a" id="q35a" value="1" v-model="form.pdsquestion.q35a">
+                            <label for="q35a_yes">
+                                <input type="radio" class="q35a_yes" name="q35a_yes" id="q35a_yes" value="1" v-model="form.pdsquestion.q35a">
                                 YES
                             </label>
 
                             <label for="q35a">
-                                <input type="radio" class="q35a" name="q35a" id="q35a" value="0" v-model="form.pdsquestion.q35a">
+                                <input type="radio" class="q35a_no" name="q35a_no" id="q35a_no" value="0" v-model="form.pdsquestion.q35a">
                                 NO
                             </label>
                         </div>
@@ -1006,12 +1007,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q35b">
-                                <input type="radio" class="q35b" name="q35b" id="q35b" value="1" v-model="form.pdsquestion.q35b">
+                                <input type="radio" class="q35b_yes" name="q35b_yes" id="q35b_yes" value="1" v-model="form.pdsquestion.q35b">
                                 YES
                             </label>
 
                             <label for="q35b">
-                                <input type="radio" class="q35b" name="q35b" id="q35b" value="0" v-model="form.pdsquestion.q35b">
+                                <input type="radio" class="q35b_no" name="q35b_no" id="q35b_no" value="0" v-model="form.pdsquestion.q35b">
                                 NO
                             </label>
                         </div>
@@ -1048,12 +1049,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q36a">
-                                <input type="radio" class="q36a" name="q36a" id="q36a" value="1" v-model="form.pdsquestion.q36a">
+                                <input type="radio" class="q36a_yes" name="q36a_yes" id="q36a_yes" value="1" v-model="form.pdsquestion.q36a">
                                 YES
                             </label>
 
                             <label for="q36a">
-                                <input type="radio" class="q36a" name="q36a" id="q36a" value="0" v-model="form.pdsquestion.q36a">
+                                <input type="radio" class="q36a_no" name="q36a_no" id="q36a_no" value="0" v-model="form.pdsquestion.q36a">
                                 NO
                             </label>
                         </div>
@@ -1080,12 +1081,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q37a">
-                                <input type="radio" class="q37a" name="q37a" id="q37a" value="1" v-model="form.pdsquestion.q37a">
+                                <input type="radio" class="q37a_yes" name="q37a_yes" id="q37a_yes" value="1" v-model="form.pdsquestion.q37a">
                                 YES
                             </label>
 
                             <label for="q37a">
-                                <input type="radio" class="q37a" name="q37a" id="q37a" value="0" v-model="form.pdsquestion.q37a">
+                                <input type="radio" class="q37a_no" name="q37a_no" id="q37a_no" value="0" v-model="form.pdsquestion.q37a">
                                 NO
                             </label>
                         </div>
@@ -1111,12 +1112,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q38a">
-                                <input type="radio" class="q38a" name="q38a" id="q38a" value="1" v-model="form.pdsquestion.q38a">
+                                <input type="radio" class="q38a_yes" name="q38a_yes" id="q38a_yes" value="1" v-model="form.pdsquestion.q38a">
                                 YES
                             </label>
 
                             <label for="q38a">
-                                <input type="radio" class="q38a" name="q38a" id="q38a" value="0" v-model="form.pdsquestion.q38a">
+                                <input type="radio" class="q38a_no" name="q38a_no" id="q38a_no" value="0" v-model="form.pdsquestion.q38a">
                                 NO
                             </label>
                         </div>
@@ -1142,12 +1143,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q38b">
-                                <input type="radio" class="q38b" name="q38b" id="q38b" value="1" v-model="form.pdsquestion.q38b">
+                                <input type="radio" class="q38b_yes" name="q38b_yes" id="q38b_yes" value="1" v-model="form.pdsquestion.q38b">
                                 YES
                             </label>
 
                             <label for="q38b">
-                                <input type="radio" class="q38b" name="q38b" id="q38b" value="0" v-model="form.pdsquestion.q38b">
+                                <input type="radio" class="q38b_no" name="q38b_no" id="q38b_no" value="0" v-model="form.pdsquestion.q38b">
                                 NO
                             </label>
                         </div>
@@ -1173,12 +1174,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q39a">
-                                <input type="radio" class="q39a" name="q39a" id="q39a" value="1" v-model="form.pdsquestion.q39a">
+                                <input type="radio" class="q39a_yes" name="q39a_yes" id="q39a_yes" value="1" v-model="form.pdsquestion.q39a">
                                 YES
                             </label>
 
                             <label for="q35a">
-                                <input type="radio" class="q39a" name="q39a" id="q39a" value="0" v-model="form.pdsquestion.q39a">
+                                <input type="radio" class="q39a_no" name="q39a_no" id="q39a_no" value="0" v-model="form.pdsquestion.q39a">
                                 NO
                             </label>
                         </div>
@@ -1222,12 +1223,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q40a">
-                                <input type="radio" class="q40a" name="q40a" id="q40a" value="1" v-model="form.pdsquestion.q40a">
+                                <input type="radio" class="q40a_yes" name="q40a_yes" id="q40a_yes" value="1" v-model="form.pdsquestion.q40a">
                                 YES
                             </label>
 
                             <label for="q40a">
-                                <input type="radio" class="q40a" name="q40a" id="q40a" value="0" v-model="form.pdsquestion.q40a">
+                                <input type="radio" class="q40a_no" name="q40a_no" id="q40a_no" value="0" v-model="form.pdsquestion.q40a">
                                 NO
                             </label>
                         </div>
@@ -1252,12 +1253,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q40b">
-                                <input type="radio" class="q40b" name="q40b" id="q40b" value="1" v-model="form.pdsquestion.q40b">
+                                <input type="radio" class="q40b_yes" name="q40b_yes" id="q40b_yes" value="1" v-model="form.pdsquestion.q40b">
                                 YES
                             </label>
 
                             <label for="q40b">
-                                <input type="radio" class="q40b" name="q40b" id="q40b" value="0" v-model="form.pdsquestion.q40b">
+                                <input type="radio" class="q40b_no" name="q40b_no" id="q40b_no" value="0" v-model="form.pdsquestion.q40b">
                                 NO
                             </label>
                         </div>
@@ -1282,12 +1283,12 @@
                     <div class="col">
                         <div class="input-group-sm d-flex justify-content-around mt-1">
                             <label for="q40c">
-                                <input type="radio" class="q40c" name="q40c" id="q40c" value="1" v-model="form.pdsquestion.q40c">
+                                <input type="radio" class="q40c_yes" name="q40c_yes" id="q40c_yes" value="1" v-model="form.pdsquestion.q40c">
                                 YES
                             </label>
 
                             <label for="q40c">
-                                <input type="radio" class="q40c" name="q40c" id="q40c" value="0" v-model="form.pdsquestion.q40c">
+                                <input type="radio" class="q40c_no" name="q40c_no" id="q40c_no" value="0" v-model="form.pdsquestion.q40c">
                                 NO
                             </label>
                         </div>
