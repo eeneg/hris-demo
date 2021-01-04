@@ -13,7 +13,7 @@ class Plantilla extends Model
 
     protected $primaryKey = 'id';
 
-    protected $with = ['salaryproposedschedule'];
+    protected $with = ['salaryproposedschedule', 'salaryauthorizedschedule'];
 
     protected $fillable = [ 'year', 'date_prepared', 'date_approved' ];
 
@@ -24,6 +24,10 @@ class Plantilla extends Model
 
     public function salaryproposedschedule(){
         return $this->belongsTo('App\SalarySchedule', 'salary_schedule_prop_id');
+    }
+
+    public function salaryauthorizedschedule(){
+        return $this->belongsTo('App\SalarySchedule', 'salary_schedule_auth_id');
     }
 
     public static function boot(){

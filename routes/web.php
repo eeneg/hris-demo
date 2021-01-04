@@ -21,6 +21,8 @@ Route::post('/generateId', 'PDFcontroller@employeeId');
 
 Route::post('/generatePDS', 'PDFcontroller@pds');
 
+Route::post('/generatePlantilla', 'PDFcontroller@plantilla');
+
 Route::get('{path}', 'HomeController@index')->where( 'path','([-a-z0-9_\s]+)' );
 
 

@@ -40,7 +40,7 @@ class PDFcontroller extends Controller
         $trainingPrograms_cont = $tp->skip(21);
 
         $pdf = PDF::loadView('reports.PDS', compact('personalinfos', 'fb', 'eb', 'children', 'eligibilities', 'workExperiences', 'workExperiences_cont', 'voluntaryworks', 'trainingPrograms', 'trainingPrograms_cont', 'otherinfos', 'pdsquestions'))
-            ->setPaper([0,0,590,930], 'portrait')
+            ->setPaper([0,0,720,1440], 'portrait')
             ->setOptions([
                 'defaultMediaType' => 'screen',
                 'dpi' => 112,
@@ -48,6 +48,17 @@ class PDFcontroller extends Controller
             // ->download('PDS.pdf');
         Storage::put('public/employee_pds/' . $personalinfos->firstname . '.pdf', $pdf->output());
         return ['title' => $personalinfos->firstname];
+    }
+
+    public function plantilla(Request $request) {
+        $pdf = PDF::loadView('reports/plantilla')
+            ->setPaper([0,0,720,1440], 'landscape')
+            ->setOptions([
+                'defaultMediaType' => 'screen',
+                'dpi' => 112,
+            ]);
+        Storage::put('public/plantilla_reports/test.pdf', $pdf->output());
+        return ['title' => 'plantilla_test'];
     }
 
     public function employeeId(Request $request) {
