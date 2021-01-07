@@ -1604,6 +1604,7 @@ export default {
         },
         storePersonalInformation: function()
         {
+            this.$Progress.start();
             axios.post('api/personalinformation', this.form)
             .then(respose => {
                 Swal.fire(
@@ -1611,12 +1612,14 @@ export default {
                     'Registered successfully',
                     'success'
                 )
+                this.$Progress.finish();
                 this.form.reset()
             })
             .catch(error => this.errors.record(error.response.data.errors))
         },
         updatePersonalInformation: function()
         {
+            this.$Progress.start();
             axios.patch('api/personalinformation/'+this.form.id, this.form)
             .then(response => {
                 Swal.fire(
@@ -1624,6 +1627,7 @@ export default {
                     'Updated successfully',
                     'success'
                 )
+                this.$Progress.finish();
             })
             .catch(error => this.errors.record(error.response.data.errors))
         },

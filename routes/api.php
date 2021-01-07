@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         'salarygrade' => 'API\SalaryGradeController',
         'setting' => 'API\SettingsController',
         'department' => 'API\DepartmentController',
+        'appointment' => 'API\AppointmentController',
         'plantillacontent' => 'API\PlantillaContentController',
         'abolisheditem' => 'API\AbolishedItemController'
     ]);
@@ -52,11 +53,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::patch('personalinformation', 'API\PersonalInformationController@update');
 });
 
-//api test
-// Route::get('per', 'API\PersonalInformationController@index');
-// Route::get('salary', 'API\SalaryGradeController@index');
-// Route::get('salarygrade', 'API\SalaryScheduleController@index');
-Route::get('edit', 'API\PersonalInformationController@edit');
+
 
 
 

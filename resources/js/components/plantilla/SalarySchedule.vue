@@ -217,7 +217,6 @@
                 .then(({data}) => {
                     this.salaryschedules = data
                     this.selected = this.salarySchedForm.tranche != null ? this.salarySchedForm.tranche : this.salaryschedules[0].tranche
-                    // this.getSalaryGrade()
                 })
                 .catch(error => {
 
@@ -235,10 +234,6 @@
                     $('#salarySchedModal').modal('hide')
                 })
                 .catch(error => this.errors.record(error.response.data.errors))
-                    // console.log(error.response.data.errors)
-
-                    // do something
-
             },
             createSalaryScheduleModal: function()
             {
@@ -271,14 +266,13 @@
                 var sched = _.find(this.salaryschedules, ['tranche', this.selected])
                 axios.get('api/salarygrade?id='+ sched.id)
                 .then(({data}) => {
-                    
+
                     this.salarygrades = _.chunk(data, 8)
                     this.display = sched
                     this.$Progress.finish();
                 })
                 .catch(error => {
                     this.$Progress.fail();
-                    //do something
                 })
             },
             createSalaryGradeModal: function()
@@ -316,7 +310,6 @@
                     })
                 .catch(error => this.errors.record(error.response.data.errors))
                 }
-
             },
             updateSalaryGrade: function()
             {

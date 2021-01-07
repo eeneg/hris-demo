@@ -53,6 +53,7 @@ const routes = [
     { path: '/plantilla', component: require('./components/plantilla/AnnualPlantilla.vue').default },
     { path: '/salaryschedule', component: require('./components/plantilla/SalarySchedule.vue').default },
     { path: '/departments', component: require('./components/plantilla/Departments.vue').default },
+    { path: '/appointments', component: require('./components/plantilla/Appointments.vue').default },
     { path: '/employees', component: require('./components/Employees.vue').default },
     { path: '/employees-pds', component: require('./components/employees/Pds-form.vue').default },
     { path: '/requests', component: require('./components/Requests.vue').default },

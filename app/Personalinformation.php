@@ -21,7 +21,7 @@ class PersonalInformation extends Model
 
     protected $with = [
         'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities',
-        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion'
+        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion',
     ];
 
     /**
@@ -87,6 +87,11 @@ class PersonalInformation extends Model
     public function plantillacontents()
     {
         return $this->hasMany('App\PlantillaContent', 'personal_information_id');
+    }
+
+    public function appointments()
+    {
+        return $this->hasOne('App\Appointment', 'personal_information_id');
     }
 
     public static function boot(){
