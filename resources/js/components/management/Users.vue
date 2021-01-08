@@ -86,37 +86,42 @@
                     </div>
                     <form @submit.prevent="editmode ? updateUser() : createUser()">
                         <div class="modal-body">
-                            <div class="form-group">
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label style="font-weight: normal; margin: 0;">User Role</label>
                                 <select name="role" v-model="form.role" class="form-control"
                                     :class="{ 'is-invalid': form.errors.has('role') }">
                                     <option value="">Select User Role</option>
                                     <option value="Administrator">Administrator</option>
-                                    <option value="Office User">Office User</option>
                                     <option value="Author">Author</option>
+                                    <option value="Office User">Office User</option>
                                 </select>
                                 <has-error :form="form" field="role"></has-error>
                             </div>
 
-                            <div class="form-group">
-                                <input v-model="form.name" type="text" name="name" placeholder="Name"
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label for="user_name" style="font-weight: normal; margin: 0;">Fullname</label>
+                                <input id="user_name" v-model="form.name" type="text" name="name" placeholder="Name"
                                     class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                                 <has-error :form="form" field="name"></has-error>
                             </div>
 
-                            <div class="form-group">
-                                <input v-model="form.email" type="text" name="email" placeholder="Email Address"
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label for="user_email" style="font-weight: normal; margin: 0;">Email Address</label>
+                                <input id="user_email" v-model="form.email" type="text" name="email" placeholder="eg. user@gmail.com"
                                     class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                                 <has-error :form="form" field="email"></has-error>
                             </div>
 
-                            <div class="form-group">
-                                <input v-model="form.password" type="password" name="password" placeholder="Password"
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label for="user_password" style="font-weight: normal; margin: 0;">User password</label>
+                                <input id="user_password" v-model="form.password" type="password" name="password" placeholder="Password"
                                     class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
                                 <has-error :form="form" field="password"></has-error>
                             </div>
 
-                            <div class="form-group">
-                                <input v-model="form.landline" type="text" name="landline" placeholder="Landline"
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label for="user_landline" style="font-weight: normal; margin: 0;">Landline #</label>
+                                <input id="user_landline" v-model="form.landline" type="text" name="landline" placeholder="Landline"
                                     class="form-control" :class="{ 'is-invalid': form.errors.has('landline') }">
                                 <has-error :form="form" field="landline"></has-error>
                             </div>

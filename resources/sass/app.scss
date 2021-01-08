@@ -7,6 +7,11 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import '~admin-lte/dist/css/adminlte.css';
+@import "~admin-lte/plugins/fontawesome-free/css/all.min.css";
+@import "~admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css";
+@import "~admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css";
+@import "~admin-lte/plugins/select2/css/select2.min.css";
+@import "~admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css";
 
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
@@ -323,4 +328,15 @@ a:hover{
 }
 .kuz-footer{
     border-top: none;
+}
+
+
+.callout a {
+    color: #3490dc;
+    text-decoration: none;
+    background-color: transparent;
+}
+.callout a:hover {
+    color: #1d68a7;
+    text-decoration: underline;
 }

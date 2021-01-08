@@ -41,7 +41,7 @@ Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.prototype.$gate = new Gate(window.user);
 Vue.use(VueRouter);
 const options = {
-    color: '#17a2b8',
+    color: '#007bff',
     failedColor: '#874b4b',
     thickness: '3px',
 }

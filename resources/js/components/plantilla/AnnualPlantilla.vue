@@ -21,7 +21,7 @@
                     </div>
                 </div>
 
-                <div class="card-body table-responsive p-0">
+                <div class="card-body table-responsive p-0" style="height: 650px;">
                     <table class="table table-hover table-bordered table-striped text-nowrap plantilla-table">
                         <thead>
                             <tr>
@@ -51,7 +51,8 @@
                                 <td style="text-align: center;">{{ record.old_number }}</td>
                                 <td style="text-align: center;">{{ record.new_number }}</td>
                                 <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td>
-                                <td>{{ record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT' }}</td>
+                                <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename }}</td>
+                                <td v-else class="green"><b>VACANT</b></td>
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
                                 <td style="text-align: right;">{{ record.salaryauthorized !== null ? ((record.working_time == 'Full-time' ? record.salaryauthorized.amount * 12 : (record.salaryauthorized.amount / 2) * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
                                 <td style="text-align: center;">{{ record.salaryproposed !== null ? (record.salaryproposed.grade + ' / ' + record.salaryproposed.step) : '' }}</td>
@@ -63,7 +64,25 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-info"><i class="fas fa-print"></i> Print</button>
+                    <div class="callout callout-info mb-0">
+                        <div class="d-inline-flex">
+                            <h5 class="mr-2"><b>Footnote</b></h5>
+                            <a href="" @click.prevent="footnoteEdit()" class="blue"><i class="far fa-edit"></i></a>
+                        </div>
+                        <p id="footnotetext">{{ footnote ? footnote : 'No data' }}</p>
+                        <form id="footnoteForm" style="display: none;" autocomplete="off" @submit.prevent="saveFootnote()">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <input v-model="footnoteForm.footnote" id="footnote" class="form-control" type="text" name="footnote" placeholder="Enter your footnote here. . ."
+                                        :class="{ 'is-invalid': footnoteForm.errors.has('footnote') }" required>
+                                        <has-error :form="footnoteForm" field="footnote"></has-error>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,47 +218,28 @@
                     <form autocomplete="off" @submit.prevent="duplicatePlantilla()">
                         <div class="modal-body">
                             <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ salaryproposed.tranche }}</p>
-                            <!-- <div class="row">
-                                <div class="col-3" style="padding-right: 5px;">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
-                                        <input v-model="form.new_number" id="add_new_number" class="form-control" step="1" :min="itemMin" :max="(parseInt(itemMax) + 1)" type="number" name="new_number" placeholder="New Item Number" required>
-                                    </div>
-                                </div>
-                                <div class="col-9" style="padding-left: 5px;">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_position" style="font-weight: normal; margin: 0;">Position</label>
-                                        <input v-model="form.position" id="add_position" class="form-control" type="text" name="position" placeholder="Position" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0.3rem;">
-                                <div class="custom-control custom-radio mr-2" style="display: inline;">
-                                    <input class="custom-control-input" type="radio" id="customRadio1" value="Full-time" v-model="form.working_time" name="working_time" checked>
-                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal; margin: 0;">Full-time</label>
-                                </div>
-                                <div class="custom-control custom-radio" style="display: inline;">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" value="Part-time" v-model="form.working_time" name="working_time">
-                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal; margin: 0;">Part-time</label>
-                                </div>
+                            <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
+                                <label style="font-weight: normal; margin: 0;">Proposed Salary Schedule</label>
+                                <select v-model="plantillaForm.salary_prop" class="custom-select form-control-border border-width-2">
+                                    <option :value="salaryschedule.id" v-for="salaryschedule in schedules" :key="salaryschedule.id">{{ salaryschedule.tranche }}</option>
+                                </select>
                             </div>
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-12">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
-                                        <input v-model="form.salaryproposed.grade" id="add_budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
+                                        <label for="year" style="font-weight: normal; margin: 0;">Plantilla Year</label>
+                                        <input v-model="plantillaForm.year" id="year" class="form-control" type="text" name="year" placeholder="Year"
+                                        :class="{ 'is-invalid': plantillaForm.errors.has('year') }" required>
+                                        <has-error :form="plantillaForm" field="year"></has-error>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
-                                        <input v-model="form.salaryproposed.step" id="add_budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
-                                    </div>
-                                </div>
-                            </div> -->
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Create</button>
+                        <div class="modal-footer" style="display: flow-root;padding: 6px 10px;">
+                            <div id="duplicateLoadingIcon" class="spinner-border text-success d-none" role="status" style="float: left;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <button id="duplicateButton" type="submit" class="btn btn-success" style="float: right;">Create</button>
                         </div>
                     </form>
                 </div>
@@ -282,12 +282,23 @@
                 itemMin: 0,
                 itemMax: 0,
                 selectedDepartment: '',
-                records: {},
-                forvacants: {},
+                records: [],
+                forvacants: [],
+                schedules: [],
                 plantillaNameForEdit: '',
                 previousPlantilla: '',
                 salaryauthorized: {},
                 salaryproposed: {},
+                footnote: '',
+                footnoteForm: new Form({
+                    'footnote': '',
+                    'department': ''
+                }),
+                plantillaForm: new Form({
+                    'year': '',
+                    'salary_auth': '',
+                    'salary_prop': ''
+                }),
                 form: new Form( {
                     'id': '',
                     'personal_information_id': '',
@@ -309,16 +320,67 @@
             }
         },
         methods: {
+            footnoteEdit() {
+                $('#footnotetext').toggle("slide");
+                $('#footnoteForm').toggle("slide");
+            },
+            saveFootnote() {
+                this.footnoteForm.post('api/footnote')
+                    .then(({data}) => {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Footnote updated successfully'
+                        });
+                        $('#footnotetext').toggle("slide");
+                        $('#footnoteForm').toggle("slide");
+                        this.footnote = data.note;
+                        this.footnoteForm.footnote = '';
+                        this.$Progress.finish();
+                    })
+                    .catch(error => {
+                        this.$Progress.fail();
+                    });
+            },
             addItemModal() {
                 $('#add-item-modal').modal('show');
                 this.form.reset();
                 this.form.department = this.selectedDepartment;
             },
             duplicatePlantilla() {
-                
+                this.$Progress.start();
+                $('#duplicateLoadingIcon').removeClass('d-none');
+                $('#duplicateButton').attr('disabled','disabled');
+                this.plantillaForm.post('api/plantilla')
+                    .then(() => {
+                        this.loadContents();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Annual Plantilla ' + this.plantillaForm.year + ' created successfully',
+                        })
+                        $('#duplicate-plantilla-modal').modal('hide');     
+                        this.$Progress.finish();
+                        $('#duplicateLoadingIcon').addClass('d-none');
+                        $('#duplicateButton').removeAttr('disabled');
+                    })
+                    .catch(error => {
+                        this.$Progress.fail();
+                        $('#duplicateLoadingIcon').addClass('d-none');
+                        $('#duplicateButton').removeAttr('disabled');
+                    });
             },
             duplicatePlantillaModal() {
                 $('#duplicate-plantilla-modal').modal('show');
+                this.plantillaForm.reset();
+                axios.get('api/salaryschedule')
+                    .then(({data}) => {
+                        this.schedules = data;
+                        this.plantillaForm.salary_prop = data[0].id;
+                        this.plantillaForm.salary_auth = this.salaryproposed.id;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
             },
             showRevertConfirmation(record) {
                 axios.get('api/abolisheditem/' + record.id)
@@ -516,13 +578,25 @@
                     });
             },
             loadContents() {
+                this.$Progress.start();
                 axios.post('api/plantilladepartmentcontent', {department: this.selectedDepartment})
                     .then(({data}) => {
                         this.records = data.data;
                         this.itemMin = data.data[0].new_number;
                         this.itemMax = data.data[data.data.length - 1].new_number;
+                        this.footnoteForm.department = this.selectedDepartment;
+                        this.$Progress.finish();
+                        axios.post('api/footnotespec', {department: this.selectedDepartment})
+                            .then(({data}) => {
+                                this.footnote = data.note;
+                                this.footnoteForm.footnote = data.note;
+                            })
+                            .catch(error => {
+                                console.log(error.response.data.message);
+                            })
                     })
                     .catch(error => {
+                        this.$Progress.fail();
                         console.log(error.response.data.message);
                     });
             }

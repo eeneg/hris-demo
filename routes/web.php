@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
 
+Route::get('/login/employee', 'EmployeeLoginController@employeelogin');
+
 Auth::routes(['register' => false]);
 
 Route::post('/generateId', 'PDFcontroller@employeeId');

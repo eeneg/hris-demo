@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Plantilla;
+use App\PlantillaContent;
+use App\SalaryGrade;
+use App\Setting;
 
 class PlantillaController extends Controller
 {
@@ -15,11 +18,11 @@ class PlantillaController extends Controller
      */
     public function index()
     {
-        return Plantilla::orderBy('date_prepared', 'desc')->get();
+        return Plantilla::orderBy('created_at', 'desc')->get();
     }
 
     public function previousplantilla(Request $request) {
-        return Plantilla::where('year', '!=', $request->current)->latest('date_prepared')->first();
+        return Plantilla::where('year', '!=', $request->current)->latest('created_at')->first();
     }
 
     /**
@@ -30,7 +33,32 @@ class PlantillaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'year' => 'unique:plantillas'
+        ]);
+        $newplantilla = Plantilla::create([
+            'year' => $request['year'],
+            'salary_schedule_auth_id' => $request['salary_auth'],
+            'salary_schedule_prop_id' => $request['salary_prop']
+        ]);
+
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
+        foreach ($plantillacontents as $key => $content) {
+            PlantillaContent::create([
+                'plantilla_id' => $newplantilla->id,
+                'salary_grade_auth_id' => $content->salaryproposed->id,
+                'salary_grade_prop_id' => SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id,
+                'position_id' => $content->position->id,
+                'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
+                'old_number' => $content->new_number,
+                'new_number' => $content->new_number,
+                'working_time' => $content->working_time,
+                'appointment_status' => $content->appointment_status,
+                'order_number' => $content->order_number
+            ]);
+        }
     }
 
     /**

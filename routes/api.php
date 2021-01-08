@@ -30,7 +30,8 @@ Route::group(['middleware' => 'auth:api'], function() {
         'department' => 'API\DepartmentController',
         'appointment' => 'API\AppointmentController',
         'plantillacontent' => 'API\PlantillaContentController',
-        'abolisheditem' => 'API\AbolishedItemController'
+        'abolisheditem' => 'API\AbolishedItemController',
+        'footnote' => 'API\FootnoteController'
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
@@ -51,6 +52,8 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('forvacants', 'API\PersonalInformationController@forvacants');
     Route::get('edit', 'API\PersonalInformationController@edit');
     Route::patch('personalinformation', 'API\PersonalInformationController@update');
+
+    Route::post('footnotespec', 'API\FootnoteController@getfootnote');
 });
 
 

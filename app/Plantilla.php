@@ -15,7 +15,7 @@ class Plantilla extends Model
 
     protected $with = ['salaryproposedschedule', 'salaryauthorizedschedule'];
 
-    protected $fillable = [ 'year', 'date_prepared', 'date_approved' ];
+    protected $fillable = [ 'year', 'salary_schedule_auth_id', 'salary_schedule_prop_id' ];
 
     public function plantilla_contents()
     {
