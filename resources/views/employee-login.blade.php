@@ -104,81 +104,56 @@
             <div class="login-box" >
                 <!-- /.login-logo -->
                 <div class="">
-                <div class="card-body login-card-body">
-                    <div class="login-logo">
-                        <img src="/storage/project_files/davsur.png" alt="logo" width="120px" height="120px">
+                    <div class="card-body login-card-body">
+                        <div class="login-logo">
+                            <img src="/storage/project_files/davsur.png" alt="logo" width="120px" height="120px">
+                        </div>
+                        <div class="title-container">
+                            <p class="logo-title">Human Resource<br></p>
+                            <span class="logo-title2">Information System</span>
+                        </div>
+                        <form class="form-signin" method="POST" action="{{ route('login') }}">
+                            @csrf
+                            <div class="form-label-group">
+                                <input id="emp_firstname" type="text" class="form-control input" name="firstname" placeholder="Firstname" required>
+                                <span class="underline"></span>
+                                <label class="text-muted label-input" for="emp_firstname">Firstname</label>
+                            </div>
+                            <div class="form-label-group">
+                                <input id="emp_surname" type="text" class="form-control input" name="surname" placeholder="Surname" required>
+                                <span class="underline"></span>
+                                <label class="text-muted label-input" for="emp_surname">Surname</label>
+                            </div>
+                            <div class="form-label-group">
+                                <input id="emp_ext" type="text" class="form-control input" name="nameextension" placeholder="Name extension" required>
+                                <span class="underline"></span>
+                                <label class="text-muted label-input" for="emp_ext">Name extension</label>
+                            </div>
+                            <div class="form-label-group">
+                                <input id="emp_birthdate" type="text" class="form-control input" name="birthdate" placeholder="yyyy-mm-dd" 
+                                onkeypress="return event.charCode > 47 && event.charCode < 58;" 
+                                onkeydown="var date = this.value;
+                                    if (window.event.keyCode == 8) {
+                                        this.value = date;
+                                    } else if (date.match(/^\d{4}$/) !== null) {
+                                        this.value = date + '-';
+                                    } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                                        this.value = date + '-';
+                                    }" 
+                                maxlength="10" required>
+                                <span class="underline"></span>
+                                <label class="text-muted label-input" for="emp_birthdate">Birthdate (yyyy-mm-dd)</label>
+                            </div>
+                            <div class="form-label-group">
+                                <input id="emp_barcode" type="password" class="form-control input" name="barcode" placeholder="Scan Barcode" required>
+                                <span class="underline"></span>
+                                <label class="text-muted label-input" for="emp_barcode">Scan Barcode</label>
+                            </div>
+                        </form>
                     </div>
-                    <div class="title-container">
-                        <p class="logo-title">Human Resource<br></p>
-                        <span class="logo-title2">Information System</span>
-                    </div>
-                    <form class="form-signin" method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <div class="form-label-group">
-                            <input id="emp_firstname" type="text" class="form-control input" name="firstname" placeholder="Firstname" required>
-                            <span class="underline"></span>
-                            <label class="text-muted label-input" for="emp_firstname">Firstname</label>
-                        </div>
-                        <div class="form-label-group">
-                            <input id="emp_surname" type="text" class="form-control input" name="surname" placeholder="Surname" required>
-                            <span class="underline"></span>
-                            <label class="text-muted label-input" for="emp_surname">Surname</label>
-                        </div>
-                        <div class="form-label-group">
-                            <input id="emp_ext" type="text" class="form-control input" name="nameextension" placeholder="Name extension" required>
-                            <span class="underline"></span>
-                            <label class="text-muted label-input" for="emp_ext">Name extension</label>
-                        </div>
-                        <div class="form-label-group">
-                            <input id="emp_birthdate" type="text" class="form-control input" name="birthdate" placeholder="Birthdate"
-                                data-inputmask-inputformat="mm/dd/yyyy" inputmode="numeric" required>
-                            <span class="underline"></span>
-                            <label class="text-muted label-input" for="emp_birthdate">Birthdate</label>
-                        </div>
-                        {{-- <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control input @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email address" required autofocus>
-                            <span class="underline"></span>
-                            <label class="text-muted label-input" for="inputEmail">{{ __('E-mail Address') }}</label>
-                            @error('email')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-label-group">
-                            <input type="password" id="inputPassword" class="form-control input @error('password') is-invalid @enderror" name="password" placeholder="Password" required>
-                            <span class="underline"></span>
-                            <label class="text-muted label-input" for="inputPassword">{{ __('Password') }}</label>
-                            @error('password')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                            <label class="custom-control-label" for="remember">{{ __('Remember Me') }}</label>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-lg btn-primary btn-block text-uppercase mb-1" type="submit">{{ __('Sign in') }}</button>
-                            @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}">
-                            {{ __('Forgot Your Password') }}
-                            </a>
-                            @endif
-                            <br>
-                            <a href="/login/employee">
-                            Sign in as Employee
-                            </a>
-                        </div> --}}
-                    </form>
-                    <!-- /.social-auth-links -->
-                </div>
-                <!-- /.login-card-body -->
                 </div>
             </div>
         </div>
-        <!-- REQUIRED SCRIPTS -->
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

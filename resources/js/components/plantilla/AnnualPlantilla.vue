@@ -3,8 +3,12 @@
         <div class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Annual Plantilla {{ this.$parent.settings.plantilla }}</h2>
-                    <div class="row mt-3">
+                    <div class="d-inline-flex">
+                        <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Annual Plantilla {{ this.$parent.settings.plantilla }}</h2>
+                        <a href="" @click.prevent="showEditPlantillaModal()" class="blue ml-2"><i class="far fa-edit"></i></a>
+                    </div>
+                    <p style="margin: 0;">Date Approved: <span>{{  }}</span> </p>
+                    <div class="row mt-2">
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom:0;">
                                 <label style="margin: 0;font-weight: normal;line-height:25px;">Select Department</label>
@@ -101,7 +105,7 @@
                         <div class="modal-body">
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
                                 <label style="font-weight: normal; margin: 0;">Employee name</label>
-                                <select v-model="form.personal_information_id" class="custom-select form-control-border border-width-2" id="employeesDropdown">
+                                <select v-model="form.personal_information_id" class="custom-select form-control-border" id="employeesDropdown">
                                     <option value="null">VACANT</option>
                                     <option :value="forvacant.id" v-for="forvacant in forvacants" :key="forvacant.id">{{ forvacant.surname + ', ' + forvacant.firstname + ' ' + (forvacant.nameextension != '' ? forvacant.nameextension + ' ' : '') + forvacant.middlename }}</option>
                                 </select>
@@ -110,13 +114,13 @@
                                 <div class="col-3" style="padding-right: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="new_number" style="font-weight: normal; margin: 0;">Item No.</label>
-                                        <input v-model="form.new_number" id="new_number" value="" class="form-control form-control-border border-width-2" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
+                                        <input v-model="form.new_number" id="new_number" value="" class="form-control form-control-border" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
                                     </div>
                                 </div>
                                 <div class="col-9" style="padding-left: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="position" style="font-weight: normal; margin: 0;">Position</label>
-                                        <input v-model="form.position" id="position" class="form-control form-control-border border-width-2" type="text" name="position" placeholder="Position" required>
+                                        <input v-model="form.position" id="position" class="form-control form-control-border" type="text" name="position" placeholder="Position" required>
                                     </div>
                                 </div>
                             </div>
@@ -124,13 +128,13 @@
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
-                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control form-control-border border-width-2" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
+                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control form-control-border" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
-                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control form-control-border border-width-2" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
+                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control form-control-border" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
                                     </div>
                                 </div>
                             </div>
@@ -246,6 +250,68 @@
             </div>
         </div>
 
+        <!-- Edit Plantilla Modal -->
+        <div class="modal fade" id="edit-plantilla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Plantilla {{ this.$parent.settings.plantilla }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form autocomplete="off" @submit.prevent="editPlantilla()">
+                        <div class="modal-body">
+                            <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ salaryproposed.tranche }}</p>
+                            <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
+                                <label style="font-weight: normal; margin: 0;">Proposed Salary Schedule</label>
+                                <select v-model="plantillaForm.salary_prop" class="custom-select form-control-border border-width-2">
+                                    <option :value="salaryschedule.id" v-for="salaryschedule in schedules" :key="salaryschedule.id">{{ salaryschedule.tranche }}</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="year" style="font-weight: normal; margin: 0;">Plantilla Year</label>
+                                        <input v-model="plantillaForm.year" id="year" class="form-control" type="text" name="year" placeholder="Year"
+                                        :class="{ 'is-invalid': plantillaForm.errors.has('year') }" required>
+                                        <has-error :form="plantillaForm" field="year"></has-error>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label for="date_approved" style="font-weight: normal; margin: 0;">Date Approved (yyyy-mm-dd)</label>
+                                        <input v-model="plantillaForm.date_approved" id="date_approved" class="form-control" type="text" name="date_approved" placeholder="yyyy-mm-dd"
+                                        :class="{ 'is-invalid': plantillaForm.errors.has('date_approved') }" 
+                                            onkeypress="return event.charCode > 47 && event.charCode < 58;" 
+                                            onkeydown="var date = this.value;
+                                                if (window.event.keyCode == 8) {
+                                                    this.value = date;
+                                                } else if (date.match(/^\d{4}$/) !== null) {
+                                                    this.value = date + '-';
+                                                } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                                                    this.value = date + '-';
+                                                }
+                                            " 
+                                            maxlength="10" required>
+                                        <has-error :form="plantillaForm" field="date_approved"></has-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="display: flow-root;padding: 6px 10px;">
+                            <div id="duplicateLoadingIcon" class="spinner-border text-success d-none" role="status" style="float: left;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <button id="duplicateButton" type="submit" class="btn btn-success" style="float: right;">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Report Modal -->
         <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
@@ -297,7 +363,8 @@
                 plantillaForm: new Form({
                     'year': '',
                     'salary_auth': '',
-                    'salary_prop': ''
+                    'salary_prop': '',
+                    'date_approved': ''
                 }),
                 form: new Form( {
                     'id': '',
@@ -339,6 +406,19 @@
                     })
                     .catch(error => {
                         this.$Progress.fail();
+                    });
+            },
+            showEditPlantillaModal() {
+                $('#edit-plantilla-modal').modal('show');
+                this.plantillaForm.reset();
+                axios.get('api/salaryschedule')
+                    .then(({data}) => {
+                        this.schedules = data;
+                        this.plantillaForm.salary_prop = data[0].id;
+                        this.plantillaForm.salary_auth = this.salaryproposed.id;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
                     });
             },
             addItemModal() {

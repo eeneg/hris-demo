@@ -150,6 +150,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <p>Requests</p>
                             </router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link to="/reports" class="nav-link">
+                                <i class="nav-icon fas fa-print blue"></i>
+                                <p>Reports</p>
+                            </router-link>
+                        </li>
                         @endcan
                         @can('isAdministrator')
                         <li class="nav-item has-treeview">
