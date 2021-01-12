@@ -52,11 +52,12 @@ class PDFcontroller extends Controller
 
     public function plantilla(Request $request) {
         $pdf = PDF::loadView('reports/plantilla')
-            ->setPaper([0,0,720,1440], 'landscape')
-            ->setOptions([
-                'defaultMediaType' => 'screen',
-                'dpi' => 112,
-            ]);
+            ->setPaper([0,0,1275,1950], 'landscape')
+            // ->setOptions([
+            //     'defaultMediaType' => 'screen',
+            //     'dpi' => 112,
+            // ])
+            ;
         Storage::put('public/plantilla_reports/test.pdf', $pdf->output());
         return ['title' => 'plantilla_test'];
     }

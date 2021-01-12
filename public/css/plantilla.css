@@ -1,0 +1,225 @@
+#rfq-body footer {
+    position: fixed; 
+    bottom: 0cm; 
+    left: 0cm; 
+    right: 0cm;
+    height: 908px;
+    margin: 0px 10px 10px 10px !important; 
+}
+
+#rfq-html {
+    width: 100%;
+
+    margin: 0 8px !important;
+}
+#rfq-body { 
+    width: 100%;
+    margin: 20px 10px 10px 10px !important; 
+    font-family: 'Roboto Slab', sans-serif !important;
+}
+
+#rfq_header {
+    background-color: #ececec;
+}
+
+#rfq_footer {
+    background-color: #ececec;
+}
+
+#rfq_header th {
+    text-align: center;
+    line-height: 15px;
+
+    padding: 0.2rem;
+    border-left: 0px solid;
+    border-right: 0px solid;
+    border-top: 0px solid;
+}
+
+.rfq-report th {
+    border: 1px solid black;
+    vertical-align: middle !important;
+}
+
+.rfq-report td {
+    border: 1px solid black;
+
+    line-height: 14px;
+}
+
+.rfq-report br {
+    display: block;
+    content: "";
+    margin: 0px;
+}
+
+.rfq-report .item-row {
+    height: fit-content;
+}
+
+.rfq-report .item-row td {
+    padding: 0.3rem;
+    border-left: 0px solid;
+    border-right: 0px solid;
+}
+
+.rfq-report .item-row-charges td {
+    padding: 0.3rem;
+    border: 0px solid !important;
+}
+
+.rfq-report .rfq-note td {
+    padding: 0.3rem;
+    border: 0px solid;
+}
+
+#table-lines td {
+    padding: 0.25rem;
+}
+
+.rfq-report .rfq-asterisk td {
+    padding: 0.3rem;
+    border-left: 0px solid;
+    border-right: 0px solid;
+    border-bottom: 0px solid;
+}
+
+.rfq-report p {
+    margin: 0;
+    line-height: 16px;
+    font-weight: normal !important;
+}
+
+.rfq-report .row {
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+/* RFQ BACK */
+.rfq-back-report li {
+    margin-bottom: 20px;
+    vertical-align: middle;
+}
+.tblres{
+    overflow-x: initial;
+}
+/* Purchase Order */
+#po-body footer {
+    position: fixed; 
+    bottom: 0cm; 
+    left: 0cm; 
+    right: 0cm;
+    height: 1151px;
+    margin: 0px 7.3px 7.3px 7.3px !important; 
+}
+
+#po-html {
+    width: 100%;
+
+    margin: 0 5px !important;
+}
+
+#po-body { 
+    width: 100%;
+    margin: 7px !important; 
+    font-family: 'Roboto Slab', sans-serif !important;
+}
+
+#po_header th {
+    text-align: center;
+    line-height: 20px;
+ 
+    margin-top: 13px;
+    padding: 0.8rem 0.2rem 1.2rem 0.2rem;
+    border-left: 0px solid;
+    border-right: 0px solid;
+    border-top: 0px solid;
+}
+.po-report .row {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.po-report th {
+    border: 1px solid black;
+    vertical-align: middle !important;
+}
+
+.po-report td {
+    border: 1px solid black;
+
+    line-height: 14px;
+}
+
+
+/* Purchase Request */
+#pr-body footer {
+    position: fixed; 
+    bottom: 0cm; 
+    left: 0cm; 
+    right: 0cm;
+    height: 765px;
+    margin: 0px 7.3px 7.3px 7.3px !important; 
+}
+
+#pr-html {
+    width: 100%;
+
+    margin: 0 5px !important;
+}
+
+#pr-body { 
+    width: 100%;
+    margin: 7px !important; 
+    font-family: 'Roboto Slab', sans-serif !important;
+}
+
+#pr_header th {
+    text-align: center;
+    line-height: 10px;
+    
+    margin-top: 33px;
+    padding: 0.8rem 0.2rem 1.2rem 0.2rem;
+    border-left: 0px solid;
+    border-right: 0px solid;
+    border-top: 0px solid;
+}
+
+.pr-report p {
+    margin: 0;
+    line-height: 16px;
+    font-weight: normal !important;
+}
+
+.pr-report .row {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.pr-report th {
+    border: 1px solid black;
+    vertical-align: middle !important;
+}
+
+.pr-report td {
+    border: 1px solid black;
+  
+    line-height: 14px;
+}
+
+
+
+/* p */
+
+.pmargin{
+    margin-left: 10% !important;
+}
+.qr-code{
+    background-color: black;
+    width: 130px;
+    height: 130px;
+    margin-left: 1600px;
+    top: 10.6in;
+}
