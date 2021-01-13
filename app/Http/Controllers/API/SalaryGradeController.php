@@ -16,21 +16,24 @@ class SalaryGradeController extends Controller
      */
     public function index(Request $request)
     {
-        $sg = SalarySchedule::findOrFail($request->id)->salarygrades;
-        $cl = collect();
-
-        $maxG = $sg->max('grade');
-        $maxS = $sg->max('step');
-        for ($i=0; $i < $maxG + 1; $i++)
+        if($request->id != null)
         {
-            for ($x=0; $x < $maxS + 1; $x++)
-            {
-                $temp = $sg->where('grade', $i)->where('step', $x)->first();
-                isset($temp) ? $cl->push($temp) : '';
-            }
-        }
+            $sg = SalarySchedule::findOrFail($request->id)->salarygrades;
+            $cl = collect();
 
-        return $cl;
+            $maxG = $sg->max('grade');
+            $maxS = $sg->max('step');
+            for ($i=0; $i < $maxG + 1; $i++)
+            {
+                for ($x=0; $x < $maxS + 1; $x++)
+                {
+                    $temp = $sg->where('grade', $i)->where('step', $x)->first();
+                    isset($temp) ? $cl->push($temp) : '';
+                }
+            }
+
+            return $cl;
+        }
     }
 
     /**

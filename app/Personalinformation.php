@@ -91,7 +91,7 @@ class PersonalInformation extends Model
 
     public function appointments()
     {
-        return $this->hasOne('App\Appointment', 'personal_information_id');
+        return $this->hasMany('App\Appointment', 'personal_information_id');
     }
 
     public static function boot(){

@@ -7,19 +7,30 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row align-items-end">
                         <div class="col-md-4">
-                            <label for="custom-select">Department: </label>
-                            <div class="btn-group">
-                                <select class="custom-select" v-model="selected">
-                                    <option v-for="department in departments" v-bind:value="department.title" :key="department.id"> {{ department.title }} </option>
-                                </select>
+                            <div class="input-group mb-3">
+                                <input type="text" name="search" id="search" class="form-control" placeholder="Search" v-model="search" @keyup.prevent="searchAppointment">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-search"></i></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2" v-model="search">
-                                <span class="input-group-text" id="basic-addon2"><i class="fas fa-search"></i></span>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="" class="p-0">Reckoning date from: </label>
+                                <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control" v-model="reckoning_date_from" @change="searchAppointment">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="" class="p-0">Reckoning date to: </label>
+                                <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control" v-model="reckoning_date_to" @change="searchAppointment">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <button class="btn btn-primary float-right mb-3" type="button" @click="createAppointments()" data-toggle="modal">Create <i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -27,7 +38,6 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th scope="col">Name</th>
-                                        <th scope="col">Position</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Appointment Nature</th>
                                         <th scope="col">Reckoning Date</th>
@@ -35,19 +45,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="text-center" v-for="(appointment, index) in filter" :key="appointment.id">
-                                        <td>{{ appointment.surname }}, {{ appointment.firstname }} {{ appointment.nameextension }}</td>
-                                        <td>{{ appointment.position.title }}</td>
-                                        <td>{{ appointment.appointment.status }}</td>
-                                        <td>{{ appointment.appointment.nature_of_appointment }}</td>
-                                        <td>{{ appointment.appointment.reckoning_date }}</td>
+                                    <tr class="text-center" v-for="(appointment, index) in appointments.data" :key="appointment.id">
+                                        <td>{{ appointment.personal_information.surname }}, {{ appointment.personal_information.firstname }} {{ appointment.personal_information.nameextension }}</td>
+                                        <td>{{ appointment.status }}</td>
+                                        <td>{{ appointment.nature_of_appointment }}</td>
+                                        <td>{{ appointment.reckoning_date }}</td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Action
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" type="button" data-toggle="modal" @click="createAppointments(appointment)">Add Appointment</a>
                                                     <a class="dropdown-item" type="button" @click="editAppointments(appointment)">Edit Appointment</a>
                                                     <a class="dropdown-item" type="button" @click="deleteAppointment(appointment)">Delete Appointment</a>
                                                 </div>
@@ -58,6 +66,13 @@
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
+                    <pagination size="default" :data="appointments" @pagination-change-page="getSearchResults" :limit="5">
+                        <span slot="prev-nav">&lt; Previous</span>
+                        <span slot="next-nav">Next &gt;</span>
+                    </pagination>
+                    <span style="margin-left: 10px;">Page {{ appointments.meta && appointments.meta.current_page }} of {{ appointments.meta && appointments.meta.last_page }}</span>
                 </div>
             </div>
         </div>
@@ -73,21 +88,105 @@
                     </button>
                 </div>
                 <form @submit.prevent="editMode == false ? storeAppointments() : updateAppointments()" action="" id="pdsForm" @keydown="errors.clear($event.target.name)">
-                    <div class="modal-body" style="padding: 2.5rem !important;">
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <span class="text-danger" name="personal_information_id" v-if="errors.has('personal_information_id')">Employee not found</span>
+                        </div>
                         <div class="row">
-                            <div class="form-group col-md-12">
+                            <div class="col-md-6">
+                                <label for="firstname">First Name</label>
+                                <input type="text" name="firstname" id="firstname" class="form-control" v-model="form.firstname" @keydown="errors.clear('personal_information_id')">
+                                <span class="text-danger" v-if="errors.has('firstname')" v-text="errors.get('firstname')"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="surname">Surname</label>
+                                <input type="text" name="surname" id="surname" class="form-control" v-model="form.surname" @keydown="errors.clear('personal_information_id')">
+                                <span class="text-danger" v-if="errors.has('surname')" v-text="errors.get('surname')"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="selectedDept">Department</label>
+                                <select name="selectedDept" class="custom-select" id="selectedDept" v-model="selectedDept">
+                                    <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.title }}</option>
+                                </select>
+                            </div>
+                             <div class="col-md-6">
+                                <label for="position_id">Position</label>
+                                <select name="position_id" class="custom-select" id="position_id" v-model="form.position_id">
+                                    <option v-for="position in positions" :key="position.id" :value="position.id">{{ position.title }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <span class="text-danger" v-if="errors.has('position_id')">Missing Department/Position</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="selectedSalarySched">Salary Schedule</label>
+                                <select name="selectedSalarySched" class="custom-select" id="selectedSalarySched" v-model="selectedSalarySched">
+                                    <option v-for="salaryschedule in salaryschedules" :key="salaryschedule.id" :value="salaryschedule.id">{{ salaryschedule.tranche }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="grade">Grade</label>
+                                <select name="grade" class="custom-select" id="grade" v-model="form.grade">
+                                    <option v-for="grade in salarygrades" :key="grade.id">{{ grade.grade }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="step">Step</label>
+                                <select name="step" class="custom-select" id="step" v-model="form.step">
+                                    <option v-for="step in 8" :key="step.id">{{ step }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <span class="text-danger" v-if="errors.has('salary_sched_id')">Missing Salary Schedule</span>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <span class="text-danger" v-if="errors.has('salary_grade_id')">Missing Salary Grade</span>
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label for="status">Status</label>
-                                <input type="text" name="status" class="form-control kuz-control" v-model="form.status" equired>
+                                <select name="status" id="status" class="form-control" v-model="form.status">
+                                    <option>Permanent</option>
+                                    <option>Co-terminus</option>
+                                    <option>Elected</option>
+                                </select>
                                 <span class="text-danger" v-if="errors.has('status')" v-text="errors.get('status')"></span>
                             </div>
-                            <div class="form-group col-md-12">
-                                <label for="nature_of_appointment">Appointment Nature</label>
-                                <input type="text" name="nature_of_appointment" class="form-control kuz-control" v-model="form.nature_of_appointment">
+                            <div class="col-md-6">
+                                <label for="agency">Agency</label>
+                                <input type="text" name="agency" class="form-control" v-model="form.agency">
+                                <span class="text-danger" v-if="errors.has('agency')" v-text="errors.get('agency')"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="nature_of_appointment">Nature of Appointment</label>
+                                 <select name="nature_of_appointment" id="nature_of_appointment" class="form-control" v-model="form.nature_of_appointment">
+                                    <option>Original</option>
+                                    <option>Promotion</option>
+                                </select>
                                 <span class="text-danger" v-if="errors.has('nature_of_appointment')" v-text="errors.get('nature_of_appointment')"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="previous_employee">Previous Employee</label>
+                                <input type="text" name="previous_employee" class="form-control" v-model="form.previous_employee">
+                                <span class="text-danger" v-if="errors.has('previous_employee')" v-text="errors.get('previous_employee')"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="previous_status">Previous Employee Status</label>
+                                <input type="text" name="previous_status" class="form-control" v-model="form.previous_status">
+                                <span class="text-danger" v-if="errors.has('previous_status')" v-text="errors.get('previous_status')"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="itemno">Item No.</label>
+                                <input type="number" name="itemno" class="form-control" v-model="form.itemno">
+                                <span class="text-danger" v-if="errors.has('itemno')">The item number field is required.</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="page">Page</label>
+                                <input type="number" name="page" class="form-control" v-model="form.page">
+                                <span class="text-danger" v-if="errors.has('page')" v-text="errors.get('page')"></span>
                             </div>
                             <div class="form-group col-md-12">
                                 <label for="reckoning_date">Reckoning Date</label>
-                                <input type="date" name="reckoning_date" class="form-control kuz-control" v-model="form.reckoning_date" min="0">
+                                <input type="date" name="reckoning_date" class="form-control" v-model="form.reckoning_date" min="0">
                                 <span class="text-danger" v-if="errors.has('reckoning_date')" v-text="errors.get('reckoning_date')"></span>
                             </div>
                         </div>
@@ -146,111 +245,242 @@ export default {
     {
         return {
             editMode: false,
+            from: '',
+            to: '',
+            employees: [{}],
             search: '',
-            selected: '',
-            departments: '',
-            appointments: [],
-            tempData: {},
+            reckoning_date_from: '',
+            reckoning_date_to: '',
+            departments: [{}],
+            positions: [{}],
+            salaryschedules: [{}],
+            salarygrades: [],
+            appointments: {personal_information:{}},
+            selectedDept: '',
+            selectedSalarySched: '',
             errors: new Errors(),
             form: new Form({
-                'personal_information_id': '',
+                'firstname': '',
+                'surname': '',
                 'position_id': '',
-                'salary_grade_id': '',
+                'salary_sched_id': '',
+                'grade': '',
+                'step': '',
                 'status': '',
+                'agency': '',
                 'nature_of_appointment': '',
+                'previous_employee': '',
+                'previous_status': '',
+                'itemno':'',
+                'page':'',
                 'reckoning_date': ''
             }),
         }
     },
     watch:
     {
-        selected: function()
+        selectedDept: function()
         {
-            this.debouncedgetAppointments();
+            this.debouncedgetDepartments();
         },
+        selectedSalarySched: function()
+        {
+            this.debouncedgetSalaryScheds();
+        }
+    },
+     created: function() {
+
+        this.$Progress.start()
+        this.getAppointments()
+        this.getEmployees()
+        this.getDepartments()
+        this.getSalarySched()
+
+        this.debouncedgetDepartments = _.debounce(this.getDepartments);
+        this.debouncedgetSalaryScheds = _.debounce(this.getSalarySched);
     },
     methods: {
+        searchAppointment: _.debounce(function(){
+                this.getSearchResults();
+        }, 400),
+        getSearchResults: function(page = 1)
+        {
+            axios.get('api/appointment?page=' + page + '&search=' + this.search + '&from=' + this.reckoning_date_from + '&to=' + this.reckoning_date_to)
+            .then(({data}) => {
+                this.appointments = data;
+            }).catch(error => {
+                console.log(error.reponse.data.message);
+            });
+        },
+        getEmployees: function()
+        {
+            axios.get('api/personalinformation')
+            .then(({data})=> {
+               this.employees = data.data
+            })
+            .catch(error => {
+                console.log(error)
+                toast.fire({
+                    icon: 'error',
+                    title: 'Employee data not retrieved'
+                });
+            })
+        },
         getDepartments: function()
         {
-            this.$Progress.start()
             axios.get('api/department')
             .then(({data}) => {
-                this.departments = data.data;
-                this.selected = this.departments.title != null ? this.departments.title : this.departments[0].title
+                this.departments = data.data
+                if(this.departments.length != 0 || this.departments.length)
+                {
+                    this.getPositions()
+                }else{
+                    Swal.fire(
+                        'Failed',
+                        'No Department data retrieved',
+                        'warning'
+                    )
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                toast.fire({
+                    icon: 'error',
+                    title: 'Departments not retrieved'
+                });
+            })
+        },
+        getPositions: function()
+        {
+            this.$Progress.start()
+            axios.get('api/fetchPosition?deptId='+this.selectedDept)
+            .then(({data})=> {
+                this.positions = data
+
+                if(this.positions == 0 || !this.positions)
+                {
+                    this.positions = { title: 'No Data'}
+                }
                 this.$Progress.finish()
             })
             .catch(error => {
-                console.log(error.response.data.message);
-            });
+                console.log(error)
+                toast.fire({
+                    icon: 'error',
+                    title: 'Positions not retrieved'
+                });
+            })
+        },
+        getSalarySched: function()
+        {
+            axios.get('api/salaryschedule')
+            .then(({data}) => {
+                this.salaryschedules = data
+
+                if(this.salaryschedules.length != 0 || this.departments.length)
+                {
+                    this.getPositions()
+                }else{
+                    Swal.fire(
+                        'Failed',
+                        'No Salary Schedule data retrieved',
+                        'warning'
+                    )
+                }
+                this.getSalaryGrade()
+            })
+            .catch(error => {
+                console.log(error)
+                toast.fire({
+                    icon: 'error',
+                    title: 'Salary Schedules not retrieved'
+                });
+            })
+        },
+        getSalaryGrade: function()
+        {
+            this.$Progress.start()
+            axios.get('api/salarygrade?id='+ this.selectedSalarySched)
+            .then(({data}) => {
+                let ar = _.chunk(data, 8)
+
+                _.each(ar, e => {
+                    if(e[0].grade)
+                    {
+                        this.salarygrades.push({grade: e[0].grade})
+                    }
+                })
+
+                this.$Progress.finish()
+            })
+            .catch(error => {
+                this.$Progress.fail();
+                toast.fire({
+                    icon: 'error',
+                    title: 'Salary Grades not retrieved'
+                });
+            })
         },
         getAppointments: function()
         {
             this.$Progress.start()
-            axios.get('api/appointment?deptTitle='+this.selected)
+            axios.get('api/appointment')
             .then(({data}) => {
-                this.appointments = data.data
+                this.appointments = data
+
                 this.$Progress.finish()
             })
-            .catch(this.$Progress.fail())
+            .catch(error => {
+                this.$Progress.fail();
+                toast.fire({
+                    icon: 'error',
+                    title: 'Appointments not retrieved'
+                });
+            })
         },
         createAppointments: function(appointment)
         {
             this.form = {}
-            if(appointment.appointment.id == "" || appointment.appointment.id == null)
-            {
-                this.editMode = false
-                this.tempData = {personal_information_id: appointment.id, position_id: appointment.position.id, salary_grade_id: appointment.salary_grade_id}
-                $('#appointmentsModal').modal('show')
-            }else if(appointment.appointment.id != null){
-                Swal.fire(
-                    'Oops...',
-                    'This employee already has an appointment',
-                    'error'
-                )
-            }else if(appointment.salary_grade_id == "" || appointment.salary_grade_id == null){
-                Swal.fire(
-                    'Oops...',
-                    'Missing salary grade ID',
-                    'error'
-                )
-            }else if(appointment.position.id == "" || appointment.position.id == null){
-                Swal.fire(
-                    'Oops...',
-                    'Missing position ID',
-                    'error'
-                )
-            }
+            this.salarygrades = []
+            this.selectedDept = ''
+            this.selectedSalarySched = ''
+            $('#appointmentsModal').modal('show')
+            this.editMode = false
         },
         editAppointments: function(appointment)
         {
             this.form = {}
-            if(appointment.appointment.id == "" || appointment.appointment.id == null)
-            {
-                Swal.fire(
-                    'Oops...',
-                    'Create an appointment first',
-                    'error'
-                )
-            } else {
-                this.editMode = true
-                this.tempData = {personal_information_id: appointment.id, position_id: appointment.position.id, salary_grade_id: appointment.salary_grade_id}
-                Object.assign(this.form, appointment.appointment)
-                $('#appointmentsModal').modal('show')
-            }
+
+            this.selectedDept = appointment.department.id
+            this.selectedSalarySched = appointment.salary_sched.id
+
+            this.form.id                        = appointment.id
+            this.form.firstname                 = appointment.personal_information.firstname
+            this.form.surname                   = appointment.personal_information.surname
+            this.form.position_id               = appointment.position.id
+            this.form.salary_sched_id           = appointment.salary_sched.id
+            this.form.grade                     = appointment.salary_grade.grade
+            this.form.step                      = appointment.salary_grade.step
+            this.form.status                    = appointment.status
+            this.form.agency                    = appointment.agency
+            this.form.nature_of_appointment     = appointment.nature_of_appointment
+            this.form.previous_employee         = appointment.previous_employee
+            this.form.previous_status           = appointment.previous_status
+            this.form.itemno                    = appointment.itemno
+            this.form.page                      = appointment.page
+            this.form.reckoning_date            = appointment.reckoning_date
+
+            this.editMode = true
+            $('#appointmentsModal').modal('show')
         },
         storeAppointments: function()
         {
+            if(this.selectedSalarySched != '' || this.selectedSalarySched)
+            {
+                this.form.salary_sched_id = this.selectedSalarySched
+            }
             this.$Progress.start()
-            axios.post('api/appointment',
-                {
-                    personal_information_id: this.tempData.personal_information_id,
-                    position_id: this.tempData.position_id,
-                    salary_grade_id: this.tempData.salary_grade_id,
-                    status: this.form.status,
-                    nature_of_appointment: this.form.nature_of_appointment,
-                    reckoning_date: this.form.reckoning_date
-                }
-            )
+            axios.post('api/appointment', this.form)
             .then(({data}) => {
                 toast.fire({
                     icon: 'success',
@@ -266,16 +496,8 @@ export default {
         updateAppointments: function()
         {
             this.$Progress.start()
-            axios.patch('api/appointment/'+this.form.id,
-                {
-                    personal_information_id: this.tempData.personal_information_id,
-                    position_id: this.tempData.position_id,
-                    salary_grade_id: this.tempData.salary_grade_id,
-                    status: this.form.status,
-                    nature_of_appointment: this.form.nature_of_appointment,
-                    reckoning_date: this.form.reckoning_date
-                }
-            )
+
+            axios.patch('api/appointment/'+this.form.id, this.form)
             .then(({data}) => {
                 toast.fire({
                     icon: 'success',
@@ -290,7 +512,7 @@ export default {
         },
         deleteAppointment: function(appointment)
         {
-            if(!appointment.appointment.id)
+            if(!appointment.id)
             {
                 toast.fire({
                     icon: 'error',
@@ -314,7 +536,7 @@ export default {
                         });
                     }else{
                         this.$Progress.start()
-                        axios.delete('api/appointment/'+appointment.appointment.id)
+                        axios.delete('api/appointment/'+appointment.id)
                         .then(response => {
                             toast.fire({
                                 icon: 'success',
@@ -329,26 +551,12 @@ export default {
                                 'Something went wrong',
                                 'error'
                             )
+                            console.log(error)
                         })
                     }
                 })
             }
         },
     },
-    computed: {
-       filter: function () {
-            var self = this;
-            return this.appointments.filter(e => {
-                return e.firstname.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                || e.surname.toLowerCase().indexOf(self.search.toLowerCase()) >= 0;
-            });
-        }
-    },
-    created: function() {
-        this.$Progress.start()
-        this.debouncedgetAppointments = _.debounce(this.getAppointments, 500);
-        this.getDepartments()
-    },
-
 }
 </script>

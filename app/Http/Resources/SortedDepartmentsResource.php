@@ -16,6 +16,7 @@ class SortedDepartmentsResource extends ResourceCollection
     {
         return $this->collection->map(function ($item) {
             return [
+                'id' => $item->position->department->id,
                 'title' => $item->position->department->title,
                 'description' => $item->position->department->description,
                 'address' => $item->position->department->address,

@@ -24,7 +24,12 @@ class Appointment extends Model
                             'position_id',
                             'salary_grade_id',
                             'status',
+                            'agency',
                             'nature_of_appointment',
+                            'previous_employee',
+                            'previous_status',
+                            'itemno',
+                            'page',
                             'reckoning_date'
     ];
 

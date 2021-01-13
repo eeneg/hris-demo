@@ -12,7 +12,7 @@
                                 </select>
                             </div>
                             <div class="btn-group">
-                                <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryScheduleModal()" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salarySchedModal">
+                                <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryScheduleModal()" type="button" class="btn btn-outline-primary">
                                 Edit Salary Schedule <i class="fa fa-edit"></i>
                                 </button>
                             </div>
@@ -242,10 +242,18 @@
             },
             editSalaryScheduleModal: function()
             {
-                var ar =  _.find(this.salaryschedules, ['tranche', this.selected])
-
-                this.salarySchedForm = {id: ar.id, tranche: ar.tranche, effective_date:ar.effective_date}
-                this.editMode = true
+                if(this.selected == null || this.selected == '')
+                {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Nothing to edit'
+                    });
+                }else{
+                    var ar =  _.find(this.salaryschedules, ['tranche', this.selected])
+                    this.salarySchedForm = {id: ar.id, tranche: ar.tranche, effective_date:ar.effective_date}
+                    this.editMode = true
+                    $('#salarySchedModal').modal('show')
+                }
             },
             updateSalarySchedule: function()
             {
