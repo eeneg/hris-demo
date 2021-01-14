@@ -22,7 +22,8 @@ class EmployeesListResource extends ResourceCollection
                 'nameextension' => $item->nameextension,
                 'surname' => $item->surname,
                 'status' => $item->status,
-                'plantillacontents' => $item->plantillacontents
+                'plantillacontents' => $item->plantillacontents,
+                'picture' => $item->picture
             ];
         });
         

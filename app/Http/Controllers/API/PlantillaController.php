@@ -81,7 +81,21 @@ class PlantillaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'year' => 'unique:plantillas,year,'.$id
+        ]);
+        $plantilla = Plantilla::findOrFail($id);
+        $plantilla->year = $request->year;
+        $plantilla->salary_schedule_auth_id = $request->salary_auth;
+        $plantilla->salary_schedule_prop_id = $request->salary_prop;
+        $plantilla->date_approved = $request->date_approved;
+        $plantilla->save();
+
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $default_plantilla->value = $request->year;
+        $default_plantilla->save();
+
+        return ['message' => 'Success'];
     }
 
     /**

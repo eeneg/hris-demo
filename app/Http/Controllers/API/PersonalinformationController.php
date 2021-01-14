@@ -71,7 +71,7 @@ class PersonalInformationController extends Controller
 
         if ($request->picture != null) {
             $name = time() . '.' . explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
-            \Image::make($request->picture)->save(public_path('storage/pds_employeePictures/').$name);
+            \Image::make($request->picture)->save(public_path('storage/employee_pictures/').$name);
 
             $request->merge(['picture' => $name]);
         }

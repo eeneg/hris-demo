@@ -2745,9 +2745,9 @@
       
                 <!-- Conforme -->
       
-                <tr style="border: solid 1px; border-bottom: none;">
+                <tr>
                     <div class="qr-code" style="position: absolute;">
-                        <img src="./storage/employee_id_files/2go.png" alt="..." class="img-thumbnail">
+                        <img src="./storage/employee_id_files/blue.png" alt="..." class="img-thumbnail">
                     </div>
                   <td colspan="9" style=" border: none; height: 260px;">
                   </td>

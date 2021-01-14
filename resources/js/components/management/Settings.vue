@@ -11,7 +11,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Select latest approved Annual Plantilla</label>
-                                <select class="custom-select" v-model="form.plantilla" :class="{ 'is-invalid': form.errors.has('plantilla') }">
+                                <select class="custom-select" v-model="form.plantilla.year" :class="{ 'is-invalid': form.errors.has('plantilla') }">
                                     <option v-for="plantilla in plantillas" :key="plantilla.id">{{ plantilla.year }}</option>
                                 </select>
                                 <has-error :form="form" field="plantilla"></has-error>
@@ -35,7 +35,7 @@
             return {
                 plantillas: {},
                 form: new Form({
-                    'plantilla': '',
+                    'plantilla': {},
                 })
             }
         },

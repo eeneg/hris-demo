@@ -4,10 +4,10 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <div class="d-inline-flex">
-                        <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Annual Plantilla {{ this.$parent.settings.plantilla }}</h2>
+                        <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h2>
                         <a href="" @click.prevent="showEditPlantillaModal()" class="blue ml-2"><i class="far fa-edit"></i></a>
                     </div>
-                    <p style="margin: 0;">Date Approved: <span>{{  }}</span> </p>
+                    <p style="margin: 0;">Date Approved: <span>{{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.date_approved }}</span> </p>
                     <div class="row mt-2">
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom:0;">
@@ -39,7 +39,7 @@
                             </tr>
                             <tr>
                                 <th colspan="2" style="font-weight: normal;">Rate/Annum {{ this.previousPlantilla }}</th>
-                                <th colspan="2" style="font-weight: normal;">Rate/Annum {{ this.$parent.settings.plantilla }}</th>
+                                <th colspan="2" style="font-weight: normal;">Rate/Annum {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</th>
                             </tr>
                             <tr>
                                 <th style="font-weight: normal;">Old</th>
@@ -214,14 +214,14 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Duplicate Annual Plantilla {{ this.$parent.settings.plantilla }}</h5>
+                        <h5 class="modal-title">Duplicate Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <form autocomplete="off" @submit.prevent="duplicatePlantilla()">
                         <div class="modal-body">
-                            <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ salaryproposed.tranche }}</p>
+                            <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ prevSalaryproposed.tranche }}</p>
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
                                 <label style="font-weight: normal; margin: 0;">Proposed Salary Schedule</label>
                                 <select v-model="plantillaForm.salary_prop" class="custom-select form-control-border border-width-2">
@@ -255,14 +255,14 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Plantilla {{ this.$parent.settings.plantilla }}</h5>
+                        <h5 class="modal-title">Edit Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <form autocomplete="off" @submit.prevent="editPlantilla()">
                         <div class="modal-body">
-                            <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ salaryproposed.tranche }}</p>
+                            <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.salaryauthorizedschedule.tranche }}</p>
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
                                 <label style="font-weight: normal; margin: 0;">Proposed Salary Schedule</label>
                                 <select v-model="plantillaForm.salary_prop" class="custom-select form-control-border border-width-2">
@@ -272,8 +272,8 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="year" style="font-weight: normal; margin: 0;">Plantilla Year</label>
-                                        <input v-model="plantillaForm.year" id="year" class="form-control" type="text" name="year" placeholder="Year"
+                                        <label for="edit_year" style="font-weight: normal; margin: 0;">Plantilla Year</label>
+                                        <input v-model="plantillaForm.year" id="edit_year" class="form-control" type="text" name="year" placeholder="Year"
                                         :class="{ 'is-invalid': plantillaForm.errors.has('year') }" required>
                                         <has-error :form="plantillaForm" field="year"></has-error>
                                     </div>
@@ -282,8 +282,8 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="date_approved" style="font-weight: normal; margin: 0;">Date Approved (yyyy-mm-dd)</label>
-                                        <input v-model="plantillaForm.date_approved" id="date_approved" class="form-control" type="text" name="date_approved" placeholder="yyyy-mm-dd"
+                                        <label for="edit_date_approved" style="font-weight: normal; margin: 0;">Date Approved (yyyy-mm-dd)</label>
+                                        <input v-model="plantillaForm.date_approved" id="edit_date_approved" class="form-control" type="text" name="date_approved" placeholder="yyyy-mm-dd"
                                         :class="{ 'is-invalid': plantillaForm.errors.has('date_approved') }" 
                                             onkeypress="return event.charCode > 47 && event.charCode < 58;" 
                                             onkeydown="var date = this.value;
@@ -295,17 +295,17 @@
                                                     this.value = date + '-';
                                                 }
                                             " 
-                                            maxlength="10" required>
+                                            maxlength="10">
                                         <has-error :form="plantillaForm" field="date_approved"></has-error>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer" style="display: flow-root;padding: 6px 10px;">
-                            <div id="duplicateLoadingIcon" class="spinner-border text-success d-none" role="status" style="float: left;">
+                            <div id="editLoadingIcon" class="spinner-border text-success d-none" role="status" style="float: left;">
                                 <span class="sr-only">Loading...</span>
                             </div>
-                            <button id="duplicateButton" type="submit" class="btn btn-success" style="float: right;">Create</button>
+                            <button id="editButton" type="submit" class="btn btn-success" style="float: right;">Save</button>
                         </div>
                     </form>
                 </div>
@@ -316,23 +316,18 @@
         <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Print Report</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Print Report</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+                    <div class="modal-body" id="pdf-viewer">
 
-                <!-- Modal body -->
-                <div class="modal-body" id="pdf-viewer">
+                    </div>
 
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -353,8 +348,9 @@
                 schedules: [],
                 plantillaNameForEdit: '',
                 previousPlantilla: '',
-                salaryauthorized: {},
-                salaryproposed: {},
+                prevSalaryauthorized: {},
+                prevSalaryproposed: {},
+                dateApproved: '',
                 footnote: '',
                 footnoteForm: new Form({
                     'footnote': '',
@@ -414,11 +410,37 @@
                 axios.get('api/salaryschedule')
                     .then(({data}) => {
                         this.schedules = data;
-                        this.plantillaForm.salary_prop = data[0].id;
-                        this.plantillaForm.salary_auth = this.salaryproposed.id;
+                        this.plantillaForm.salary_prop = this.$parent.settings.plantilla.salaryproposedschedule.id;
+                        this.plantillaForm.salary_auth = this.prevSalaryproposed.id;
+                        this.plantillaForm.year = this.$parent.settings.plantilla.year;
+                        this.plantillaForm.date_approved = this.$parent.settings.plantilla.date_approved;
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
+                    });
+            },
+            editPlantilla() {
+                this.$Progress.start();
+                $('#editLoadingIcon').removeClass('d-none');
+                $('#editButton').attr('disabled','disabled');
+                this.plantillaForm.put('api/plantilla/' + this.$parent.settings.plantilla.id)
+                    .then(() => {
+                        this.loadContents();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Annual Plantilla ' + this.plantillaForm.year + ' updated successfully',
+                        })
+                        this.$parent.getSettings();
+                        $('#edit-plantilla-modal').modal('hide');     
+                        this.$Progress.finish();
+                        $('#editLoadingIcon').addClass('d-none');
+                        $('#editButton').removeAttr('disabled');
+                    })
+                    .catch(error => {
+                        this.$Progress.fail();
+                        $('#editLoadingIcon').addClass('d-none');
+                        $('#editButton').removeAttr('disabled');
                     });
             },
             addItemModal() {
@@ -456,7 +478,7 @@
                     .then(({data}) => {
                         this.schedules = data;
                         this.plantillaForm.salary_prop = data[0].id;
-                        this.plantillaForm.salary_auth = this.salaryproposed.id;
+                        this.plantillaForm.salary_auth = this.prevSalaryproposed.id;
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -590,11 +612,11 @@
                 return difference < 0 ? '(' + (difference * -1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')' : difference.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             },
             getPreviousPlantilla() {
-                axios.post('api/previousplantilla', {current: this.$parent.settings.plantilla})
+                axios.post('api/previousplantilla', {current: this.$parent.settings.plantilla.year})
                     .then(({data}) => {
                         this.previousPlantilla = data.year;
-                        this.salaryauthorized = data.salaryauthorizedschedule;
-                        this.salaryproposed = data.salaryproposedschedule;
+                        this.prevSalaryauthorized = data.salaryauthorizedschedule;
+                        this.prevSalaryproposed = data.salaryproposedschedule;
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -665,7 +687,7 @@
                         this.itemMin = data.data[0].new_number;
                         this.itemMax = data.data[data.data.length - 1].new_number;
                         this.footnoteForm.department = this.selectedDepartment;
-                        this.$Progress.finish();
+                        
                         axios.post('api/footnotespec', {department: this.selectedDepartment})
                             .then(({data}) => {
                                 this.footnote = data.note;
@@ -674,6 +696,8 @@
                             .catch(error => {
                                 console.log(error.response.data.message);
                             })
+
+                        this.$Progress.finish();
                     })
                     .catch(error => {
                         this.$Progress.fail();

@@ -5,7 +5,7 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Employees</h2>
-                    <small style="margin-left: 2px;">Positions are based on Annual Plantilla {{ this.$parent.settings.plantilla }}</small>
+                    <small style="margin-left: 2px;">Positions are based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</small>
                     <div class="row mt-1">
                         <div class="col-md-3">
                             <div class="input-group">
@@ -26,7 +26,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Position <span style="font-weight: 100;">({{ this.$parent.settings.plantilla }})</span></th>
+                                <th>Position <span style="font-weight: 100;">({{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})</span></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -816,7 +816,7 @@
                 if (employee.plantillacontents.length > 0) {
                     let details = {designation: '', department: '', sg: ''};
                     _.forEach(employee.plantillacontents, (value) => {
-                        if (this.$parent.settings.plantilla == value.plantilla.year) {
+                        if (this.$parent.settings.plantilla.year == value.plantilla.year) {
                             details.designation = value.position && value.position.title;
                             details.department = value.position && value.position.department.description;
                             details.sg = value.salaryproposed && value.salaryproposed.grade;

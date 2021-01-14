@@ -1598,7 +1598,7 @@ export default {
         getAvatar: function() {
             if(this.form.picture != null)
             {
-                let prefix = (this.form.picture.match(/\//) ? '' : '/storage/pds_employeePictures/');
+                let prefix = (this.form.picture.match(/\//) ? '' : '/storage/employee_pictures/');
                 return prefix + this.form.picture;
             }
         },

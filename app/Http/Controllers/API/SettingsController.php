@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Setting;
+use App\Plantilla;
 
 class SettingsController extends Controller
 {
@@ -16,8 +17,9 @@ class SettingsController extends Controller
     public function index()
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $data = [
-            'plantilla' => $default_plantilla->value
+            'plantilla' => $plantilla
         ];
         return $data;
     }
