@@ -20,6 +20,9 @@ import VueRx from "vue-rx";
 import VuejsClipper from "vuejs-clipper/dist/vuejs-clipper.umd";
 import "vuejs-clipper/dist/vuejs-clipper.css";
 
+import vSelect from "vue-select";
+Vue.component("v-select", vSelect);
+
 Vue.use(VueRx);
 Vue.use(VuejsClipper,{
     components: {

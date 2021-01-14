@@ -35,6 +35,7 @@
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.4.9",
         "vue-rx": "^6.2.0",
+        "vue-select": "^3.11.2",
         "vuejs-clipper": "^3.1.1"
     }
 }

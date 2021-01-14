@@ -8,6 +8,7 @@ use App\Position;
 use App\Http\Controllers\Controller;
 use App\PersonalInformation;
 use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\EmployeeAppointmentListResource;
 use App\SalaryGrade;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -83,6 +84,12 @@ class AppointmentController extends Controller
 
     }
 
+    public function employees(Request $request)
+    {
+        $employees = PersonalInformation::all();
+        return new EmployeeAppointmentListResource($employees);
+    }
+
     public function deptPosition(Request $request)
     {
         if($request->deptId != null)
@@ -99,17 +106,13 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        $personalInfoId = PersonalInformation::where('firstname', $request->firstname)->where('surname', $request->surname)->value('id');
-
         $salaryGradeId = SalaryGrade::where('salary_sched_id', $request->salary_sched_id)->where('grade', $request->grade)->where('step', $request->step)->value('id');
 
-        $request->merge(['personal_information_id' => $personalInfoId, 'salary_grade_id' => $salaryGradeId]);
+        $request->merge(['salary_grade_id' => $salaryGradeId]);
 
         $request->validate([
             'personal_information_id'   => 'required',
             'salary_grade_id'           => 'required',
-            'firstname'                 => 'required',
-            'surname'                   => 'required',
             'position_id'               => 'required',
             'salary_sched_id'           => 'required',
             'grade'                     => 'required',
@@ -149,17 +152,13 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::findOrFail($id);
 
-        $personalInfoId = PersonalInformation::where('firstname', $request->firstname)->where('surname', $request->surname)->value('id');
-
         $salaryGradeId = SalaryGrade::where('salary_sched_id', $request->salary_sched_id)->where('grade', $request->grade)->where('step', $request->step)->value('id');
 
-        $request->merge(['personal_information_id' => $personalInfoId, 'salary_grade_id' => $salaryGradeId]);
+        $request->merge(['salary_grade_id' => $salaryGradeId]);
 
         $request->validate([
             'personal_information_id'   => 'required',
             'salary_grade_id'           => 'required',
-            'firstname'                 => 'required',
-            'surname'                   => 'required',
             'position_id'               => 'required',
             'salary_sched_id'           => 'required',
             'grade'                     => 'required',

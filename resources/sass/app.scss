@@ -17,6 +17,8 @@
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
+@import "vue-select/src/scss/vue-select.scss";
+
 .router-link-active {
     background-color: #1e8cad !important;
     color: white !important;
@@ -136,7 +138,7 @@
     position: relative;
     display: inline-block;
 }
-  
+
 .autocomplete-items {
     position: absolute;
     border: 1px solid #d4d4d4;
@@ -152,19 +154,19 @@
 .autocomplete-items div {
     padding: 10px;
     cursor: pointer;
-    background-color: #fff; 
-    border-bottom: 1px solid #d4d4d4; 
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
 }
 
 /*when hovering an item:*/
 .autocomplete-items div:hover {
-    background-color: #e9e9e9; 
+    background-color: #e9e9e9;
 }
 
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
-    background-color: DodgerBlue !important; 
-    color: #ffffff; 
+    background-color: DodgerBlue !important;
+    color: #ffffff;
 }
 
 .nav-link2{
@@ -190,7 +192,7 @@
 }
 // table
 .td-notif{
-    font-size: 13px; 
+    font-size: 13px;
     vertical-align: middle;
 }
 // messages board

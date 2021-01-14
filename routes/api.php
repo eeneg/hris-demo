@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('footnotespec', 'API\FootnoteController@getfootnote');
 
     Route::get('fetchPosition', 'API\AppointmentController@deptPosition');
+    Route::get('appointmentemployeelist', 'API\AppointmentController@employees');
 });
 
 

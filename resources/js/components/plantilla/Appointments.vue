@@ -89,19 +89,11 @@
                 </div>
                 <form @submit.prevent="editMode == false ? storeAppointments() : updateAppointments()" action="" id="pdsForm" @keydown="errors.clear($event.target.name)">
                     <div class="modal-body">
-                        <div class="row justify-content-center">
-                            <span class="text-danger" name="personal_information_id" v-if="errors.has('personal_information_id')">Employee not found</span>
-                        </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <label for="firstname">First Name</label>
-                                <input type="text" name="firstname" id="firstname" class="form-control" v-model="form.firstname" @keydown="errors.clear('personal_information_id')">
-                                <span class="text-danger" v-if="errors.has('firstname')" v-text="errors.get('firstname')"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="surname">Surname</label>
-                                <input type="text" name="surname" id="surname" class="form-control" v-model="form.surname" @keydown="errors.clear('personal_information_id')">
-                                <span class="text-danger" v-if="errors.has('surname')" v-text="errors.get('surname')"></span>
+                                <v-select v-model="form.personal_information_id" :options="employees.data" label="name" :reduce="employees => employees.id"></v-select>
+                                <span class="text-danger" v-if="errors.has('personal_information_id')">Employee not found</span>
                             </div>
                             <div class="col-md-6">
                                 <label for="selectedDept">Department</label>
@@ -164,9 +156,14 @@
                                 </select>
                                 <span class="text-danger" v-if="errors.has('nature_of_appointment')" v-text="errors.get('nature_of_appointment')"></span>
                             </div>
-                            <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <label for="reckoning_date">Reckoning Date</label>
+                                <input type="date" name="reckoning_date" class="form-control" v-model="form.reckoning_date" min="0">
+                                <span class="text-danger" v-if="errors.has('reckoning_date')" v-text="errors.get('reckoning_date')"></span>
+                            </div>
+                            <div class="col-md-12">
                                 <label for="previous_employee">Previous Employee</label>
-                                <input type="text" name="previous_employee" class="form-control" v-model="form.previous_employee">
+                                <v-select v-model="form.previous_employee" :options="employees.data" label="name" :reduce="employees => employees.name"></v-select>
                                 <span class="text-danger" v-if="errors.has('previous_employee')" v-text="errors.get('previous_employee')"></span>
                             </div>
                             <div class="col-md-6">
@@ -183,11 +180,6 @@
                                 <label for="page">Page</label>
                                 <input type="number" name="page" class="form-control" v-model="form.page">
                                 <span class="text-danger" v-if="errors.has('page')" v-text="errors.get('page')"></span>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label for="reckoning_date">Reckoning Date</label>
-                                <input type="date" name="reckoning_date" class="form-control" v-model="form.reckoning_date" min="0">
-                                <span class="text-danger" v-if="errors.has('reckoning_date')" v-text="errors.get('reckoning_date')"></span>
                             </div>
                         </div>
                     </div>
@@ -260,8 +252,7 @@ export default {
             selectedSalarySched: '',
             errors: new Errors(),
             form: new Form({
-                'firstname': '',
-                'surname': '',
+                'personal_information_id': '',
                 'position_id': '',
                 'salary_sched_id': '',
                 'grade': '',
@@ -293,8 +284,6 @@ export default {
         this.$Progress.start()
         this.getAppointments()
         this.getEmployees()
-        this.getDepartments()
-        this.getSalarySched()
 
         this.debouncedgetDepartments = _.debounce(this.getDepartments);
         this.debouncedgetSalaryScheds = _.debounce(this.getSalarySched);
@@ -314,9 +303,9 @@ export default {
         },
         getEmployees: function()
         {
-            axios.get('api/personalinformation')
+            axios.get('api/appointmentemployeelist')
             .then(({data})=> {
-               this.employees = data.data
+               this.employees = data
             })
             .catch(error => {
                 console.log(error)
@@ -331,15 +320,10 @@ export default {
             axios.get('api/department')
             .then(({data}) => {
                 this.departments = data.data
-                if(this.departments.length != 0 || this.departments.length)
+
+                if(this.selectedDept.length != 0)
                 {
                     this.getPositions()
-                }else{
-                    Swal.fire(
-                        'Failed',
-                        'No Department data retrieved',
-                        'warning'
-                    )
                 }
             })
             .catch(error => {
@@ -357,10 +341,6 @@ export default {
             .then(({data})=> {
                 this.positions = data
 
-                if(this.positions == 0 || !this.positions)
-                {
-                    this.positions = { title: 'No Data'}
-                }
                 this.$Progress.finish()
             })
             .catch(error => {
@@ -377,17 +357,10 @@ export default {
             .then(({data}) => {
                 this.salaryschedules = data
 
-                if(this.salaryschedules.length != 0 || this.departments.length)
+                if(this.selectedSalarySched.length != 0)
                 {
-                    this.getPositions()
-                }else{
-                    Swal.fire(
-                        'Failed',
-                        'No Salary Schedule data retrieved',
-                        'warning'
-                    )
+                    this.getSalaryGrade()
                 }
-                this.getSalaryGrade()
             })
             .catch(error => {
                 console.log(error)
@@ -440,23 +413,29 @@ export default {
         },
         createAppointments: function(appointment)
         {
-            this.form = {}
+            this.form.reset()
             this.salarygrades = []
             this.selectedDept = ''
             this.selectedSalarySched = ''
+
+            this.getDepartments()
+            this.getSalarySched()
+
+            this.errors.deleteV()
+
             $('#appointmentsModal').modal('show')
             this.editMode = false
         },
         editAppointments: function(appointment)
         {
-            this.form = {}
+            this.form.reset()
+            this.errors.deleteV()
 
             this.selectedDept = appointment.department.id
             this.selectedSalarySched = appointment.salary_sched.id
 
             this.form.id                        = appointment.id
-            this.form.firstname                 = appointment.personal_information.firstname
-            this.form.surname                   = appointment.personal_information.surname
+            this.form.personal_information_id   = appointment.personal_information.id
             this.form.position_id               = appointment.position.id
             this.form.salary_sched_id           = appointment.salary_sched.id
             this.form.grade                     = appointment.salary_grade.grade
