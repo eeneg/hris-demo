@@ -43,6 +43,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $with = [
+        'userassignment'
+    ];
+
+    public function userassignment()
+    {
+        return $this->hasOne('App\UserAssignment', 'user_id');
+    }
+
     public static function boot(){
         parent::boot();
         self::creating(function($model){

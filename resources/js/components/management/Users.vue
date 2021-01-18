@@ -89,11 +89,22 @@
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label style="font-weight: normal; margin: 0;">User Role</label>
                                 <select name="role" v-model="form.role" class="form-control"
-                                    :class="{ 'is-invalid': form.errors.has('role') }">
+                                    :class="{ 'is-invalid': form.errors.has('role') }" @change="showDepartments()" id="user_role_combo">
                                     <option value="">Select User Role</option>
                                     <option value="Administrator">Administrator</option>
                                     <option value="Author">Author</option>
+                                    <option value="Office User">Office Head</option>
                                     <option value="Office User">Office User</option>
+                                </select>
+                                <has-error :form="form" field="role"></has-error>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0.3rem;display: none;" id="department_user_select">
+                                <label style="font-weight: normal; margin: 0;">Department</label>
+                                <select name="department_id" v-model="form.department_id" class="form-control"
+                                    :class="{ 'is-invalid': form.errors.has('department_id') }">
+                                    <option value="">Select Department</option>
+                                    <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.address }}</option>
                                 </select>
                                 <has-error :form="form" field="role"></has-error>
                             </div>
@@ -148,6 +159,8 @@
                 editmode: false,
                 users: {},
                 search: '',
+                departments: [],
+                selectedDepartment: '',
                 form: new Form({
                     'id': '',
                     'name': '',
@@ -156,7 +169,8 @@
                     'landline': '',
                     'role': '',
                     'avatar': '',
-                    'status': ''
+                    'status': '',
+                    'department_id': ''
                 })
             }
         },
@@ -183,6 +197,10 @@
                 this.form.reset();
                 $('#userModal').modal('show');
                 this.form.fill(user);
+                if (this.form.department_id != null) {
+                    this.loadDepartments();
+                    $('#department_user_select').toggle('slide');
+                }
             },
             getAvatar(avatar) {
                 if (avatar != "profile.png") {
@@ -193,6 +211,17 @@
                     return prefix + avatar;
                 }
             }, 
+            showDepartments(value) {
+                var value = $('#user_role_combo').val();
+                if ((value == 'Office User' || value == 'Office Head') && $('#department_user_select').is(":hidden")) {
+                    if (this.departments.length == 0) {
+                        this.loadDepartments();
+                    }
+                    $('#department_user_select').toggle('slide');
+                } else if(value != 'Office User' && value != 'Office Head' && $('#department_user_select').is(":visible")) {
+                    $('#department_user_select').toggle('slide');
+                }
+            },
             loadUsers() {
                 // if (this.$gate.isAdministratorORAuthor()) {
                     axios.get('api/user')
@@ -267,6 +296,16 @@
                             });
                     }
                 });
+            },
+            loadDepartments() {
+                axios.get('api/department')
+                    .then(({data}) => {
+                        this.departments = data.data;
+                        this.selectedDepartment = data.data[0].id;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
             }
         },
         created() {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use App\UserAssignment;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 
@@ -28,7 +30,7 @@ class UserController extends Controller
                 $users = User::latest()->paginate(15);
             }
     
-            return $users;
+            return new UserResource($users);
         // }
     }
 
@@ -46,7 +48,7 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
             'role' => 'required'
         ]);
-        return User::create([
+        $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
@@ -55,6 +57,12 @@ class UserController extends Controller
             'avatar' => 'profile.png',
             'status' => 'Active'
         ]);
+        if ($request->department_id != '') {
+            UserAssignment::create([
+                'user_id' => $user->id,
+                'department_id' => $request->department_id
+            ]);
+        }
     }
 
     /**

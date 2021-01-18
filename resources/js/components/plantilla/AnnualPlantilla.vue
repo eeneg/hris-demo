@@ -105,10 +105,7 @@
                         <div class="modal-body">
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
                                 <label style="font-weight: normal; margin: 0;">Employee name</label>
-                                <select v-model="form.personal_information_id" class="custom-select form-control-border" id="employeesDropdown">
-                                    <option value="null">VACANT</option>
-                                    <option :value="forvacant.id" v-for="forvacant in forvacants" :key="forvacant.id">{{ forvacant.surname + ', ' + forvacant.firstname + ' ' + (forvacant.nameextension != '' ? forvacant.nameextension + ' ' : '') + forvacant.middlename }}</option>
-                                </select>
+                                <v-select class="form-control form-control-border" v-model="form.personal_information_id" :options="forvacants" label="name" :reduce="forvacants => forvacants.id" id="employeesDropdown"></v-select>
                             </div>
                             <div class="row">
                                 <div class="col-3" style="padding-right: 5px;">
