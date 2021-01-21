@@ -2711,6 +2711,7 @@
         </style>
     </head>
     <body id="po-body" style="width: 100%">
+        
         <footer style="font-size: 12px; color: black; bottom: 0; position: fixed;">
             <div class="rfq-report" style="width: 100%;">
               <table style="width: 100%;">
@@ -2906,6 +2907,18 @@
                             <td style="border: none; text-align: center; font-size: 30px; vertical-align: bottom;">2,179,248.00</td>
                             <td style="border: none; text-align: center; font-size: 30px; vertical-align: bottom;">2,179,248.00</td>
                           </tr> 
+                          <tr style="border: solid 1px;">
+                            <td style="border: none; height: 50px; font-size: 30px; vertical-align: bottom;">1</td>
+                            <td style="border: none; font-size: 30px; vertical-align: bottom;">1</td>
+                            <td style="border: none; text-align: left; font-size: 30px; vertical-align: bottom;"><p style="margin-left: 5px;">Provincial Governor</p></td>
+                            <td style="border: none; text-align: left; font-size: 30px; font-weight: 700; vertical-align: bottom;"><p style="margin-left: 5px; ">DOUGLAS R. CAGAS</p></td>
+                            <td style="border: none; font-size: 30px; vertical-align: bottom;">30/2</td>
+                            <td style="border: none; text-align: center; font-size: 30px; vertical-align: bottom;">2,179,248.00</td>
+                            <td style="border: none; text-align: center; font-size: 30px; vertical-align: bottom;">30/2</td>
+                            <td style="border: none; text-align: center; font-size: 30px; vertical-align: bottom;">2,179,248.00</td>
+                            <td style="border: none; text-align: center; font-size: 30px; vertical-align: bottom;">2,179,248.00</td>
+                          </tr> 
+                         
                           
                     </tbody>
                 </table>

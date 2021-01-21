@@ -217,8 +217,10 @@
     margin-left: 10% !important;
 }
 .qr-code{
+    
     width: 130px;
     height: 130px;
     margin-left: 1600px;
-    top: 9.8in;
+    top: 10.6in;
 }
+.page_break { page-break-before: always; }
