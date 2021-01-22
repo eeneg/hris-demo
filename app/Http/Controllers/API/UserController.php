@@ -55,7 +55,7 @@ class UserController extends Controller
             'landline' => $request['landline'],
             'role' => $request['role'],
             'avatar' => 'profile.png',
-            'status' => 'Active'
+            'status' => 'Active',
         ]);
         if ($request->department_id != '') {
             UserAssignment::create([
@@ -139,6 +139,13 @@ class UserController extends Controller
         }
         
         $user->update($request->all());
+
+        if ($request->department_id != '') {
+            $user_assignment = UserAssignment::where('user_id', $user->id)->first();
+            $user_assignment->department_id = $request->department_id;
+            $user_assignment->save();
+        }
+
         return ['message' => 'User has been updated.'];
     }
 

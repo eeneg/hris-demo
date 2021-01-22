@@ -148,19 +148,19 @@
 								</a>
 								<ul class="nav nav-treeview">
 									<li class="nav-item">
-										<router-link to="/plantilla" class="nav-link">
+										<router-link to="/leave-credits" class="nav-link">
 											<i class="fas fa-download nav-icon"></i>
 											<p>Credits</p>
 										</router-link>
 									</li>
 									<li class="nav-item">
-										<router-link to="/salaryschedule" class="nav-link">
+										<router-link to="/leave-applications" class="nav-link">
 											<i class="fas fa-file nav-icon"></i>
 											<p>Applications</p>
 										</router-link>
 									</li>
 									<li class="nav-item">
-										<router-link to="/departments" class="nav-link">
+										<router-link to="/leave-types" class="nav-link">
 											<i class="fas fa-list nav-icon"></i>
 											<p>Leave Types</p>
 										</router-link>

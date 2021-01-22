@@ -31,7 +31,8 @@ Route::group(['middleware' => 'auth:api'], function() {
         'appointment' => 'API\AppointmentController',
         'plantillacontent' => 'API\PlantillaContentController',
         'abolisheditem' => 'API\AbolishedItemController',
-        'footnote' => 'API\FootnoteController'
+        'footnote' => 'API\FootnoteController',
+        'leavetype' => 'API\LeaveTypeController'
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');

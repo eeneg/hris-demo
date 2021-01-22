@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="card-body table-responsive p-0" style="height: 650px;">
-                    <table class="table table-hover table-bordered table-striped text-nowrap plantilla-table">
+                    <table class="table table-hover table-bordered table-striped text-nowrap custom-table plantilla-table">
                         <thead>
                             <tr>
                                 <th colspan="2" rowspan="2" style="font-size: 1rem;">Item No.</th>
@@ -96,7 +96,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Plantilla Record</h5>
+                        <h5 class="modal-title"><b>Edit Plantilla Record</b></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -104,19 +104,19 @@
                     <form autocomplete="off" @submit.prevent="updatePlantillaRecord()">
                         <div class="modal-body">
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
-                                <label style="font-weight: normal; margin: 0;">Employee name</label>
+                                <label style="margin: 0;">Employee name</label>
                                 <v-select class="form-control form-control-border" v-model="form.personal_information_id" :options="forvacants" label="name" :reduce="forvacants => forvacants.id" id="employeesDropdown"></v-select>
                             </div>
                             <div class="row">
                                 <div class="col-3" style="padding-right: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="new_number" style="font-weight: normal; margin: 0;">Item No.</label>
+                                        <label for="new_number" style="margin: 0;">Item No.</label>
                                         <input v-model="form.new_number" id="new_number" value="" class="form-control form-control-border" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
                                     </div>
                                 </div>
                                 <div class="col-9" style="padding-left: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="position" style="font-weight: normal; margin: 0;">Position</label>
+                                        <label for="position" style="margin: 0;">Position</label>
                                         <input v-model="form.position" id="position" class="form-control form-control-border" type="text" name="position" placeholder="Position" required>
                                     </div>
                                 </div>
@@ -124,13 +124,13 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
+                                        <label for="budget-grade" style="margin: 0;">Budget Year Salary Grade</label>
                                         <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control form-control-border" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
+                                        <label for="budget-step" style="margin: 0;">Budget Year Salary Step</label>
                                         <input v-model="form.salaryproposed.step" id="budget-step" class="form-control form-control-border" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
                                     </div>
                                 </div>
@@ -464,6 +464,7 @@
                     })
                     .catch(error => {
                         this.$Progress.fail();
+                        console.log(error.response.data.message);
                         $('#duplicateLoadingIcon').addClass('d-none');
                         $('#duplicateButton').removeAttr('disabled');
                     });

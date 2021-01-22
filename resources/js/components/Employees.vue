@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="card-body table-responsive p-0" style="height: 650px;">
-                    <table class="table table-striped text-nowrap employees-table">
+                    <table class="table table-striped text-nowrap custom-table">
                         <thead>
                             <tr>
                                 <th>Name</th>

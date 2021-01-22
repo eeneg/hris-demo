@@ -58,9 +58,7 @@
     border-color: #117a8b !important;
 }
 
-.users-table tbody tr td,
-.employees-table tbody tr td,
-.plantilla-table tbody tr td {
+.custom-table tbody tr td{
     vertical-align: middle;
     padding: 0.55rem !important;
 }
@@ -121,13 +119,13 @@
 .form-control:focus {
     color: #495057;
     background-color: #ffffff;
-    border-color: #80bdff;
+    border-color: #007bff;
     outline: 0;
     box-shadow: none;
 }
 
 .custom-select:focus {
-    border-color: #80bdff;
+    border-color: #007bff;
     outline: 0;
     box-shadow: none;
 }

@@ -23,7 +23,7 @@ class UserResource extends ResourceCollection
                 'email' => $item->email,
                 'role' => $item->role,
                 'status' => $item->status,
-                'department_id' => $item->userassignment ? $item->userassignment->id : null
+                'userassignment' => $item->userassignment
             ];
         });
     }

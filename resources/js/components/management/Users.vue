@@ -25,7 +25,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                    <table class="table text-nowrap table-striped users-table">
+                    <table class="table text-nowrap table-striped custom-table">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -46,7 +46,9 @@
                                 </td>
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.landline }}</td>
-                                <td><span class="tag tag-success">{{ user.role }}</span></td>
+                                <td>
+                                    <span class="tag tag-success">{{ user.role }}<p class="text-muted" style="margin: 0;">{{ user.userassignment && user.userassignment.department.address }}</p></span>
+                                </td>
                                 <td>{{ user.status }}</td>
                                 <td>{{ user.created_at | myDate }}</td>
                                 <td v-if="$gate.isAdministrator()">
@@ -93,7 +95,7 @@
                                     <option value="">Select User Role</option>
                                     <option value="Administrator">Administrator</option>
                                     <option value="Author">Author</option>
-                                    <option value="Office User">Office Head</option>
+                                    <option value="Office Head">Office Head</option>
                                     <option value="Office User">Office User</option>
                                 </select>
                                 <has-error :form="form" field="role"></has-error>
@@ -190,13 +192,16 @@
             newUserModal() {
                 this.editmode = false;
                 this.form.reset();
+                $('#department_user_select').css('display', 'none');
                 $('#userModal').modal('show');   
             },
             editUserModal(user) {
                 this.editmode = true;
                 this.form.reset();
+                $('#department_user_select').css('display', 'none');
                 $('#userModal').modal('show');
                 this.form.fill(user);
+                this.form.department_id = user.userassignment && user.userassignment.department.id;
                 if (this.form.department_id != null) {
                     this.loadDepartments();
                     $('#department_user_select').toggle('slide');
