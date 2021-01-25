@@ -16,19 +16,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="" class="p-0">Reckoning date from: </label>
-                                <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control" v-model="reckoning_date_from" @change="searchAppointment">
+                                <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control form-control-border border-width-2" v-model="reckoning_date_from" @change="searchAppointment">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="" class="p-0">Reckoning date to: </label>
+                                <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control form-control-border border-width-2" v-model="reckoning_date_to" @change="searchAppointment">
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="" class="p-0">Reckoning date to: </label>
-                                <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control" v-model="reckoning_date_to" @change="searchAppointment">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
                             <div class="form-group">
                                 <button class="btn btn-primary float-right mb-3" type="button" @click="createAppointments()" data-toggle="modal">Create <i class="fas fa-plus"></i></button>
                             </div>
@@ -79,31 +79,31 @@
 
           <!-- modal -->
         <div class="modal fade" id="appointmentsModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                <div class="modal-header kuz-header">
+                <div class="modal-header modal-border">
                     <h5 class="modal-title" id="modal-grade">Create Appointments</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="errors.deleteV()">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <form @submit.prevent="editMode == false ? storeAppointments() : updateAppointments()" action="" id="pdsForm" @keydown="errors.clear($event.target.name)">
-                    <div class="modal-body">
+                    <div class="modal-body pb-0 pt-0">
                         <div class="row">
                             <div class="col-md-12">
                                 <label for="firstname">First Name</label>
-                                <v-select v-model="form.personal_information_id" :options="employees.data" label="name" :reduce="employees => employees.id"></v-select>
+                                <v-select v-model="form.personal_information_id" :options="employees.data" label="name" :reduce="employees => employees.id" class="form-control-border border-width-2"></v-select>
                                 <span class="text-danger" v-if="errors.has('personal_information_id')">Employee not found</span>
                             </div>
                             <div class="col-md-6">
                                 <label for="selectedDept">Department</label>
-                                <select name="selectedDept" class="custom-select" id="selectedDept" v-model="selectedDept">
+                                <select name="selectedDept" class="custom-select form-control-border border-width-2" id="selectedDept" v-model="selectedDept">
                                     <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.title }}</option>
                                 </select>
                             </div>
                              <div class="col-md-6">
                                 <label for="position_id">Position</label>
-                                <select name="position_id" class="custom-select" id="position_id" v-model="form.position_id">
+                                <select name="position_id" class="custom-select form-control-border border-width-2" id="position_id" v-model="form.position_id">
                                     <option v-for="position in positions" :key="position.id" :value="position.id">{{ position.title }}</option>
                                 </select>
                             </div>
@@ -112,19 +112,19 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="selectedSalarySched">Salary Schedule</label>
-                                <select name="selectedSalarySched" class="custom-select" id="selectedSalarySched" v-model="selectedSalarySched">
+                                <select name="selectedSalarySched" class="custom-select form-control-border border-width-2" id="selectedSalarySched" v-model="selectedSalarySched">
                                     <option v-for="salaryschedule in salaryschedules" :key="salaryschedule.id" :value="salaryschedule.id">{{ salaryschedule.tranche }}</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="grade">Grade</label>
-                                <select name="grade" class="custom-select" id="grade" v-model="form.grade">
+                                <select name="grade" class="custom-select form-control-border border-width-2" id="grade" v-model="form.grade">
                                     <option v-for="grade in salarygrades" :key="grade.id">{{ grade.grade }}</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="step">Step</label>
-                                <select name="step" class="custom-select" id="step" v-model="form.step">
+                                <select name="step" class="custom-select form-control-border border-width-2" id="step" v-model="form.step">
                                     <option v-for="step in 8" :key="step.id">{{ step }}</option>
                                 </select>
                             </div>
@@ -136,7 +136,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="status">Status</label>
-                                <select name="status" id="status" class="form-control" v-model="form.status">
+                                <select name="status" id="status" class="form-control form-control-border border-width-2" v-model="form.status">
                                     <option>Permanent</option>
                                     <option>Co-terminus</option>
                                     <option>Elected</option>
@@ -145,12 +145,12 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="agency">Agency</label>
-                                <input type="text" name="agency" class="form-control" v-model="form.agency">
+                                <input type="text" name="agency" class="form-control form-control-border border-width-2" v-model="form.agency">
                                 <span class="text-danger" v-if="errors.has('agency')" v-text="errors.get('agency')"></span>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="nature_of_appointment">Nature of Appointment</label>
-                                 <select name="nature_of_appointment" id="nature_of_appointment" class="form-control" v-model="form.nature_of_appointment">
+                                 <select name="nature_of_appointment" id="nature_of_appointment" class="form-control form-control-border border-width-2" v-model="form.nature_of_appointment">
                                     <option>Original</option>
                                     <option>Promotion</option>
                                 </select>
@@ -158,7 +158,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="reckoning_date">Reckoning Date</label>
-                                <input type="date" name="reckoning_date" class="form-control" v-model="form.reckoning_date" min="0">
+                                <input type="date" name="reckoning_date" class="form-control form-control-border border-width-2" v-model="form.reckoning_date" min="0">
                                 <span class="text-danger" v-if="errors.has('reckoning_date')" v-text="errors.get('reckoning_date')"></span>
                             </div>
                             <div class="col-md-12">
@@ -168,24 +168,24 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="previous_status">Previous Employee Status</label>
-                                <input type="text" name="previous_status" class="form-control" v-model="form.previous_status">
+                                <input type="text" name="previous_status" class="form-control form-control-border border-width-2" v-model="form.previous_status">
                                 <span class="text-danger" v-if="errors.has('previous_status')" v-text="errors.get('previous_status')"></span>
                             </div>
                             <div class="col-md-3">
                                 <label for="itemno">Item No.</label>
-                                <input type="number" name="itemno" class="form-control" v-model="form.itemno">
+                                <input type="number" name="itemno" class="form-control form-control-border border-width-2" v-model="form.itemno">
                                 <span class="text-danger" v-if="errors.has('itemno')">The item number field is required.</span>
                             </div>
                             <div class="col-md-3">
                                 <label for="page">Page</label>
-                                <input type="number" name="page" class="form-control" v-model="form.page">
+                                <input type="number" name="page" class="form-control form-control-border border-width-2" v-model="form.page">
                                 <span class="text-danger" v-if="errors.has('page')" v-text="errors.get('page')"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer kuz-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
-                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                    <div class="modal-footer modal-border">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
                     </div>
                 </form>
                 </div>

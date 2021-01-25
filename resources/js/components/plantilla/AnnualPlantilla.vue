@@ -95,8 +95,8 @@
         <div class="modal fade" id="plantilla-content-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"><b>Edit Plantilla Record</b></h5>
+                    <div class="modal-header modal-border">
+                        <h5 class="modal-title">Edit Plantilla Record</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -104,39 +104,39 @@
                     <form autocomplete="off" @submit.prevent="updatePlantillaRecord()">
                         <div class="modal-body">
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
-                                <label style="margin: 0;">Employee name</label>
-                                <v-select class="form-control form-control-border" v-model="form.personal_information_id" :options="forvacants" label="name" :reduce="forvacants => forvacants.id" id="employeesDropdown"></v-select>
+                                <label style="font-weight: normal; margin: 0;">Employee name</label>
+                                <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="forvacants" label="name" :reduce="forvacants => forvacants.id" id="employeesDropdown"></v-select>
                             </div>
                             <div class="row">
                                 <div class="col-3" style="padding-right: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="new_number" style="margin: 0;">Item No.</label>
-                                        <input v-model="form.new_number" id="new_number" value="" class="form-control form-control-border" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
+                                        <label for="new_number" style="font-weight: normal; margin: 0;">Item No.</label>
+                                        <input v-model="form.new_number" id="new_number" value="" class="form-control form-control-border border-width-2" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
                                     </div>
                                 </div>
                                 <div class="col-9" style="padding-left: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="position" style="margin: 0;">Position</label>
-                                        <input v-model="form.position" id="position" class="form-control form-control-border" type="text" name="position" placeholder="Position" required>
+                                        <label for="position" style="font-weight: normal; margin: 0;">Position</label>
+                                        <input v-model="form.position" id="position" class="form-control form-control-border border-width-2" type="text" name="position" placeholder="Position" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="budget-grade" style="margin: 0;">Budget Year Salary Grade</label>
-                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control form-control-border" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
+                                        <label for="budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
+                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control form-control-border border-width-2" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="budget-step" style="margin: 0;">Budget Year Salary Step</label>
-                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control form-control-border" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
+                                        <label for="budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
+                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control form-control-border border-width-2" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer" style="display: block;">
+                        <div class="modal-footer modal-border" style="display: block;">
                             <button v-if="form.surname == '' && form.salaryauthorized" type="button" class="btn btn-danger" @click="abolishItem()">Abolish Item</button>
                             <button v-if="form.surname == '' && form.salaryauthorized == null" type="button" class="btn btn-danger" @click="removeItem()">Remove</button>
                             <button type="submit" class="btn btn-success mb-3" style="float: right;">Update</button>
@@ -150,7 +150,7 @@
         <div class="modal fade" id="add-item-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header modal-border">
                         <h5 class="modal-title">Add Plantilla Item</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -163,13 +163,13 @@
                                 <div class="col-3" style="padding-right: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="add_new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
-                                        <input v-model="form.new_number" id="add_new_number" class="form-control" step="1" :min="itemMin" :max="(parseInt(itemMax) + 1)" type="number" name="new_number" placeholder="New Item Number" required>
+                                        <input v-model="form.new_number" id="add_new_number" class="form-control form-control-border border-width-2" step="1" :min="itemMin" :max="(parseInt(itemMax) + 1)" type="number" name="new_number" placeholder="New Item Number" required>
                                     </div>
                                 </div>
                                 <div class="col-9" style="padding-left: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="add_position" style="font-weight: normal; margin: 0;">Position</label>
-                                        <input v-model="form.position" id="add_position" class="form-control" type="text" name="position" placeholder="Position" required>
+                                        <input v-model="form.position" id="add_position" class="form-control form-control-border border-width-2" type="text" name="position" placeholder="Position" required>
                                     </div>
                                 </div>
                             </div>
@@ -187,18 +187,18 @@
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="add_budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
-                                        <input v-model="form.salaryproposed.grade" id="add_budget-grade" class="form-control" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
+                                        <input v-model="form.salaryproposed.grade" id="add_budget-grade" class="form-control form-control-border border-width-2" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="add_budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
-                                        <input v-model="form.salaryproposed.step" id="add_budget-step" class="form-control" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
+                                        <input v-model="form.salaryproposed.step" id="add_budget-step" class="form-control form-control-border border-width-2" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer modal-border">
                             <button type="submit" class="btn btn-success">Create</button>
                         </div>
                     </form>
@@ -210,7 +210,7 @@
         <div class="modal fade" id="duplicate-plantilla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header modal-border">
                         <h5 class="modal-title">Duplicate Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -229,14 +229,14 @@
                                 <div class="col-12">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="year" style="font-weight: normal; margin: 0;">Plantilla Year</label>
-                                        <input v-model="plantillaForm.year" id="year" class="form-control" type="text" name="year" placeholder="Year"
+                                        <input v-model="plantillaForm.year" id="year" class="form-control form-control-border border-width-2" type="text" name="year" placeholder="Year"
                                         :class="{ 'is-invalid': plantillaForm.errors.has('year') }" required>
                                         <has-error :form="plantillaForm" field="year"></has-error>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer" style="display: flow-root;padding: 6px 10px;">
+                        <div class="modal-footer modal-border" style="display: flow-root;padding: 6px 10px;">
                             <div id="duplicateLoadingIcon" class="spinner-border text-success d-none" role="status" style="float: left;">
                                 <span class="sr-only">Loading...</span>
                             </div>
@@ -251,7 +251,7 @@
         <div class="modal fade" id="edit-plantilla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header modal-border">
                         <h5 class="modal-title">Edit Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -270,7 +270,7 @@
                                 <div class="col-12">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="edit_year" style="font-weight: normal; margin: 0;">Plantilla Year</label>
-                                        <input v-model="plantillaForm.year" id="edit_year" class="form-control" type="text" name="year" placeholder="Year"
+                                        <input v-model="plantillaForm.year" id="edit_year" class="form-control form-control-border border-width-2" type="text" name="year" placeholder="Year"
                                         :class="{ 'is-invalid': plantillaForm.errors.has('year') }" required>
                                         <has-error :form="plantillaForm" field="year"></has-error>
                                     </div>
@@ -280,7 +280,7 @@
                                 <div class="col-12">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="edit_date_approved" style="font-weight: normal; margin: 0;">Date Approved (yyyy-mm-dd)</label>
-                                        <input v-model="plantillaForm.date_approved" id="edit_date_approved" class="form-control" type="text" name="date_approved" placeholder="yyyy-mm-dd"
+                                        <input v-model="plantillaForm.date_approved" id="edit_date_approved" class="form-control form-control-border border-width-2" type="text" name="date_approved" placeholder="yyyy-mm-dd"
                                         :class="{ 'is-invalid': plantillaForm.errors.has('date_approved') }" 
                                             onkeypress="return event.charCode > 47 && event.charCode < 58;" 
                                             onkeydown="var date = this.value;
@@ -298,7 +298,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer" style="display: flow-root;padding: 6px 10px;">
+                        <div class="modal-footer modal-border" style="display: flow-root;padding: 6px 10px;">
                             <div id="editLoadingIcon" class="spinner-border text-success d-none" role="status" style="float: left;">
                                 <span class="sr-only">Loading...</span>
                             </div>
@@ -313,7 +313,7 @@
         <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header modal-border">
                         <h4 class="modal-title">Print Report</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
@@ -322,7 +322,7 @@
 
                     </div>
 
-                    <div class="modal-footer">
+                    <div class="modal-footer modal-border">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>

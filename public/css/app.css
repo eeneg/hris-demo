@@ -50709,3 +50709,7 @@ a:hover {
   text-decoration: underline;
 }
 
+.modal-border {
+  border: none;
+}
+
