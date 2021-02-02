@@ -6,6 +6,7 @@
 
 require('./bootstrap');
 
+
 window.Vue = require('vue');
 import moment from 'moment';
 import { Form, HasError, AlertError } from 'vform'
@@ -14,11 +15,11 @@ import VueProgressBar from 'vue-progressbar'
 import Swal from 'sweetalert2'
 import Gate from './gate'
 import PDFObject from 'pdfobject'
+import datePicker from 'vue-bootstrap-datetimepicker';
 
 import Vue from "vue";
 import VueRx from "vue-rx";
 import VuejsClipper from "vuejs-clipper/dist/vuejs-clipper.umd";
-import "vuejs-clipper/dist/vuejs-clipper.css";
 
 import vSelect from "vue-select";
 Vue.component("v-select", vSelect);
@@ -35,6 +36,7 @@ Vue.use(VuejsClipper,{
 window.Swal = Swal;
 window.Form = Form;
 window.PDFObject = PDFObject;
+window.datePicker = datePicker;
 
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
@@ -59,6 +61,7 @@ const routes = [
     { path: '/appointments', component: require('./components/plantilla/Appointments.vue').default },
     { path: '/leave-credits', component: require('./components/leave/Credits.vue').default },
     { path: '/leave-applications', component: require('./components/leave/LeaveApplications.vue').default },
+    { path: '/leave-form', component: require('./components/leave/LeaveForm.vue').default },
     { path: '/leave-types', component: require('./components/leave/LeaveTypes.vue').default },
     { path: '/employees', component: require('./components/Employees.vue').default },
     { path: '/employees-pds', component: require('./components/employees/Pds-form.vue').default },

@@ -5,8 +5,8 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Applications</h2>
-                    <!-- <small style="margin-left: 2px;">Positions are based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</small> -->
-                    <!-- <div class="row mt-1">
+                    <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
+                    <div class="row mt-1">
                         <div class="col-md-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -15,10 +15,10 @@
                                 <input v-model="search" @keyup.prevent="searchit" type="text" class="form-control" placeholder="Search">
                             </div>
                         </div>
-                        <div v-if="$gate.isAdministratorORAuthor()" class="col-md-9">
-                            <router-link class="btn btn-primary float-right" to="/employees-pds">Create</router-link>
+                        <div class="col-md-9">
+                            <router-link class="btn btn-primary float-right" to="/leave-form">New Application</router-link>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="card-body table-responsive p-0" style="height: 650px;">
@@ -83,11 +83,16 @@
     export default {
         data() {
             return {
-                
+                search: '',
+                form: new Form({
+
+                })
             }
         },
         methods: {
-            
+            searchit: _.debounce(function(){
+
+            }, 400)
         },
         created() {
             this.$Progress.start();

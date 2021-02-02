@@ -7,47 +7,48 @@
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Types of leave</h2>
                     <small style="margin-left: 2px;">Description Description Description Description Description</small>
                     <div class="row mt-3">
-                        <div class="col-md-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                </div>
-                                <input v-model="search" @keyup.prevent="searchit" type="text" class="form-control" placeholder="Search">
-                            </div>
-                        </div>
-                        <div v-if="$gate.isAdministratorORAuthor()" class="col-md-9">
-                            <button style="float: right;" type="button" class="btn btn-success" @click="addNewTypeModal()">Add New Type</button>
+                        <div v-if="$gate.isAdministratorORAuthor()" class="col-md-12">
+                            <button type="button" class="btn btn-primary" @click="addNewTypeModal()">Add New Type</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body table-responsive p-0" style="height: 650px;">
-                    <table class="table text-nowrap table-striped">
+                    <table class="table text-nowrap table-striped custom-table">
                         <thead>
                             <tr>
                                 <th>Type</th>
+                                <th>Description</th>
                                 <th>Max Duration</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="leavetype in leavetypes" :key="leavetype.id">
-                                <td>{{ leavetype.title }}</td>
+                            <tr v-for="leavetype in leavetypes.data" :key="leavetype.id">
+                                <td>{{ leavetype.title}} <span v-if="leavetype.abbreviation" class="text-muted">{{ ' (' + leavetype.abbreviation + ')' }}</span> </td>
+                                <td class="text-muted">
+                                    <span v-if="leavetype.description">{{ leavetype.description }}</span>
+                                    <span v-else>No data</span>
+                                </td>
                                 <td>{{ leavetype.max_duration }}</td>
-                                <td>{{ leavetype.status }}</td>
-                                <td></td>
+                                <td><span style="font-size: 100%;font-weight: normal;" :class="leavetype.status == 'active' ? 'badge bg-success' : 'badge bg-warning'">{{ leavetype.status }}</span></td>
+                                <td v-if="$gate.isAdministrator()">
+                                    <a style="float:right" class="btn btn-info btn-sm" href="" @click.prevent="editLeaveTypeModal(leavetype)">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <!-- <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <pagination size="default" :data="employees" @pagination-change-page="getResults" :limit="5">
+                <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
+                    <pagination size="default" :data="leavetypes" @pagination-change-page="getResults" :limit="5">
                         <span slot="prev-nav">&lt; Previous</span>
 	                    <span slot="next-nav">Next &gt;</span>
                     </pagination>
-                    <span style="margin-left: 10px;">Showing {{ employees.meta && employees.meta.from | validateCount }} to {{ employees.meta && employees.meta.to | validateCount }} of {{ employees.meta && employees.meta.total }} records</span>
-                </div> -->
+                    <span style="margin-left: 10px;">Showing {{ leavetypes && leavetypes.from | validateCount }} to {{ leavetypes && leavetypes.to | validateCount }} of {{ leavetypes && leavetypes.total }} records</span>
+                </div>
             </div>
         </div>
         
@@ -56,16 +57,18 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title blue"><b>New Leave type</b></h4>
+                        <h5 class="modal-title">{{ editmode ? 'Update Leave type' : 'Create Leave type' }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form autocomplete="off" @submit.prevent="addLeaveType()">
+                    <form autocomplete="off" @submit.prevent="editmode ? editLeaveType() : addLeaveType()">
                         <div class="modal-body">
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="title" style="margin: 0;">Type</label>
-                                <input v-model="form.title" type="text" class="form-control form-control-border border-width-2" name="title" id="title" placeholder="Leave Type" required>
+                                <input v-model="form.title" type="text" class="form-control form-control-border border-width-2" name="title" id="title" placeholder="Leave Type" requiredclass="form-control" 
+                                    :class="{ 'is-invalid': form.errors.has('title') }">
+                                <has-error :form="form" field="title"></has-error>
                             </div>
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label style="margin: 0;">Description</label>
@@ -75,13 +78,13 @@
                                 <div class="col-8" style="padding-right: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="max_duration" style="margin: 0;">Max Duration</label>
-                                        <input v-model="form.abbreviation" type="text" class="form-control form-control-border border-width-2" name="max_duration" id="max_duration" placeholder="Max Duration" required>
+                                        <input v-model="form.max_duration" type="text" class="form-control form-control-border border-width-2" name="max_duration" id="max_duration" placeholder="Max Duration" required>
                                     </div>
                                 </div>
                                 <div class="col-4" style="padding-left: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="abbreviation" style="margin: 0;">Abbreviation</label>
-                                        <input v-model="form.max_duration" type="text" class="form-control form-control-border border-width-2" name="abbreviation" id="abbreviation" placeholder="Abbreviation">
+                                        <input v-model="form.abbreviation" type="text" class="form-control form-control-border border-width-2" name="abbreviation" id="abbreviation" placeholder="Abbreviation">
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +97,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Create</button>
+                            <button type="submit" class="btn btn-success">Save</button>
                         </div>
                     </form>
                 </div>
@@ -108,9 +111,10 @@
     export default {
         data() {
             return {
-                leavetypes: [],
-                search: '',
+                editmode: false,
+                leavetypes: {},
                 form: new Form({
+                    'id': '',
                     'title': '',
                     'description': '',
                     'abbreviation': '',
@@ -120,9 +124,20 @@
             }
         },
         methods: {
-            searchit: _.debounce(function(){
-                // this.getResults();
-            }, 400),
+            getResults(page = 1) {
+                axios.get('api/leavetype?page=' + page)
+                    .then(({data}) => {
+                        this.leavetypes = data;
+                    }).catch(error => {
+                        console.log(error.reponse.data.message);
+                    });
+            },
+            editLeaveTypeModal(leavetype) {
+                this.editmode = true;
+                this.form.reset();
+                this.form.fill(leavetype);
+                $('#add-leavetype-modal').modal('show');
+            },
             addNewTypeModal() {
                 $('#add-leavetype-modal').modal('show');
             }, 
@@ -135,6 +150,25 @@
                             title: 'Success',
                             text: 'New leave type is created successfully',
                         })
+                        this.loadContents();
+                        $('#add-leavetype-modal').modal('hide');
+                        this.$Progress.finish();
+                    })
+                    .catch(error => {
+                        this.$Progress.fail();
+                        console.log(error.response.data.message);
+                    });
+            },
+            editLeaveType() {
+                this.$Progress.start();
+                this.form.put('api/leavetype/' + this.form.id)
+                    .then(({data}) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Leave type is updated successfully',
+                        })
+                        this.loadContents();
                         $('#add-leavetype-modal').modal('hide');
                         this.$Progress.finish();
                     })

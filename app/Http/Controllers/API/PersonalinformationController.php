@@ -38,11 +38,20 @@ class PersonalInformationController extends Controller
         return new EmployeesListResource($personalinformations);
     }
 
+    public function forleave(Request $request) {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $allEmployees = DB::select("SELECT id, CONCAT(surname, ', ', firstname, ' ', nameextension, ' ', middlename) AS `name` FROM personal_informations
+            WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id` AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "') = 1
+            ORDER BY personal_informations.`surname`");
+            return $allEmployees;
+    }
+
     public function forvacants(Request $request) {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $allEmployees = DB::select("SELECT id, CONCAT(surname, ', ', firstname, ' ', nameextension, ' ', middlename) AS `name` FROM personal_informations
-            WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id`) = 0
+            WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id` AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "') = 0
             OR personal_informations.`id` = '" . $request->personal_information_id . "'
             ORDER BY personal_informations.`surname`");
         // $collection = collect($allEmployees);

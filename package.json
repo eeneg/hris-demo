@@ -32,6 +32,7 @@
         "rxjs": "^6.6.3",
         "sweetalert2": "^10.13.0",
         "vform": "^1.0.1",
+        "vue-bootstrap-datetimepicker": "^5.0.1",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.4.9",
         "vue-rx": "^6.2.0",

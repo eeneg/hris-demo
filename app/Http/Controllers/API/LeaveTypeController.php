@@ -15,6 +15,10 @@ class LeaveTypeController extends Controller
      */
     public function index()
     {
+        return LeaveType::paginate(20);
+    }
+
+    public function getleavetypes() {
         return LeaveType::all();
     }
 
@@ -52,7 +56,11 @@ class LeaveTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $leavetype = LeaveType::findOrFail($id);
+        $this->validate($request, [
+            'title' => 'unique:leave_types,title,'.$leavetype->id
+        ]);
+        $leavetype->update($request->all());
     }
 
     /**

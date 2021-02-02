@@ -17,7 +17,9 @@
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
-@import "vue-select/src/scss/vue-select.scss";
+@import "~vue-select/src/scss/vue-select.scss";
+@import "~vuejs-clipper/dist/vuejs-clipper.css";
+@import '~pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
 .router-link-active {
     background-color: #1e8cad !important;
@@ -60,7 +62,11 @@
 
 .custom-table tbody tr td{
     vertical-align: middle;
-    padding: 0.55rem !important;
+    padding: 0.55rem 1.4rem !important;
+}
+
+.custom-table thead tr th {
+    padding: 0.55rem 1.4rem !important;
 }
 
 .plantilla-table thead tr th {

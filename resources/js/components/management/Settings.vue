@@ -10,7 +10,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>Select latest approved Annual Plantilla</label>
+                                <label style="margin: 0;">Select latest approved Annual Plantilla</label>
+                                <small class="text-muted d-block"><i class="fas fa-info-circle blue"></i> This will be the reference of most of the HRIS transactions</small>
                                 <select class="custom-select" v-model="form.plantilla.year" :class="{ 'is-invalid': form.errors.has('plantilla') }">
                                     <option v-for="plantilla in plantillas" :key="plantilla.id">{{ plantilla.year }}</option>
                                 </select>

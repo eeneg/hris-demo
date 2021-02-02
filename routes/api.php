@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('previousplantilla', 'API\PlantillaController@previousplantilla');
 
     Route::post('forvacants', 'API\PersonalInformationController@forvacants');
+    Route::post('forleave', 'API\PersonalInformationController@forleave');
     Route::get('edit', 'API\PersonalInformationController@edit');
     Route::patch('personalinformation', 'API\PersonalInformationController@update');
 
@@ -58,6 +59,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::get('fetchPosition', 'API\AppointmentController@deptPosition');
     Route::get('appointmentemployeelist', 'API\AppointmentController@employees');
+
+    Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
 });
 
 
