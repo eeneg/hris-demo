@@ -36,7 +36,7 @@
                             <div>
                                 <label class="" for="surname" style="line-height: 10px;">Surname</label>
                             </div>
-                                <input type="text" placeholder="Surname" name="surname" class="form-control" id="surname" v-model="form.surname">
+                                <input type="text" placeholder="Surname" name="surname" class="form-control form-control-border border-width-2" id="surname" v-model="form.surname">
                             <span>
                                 <strong class="text-danger" v-if="errors.has('surname')">Field Required</strong>
                             </span>
@@ -46,7 +46,7 @@
                             <div>
                                 <label for="firstname" style="line-height: 10px;">Firstname</label>
                             </div>    
-                                <input type="text" placeholder="Firstname" name="firstname" class="form-control" id="firstname" v-model="form.firstname">
+                                <input type="text" placeholder="Firstname" name="firstname" class="form-control form-control-border border-width-2" id="firstname" v-model="form.firstname">
                             <span>
                                 <strong class="text-danger" v-if="errors.has('firstname')">Field Required</strong>
                             </span>
@@ -56,7 +56,7 @@
                             <div>
                                 <label for="nameextension" style="line-height: 10px;">Name Ext. (Jr., Sr.)</label>
                             </div>
-                                <input type="text" placeholder="Name Extension" name="nameextension" class="form-control" id="nameextension" v-model="form.nameextension">
+                                <input type="text" placeholder="Name Extension" name="nameextension" class="form-control form-control-border border-width-2" id="nameextension" v-model="form.nameextension">
                             </div>
                     </div>
 
@@ -65,13 +65,13 @@
                             <div>
                                 <label for="middlename" style="line-height: 10px;">Middlename</label>
                             </div>
-                                <input type="text" placeholder="Middlename" name="middlename" class="form-control" id="middlename" v-model="form.middlename">
+                                <input type="text" placeholder="Middlename" name="middlename" class="form-control form-control-border border-width-2" id="middlename" v-model="form.middlename">
                         </div>
                         <div class="col-md-4">
                             <div>
                                  <label for="birthdate" style="line-height: 10px;">Birth Date</label>
                             </div>
-                                <input type="date" name="birthdate" class="form-control" id="birthdate" v-model="form.birthdate">
+                                <input type="date" name="birthdate" class="form-control form-control-border border-width-2" id="birthdate" v-model="form.birthdate">
                             <span>
                                 <strong class="text-danger" v-if="errors.has('birthdate')">Field Required</strong>
                             </span>
@@ -80,7 +80,7 @@
                             <div>
                                 <label for="birthplace" style="line-height: 10px;">Birth Place</label>
                             </div>
-                                <input type="text" placeholder="Birth Place" name="birthplace" class="form-control" id="birthplace" v-model="form.birthplace">
+                                <input type="text" placeholder="Birth Place" name="birthplace" class="form-control form-control-border border-width-2" id="birthplace" v-model="form.birthplace">
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@
                             <div>
                                 <label for="sex" style="line-height: 10px;">Gender</label>
                             </div>
-                            <select name="sex" id="sex" class="form-control" v-model="form.sex">
+                            <select name="sex" id="sex" class="form-control form-control-border border-width-2" v-model="form.sex">
                                 <option>Male</option>
                                 <option>Female</option>
                             </select>
@@ -98,7 +98,7 @@
                             <div>
                                 <label for="civilstatus" style="line-height: 10px;">Civil Status</label>
                             </div>
-                            <select name="civilstatus" id="civilstatus" class="form-control" v-model="form.civilstatus">
+                            <select name="civilstatus" id="civilstatus" class="form-control form-control-border border-width-2" v-model="form.civilstatus">
                                 <option>Single</option>
                                 <option>Widowed</option>
                                 <option>Married</option>
@@ -113,19 +113,19 @@
                             <div>
                                 <label for="height" style="line-height: 10px;">Height(m)</label>
                             </div>
-                            <input type="text" placeholder="height (m)" name="height" class="form-control" id="height" v-model="form.height">
+                            <input type="text" placeholder="height (m)" name="height" class="form-control form-control-border border-width-2" id="height" v-model="form.height">
                         </div>
                         <div class="col-md-4">
                             <div>
                                  <label for="weight" style="line-height: 10px;">Weight(kg)</label>
                             </div>
-                             <input type="text" placeholder="weight (kg)" name="weight" class="form-control" id="weight" v-model="form.weight">
+                             <input type="text" placeholder="weight (kg)" name="weight" class="form-control form-control-border border-width-2" id="weight" v-model="form.weight">
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <label for="bloodtype" style="line-height: 10px;">Blood Type</label>
                             </div>
-                            <input type="text" placeholder="Blood Type" name="bloodtype" class="form-control" id="bloodtype" v-model="form.bloodtype">
+                            <input type="text" placeholder="Blood Type" name="bloodtype" class="form-control form-control-border border-width-2" id="bloodtype" v-model="form.bloodtype">
                         </div>
                     </div>
                     
@@ -134,19 +134,19 @@
                             <div>
                                 <label for="gsis" style="line-height: 10px;">GSIS ID No.</label>
                             </div>
-                            <input type="text" placeholder="gsis ID No." name="gsis" class="form-control" id="gsis" v-model="form.gsis">
+                            <input type="text" placeholder="gsis ID No." name="gsis" class="form-control form-control-border border-width-2" id="gsis" v-model="form.gsis">
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <label for="pagibig" style="line-height: 10px;">PAG-IBIG ID No.</label>
                             </div>
-                            <input type="text" placeholder="PAG-IBIG ID No." name="pagibig" class="form-control" id="pagibig" v-model="form.pagibig">
+                            <input type="text" placeholder="PAG-IBIG ID No." name="pagibig" class="form-control form-control-border border-width-2" id="pagibig" v-model="form.pagibig">
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <label for="philhealth" style="line-height: 10px;">PHILHEALTH No.</label>
                             </div>
-                            <input type="text" placeholder="PHILHEALTH No." name="philhealth" class="form-control" id="philhealth" v-model="form.philhealth">
+                            <input type="text" placeholder="PHILHEALTH No." name="philhealth" class="form-control form-control-border border-width-2" id="philhealth" v-model="form.philhealth">
                         </div>
                     </div>
 
@@ -155,19 +155,19 @@
                             <div>
                                 <label for="sss" style="line-height: 10px;">SSS No.</label>
                             </div>
-                            <input type="text" placeholder="sss No." name="sss" class="form-control" id="sss" v-model="form.sss">
+                            <input type="text" placeholder="sss No." name="sss" class="form-control form-control-border border-width-2" id="sss" v-model="form.sss">
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <label for="tin" style="line-height: 10px;">TIN No.</label>
                             </div>
-                            <input type="text" placeholder="tin No." name="tin" class="form-control" id="tin" v-model="form.tin">
+                            <input type="text" placeholder="tin No." name="tin" class="form-control form-control-border border-width-2" id="tin" v-model="form.tin">
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <label for="agencynumber" style="line-height: 10px;">Agency Employee No.</label>
                             </div>
-                            <input type="text" placeholder="AGENCY EMPLOYEE No." name="agencynumber" class="form-control" id="agencynumber" v-model="form.agencynumber">
+                            <input type="text" placeholder="AGENCY EMPLOYEE No." name="agencynumber" class="form-control form-control-border border-width-2" id="agencynumber" v-model="form.agencynumber">
                         </div>
                     </div>
 
@@ -176,7 +176,7 @@
                             <div>
                                  <label for="citizenship" style="line-height: 10px;">Citizenship</label>
                             </div>
-                            <select name="citizenship" id="citizenship" class="form-control" v-model="form.citizenship">
+                            <select name="citizenship" id="citizenship" class="form-control form-control-border border-width-2" v-model="form.citizenship">
                                 <option>Filipino</option>
                                 <option>Dual citizenship (By Birth)</option>
                                 <option>Dual citizenship (By Naturalization)</option>
@@ -189,13 +189,13 @@
                             <div>
                                 <label for="residentialaddress" style="line-height: 10px;">Residential Address</label>
                             </div>
-                            <input type="text" name="residentialaddress" placeholder="Residential Address" class="form-control" id="residentialaddress" v-model="form.residentialaddress">
+                            <input type="text" name="residentialaddress" placeholder="Residential Address" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddress">
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <label for="telephone1" style="line-height: 10px;">Telephone</label>
                             </div>
-                            <input type="text" name="telephone1" placeholder="Telephone 1" class="form-control" id="telephone1" v-model="form.telephone1">
+                            <input type="text" name="telephone1" placeholder="Telephone 1" class="form-control form-control-border border-width-2" id="telephone1" v-model="form.telephone1">
                         </div>
                     </div>
 
@@ -204,7 +204,7 @@
                             <div>
                                 <label for="zipcode1" style="line-height: 10px;">Zip Code</label>
                             </div>
-                             <input type="text" placeholder="Zip Code" name="zipcode1" class="form-control" id="zipcode1" v-model="form.zipcode1">
+                             <input type="text" placeholder="Zip Code" name="zipcode1" class="form-control form-control-border border-width-2" id="zipcode1" v-model="form.zipcode1">
                         </div>
                     </div>
 
@@ -213,7 +213,7 @@
                             <div>
                                 <label for="permanentaddress" style="line-height: 10px;">Permanent Address</label>
                             </div>
-                            <input type="text" name="permanentaddress" placeholder="Permanent Address" class="form-control" id="permanentaddress" v-model="form.permanentaddress">
+                            <input type="text" name="permanentaddress" placeholder="Permanent Address" class="form-control form-control-border border-width-2" id="permanentaddress" v-model="form.permanentaddress">
                                 <span>
                                     <strong class="text-danger" v-if="errors.has('permanentaddress')">Field Required</strong>
                                 </span>
@@ -222,7 +222,7 @@
                             <div>
                                 <label for="telephone2" style="line-height: 10px;">Telephone</label>
                             </div>
-                            <input type="text" name="telephone2" placeholder="Telephone 2" class="form-control" id="telephone2" v-model="form.telephone2">
+                            <input type="text" name="telephone2" placeholder="Telephone 2" class="form-control form-control-border border-width-2" id="telephone2" v-model="form.telephone2">
                         </div>
                     </div>
 
@@ -231,7 +231,7 @@
                             <div>
                                 <label for="zipcode2" style="line-height: 10px;">Zip Code</label>
                             </div>
-                            <input type="text" placeholder="Zip Code" name="zipcode2" class="form-control" id="zipcode2" v-model="form.zipcode2">
+                            <input type="text" placeholder="Zip Code" name="zipcode2" class="form-control form-control-border border-width-2" id="zipcode2" v-model="form.zipcode2">
                         </div>
                     </div>
 
@@ -240,7 +240,7 @@
                             <div>
                                 <label for="cellphone" style="line-height: 10px;">Mobile No.</label>
                             </div>
-                            <input type="text" placeholder="Mobile No." name="cellphone" class="form-control" id="cellphone" v-model="form.cellphone">
+                            <input type="text" placeholder="Mobile No." name="cellphone" class="form-control form-control-border border-width-2" id="cellphone" v-model="form.cellphone">
                                 <span>
                                     <strong class="text-danger" v-if="errors.has('cellphone')">Field Required</strong>
                                 </span>
@@ -249,7 +249,7 @@
                             <div>
                                 <label for="email" style="line-height: 10px;">email</label>
                             </div>
-                            <input type="email" placeholder="email" name="email" class="form-control" id="email" v-model="form.email">
+                            <input type="email" placeholder="email" name="email" class="form-control form-control-border border-width-2" id="email" v-model="form.email">
                         </div>
                     </div>
                 </div>
@@ -267,13 +267,13 @@
                                 <div>
                                     <label for="spouseSurname" style="line-height: 10px;">Spouse Surname</label>
                                 </div>
-                                <input type="text" placeholder="spouseSurname" name="spouseSurname" class="form-control" id="spouseSurname" v-model="form.familybackground.spouseSurname">
+                                <input type="text" placeholder="spouseSurname" name="spouseSurname" class="form-control form-control-border border-width-2" id="spouseSurname" v-model="form.familybackground.spouseSurname">
                             </div>
                             <div class="col-md-6">
                                 <div>
                                     <label for="spouseFirstname" style="line-height: 10px;">Spouse Firstname</label>
                                 </div>
-                                <input type="text" placeholder="spouseFirstname" name="spouseFirstname" class="form-control" id="spouseFirstname" v-model="form.familybackground.spouseFirstname">
+                                <input type="text" placeholder="spouseFirstname" name="spouseFirstname" class="form-control form-control-border border-width-2" id="spouseFirstname" v-model="form.familybackground.spouseFirstname">
                             </div>
                         </div>
 
@@ -282,13 +282,13 @@
                                 <div>
                                     <label for="spouseMiddlename" style="line-height: 10px;">Spouse Middlename</label>
                                 </div>
-                                <input type="text" placeholder="spouse Middlename" name="spouseMiddlename" class="form-control" id="spouseMiddlename" v-model="form.familybackground.spouseMiddlename">
+                                <input type="text" placeholder="spouse Middlename" name="spouseMiddlename" class="form-control form-control-border border-width-2" id="spouseMiddlename" v-model="form.familybackground.spouseMiddlename">
                             </div>
                             <div class="col-md-6">
                                 <div>
                                     <label for="spouseOccupation" style="line-height: 10px;">Spouse Occupation</label>
                                 </div>
-                                <input type="text" placeholder="spouseOccupation" name="spouseOccupation" class="form-control" id="spouseOccupation" v-model="form.familybackground.spouseOccupation">
+                                <input type="text" placeholder="spouseOccupation" name="spouseOccupation" class="form-control form-control-border border-width-2" id="spouseOccupation" v-model="form.familybackground.spouseOccupation">
                             </div>
                         </div>
 
@@ -297,13 +297,13 @@
                                 <div>
                                     <label for="spouseBussiness" style="line-height: 10px;">Spouse Bussiness</label>
                                 </div>
-                                <input type="text" placeholder="spouseBussiness" name="spouseBussiness" class="form-control" id="spouseBussiness" v-model="form.familybackground.spouseBussiness">
+                                <input type="text" placeholder="spouseBussiness" name="spouseBussiness" class="form-control form-control-border border-width-2" id="spouseBussiness" v-model="form.familybackground.spouseBussiness">
                             </div>
                             <div class="col-md-6">
                                 <div>
                                     <label for="spouseBussinessAddress" style="line-height: 10px;">Spouse Bussiness Address</label>
                                 </div>
-                                <input type="text" placeholder="spouse Bussiness Address" name="spouseBussinessAddress" class="form-control" id="spouseBussinessAddress" v-model="form.familybackground.spouseBussinessAddress">
+                                <input type="text" placeholder="spouse Bussiness Address" name="spouseBussinessAddress" class="form-control form-control-border border-width-2" id="spouseBussinessAddress" v-model="form.familybackground.spouseBussinessAddress">
                             </div> 
                         </div> 
 
@@ -312,7 +312,7 @@
                                 <div>
                                     <label for="spouseTelephone" style="line-height: 10px;">Spouse Telephone</label>
                                 </div>
-                                <input type="text" placeholder="spouse Telephone" name="spouseTelephone" class="form-control" id="spouseTelephone" v-model="form.familybackground.spouseTelephone">
+                                <input type="text" placeholder="spouse Telephone" name="spouseTelephone" class="form-control form-control-border border-width-2" id="spouseTelephone" v-model="form.familybackground.spouseTelephone">
                             </div>
                         </div>
 
@@ -321,13 +321,13 @@
                                 <div>
                                     <label for="fatherSurname" style="line-height: 10px;">Father Surname</label>
                                 </div>
-                                <input type="text" placeholder="fatherSurname" name="fatherSurname" class="form-control" id="fatherSurname" v-model="form.familybackground.fatherSurname">
+                                <input type="text" placeholder="fatherSurname" name="fatherSurname" class="form-control form-control-border border-width-2" id="fatherSurname" v-model="form.familybackground.fatherSurname">
                             </div>
                             <div class="col-md-6">
                                 <div>
                                     <label for="fatherFirstname" style="line-height: 10px;">Father Firstname</label>
                                 </div>
-                                <input type="text" placeholder="fatherFirstname" name="fatherFirstname" class="form-control" id="fatherFirstname" v-model="form.familybackground.fatherFirstname">
+                                <input type="text" placeholder="fatherFirstname" name="fatherFirstname" class="form-control form-control-border border-width-2" id="fatherFirstname" v-model="form.familybackground.fatherFirstname">
                             </div>
                         </div>
 
@@ -336,7 +336,7 @@
                                 <div>
                                     <label for="fatherMiddlename" style="line-height: 10px;">Father Middlename</label>
                                 </div>
-                                <input type="text" placeholder="father Middlename" name="fatherMiddlename" class="form-control" id="fatherMiddlename" v-model="form.familybackground.fatherMiddlename">
+                                <input type="text" placeholder="father Middlename" name="fatherMiddlename" class="form-control form-control-border border-width-2" id="fatherMiddlename" v-model="form.familybackground.fatherMiddlename">
                             </div>
                         </div>
 
@@ -345,13 +345,13 @@
                                 <div>
                                     <label for="motherSurname" style="line-height: 10px;">Mother Surname</label>
                                 </div>
-                                <input type="text" placeholder="motherSurname" name="motherSurname" class="form-control" id="motherSurname" v-model="form.familybackground.motherSurname">
+                                <input type="text" placeholder="motherSurname" name="motherSurname" class="form-control form-control-border border-width-2" id="motherSurname" v-model="form.familybackground.motherSurname">
                             </div>
                             <div class="col-md-6">
                                 <div>
                                     <label for="motherFirstname" style="line-height: 10px;">Mother Firstname</label>
                                 </div>
-                                <input type="text" placeholder="motherFirstname" name="motherFirstname" class="form-control" id="motherFirstname" v-model="form.familybackground.motherFirstname">
+                                <input type="text" placeholder="motherFirstname" name="motherFirstname" class="form-control form-control-border border-width-2" id="motherFirstname" v-model="form.familybackground.motherFirstname">
                             </div>
                         </div>
 
@@ -360,13 +360,13 @@
                                 <div>
                                     <label for="motherMiddlename" style="line-height: 10px;">Mother Middlename</label>
                                 </div>
-                                <input type="text" placeholder="motherMiddlename" name="motherMiddlename" class="form-control" id="motherMiddlename" v-model="form.familybackground.motherMiddlename">
+                                <input type="text" placeholder="motherMiddlename" name="motherMiddlename" class="form-control form-control-border border-width-2" id="motherMiddlename" v-model="form.familybackground.motherMiddlename">
                             </div>
                             <div class="col-md-6">
                                 <div>
                                     <label for="motherMaidenName" style="line-height: 10px;">Mother MaidenName</label>
                                 </div>
-                                <input type="text" placeholder="motherMaidenName" name="motherMaidenName" class="form-control" id="motherMaidenName" v-model="form.familybackground.motherMaidenName">
+                                <input type="text" placeholder="motherMaidenName" name="motherMaidenName" class="form-control form-control-border border-width-2" id="motherMaidenName" v-model="form.familybackground.motherMaidenName">
                             </div>
                         </div>   
                     </div>
@@ -384,13 +384,13 @@
                             <tr v-for="(child, index) in form.children" :key="child.id">
                                 <td>
                                     <div class="form-group input-group">
-                                        <input type="text" :name="'name'+index" :id="'name'+index" class="form-control" v-model="child.name">
+                                        <input type="text" :name="'name'+index" :id="'name'+index" class="form-control form-control-border border-width-2" v-model="child.name">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group">
-                                        <input type="date" :name="'birthday'+index" :id="'birthday'+index" class="form-control" v-model="child.birthday">
+                                        <input type="date" :name="'birthday'+index" :id="'birthday'+index" class="form-control form-control-border border-width-2" v-model="child.birthday">
                                     </div>
                                 </td>
 
@@ -431,31 +431,31 @@
                         <tr>
                             <th>Elementary: </th>
                             <td>
-                                <input type="text" name="elemSchoolName" id="elemSchoolName" class="form-control" v-model="form.educationalbackground.elemSchoolName">
+                                <input type="text" name="elemSchoolName" id="elemSchoolName" class="form-control form-control-border border-width-2" v-model="form.educationalbackground.elemSchoolName">
                             </td>
 
                             <td>
-                                <input type="text" name="elemDegree" class="form-control" id="elemDegree" v-model="form.educationalbackground.elemDegree">
+                                <input type="text" name="elemDegree" class="form-control form-control-border border-width-2" id="elemDegree" v-model="form.educationalbackground.elemDegree">
                             </td>
 
                             <td>
-                                <input type="number" name="elemYear" class="form-control" id="elemYear" v-model="form.educationalbackground.elemYear">
+                                <input type="number" name="elemYear" class="form-control form-control-border border-width-2" id="elemYear" v-model="form.educationalbackground.elemYear">
                             </td>
 
                             <td>
-                                <input type="text" name="elemHighestLevel" class="form-control" id="elemHighestLevel" v-model="form.educationalbackground.elemHighestLevel">
+                                <input type="text" name="elemHighestLevel" class="form-control form-control-border border-width-2" id="elemHighestLevel" v-model="form.educationalbackground.elemHighestLevel">
                             </td>
 
                             <td>
-                                <input type="text" name="elemFrom" class="form-control" id="elemFrom" v-model="form.educationalbackground.elemFrom">
+                                <input type="text" name="elemFrom" class="form-control form-control-border border-width-2" id="elemFrom" v-model="form.educationalbackground.elemFrom">
                             </td>
 
                             <td>
-                                <input type="text" name="elemTo" class="form-control" id="elemTo" v-model="form.educationalbackground.elemTo">
+                                <input type="text" name="elemTo" class="form-control form-control-border border-width-2" id="elemTo" v-model="form.educationalbackground.elemTo">
                             </td>
 
                             <td>
-                                <input type="text" name="elemSOA" class="form-control" id="elemSOA" v-model="form.educationalbackground.elemSOA">
+                                <input type="text" name="elemSOA" class="form-control form-control-border border-width-2" id="elemSOA" v-model="form.educationalbackground.elemSOA">
                             </td>
                         </tr>
 
@@ -464,31 +464,31 @@
                             <th>Secondary: </th>
 
                             <td>
-                                <input type="text" name="secSchoolName" id="secSchoolName" class="form-control" v-model="form.educationalbackground.secSchoolName">
+                                <input type="text" name="secSchoolName" id="secSchoolName" class="form-control form-control-border border-width-2" v-model="form.educationalbackground.secSchoolName">
                             </td>
 
                             <td>
-                                <input type="text" name="secDegree" class="form-control" id="secDegree" v-model="form.educationalbackground.secDegree">
+                                <input type="text" name="secDegree" class="form-control form-control-border border-width-2" id="secDegree" v-model="form.educationalbackground.secDegree">
                             </td>
 
                             <td>
-                                <input type="number" name="secYear" class="form-control" id="secYear" v-model="form.educationalbackground.secYear">
+                                <input type="number" name="secYear" class="form-control form-control-border border-width-2" id="secYear" v-model="form.educationalbackground.secYear">
                             </td>
 
                             <td>
-                                <input type="text" name="secHighestLevel" class="form-control" id="secHighestLevel" v-model="form.educationalbackground.secHighestLevel">
+                                <input type="text" name="secHighestLevel" class="form-control form-control-border border-width-2" id="secHighestLevel" v-model="form.educationalbackground.secHighestLevel">
                             </td>
 
                             <td>
-                                <input type="text" name="secFrom" class="form-control" id="secFrom" v-model="form.educationalbackground.secFrom">
+                                <input type="text" name="secFrom" class="form-control form-control-border border-width-2" id="secFrom" v-model="form.educationalbackground.secFrom">
                             </td>
 
                             <td>
-                                <input type="text" name="SecTo" class="form-control" id="SecTo" v-model="form.educationalbackground.secTo">
+                                <input type="text" name="SecTo" class="form-control form-control-border border-width-2" id="SecTo" v-model="form.educationalbackground.secTo">
                             </td>
 
                             <td>
-                                <input type="text" name="secSOA" class="form-control" id="secSOA" v-model="form.educationalbackground.secSOA">
+                                <input type="text" name="secSOA" class="form-control form-control-border border-width-2" id="secSOA" v-model="form.educationalbackground.secSOA">
                             </td>
                         </tr>
 
@@ -496,31 +496,31 @@
                             <th>Vocational: </th>
 
                             <td>
-                                <input type="text" name="vocSchoolName" id="vocSchoolName" class="form-control" v-model="form.educationalbackground.vocSchoolName">
+                                <input type="text" name="vocSchoolName" id="vocSchoolName" class="form-control form-control-border border-width-2" v-model="form.educationalbackground.vocSchoolName">
                             </td>
 
                             <td>
-                                <input type="text" name="vocDegree" class="form-control" id="vocDegree" v-model="form.educationalbackground.vocDegree">
+                                <input type="text" name="vocDegree" class="form-control form-control-border border-width-2" id="vocDegree" v-model="form.educationalbackground.vocDegree">
                             </td>
 
                             <td>
-                                <input type="number" name="vocYear" class="form-control" id="vocYear" v-model="form.educationalbackground.vocYear">
+                                <input type="number" name="vocYear" class="form-control form-control-border border-width-2" id="vocYear" v-model="form.educationalbackground.vocYear">
                             </td>
 
                             <td>
-                                <input type="text" name="vocHighestLevel" class="form-control" id="vocHighestLevel" v-model="form.educationalbackground.vocHighestLevel">
+                                <input type="text" name="vocHighestLevel" class="form-control form-control-border border-width-2" id="vocHighestLevel" v-model="form.educationalbackground.vocHighestLevel">
                             </td>
 
                             <td>
-                                <input type="text" name="vocFrom" class="form-control" id="vocFrom" v-model="form.educationalbackground.vocFrom">
+                                <input type="text" name="vocFrom" class="form-control form-control-border border-width-2" id="vocFrom" v-model="form.educationalbackground.vocFrom">
                             </td>
 
                             <td>
-                                <input type="text" name="vocTo" class="form-control" id="vocTo" v-model="form.educationalbackground.vocTo">
+                                <input type="text" name="vocTo" class="form-control form-control-border border-width-2" id="vocTo" v-model="form.educationalbackground.vocTo">
                             </td>
 
                             <td>
-                                <input type="text" name="vocSOA" class="form-control" id="vocSOA" v-model="form.educationalbackground.vocSOA">
+                                <input type="text" name="vocSOA" class="form-control form-control-border border-width-2" id="vocSOA" v-model="form.educationalbackground.vocSOA">
                             </td>
                         </tr>
 
@@ -528,31 +528,31 @@
                             <th>College: </th>
 
                             <td>
-                                <input type="text" name="collSchoolName1" id="collSchoolName1" class="form-control" v-model="form.educationalbackground.collSchoolName1">
+                                <input type="text" name="collSchoolName1" id="collSchoolName1" class="form-control form-control-border border-width-2" v-model="form.educationalbackground.collSchoolName1">
                             </td>
 
                             <td>
-                                <input type="text" name="collDegree1" class="form-control" id="collDegree1" v-model="form.educationalbackground.collDegree1">
+                                <input type="text" name="collDegree1" class="form-control form-control-border border-width-2" id="collDegree1" v-model="form.educationalbackground.collDegree1">
                             </td>
 
                             <td>
-                                <input type="number" name="collYear1" class="form-control" id="collYear1" v-model="form.educationalbackground.collYear1">
+                                <input type="number" name="collYear1" class="form-control form-control-border border-width-2" id="collYear1" v-model="form.educationalbackground.collYear1">
                             </td>
 
                             <td>
-                                <input type="text" name="collHighestLevel1" class="form-control" id="collHighestLevel1" v-model="form.educationalbackground.collHighestLevel1">
+                                <input type="text" name="collHighestLevel1" class="form-control form-control-border border-width-2" id="collHighestLevel1" v-model="form.educationalbackground.collHighestLevel1">
                             </td>
 
                             <td>
-                                <input type="text" name="collFrom1" class="form-control" id="collFrom1" v-model="form.educationalbackground.collFrom1">
+                                <input type="text" name="collFrom1" class="form-control form-control-border border-width-2" id="collFrom1" v-model="form.educationalbackground.collFrom1">
                             </td>
 
                             <td>
-                                <input type="text" name="collTo1" class="form-control" id="collTo1" v-model="form.educationalbackground.collTo1">
+                                <input type="text" name="collTo1" class="form-control form-control-border border-width-2" id="collTo1" v-model="form.educationalbackground.collTo1">
                             </td>
 
                             <td>
-                                <input type="text" name="collSOA1" class="form-control" id="collSOA1" v-model="form.educationalbackground.collSOA1">
+                                <input type="text" name="collSOA1" class="form-control form-control-border border-width-2" id="collSOA1" v-model="form.educationalbackground.collSOA1">
                             </td>
                         </tr>
 
@@ -560,31 +560,31 @@
                             <th></th>
 
                             <td>
-                                <input type="text" name="collSchoolName2" id="collSchoolName2" class="form-control" v-model="form.educationalbackground.collSchoolName2">
+                                <input type="text" name="collSchoolName2" id="collSchoolName2" class="form-control form-control-border border-width-2" v-model="form.educationalbackground.collSchoolName2">
                             </td>
 
                             <td>
-                                <input type="text" name="collDegree2" class="form-control" id="collDegree2" v-model="form.educationalbackground.collDegree2">
+                                <input type="text" name="collDegree2" class="form-control form-control-border border-width-2" id="collDegree2" v-model="form.educationalbackground.collDegree2">
                             </td>
 
                             <td>
-                                <input type="number" name="collYear2" class="form-control" id="collYear2" v-model="form.educationalbackground.collYear2">
+                                <input type="number" name="collYear2" class="form-control form-control-border border-width-2" id="collYear2" v-model="form.educationalbackground.collYear2">
                             </td>
 
                             <td>
-                                <input type="text" name="collHighestLevel2" class="form-control" id="collHighestLevel2" v-model="form.educationalbackground.collHighestLevel2">
+                                <input type="text" name="collHighestLevel2" class="form-control form-control-border border-width-2" id="collHighestLevel2" v-model="form.educationalbackground.collHighestLevel2">
                             </td>
 
                             <td>
-                                <input type="text" name="collFrom2" class="form-control" id="collFrom2" v-model="form.educationalbackground.collFrom2">
+                                <input type="text" name="collFrom2" class="form-control form-control-border border-width-2" id="collFrom2" v-model="form.educationalbackground.collFrom2">
                             </td>
 
                             <td>
-                                <input type="text" name="collTo2" class="form-control" id="collTo2" v-model="form.educationalbackground.collTo2">
+                                <input type="text" name="collTo2" class="form-control form-control-border border-width-2" id="collTo2" v-model="form.educationalbackground.collTo2">
                             </td>
 
                             <td>
-                                <input type="text" name="collSOA2" class="form-control" id="collSOA2" v-model="form.educationalbackground.collSOA2">
+                                <input type="text" name="collSOA2" class="form-control form-control-border border-width-2" id="collSOA2" v-model="form.educationalbackground.collSOA2">
                             </td>
                         </tr>
 
@@ -592,31 +592,31 @@
                             <th>Graduate Stud: </th>
 
                             <td>
-                                <input type="text" name="gradSchoolName" id="gradSchoolName" class="form-control" v-model="form.educationalbackground.gradSchoolName">
+                                <input type="text" name="gradSchoolName" id="gradSchoolName" class="form-control form-control-border border-width-2" v-model="form.educationalbackground.gradSchoolName">
                             </td>
 
                             <td>
-                                <input type="text" name="gradDegree" class="form-control" id="gradDegree" v-model="form.educationalbackground.gradDegree">
+                                <input type="text" name="gradDegree" class="form-control form-control-border border-width-2" id="gradDegree" v-model="form.educationalbackground.gradDegree">
                             </td>
 
                             <td>
-                                <input type="number" name="gradYear" class="form-control" id="gradYear" v-model="form.educationalbackground.gradYear">
+                                <input type="number" name="gradYear" class="form-control form-control-border border-width-2" id="gradYear" v-model="form.educationalbackground.gradYear">
                             </td>
 
                             <td>
-                                <input type="text" name="gradHighestLevel" class="form-control" id="gradHighestLevel" v-model="form.educationalbackground.gradHighestLevel">
+                                <input type="text" name="gradHighestLevel" class="form-control form-control-border border-width-2" id="gradHighestLevel" v-model="form.educationalbackground.gradHighestLevel">
                             </td>
 
                             <td>
-                                <input type="text" name="gradFrom" class="form-control" id="gradFrom" v-model="form.educationalbackground.gradFrom">
+                                <input type="text" name="gradFrom" class="form-control form-control-border border-width-2" id="gradFrom" v-model="form.educationalbackground.gradFrom">
                             </td>
 
                             <td>
-                                <input type="text" name="gradTo" class="form-control" id="gradTo" v-model="form.educationalbackground.gradTo">
+                                <input type="text" name="gradTo" class="form-control form-control-border border-width-2" id="gradTo" v-model="form.educationalbackground.gradTo">
                             </td>
 
                             <td>
-                                <input type="text" name="gradSOA" class="form-control" id="gradSOA" v-model="form.educationalbackground.gradSOA">
+                                <input type="text" name="gradSOA" class="form-control form-control-border border-width-2" id="gradSOA" v-model="form.educationalbackground.gradSOA">
                             </td>
                         </tr>
 
@@ -646,35 +646,35 @@
                             <tr v-for="(eligibility, index) in form.eligibilities" :key="eligibility.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'careerService'+index" :id="'careerService'+index" class="form-control" v-model="eligibility.careerService">
+                                        <input type="text" :name="'careerService'+index" :id="'careerService'+index" class="form-control form-control-border border-width-2" v-model="eligibility.careerService">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'rating'+index" :id="'rating'+index" class="form-control" v-model="eligibility.rating">
+                                        <input type="text" :name="'rating'+index" :id="'rating'+index" class="form-control form-control-border border-width-2" v-model="eligibility.rating">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" :name="'dateOfExam'+index" :id="'dateOfExam'+index" class="form-control" v-model="eligibility.dateOfExam">
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="form-group input-group-sm">
-                                        <input type="text" :name="'placeOfExam'+index" :id="'placeOfExam'+index" class="form-control" v-model="eligibility.placeOfExam">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group input-group-sm">
-                                        <input type="text" :name="'licenseNumber'+index" :id="'licenseNumber'+index" class="form-control" v-model="eligibility.licenseNumber">
+                                        <input type="date" :name="'dateOfExam'+index" :id="'dateOfExam'+index" class="form-control form-control-border border-width-2" v-model="eligibility.dateOfExam">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'licenseRelease'+index" :id="'licenseRelease'+index" class="form-control" v-model="eligibility.licenseRelease">
+                                        <input type="text" :name="'placeOfExam'+index" :id="'placeOfExam'+index" class="form-control form-control-border border-width-2" v-model="eligibility.placeOfExam">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" :name="'licenseNumber'+index" :id="'licenseNumber'+index" class="form-control form-control-border border-width-2" v-model="eligibility.licenseNumber">
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" :name="'licenseRelease'+index" :id="'licenseRelease'+index" class="form-control form-control-border border-width-2" v-model="eligibility.licenseRelease">
                                     </div>
                                 </td>
                                 <td>
@@ -712,47 +712,47 @@
                                 <tr v-for="(workexperience, index) in form.workexperiences" :key="workexperience.id">
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <input type="date" :name="'we_inclusiveDateFrom'+index" :id="'we_inclusiveDateFrom'+index" class="form-control" v-model="workexperience.inclusiveDateFrom">
+                                            <input type="date" :name="'we_inclusiveDateFrom'+index" :id="'we_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateFrom">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <input type="date" :name="'we_inclusiveDateTo'+index" :id="'we_inclusiveDateTo'+index" class="form-control" v-model="workexperience.inclusiveDateTo">
+                                            <input type="date" :name="'we_inclusiveDateTo'+index" :id="'we_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateTo">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <input type="text" :name="'we_position'+index" :id="'we_position'+index" class="form-control" v-model="workexperience.position">
+                                            <input type="text" :name="'we_position'+index" :id="'we_position'+index" class="form-control form-control-border border-width-2" v-model="workexperience.position">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <input type="text" :name="'department'+index" :id="'department'+index" class="form-control" v-model="workexperience.department">
+                                            <input type="text" :name="'department'+index" :id="'department'+index" class="form-control form-control-border border-width-2" v-model="workexperience.department">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <input type="text" :name="'monthlySalary'+index" :id="'monthlySalary'+index" class="form-control" v-model="workexperience.monthlySalary">
+                                            <input type="text" :name="'monthlySalary'+index" :id="'monthlySalary'+index" class="form-control form-control-border border-width-2" v-model="workexperience.monthlySalary">
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <input type="text" :name="'salaryGrade'+index" :id="'salaryGrade'+index" class="form-control" v-model="workexperience.salaryGrade">
+                                            <input type="text" :name="'salaryGrade'+index" :id="'salaryGrade'+index" class="form-control form-control-border border-width-2" v-model="workexperience.salaryGrade">
                                         </div>
                                     </td>
 
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <input type="text" :name="'statusOfAppointment'+index" :id="'statusOfAppointment'+index" class="form-control" v-model="workexperience.statusOfAppointment">
+                                            <input type="text" :name="'statusOfAppointment'+index" :id="'statusOfAppointment'+index" class="form-control form-control-border border-width-2" v-model="workexperience.statusOfAppointment">
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-group input-group-sm">
-                                            <select :name="'govService'+index" :id="'govService'+index" class="form-control" v-model="workexperience.govService">
+                                            <select :name="'govService'+index" :id="'govService'+index" class="form-control form-control-border border-width-2" v-model="workexperience.govService">
                                                 <option>YES</option>
                                                 <option>NO</option>
                                             </select>
@@ -791,31 +791,31 @@
                             <tr v-for="(voluntarywork, index) in form.voluntaryworks" :key="voluntarywork.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'nameAndAddress'+index" :id="'nameAndAddress'+index" class="form-control" v-model="voluntarywork.nameAndAddress">
+                                        <input type="text" :name="'nameAndAddress'+index" :id="'nameAndAddress'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.nameAndAddress">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" :name="'vw_inclusiveDateFrom'+index" :id="'vw_inclusiveDateFrom'+index" class="form-control" v-model="voluntarywork.inclusiveDateFrom">
+                                        <input type="date" :name="'vw_inclusiveDateFrom'+index" :id="'vw_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateFrom">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" :name="'vw_inclusiveDateTo'+index" :id="'vw_inclusiveDateTo'+index" class="form-control" v-model="voluntarywork.inclusiveDateTo">
+                                        <input type="date" :name="'vw_inclusiveDateTo'+index" :id="'vw_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateTo">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'vw_hours'+index" :id="'vw_hours'+index" class="form-control" v-model="voluntarywork.hours">
+                                        <input type="text" :name="'vw_hours'+index" :id="'vw_hours'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.hours">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'vw_position'+index" :id="'vw_position'+index" class="form-control" v-model="voluntarywork.position">
+                                        <input type="text" :name="'vw_position'+index" :id="'vw_position'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.position">
                                     </div>
                                 </td>
                                 <td>
@@ -851,31 +851,31 @@
                             <tr v-for="(trainingprogram, index) in form.trainingprograms" :key="trainingprogram.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'title'+index" :id="'title'+index" class="form-control" v-model="trainingprogram.title">
+                                        <input type="text" :name="'title'+index" :id="'title'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.title">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" :name="'tp_inclusiveDateFrom'+index" :id="'tp_inclusiveDateFrom'+index" class="form-control" v-model="trainingprogram.inclusiveDateFrom">
+                                        <input type="date" :name="'tp_inclusiveDateFrom'+index" :id="'tp_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateFrom">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="date" :name="'tp_inclusiveDateTo'+index" :id="'tp_inclusiveDateTo'+index" class="form-control" v-model="trainingprogram.inclusiveDateTo">
+                                        <input type="date" :name="'tp_inclusiveDateTo'+index" :id="'tp_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateTo">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="number" :name="'tp_hours'+index" :id="'tp_hours'+index" class="form-control" v-model="trainingprogram.hours">
+                                        <input type="number" :name="'tp_hours'+index" :id="'tp_hours'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.hours">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'conductor'+index" :id="'conductor'+index" class="form-control" v-model="trainingprogram.conductor">
+                                        <input type="text" :name="'conductor'+index" :id="'conductor'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.conductor">
                                     </div>
                                 </td>
                                 <td>
@@ -910,19 +910,19 @@
                             <tr v-for="(otherinfo, index) in form.otherinfos" :key="otherinfo.id">
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'skill'+index" :id="'skill'+index" class="form-control" v-model="otherinfo.skill">
+                                        <input type="text" :name="'skill'+index" :id="'skill'+index" class="form-control form-control-border border-width-2" v-model="otherinfo.skill">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'recognition'+index" :id="'recognition'+index" class="form-control" v-model="otherinfo.recognition">
+                                        <input type="text" :name="'recognition'+index" :id="'recognition'+index" class="form-control form-control-border border-width-2" v-model="otherinfo.recognition">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" :name="'membership'+index" :id="'membership'+index" class="form-control" v-model="otherinfo.membership">
+                                        <input type="text" :name="'membership'+index" :id="'membership'+index" class="form-control form-control-border border-width-2" v-model="otherinfo.membership">
                                     </div>
                                 </td>
                                 <td>
@@ -991,7 +991,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q34bdetails">If YES give details:</label>
-                            <input type="text" name="q34bdetails" class="form-control" id="q34bdetails" v-model="form.pdsquestion.q34bdetails">
+                            <input type="text" name="q34bdetails" class="form-control form-control-border border-width-2" id="q34bdetails" v-model="form.pdsquestion.q34bdetails">
                         </div>
                     </div>
 
@@ -1022,7 +1022,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q35adetails">If YES give details:</label>
-                            <input type="text" name="q35adetails" class="form-control" id="q35adetails" v-model="form.pdsquestion.q35adetails">
+                            <input type="text" name="q35adetails" class="form-control form-control-border border-width-2" id="q35adetails" v-model="form.pdsquestion.q35adetails">
                         </div>
                     </div>
                     <div class="col-md-12" style="display: flex;">
@@ -1051,11 +1051,11 @@
                         </div>
                         <div class="col-md-2">
                             <label for="q35bdatefiled">Date Filed:</label>
-                            <input type="date" name="q35bdatefiled" class="form-control" id="q35bdatefiled" v-model="form.pdsquestion.q35bdatefiled">
+                            <input type="date" name="q35bdatefiled" class="form-control form-control-border border-width-2" id="q35bdatefiled" v-model="form.pdsquestion.q35bdatefiled">
                         </div>
                         <div class="col-md-3">
                             <label for="q35bcasestatus">Status of Case/s:</label>
-                             <input type="text" name="q35bcasestatus" class="form-control" id="q35bcasestatus" v-model="form.pdsquestion.q35bcasestatus">
+                             <input type="text" name="q35bcasestatus" class="form-control form-control-border border-width-2" id="q35bcasestatus" v-model="form.pdsquestion.q35bcasestatus">
                         </div>
                     </div>
                     <hr>
@@ -1084,7 +1084,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q36adetails">If YES give details:</label>
-                            <input type="text" name="q36adetails" class="form-control" id="q36adetails" v-model="form.pdsquestion.q36adetails">
+                            <input type="text" name="q36adetails" class="form-control form-control-border border-width-2" id="q36adetails" v-model="form.pdsquestion.q36adetails">
                         </div>
                     </div>
                     <hr>
@@ -1114,7 +1114,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q37adetails">If YES give details</label>
-                            <input type="text" name="q37adetails" class="form-control" id="q37adetails"  v-model="form.pdsquestion.q37adetails">
+                            <input type="text" name="q37adetails" class="form-control form-control-border border-width-2" id="q37adetails"  v-model="form.pdsquestion.q37adetails">
                         </div>
                     </div>
                     <hr>
@@ -1143,7 +1143,7 @@
                         </div>
                         <div class="col-md-5 mb-3">
                             <label for="q38adetails">If YES give details:</label>
-                            <input type="text" name="q38adetails" class="form-control" id="q38adetails" v-model="form.pdsquestion.q38adetails">
+                            <input type="text" name="q38adetails" class="form-control form-control-border border-width-2" id="q38adetails" v-model="form.pdsquestion.q38adetails">
                         </div>
                     </div>
                     <div class="col-md-12" style="display: flex;">
@@ -1171,7 +1171,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q38bdetails">If YES give details:</label>
-                            <input type="text" name="q38bdetails" class="form-control" id="q38bdetails" v-model="form.pdsquestion.q38bdetails">
+                            <input type="text" name="q38bdetails" class="form-control form-control-border border-width-2" id="q38bdetails" v-model="form.pdsquestion.q38bdetails">
                         </div>
                     </div>
                     <hr>
@@ -1200,7 +1200,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q39adetails">If YES give details:</label>
-                            <input type="text" name="q39adetails" class="form-control" id="q39adetails" v-model="form.pdsquestion.q39adetails">
+                            <input type="text" name="q39adetails" class="form-control form-control-border border-width-2" id="q39adetails" v-model="form.pdsquestion.q39adetails">
                         </div>
                     </div>
                     <hr>
@@ -1238,7 +1238,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q40adetails">If YES please specify:</label>
-                            <input type="text" name="q40adetails" class="form-control" id="q40adetails" v-model="form.pdsquestion.q40adetails">
+                            <input type="text" name="q40adetails" class="form-control form-control-border border-width-2" id="q40adetails" v-model="form.pdsquestion.q40adetails">
                         </div>
                     </div>
                     <div class="col-md-12" style="display: flex;">
@@ -1265,7 +1265,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q40bdetails">If YES, please specify ID No:</label>
-                            <input type="text" name="q40bdetails" class="form-control" id="q40bdetails" v-model="form.pdsquestion.q40bdetails">
+                            <input type="text" name="q40bdetails" class="form-control form-control-border border-width-2" id="q40bdetails" v-model="form.pdsquestion.q40bdetails">
                         </div>
                     </div>
                     <div class="col-md-12" style="display: flex;">
@@ -1292,7 +1292,7 @@
                         </div>
                         <div class="col-md-5">
                             <label for="q40cdetails">If YES, please specify ID No:</label>
-                            <input type="text" name="q40cdetails" id="q40cdetails" class="form-control" v-model="form.pdsquestion.q40cdetails">
+                            <input type="text" name="q40cdetails" id="q40cdetails" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.q40cdetails">
                         </div>
                     </div>
                 </div>
@@ -1316,51 +1316,51 @@
                             <tr>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="refname1" id="refname1" class="form-control" v-model="form.pdsquestion.refname1">
+                                        <input type="text" name="refname1" id="refname1" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.refname1">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="refaddress1" id="refaddress1" class="form-control" v-model="form.pdsquestion.refaddress1">
+                                        <input type="text" name="refaddress1" id="refaddress1" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.refaddress1">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="reftelephone1" id="reftelephone1" class="form-control" v-model="form.pdsquestion.reftelephone1">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group input-group-sm">
-                                        <input type="text" name="refname2" id="refname2" class="form-control" v-model="form.pdsquestion.refname2">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group input-group-sm">
-                                        <input type="text" name="refaddress2" id="refaddress2" class="form-control" v-model="form.pdsquestion.refaddress2">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group input-group-sm">
-                                        <input type="text" name="reftelephone2" id="reftelephone2" class="form-control" v-model="form.pdsquestion.reftelephone2">
+                                        <input type="text" name="reftelephone1" id="reftelephone1" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.reftelephone1">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="refname3" id="refname3" class="form-control" v-model="form.pdsquestion.refname3">
+                                        <input type="text" name="refname2" id="refname2" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.refname2">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="refaddress3" id="refaddress3" class="form-control" v-model="form.pdsquestion.refaddress3">
+                                        <input type="text" name="refaddress2" id="refaddress2" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.refaddress2">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm">
-                                        <input type="text" name="reftelephone3" id="reftelephone3" class="form-control" v-model="form.pdsquestion.reftelephone3">
+                                        <input type="text" name="reftelephone2" id="reftelephone2" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.reftelephone2">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" name="refname3" id="refname3" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.refname3">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" name="refaddress3" id="refaddress3" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.refaddress3">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" name="reftelephone3" id="reftelephone3" class="form-control form-control-border border-width-2" v-model="form.pdsquestion.reftelephone3">
                                     </div>
                                 </td>
                             </tr>
@@ -1377,15 +1377,15 @@
                 <div class="card-body" style="display: flex;">
                     <div class="col-md-4">
                         <label for="govid" style="line-height: 10px;">Government Issued ID:</label>
-                        <input type="text" placeholder="" name="govid" class="form-control" id="govid" v-model="form.pdsquestion.govid">
+                        <input type="text" placeholder="" name="govid" class="form-control form-control-border border-width-2" id="govid" v-model="form.pdsquestion.govid">
                     </div>
                     <div class="col-md-4">
                         <label for="idnumber" style="line-height: 10px;">ID/License/Passport No.:</label>
-                        <input type="text" placeholder="" name="idnumber" class="form-control" id="idnumber" v-model="form.pdsquestion.idnumber">
+                        <input type="text" placeholder="" name="idnumber" class="form-control form-control-border border-width-2" id="idnumber" v-model="form.pdsquestion.idnumber">
                     </div>
                     <div class="col-md-4">
                         <label for="dateissued" style="line-height: 10px;">Date/Place of Issuance:</label>
-                        <input type="text" placeholder="" name="dateissued" class="form-control" id="dateissued" v-model="form.pdsquestion.dateissued">
+                        <input type="text" placeholder="" name="dateissued" class="form-control form-control-border border-width-2" id="dateissued" v-model="form.pdsquestion.dateissued">
                     </div>
                 </div>
             </div>
