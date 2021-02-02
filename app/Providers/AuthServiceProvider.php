@@ -42,6 +42,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role == 'Administrator' || $user->role == 'Author';
         });
 
+        Gate::define('employee', function($user){
+            return !$user->role;
+        });
+
         Passport::routes();
     }
 }

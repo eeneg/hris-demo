@@ -13,9 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/employee', 'EmployeeHomeController@index')->name('pds')->middleware('auth:employee');
+
 Route::get('/', 'HomeController@index');
 
-Route::get('/login/employee', 'EmployeeLoginController@employeelogin');
+Route::group(['prefix' => 'employee'], function () {
+
+    Route::get('/login/step-one', 'Auth\EmployeeLoginController@employeelogin')->name('step-one');
+    Route::post('/login/step-one/post', 'Auth\EmployeeLoginController@authenticateEmployeeLogin')->name('employee_login');
+
+    Route::get('/login/step-two', 'Auth\EmployeeLoginController@employeeloginbarcode')->name('step-two');
+    Route::post('/login/step-two/post', 'Auth\EmployeeLoginController@authenticateEmployeeLoginBarcode')->name('employee_login_barcode');
+
+});
 
 Auth::routes(['register' => false]);
 

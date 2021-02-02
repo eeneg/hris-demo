@@ -3,10 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Webpatser\Uuid\Uuid;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
-class PersonalInformation extends Model
+class PersonalInformation extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
     public $incrementing = false;
 
     protected $keyType = 'string';
@@ -14,7 +19,7 @@ class PersonalInformation extends Model
     protected $primaryKey = 'id';
 
     protected $casts = [
-        'id' => 'string'
+        'id' => 'string',
     ];
 
     protected $table = 'personal_informations';
@@ -32,8 +37,10 @@ class PersonalInformation extends Model
     protected $fillable = [
         'surname', 'firstname', 'middlename', 'nameextension', 'birthdate', 'birthplace', 'sex', 'civilstatus', 'citizenship', 'height',
         'weight', 'bloodtype', 'gsis', 'pagibig', 'philhealth', 'sss', 'residentialaddress', 'zipcode1', 'telephone1', 'permanentaddress',
-        'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status'
+        'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status',
     ];
+
+    protected $guard = 'employee';
 
     public function barcode(){
         return $this->hasOne('App\Barcode', 'personal_information_id');
@@ -92,6 +99,11 @@ class PersonalInformation extends Model
     public function appointments()
     {
         return $this->hasMany('App\Appointment', 'personal_information_id');
+    }
+
+    public function employeeEditRequests()
+    {
+        return $this->hasOne('App\EmployeePDSEditRequest');
     }
 
     public static function boot(){

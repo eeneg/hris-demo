@@ -46,8 +46,7 @@ class AppointmentController extends Controller
                 'salary_grades.step as step',
                 'salary_grades.grade as grade',
                 'appointment_records.*'
-            )
-            ->paginate(20);
+            );
         }else{
             $appointments = Appointment::select('appointment_records.*')
             ->leftJoin('personal_informations', 'appointment_records.personal_information_id', '=', 'personal_informations.id')
@@ -74,13 +73,12 @@ class AppointmentController extends Controller
             ->orWhere('surname', 'LIKE', '%'.$request->search.'%')
             ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
             ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-            ->orderBy('surname')
-            ->get();
+            ->orderBy('surname');
 
             $appointments = $appointments->whereBetween('reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')));
         }
 
-        return new AppointmentResource($appointments);
+        return new AppointmentResource($appointments->paginate(20));
 
     }
 

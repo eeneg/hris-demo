@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-12">
 
-        <form @submit.prevent="editMode == false ? storePersonalInformation() : updatePersonalInformation()" action="" id="pdsForm" @keydown="errors.clear($event.target.name)">
+        <form @submit.prevent="editMode == 1 ? storePersonalInformation() : editMode == 2 ? updatePersonalInformation() : editMode == 3 ? updateRequest() : ''" action="" id="pdsForm" @keydown="errors.clear($event.target.name)">
             <div class="row">
                 <div class="flex col-md-12 p-0">
                     <div class="form-group  col-md-3 float-right">
@@ -23,13 +23,13 @@
             </div>
 
             <div class="flex border-left text-white" style="border-left: 100px solid red; background-color: #01579b">
-                
+
             </div>
                 <div class="card card-primary">
                     <div class="card-header">
                         <h3>Personal Information</h3>
                     </div>
-              
+
                 <div class="card-body">
                     <div class="form-group" style="display: flex;">
                         <div class="col-md-4">
@@ -45,7 +45,7 @@
                         <div class="col-md-4">
                             <div>
                                 <label for="firstname" style="line-height: 10px;">Firstname</label>
-                            </div>    
+                            </div>
                                 <input type="text" placeholder="Firstname" name="firstname" class="form-control form-control-border border-width-2" id="firstname" v-model="form.firstname">
                             <span>
                                 <strong class="text-danger" v-if="errors.has('firstname')">Field Required</strong>
@@ -105,7 +105,7 @@
                                 <option>Separated</option>
                                 <option>Other/s</option>
                             </select>
-                        </div>   
+                        </div>
                     </div>
 
                     <div class="form-group" style="display: flex;">
@@ -128,7 +128,7 @@
                             <input type="text" placeholder="Blood Type" name="bloodtype" class="form-control form-control-border border-width-2" id="bloodtype" v-model="form.bloodtype">
                         </div>
                     </div>
-                    
+
                     <div class="form-group" style="display: flex;">
                         <div class="col-md-4">
                             <div>
@@ -259,9 +259,9 @@
                     <div class="card-header">
                         <h3>Family Background</h3>
                     </div>
-              
+
                 <div class="card-body">
-                    <div class="col-md-6 float-left" style="padding: 0px;"> 
+                    <div class="col-md-6 float-left" style="padding: 0px;">
                         <div class="form-group input-group" style="display: flex;">
                             <div class="col-md-6">
                                 <div>
@@ -304,8 +304,8 @@
                                     <label for="spouseBussinessAddress" style="line-height: 10px;">Spouse Bussiness Address</label>
                                 </div>
                                 <input type="text" placeholder="spouse Bussiness Address" name="spouseBussinessAddress" class="form-control form-control-border border-width-2" id="spouseBussinessAddress" v-model="form.familybackground.spouseBussinessAddress">
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
 
                         <div class="form-group input-group" style="display: flex;">
                             <div class="col-md-6">
@@ -368,7 +368,7 @@
                                 </div>
                                 <input type="text" placeholder="motherMaidenName" name="motherMaidenName" class="form-control form-control-border border-width-2" id="motherMaidenName" v-model="form.familybackground.motherMaidenName">
                             </div>
-                        </div>   
+                        </div>
                     </div>
 
                     <div class="col-md-6 float-right" style="padding: 0px;">
@@ -405,14 +405,14 @@
                         </tbody>
                     </table>
                     </div>
-                </div>  
+                </div>
             </div>
 
             <div class="card card-primary">
                 <div class="card-header">
                     <h3>Educational Background</h3>
                 </div>
-              
+
                 <div class="card-body pt-0">
                     <table class="table table-md table-borderless table-responsive no-datatable">
                     <thead>
@@ -621,14 +621,14 @@
                         </tr>
 
                     </tbody>
-                </table>            
+                </table>
                 </div>
-            </div>        
+            </div>
             <div class="card card-primary">
                 <div class="card-header">
                     <h3>Eligibility</h3>
                 </div>
-              
+
                 <div class="card-body pt-0">
                     <table class="table table-responsive table-borderless table-sm no-datatable" id="eligibility-tbl">
                         <thead>
@@ -687,12 +687,12 @@
                         </tbody>
                     </table>
                 </div>
-            </div>    
+            </div>
             <div class="card card-primary">
                 <div class="card-header">
                     <h3>Work Experience</h3>
                 </div>
-              
+
                 <div class="card-body pt-0">
                         <table class="table table-responsive table-borderless table-sm no-datatable" id="workex_tbl">
                             <thead>
@@ -768,13 +768,13 @@
                             </tbody>
                         </table>
                 </div>
-            </div>        
+            </div>
 
             <div class="card card-primary">
                 <div class="card-header">
                     <h3>Voluntary Work</h3>
                 </div>
-              
+
                 <div class="card-body pt-0">
                     <table class="table table-responsive table-borderless table-sm no-datatable" id="volwork-tbl">
                         <thead>
@@ -834,7 +834,7 @@
                 <div class="card-header">
                     <h3>Learning and Development</h3>
                 </div>
-              
+
                 <div class="card-body pt-0">
                     <table class="table table-responsive table-borderless table-sm no-datatable" id="learnanddev-tbl">
                         <thead>
@@ -889,13 +889,13 @@
                     </table>
                 </div>
             </div>
-            
+
 
             <div class="card card-primary">
                 <div class="card-header">
                     <h3>Other Information</h3>
                 </div>
-              
+
                 <div class="card-body pt-0">
                     <table class="table table-responsive table-borderless table-sm no-datatable" id="otherinfo-tbl">
                         <thead>
@@ -941,7 +941,7 @@
                 <div class="card-header">
                    <h3>lp</h3>
                 </div>
-              
+
                 <div class="card-body">
                     <div class="col-md-12">
                         <div class="col-md-6" style="display: flex;">
@@ -953,7 +953,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-12" style="display: flex;">   
+                    <div class="col-md-12" style="display: flex;">
                         <div class="col-md-7">
                             <p style="margin-left: 30px;"> a. within the third degree?</p>
                         </div>
@@ -1032,7 +1032,7 @@
                                 b. Have you been criminally charged before any court?
                             </p>
                         </div>
-                       
+
                         <div class="col-md-5">
                             <label for="q35b" style="margin-right: 50%;">
                                 <input type="radio" class="q35b_yes" name="q35b_yes" id="q35b_yes" value="1" v-model="form.pdsquestion.q35b">
@@ -1151,7 +1151,7 @@
                             <p style="margin-left: 30px;">
                                 b. Have you resigned from the government service during the three
                                 (3)-month period before the last election to promote/actively campaign for a national or local candidate?
-                            </p>                              
+                            </p>
                         </div>
                         <div class="col-md-5">
                             <label for="q38b" style="margin-right: 50%;">
@@ -1297,12 +1297,12 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="card card-primary">
                 <div class="card-header">
                    <h3>REFERENCES (Person not related by consanguinity or affinity to applicant /appointee)</h3>
                 </div>
-              
+
                 <div class="card-body">
                     <table class="table table-borderless table-sm no-datatable" id="otherinfo-tbl">
                         <thead>
@@ -1368,12 +1368,12 @@
                     </table>
                 </div>
             </div>
-            
+
             <div class="card card-primary">
                 <div class="card-header">
                    <h3>Government Issued ID (i.e.Passport, GSIS, SSS, PRC, Driver's License, etc.)</h3>
                 </div>
-              
+
                 <div class="card-body" style="display: flex;">
                     <div class="col-md-4">
                         <label for="govid" style="line-height: 10px;">Government Issued ID:</label>
@@ -1394,7 +1394,7 @@
                 <div class="card-header">
                    <h3>ID Picture</h3>
                 </div>
-              
+
                 <div class="card-body" style="display: flex;">
                     <div class="form-group col-md-3">
                         <label for="picture" class="col-form-label">Picture</label>
@@ -1406,7 +1406,7 @@
                         <div>
                             <img class="result" style="height: 100%; width: 100%;" :src="getAvatar()" alt="">
                         </div>
-                    </div>  
+                    </div>
                 </div>
             </div>
 
@@ -1497,7 +1497,9 @@ export default {
     data()
     {
         return {
-            editMode: false,
+            editMode: 1,
+            oldData: {},
+            edits: {},
             errors: new Errors(),
             form: new Form({
                     'id': '',
@@ -1546,18 +1548,33 @@ export default {
        if(to.query.id == null)
        {
             next()
-       }else{
+       }
+       else if(to.query.id != null && to.query.mode == 1){
             axios.get('api/edit?id='+to.query.id)
             .then(({data}) => {
                 next(vm => vm.fetchData(data))
             })
             .catch(error => {
+                console.log(error)
                 Swal.fire(
-                    'Failed',
-                    error.response.status.toString(),
-                    'warning'
+                    'Oops...',
+                    error.response.statusText,
+                    'error'
                 )
-                next(false)
+            })
+       }
+       else if(to.query.id != null && to.query.mode == 2){
+            axios.get('api/editemployee?id='+to.query.id)
+            .then(({data, editMode}) => {
+                next(vm => vm.fetchData(data, editMode = 3))
+            })
+            .catch(error => {
+                console.log(error)
+                Swal.fire(
+                    'Oops...',
+                    error.response.statusText,
+                    'error'
+                )
             })
        }
     },
@@ -1611,7 +1628,14 @@ export default {
                 this.$Progress.finish();
                 this.form.reset()
             })
-            .catch(error => this.errors.record(error.response.data.errors))
+            .catch(error =>{
+                this.errors.record(error.response.data.errors)
+                 Swal.fire(
+                    'Oops...',
+                    error.response.statusText,
+                    'error'
+                )
+            })
         },
         updatePersonalInformation: function()
         {
@@ -1625,7 +1649,14 @@ export default {
                 )
                 this.$Progress.finish();
             })
-            .catch(error => this.errors.record(error.response.data.errors))
+             .catch(error =>{
+                this.errors.record(error.response.data.errors)
+                Swal.fire(
+                    'Oops...',
+                    error.response.statusText,
+                    'error'
+                )
+            })
         },
         addFields: function(data)
         {
@@ -1711,9 +1742,92 @@ export default {
                 break;
             }
         },
-        fetchData: function(data)
+        updateRequest: function()
         {
-            this.editMode = true
+            this.$Progress.start();
+
+            this.oldData['errors'] ? delete this.oldData['errors'] : ''
+            this.oldData['originalData'] ? delete this.oldData['originalData'] : ''
+            this.form['errors'] ? delete this.form['errors'] : ''
+            this.form['originalData'] ? delete this.form['originalData'] : ''
+
+            this.difference(this.form, this.oldData)
+
+            console.log(this.edits)
+
+            axios.post('api/employeepersonalinformation?id='+this.form.id, this.edits)
+             .then(response => {
+                toast.fire({
+                    icon: 'success',
+                    title: 'Request sent successfully'
+                });
+                this.$Progress.finish();
+            })
+             .catch(response =>{
+                Swal.fire(
+                    'Oops...',
+                    'Can only have one request',
+                    'error'
+                )
+            })
+        },
+
+        difference: function(newValue, oldValue)
+        {
+            let ar = []
+
+            _.forEach(newValue, function(value, key)
+            {
+
+                if(((value || value != '') && !(typeof(value) === "object")) && value != oldValue[key])
+                {
+                    ar.push({model: 'personalinformation', field: key, oldValue: oldValue[key], newValue: value, status: 'PENDING'})
+                }
+
+                if((value && (typeof(value) === "object")) && !Array.isArray(value))
+                {
+                    for(var field in value)
+                    {
+                        if(value[field] != oldValue[key][field])
+                        {
+                            ar.push({model: key, field: field, oldValue: oldValue[key][field], newValue: value[field], status: 'PENDING'})
+                        }
+                    }
+                }
+
+                if((value && (typeof(value) === "object")) && Array.isArray(value))
+                {
+                    if(value.length > 0)
+                    {
+                        value.forEach(function(data, index){
+                            for(var field in data)
+                            {
+                                if(data['id'] && data[field] != oldValue[key][index][field])
+                                {
+                                    ar.push({model: key, field: field, oldValue: oldValue[key][index][field], newValue: data[field], status: 'PENDING'})
+                                }else if(!data['id']){
+                                    ar.push({model: key, field: field, oldValue: null, newValue: data[field], status: 'PENDING'})
+                                }
+                            }
+
+                        })
+                    }
+                }
+
+            })
+
+            this.edits = ar
+        },
+
+        fetchData: function(data, editMode)
+        {
+            if(editMode == 3 && editMode)
+            {
+                this.editMode = editMode
+            }else if(!data.editMode){
+                this.editMode = 2
+            }
+
 
             if(!data.familybackground)
             {
@@ -1731,6 +1845,9 @@ export default {
             }
 
             this.form.fill(data)
+
+            this.oldData = JSON.parse(JSON.stringify(data))
+
         }
 
     },

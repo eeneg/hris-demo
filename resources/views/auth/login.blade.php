@@ -146,7 +146,7 @@
                         </a>
                         @endif
                         <br>
-                        <a href="/login/employee">
+                        <a href="{{ route('step-one') }}">
                         Sign in as Employee
                         </a>
                      </div>

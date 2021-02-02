@@ -41,11 +41,22 @@ return [
             'provider' => 'users',
         ],
 
+        'employee' => [
+            'driver' => 'session',
+            'provider' => 'employees',
+        ],
+
         'api' => [
             'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'employee-api' => [
+            'driver' => 'passport',
+            'provider' => 'employees',
+            'hash' => false,
+        ]
     ],
 
     /*
@@ -69,6 +80,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'employees' => [
+            'driver' => 'eloquent',
+            'model' => App\PersonalInformation::class,
         ],
 
         // 'users' => [

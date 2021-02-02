@@ -32,7 +32,7 @@
 					</li>
 				</ul>
 				<!-- SEARCH FORM -->
-				{{-- 
+				{{--
 				<div class="form-inline ml-3">
 					<div class="input-group input-group-md" style="width: 400px;">
 						<input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
@@ -47,7 +47,7 @@
 				<!-- Right navbar links -->
 				<ul class="navbar-nav ml-auto">
 					<ul class="navbar-nav">
-						{{-- 
+						{{--
 						<li class="nav-item d-none d-sm-inline-block">
 							<a href="{{ route('logout') }}"
 								onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="nav-link">
@@ -88,7 +88,8 @@
 					<nav class="mt-2">
 						<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 							<!-- Add icons to the links using the .nav-icon class
-								with font-awesome or any other icon font library -->
+                                with font-awesome or any other icon font library -->
+                            @cannot('employee')
 							<li class="nav-item">
 								<router-link to="/" exact class="nav-link">
 									<i class="nav-icon fas fa-tachometer-alt blue"></i>
@@ -101,6 +102,7 @@
 									<p>Employees</p>
 								</router-link>
 							</li>
+                            @endcannot
 							@can('isAdministratorORAuthor')
 							<li class="nav-item has-treeview">
 								<a href="" class="nav-link">
@@ -138,6 +140,7 @@
 								</ul>
                             </li>
                             @endcan
+                            @cannot('employee')
                             <li class="nav-item has-treeview">
 								<a href="" class="nav-link">
 									<i class="nav-icon fas fa-folder blue"></i>
@@ -167,6 +170,7 @@
 									</li>
 								</ul>
                             </li>
+                            @endcannot
                             @can('isAdministratorORAuthor')
 							<li class="nav-item">
 								<router-link to="/requests" class="nav-link">
@@ -211,13 +215,29 @@
 									</li>
 								</ul>
 							</li>
-							@endcan
+                            @endcan
+                            @cannot('employee')
 							<li class="nav-item">
 								<router-link to="/profile" class="nav-link">
 									<i class="nav-icon fas fa-user blue"></i>
 									<p>Profile</p>
 								</router-link>
 							</li>
+                            @endcannot
+                            @can('employee')
+                            <li class="nav-item">
+								<router-link to="/employees-pds-view" class="nav-link">
+									<i class="nav-icon fas fa-user blue"></i>
+									<p>PDS</p>
+								</router-link>
+                            </li>
+                            <li class="nav-item">
+								<router-link to="/employee-pdst-edit-requests" class="nav-link">
+									<i class="nav-icon fas fa-user blue"></i>
+									<p>asd</p>
+								</router-link>
+							</li>
+                            @endcan
 							<li class="nav-item">
 								<a href="{{ route('logout') }}"
 								@click.prevent="logout"

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => ['auth:api']], function() {
     Route::apiResources([
         'user' => 'API\UserController',
         'personalinformation' => 'API\PersonalInformationController',
@@ -32,7 +32,8 @@ Route::group(['middleware' => 'auth:api'], function() {
         'plantillacontent' => 'API\PlantillaContentController',
         'abolisheditem' => 'API\AbolishedItemController',
         'footnote' => 'API\FootnoteController',
-        'leavetype' => 'API\LeaveTypeController'
+        'leavetype' => 'API\LeaveTypeController',
+        'request'   => 'API\RequestController'
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
@@ -61,7 +62,19 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('appointmentemployeelist', 'API\AppointmentController@employees');
 
     Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
+
+    Route::post('acceptEditRequest', 'API\RequestController@acceptEditRequest');
 });
+
+Route::group(['middleware' => ['auth:employee-api']], function() {
+    Route::apiResources([
+        'employeepersonalinformation' => 'API\EmployeeController',
+    ]);
+
+    Route::get('editemployee', 'API\EmployeeController@edit');
+});
+
+Route::get('asd', 'API\RequestController@acceptEditRequest');
 
 
 

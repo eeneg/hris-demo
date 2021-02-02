@@ -55,7 +55,7 @@
                                                 <a class="dropdown-item" @click.prevent="viewProfileModal(employee.id)" href="#">View Profile</a>
                                                 <a class="dropdown-item" href="#">Basic Information</a>
                                                 <a class="dropdown-item" href="#">Latest Plantilla Record</a>
-                                                <router-link class="dropdown-item" :to="{path: '/employees-pds', query: {id: employee.id}}" href="#">Edit Information</router-link>
+                                                <a class="dropdown-item" @click="editInformationModal(employee.id)" href="#">Edit Information</a>
                                                 <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
@@ -704,6 +704,7 @@
         data() {
             return {
                 employees: {},
+                mode: '',
                 barcode: '',
                 search: '',
                 personalinformation: {},
@@ -778,8 +779,30 @@
                         console.log(error);
                     })
             },
+            processBarcodeForEditInfo() {
+                axios.post('api/verifybarcode', {barcode: this.barcode, employee_id: this.form.id})
+                    .then(response => {
+                        if (response.data != '') {
+                            this.form.fill(response.data);
+                            $('#scanModal').modal('hide');
+                            this.barcode = '';
+                            this.$router.push({path: '/employees-pds', query: {id: this.form.id, mode: 1}})
+                        } else {
+                            this.barcode = '';
+                            $('.barcode-validate').show();
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+            },
             readBarcode: _.debounce(function(){
-                this.processBarcode();
+                if(this.mode == true)
+                {
+                    this.processBarcode();
+                }else if(this.mode == false){
+                    this.processBarcodeForEditInfo();
+                }
             }, 200),
             focusBarcode: _.debounce(function(){
                 this.$refs.barcodeField.focus();
@@ -787,8 +810,20 @@
             searchit: _.debounce(function(){
                 this.getResults();
             }, 400),
+            editInformationModal(id)
+            {
+                this.form.id = id;
+                this.mode = false;
+                $('#scanModal').modal('show');
+                $('#barcodeField').val('');
+                $('.barcode-validate').hide();
+
+
+                this.focusBarcode();
+            },
             viewProfileModal(id) {
                 this.form.id = id;
+                this.mode = true;
                 $('#scanModal').modal('show');
                 $('#barcodeField').val('');
                 $('.barcode-validate').hide();

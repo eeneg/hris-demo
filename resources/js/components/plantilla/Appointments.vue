@@ -465,7 +465,6 @@ export default {
                     icon: 'success',
                     title: 'Saved'
                 });
-                this.tempData = {}
                 this.getAppointments()
                 this.$Progress.finish()
                 $('#appointmentsModal').modal('hide')
@@ -482,7 +481,6 @@ export default {
                     icon: 'success',
                     title: 'Saved'
                 });
-                this.tempData = {}
                 this.getAppointments()
                 this.$Progress.finish()
                 $('#appointmentsModal').modal('hide')
