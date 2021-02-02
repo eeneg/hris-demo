@@ -36,7 +36,7 @@ class SettingsController extends Controller
             'plantilla' => 'required'
         ]);
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $default_plantilla->value = $request['plantilla'];
+        $default_plantilla->value = $request->plantilla['year'];
         $default_plantilla->save();
     }
 
