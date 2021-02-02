@@ -14,12 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-
-        // if(Auth::guard('employee')->check()){
-            $this->middleware('auth:employee');
-        // }else{
-        //     $this->middleware('auth');
-        // }
+        $this->middleware('auth:employee,web');
     }
 
     /**

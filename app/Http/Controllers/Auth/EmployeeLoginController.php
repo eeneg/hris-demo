@@ -35,13 +35,14 @@ class EmployeeLoginController extends Controller
         $employee = PersonalInformation::where('firstname', $request->firstname)
                         ->where('surname', $request->surname)
                         ->where('birthdate', $request->birthdate)
-                        ->orWhere('nameextension', $request->nameextension)->value('id');
+                        ->Where('nameextension', $request->nameextension)->value('id');
 
         $barcode = PersonalInformation::find($employee)->barcode;
 
         if(!$employee){
             abort(404, 'Crendentials not found');
         }else if(!$barcode){
+            dd($employee);
             abort(403, 'Employee does not have a bacode');
         }else if($employee && $barcode->value){
             session(['id' => $employee, 'barcode' => $barcode->value]);

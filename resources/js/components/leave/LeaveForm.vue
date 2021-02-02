@@ -132,8 +132,8 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <!-- <button type="submit" class="btn btn-success" @submit="">Finalize</button> -->
-                    <button type="submit" class="btn btn-secondary">Save as draft</button>
+                    <button type="submit" class="btn btn-success" @click="status = 'final'">Finalize</button>
+                    <button type="submit" class="btn btn-secondary" @click="status = 'draft'">Save as draft</button>
                 </div>
                 </form>
             </div>
@@ -201,7 +201,20 @@
                 this.balance_total = parseFloat(this.curr_vacation_balance) + parseFloat(this.curr_sick_balance);
             },
             submitForm() {
+                this.$Progress.start();
+                if (this.status == 'final') {
+                    this.form.post('api/leaveapplication')
+                        .then(({data}) => {
+                            console.log(data.message);
+                            this.$Progress.finish();
+                        })
+                        .catch(error => {
+                            console.log(error.response.data.message);
+                            this.$Progress.fail();
+                        });
+                } else {
 
+                }
             },
             loadFormData() {
                 axios.post('api/forleave')
