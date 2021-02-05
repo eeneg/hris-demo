@@ -77,7 +77,7 @@
                 </div>
                 <div class="form-group" style="display: flex;">
                     
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0" style="margin-right: 15px; width: 69%;">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0" style="margin-right: 15px; width: 69%;">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -114,7 +114,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -124,7 +124,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Employee</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>All Employees</option>
                     <option>Gene Rellanos</option>
                     <option>Zak Ongkas</option>
@@ -144,7 +144,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                   <div class="col-md-4">
@@ -159,7 +159,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                   <div class="col-md-4">
@@ -174,7 +174,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                 
@@ -184,7 +184,7 @@
                   <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Local Budget Circular No.</label>
                     </div>
-                  <input type="text" class="form-control rounded-0" id="exampleInputRounded0">
+                  <input type="text" class="form-control rounded-0 form-control-border border-width-2" id="exampleInputRounded0">
                   
                 </div>
                 <div class="col-md-6">
@@ -199,7 +199,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                   
@@ -231,7 +231,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -241,7 +241,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Employee</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>All Employees</option>
                     <option>Gene Rellanos</option>
                     <option>Zak Ongkas</option>
@@ -261,7 +261,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                   <div class="col-md-4" style=" margin-top: 23px;">
@@ -293,7 +293,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -303,7 +303,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Employee</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>All Employees</option>
                     <option>Gene Rellanos</option>
                     <option>Zak Ongkas</option>
@@ -323,21 +323,21 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                   <div class="col-md-4">
                 <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Amount</label>
                     </div>
-                  <input type="number" class="form-control rounded-0" id="exampleInputRounded0">
+                  <input type="number" class="form-control rounded-0 form-control-border border-width-2" id="exampleInputRounded0">
                   
                 </div>
                 <div class="col-md-4">
                   <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Certified Correct</label>
                     </div>
-                  <input type="text" class="form-control rounded-0" id="exampleInputRounded0">
+                  <input type="text" class="form-control rounded-0 form-control-border border-width-2" id="exampleInputRounded0">
                   
                 </div>
                 </div>
@@ -367,7 +367,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Salary Schedule</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -404,7 +404,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -422,7 +422,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                 </div>
@@ -454,7 +454,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -472,7 +472,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                 </div>
@@ -503,7 +503,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -521,7 +521,7 @@
                                             } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                 this.value = date + '-';
                                             }
-                                        " maxlength="10" required="required" class="form-control rounded-0">
+                                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
 
                   </div>
                 </div>
@@ -553,7 +553,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>
@@ -564,7 +564,7 @@
                     <div>
                       <label class="text-muted" style="font-weight: 400; line-height: 10px;">Position</label>
                     </div>
-                  <select class="custom-select rounded-0" id="exampleSelectRounded0">
+                  <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
                     <option>Imbalmer</option>
                     <option>Office of the Provincial Engineer</option>
                     <option>Office of the Provincial Engineer</option>

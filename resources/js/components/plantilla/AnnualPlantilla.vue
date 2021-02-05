@@ -12,7 +12,7 @@
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom:0;">
                                 <label style="margin: 0;font-weight: normal;line-height:25px;">Select Department</label>
-                                <select class="custom-select" v-model="selectedDepartment" @change="loadContents()">
+                                <select class="custom-select form-control-border border-width-2" v-model="selectedDepartment" @change="loadContents()">
                                     <option v-for="department in departments" :key="department.id">{{ department.address }}</option>
                                 </select>
                             </div>

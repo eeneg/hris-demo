@@ -381,14 +381,14 @@
                           <label for="profileInputName" class="col-sm-2 col-form-label">Name</label>
                           <div class="col-sm-10">
                               <input v-model="form.name" type="text" name="name" placeholder="Name"  id="profileInputName"
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                              class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('name') }">
                               <has-error :form="form" field="name"></has-error>
                           </div>
                       </div>
                       <div class="form-group row">
                           <label for="profileInputEmail" class="col-sm-2 col-form-label">Email</label>
                           <div class="col-sm-10">
-                              <input v-model="form.email" type="email" name="email" class="form-control" id="profileInputEmail" placeholder="Email"
+                              <input v-model="form.email" type="email" name="email" class="form-control form-control-border border-width-2" id="profileInputEmail" placeholder="Email"
                               :class="{ 'is-invalid': form.errors.has('email') }">
                               <has-error :form="form" field="email"></has-error>
                           </div>
@@ -397,7 +397,7 @@
                           <label for="profileInputLandline" class="col-sm-2 col-form-label">Landline</label>
                           <div class="col-sm-10">
                               <input v-model="form.landline" type="text" name="landline" placeholder="Landline" id="profileInputLandline"
-                              class="form-control" :class="{ 'is-invalid': form.errors.has('landline') }">
+                              class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('landline') }">
                               <has-error :form="form" field="landline"></has-error>
                           </div>
                       </div>
@@ -405,7 +405,7 @@
                           <label for="profileInputNewPassword" class="col-sm-2 col-form-label">New Password</label>
                           <div class="col-sm-10">
                               <input v-model="form.password" type="password" name="password" placeholder="New Password" id="profileInputNewPassword"
-                                  class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                                  class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('password') }">
                               <has-error :form="form" field="password"></has-error>
                           </div>
                       </div>
@@ -413,7 +413,7 @@
                           <label for="profileInputConfirmPassword" class="col-sm-2 col-form-label">Confirm Password</label>
                           <div class="col-sm-10">
                               <input v-model="form.password_confirmation" type="password" name="password_confirmation" placeholder="Confirm Password" id="profileInputConfirmPassword"
-                                  class="form-control" :class="{ 'is-invalid': form.errors.has('password_confirmation') }">
+                                  class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('password_confirmation') }">
                                   <has-error :form="form" field="confirm"></has-error>
                               </div>
                       </div>

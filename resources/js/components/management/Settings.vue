@@ -12,8 +12,13 @@
                             <div class="form-group">
                                 <label style="margin: 0;">Select latest approved Annual Plantilla</label>
                                 <small class="text-muted d-block"><i class="fas fa-info-circle blue"></i> This will be the reference of most of the HRIS transactions</small>
+<<<<<<< Updated upstream
                                 <select class="custom-select" v-model="form.plantilla" :class="{ 'is-invalid': form.errors.has('plantilla') }">
                                     <option v-for="plantilla in plantillas" :key="plantilla.id" :value="plantilla">{{ plantilla.year }}</option>
+=======
+                                <select class="custom-select" v-model="form.year" :class="{ 'is-invalid': form.errors.has('plantilla') }">
+                                    <option v-for="plantilla in plantillas" :key="plantilla.id">{{ plantilla.year }}</option>
+>>>>>>> Stashed changes
                                 </select>
                                 <has-error :form="form" field="plantilla"></has-error>
                             </div>
@@ -37,6 +42,7 @@
                 plantillas: {},
                 form: new Form({
                     'plantilla': {},
+                    'year': ''
                 })
             }
         },
@@ -54,6 +60,7 @@
                 axios.get('api/setting')
                     .then(({data}) => {
                         this.form.fill(data);
+                        this.form.year = data != null ? data.year : '';
                     })
                     .catch(error => {
                         console.log(error.response.data.message);

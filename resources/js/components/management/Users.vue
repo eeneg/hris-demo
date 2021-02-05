@@ -90,7 +90,7 @@
                         <div class="modal-body">
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label style="font-weight: normal; margin: 0;">User Role</label>
-                                <select name="role" v-model="form.role" class="form-control"
+                                <select name="role" v-model="form.role" class="form-control form-control-border border-width-2"
                                     :class="{ 'is-invalid': form.errors.has('role') }" @change="showDepartments()" id="user_role_combo">
                                     <option value="">Select User Role</option>
                                     <option value="Administrator">Administrator</option>
@@ -103,7 +103,7 @@
 
                             <div class="form-group" style="margin-bottom: 0.3rem;display: none;" id="department_user_select">
                                 <label style="font-weight: normal; margin: 0;">Department</label>
-                                <select name="department_id" v-model="form.department_id" class="form-control"
+                                <select name="department_id" v-model="form.department_id" class="form-control form-control-border border-width-2"
                                     :class="{ 'is-invalid': form.errors.has('department_id') }">
                                     <option value="">Select Department</option>
                                     <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.address }}</option>
@@ -114,28 +114,28 @@
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="user_name" style="font-weight: normal; margin: 0;">Fullname</label>
                                 <input id="user_name" v-model="form.name" type="text" name="name" placeholder="Name"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                                    class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('name') }">
                                 <has-error :form="form" field="name"></has-error>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="user_email" style="font-weight: normal; margin: 0;">Email Address</label>
                                 <input id="user_email" v-model="form.email" type="text" name="email" placeholder="eg. user@gmail.com"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
+                                    class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('email') }">
                                 <has-error :form="form" field="email"></has-error>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="user_password" style="font-weight: normal; margin: 0;">User password</label>
                                 <input id="user_password" v-model="form.password" type="password" name="password" placeholder="Password"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                                    class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('password') }">
                                 <has-error :form="form" field="password"></has-error>
                             </div>
 
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="user_landline" style="font-weight: normal; margin: 0;">Landline #</label>
                                 <input id="user_landline" v-model="form.landline" type="text" name="landline" placeholder="Landline"
-                                    class="form-control" :class="{ 'is-invalid': form.errors.has('landline') }">
+                                    class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('landline') }">
                                 <has-error :form="form" field="landline"></has-error>
                             </div>
 
