@@ -1572,7 +1572,7 @@ export default {
                 console.log(error)
                 Swal.fire(
                     'Oops...',
-                    error.response.statusText,
+                    error.response.data.message,
                     'error'
                 )
             })
@@ -1761,10 +1761,10 @@ export default {
                 });
                 this.$Progress.finish();
             })
-             .catch(response =>{
+             .catch(error =>{
                 Swal.fire(
                     'Oops...',
-                    'Can only have one request',
+                    error.response.data.message,
                     'error'
                 )
             })

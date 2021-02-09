@@ -51,7 +51,7 @@ class RequestController extends Controller
         return $editRequest->where('employee_p_d_s_edit_requests.status', '=', 'PENDING')->paginate(10);
     }
 
-    public function VALIDATEDRequest(Request $request)
+    public function reviewedRequest(Request $request)
     {
         if(!$request->search)
         {

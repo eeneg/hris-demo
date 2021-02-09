@@ -45,28 +45,34 @@ class EmployeeController extends Controller
     {
         $employee = PersonalInformation::find($request->id);
 
-        // if(count($employee->employeeEditRequests->where('status', 'PENDING')) == 0 && count($employee->employeeEditRequests->where('status', 'REVIEWED')) == 0)
-        // {
+        if(!count($employee->employeeEditRequests->where('status', 'PENDING')))
+        {
             $editRequest = $employee->employeeEditRequests()->create(['status' => 'PENDING']);
 
             foreach ($request->except('id') as $key => $value) {
                 $editRequest->employeeEdits()->create([
-                    'model_id' => $value['model_id'],
-                    'model' => $value['model'],
-                    'field' => $value['field'],
-                    'oldValue' => $value['oldValue'],
-                    'newValue' => $value['newValue'],
-                    'status' => $value['status'],
+                    'model_id'  => isset($value['model_id']) ? $value['model_id'] : '',
+                    'model'     => isset($value['model']) ? $value['model'] : '',
+                    'field'     => isset($value['field']) ? $value['field'] : '',
+                    'oldValue'  => isset($value['oldValue']) ? $value['oldValue'] : '',
+                    'newValue'  => isset($value['newValue']) ? $value['newValue'] : '',
+                    'status'    => isset($value['status']) ? $value['status'] : '',
                 ]);
             }
-        // }else{
-        //     abort(401, 'There are still pending request');
-        // }
+        }else{
+            abort(401, 'Can only have one requests at a time');
+        }
     }
 
     public function edit(Request $request)
     {
-        return PersonalInformation::find($request->id);
+        $editsRequest = PersonalInformation::find($request->id)->employeeEditRequests->where('status', 'PENDING');
+
+        if(count($editsRequest)){
+            abort(401, 'Can only have one requests at a time');
+        }else{
+            return PersonalInformation::find($request->id);
+        }
     }
 
     public function employeeEdits(Request $request)

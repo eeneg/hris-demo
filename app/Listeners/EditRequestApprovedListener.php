@@ -52,17 +52,17 @@ class EditRequestApprovedListener
 
                 if($record->model == 'familybackground')
                 {
-                    $employee->familybackground()->update([$record->field => $record->newValue]);
+                    $employee->familybackground()->updateOrCreate(['personal_information_id' => $employee->value('id')], [$record->field => $record->newValue]);
                 }
 
                 if($record->model == 'educationalbackground')
                 {
-                    $employee->educationalbackground()->update([$record->field => $record->newValue]);
+                    $employee->educationalbackground()->updateOrCreate(['personal_information_id' => $employee->value('id')], [$record->field => $record->newValue]);
                 }
 
                 if($record->model == 'pdsquestion')
                 {
-                    $employee->pdsquestion()->update([$record->field => $record->newValue]);
+                    $employee->pdsquestion()->updateOrCreate(['personal_information_id' => $employee->value('id')], [$record->field => $record->newValue]);
                 }
 
                 if($record->model == 'children')
