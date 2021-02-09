@@ -96,12 +96,29 @@
 									<p>Dashboard</p>
 								</router-link>
 							</li>
-							<li class="nav-item">
-								<router-link to="/employees" class="nav-link">
+							<li class="nav-item has-treeview">
+								<a href="" class="nav-link">
 									<i class="nav-icon fas fa-user-tie green"></i>
-									<p>Employees</p>
-								</router-link>
-							</li>
+									<p>
+										Employees
+										<i class="right fas fa-angle-left"></i>
+									</p>
+								</a>
+								<ul class="nav nav-treeview">
+									<li class="nav-item">
+										<router-link to="/employees" class="nav-link">
+											<i class="nav-icon fas fa-list"></i>
+											<p>Employee List</p>
+										</router-link>
+									</li>
+									<li class="nav-item">
+										<router-link to="/requests" class="nav-link">
+											<i class="nav-icon fas fa-file-signature"></i>
+											<p>PDS Edit Requests</p>
+										</router-link>
+									</li>
+								</ul>
+                            </li>
                             @endcannot
 							@can('isAdministratorORAuthor')
 							<li class="nav-item has-treeview">
@@ -173,12 +190,6 @@
                             @endcannot
                             @can('isAdministratorORAuthor')
 							<li class="nav-item">
-								<router-link to="/requests" class="nav-link">
-									<i class="nav-icon fas fa-file-signature pink"></i>
-									<p>Requests</p>
-								</router-link>
-							</li>
-							<li class="nav-item">
 								<router-link to="/reports" class="nav-link">
 									<i class="nav-icon fas fa-print blue"></i>
 									<p>Reports</p>
@@ -231,12 +242,6 @@
 									<p>PDS</p>
 								</router-link>
                             </li>
-                            <li class="nav-item">
-								<router-link to="/employee-pdst-edit-requests" class="nav-link">
-									<i class="nav-icon fas fa-user blue"></i>
-									<p>asd</p>
-								</router-link>
-							</li>
                             @endcan
 							<li class="nav-item">
 								<a href="{{ route('logout') }}"

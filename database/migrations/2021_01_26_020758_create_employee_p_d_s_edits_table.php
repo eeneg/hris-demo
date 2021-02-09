@@ -20,6 +20,7 @@ class CreateEmployeePDSEditsTable extends Migration
                     ->references('id')
                     ->on('employee_p_d_s_edit_requests')
                     ->onDelete('cascade');
+            $table->string('model_id')->nullable();
             $table->string('model')->nullable();
             $table->string('field')->nullable();
             $table->string('oldValue')->nullable();

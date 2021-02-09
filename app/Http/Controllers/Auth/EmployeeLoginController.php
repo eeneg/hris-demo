@@ -6,18 +6,15 @@ use App\PersonalInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class EmployeeLoginController extends Controller
 {
-    // public function index()
-    // {
-    //     $employee = PersonalInformation::find(Auth::guard('employee')->user()->id);
+    public function index()
+    {
 
-    //     return $employee;
-
-    //     // return view('employee_login.employee-pds', compact('employee'));
-    // }
+    }
 
     public function employeelogin ()
     {
@@ -32,18 +29,22 @@ class EmployeeLoginController extends Controller
             'birthdate' => 'required|exists:personal_informations,birthdate'
         ]);
 
+        $barcode = '';
+
         $employee = PersonalInformation::where('firstname', $request->firstname)
                         ->where('surname', $request->surname)
                         ->where('birthdate', $request->birthdate)
-                        ->Where('nameextension', $request->nameextension)->value('id');
+                        ->where('nameextension', $request->nameextension)->value('id');
 
-        $barcode = PersonalInformation::find($employee)->barcode;
 
         if(!$employee){
-            abort(404, 'Crendentials not found');
-        }else if(!$barcode){
-            dd($employee);
-            abort(403, 'Employee does not have a bacode');
+            abort(403, 'Credentials not found');
+        }else{
+            $barcode = PersonalInformation::find($employee)->barcode;
+        }
+
+        if(!$barcode){
+            abort(403, 'Invalid Barcode');
         }else if($employee && $barcode->value){
             session(['id' => $employee, 'barcode' => $barcode->value]);
             return redirect()->route('step-two');
@@ -67,6 +68,8 @@ class EmployeeLoginController extends Controller
             abort(403, 'Invalid Barcode');
         }else{
             Auth::guard('employee')->loginUsingId(session('id'));
+            session()->forget('id');
+            session()->forget('barcode');
             return redirect('/employees-pds-view');
         }
     }

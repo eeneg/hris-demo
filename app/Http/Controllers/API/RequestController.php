@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Events\EditRequestApproved;
 
 class RequestController extends Controller
 {
@@ -29,8 +30,9 @@ class RequestController extends Controller
                                 'personal_informations.surname as surname',
                                 'personal_informations.nameextension as nameextension',
                                 'employee_p_d_s_edit_requests.*',
-                            )->orderBy('employee_p_d_s_edit_requests.created_at', 'DESC');
-        }else if($request->search || $request->to || $request->from){
+                            )
+                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC');
+        }else if($request->search){
             $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
                             ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
                             ->select(
@@ -43,10 +45,46 @@ class RequestController extends Controller
                             ->orWhere('surname', 'LIKE', '%'.$request->search.'%')
                             ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
                             ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'DESC');
+                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC');
         }
 
-        return $editRequest->paginate(10);
+        return $editRequest->where('employee_p_d_s_edit_requests.status', '=', 'PENDING')->paginate(10);
+    }
+
+    public function VALIDATEDRequest(Request $request)
+    {
+        if(!$request->search)
+        {
+            $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
+                            ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
+                            ->select(
+                                'personal_informations.id as personal_information_id',
+                                'personal_informations.firstname as firstname',
+                                'personal_informations.surname as surname',
+                                'personal_informations.nameextension as nameextension',
+                                'employee_p_d_s_edit_requests.*',
+                            )
+                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC');
+        }else if($request->search){
+            $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
+                            ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
+                            ->select(
+                                'personal_informations.id as personal_information_id',
+                                'personal_informations.firstname as firstname',
+                                'personal_informations.surname as surname',
+                                'personal_informations.nameextension as nameextension',
+                                'employee_p_d_s_edit_requests.*',
+                            )
+                            ->orWhere('surname', 'LIKE', '%'.$request->search.'%')
+                            ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                            ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC');
+        }
+
+        return $editRequest->where('employee_p_d_s_edit_requests.status', '=', 'APPROVED')
+                    ->orWhere('employee_p_d_s_edit_requests.status', '=', 'DENIED')
+                    ->orWhere('employee_p_d_s_edit_requests.status', '=', 'VALIDATED')
+                    ->paginate(10);
     }
 
     public function acceptEditRequest(Request $request)
@@ -55,28 +93,38 @@ class RequestController extends Controller
 
         $ar = [];
 
-        if(count($edits) > 0){
-            EmployeePDSEdit::where('employee_edit_request_id', $request->id)->whereIn('id', $edits)->update(['status' => 'APPROVED']);
-            EmployeePDSEdit::where('employee_edit_request_id', $request->id)->whereNotIn('id', $edits)->update(['status' => 'DENIED']);
-        }else{
-            EmployeePDSEdit::where('employee_edit_request_id', $request->id)->whereNotIn('id', $edits)->update(['status' => 'DENIED']);
+        if(count($edits['accept']) > 0){
+            EmployeePDSEdit::where('employee_edit_request_id', $request->id)->whereIn('id', $edits['accept'])->update(['status' => 'APPROVED']);
+        }
+
+        if(count($edits['deny']) > 0){
+            EmployeePDSEdit::where('employee_edit_request_id', $request->id)->whereIn('id', $edits['deny'])->update(['status' => 'DENIED']);
         }
 
 
         $editRequest = EmployeePDSEdit::where('employee_edit_request_id', $request->id)->get();
 
-        foreach($editRequest as $value)
+        if($editRequest)
         {
-            array_push($ar, $value->status);
+            foreach($editRequest as $value)
+            {
+                array_push($ar, $value->status);
+            }
+
+            $data = EmployeePDSEditRequest::find($request->id);
+
+            if(in_array('APPROVED', $ar) && !in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
+                $data->update(['status' => 'APPROVED']);
+            }else if(in_array('DENIED', $ar) && !in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
+                $data->update(['status' => 'DENIED']);
+            }else if(in_array('DENIED', $ar) && !in_array('PENDING', $ar) && in_array('APPROVED', $ar)){
+                $data->update(['status' => 'VALIDATED']);
+            }
         }
 
-
-        if(in_array('APPROVED', $ar) && !in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
-            EmployeePDSEditRequest::find($request->id)->update(['status' => 'APPROVED']);
-        }else if(in_array('DENIED', $ar) && !in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
-            EmployeePDSEditRequest::find($request->id)->update(['status' => 'DENIED']);
-        }else{
-            EmployeePDSEditRequest::find($request->id)->update(['status' => 'REVIEWED']);
+        if($data != '' || $data != null)
+        {
+            event(new EditRequestApproved($data));
         }
     }
 
@@ -122,6 +170,8 @@ class RequestController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = EmployeePDSEditRequest::find($id);
+
+        $data->delete();
     }
 }

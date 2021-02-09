@@ -45,12 +45,13 @@ class EmployeeController extends Controller
     {
         $employee = PersonalInformation::find($request->id);
 
-        if(!$employee->employeeEditRequests)
-        {
+        // if(count($employee->employeeEditRequests->where('status', 'PENDING')) == 0 && count($employee->employeeEditRequests->where('status', 'REVIEWED')) == 0)
+        // {
             $editRequest = $employee->employeeEditRequests()->create(['status' => 'PENDING']);
 
             foreach ($request->except('id') as $key => $value) {
                 $editRequest->employeeEdits()->create([
+                    'model_id' => $value['model_id'],
                     'model' => $value['model'],
                     'field' => $value['field'],
                     'oldValue' => $value['oldValue'],
@@ -58,9 +59,9 @@ class EmployeeController extends Controller
                     'status' => $value['status'],
                 ]);
             }
-        }else{
-            abort(401, 'Can only have one requests');
-        }
+        // }else{
+        //     abort(401, 'There are still pending request');
+        // }
     }
 
     public function edit(Request $request)

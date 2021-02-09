@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/employee', 'EmployeeHomeController@index')->name('pds')->middleware('auth:employee');
-
 Route::get('/', 'HomeController@index');
 
 Route::group(['prefix' => 'employee'], function () {

@@ -43,7 +43,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('employee', function($user){
-            return !$user->role;
+            return $user->role == null;
         });
 
         Passport::routes();

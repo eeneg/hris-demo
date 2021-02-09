@@ -38,6 +38,9 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\UpdatePersonalInfo\OtherInformationUpdateListener',
             'App\Listeners\UpdatePersonalInfo\PDSQuestionUpdateListener',
         ],
+        'App\Events\EditRequestApproved' => [
+            'App\Listeners\EditRequestApprovedListener',
+        ]
     ];
 
     /**

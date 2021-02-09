@@ -397,8 +397,8 @@
 
                                 <td style="vertical-align: middle;">
                                     <div class="form-group input-group">
-                                        <a type="button" class="btn btn-primary btn-sm float-right mr-1" name="add" id="add-btn" @click="addFields('children')"><i class="fas fa-plus"></i></a>
-                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click="deleteFields('children', index)"><i class="fas fa-trash"></i></a>
+                                        <a type="button" class="btn btn-primary btn-sm float-right mr-1" name="add" id="add-btn" @click.prevent="addFields('children')"><i class="fas fa-plus"></i></a>
+                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('children', index)"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -679,8 +679,8 @@
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm" style="text-align: center;">
-                                        <a type="button" class="btn btn-primary btn-sm mb-1 mt-1" id="add-eli"  @click="addFields('eligibility')"><i class="fas fa-plus"></i></a>
-                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click="deleteFields('eligibility' ,index)"><i class="fas fa-trash"></i></a>
+                                        <a type="button" class="btn btn-primary btn-sm mb-1 mt-1" id="add-eli"  @click.prevent="addFields('eligibility')"><i class="fas fa-plus"></i></a>
+                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('eligibility' ,index)"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -760,8 +760,8 @@
                                     </td>
                                     <td>
                                         <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                            <a type="button" class="btn btn-primary float-right btn-sm mb-1 mt-1" id="add-workex" @click="addFields('workexperience')"><i class="fas fa-plus"></i></a>
-                                            <a type="button" class="btn btn-danger remove-tr btn-sm" @click="deleteFields('workexperience', index)"><i class="fas fa-trash"></i></a>
+                                            <a type="button" class="btn btn-primary float-right btn-sm mb-1 mt-1" id="add-workex" @click.prevent="addFields('workexperience')"><i class="fas fa-plus"></i></a>
+                                            <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('workexperience', index)"><i class="fas fa-trash"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -820,8 +820,8 @@
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                        <a type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-volwork" @click="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
-                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click="deleteFields('voluntaryworks', index)"><i class="fas fa-trash"></i></a>
+                                        <a type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-volwork" @click.prevent="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
+                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('voluntaryworks', index)"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -880,8 +880,8 @@
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                        <button type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-learn" @click="addFields('trainingprograms')"><i class="fas fa-plus"></i></button>
-                                        <button type="button" class="btn btn-danger remove-tr btn-sm" @click="deleteFields('trainingprograms', index)"><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-learn" @click.prevent="addFields('trainingprograms')"><i class="fas fa-plus"></i></button>
+                                        <button type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('trainingprograms', index)"><i class="fas fa-trash"></i></button>
                                     </div>
                                 </td>
                             </tr>
@@ -927,8 +927,8 @@
                                 </td>
                                 <td>
                                     <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                        <a type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-otherinfo" @click="addFields('otherinfos')"><i class="fas fa-plus"></i></a>
-                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click="deleteFields('otherinfos', index)"><i class="fas fa-trash"></i></a>
+                                        <a type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-otherinfo" @click.prevent="addFields('otherinfos')"><i class="fas fa-plus"></i></a>
+                                        <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('otherinfos', index)"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -939,7 +939,7 @@
 
             <div class="card card-primary">
                 <div class="card-header">
-                   <h3>lp</h3>
+                   <h3>PDS questions</h3>
                 </div>
 
                 <div class="card-body">
@@ -1399,7 +1399,7 @@
                     <div class="form-group col-md-3">
                         <label for="picture" class="col-form-label">Picture</label>
                             <div>
-                                <input type="file" @click="reset()" @change="uploadPicture" name="picture" ref="picture" id="picture" accept="image/jpeg, image/png">
+                                <input type="file" @click.prevent="reset()" @change="uploadPicture" name="picture" ref="picture" id="picture" accept="image/jpeg, image/png">
                             </div>
                         </div>
                     <div class="form-group col-md-9">
@@ -1420,38 +1420,38 @@
 
         </form>
     </div>
-<!-- image resize modal -->
-<div class="modal" id="image-modal" data-backdrop="static" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Resize</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-
-                    <div class="col-md-6">
-                        <clipper-fixed  class="my-clipper" :round="true" ref="clipper" preview="my-preview" :src="getAvatar()"><div class="placeholder" slot="placeholder">No image</div></clipper-fixed>
-                    </div>
-
-                    <div class="col-md-6">
-                        <clipper-preview name="my-preview" class="my-clipper">
-                            <div class="placeholder" slot="placeholder">preview area</div>
-                        </clipper-preview>
-                    </div>
-
+    <!-- image resize modal -->
+    <div class="modal" id="image-modal" data-backdrop="static" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Resize</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="getResult">Confirm</button>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <clipper-fixed  class="my-clipper" :round="true" ref="clipper" preview="my-preview" :src="getAvatar()"><div class="placeholder" slot="placeholder">No image</div></clipper-fixed>
+                        </div>
+
+                        <div class="col-md-6">
+                            <clipper-preview name="my-preview" class="my-clipper">
+                                <div class="placeholder" slot="placeholder">preview area</div>
+                            </clipper-preview>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click.prevent="getResult">Confirm</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
+    </div>
 
 </template>
 
@@ -1753,8 +1753,6 @@ export default {
 
             this.difference(this.form, this.oldData)
 
-            console.log(this.edits)
-
             axios.post('api/employeepersonalinformation?id='+this.form.id, this.edits)
              .then(response => {
                 toast.fire({
@@ -1781,7 +1779,7 @@ export default {
 
                 if(((value || value != '') && !(typeof(value) === "object")) && value != oldValue[key])
                 {
-                    ar.push({model: 'personalinformation', field: key, oldValue: oldValue[key], newValue: value, status: 'PENDING'})
+                    ar.push({model_id: oldValue['id'], model: 'personalinformation', field: key, oldValue: oldValue[key], newValue: value, status: 'PENDING'})
                 }
 
                 if((value && (typeof(value) === "object")) && !Array.isArray(value))
@@ -1790,7 +1788,7 @@ export default {
                     {
                         if(value[field] != oldValue[key][field])
                         {
-                            ar.push({model: key, field: field, oldValue: oldValue[key][field], newValue: value[field], status: 'PENDING'})
+                            ar.push({model_id: oldValue[key]['id'] ? oldValue[key]['id'] : '', model: key, field: field, oldValue: oldValue[key][field], newValue: value[field], status: 'PENDING'})
                         }
                     }
                 }
@@ -1804,9 +1802,9 @@ export default {
                             {
                                 if(data['id'] && data[field] != oldValue[key][index][field])
                                 {
-                                    ar.push({model: key, field: field, oldValue: oldValue[key][index][field], newValue: data[field], status: 'PENDING'})
+                                    ar.push({model_id: data['id'], model: key, field: field, oldValue: oldValue[key][index][field], newValue: data[field], status: 'PENDING'})
                                 }else if(!data['id']){
-                                    ar.push({model: key, field: field, oldValue: null, newValue: data[field], status: 'PENDING'})
+                                    ar.push({model_id: index, model: key, field: field, oldValue: null, newValue: data[field], status: 'PENDING'})
                                 }
                             }
 
@@ -1844,10 +1842,39 @@ export default {
                 data.pdsquestion = {}
             }
 
-            this.form.fill(data)
+            this.form = data
+
+            if(this.form.children.length == 0)
+            {
+                this.form.children = [{}]
+            }
+
+            if(this.form.eligibilities.length == 0)
+            {
+                this.form.eligibilities = [{}]
+            }
+
+            if(this.form.workexperiences.length == 0)
+            {
+                this.form.workexperiences = [{}]
+            }
+
+            if(this.form.voluntaryworks.length == 0)
+            {
+                this.form.voluntaryworks = [{}]
+            }
+
+            if(this.form.trainingprograms.length == 0)
+            {
+                this.form.trainingprograms = [{}]
+            }
+
+            if(this.form.otherinfos.length == 0)
+            {
+                this.form.otherinfos = [{}]
+            }
 
             this.oldData = JSON.parse(JSON.stringify(data))
-
         }
 
     },

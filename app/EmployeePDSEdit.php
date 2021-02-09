@@ -15,7 +15,7 @@ class EmployeePDSEdit extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-       'employee_edit_request_id', 'model', 'field', 'oldValue', 'newValue', 'status',
+       'employee_edit_request_id', 'model_id', 'model', 'field', 'oldValue', 'newValue', 'status',
     ];
 
     public function employeeEditRequests()

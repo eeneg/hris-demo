@@ -103,7 +103,7 @@ class PersonalInformation extends Authenticatable
 
     public function employeeEditRequests()
     {
-        return $this->hasOne('App\EmployeePDSEditRequest');
+        return $this->hasMany('App\EmployeePDSEditRequest');
     }
 
     public static function boot(){

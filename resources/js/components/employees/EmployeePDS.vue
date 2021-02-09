@@ -13,7 +13,6 @@
                 </div>
 
                 <div class="btn-group float-right p-1">
-                    <!-- <button class="btn btn-primary" type="button">Edit <i class="fa fa-edit"></i></button> -->
                     <router-link class="btn btn-primary" type="button" :to="{path: '/employees-pds', query: {id: this.personalinformation.id, mode: 2, editMode: 3}}">Edit <i class="fa fa-edit"></i></router-link>
                 </div>
             </div>
@@ -26,14 +25,6 @@
             </div>
 
             <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ personalinformation.firstname + ' ' + personalinformation.middlename + ' ' + personalinformation.surname + ' ' + personalinformation.nameextension }}</b></h3>
-
-            <!-- <span v-if="getPlantillaDetails(form)">
-                <p class="text-muted text-center mt-1" style="font-size: 1rem;line-height: 1.2rem;">
-                    {{ getPlantillaDetails(form).designation }}<br>
-                    {{ getPlantillaDetails(form).department }}
-                </p>
-            </span>
-            <span v-else><br></span> -->
 
             <div class="view-profile-container">
                 <div class="row">
