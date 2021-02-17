@@ -42,10 +42,10 @@
                                                 Action
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a type="button" @click.prevent="viewPending(index)" class="dropdown-item" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#pendingRequestsModal">
+                                                <a type="button" @click.prevent="viewPending(index)" class="dropdown-item" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                                     View Pending
                                                 </a>
-                                                <a class="dropdown-item" @click.prevent="viewReviewed(index)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#rewievedModal">
+                                                <a class="dropdown-item" @click.prevent="viewReviewed(index)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                                     View Reviewed
                                                 </a>
                                                 <a class="dropdown-item" type="button" @click.prevent="deleteRequest(pendingRequest.id)">Delete</a>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="col-md-12" v-if="!$gate.isOfficeUser()">
-            <div class="card card-primary card-outline">
+            <div class="card card-success card-outline">
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
@@ -106,7 +106,7 @@
                                                 Action
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a type="button" class="dropdown-item" @click.prevent="viewValidatedRequestRequest(index)" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#validatedRequestModal">
+                                                <a type="button" class="dropdown-item" @click.prevent="viewValidatedRequestRequest(index)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                                     View
                                                 </a>
                                                 <a class="dropdown-item" type="button" @click.prevent="deleteRequest(reviwedRequest.id)">Delete</a>
@@ -183,14 +183,14 @@
                                                 <td>
                                                     <div class="col">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" :name="'rad'+index" v-model="acceptedRequest.accept" v-bind:value="edit.id">
+                                                            <input class="form-check-input" type="checkbox" v-model="acceptedRequest.accept" v-bind:value="edit.id">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="col">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" :name="'rad'+index" v-model="acceptedRequest.deny" v-bind:value="edit.id">
+                                                            <input class="form-check-input" type="checkbox" v-model="acceptedRequest.deny" v-bind:value="edit.id">
                                                         </div>
                                                     </div>
                                                 </td>
@@ -205,7 +205,7 @@
         </div><!-- modal -->
 
          <!-- modal -->
-        <div class="modal fade" id="rewievedModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="reviewedModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header kuz-header">
@@ -217,6 +217,14 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="col">
+                                    <div class="btn-group float-right p-1">
+                                        <button class="btn btn-primary float-right" @click.prevent="revertRequest(0)">Save</button>
+                                    </div>
+                                    <div class="btn-group float-right p-1">
+                                        <button class="btn btn-primary float-right" @click.prevent="revertRequest(1)">Revert all</button>
+                                    </div>
+                                </div>
                                 <table class="table table-striped table-responsive-sm">
                                         <thead>
                                             <tr class="text-center">
@@ -225,6 +233,7 @@
                                                 <th scope="col">Old input</th>
                                                 <th scope="col">New input</th>
                                                 <th scope="col">Status</th>
+                                                <th scope="col">Revert</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -236,6 +245,11 @@
                                                 <td v-bind:class="{ 'text-success': data.status == 'APPROVED',
                                                                     'text-danger': data.status == 'DENIED',
                                                                 }">{{ data.status }}
+                                                </td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" v-model="revert" v-bind:value="data">
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -260,6 +274,14 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="col">
+                                    <div class="btn-group float-right p-1">
+                                        <button class="btn btn-primary float-right" @click.prevent="revertRequest(0)">Save</button>
+                                    </div>
+                                    <div class="btn-group float-right p-1">
+                                        <button class="btn btn-primary float-right" @click.prevent="revertRequest(2)">Revert all</button>
+                                    </div>
+                                </div>
                                 <table class="table table-striped table-responsive-sm">
                                         <thead>
                                             <tr class="text-center">
@@ -268,6 +290,7 @@
                                                 <th scope="col">Old input</th>
                                                 <th scope="col">New input</th>
                                                 <th scope="col">Status</th>
+                                                <th scope="col">Revert</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -279,6 +302,11 @@
                                                 <td v-bind:class="{ 'text-success': data.status == 'APPROVED',
                                                                     'text-danger': data.status == 'DENIED',
                                                                 }">{{ data.status }}
+                                                </td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" v-model="revert" v-bind:value="data">
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -307,6 +335,8 @@
             reviewed: {},
             validatedRequest: {},
             editIndex: '',
+            revert: [],
+            personal_information_id: ''
         }
     },
     beforeRouteEnter (to, from, next) {
@@ -337,6 +367,9 @@
                 return e.status == 'PENDING'
             })
 
+            this.acceptedRequest = {accept: [], deny: []}
+            $('#pendingRequestsModal').modal('show')
+
             this.editIndex = index
         },
         viewReviewed: function(index)
@@ -344,17 +377,29 @@
             this.reviewed = this.pendingRequest.data[index]['employee_edits'].filter(e => {
                 return e.status != 'PENDING'
             })
+
+            this.acceptedRequest = {accept: [], deny: []}
+            this.revert = []
+            this.editIndex = index
+            this.personal_information_id = this.pendingRequest.data[this.editIndex]['personal_information_id']
+            $('#reviewedModal').modal('show')
+
         },
         viewValidatedRequestRequest: function(index)
         {
             this.validatedRequest = this.reviwedRequest.data[index]['employee_edits']
+
+            this.acceptedRequest = {accept: [], deny: []}
+            this.revert = []
+            this.editIndex = index
+            this.personal_information_id = this.reviwedRequest.data[this.editIndex]['personal_information_id']
+            $('#validatedRequestModal').modal('show')
         },
         getSearchResults: function(page = 1)
         {
             axios.get('api/request?page=' + page + '&search=' + this.search)
             .then(({data}) => {
                 this.pendingRequest = data;
-                console.log(this.pendingRequest)
             }).catch(error => {
                 console.log(error.reponse.data.message);
             });
@@ -506,6 +551,77 @@
                     })
                 }
             })
+        },
+        revertRequest: function(mode)
+        {
+            let s = false
+
+            switch (mode){
+                case 0:
+                    s = true
+                    break
+                case 1:
+                    this.revert = []
+                    this.reviewed.forEach(e => {
+                        this.revert.push(e)
+                    })
+                    this.personal_information_id = this.pendingRequest.data[this.editIndex]['personal_information_id']
+                    break
+                case 2:
+                    this.revert = []
+                    this.validatedRequest.forEach(e => {
+                        this.revert.push(e)
+                    })
+                    this.personal_information_id = this.reviwedRequest.data[this.editIndex]['personal_information_id']
+                    break
+            }
+
+            if(s == true)
+            {
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "Please review changes!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Cancelled'
+                        });
+                    }else{
+                        this.$Progress.start()
+
+                        console.log(this.personal_information_id+'asd')
+
+                        axios.post('api/revertRequest?id='+ this.personal_information_id, this.revert)
+                        .then(response => {
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Submitted'
+                            });
+                            this.$Progress.finish()
+                            this.revert = []
+                            this.getSearchResults()
+                            this.getReviewedSearchResults()
+                            $('#validatedRequestModal').modal('hide')
+                            $('#reviewedModal').modal('hide')
+                        })
+                        .catch(error => {
+                            Swal.fire(
+                                'Oops...',
+                                error.response.statusText,
+                                'error'
+                            )
+                            console.log(error)
+                        })
+                    }
+                })
+            }
         },
         fetchData: function(pending)
         {

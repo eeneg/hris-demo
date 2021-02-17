@@ -22,6 +22,11 @@ class EmployeePDSEditRequest extends Model
         'employeeEdits'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
     public function personalinformation()
     {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');

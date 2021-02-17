@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Events\EditRequestApproved;
+use App\FamilyBackground;
+use App\PersonalInformation;
+use Throwable;
 
 class RequestController extends Controller
 {
@@ -31,7 +34,12 @@ class RequestController extends Controller
                                 'personal_informations.nameextension as nameextension',
                                 'employee_p_d_s_edit_requests.*',
                             )
-                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC');
+                            ->where('employee_p_d_s_edit_requests.status', '=', 'PENDING')
+                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC')
+                            ->paginate(10);
+
+            return $editRequest;
+
         }else if($request->search){
             $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
                             ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
@@ -40,15 +48,18 @@ class RequestController extends Controller
                                 'personal_informations.firstname as firstname',
                                 'personal_informations.surname as surname',
                                 'personal_informations.nameextension as nameextension',
-                                'employee_p_d_s_edit_requests.*',
+                                'employee_p_d_s_edit_requests.*'
                             )
-                            ->orWhere('surname', 'LIKE', '%'.$request->search.'%')
+                            ->where('employee_p_d_s_edit_requests.status', 'PENDING')
+                            ->where('surname', 'LIKE', '%'.$request->search.'%')
                             ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
                             ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC');
+                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC')
+                            ->paginate(10);
+
+            return $editRequest;
         }
 
-        return $editRequest->where('employee_p_d_s_edit_requests.status', '=', 'PENDING')->paginate(10);
     }
 
     public function reviewedRequest(Request $request)
@@ -64,7 +75,12 @@ class RequestController extends Controller
                                 'personal_informations.nameextension as nameextension',
                                 'employee_p_d_s_edit_requests.*',
                             )
-                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC');
+                            ->where('employee_p_d_s_edit_requests.status', '!=', 'PENDING')
+                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC')
+                            ->paginate(10);
+
+            return $editRequest;
+
         }else if($request->search){
             $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
                             ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
@@ -75,16 +91,15 @@ class RequestController extends Controller
                                 'personal_informations.nameextension as nameextension',
                                 'employee_p_d_s_edit_requests.*',
                             )
-                            ->orWhere('surname', 'LIKE', '%'.$request->search.'%')
+                            ->where('surname', 'LIKE', '%'.$request->search.'%')
                             ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
                             ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC');
+                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC')
+                            ->paginate(10);
+
+            return $editRequest->where('status', '!=', 'PENDING');
         }
 
-        return $editRequest->where('employee_p_d_s_edit_requests.status', '=', 'APPROVED')
-                    ->orWhere('employee_p_d_s_edit_requests.status', '=', 'DENIED')
-                    ->orWhere('employee_p_d_s_edit_requests.status', '=', 'VALIDATED')
-                    ->paginate(10);
     }
 
     public function acceptEditRequest(Request $request)
@@ -92,39 +107,113 @@ class RequestController extends Controller
         $edits = $request->except('id');
 
         $ar = [];
+        $data = '';
+
+        $editRequest = EmployeePDSEdit::where('employee_edit_request_id', $request->id);
 
         if(count($edits['accept']) > 0){
-            EmployeePDSEdit::where('employee_edit_request_id', $request->id)->whereIn('id', $edits['accept'])->update(['status' => 'APPROVED']);
+            $editRequest->whereIn('id', $edits['accept'])->update(['status' => 'APPROVED']);
         }
 
         if(count($edits['deny']) > 0){
-            EmployeePDSEdit::where('employee_edit_request_id', $request->id)->whereIn('id', $edits['deny'])->update(['status' => 'DENIED']);
+            $editRequest->whereIn('id', $edits['deny'])->update(['status' => 'DENIED']);
         }
 
+        $data = EmployeePDSEditRequest::find($request->id);
 
-        $editRequest = EmployeePDSEdit::where('employee_edit_request_id', $request->id)->get();
-
-        if($editRequest)
+        foreach($data->employeeEdits as $value)
         {
-            foreach($editRequest as $value)
-            {
-                array_push($ar, $value->status);
-            }
+            array_push($ar, $value->status);
+        }
 
-            $data = EmployeePDSEditRequest::find($request->id);
-
-            if(in_array('APPROVED', $ar) && !in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
-                $data->update(['status' => 'APPROVED']);
-            }else if(in_array('DENIED', $ar) && !in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
-                $data->update(['status' => 'DENIED']);
-            }else if(in_array('DENIED', $ar) && !in_array('PENDING', $ar) && in_array('APPROVED', $ar)){
-                $data->update(['status' => 'VALIDATED']);
-            }
+        if(!in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
+            $data->update(['status' => 'APPROVED']);
+        }else if (!in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
+            $data->update(['status' => 'DENIED']);
+        }else if(!in_array('PENDING', $ar)){
+            $data->update(['status' => 'VALIDATED']);
         }
 
         if($data != '' || $data != null)
         {
             event(new EditRequestApproved($data));
+            $this->deleteEmptyRecords($data->personal_information_id);
+        }
+
+
+    }
+
+    public function revertRequest(Request $request)
+    {
+
+        $edits = $request->except('id');
+
+        $employee = PersonalInformation::find($request->id);
+
+        foreach($edits as $data)
+        {
+            if($data['status'] == 'APPROVED' && $data['model'] == 'personalinformation')
+            {
+                $employee->update([$data['field'] => $data['oldValue']]);
+                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
+            }else if(($data['status'] == 'APPROVED') && $data['model'] == 'familybackground' || $data['model'] == 'educationalbackground' || $data['model'] == 'pdsquestion'){
+                $model = $data['model'];
+                $employee->$model()->updateOrCreate(['personal_information_id' => $employee->id], [$data['field'] => $data['oldValue']]);
+                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
+            }
+            else if(($data['status'] == 'APPROVED')){
+                $model = $data['model'];
+                $employee->$model()->updateOrCreate(['personal_information_id' => $employee->id], [$data['field'] => $data['oldValue']]);
+                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
+            }
+        }
+
+        $req = EmployeePDSEdit::where('employee_edit_request_id', $edits[0]['employee_edit_request_id'])->where('status', 'PENDING')->get();
+
+        if(count($req) > 0)
+        {
+            EmployeePDSEditRequest::find($edits[0]['employee_edit_request_id'])->update(['status' => 'PENDING']);
+        }
+
+        $this->deleteEmptyRecords($request->id);
+    }
+
+    public function deleteEmptyRecords($id)
+    {
+        $models = ['familybackground', 'children', 'educationalbackground', 'eligibilities',
+                    'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion',];
+
+        $employee = PersonalInformation::find($id);
+
+        $record = null;
+
+        foreach($models as $data)
+        {
+            if($data == 'familybackground' || $data == 'educationalbackground' || $data == 'pdsquestion')
+            {
+                if(isset($employee->$data))
+                {
+                    $record = collect($employee->$data)->except(['id', 'personal_information_id', 'created_at', 'updated_at'])->toArray();
+                }
+
+                if($record !== null && count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
+                {
+                    $employee->$data()->delete();
+                }
+            }else{
+                foreach($employee->$data as $value)
+                {
+                    if(isset($value))
+                    {
+                        $record = collect($value)->except(['id', 'personal_information_id', 'created_at', 'updated_at'])->toArray();
+                    }
+
+                    if(count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
+                    {
+                        $employee->$data->find($value->id)->delete();
+                    }
+                }
+            }
         }
     }
 

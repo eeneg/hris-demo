@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\EmployeePDSEdit;
 use App\EmployeePDSEditRequest;
 use App\Http\Controllers\Controller;
 use App\PersonalInformation;
@@ -30,7 +31,10 @@ class EmployeeController extends Controller
                             'personal_informations.surname as surname',
                             'personal_informations.nameextension as nameextension',
                             'employee_p_d_s_edit_requests.*'
-                        )->orderBy('employee_p_d_s_edit_requests.created_at', 'DESC')->paginate(10);
+                        )
+                        ->where('employee_p_d_s_edit_requests.personal_information_id', '=', Auth::user()->id)
+                        ->orderBy('employee_p_d_s_edit_requests.created_at', 'DESC')
+                        ->paginate(10);
 
         return $editRequest;
     }
@@ -75,9 +79,32 @@ class EmployeeController extends Controller
         }
     }
 
-    public function employeeEdits(Request $request)
+    public function cancelEdits(Request $request)
     {
+        $ar = [];
 
+        EmployeePDSEdit::whereIn('id', $request->all())->delete();
+
+        $editRequest = EmployeePDSEditRequest::where('personal_information_id', Auth::user()->id)->first();
+
+        foreach($editRequest->employeeEdits as $value)
+        {
+            array_push($ar, $value->status);
+        }
+
+        if(!in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
+            $editRequest->update(['status' => 'APPROVED']);
+        }else if (!in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
+            $editRequest->update(['status' => 'DENIED']);
+        }else if(!in_array('PENDING', $ar)){
+            $editRequest->update(['status' => 'VALIDATED']);
+        }
+
+
+        if(count($editRequest->employeeEdits) == 0)
+        {
+            $editRequest->delete();
+        }
     }
 
     /**
@@ -111,6 +138,13 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $editRequest = EmployeePDSEditRequest::find($id);
+
+        if(count($editRequest->employeeEdits) == 0)
+        {
+            $editRequest->delete();
+        }else{
+            abort(401, 'Cannot cancel validated requests');
+        }
     }
 }

@@ -18,6 +18,7 @@ class EmployeePDSEdit extends Model
        'employee_edit_request_id', 'model_id', 'model', 'field', 'oldValue', 'newValue', 'status',
     ];
 
+
     public function employeeEditRequests()
     {
         return $this->belongsTo('App\EmployeePDSEditRequest', 'employee_edit_request_id');

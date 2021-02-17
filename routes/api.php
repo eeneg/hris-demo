@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
 
     Route::post('acceptEditRequest', 'API\RequestController@acceptEditRequest');
+    Route::post('revertRequest', 'API\RequestController@revertRequest');
     Route::get('reviewedRequest', 'API\RequestController@reviewedRequest');
 });
 
@@ -73,9 +74,12 @@ Route::group(['middleware' => ['auth:employee-api']], function() {
     ]);
 
     Route::get('editemployee', 'API\EmployeeController@edit');
+    Route::get('getpdsEdits', 'API\EmployeeController@getpdsEdits');
+    Route::post('cancelEdits', 'API\EmployeeController@cancelEdits');
 });
 
-Route::get('asd', 'API\RequestController@acceptEditRequest');
+// Route::get('asd1', 'API\RequestController@reviewedRequest');
+// Route::get('asd', 'API\RequestController@index');
 
 
 

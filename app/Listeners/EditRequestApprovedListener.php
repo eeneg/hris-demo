@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\EmployeePDSEdit;
 use App\Events\EditRequestApproved;
 use App\PersonalInformation;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,7 +29,7 @@ class EditRequestApprovedListener
      */
     public function handle(EditRequestApproved $event)
     {
-        $id = $event->data->value('personal_information_id');
+        $id = $event->data->personal_information_id;
 
         $children = [];
         $eligibilities = [];
@@ -52,24 +53,24 @@ class EditRequestApprovedListener
 
                 if($record->model == 'familybackground')
                 {
-                    $employee->familybackground()->updateOrCreate(['personal_information_id' => $employee->value('id')], [$record->field => $record->newValue]);
+                    $employee->familybackground()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                 }
 
                 if($record->model == 'educationalbackground')
                 {
-                    $employee->educationalbackground()->updateOrCreate(['personal_information_id' => $employee->value('id')], [$record->field => $record->newValue]);
+                    $employee->educationalbackground()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                 }
 
                 if($record->model == 'pdsquestion')
                 {
-                    $employee->pdsquestion()->updateOrCreate(['personal_information_id' => $employee->value('id')], [$record->field => $record->newValue]);
+                    $employee->pdsquestion()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                 }
 
                 if($record->model == 'children')
                 {
-                    if(strlen($record->model_id) > 5)
+                    if(strlen($record->model_id) > 30)
                     {
-                        $employee->children()->find($record->model_id)->update([$record->field => $record->newValue]);
+                        $employee->children()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                     }else{
                         $children[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -78,9 +79,9 @@ class EditRequestApprovedListener
                 if($record->model == 'eligibilities')
                 {
 
-                    if(strlen($record->model_id) > 5)
+                    if(strlen($record->model_id) > 30)
                     {
-                        $employee->eligibilities()->find($record->model_id)->update([$record->field => $record->newValue]);
+                        $employee->eligibilities()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                     }else{
                         $eligibilities[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -89,9 +90,9 @@ class EditRequestApprovedListener
                 if($record->model == 'workexperiences')
                 {
 
-                    if(strlen($record->model_id) > 5)
+                    if(strlen($record->model_id) > 30)
                     {
-                        $employee->workexperiences()->find($record->model_id)->update([$record->field => $record->newValue]);
+                        $employee->workexperiences()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                     }else{
                         $workexperiences[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -100,9 +101,9 @@ class EditRequestApprovedListener
                 if($record->model == 'voluntaryworks')
                 {
 
-                    if(strlen($record->model_id) > 5)
+                    if(strlen($record->model_id) > 30)
                     {
-                        $employee->voluntaryworks()->find($record->model_id)->update([$record->field => $record->newValue]);
+                        $employee->voluntaryworks()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                     }else{
                         $voluntaryworks[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -112,9 +113,9 @@ class EditRequestApprovedListener
                 if($record->model == 'trainingprograms')
                 {
 
-                    if(strlen($record->model_id) > 5)
+                    if(strlen($record->model_id) > 30)
                     {
-                        $employee->trainingprograms()->find($record->model_id)->update([$record->field => $record->newValue]);
+                        $employee->trainingprograms()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                     }else{
                         $trainingprograms[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -124,9 +125,9 @@ class EditRequestApprovedListener
                 if($record->model == 'otherinfos')
                 {
 
-                    if(strlen($record->model_id) > 5)
+                    if(strlen($record->model_id) > 30)
                     {
-                        $employee->otherinfos()->find($record->model_id)->update([$record->field => $record->newValue]);
+                        $employee->otherinfos()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                     }else{
                         $otherinfos[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -137,32 +138,56 @@ class EditRequestApprovedListener
 
             if(count($children) > 0)
             {
-                $employee->children()->createMany($children);
+                foreach($children as $key => $data)
+                {
+                    $record = $employee->children()->create($data);
+                    EmployeePDSEdit::where('model_id', $key)->update(['model_id' => $record->id]);
+                }
             }
 
             if(count($eligibilities) > 0)
             {
-                $employee->eligibilities()->createMany($eligibilities);
+                foreach($eligibilities as $key => $data)
+                {
+                    $record = $employee->eligibilities()->create($data);
+                    EmployeePDSEdit::where('model_id', $key)->update(['model_id' => $record->id]);
+                }
             }
 
             if(count($workexperiences) > 0)
             {
-                $employee->workexperiences()->createMany($workexperiences);
+                foreach($workexperiences as $key => $data)
+                {
+                    $record = $employee->workexperiences()->create($data);
+                    EmployeePDSEdit::where('model_id', $key)->update(['model_id' => $record->id]);
+                }
             }
 
             if(count($voluntaryworks) > 0)
             {
-                $employee->voluntaryworks()->createMany($voluntaryworks);
+                foreach($voluntaryworks as $key => $data)
+                {
+                    $record = $employee->voluntaryworks()->create($data);
+                    EmployeePDSEdit::where('model_id', $key)->update(['model_id' => $record->id]);
+                }
             }
 
             if(count($trainingprograms) > 0)
             {
-                $employee->trainingprograms()->createMany($trainingprograms);
+                foreach($trainingprograms as $key => $data)
+                {
+                    $record = $employee->trainingprograms()->create($data);
+                    EmployeePDSEdit::where('model_id', $key)->update(['model_id' => $record->id]);
+                }
             }
 
             if(count($otherinfos) > 0)
             {
-                $employee->otherinfos()->createMany($otherinfos);
+                foreach($otherinfos as $key => $data)
+                {
+                    $record = $employee->otherinfos()->create($data);
+                    EmployeePDSEdit::where('model_id', $key)->update(['model_id' => $record->id]);
+                }
             }
 
         }

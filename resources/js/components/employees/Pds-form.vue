@@ -1499,7 +1499,7 @@ export default {
         return {
             editMode: 1,
             oldData: {},
-            edits: {},
+            edits: [],
             errors: new Errors(),
             form: new Form({
                     'id': '',
@@ -1720,24 +1720,81 @@ export default {
         },
         deleteFields: function(data, index)
         {
+            let vm = this;
+
+
             switch(data)
             {
                 case data = 'children':
+                    if(this.editMode == 3)
+                    {
+                        _.each(this.form.children[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            {
+                                vm.edits.push({model_id: vm.form.children[index]['id'], model: 'children', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                            }
+                        })
+                    }
                     this.form.children.splice(index, 1)
                 break;
                 case data = 'eligibility':
+                     if(this.editMode == 3)
+                    {
+                        _.each(this.form.eligibility[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            {
+                                vm.edits.push({model_id: vm.form.eligibility[index]['id'], model: 'eligibility', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                            }
+                        })
+                    }
                     this.form.eligibilities.splice(index, 1)
                 break;
                 case data = 'workexperience':
+                     if(this.editMode == 3)
+                    {
+                        _.each(this.form.workexperience[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            {
+                                vm.edits.push({model_id: vm.form.workexperience[index]['id'], model: 'workexperience', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                            }
+                        })
+                    }
                     this.form.workexperiences.splice(index, 1)
                 break;
                 case data = 'voluntaryworks':
+                     if(this.editMode == 3)
+                    {
+                        _.each(this.form.voluntaryworks[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            {
+                                vm.edits.push({model_id: vm.form.voluntaryworks[index]['id'], model: 'voluntaryworks', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                            }
+                        })
+                    }
                     this.form.voluntaryworks.splice(index, 1)
                 break;
                 case data = 'trainingprograms':
+                     if(this.editMode == 3)
+                    {
+                        _.each(this.form.trainingprograms[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            {
+                                vm.edits.push({model_id: vm.form.trainingprograms[index]['id'], model: 'trainingprograms', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                            }
+                        })
+                    }
                     this.form.trainingprograms.splice(index, 1)
                 break;
                 case data = 'otherinfos':
+                     if(this.editMode == 3)
+                    {
+                        _.each(this.form.otherinfos[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            {
+                                vm.edits.push({model_id: vm.form.otherinfos[index]['id'], model: 'otherinfos', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                            }
+                        })
+                    }
                     this.form.otherinfos.splice(index, 1)
                 break;
             }
@@ -1752,6 +1809,8 @@ export default {
             this.form['originalData'] ? delete this.form['originalData'] : ''
 
             this.difference(this.form, this.oldData)
+
+            console.log(this.edits)
 
             axios.post('api/employeepersonalinformation?id='+this.form.id, this.edits)
              .then(response => {
@@ -1772,14 +1831,14 @@ export default {
 
         difference: function(newValue, oldValue)
         {
-            let ar = []
+            let vm = this
 
             _.forEach(newValue, function(value, key)
             {
 
                 if(((value || value != '') && !(typeof(value) === "object")) && value != oldValue[key])
                 {
-                    ar.push({model_id: oldValue['id'], model: 'personalinformation', field: key, oldValue: oldValue[key], newValue: value, status: 'PENDING'})
+                    vm.edits.push({model_id: oldValue['id'], model: 'personalinformation', field: key, oldValue: oldValue[key], newValue: value, status: 'PENDING'})
                 }
 
                 if((value && (typeof(value) === "object")) && !Array.isArray(value))
@@ -1788,7 +1847,7 @@ export default {
                     {
                         if(value[field] != oldValue[key][field])
                         {
-                            ar.push({model_id: oldValue[key]['id'] ? oldValue[key]['id'] : '', model: key, field: field, oldValue: oldValue[key][field], newValue: value[field], status: 'PENDING'})
+                            vm.edits.push({model_id: oldValue['id'] ? oldValue['id'] : '', model: key, field: field, oldValue: oldValue[key][field], newValue: value[field], status: 'PENDING'})
                         }
                     }
                 }
@@ -1802,9 +1861,9 @@ export default {
                             {
                                 if(data['id'] && data[field] != oldValue[key][index][field])
                                 {
-                                    ar.push({model_id: data['id'], model: key, field: field, oldValue: oldValue[key][index][field], newValue: data[field], status: 'PENDING'})
+                                    vm.edits.push({model_id: data['id'], model: key, field: field, oldValue: oldValue[key][index][field], newValue: data[field], status: 'PENDING'})
                                 }else if(!data['id']){
-                                    ar.push({model_id: index, model: key, field: field, oldValue: null, newValue: data[field], status: 'PENDING'})
+                                    vm.edits.push({model_id: key+index, model: key, field: field, oldValue: null, newValue: data[field], status: 'PENDING'})
                                 }
                             }
 
@@ -1813,8 +1872,6 @@ export default {
                 }
 
             })
-
-            this.edits = ar
         },
 
         fetchData: function(data, editMode)

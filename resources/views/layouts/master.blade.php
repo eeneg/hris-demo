@@ -242,6 +242,12 @@
 									<p>PDS</p>
 								</router-link>
                             </li>
+                            <li class="nav-item">
+								<router-link to="/employee-pds-edit-requests" class="nav-link">
+									<i class="nav-icon fas fa-file-signature green"></i>
+									<p>Requests</p>
+								</router-link>
+                            </li>
                             @endcan
 							<li class="nav-item">
 								<a href="{{ route('logout') }}"
