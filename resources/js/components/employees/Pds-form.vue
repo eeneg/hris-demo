@@ -1810,8 +1810,6 @@ export default {
 
             this.difference(this.form, this.oldData)
 
-            console.log(this.edits)
-
             axios.post('api/employeepersonalinformation?id='+this.form.id, this.edits)
              .then(response => {
                 toast.fire({

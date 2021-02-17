@@ -409,7 +409,6 @@
             axios.get('api/reviewedRequest?page=' + page + '&search=' + this.searchReviewed)
             .then(({data}) => {
                 this.reviwedRequest = data;
-                console.log(this.reviwedRequest)
             }).catch(error => {
                 console.log(error.reponse.data.message);
             });
@@ -595,8 +594,6 @@
                         });
                     }else{
                         this.$Progress.start()
-
-                        console.log(this.personal_information_id+'asd')
 
                         axios.post('api/revertRequest?id='+ this.personal_information_id, this.revert)
                         .then(response => {

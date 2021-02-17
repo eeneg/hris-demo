@@ -50,11 +50,13 @@ class RequestController extends Controller
                                 'personal_informations.nameextension as nameextension',
                                 'employee_p_d_s_edit_requests.*'
                             )
-                            ->where('employee_p_d_s_edit_requests.status', 'PENDING')
-                            ->where('surname', 'LIKE', '%'.$request->search.'%')
-                            ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
-                            ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                            ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC')
+                            ->where('employee_p_d_s_edit_requests.status', '=', 'PENDING')
+                            ->where(function ($query) use ($request) {
+                                $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                                    ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                                    ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                                    ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC');
+                            })
                             ->paginate(10);
 
             return $editRequest;
@@ -91,13 +93,16 @@ class RequestController extends Controller
                                 'personal_informations.nameextension as nameextension',
                                 'employee_p_d_s_edit_requests.*',
                             )
-                            ->where('surname', 'LIKE', '%'.$request->search.'%')
-                            ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
-                            ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC')
+                            ->where('employee_p_d_s_edit_requests.status', '!=', 'PENDING')
+                            ->where(function ($query) use ($request) {
+                                $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                                    ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                                    ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                                    ->orderBy('employee_p_d_s_edit_requests.created_at', 'ASC');
+                            })
                             ->paginate(10);
 
-            return $editRequest->where('status', '!=', 'PENDING');
+            return $editRequest;
         }
 
     }

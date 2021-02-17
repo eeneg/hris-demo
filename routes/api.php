@@ -78,8 +78,8 @@ Route::group(['middleware' => ['auth:employee-api']], function() {
     Route::post('cancelEdits', 'API\EmployeeController@cancelEdits');
 });
 
-// Route::get('asd1', 'API\RequestController@reviewedRequest');
-// Route::get('asd', 'API\RequestController@index');
+Route::get('asd1', 'API\RequestController@reviewedRequest');
+Route::get('asd', 'API\RequestController@index');
 
 
 
