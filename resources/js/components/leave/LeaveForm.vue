@@ -117,7 +117,7 @@
                         <div class="form-group col-3">
                             <label for="credit_as_of" style="margin: 0;"><span style="font-weight: normal;">As of</span></label>
                             <input type="text" class="form-control form-control-border border-width-2" id="credit_as_of" name="credit_as_of" placeholder="yyyy-mm-dd"
-                            onkeypress="return event.charCode > 47 && event.charCode < 58;" 
+                            onkeypress="return event.charCode > 47 && event.charCode < 58;"
                             onkeydown="var date = this.value;
                                 if (window.event.keyCode == 8) {
                                     this.value = date;
@@ -138,7 +138,7 @@
                 </form>
             </div>
         </div>
-        
+
     </div>
 </template>
 

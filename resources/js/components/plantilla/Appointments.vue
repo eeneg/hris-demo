@@ -1,9 +1,9 @@
 <template>
       <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card card-primary card-outline">
                 <div class="card-header">
-                    Appointment Records
+                    <h3>Appointment Records</h3>
                 </div>
 
                 <div class="card-body">
@@ -19,13 +19,15 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="" class="p-0">Reckoning date from: </label>
-                                <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control form-control-border border-width-2" v-model="reckoning_date_from" @change="searchAppointment">
+                                <!-- <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control form-control-border border-width-2" v-model="reckoning_date_from" @change="searchAppointment"> -->
+                                <date-picker v-model="reckoning_date_from" id="reckoning_date_from" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="" class="p-0">Reckoning date to: </label>
-                                <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control form-control-border border-width-2" v-model="reckoning_date_to" @change="searchAppointment">
+                                <!-- <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control form-control-border border-width-2" v-model="reckoning_date_to" @change="searchAppointment"> -->
+                                <date-picker v-model="reckoning_date_to" id="reckoning_date_to" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -158,7 +160,8 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="reckoning_date">Reckoning Date</label>
-                                <input type="date" name="reckoning_date" class="form-control form-control-border border-width-2" v-model="form.reckoning_date" min="0">
+                                <!-- <input type="date" name="reckoning_date" class="form-control form-control-border border-width-2" v-model="form.reckoning_date" min="0"> -->
+                                <date-picker v-model="form.reckoning_date" id="reckoning_date" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
                                 <span class="text-danger" v-if="errors.has('reckoning_date')" v-text="errors.get('reckoning_date')"></span>
                             </div>
                             <div class="col-md-12">
@@ -266,7 +269,14 @@ export default {
                 'page':'',
                 'reckoning_date': ''
             }),
+            options: {
+                format: 'yyyy-MM-DD',
+                useCurrent: false,
+            }
         }
+    },
+    components: {
+        datePicker
     },
     watch:
     {

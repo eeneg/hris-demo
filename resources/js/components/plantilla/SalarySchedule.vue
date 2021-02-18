@@ -87,8 +87,9 @@
                                     <span class="text-danger" v-if="errors.has('tranche')" v-text="errors.get('tranche')"></span>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label for="effective_date">Effective Date</label>
-                                    <input type="date" class="form-control form-control-border border-width-2" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date" required>
+                                    <label for="effective_date">Effective Date (yyyy-mm-dd)</label>
+                                    <!-- <input type="date" class="form-control form-control-border border-width-2" name="effective_date" id="effective_date" v-model="salarySchedForm.effective_date" required> -->
+                                    <date-picker v-model="salarySchedForm.effective_date" id="effective_date" :config="options" class="form-control form-control-border border-width-2" required></date-picker>
                                     <span class="text-danger" v-if="errors.has('effective_date')" v-text="errors.get('effective_date')"></span>
                                 </div>
                            </div>
@@ -193,8 +194,15 @@
                 salarySchedForm: {},
                 salaryGradeForm: {amount:[]},
                 display: {},
-                errors: new Errors()
+                errors: new Errors(),
+                options: {
+                    format: 'yyyy-MM-DD',
+                    useCurrent: false,
+                }
             }
+        },
+        components: {
+            datePicker
         },
         watch:
         {
