@@ -10,7 +10,7 @@
                     <h4>PDS FORM</h4>
                 </div>
                 <div class="card-body">
-                    <form-wizard :start-index="9" shape="tab" title="" subtitle="" color="#3490dc">
+                    <form-wizard ref="wizard" :start-index="0" shape="tab" title="" subtitle="" color="#3490dc">
 
                         <tab-content title="Personal Information" icon="ti-user">
                             <div class="form-group" style="display: flex;">
@@ -237,7 +237,7 @@
                             </div>
                         </tab-content>
 
-                        <tab-content title="Family Background" icon="ti-trash">
+                        <tab-content title="Family Background" icon="ti-star">
                             <div class="row">
                                 <div class="col-md-6 float-left" style="padding: 0px;">
                                     <div class="form-group input-group" style="display: flex;">
@@ -368,12 +368,16 @@
                                         <hr>
                                     </div>
                                     <div class="col-md-12">
-                                        <table class="table table-responsive table-borderless  no-datatable" id="child-tbl">
+                                        <table class="table table-borderless no-datatable" id="child-tbl">
                                             <thead>
                                                 <tr>
                                                 <th scope="col" style="padding: 0px 0px 0px 10px; line-height: 16px;">Name of Child</th>
                                                 <th scope="col" style="padding: 0px 0px 0px 10px; line-height: 16px;">Date Of Birth</th>
-                                                <th scope="col" style="padding: 0px 0px 0px 10px; line-height: 16px;">Action</th>
+                                                <th scope="col" style="">
+                                                    <div class="form-group input-group">
+                                                        <a type="button" class="btn btn-primary btn-sm" name="add" id="add-btn" @click.prevent="addFields('children')"><i class="fas fa-plus"></i></a>
+                                                    </div>
+                                                </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -394,7 +398,6 @@
 
                                                     <td style="vertical-align: middle;">
                                                         <div class="form-group input-group">
-                                                            <a type="button" class="btn btn-primary btn-sm float-right mr-1" name="add" id="add-btn" @click.prevent="addFields('children')"><i class="fas fa-plus"></i></a>
                                                             <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('children', index)"><i class="fas fa-trash"></i></a>
                                                         </div>
                                                     </td>
@@ -630,7 +633,11 @@
                                         <th scope="col" class="text-center" style="width: 25%">Place Of Examination</th>
                                         <th scope="col" class="text-center" style="width: 10%">License Number (if applicable)</th>
                                         <th scope="col" class="text-center" style="width: 10%">Date of Release</th>
-                                        <th scope="col" class="text-center" style="width: 5%">Action</th>
+                                        <th scope="col" class="text-center" style="width: 5%">
+                                            <div class="form-group input-sm">
+                                                <a type="button" class="btn btn-primary btn-sm" id="add-eli"  @click.prevent="addFields('eligibility')"><i class="fas fa-plus"></i></a>
+                                            </div>
+                                        </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -671,7 +678,6 @@
                                             </td>
                                             <td>
                                                 <div class="form-group input-group-sm" style="text-align: center;">
-                                                    <a type="button" class="btn btn-primary btn-sm mb-1 mt-1" id="add-eli"  @click.prevent="addFields('eligibility')"><i class="fas fa-plus"></i></a>
                                                     <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('eligibility' ,index)"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
@@ -694,7 +700,11 @@
                                             <th scope="col" class="text-center" style="width: 10%">Salary Grade & Step</th>
                                             <th scope="col" class="text-center" style="width: 10%">Status Appointment</th>
                                             <th scope="col" class="text-center" style="width: 10%">Gov't Service (YES/NO)</th>
-                                            <th scope="col" class="text-center" style="width: 5%">Action</th>
+                                            <th scope="col" class="text-center" style="width: 5%">
+                                                <div class="form-group input-sm">
+                                                    <a type="button" class="btn btn-primary btn-sm" id="add-workex" @click.prevent="addFields('workexperience')"><i class="fas fa-plus"></i></a>
+                                                </div>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -751,7 +761,6 @@
                                             </td>
                                             <td>
                                                 <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                                    <a type="button" class="btn btn-primary float-right btn-sm mb-1 mt-1" id="add-workex" @click.prevent="addFields('workexperience')"><i class="fas fa-plus"></i></a>
                                                     <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('workexperience', index)"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
@@ -770,7 +779,11 @@
                                     <th scope="col" class="text-center" style="width: 10%">To</th>
                                     <th scope="col" class="text-center" style="width: 25%">Number Of Hours</th>
                                     <th scope="col" class="text-center" style="width: 30%">Position / Nature of Work</th>
-                                    <th scope="col" class="text-center" style="width: 5%">Action</th>
+                                    <th scope="col" class="text-center" style="width: 5%">
+                                        <div class="form-group input-sm">
+                                            <a type="button" class="btn btn-primary btn-sm" name="add" id="add-volwork" @click.prevent="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
+                                        </div>
+                                    </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -808,7 +821,6 @@
                                         </td>
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                                <a type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-volwork" @click.prevent="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
                                                 <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('voluntaryworks', index)"><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>
@@ -826,7 +838,11 @@
                                     <th scope="col" class="text-center" style="width: 10%">To</th>
                                     <th scope="col" class="text-center" style="width: 10%">Number of Hours</th>
                                     <th scope="col" class="text-center" style="width: 30%">Conducted / Sponsored By</th>
-                                    <th scope="col" class="text-center" style="width: 5%">Action</th>
+                                    <th scope="col" class="text-center" style="width: 5%">
+                                        <div class="form-group input-sm">
+                                            <button type="button" class="btn btn-primary btn-sm" name="add" id="add-learn" @click.prevent="addFields('trainingprograms')"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -864,7 +880,6 @@
                                         </td>
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                                <button type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-learn" @click.prevent="addFields('trainingprograms')"><i class="fas fa-plus"></i></button>
                                                 <button type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('trainingprograms', index)"><i class="fas fa-trash"></i></button>
                                             </div>
                                         </td>
@@ -880,7 +895,11 @@
                                         <th scope="col" class="text-center" style="width: 20%">Specail Skill and Hobby</th>
                                         <th scope="col" class="text-center" style="width: 50%">Non-Academic Distinctions / Recognition</th>
                                         <th scope="col" class="text-center" style="width: 20%">Membership in Association / Organization</th>
-                                        <th scope="col" class="text-center" style="width: 5%">Action</th>
+                                        <th scope="col" class="text-center" style="width: 5%">
+                                            <div class="form-group input-sm">
+                                                <a type="button" class="btn btn-primary btn-sm" name="add" id="add-otherinfo" @click.prevent="addFields('otherinfos')"><i class="fas fa-plus"></i></a>
+                                            </div>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -904,7 +923,6 @@
                                         </td>
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center; display: grid;">
-                                                <a type="button" class="btn btn-primary btn-sm float-right mb-1 mt-1" name="add" id="add-otherinfo" @click.prevent="addFields('otherinfos')"><i class="fas fa-plus"></i></a>
                                                 <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('otherinfos', index)"><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>
@@ -1024,7 +1042,7 @@
                                     <div class="col-md-2">
                                         <label for="q35bdatefiled">Date Filed:</label>
                                         <!-- <input type="date" name="q35bdatefiled" class="form-control form-control-border border-width-2" id="q35bdatefiled" v-model="form.pdsquestion.q35bdatefiled"> -->
-                                        <date-picker v-model="form.pdsquestion.q35bdatefiled" id="q35bdatefiled" :config="options" class="form-control form-control-border border-width-2"placeholder="(yyyy-mm-dd)"></date-picker>
+                                        <date-picker v-model="form.pdsquestion.q35bdatefiled" id="q35bdatefiled" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="q35bcasestatus">Status of Case/s:</label>
@@ -1396,11 +1414,9 @@
                             </div>
                             <div class="wizard-footer-right">
                                 <wizard-button v-if="!props.isLastStep" @click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Next</wizard-button>
-
-                                <wizard-button v-else-if="props.isLastStep" @click.native="submit" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">  {{props.isLastStep ? 'Done' : 'Next'}}</wizard-button>
                             </div>
                             <div class="wizard-footer-right mr-1">
-                                <wizard-button v-if="!props.isLastStep" type="submit" :style="props.fillButtonStyle">Save</wizard-button>
+                                <wizard-button type="submit" :style="props.fillButtonStyle">Save</wizard-button>
                             </div>
                         </template>
                     </form-wizard>
@@ -1613,24 +1629,49 @@ export default {
         },
         storePersonalInformation: function()
         {
-            this.$Progress.start();
-            axios.post('api/personalinformation', this.form)
-            .then(respose => {
-                Swal.fire(
-                    'Success',
-                    'Registered successfully',
-                    'success'
-                )
-                this.$Progress.finish();
-                this.form.reset()
-            })
-            .catch(error =>{
-                this.errors.record(error.response.data.errors)
-                 Swal.fire(
-                    'Oops...',
-                    error.response.data.message,
-                    'error'
-                )
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will save and reset the form",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Cancelled'
+                        });
+                    }else{
+
+                        this.$Progress.start();
+                        axios.post('api/personalinformation', this.form)
+                        .then(respose => {
+                            Swal.fire(
+                                'Success',
+                                'Saved successfully',
+                                'success'
+                            )
+                            this.$Progress.finish();
+                            this.form.reset()
+                        })
+                        .catch(error =>{
+                            this.$Progress.finish();
+
+                            this.$refs.wizard.changeTab(null, 0);
+
+                            this.errors.record(error.response.data.errors)
+
+                            Swal.fire(
+                                'Oops...',
+                                error.response.data.message,
+                                'error'
+                            )
+                        })
+
+                    }
             })
         },
         updatePersonalInformation: function()
@@ -1926,12 +1967,16 @@ export default {
             }
 
             this.oldData = JSON.parse(JSON.stringify(data))
-        }
+        },
 
     },
     created()
     {
 
+    },
+    mounted()
+    {
+        this.$refs.wizard.activateAll();
     }
 
 }

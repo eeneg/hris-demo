@@ -144,8 +144,6 @@ class RequestController extends Controller
             event(new EditRequestApproved($data));
             $this->deleteEmptyRecords($data->personal_information_id);
         }
-
-
     }
 
     public function revertRequest(Request $request)
@@ -201,7 +199,7 @@ class RequestController extends Controller
                     $record = collect($employee->$data)->except(['id', 'personal_information_id', 'created_at', 'updated_at'])->toArray();
                 }
 
-                if($record !== null && count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
+                if(count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
                 {
                     $employee->$data()->delete();
                 }
