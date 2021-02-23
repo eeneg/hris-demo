@@ -13,6 +13,11 @@
                     <p class="logo-title">Human Resource<br></p>
                     <span class="logo-title2">Information System</span>
                 </div>
+                <div class="errors text-center">
+                    @if($errors->first('barcode'))
+                        <h4 class="text-danger">{{$errors->first('barcode')}}</h4>
+                    @endif
+                </div>
                 <form class="form-signin" method="POST" action="{{ route('employee_login_barcode') }}">
                     @csrf
                     <div class="form-label-group">

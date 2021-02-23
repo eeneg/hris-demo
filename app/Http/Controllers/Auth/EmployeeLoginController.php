@@ -34,17 +34,18 @@ class EmployeeLoginController extends Controller
         $employee = PersonalInformation::where('firstname', $request->firstname)
                         ->where('surname', $request->surname)
                         ->where('birthdate', $request->birthdate)
-                        ->where('nameextension', $request->nameextension)->value('id');
+                        ->where('nameextension', $request->nameextension)
+                        ->value('id');
 
 
         if(!$employee){
-            abort(403, 'Credentials not found');
+            return Redirect::back()->withErrors(['msg' => 'Credentials not found'])->withInput();
         }else{
             $barcode = PersonalInformation::find($employee)->barcode;
         }
 
         if(!$barcode){
-            abort(403, 'Invalid Barcode');
+            return Redirect::back()->withErrors(['barcode' => 'Employee does not have a barcode'])->withInput();
         }else if($employee && $barcode->value){
             session(['id' => $employee, 'barcode' => $barcode->value]);
             return redirect()->route('step-two');
@@ -65,7 +66,7 @@ class EmployeeLoginController extends Controller
 
         if(session('barcode') != $request->barcode)
         {
-            abort(403, 'Invalid Barcode');
+            return Redirect::back()->withErrors(['barcode' => 'Invalid Barcode']);
         }else{
             Auth::guard('employee')->loginUsingId(session('id'));
             session()->forget('id');

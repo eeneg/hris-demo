@@ -94,7 +94,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label for="firstname">First Name</label>
-                                <v-select v-model="form.personal_information_id" :options="employees.data" label="name" :reduce="employees => employees.id" class="form-control-border border-width-2"></v-select>
+                                <v-select class="form-control" v-model="form.personal_information_id" :options="employees.data" label="name" :reduce="employees => employees.id"></v-select>
                                 <span class="text-danger" v-if="errors.has('personal_information_id')">Employee not found</span>
                             </div>
                             <div class="col-md-6">
@@ -166,7 +166,7 @@
                             </div>
                             <div class="col-md-12">
                                 <label for="previous_employee">Previous Employee</label>
-                                <v-select v-model="form.previous_employee" :options="employees.data" label="name" :reduce="employees => employees.name"></v-select>
+                                <v-select class="form-control" v-model="form.previous_employee" :options="employees.data" label="name" :reduce="employees => employees.name"></v-select>
                                 <span class="text-danger" v-if="errors.has('previous_employee')" v-text="errors.get('previous_employee')"></span>
                             </div>
                             <div class="col-md-6">

@@ -36,10 +36,20 @@
 
                                 <div class="col-md-4">
                                     <div>
-                                        <label for="nameextension" style="line-height: 10px;">Name Ext. (Jr., Sr.)</label>
+                                        <label for="citizenship" style="line-height: 10px;">Name Extention</label>
                                     </div>
-                                        <input type="text" name="nameextension" class="form-control form-control-border border-width-2" id="nameextension" v-model="form.nameextension">
-                                    </div>
+                                    <select name="nameextension" id="nameextension" class="form-control form-control-border border-width-2" v-model="form.nameextension" placeholder="Jr., Sr.">
+                                        <option>Jr.</option>
+                                        <option>Sr.</option>
+                                        <option>I</option>
+                                        <option>II</option>
+                                        <option>III</option>
+                                        <option>IV</option>
+                                        <option>V</option>
+                                        <option>VI</option>
+                                        <option>VII</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="form-group" style="display: flex;">
@@ -54,7 +64,7 @@
                                         <label for="birthdate" style="line-height: 10px;">Birth Date</label>
                                     </div>
                                         <!-- <input type="date" name="birthdate" class="form-control form-control-border border-width-2" id="birthdate" v-model="form.birthdate"> -->
-                                        <date-picker v-model="form.birthdate" id="birthdate" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                        <date-picker v-model="form.birthdate" name="birthdate" id="birthdate" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
                                     <span>
                                         <strong class="text-danger" v-if="errors.has('birthdate')">Field Required</strong>
                                     </span>
@@ -180,9 +190,6 @@
                                     </div>
                                     <input type="text" name="telephone1" class="form-control form-control-border border-width-2" id="telephone1" v-model="form.telephone1">
                                 </div>
-                            </div>
-
-                            <div class="form-group" style="display: flex;">
                                 <div class="col-md-4">
                                     <div>
                                         <label for="zipcode1" style="line-height: 10px;">Zip Code</label>
@@ -207,9 +214,6 @@
                                     </div>
                                     <input type="text" name="telephone2" class="form-control form-control-border border-width-2" id="telephone2" v-model="form.telephone2">
                                 </div>
-                            </div>
-
-                            <div class="form-group" style="display: flex;">
                                 <div class="col-md-4">
                                     <div>
                                         <label for="zipcode2" style="line-height: 10px;">Zip Code</label>
@@ -373,10 +377,8 @@
                                                 <tr>
                                                 <th scope="col" style="padding: 0px 0px 0px 10px; line-height: 16px;">Name of Child</th>
                                                 <th scope="col" style="padding: 0px 0px 0px 10px; line-height: 16px;">Date Of Birth</th>
-                                                <th scope="col" style="">
-                                                    <div class="form-group input-group">
-                                                        <a type="button" class="btn btn-primary btn-sm" name="add" id="add-btn" @click.prevent="addFields('children')"><i class="fas fa-plus"></i></a>
-                                                    </div>
+                                                <th scope="col" style="padding: 0px 0px 0px 10px; line-height: 16px;">
+                                                    <a type="button" class="btn btn-primary btn-sm" name="add" id="add-btn" @click.prevent="addFields('children')"><i class="fas fa-plus"></i></a>
                                                 </th>
                                                 </tr>
                                             </thead>
@@ -633,10 +635,8 @@
                                         <th scope="col" class="text-center" style="width: 25%">Place Of Examination</th>
                                         <th scope="col" class="text-center" style="width: 10%">License Number (if applicable)</th>
                                         <th scope="col" class="text-center" style="width: 10%">Date of Release</th>
-                                        <th scope="col" class="text-center" style="width: 5%">
-                                            <div class="form-group input-sm">
-                                                <a type="button" class="btn btn-primary btn-sm" id="add-eli"  @click.prevent="addFields('eligibility')"><i class="fas fa-plus"></i></a>
-                                            </div>
+                                        <th scope="col" class="text-center" style="width: 5%;">
+                                            <a type="button" class="btn btn-primary btn-sm" id="add-eli"  @click.prevent="addFields('eligibility')"><i class="fas fa-plus"></i></a>
                                         </th>
                                         </tr>
                                     </thead>
@@ -677,7 +677,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="form-group input-group-sm" style="text-align: center;">
+                                                <div class="form-group input-group-sm" style="text-align: center; line-height: 16px;">
                                                     <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('eligibility' ,index)"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
@@ -700,10 +700,8 @@
                                             <th scope="col" class="text-center" style="width: 10%">Salary Grade & Step</th>
                                             <th scope="col" class="text-center" style="width: 10%">Status Appointment</th>
                                             <th scope="col" class="text-center" style="width: 10%">Gov't Service (YES/NO)</th>
-                                            <th scope="col" class="text-center" style="width: 5%">
-                                                <div class="form-group input-sm">
-                                                    <a type="button" class="btn btn-primary btn-sm" id="add-workex" @click.prevent="addFields('workexperience')"><i class="fas fa-plus"></i></a>
-                                                </div>
+                                            <th scope="col" class="text-center" style="width: 5%;">
+                                                <a type="button" class="btn btn-primary btn-sm" id="add-workex" @click.prevent="addFields('workexperience')"><i class="fas fa-plus"></i></a>
                                             </th>
                                         </tr>
                                     </thead>
@@ -760,7 +758,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="form-group input-group-sm" style="text-align: center; display: grid;">
+                                                <div class="form-group input-group-sm" style="text-align: center;">
                                                     <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('workexperience', index)"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
@@ -780,9 +778,7 @@
                                     <th scope="col" class="text-center" style="width: 25%">Number Of Hours</th>
                                     <th scope="col" class="text-center" style="width: 30%">Position / Nature of Work</th>
                                     <th scope="col" class="text-center" style="width: 5%">
-                                        <div class="form-group input-sm">
-                                            <a type="button" class="btn btn-primary btn-sm" name="add" id="add-volwork" @click.prevent="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
-                                        </div>
+                                        <a type="button" class="btn btn-primary btn-sm" name="add" id="add-volwork" @click.prevent="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
                                     </th>
                                     </tr>
                                 </thead>
@@ -839,9 +835,7 @@
                                     <th scope="col" class="text-center" style="width: 10%">Number of Hours</th>
                                     <th scope="col" class="text-center" style="width: 30%">Conducted / Sponsored By</th>
                                     <th scope="col" class="text-center" style="width: 5%">
-                                        <div class="form-group input-sm">
-                                            <button type="button" class="btn btn-primary btn-sm" name="add" id="add-learn" @click.prevent="addFields('trainingprograms')"><i class="fas fa-plus"></i></button>
-                                        </div>
+                                        <button type="button" class="btn btn-primary btn-sm" name="add" id="add-learn" @click.prevent="addFields('trainingprograms')"><i class="fas fa-plus"></i></button>
                                     </th>
                                     </tr>
                                 </thead>
@@ -879,7 +873,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="form-group input-group-sm" style="text-align: center; display: grid;">
+                                            <div class="form-group input-group-sm" style="text-align: center;">
                                                 <button type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('trainingprograms', index)"><i class="fas fa-trash"></i></button>
                                             </div>
                                         </td>
@@ -896,9 +890,7 @@
                                         <th scope="col" class="text-center" style="width: 50%">Non-Academic Distinctions / Recognition</th>
                                         <th scope="col" class="text-center" style="width: 20%">Membership in Association / Organization</th>
                                         <th scope="col" class="text-center" style="width: 5%">
-                                            <div class="form-group input-sm">
-                                                <a type="button" class="btn btn-primary btn-sm" name="add" id="add-otherinfo" @click.prevent="addFields('otherinfos')"><i class="fas fa-plus"></i></a>
-                                            </div>
+                                            <a type="button" class="btn btn-primary btn-sm" name="add" id="add-otherinfo" @click.prevent="addFields('otherinfos')"><i class="fas fa-plus"></i></a>
                                         </th>
                                     </tr>
                                 </thead>
@@ -922,7 +914,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="form-group input-group-sm" style="text-align: center; display: grid;">
+                                            <div class="form-group input-group-sm" style="text-align: center;">
                                                 <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('otherinfos', index)"><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>

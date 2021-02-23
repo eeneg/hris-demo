@@ -13,6 +13,13 @@
                         <p class="logo-title">Human Resource<br></p>
                         <span class="logo-title2">Information System</span>
                     </div>
+                    <div class="errors text-center">
+                        @if($errors->first('msg'))
+                            <h4 class="text-danger">{{$errors->first('msg')}}</h4>
+                        @elseif($errors->first('barcode'))
+                            <h4 class="text-danger">{{$errors->first('barcode')}}</h4>
+                        @endif
+                    </div>
                     <form class="form-signin" method="POST" action="{{ route('employee_login') }}">
                         @csrf
                         <div class="form-label-group">
@@ -36,9 +43,18 @@
                             @enderror
                         </div>
                         <div class="form-label-group">
-                            <input id="emp_ext" type="text" class="form-control input @error('nameextension') is-invalid @enderror" name="nameextension" value="{{ old('nameextension') }}" placeholder="Name extension" >
-                            <span class="underline"></span>
-                            <label class="text-muted label-input" for="emp_ext">Name extension</label>
+                            <select name="nameextension" id="emp_ext" class="form-control form-control-border @error('nameextension') is-invalid @enderror" name="nameextension">
+                                <option value="" disabled selected>Name Extension</option>
+                                <option value="Jr." {{ old('nameextension') == 'Jr.' ? 'selected' : '' }}>Jr.</option>
+                                <option value="Sr." {{ old('nameextension') == 'Sr.' ? 'selected' : '' }}>Sr.</option>
+                                <option value="I"   {{ old('nameextension') == 'I' ? 'selected' : '' }}>I</option>
+                                <option value="II"  {{ old('nameextension') == 'II' ? 'selected' : '' }}>II</option>
+                                <option value="III" {{ old('nameextension') == 'III' ? 'selected' : '' }}>III</option>
+                                <option value="IV"  {{ old('nameextension') == 'IV' ? 'selected' : '' }}>IV</option>
+                                <option value="V"   {{ old('nameextension') == 'V' ? 'selected' : '' }}>V</option>
+                                <option value="VI"  {{ old('nameextension') == 'VI' ? 'selected' : '' }}>VI</option>
+                                <option value="VII" {{ old('nameextension') == 'VII' ? 'selected' : '' }}>VII</option>
+                            </select>
                             @error('nameextension')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
