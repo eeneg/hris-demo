@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('salarygrade', 'API\SalaryGradeController@store');
     Route::patch('salarygrade', 'API\SalaryGradeController@update');
+    Route::post('deleteSalaryGrade', 'API\SalaryGradeController@deleteSalaryGrade');
 
     Route::put('plantillacontentabolish', 'Api\PlantillaContentController@plantillacontentabolish');
     Route::post('plantilladepartmentcontent', 'API\PlantillaContentController@plantilladepartmentcontent');

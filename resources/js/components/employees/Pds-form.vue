@@ -64,7 +64,7 @@
                                         <label for="birthdate" style="line-height: 10px;">Birth Date</label>
                                     </div>
                                         <!-- <input type="date" name="birthdate" class="form-control form-control-border border-width-2" id="birthdate" v-model="form.birthdate"> -->
-                                        <date-picker v-model="form.birthdate" name="birthdate" id="birthdate" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                        <date-picker v-model="form.birthdate" name="birthdate" id="birthdate" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                     <span>
                                         <strong class="text-danger" v-if="errors.has('birthdate')">Field Required</strong>
                                     </span>
@@ -393,7 +393,7 @@
                                                     <td>
                                                         <div class="form-group input-group">
                                                             <!-- <input type="date" :name="'birthday'+index" :id="'birthday'+index" class="form-control form-control-border border-width-2" v-model="child.birthday"> -->
-                                                            <date-picker v-model="child.birthday" id="birthday" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                            <date-picker v-model="child.birthday" id="birthday" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                                         </div>
                                                     </td>
 
@@ -656,7 +656,7 @@
                                             <td>
                                                 <div class="form-group input-group-sm">
                                                     <!-- <input type="date" :name="'dateOfExam'+index" :id="'dateOfExam'+index" class="form-control form-control-border border-width-2" v-model="eligibility.dateOfExam"> -->
-                                                    <date-picker v-model="eligibility.dateOfExam" id="dateOfExam" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                    <date-picker v-model="eligibility.dateOfExam" id="dateOfExam" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                                 </div>
                                             </td>
 
@@ -710,14 +710,14 @@
                                             <td>
                                                 <div class="form-group input-group-sm">
                                                     <!-- <input type="date" :name="'we_inclusiveDateFrom'+index" :id="'we_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateFrom"> -->
-                                                    <date-picker v-model="workexperience.inclusiveDateFrom" id="we_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                    <date-picker v-model="workexperience.inclusiveDateFrom" id="we_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                                 </div>
                                             </td>
 
                                             <td>
                                                 <div class="form-group input-group-sm">
                                                     <!-- <input type="date" :name="'we_inclusiveDateTo'+index" :id="'we_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateTo"> -->
-                                                    <date-picker v-model="workexperience.inclusiveDateTo" id="we_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                    <date-picker v-model="workexperience.inclusiveDateTo" id="we_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                                 </div>
                                             </td>
 
@@ -793,14 +793,14 @@
                                         <td>
                                             <div class="form-group input-group-sm">
                                                 <!-- <input type="date" :name="'vw_inclusiveDateFrom'+index" :id="'vw_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateFrom"> -->
-                                                <date-picker v-model="voluntarywork.inclusiveDateFrom" id="vw_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                <date-picker v-model="voluntarywork.inclusiveDateFrom" id="vw_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="form-group input-group-sm">
                                                 <!-- <input type="date" :name="'vw_inclusiveDateTo'+index" :id="'vw_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateTo"> -->
-                                                <date-picker v-model="voluntarywork.inclusiveDateFrom" id="vw_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                <date-picker v-model="voluntarywork.inclusiveDateFrom" id="vw_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                             </div>
                                         </td>
 
@@ -850,14 +850,14 @@
                                         <td>
                                             <div class="form-group input-group-sm">
                                                 <!-- <input type="date" :name="'tp_inclusiveDateFrom'+index" :id="'tp_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateFrom"> -->
-                                                <date-picker v-model="trainingprogram.inclusiveDateFrom" id="tp_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                <date-picker v-model="trainingprogram.inclusiveDateFrom" id="tp_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="form-group input-group-sm">
                                                 <!-- <input type="date" :name="'tp_inclusiveDateTo'+index" :id="'tp_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateTo"> -->
-                                                <date-picker v-model="trainingprogram.inclusiveDateTo" id="tp_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                                <date-picker v-model="trainingprogram.inclusiveDateTo" id="tp_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                             </div>
                                         </td>
 
@@ -1034,7 +1034,7 @@
                                     <div class="col-md-2">
                                         <label for="q35bdatefiled">Date Filed:</label>
                                         <!-- <input type="date" name="q35bdatefiled" class="form-control form-control-border border-width-2" id="q35bdatefiled" v-model="form.pdsquestion.q35bdatefiled"> -->
-                                        <date-picker v-model="form.pdsquestion.q35bdatefiled" id="q35bdatefiled" :config="options" class="form-control form-control-border border-width-2" placeholder="(yyyy-mm-dd)"></date-picker>
+                                        <date-picker v-model="form.pdsquestion.q35bdatefiled" id="q35bdatefiled" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="q35bcasestatus">Status of Case/s:</label>

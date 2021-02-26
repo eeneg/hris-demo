@@ -13,7 +13,12 @@
                             </div>
                             <div class="btn-group">
                                 <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryScheduleModal()" type="button" class="btn btn-outline-primary">
-                                Edit Salary Schedule <i class="fa fa-edit"></i>
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </div>
+                             <div class="btn-group">
+                                <button v-if="$gate.isAdministrator()" @click.prevent="deleteSalarySchedule()" type="button" class="btn btn-outline-danger">
+                                    <i class="fa fa-trash"></i>
                                 </button>
                             </div>
                             <div class="btn-group float-right">
@@ -33,7 +38,7 @@
                                     <div class="bd-highlight">Effective Date: {{ display.effective_date }}</div>
                                 </div>
                                 <div class="ml-auto p-1">
-                                    <button v-if="$gate.isAdministrator()" @click.prevent="createSalaryGradeModal()" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salaryGradeModal">
+                                    <button v-if="$gate.isAdministrator() && add == true" @click.prevent="createSalaryGradeModal()" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salaryGradeModal">
                                     Create <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
@@ -51,11 +56,14 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(salarygrade, index) in salarygrades" :key="salarygrade.id" class="text-center">
-                                         <td style="width: calc(100%-150px);"> {{ salarygrade[0].grade }} </td>
+                                        <td style="width: calc(100%-150px);"> {{ salarygrade[0]['grade'] }} </td>
                                         <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">{{ amounts.amount }}</td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
-                                            <a href="#" v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" data-toggle="modal" data-target="#salaryGradeModal">
-                                            <i class="fa fa-edit"></i>
+                                            <a href="#" class="btn btn-sm btn-outline-primary" v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" data-toggle="modal" data-target="#salaryGradeModal">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-sm btn-outline-danger" v-if="$gate.isAdministrator()" @click.prevent="deleteSalaryGrade(salarygrade)">
+                                                <i class="fa fa-trash"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -121,13 +129,14 @@
                             <div class="form-group col-md-12">
                                 <label for="grade">Grade</label>
                                 <select class="form-control form-control-border border-width-2" id="grade" v-model="salaryGradeForm.grade" required>
-                                    <option v-for="grade in 33" v-bind:value="grade" :key="grade.id">Grade: {{ grade }}</option>
+                                    <option v-for="grade in 33" v-bind:value="grade" :key="grade.id" v-text="'Grade: ' + grade"></option>
+                                    <!-- <option v-for="grade in 33" v-if="editMode == true" v-bind:value="grade" :key="grade.id" v-text="'Grade: ' + grade"></option> -->
                                 </select>
                                 <span class="text-danger" v-if="errors.has('grade')" v-text="errors.get('grade')"></span>
                             </div>
                             <div class="form-group col-md-6" v-for="(n, index) in 8" :key="index.id">
                                 <label for="amount" style="margin-bottom: 2px;">Step {{ index+1 }}</label>
-                                <input type="number" class="form-control form-control-border border-width-2" @keypress="onlyNumber" v-model="salaryGradeForm.amount[index]" min="0" required>
+                                <input type="number" class="form-control form-control-border border-width-2" @keypress="onlyNumber" v-model="salaryGradeForm.amount[index]" min="0">
                             </div>
                             <div class="form-group col-md-12 text-center">
                                 <span class="text-danger" v-if="errors.has('amount')" v-text="errors.get('amount')"></span>
@@ -192,8 +201,9 @@
                 salarygrades: {},
                 selected: '',
                 salarySchedForm: {},
-                salaryGradeForm: {amount:[]},
+                salaryGradeForm: {amount: []},
                 display: {},
+                add: false,
                 errors: new Errors(),
                 options: {
                     format: 'yyyy-MM-DD',
@@ -221,20 +231,34 @@
         {
             getSalarySchedule: function()
             {
+                this.$Progress.start()
                 axios.get('api/salaryschedule')
                 .then(({data}) => {
                     this.salaryschedules = data
-                    this.selected = this.salarySchedForm.tranche != null ? this.salarySchedForm.tranche : this.salaryschedules[0].tranche
+
+                    if(this.salaryschedules.length == 0 )
+                    {
+                        this.display = {}
+                        this.add = false
+                        this.salarygrades = {}
+                        this.selected = null
+                    }else{
+                        this.selected = this.salarySchedForm.tranche != null ? this.salarySchedForm.tranche : this.salaryschedules[0].tranche
+                    }
+
+                    this.$Progress.finish()
                 })
                 .catch(error => {
-
+                    console.log(error)
                 })
             },
             createSalarySchedule: function()
             {
+                this.$Progress.start()
                 axios.post('api/salaryschedule', this.salarySchedForm)
                 .then(response => {
-                   toast.fire({
+                    this.$Progress.finish()
+                    toast.fire({
                         icon: 'success',
                         title: 'Created successfully'
                     });
@@ -265,9 +289,11 @@
             },
             updateSalarySchedule: function()
             {
+                this.$Progress.start()
                 axios.patch('api/salaryschedule/'+this.salarySchedForm.id, this.salarySchedForm)
                 .then(response => {
-                   toast.fire({
+                    this.$Progress.finish()
+                    toast.fire({
                         icon: 'success',
                         title: 'Updated successfully'
                     });
@@ -277,19 +303,72 @@
                 .catch(error => this.errors.record(error.response.data.errors))
 
             },
+            deleteSalarySchedule: function()
+            {
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "This will delete the salary schedule as well as the salary grades under it!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Cancelled'
+                        });
+                    }else if(this.salaryschedules.length == 0){
+                        toast.fire({
+                            icon: 'error',
+                            title: 'Nothing to delete'
+                        });
+                    }else{
+                        this.$Progress.start()
+                        axios.delete('api/salaryschedule/'+_.find(this.salaryschedules, ['tranche', this.selected]).id)
+                        .then(response => {
+                            this.getSalarySchedule()
+                            this.$Progress.finish()
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Deleted successfully'
+                            });
+                            this.salarySchedForm = {}
+                        })
+                        .catch(error => {
+                            Swal.fire(
+                                'Oops...',
+                                error.response.data.message,
+                                'error',
+                            )
+                        })
+
+                    }
+                })
+            },
             getSalaryGrade: function()
             {
-                var sched = _.find(this.salaryschedules, ['tranche', this.selected])
-                axios.get('api/salarygrade?id='+ sched.id)
-                .then(({data}) => {
+                this.$Progress.start()
 
-                    this.salarygrades = _.chunk(data, 8)
-                    this.display = sched
-                    this.$Progress.finish();
-                })
-                .catch(error => {
-                    this.$Progress.fail();
-                })
+                if(this.salaryschedules.length > 0)
+                {
+                    var sched = _.find(this.salaryschedules, ['tranche', this.selected]) ? _.find(this.salaryschedules, ['tranche', this.selected]) : {}
+                    axios.get('api/salarygrade?id='+ sched.id)
+                    .then(({data}) => {
+                        this.salarygrades = data.sort((a,b) => (a[0].grade > b[0].grade) ? 1 : ((b[0].grade > a[0].grade) ? -1 : 0))
+                        this.display = sched
+                        this.add = true
+                        this.$Progress.finish();
+                    })
+                    .catch(error => {
+                        this.$Progress.fail();
+                    })
+                }else{
+                    this.display = {}
+                    this.add = false
+                }
             },
             createSalaryGradeModal: function()
             {
@@ -306,17 +385,24 @@
 
                 this.salaryGradeForm = ar
                 this.editMode = true
-
             },
             createSalaryGrade: function()
             {
-                if(this.salaryGradeForm.amount.length < 8 || this.salaryGradeForm.amount.includes(''))
+                if(this.salaryGradeForm.amount.length < 1)
                 {
                     this.errors.record({ amount: ['Amount Required']})
+                }else if(this.selected == null || this.selected == ''){
+                    Swal.fire(
+                        'Oops...',
+                        'No Salary Schedule selected',
+                        'error'
+                    )
                 }else{
+                    this.$Progress.start()
                     var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]))
                     axios.post('api/salarygrade', ar)
                     .then(response => {
+                        this.$Progress.finish()
                         toast.fire({
                             icon: 'success',
                             title: 'Created successfully'
@@ -324,17 +410,32 @@
                         this.getSalaryGrade()
                         $('#salaryGradeModal').modal('hide')
                     })
-                .catch(error => this.errors.record(error.response.data.errors))
+                    .catch(error => {
+                        this.errors.record(error.response.data.errors)
+                        Swal.fire(
+                            'Oops...',
+                            error.response.data.message,
+                            'error'
+                        )
+                    })
                 }
             },
             updateSalaryGrade: function()
             {
-                if(this.salaryGradeForm.amount.length < 8 || this.salaryGradeForm.amount.includes(''))
+                if(this.salaryGradeForm.amount.length < 1)
                 {
                     this.errors.record({ amount: ['Amount Required']})
+                }else if(this.selected == null || this.selected == ''){
+                    Swal.fire(
+                        'Oops...',
+                        'No Salary Schedule selected',
+                        'error'
+                    )
                 }else{
+                    this.$Progress.start()
                     axios.patch('api/salarygrade/', {id: this.salaryGradeForm.id, grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount})
                     .then(response => {
+                        this.$Progress.finish()
                         toast.fire({
                             icon: 'success',
                             title: 'Updated successfully'
@@ -342,8 +443,61 @@
                         this.getSalaryGrade()
                         $('#salaryGradeModal').modal('hide')
                     })
-                    .catch(error => this.errors.record(error.response.data.errors))
+                    .catch(error => {
+                        this.errors.record(error.response.data.errors)
+                        Swal.fire(
+                            'Oops...',
+                            error.response.data.message,
+                            'error'
+                        )
+                    })
                 }
+            },
+            deleteSalaryGrade: function(salarygrade){
+
+                var ar = []
+
+                salarygrade.forEach(e=>{
+                   ar.push(e.id)
+                })
+
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "You wont be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Cancelled'
+                        });
+                    }else{
+                        this.$Progress.start()
+                        axios.post('api/deleteSalaryGrade', ar)
+                            .then(response => {
+                                this.$Progress.finish()
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Deleted successfully'
+                                });
+                                this.getSalaryGrade()
+                                $('#salaryGradeModal').modal('hide')
+                            })
+                            .catch(error => {
+                                this.errors.record(error.response.data.errors)
+                                Swal.fire(
+                                    'Oops...',
+                                    error.response.data.message,
+                                    'error'
+                                )
+                        })
+                    }
+                })
             },
             onlyNumber: function($event) {
             let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
@@ -353,7 +507,7 @@
             }
         },
         mounted() {
-            // console.log('mounted');
+            // console.log(this.salarygrades);
         }
     }
 </script>

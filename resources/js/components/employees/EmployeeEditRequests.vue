@@ -188,51 +188,56 @@ export default {
                         this.cancel_edits.push(e.id)
                     })
                     break
+                case 2:
+                    if(this.cancel_edits.length > 0)
+                    {
+                        Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Please review changes before confirming',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirm'
+                        }).then((result) => {
+                            if(result.isDismissed == true)
+                            {
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Cancelled'
+                                });
+                            }else{
+                                this.$Progress.start()
+                                axios.post('api/cancelEdits', this.cancel_edits)
+                                .then(response => {
+                                    this.$Progress.finish()
+                                    toast.fire({
+                                        icon: 'success',
+                                        title: 'Edits Canceled'
+                                    });
+                                    $('#editrequestsModal').modal('hide')
+                                    this.getSearchResults()
+                                })
+                                .catch(error => {
+                                    Swal.fire(
+                                        'Failed',
+                                        error.response.statusText,
+                                        'warning'
+                                    )
+                                    console.log(error.reponse.data.message);
+                                })
+                            }
+                        })
+                    }else{
+                        toast.fire({
+                            icon: 'warning',
+                            title: 'Nothing to cancel'
+                        });
+                    }
+                    break
                 case 3:
                     this.cancel_edits = []
                     break
-            }
-
-
-            if(mode == 2)
-            {
-                Swal.fire({
-                title: 'Are you sure?',
-                text: 'Please review changes before confirming',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Confirm'
-                }).then((result) => {
-                    if(result.isDismissed == true)
-                    {
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Cancelled'
-                        });
-                    }else{
-                        this.$Progress.start()
-                        axios.post('api/cancelEdits', this.cancel_edits)
-                        .then(response => {
-                            this.$Progress.finish()
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Edits Canceled'
-                            });
-                            $('#editrequestsModal').modal('hide')
-                            this.getSearchResults()
-                        })
-                        .catch(error => {
-                            Swal.fire(
-                                'Failed',
-                                error.response.statusText,
-                                'warning'
-                            )
-                            console.log(error.reponse.data.message);
-                        })
-                    }
-                })
             }
         },
         deleteRequest: function(id)

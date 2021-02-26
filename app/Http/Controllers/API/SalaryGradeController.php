@@ -18,21 +18,15 @@ class SalaryGradeController extends Controller
     {
         if($request->id != null)
         {
-            $sg = SalarySchedule::findOrFail($request->id)->salarygrades;
-            $cl = collect();
+            $sg = SalarySchedule::findOrFail($request->id)->salarygrades->sortBy('created_at');
+            $ar = [];
 
-            $maxG = $sg->max('grade');
-            $maxS = $sg->max('step');
-            for ($i=0; $i < $maxG + 1; $i++)
+            foreach($sg->chunk(8) as $data)
             {
-                for ($x=0; $x < $maxS + 1; $x++)
-                {
-                    $temp = $sg->where('grade', $i)->where('step', $x)->first();
-                    isset($temp) ? $cl->push($temp) : '';
-                }
+                array_push($ar, collect($data)->sortBy('step')->values());
             }
 
-            return $cl;
+            return $ar;
         }
     }
 
@@ -48,11 +42,16 @@ class SalaryGradeController extends Controller
 
         $request->validate(['grade' => 'required|numeric']);
 
-        foreach($request->amount as $key => $amount)
-        {
-            $salarysched->salarygrades()->create(['amount' => $amount, 'grade' => $request->grade, 'step' => $key + 1]);
-        }
+        for ($i=0; $i < 8; $i++) {
 
+            $salarysched->salarygrades()->create(['amount' => isset($request->amount[$i]) ? $request->amount[$i] : 0, 'grade' => $request->grade, 'step' => $i + 1]);
+
+        }
+    }
+
+    public function deleteSalaryGrade(Request $request)
+    {
+        return SalaryGrade::whereIn('id', $request->all())->delete();
     }
 
     /**
@@ -77,12 +76,15 @@ class SalaryGradeController extends Controller
     {
         $request->validate(['grade' => 'required|numeric']);
 
+
         foreach($request->id as $key => $id)
         {
-            $salarysched = SalaryGrade::findOrFail($id);
+            $salarygrade = SalaryGrade::findOrFail($id);
 
-            $salarysched->update(['amount' => $request->amount[$key], 'grade' => $request->grade]);
+
+            $salarygrade->update(['amount' => isset($request->amount[$key]) ? $request->amount[$key] : 0, 'grade' => $request->grade]);
         }
+
     }
 
     /**

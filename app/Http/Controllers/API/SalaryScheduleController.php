@@ -68,6 +68,6 @@ class SalaryScheduleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return SalarySchedule::findOrFail($id)->delete();
     }
 }
