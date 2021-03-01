@@ -19,6 +19,12 @@ class CreateLeaveApplicationsTable extends Migration
             $table->foreign('personal_information_id')->references('id')->on('personal_informations')->onDelete('cascade');
             $table->uuid('leave_type_id');
             $table->foreign('leave_type_id')->references('id')->on('leave_types')->onDelete('cascade');
+            $table->uuid('personal_information_id_7b');
+            $table->foreign('personal_information_id_7b')->references('id')->on('personal_informations')->onDelete('cascade');
+            $table->uuid('personal_information_id_7c');
+            $table->foreign('personal_information_id_7c')->references('id')->on('personal_informations')->onDelete('cascade');
+            $table->uuid('personal_information_id_7d');
+            $table->foreign('personal_information_id_7d')->references('id')->on('personal_informations')->onDelete('cascade');
             $table->date('date_of_filing');
             $table->string('working_days');
             $table->string('spent', 500)->nullable();

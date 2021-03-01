@@ -140,10 +140,16 @@ class UserController extends Controller
         
         $user->update($request->all());
 
-        if ($request->department_id != '') {
-            $user_assignment = UserAssignment::where('user_id', $user->id)->first();
-            $user_assignment->department_id = $request->department_id;
-            $user_assignment->save();
+        $user_assignment = UserAssignment::where('user_id', $user->id)->first();
+        if ($user_assignment != null) {
+            $user_assignment->delete();
+        }
+
+        if ($request->role == 'Office User' || $request->role == 'Office Head') {
+            UserAssignment::create([
+                'user_id' => $user->id,
+                'department_id' => $request->department_id
+            ]);
         }
 
         return ['message' => 'User has been updated.'];

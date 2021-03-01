@@ -13,7 +13,9 @@
                     <div class="row">
                         <div class="form-group col-4" style="position: relative;margin-bottom: 0.3rem;">
                             <label style="margin: 0;">Applicant</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="personalinformations" label="name" :reduce="personalinformations => personalinformations.id"></v-select>
+                            <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="personalinformations" label="name" 
+                            :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
+                            <has-error :form="form" field="personal_information_id"></has-error>
                         </div>
                         <div class="form-group col-4">
                             <label for="date_of_filing" style="margin: 0;">Date of filing <span style="font-weight: normal;">(yyyy-mm-dd)</span></label>
@@ -24,11 +26,14 @@
                     <div class="row">
                         <div class="form-group col-4">
                             <label style="margin: 0;">Type of leave</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.leave_type_id" :options="leavetypes" label="title" :reduce="leavetypes => leavetypes.id"></v-select>
+                            <v-select class="form-control form-control-border border-width-2" v-model="form.leave_type_id" :options="leavetypes" label="title" 
+                            :reduce="leavetypes => leavetypes.id" :class="{ 'is-invalid': form.errors.has('leave_type_id') }"></v-select>
+                            <has-error :form="form" field="leave_type_id"></has-error>
                         </div>
                         <div class="form-group col-4">
                             <label for="working_days" style="margin: 0;">Number of working days applied</label>
-                            <input v-model="form.working_days" id="working_days" class="form-control form-control-border border-width-2" type="text" name="working_days" placeholder="Number of working days" required>
+                            <input v-model="form.working_days" id="working_days" class="form-control form-control-border border-width-2" type="text" 
+                            name="working_days" placeholder="Number of working days" required>
                         </div>
                     </div>
                     <div class="row">
@@ -100,13 +105,13 @@
                             <label class="d-block" style="margin: 0;height: 37px;">Leave Balance</label>
                         </div>
                         <div class="col-1">
-                            <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" name="" id="">
-                            <input v-model="form.vacation_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" name="" id="">
+                            <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                            <input v-model="form.vacation_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
                             <label class="d-block" style="margin: 0;padding: 10px 13px;height: 37px;">{{ curr_vacation_balance }}</label>
                         </div>
                         <div class="col-1">
-                            <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" name="" id="">
-                            <input v-model="form.sick_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" name="" id="">
+                            <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                            <input v-model="form.sick_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
                             <label class="d-block" style="margin: 0;padding: 10px 13px;height: 37px;">{{ curr_sick_balance }}</label>
                         </div>
                         <div class="col-1">
@@ -116,18 +121,7 @@
                         </div>
                         <div class="form-group col-3">
                             <label for="credit_as_of" style="margin: 0;"><span style="font-weight: normal;">As of</span></label>
-                            <input type="text" class="form-control form-control-border border-width-2" id="credit_as_of" name="credit_as_of" placeholder="yyyy-mm-dd"
-                            onkeypress="return event.charCode > 47 && event.charCode < 58;"
-                            onkeydown="var date = this.value;
-                                if (window.event.keyCode == 8) {
-                                    this.value = date;
-                                } else if (date.match(/^\d{4}$/) !== null) {
-                                    this.value = date + '-';
-                                } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                                    this.value = date + '-';
-                                }
-                            "
-                            maxlength="10">
+                            <date-picker v-model="form.credit_as_of" id="credit_as_of" :config="options" class="form-control form-control-border border-width-2"></date-picker>
                         </div>
                     </div>
                 </div>
@@ -156,7 +150,7 @@
                 curr_sick_balance: 0.0,
                 form: new Form({
                     'personal_information_id': '',
-                    'date_of_filing': new Date(),
+                    'date_of_filing': moment(new Date()).format('YYYY-MM-DD'),
                     'leave_type_id': '',
                     'working_days': '',
                     'spent': 'Within the Philippines',
@@ -164,13 +158,15 @@
                     'spent_specify2': '',
                     'spent_specify3': '',
                     'spent_specify4': '',
-                    'from': new Date(),
-                    'to': new Date(),
+                    'from': moment(new Date()).format('YYYY-MM-DD'),
+                    'to': moment(new Date()).format('YYYY-MM-DD'),
+                    'credit_as_of': moment(new Date()).format('YYYY-MM-DD'),
                     'commutation': 'Requested',
                     'vacation_balance': 0.0,
                     'sick_balance': 0.0,
                     'vacation_less': 0.0,
                     'sick_less': 0.0,
+                    'status': ''
                 }),
                 options: {
                     format: 'yyyy-MM-DD',
@@ -203,9 +199,15 @@
             submitForm() {
                 this.$Progress.start();
                 if (this.status == 'final') {
+                    this.form.status = 'final';
                     this.form.post('api/leaveapplication')
                         .then(({data}) => {
-                            console.log(data.message);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'New leave application is created successfully',
+                            })
+                            this.$router.push({ path: '/leave-applications'});
                             this.$Progress.finish();
                         })
                         .catch(error => {

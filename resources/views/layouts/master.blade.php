@@ -10,6 +10,7 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<title>{{ config('app.name', 'Laravel') }}</title>
+		
 		{{-- <script src="https://unpkg.com/pdfobject@2.2.4/pdfobject.min.js"></script> --}}
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/master.css') }}" rel="stylesheet">

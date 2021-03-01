@@ -41,6 +41,7 @@ Vue.use(VuejsClipper,{
      }
 });
 
+window.moment = moment;
 window.Swal = Swal;
 window.Form = Form;
 window.PDFObject = PDFObject;

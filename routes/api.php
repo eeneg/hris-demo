@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth:api']], function() {
         'abolisheditem' => 'API\AbolishedItemController',
         'footnote' => 'API\FootnoteController',
         'leavetype' => 'API\LeaveTypeController',
+        'leaveapplication' => 'API\LeaveApplicationController',
         'request'   => 'API\RequestController'
     ]);
     Route::get('profile', 'Api\UserController@profile');

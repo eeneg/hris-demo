@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\PersonalInformation;
@@ -11,6 +12,7 @@ use App\PlantillaContent;
 use App\Http\Resources\EmployeesListResource;
 use App\Setting;
 use App\Plantilla;
+use App\UserAssignment;
 use App\Events\PersonalInfoRegistered;
 use App\Events\PersonalInfoUpdated;
 
@@ -39,12 +41,33 @@ class PersonalInformationController extends Controller
     }
 
     public function forleave(Request $request) {
+        $department_id = Auth::user()->role == 'Office User' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $allEmployees = DB::select("SELECT id, CONCAT(surname, ', ', firstname, ' ', nameextension, ' ', middlename) AS `name` FROM personal_informations
-            WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id` AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "') = 1
-            ORDER BY personal_informations.`surname`");
-            return $allEmployees;
+        if ($department_id != '') {
+            $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
+                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', personal_informations.`nameextension`, ' ', personal_informations.`middlename`) AS `name`
+                FROM plantilla_contents
+                JOIN personal_informations ON plantilla_contents.`personal_information_id` =  personal_informations.`id`
+                JOIN positions ON plantilla_contents.`position_id` =  positions.`id`
+                JOIN departments ON positions.`department_id` =  departments.`id`
+                WHERE plantilla_contents.`personal_information_id` IS NOT NULL
+                AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "'
+                AND departments.`id` = '" . $department_id . "'
+                ORDER BY personal_informations.`surname`");
+        } else {
+            $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
+                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', personal_informations.`nameextension`, ' ', personal_informations.`middlename`) AS `name`
+                FROM plantilla_contents
+                JOIN personal_informations ON plantilla_contents.`personal_information_id` =  personal_informations.`id`
+                JOIN positions ON plantilla_contents.`position_id` =  positions.`id`
+                JOIN departments ON positions.`department_id` =  departments.`id`
+                WHERE plantilla_contents.`personal_information_id` IS NOT NULL
+                AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "'
+                ORDER BY personal_informations.`surname`");
+        }
+        
+        return $allEmployees;
     }
 
     public function forvacants(Request $request) {

@@ -68,7 +68,7 @@
                         <span slot="prev-nav">&lt; Previous</span>
 	                    <span slot="next-nav">Next &gt;</span>
                     </pagination>
-                    <span style="margin-left: 10px;">Showing {{ users.from | validateCount }} to {{ users.to | validateCount }} of {{ users.total }} records</span>
+                    <span style="margin-left: 10px;">Showing {{ users.meta && users.meta.from | validateCount }} to {{ users.meta && users.meta.to | validateCount }} of {{ users.meta && users.meta.total }} records</span>
                 </div>
                 
                 <!-- /.card-body -->
@@ -105,7 +105,6 @@
                                 <label style="font-weight: normal; margin: 0;">Department</label>
                                 <select name="department_id" v-model="form.department_id" class="form-control form-control-border border-width-2"
                                     :class="{ 'is-invalid': form.errors.has('department_id') }">
-                                    <option value="">Select Department</option>
                                     <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.address }}</option>
                                 </select>
                                 <has-error :form="form" field="role"></has-error>
@@ -162,7 +161,6 @@
                 users: {},
                 search: '',
                 departments: [],
-                selectedDepartment: '',
                 form: new Form({
                     'id': '',
                     'name': '',
@@ -202,10 +200,11 @@
                 $('#userModal').modal('show');
                 this.form.fill(user);
                 this.form.department_id = user.userassignment && user.userassignment.department.id;
-                if (this.form.department_id != null) {
+                if (user.userassignment) {
                     this.loadDepartments();
                     $('#department_user_select').toggle('slide');
                 }
+                // this.form.department_id = user.userassignment && user.userassignment.department.id;
             },
             getAvatar(avatar) {
                 if (avatar != "profile.png") {
@@ -216,12 +215,10 @@
                     return prefix + avatar;
                 }
             }, 
-            showDepartments(value) {
+            showDepartments() {
                 var value = $('#user_role_combo').val();
                 if ((value == 'Office User' || value == 'Office Head') && $('#department_user_select').is(":hidden")) {
-                    if (this.departments.length == 0) {
-                        this.loadDepartments();
-                    }
+                    this.loadDepartments();
                     $('#department_user_select').toggle('slide');
                 } else if(value != 'Office User' && value != 'Office Head' && $('#department_user_select').is(":visible")) {
                     $('#department_user_select').toggle('slide');
@@ -306,7 +303,9 @@
                 axios.get('api/department')
                     .then(({data}) => {
                         this.departments = data.data;
-                        this.selectedDepartment = data.data[0].id;
+                        if (!this.form.department_id) {
+                            this.form.department_id = this.departments[0].id;
+                        }
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
