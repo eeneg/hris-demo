@@ -20,7 +20,10 @@
                                 </thead>
                                 <tbody>
                                     <tr class="text-center" v-for="(editrequests, index) in editrequests.data" :key="editrequests.id">
-                                        <td>{{ editrequests.status }}</td>
+                                        <td v-bind:class="{ 'text-success': editrequests.status == 'APPROVED' || editrequests.status == 'VALIDATED',
+                                                    'text-danger': editrequests.status == 'DENIED',
+                                                    'text-primary': editrequests.status == 'PENDING',
+                                                }">{{ editrequests.status }}</td>
                                         <td>{{ editrequests.created_at }}</td>
                                         <td style="width: calc(100%-150px);">
                                             <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,7 +97,11 @@
                                         <td>{{ edit.field }}</td>
                                         <td>{{ edit.oldValue }}</td>
                                         <td>{{ edit.newValue }}</td>
-                                        <td>{{ edit.status }}</td>
+                                        <td v-bind:class="{ 'text-success': edit.status == 'APPROVED' || edit.status == 'VALIDATED',
+                                                    'text-danger': edit.status == 'DENIED',
+                                                    'text-primary': edit.status == 'PENDING',
+                                                }">{{ edit.status }}</td>
+                                        <td>
                                         <td v-if="mode == 1" >
                                              <div class="col">
                                                 <div class="form-check">
@@ -285,8 +292,6 @@ export default {
         {
 
             this.editrequests = data
-
-            console.log(this.editrequests)
 
         }
 

@@ -114,14 +114,12 @@ class RequestController extends Controller
         $ar = [];
         $data = '';
 
-        $editRequest = EmployeePDSEdit::where('employee_edit_request_id', $request->id);
-
         if(count($edits['accept']) > 0){
-            $editRequest->whereIn('id', $edits['accept'])->update(['status' => 'APPROVED']);
+            EmployeePDSEdit::whereIn('id', $edits['accept'])->update(['status' => 'APPROVED']);
         }
 
         if(count($edits['deny']) > 0){
-            $editRequest->whereIn('id', $edits['deny'])->update(['status' => 'DENIED']);
+            EmployeePDSEdit::whereIn('id', $edits['deny'])->update(['status' => 'DENIED']);
         }
 
         $data = EmployeePDSEditRequest::find($request->id);
@@ -166,7 +164,9 @@ class RequestController extends Controller
             }
             else if(($data['status'] == 'APPROVED')){
                 $model = $data['model'];
-                $employee->$model()->updateOrCreate(['personal_information_id' => $employee->id], [$data['field'] => $data['oldValue']]);
+                $employee->$model()->updateOrCreate(['id' => $data['model_id']], [$data['field'] => $data['oldValue']]);
+                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
+            }else if(($data['status'] == 'DENIED')){
                 EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
             }
         }
@@ -199,7 +199,7 @@ class RequestController extends Controller
                     $record = collect($employee->$data)->except(['id', 'personal_information_id', 'created_at', 'updated_at'])->toArray();
                 }
 
-                if(count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
+                if($record && count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
                 {
                     $employee->$data()->delete();
                 }
@@ -211,7 +211,7 @@ class RequestController extends Controller
                         $record = collect($value)->except(['id', 'personal_information_id', 'created_at', 'updated_at'])->toArray();
                     }
 
-                    if(count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
+                    if($record && count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
                     {
                         $employee->$data->find($value->id)->delete();
                     }

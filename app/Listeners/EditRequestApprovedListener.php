@@ -70,7 +70,7 @@ class EditRequestApprovedListener
                 {
                     if(strlen($record->model_id) > 30)
                     {
-                        $employee->children()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                        $data = $employee->children()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
                         $children[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -81,7 +81,7 @@ class EditRequestApprovedListener
 
                     if(strlen($record->model_id) > 30)
                     {
-                        $employee->eligibilities()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                        $employee->eligibilities()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
                         $eligibilities[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -92,7 +92,7 @@ class EditRequestApprovedListener
 
                     if(strlen($record->model_id) > 30)
                     {
-                        $employee->workexperiences()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                        $employee->workexperiences()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
                         $workexperiences[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -103,7 +103,7 @@ class EditRequestApprovedListener
 
                     if(strlen($record->model_id) > 30)
                     {
-                        $employee->voluntaryworks()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                        $employee->voluntaryworks()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
                         $voluntaryworks[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -115,7 +115,7 @@ class EditRequestApprovedListener
 
                     if(strlen($record->model_id) > 30)
                     {
-                        $employee->trainingprograms()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                        $employee->trainingprograms()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
                         $trainingprograms[$record->model_id][$record->field] =  $record->newValue;
                     }
@@ -127,7 +127,7 @@ class EditRequestApprovedListener
 
                     if(strlen($record->model_id) > 30)
                     {
-                        $employee->otherinfos()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                        $employee->otherinfos()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
                         $otherinfos[$record->model_id][$record->field] =  $record->newValue;
                     }

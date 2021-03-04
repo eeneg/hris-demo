@@ -21,7 +21,7 @@ class SalaryGradeController extends Controller
             $sg = SalarySchedule::findOrFail($request->id)->salarygrades->sortBy('created_at');
             $ar = [];
 
-            foreach($sg->chunk(8) as $data)
+            foreach($sg->groupBy('grade') as $data)
             {
                 array_push($ar, collect($data)->sortBy('step')->values());
             }

@@ -14,7 +14,7 @@ class Child extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'personal_information_id', 'name', 'birthday' ];
+    protected $fillable = [ 'id', 'personal_information_id', 'name', 'birthday' ];
 
     public function personalinformation(){
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
@@ -23,7 +23,10 @@ class Child extends Model
     public static function boot(){
         parent::boot();
         self::creating(function($model){
-            $model->id = self::generateUuid();
+            if($model->id == null || $model->id == '')
+            {
+                $model->id = self::generateUuid();
+            }
         });
     }
 

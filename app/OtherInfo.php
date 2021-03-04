@@ -13,7 +13,7 @@ class OtherInfo extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'personal_information_id', 'skill', 'recognition', 'membership' ];
+    protected $fillable = [ 'id', 'personal_information_id', 'skill', 'recognition', 'membership' ];
 
     public function personalinformation()
     {
@@ -23,7 +23,10 @@ class OtherInfo extends Model
     public static function boot(){
         parent::boot();
         self::creating(function($model){
-            $model->id = self::generateUuid();
+            if($model->id == null || $model->id == '')
+            {
+                $model->id = self::generateUuid();
+            }
         });
     }
 

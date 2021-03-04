@@ -14,6 +14,7 @@ class WorkExperience extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'id',
         'personal_information_id',
         'inclusiveDateFrom',
         'inclusiveDateTo',
@@ -33,7 +34,10 @@ class WorkExperience extends Model
     public static function boot(){
         parent::boot();
         self::creating(function($model){
-            $model->id = self::generateUuid();
+            if($model->id == null || $model->id == '')
+            {
+                $model->id = self::generateUuid();
+            }
         });
     }
 

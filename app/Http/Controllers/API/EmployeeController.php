@@ -83,27 +83,30 @@ class EmployeeController extends Controller
     {
         $ar = [];
 
-        EmployeePDSEdit::whereIn('id', $request->all())->delete();
+        $cancel = EmployeePDSEdit::whereIn('id', $request->all())->delete();
 
         $editRequest = EmployeePDSEditRequest::where('personal_information_id', Auth::user()->id)->first();
 
-        foreach($editRequest->employeeEdits as $value)
+        if($cancel)
         {
-            array_push($ar, $value->status);
-        }
+            foreach($editRequest->employeeEdits as $value)
+            {
+                array_push($ar, $value->status);
+            }
 
-        if(!in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
-            $editRequest->update(['status' => 'APPROVED']);
-        }else if (!in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
-            $editRequest->update(['status' => 'DENIED']);
-        }else if(!in_array('PENDING', $ar)){
-            $editRequest->update(['status' => 'VALIDATED']);
-        }
+            if(!in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
+                $editRequest->update(['status' => 'APPROVED']);
+            }else if (!in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
+                $editRequest->update(['status' => 'DENIED']);
+            }else if(!in_array('PENDING', $ar)){
+                $editRequest->update(['status' => 'VALIDATED']);
+            }
 
 
-        if(count($editRequest->employeeEdits) == 0)
-        {
-            $editRequest->delete();
+            if(count($editRequest->employeeEdits) == 0)
+            {
+                $editRequest->delete();
+            }
         }
     }
 

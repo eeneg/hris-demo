@@ -13,7 +13,7 @@ class Eligibility extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'personal_information_id', 'careerService', 'rating', 'dateOfExam', 'placeOfExam', 'licenseNumber', 'licenseRelease' ];
+    protected $fillable = [ 'id', 'personal_information_id', 'careerService', 'rating', 'dateOfExam', 'placeOfExam', 'licenseNumber', 'licenseRelease' ];
 
     public function personalinformation()
     {
@@ -23,7 +23,10 @@ class Eligibility extends Model
     public static function boot(){
         parent::boot();
         self::creating(function($model){
-            $model->id = self::generateUuid();
+            if($model->id == null || $model->id == '')
+            {
+                $model->id = self::generateUuid();
+            }
         });
     }
 

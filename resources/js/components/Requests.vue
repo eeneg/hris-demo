@@ -27,7 +27,6 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th scope="col">Name</th>
-                                        <th scope="col">Request status</th>
                                         <th scope="col">Date created</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -35,7 +34,6 @@
                                 <tbody>
                                     <tr class="text-center" v-for="(pendingRequest, index) in pendingRequest.data" :key="pendingRequest.id">
                                         <td>{{ pendingRequest.surname }}, {{ pendingRequest.firstname }} {{ pendingRequest.nameextension }}</td>
-                                        <td>{{ pendingRequest.status }}</td>
                                         <td>{{ pendingRequest.created_at }}</td>
                                         <td style="width: calc(100%-150px);">
                                             <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -99,7 +97,9 @@
                                 <tbody>
                                     <tr class="text-center" v-for="(reviwedRequest, index) in reviwedRequest.data" :key="reviwedRequest.id">
                                         <td>{{ reviwedRequest.surname }}, {{ reviwedRequest.firstname }} {{ reviwedRequest.nameextension }}</td>
-                                        <td>{{ reviwedRequest.status }}</td>
+                                        <td v-bind:class="{ 'text-success': reviwedRequest.status == 'APPROVED' || reviwedRequest.status == 'VALIDATED',
+                                                    'text-danger': reviwedRequest.status == 'DENIED',
+                                                }">{{ reviwedRequest.status }}</td>
                                         <td>{{ reviwedRequest.updated_at }}</td>
                                         <td style="width: calc(100%-150px);">
                                             <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -176,10 +176,7 @@
                                                 <td>{{ edit.field }}</td>
                                                 <td>{{ edit.oldValue }}</td>
                                                 <td>{{ edit.newValue }}</td>
-                                                <td v-bind:class="{ 'text-success': edit.status == 'APPROVED',
-                                                                    'text-danger': edit.status == 'DENIED',
-                                                                    'text-primary': edit.status == 'PENDING',
-                                                                }">{{ edit.status }}</td>
+                                                <td v-bind:class="{'text-primary': edit.status == 'PENDING'}">{{ edit.status }}</td>
                                                 <td>
                                                     <div class="col">
                                                         <div class="form-check">
