@@ -19,20 +19,20 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="" class="p-0">Reckoning date from: </label>
-                                <!-- <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control form-control-border border-width-2" v-model="reckoning_date_from" @change="searchAppointment"> -->
-                                <date-picker v-model="reckoning_date_from" id="reckoning_date_from" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker>
+                                <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control form-control-border border-width-2" v-model="reckoning_date_from" @change="searchAppointment">
+                                <!-- <date-picker v-model="reckoning_date_from" id="reckoning_date_from" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker> -->
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="" class="p-0">Reckoning date to: </label>
-                                <!-- <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control form-control-border border-width-2" v-model="reckoning_date_to" @change="searchAppointment"> -->
-                                <date-picker v-model="reckoning_date_to" id="reckoning_date_to" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker>
+                                <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control form-control-border border-width-2" v-model="reckoning_date_to" @change="searchAppointment">
+                                <!-- <date-picker v-model="reckoning_date_to" id="reckoning_date_to" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker> -->
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <button class="btn btn-primary float-right mb-3" type="button" @click="createAppointments()" data-toggle="modal">Create <i class="fas fa-plus"></i></button>
+                                <button v-if="salaryschedules.length > 0 && departments.length > 0" class="btn btn-primary float-right mb-3" type="button" @click="createAppointments()" data-toggle="modal">Create <i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -53,7 +53,7 @@
                                         <td>{{ appointment.nature_of_appointment }}</td>
                                         <td>{{ appointment.reckoning_date }}</td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
-                                            <div class="btn-group">
+                                            <div v-if="salaryschedules.length > 0 && departments.length > 0" class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Action
                                                 </button>
@@ -94,13 +94,13 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label for="firstname">First Name</label>
-                                <v-select class="form-control" v-model="form.personal_information_id" :options="employees.data" label="name" :reduce="employees => employees.id"></v-select>
+                                <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="employees.data" label="name" :reduce="employees => employees.id"></v-select>
                                 <span class="text-danger" v-if="errors.has('personal_information_id')">Employee not found</span>
                             </div>
                             <div class="col-md-6">
                                 <label for="selectedDept">Department</label>
                                 <select name="selectedDept" class="custom-select form-control-border border-width-2" id="selectedDept" v-model="selectedDept">
-                                    <option v-for="department in departments" :key="department.id" :value="department.id">{{ department.title }}</option>
+                                    <option v-for="department in departments" :key="department.id" :value="department">{{ department.title }}</option>
                                 </select>
                             </div>
                              <div class="col-md-6">
@@ -115,13 +115,13 @@
                             <div class="col-md-6">
                                 <label for="selectedSalarySched">Salary Schedule</label>
                                 <select name="selectedSalarySched" class="custom-select form-control-border border-width-2" id="selectedSalarySched" v-model="selectedSalarySched">
-                                    <option v-for="salaryschedule in salaryschedules" :key="salaryschedule.id" :value="salaryschedule.id">{{ salaryschedule.tranche }}</option>
+                                    <option v-for="salaryschedule in salaryschedules" :key="salaryschedule.id" :value="salaryschedule">{{ salaryschedule.tranche }}</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="grade">Grade</label>
                                 <select name="grade" class="custom-select form-control-border border-width-2" id="grade" v-model="form.grade">
-                                    <option v-for="grade in salarygrades" :key="grade.id">{{ grade.grade }}</option>
+                                    <option v-for="grade in salarygrades" :key="grade.id" :value="grade[0].grade">{{ grade[0].grade }}</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -166,7 +166,7 @@
                             </div>
                             <div class="col-md-12">
                                 <label for="previous_employee">Previous Employee</label>
-                                <v-select class="form-control" v-model="form.previous_employee" :options="employees.data" label="name" :reduce="employees => employees.name"></v-select>
+                                <v-select class="form-control form-control-border border-width-2" v-model="form.previous_employee" :options="employees.data" label="name" :reduce="employees => employees.name"></v-select>
                                 <span class="text-danger" v-if="errors.has('previous_employee')" v-text="errors.get('previous_employee')"></span>
                             </div>
                             <div class="col-md-6">
@@ -246,13 +246,13 @@ export default {
             search: '',
             reckoning_date_from: '',
             reckoning_date_to: '',
-            departments: [{}],
-            positions: [{}],
-            salaryschedules: [{}],
+            departments: [],
+            positions: [],
+            salaryschedules: [],
             salarygrades: [],
             appointments: {personal_information:{}},
-            selectedDept: '',
-            selectedSalarySched: '',
+            selectedDept: [],
+            selectedSalarySched: [],
             errors: new Errors(),
             form: new Form({
                 'personal_information_id': '',
@@ -294,14 +294,36 @@ export default {
         this.$Progress.start()
         this.getAppointments()
         this.getEmployees()
+        this.getDepartments()
+        this.getSalarySched()
 
-        this.debouncedgetDepartments = _.debounce(this.getDepartments);
-        this.debouncedgetSalaryScheds = _.debounce(this.getSalarySched);
+        this.debouncedgetDepartments = _.debounce(this.getPositions);
+        this.debouncedgetSalaryScheds = _.debounce(this.getSalaryGrades);
     },
     methods: {
         searchAppointment: _.debounce(function(){
                 this.getSearchResults();
         }, 400),
+        getPositions: function()
+        {
+            let vm = this
+            this.positions = []
+
+            _.each(this.selectedDept.position, function(value){
+                vm.positions.push(value)
+            })
+        },
+        getSalaryGrades: function()
+        {
+            let ar = []
+            this.salarygrades = []
+
+            _.each(this.selectedSalarySched.salarygrades, function(value){
+                ar.push(value)
+            })
+
+            this.salarygrades = _.groupBy(ar, 'grade')
+        },
         getSearchResults: function(page = 1)
         {
             axios.get('api/appointment?page=' + page + '&search=' + this.search + '&from=' + this.reckoning_date_from + '&to=' + this.reckoning_date_to)
@@ -327,14 +349,9 @@ export default {
         },
         getDepartments: function()
         {
-            axios.get('api/department')
+            axios.get('api/fetchDepartments')
             .then(({data}) => {
-                this.departments = data.data
-
-                if(this.selectedDept.length != 0)
-                {
-                    this.getPositions()
-                }
+                this.departments = data
             })
             .catch(error => {
                 console.log(error)
@@ -344,63 +361,17 @@ export default {
                 });
             })
         },
-        getPositions: function()
-        {
-            this.$Progress.start()
-            axios.get('api/fetchPosition?deptId='+this.selectedDept)
-            .then(({data})=> {
-                this.positions = data
-
-                this.$Progress.finish()
-            })
-            .catch(error => {
-                console.log(error)
-                toast.fire({
-                    icon: 'error',
-                    title: 'Positions not retrieved'
-                });
-            })
-        },
         getSalarySched: function()
         {
-            axios.get('api/salaryschedule')
+            axios.get('api/fetchSalarySched')
             .then(({data}) => {
                 this.salaryschedules = data
-
-                if(this.selectedSalarySched.length != 0)
-                {
-                    this.getSalaryGrade()
-                }
             })
             .catch(error => {
                 console.log(error)
                 toast.fire({
                     icon: 'error',
                     title: 'Salary Schedules not retrieved'
-                });
-            })
-        },
-        getSalaryGrade: function()
-        {
-            this.$Progress.start()
-            axios.get('api/salarygrade?id='+ this.selectedSalarySched)
-            .then(({data}) => {
-                let ar = _.chunk(data, 8)
-
-                _.each(ar, e => {
-                    if(e[0].grade)
-                    {
-                        this.salarygrades.push({grade: e[0].grade})
-                    }
-                })
-
-                this.$Progress.finish()
-            })
-            .catch(error => {
-                this.$Progress.fail();
-                toast.fire({
-                    icon: 'error',
-                    title: 'Salary Grades not retrieved'
                 });
             })
         },
@@ -414,6 +385,7 @@ export default {
                 this.$Progress.finish()
             })
             .catch(error => {
+                console.log(error)
                 this.$Progress.fail();
                 toast.fire({
                     icon: 'error',
@@ -421,15 +393,12 @@ export default {
                 });
             })
         },
-        createAppointments: function(appointment)
+        createAppointments: function()
         {
             this.form.reset()
             this.salarygrades = []
-            this.selectedDept = ''
-            this.selectedSalarySched = ''
-
-            this.getDepartments()
-            this.getSalarySched()
+            this.selectedDept = []
+            this.selectedSalarySched = []
 
             this.errors.deleteV()
 
@@ -441,8 +410,8 @@ export default {
             this.form.reset()
             this.errors.deleteV()
 
-            this.selectedDept = appointment.department.id
-            this.selectedSalarySched = appointment.salary_sched.id
+            this.selectedDept = _.find(this.departments, {title: appointment.department.title})
+            this.selectedSalarySched = _.find(this.salaryschedules, {tranche: appointment.salary_sched.tranche})
 
             this.form.id                        = appointment.id
             this.form.personal_information_id   = appointment.personal_information.id
@@ -464,9 +433,9 @@ export default {
         },
         storeAppointments: function()
         {
-            if(this.selectedSalarySched != '' || this.selectedSalarySched)
+            if(this.selectedSalarySched)
             {
-                this.form.salary_sched_id = this.selectedSalarySched
+                this.form.salary_sched_id = this.selectedSalarySched.id
             }
             this.$Progress.start()
             axios.post('api/appointment', this.form)
@@ -484,6 +453,11 @@ export default {
         updateAppointments: function()
         {
             this.$Progress.start()
+
+            if(this.selectedSalarySched)
+            {
+                this.form.salary_sched_id = this.selectedSalarySched.id
+            }
 
             axios.patch('api/appointment/'+this.form.id, this.form)
             .then(({data}) => {

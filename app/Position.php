@@ -17,9 +17,9 @@ class Position extends Model
 
     protected $fillable = [ 'department_id', 'title' ];
 
-    protected $with = [
-        'department'
-    ];
+    // protected $with = [
+    //     'department'
+    // ];
 
     public function department()
     {

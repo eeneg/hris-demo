@@ -4,12 +4,14 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Support\Facades\DB;
 use App\Appointment;
+use App\Department;
 use App\Position;
 use App\Http\Controllers\Controller;
 use App\PersonalInformation;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\EmployeeAppointmentListResource;
 use App\SalaryGrade;
+use App\SalarySchedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -70,12 +72,13 @@ class AppointmentController extends Controller
                 'salary_grades.grade as grade',
                 'appointment_records.*'
             )
-            ->orWhere('surname', 'LIKE', '%'.$request->search.'%')
-            ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
-            ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-            ->orderBy('surname');
-
-            $appointments = $appointments->whereBetween('reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')));
+            ->whereBetween('appointment_records.reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')))
+            ->where(function ($query) use ($request) {
+                $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                ->orderBy('surname');
+            });
         }
 
         return new AppointmentResource($appointments->paginate(20));
@@ -88,12 +91,16 @@ class AppointmentController extends Controller
         return new EmployeeAppointmentListResource($employees);
     }
 
-    public function deptPosition(Request $request)
+    public function fetchDepartments(Request $request)
     {
-        if($request->deptId != null)
-        {
-            return Position::where('department_id', $request->deptId)->get();
-        }
+        return Department::select(['departments.id', 'departments.title'])->with('position')->get();
+    }
+
+    public function fetchSalarySched(Request $request)
+    {
+        $salarysched = SalarySchedule::with('salarygrades')->get();
+
+        return $salarysched;
     }
 
     /**

@@ -60,7 +60,8 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('footnotespec', 'API\FootnoteController@getfootnote');
 
-    Route::get('fetchPosition', 'API\AppointmentController@deptPosition');
+    Route::get('fetchDepartments', 'API\AppointmentController@fetchDepartments');
+    Route::get('fetchSalarySched', 'API\AppointmentController@fetchSalarySched');
     Route::get('appointmentemployeelist', 'API\AppointmentController@employees');
 
     Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
