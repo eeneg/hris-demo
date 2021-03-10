@@ -941,12 +941,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q34a" style="margin-right: 50%;">
-                                                <input class="q34a_yes" name="q34a_yes" id="q34a_yes" type="radio" value="1" v-model="form.pdsquestion.q34a">
+                                                <input class="q34a_yes" name="q34a_yes" id="q34a_yes" type="radio" value="YES" v-model="form.pdsquestion.q34a">
                                                 YES
                                             </label>
 
                                             <label for="q34a">
-                                                <input class="q34a_no" name="q34a_no" id="q34a_no" type="radio" value="0" v-model="form.pdsquestion.q34a">
+                                                <input class="q34a_no" name="q34a_no" id="q34a_no" type="radio" value="NO" v-model="form.pdsquestion.q34a">
                                                 NO
                                         </label>
                                     </div>
@@ -957,12 +957,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q34b" style="margin-right: 50%;">
-                                                <input class="q34b_yes" name="q34b_yes" id="q34b_yes" type="radio" value="1" v-model="form.pdsquestion.q34b">
+                                                <input class="q34b_yes" name="q34b_yes" id="q34b_yes" type="radio" value="YES" v-model="form.pdsquestion.q34b">
                                                 YES
                                             </label>
 
                                             <label for="q34b">
-                                                <input class="q34b_no" name="q34b_no" id="q34b_no" type="radio" value="0" v-model="form.pdsquestion.q34b">
+                                                <input class="q34b_no" name="q34b_no" id="q34b_no" type="radio" value="NO" v-model="form.pdsquestion.q34b">
                                                 NO
                                         </label>
                                     </div>
@@ -988,12 +988,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q35a_yes" style="margin-right: 50%;">
-                                            <input type="radio" class="q35a_yes" name="q35a_yes" id="q35a_yes" value="1" v-model="form.pdsquestion.q35a">
+                                            <input type="radio" class="q35a_yes" name="q35a_yes" id="q35a_yes" value="YES" v-model="form.pdsquestion.q35a">
                                             YES
                                         </label>
 
                                         <label for="q35a">
-                                            <input type="radio" class="q35a_no" name="q35a_no" id="q35a_no" value="0" v-model="form.pdsquestion.q35a">
+                                            <input type="radio" class="q35a_no" name="q35a_no" id="q35a_no" value="NO" v-model="form.pdsquestion.q35a">
                                             NO
                                         </label>
                                     </div>
@@ -1017,12 +1017,12 @@
 
                                     <div class="col-md-5">
                                         <label for="q35b" style="margin-right: 50%;">
-                                            <input type="radio" class="q35b_yes" name="q35b_yes" id="q35b_yes" value="1" v-model="form.pdsquestion.q35b">
+                                            <input type="radio" class="q35b_yes" name="q35b_yes" id="q35b_yes" value="YES" v-model="form.pdsquestion.q35b">
                                             YES
                                         </label>
 
                                         <label for="q35b">
-                                            <input type="radio" class="q35b_no" name="q35b_no" id="q35b_no" value="0" v-model="form.pdsquestion.q35b">
+                                            <input type="radio" class="q35b_no" name="q35b_no" id="q35b_no" value="NO" v-model="form.pdsquestion.q35b">
                                             NO
                                         </label>
                                     </div>
@@ -1051,12 +1051,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q36a" style="margin-right: 50%;">
-                                            <input type="radio" class="q36a_yes" name="q36a_yes" id="q36a_yes" value="1" v-model="form.pdsquestion.q36a">
+                                            <input type="radio" class="q36a_yes" name="q36a_yes" id="q36a_yes" value="YES" v-model="form.pdsquestion.q36a">
                                             YES
                                         </label>
 
                                         <label for="q36a">
-                                            <input type="radio" class="q36a_no" name="q36a_no" id="q36a_no" value="0" v-model="form.pdsquestion.q36a">
+                                            <input type="radio" class="q36a_no" name="q36a_no" id="q36a_no" value="NO" v-model="form.pdsquestion.q36a">
                                             NO
                                         </label>
                                     </div>
@@ -1081,12 +1081,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q37a" style="margin-right: 50%;">
-                                            <input type="radio" class="q37a_yes" name="q37a_yes" id="q37a_yes" value="1" v-model="form.pdsquestion.q37a">
+                                            <input type="radio" class="q37a_yes" name="q37a_yes" id="q37a_yes" value="YES" v-model="form.pdsquestion.q37a">
                                             YES
                                         </label>
 
                                         <label for="q37a">
-                                            <input type="radio" class="q37a_no" name="q37a_no" id="q37a_no" value="0" v-model="form.pdsquestion.q37a">
+                                            <input type="radio" class="q37a_no" name="q37a_no" id="q37a_no" value="NO" v-model="form.pdsquestion.q37a">
                                             NO
                                         </label>
                                     </div>
@@ -1110,12 +1110,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q38a" style="margin-right: 50%;">
-                                            <input type="radio" class="q38a_yes" name="q38a_yes" id="q38a_yes" value="1" v-model="form.pdsquestion.q38a">
+                                            <input type="radio" class="q38a_yes" name="q38a_yes" id="q38a_yes" value="YES" v-model="form.pdsquestion.q38a">
                                             YES
                                         </label>
 
                                         <label for="q38a">
-                                            <input type="radio" class="q38a_no" name="q38a_no" id="q38a_no" value="0" v-model="form.pdsquestion.q38a">
+                                            <input type="radio" class="q38a_no" name="q38a_no" id="q38a_no" value="NO" v-model="form.pdsquestion.q38a">
                                             NO
                                         </label>
                                     </div>
@@ -1138,12 +1138,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q38b" style="margin-right: 50%;">
-                                            <input type="radio" class="q38b_yes" name="q38b_yes" id="q38b_yes" value="1" v-model="form.pdsquestion.q38b">
+                                            <input type="radio" class="q38b_yes" name="q38b_yes" id="q38b_yes" value="YES" v-model="form.pdsquestion.q38b">
                                             YES
                                         </label>
 
                                         <label for="q38b">
-                                            <input type="radio" class="q38b_no" name="q38b_no" id="q38b_no" value="0" v-model="form.pdsquestion.q38b">
+                                            <input type="radio" class="q38b_no" name="q38b_no" id="q38b_no" value="NO" v-model="form.pdsquestion.q38b">
                                             NO
                                         </label>
                                     </div>
@@ -1167,12 +1167,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q39a" style="margin-right: 50%;">
-                                            <input type="radio" class="q39a_yes" name="q39a_yes" id="q39a_yes" value="1" v-model="form.pdsquestion.q39a">
+                                            <input type="radio" class="q39a_yes" name="q39a_yes" id="q39a_yes" value="YES" v-model="form.pdsquestion.q39a">
                                             YES
                                         </label>
 
                                         <label for="q35a">
-                                            <input type="radio" class="q39a_no" name="q39a_no" id="q39a_no" value="0" v-model="form.pdsquestion.q39a">
+                                            <input type="radio" class="q39a_no" name="q39a_no" id="q39a_no" value="NO" v-model="form.pdsquestion.q39a">
                                             NO
                                         </label>
                                     </div>
@@ -1205,12 +1205,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q40a" style="margin-right: 50%;">
-                                            <input type="radio" class="q40a_yes" name="q40a_yes" id="q40a_yes" value="1" v-model="form.pdsquestion.q40a">
+                                            <input type="radio" class="q40a_yes" name="q40a_yes" id="q40a_yes" value="YES" v-model="form.pdsquestion.q40a">
                                             YES
                                         </label>
 
                                         <label for="q40a">
-                                            <input type="radio" class="q40a_no" name="q40a_no" id="q40a_no" value="0" v-model="form.pdsquestion.q40a">
+                                            <input type="radio" class="q40a_no" name="q40a_no" id="q40a_no" value="NO" v-model="form.pdsquestion.q40a">
                                             NO
                                         </label>
                                     </div>
@@ -1232,12 +1232,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q40b" style="margin-right: 50%;">
-                                            <input type="radio" class="q40b_yes" name="q40b_yes" id="q40b_yes" value="1" v-model="form.pdsquestion.q40b">
+                                            <input type="radio" class="q40b_yes" name="q40b_yes" id="q40b_yes" value="YES" v-model="form.pdsquestion.q40b">
                                             YES
                                         </label>
 
                                         <label for="q40b">
-                                            <input type="radio" class="q40b_no" name="q40b_no" id="q40b_no" value="0" v-model="form.pdsquestion.q40b">
+                                            <input type="radio" class="q40b_no" name="q40b_no" id="q40b_no" value="NO" v-model="form.pdsquestion.q40b">
                                             NO
                                         </label>
                                     </div>
@@ -1259,12 +1259,12 @@
                                     </div>
                                     <div class="col-md-5">
                                         <label for="q40c" style="margin-right: 50%;">
-                                            <input type="radio" class="q40c_yes" name="q40c_yes" id="q40c_yes" value="1" v-model="form.pdsquestion.q40c">
+                                            <input type="radio" class="q40c_yes" name="q40c_yes" id="q40c_yes" value="YES" v-model="form.pdsquestion.q40c">
                                             YES
                                         </label>
 
                                         <label for="q40c">
-                                            <input type="radio" class="q40c_no" name="q40c_no" id="q40c_no" value="0" v-model="form.pdsquestion.q40c">
+                                            <input type="radio" class="q40c_no" name="q40c_no" id="q40c_no" value="NO" v-model="form.pdsquestion.q40c">
                                             NO
                                         </label>
                                     </div>

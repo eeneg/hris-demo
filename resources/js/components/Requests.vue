@@ -130,7 +130,7 @@
 
         <!-- modal -->
         <div class="modal fade" id="pendingRequestsModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header kuz-header">
                     <h5 class="modal-title" id="modal-grade">View Request</h5>
@@ -203,7 +203,7 @@
 
          <!-- modal -->
         <div class="modal fade" id="reviewedModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header kuz-header">
                     <h5 class="modal-title" id="modal-grade">Reviewed</h5>
@@ -260,7 +260,7 @@
 
          <!-- modal -->
         <div class="modal fade" id="validatedRequestModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                 <div class="modal-header kuz-header">
                     <h5 class="modal-title" id="modal-grade">Reviewed</h5>
@@ -360,9 +360,12 @@
         }, 400),
         viewPending: function(index)
         {
-            this.edits = this.pendingRequest.data[index]['employee_edits'].filter(e => {
+
+            let edits = this.pendingRequest.data[index]['employee_edits'].filter(e => {
                 return e.status == 'PENDING'
             })
+
+            this.changeData(edits, 1)
 
             this.acceptedRequest = {accept: [], deny: []}
             $('#pendingRequestsModal').modal('show')
@@ -371,9 +374,11 @@
         },
         viewReviewed: function(index)
         {
-            this.reviewed = this.pendingRequest.data[index]['employee_edits'].filter(e => {
+            let edits = this.pendingRequest.data[index]['employee_edits'].filter(e => {
                 return e.status != 'PENDING'
             })
+
+            this.changeData(edits, 2)
 
             this.acceptedRequest = {accept: [], deny: []}
             this.revert = []
@@ -384,7 +389,9 @@
         },
         viewValidatedRequestRequest: function(index)
         {
-            this.validatedRequest = this.reviwedRequest.data[index]['employee_edits']
+            let edits = this.reviwedRequest.data[index]['employee_edits']
+
+            this.changeData(edits, 3)
 
             this.acceptedRequest = {accept: [], deny: []}
             this.revert = []
@@ -633,6 +640,212 @@
                 )
             })
         },
+
+        changeData: function(edits, mode)
+        {
+            let personalinformation = {
+                'surname':          'Surname',
+                'firstname':        'First name',
+                'middlename':       'Middle Name',
+                'nameextension':    'Name Extension',
+                'birthdate':        'Birthdate',
+                'birthplace':       'Birthplace',
+                'sex':              'Sex',
+                'civilstatus':      'Civil Status',
+                'citizenship':      'Citizenship',
+                'height':           'Height',
+                'weight':           'Weight',
+                'bloodtype':        'Blood Type',
+                'gsis':             'GSIS',
+                'pagibig':          'Pag-IBIG',
+                'philhealth':       'PhilHealth',
+                'sss':              'SSS',
+                'residentialaddress': 'Residential Address',
+                'zipcode1':         'Zipcode 1',
+                'telephone1':       'Telephone 1',
+                'permanentaddress': 'Permanent Address',
+                'zipcode2':         'Zipcode 2',
+                'telephone2':       'Telephone 2',
+                'email':            'Email',
+                'cellphone':        'Cellphone',
+                'agencynumber':     'Agency Number',
+                'tin':              'TIN',
+                'picture':          'Picture',
+                'status':           'Status',
+            }
+
+            let educationalbackground = {
+                'elemSchoolName'        : 'Elementary School Name',
+                'secSchoolName'         : 'Secondary  School Name',
+                'vocSchoolName'         : 'Vocational  School Name',
+                'collSchoolName1'       : 'College 1 School Name',
+                'collSchoolName2'       : 'College 2 School Name',
+                'gradSchoolName'        : 'Graduate  School Name',
+                'elemDegree'            : 'Elementary Basic Educ./Degree/Course',
+                'secDegree'             : 'Secondary Basic Educ./Degree/Course',
+                'vocDegree'             : 'Vocational Basic Educ./Degree/Course',
+                'collDegree1'           : 'College 1 Basic Educ./Degree/Course',
+                'collDegree2'           : 'College 2 Basic Educ./Degree/Course',
+                'gradDegree'            : 'Graduate Basic Educ./Degree/Course',
+                'elemYear'              : 'Elementary Year Graduated',
+                'secYear'               : 'Secondary Year Graduated',
+                'vocYear'               : 'Vocational Year Graduated',
+                'collYear1'             : 'College 1 Year Graduated',
+                'collYear2'             : 'College 2 Year Graduated',
+                'gradYear'              : 'Graduate Year Graduated',
+                'elemHighestLevel'      : 'Elementary Highest Level/Units Earned',
+                'secHighestLevel'       : 'Secondary Highest Level/Units Earned',
+                'vocHighestLevel'       : 'Vocational Highest Level/Units Earned',
+                'collHighestLevel1'     : 'College 1 Highest Level/Units Earned',
+                'collHighestLevel2'     : 'College 2 Highest Level/Units Earned',
+                'gradHighestLevel'      : 'Graduate Highest Level/Units Earned',
+                'elemFrom'              : 'Elementary Attendance From',
+                'elemTo'                : 'Elementary Attendance To',
+                'secFrom'               : 'Secondary Attendance From',
+                'secTo'                 : 'Secondary Attendance To',
+                'vocFrom'               : 'Vocational Attendance From',
+                'vocTo'                 : 'Vocational Attendance To',
+                'collFrom1'             : 'College 1 Attendance From',
+                'collFrom2'             : 'College 2 Attendance From',
+                'collTo1'               : 'College 1 Attendance To',
+                'collTo2'               : 'College 2 Attendance To',
+                'gradFrom'              : 'Graduate Attendance From',
+                'gradTo'                : 'Graduate Attendance To',
+                'elemSOA'               : 'Elementary Scholarship/Academic Honors Recevied',
+                'secSOA'                : 'Secondary Scholarship/Academic Honors Recevied',
+                'vocSOA'                : 'Vocational Scholarship/Academic Honors Recevied',
+                'collSOA1'              : 'College Scholarship/Academic Honors Recevied',
+                'collSOA2'              : 'College Scholarship/Academic Honors Recevied',
+                'gradSOA'               : 'Graduate Scholarship/Academic Honors Recevied',
+            }
+
+            let pdsquestion = {
+                'refname1'          : 'Reference Name 1',
+                'refaddress1'       : 'Reference Address 1',
+                'reftelephone1'     : 'Reference Telephone 1',
+                'refname2'          : 'Reference Name 2',
+                'refaddress2'       : 'Reference Address 2',
+                'reftelephone2'     : 'Reference Telephone 2',
+                'refname3'          : 'Reference Name 3',
+                'refaddress3'       : 'Reference Address 3',
+                'reftelephone3'     : 'Reference Telephone 3',
+                'govid'             : 'Government ID',
+                'idnumber'          : 'ID Number',
+                'dateissued'        : 'Date Issued',
+            }
+
+            edits.forEach(e => {
+                if(e.model == "personalinformation")
+                {
+                    e.model = 'Personal Information'
+
+                    for(var data in personalinformation)
+                    {
+                        if(data == e.field)
+                        {
+                            e.field = personalinformation[data]
+                        }
+                    }
+                }
+
+                if(e.model == "familybackground")
+                {
+                    e.model = 'Family Background'
+
+                    let s = e.field.replace(/([A-Z])/g, ' $1').trim()
+
+                    e.field = s.charAt(0).toUpperCase() + s.slice(1)
+                }
+
+                if(e.model == "children")
+                {
+                    e.model = 'Children'
+
+                    e.field = e.field.charAt(0).toUpperCase() + e.field.slice(1)
+                }
+
+                if(e.model == "educationalbackground")
+                {
+                    e.model = 'Educational Background'
+
+                    for(var data in educationalbackground)
+                    {
+                        if(data == e.field)
+                        {
+                            e.field = educationalbackground[data]
+                        }
+                    }
+                }
+
+                if(e.model == "eligibilities")
+                {
+                    e.model = 'Eligibilities'
+
+                    let s = e.field.replace(/([A-Z])/g, ' $1').trim()
+
+                    e.field = s.charAt(0).toUpperCase() + s.slice(1)
+                }
+
+                if(e.model == "otherinfos")
+                {
+                    e.model = 'Other Information'
+
+                    let s = e.field.replace(/([A-Z])/g, ' $1').trim()
+
+                    e.field = s.charAt(0).toUpperCase() + s.slice(1)
+                }
+
+                if(e.model == "workexperiences")
+                {
+                    e.model = 'Work Experiences'
+
+                    let s = e.field.replace(/([A-Z])/g, ' $1').trim()
+
+                    e.field = s.charAt(0).toUpperCase() + s.slice(1)
+                }
+
+                if(e.model == "voluntaryworks")
+                {
+                    e.model = 'Voluntary Works'
+
+                    let s = e.field.replace(/([A-Z])/g, ' $1').trim()
+
+                    e.field = s.charAt(0).toUpperCase() + s.slice(1)
+                }
+
+                if(e.model == "trainingprograms")
+                {
+                    e.model = 'Training Programs'
+
+                    let s = e.field.replace(/([A-Z])/g, ' $1').trim()
+
+                    e.field = s.charAt(0).toUpperCase() + s.slice(1)
+                }
+
+                if(e.model == "pdsquestion")
+                {
+                    e.model = 'Last Page'
+
+                    for(var data in pdsquestion)
+                    {
+                        if(data == e.field)
+                        {
+                            e.field = pdsquestion[data]
+                        }
+                    }
+                }
+            })
+
+            if(mode == 1)
+            {
+                this.edits = edits
+            }else if(mode == 2){
+                this.reviewed = edits
+            }else if(mode == 3){
+                this.validatedRequest = edits
+            }
+
+        }
 
 
     },
