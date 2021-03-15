@@ -245,7 +245,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" v-model="revert" v-bind:value="data">
+                                                        <input class="form-check-input" type="checkbox" v-model="revert" v-bind:value="data.id">
                                                     </div>
                                                 </td>
                                             </tr>
@@ -302,7 +302,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" v-model="revert" v-bind:value="data">
+                                                        <input class="form-check-input" type="checkbox" v-model="revert" v-bind:value="data.id">
                                                     </div>
                                                 </td>
                                             </tr>
@@ -333,7 +333,140 @@
             validatedRequest: {},
             editIndex: '',
             revert: [],
-            personal_information_id: ''
+            personal_information_id: '',
+            personalinformation: {
+                'surname':          'Surname',
+                'firstname':        'First name',
+                'middlename':       'Middle Name',
+                'nameextension':    'Name Extension',
+                'birthdate':        'Birthdate',
+                'birthplace':       'Birthplace',
+                'sex':              'Sex',
+                'civilstatus':      'Civil Status',
+                'citizenship':      'Citizenship',
+                'height':           'Height',
+                'weight':           'Weight',
+                'bloodtype':        'Blood Type',
+                'gsis':             'GSIS',
+                'pagibig':          'Pag-IBIG',
+                'philhealth':       'PhilHealth',
+                'sss':              'SSS',
+                'residentialaddress': 'Residential Address',
+                'zipcode1':         'Zipcode 1',
+                'telephone1':       'Telephone 1',
+                'permanentaddress': 'Permanent Address',
+                'zipcode2':         'Zipcode 2',
+                'telephone2':       'Telephone 2',
+                'email':            'Email',
+                'cellphone':        'Cellphone',
+                'agencynumber':     'Agency Number',
+                'tin':              'TIN',
+                'picture':          'Picture',
+                'status':           'Status',
+            },
+            educationalbackground: {
+                'elemSchoolName'        : 'Elementary School Name',
+                'secSchoolName'         : 'Secondary  School Name',
+                'vocSchoolName'         : 'Vocational  School Name',
+                'collSchoolName1'       : 'College 1 School Name',
+                'collSchoolName2'       : 'College 2 School Name',
+                'gradSchoolName'        : 'Graduate  School Name',
+                'elemDegree'            : 'Elementary Basic Educ./Degree/Course',
+                'secDegree'             : 'Secondary Basic Educ./Degree/Course',
+                'vocDegree'             : 'Vocational Basic Educ./Degree/Course',
+                'collDegree1'           : 'College 1 Basic Educ./Degree/Course',
+                'collDegree2'           : 'College 2 Basic Educ./Degree/Course',
+                'gradDegree'            : 'Graduate Basic Educ./Degree/Course',
+                'elemYear'              : 'Elementary Year Graduated',
+                'secYear'               : 'Secondary Year Graduated',
+                'vocYear'               : 'Vocational Year Graduated',
+                'collYear1'             : 'College 1 Year Graduated',
+                'collYear2'             : 'College 2 Year Graduated',
+                'gradYear'              : 'Graduate Year Graduated',
+                'elemHighestLevel'      : 'Elementary Highest Level/Units Earned',
+                'secHighestLevel'       : 'Secondary Highest Level/Units Earned',
+                'vocHighestLevel'       : 'Vocational Highest Level/Units Earned',
+                'collHighestLevel1'     : 'College 1 Highest Level/Units Earned',
+                'collHighestLevel2'     : 'College 2 Highest Level/Units Earned',
+                'gradHighestLevel'      : 'Graduate Highest Level/Units Earned',
+                'elemFrom'              : 'Elementary Attendance From',
+                'elemTo'                : 'Elementary Attendance To',
+                'secFrom'               : 'Secondary Attendance From',
+                'secTo'                 : 'Secondary Attendance To',
+                'vocFrom'               : 'Vocational Attendance From',
+                'vocTo'                 : 'Vocational Attendance To',
+                'collFrom1'             : 'College 1 Attendance From',
+                'collFrom2'             : 'College 2 Attendance From',
+                'collTo1'               : 'College 1 Attendance To',
+                'collTo2'               : 'College 2 Attendance To',
+                'gradFrom'              : 'Graduate Attendance From',
+                'gradTo'                : 'Graduate Attendance To',
+                'elemSOA'               : 'Elementary Scholarship/Academic Honors Recevied',
+                'secSOA'                : 'Secondary Scholarship/Academic Honors Recevied',
+                'vocSOA'                : 'Vocational Scholarship/Academic Honors Recevied',
+                'collSOA1'              : 'College Scholarship/Academic Honors Recevied',
+                'collSOA2'              : 'College Scholarship/Academic Honors Recevied',
+                'gradSOA'               : 'Graduate Scholarship/Academic Honors Recevied',
+            },
+            educationalbackground: {
+                'elemSchoolName'        : 'Elementary School Name',
+                'secSchoolName'         : 'Secondary  School Name',
+                'vocSchoolName'         : 'Vocational  School Name',
+                'collSchoolName1'       : 'College 1 School Name',
+                'collSchoolName2'       : 'College 2 School Name',
+                'gradSchoolName'        : 'Graduate  School Name',
+                'elemDegree'            : 'Elementary Basic Educ./Degree/Course',
+                'secDegree'             : 'Secondary Basic Educ./Degree/Course',
+                'vocDegree'             : 'Vocational Basic Educ./Degree/Course',
+                'collDegree1'           : 'College 1 Basic Educ./Degree/Course',
+                'collDegree2'           : 'College 2 Basic Educ./Degree/Course',
+                'gradDegree'            : 'Graduate Basic Educ./Degree/Course',
+                'elemYear'              : 'Elementary Year Graduated',
+                'secYear'               : 'Secondary Year Graduated',
+                'vocYear'               : 'Vocational Year Graduated',
+                'collYear1'             : 'College 1 Year Graduated',
+                'collYear2'             : 'College 2 Year Graduated',
+                'gradYear'              : 'Graduate Year Graduated',
+                'elemHighestLevel'      : 'Elementary Highest Level/Units Earned',
+                'secHighestLevel'       : 'Secondary Highest Level/Units Earned',
+                'vocHighestLevel'       : 'Vocational Highest Level/Units Earned',
+                'collHighestLevel1'     : 'College 1 Highest Level/Units Earned',
+                'collHighestLevel2'     : 'College 2 Highest Level/Units Earned',
+                'gradHighestLevel'      : 'Graduate Highest Level/Units Earned',
+                'elemFrom'              : 'Elementary Attendance From',
+                'elemTo'                : 'Elementary Attendance To',
+                'secFrom'               : 'Secondary Attendance From',
+                'secTo'                 : 'Secondary Attendance To',
+                'vocFrom'               : 'Vocational Attendance From',
+                'vocTo'                 : 'Vocational Attendance To',
+                'collFrom1'             : 'College 1 Attendance From',
+                'collFrom2'             : 'College 2 Attendance From',
+                'collTo1'               : 'College 1 Attendance To',
+                'collTo2'               : 'College 2 Attendance To',
+                'gradFrom'              : 'Graduate Attendance From',
+                'gradTo'                : 'Graduate Attendance To',
+                'elemSOA'               : 'Elementary Scholarship/Academic Honors Recevied',
+                'secSOA'                : 'Secondary Scholarship/Academic Honors Recevied',
+                'vocSOA'                : 'Vocational Scholarship/Academic Honors Recevied',
+                'collSOA1'              : 'College Scholarship/Academic Honors Recevied',
+                'collSOA2'              : 'College Scholarship/Academic Honors Recevied',
+                'gradSOA'               : 'Graduate Scholarship/Academic Honors Recevied',
+            },
+
+            pdsquestion: {
+                'refname1'          : 'Reference Name 1',
+                'refaddress1'       : 'Reference Address 1',
+                'reftelephone1'     : 'Reference Telephone 1',
+                'refname2'          : 'Reference Name 2',
+                'refaddress2'       : 'Reference Address 2',
+                'reftelephone2'     : 'Reference Telephone 2',
+                'refname3'          : 'Reference Name 3',
+                'refaddress3'       : 'Reference Address 3',
+                'reftelephone3'     : 'Reference Telephone 3',
+                'govid'             : 'Government ID',
+                'idnumber'          : 'ID Number',
+                'dateissued'        : 'Date Issued',
+            }
         }
     },
     beforeRouteEnter (to, from, next) {
@@ -566,14 +699,14 @@
                 case 1:
                     this.revert = []
                     this.reviewed.forEach(e => {
-                        this.revert.push(e)
+                        this.revert.push(e.id)
                     })
                     this.personal_information_id = this.pendingRequest.data[this.editIndex]['personal_information_id']
                     break
                 case 2:
                     this.revert = []
                     this.validatedRequest.forEach(e => {
-                        this.revert.push(e)
+                        this.revert.push(e.id)
                     })
                     this.personal_information_id = this.reviwedRequest.data[this.editIndex]['personal_information_id']
                     break
@@ -643,107 +776,16 @@
 
         changeData: function(edits, mode)
         {
-            let personalinformation = {
-                'surname':          'Surname',
-                'firstname':        'First name',
-                'middlename':       'Middle Name',
-                'nameextension':    'Name Extension',
-                'birthdate':        'Birthdate',
-                'birthplace':       'Birthplace',
-                'sex':              'Sex',
-                'civilstatus':      'Civil Status',
-                'citizenship':      'Citizenship',
-                'height':           'Height',
-                'weight':           'Weight',
-                'bloodtype':        'Blood Type',
-                'gsis':             'GSIS',
-                'pagibig':          'Pag-IBIG',
-                'philhealth':       'PhilHealth',
-                'sss':              'SSS',
-                'residentialaddress': 'Residential Address',
-                'zipcode1':         'Zipcode 1',
-                'telephone1':       'Telephone 1',
-                'permanentaddress': 'Permanent Address',
-                'zipcode2':         'Zipcode 2',
-                'telephone2':       'Telephone 2',
-                'email':            'Email',
-                'cellphone':        'Cellphone',
-                'agencynumber':     'Agency Number',
-                'tin':              'TIN',
-                'picture':          'Picture',
-                'status':           'Status',
-            }
-
-            let educationalbackground = {
-                'elemSchoolName'        : 'Elementary School Name',
-                'secSchoolName'         : 'Secondary  School Name',
-                'vocSchoolName'         : 'Vocational  School Name',
-                'collSchoolName1'       : 'College 1 School Name',
-                'collSchoolName2'       : 'College 2 School Name',
-                'gradSchoolName'        : 'Graduate  School Name',
-                'elemDegree'            : 'Elementary Basic Educ./Degree/Course',
-                'secDegree'             : 'Secondary Basic Educ./Degree/Course',
-                'vocDegree'             : 'Vocational Basic Educ./Degree/Course',
-                'collDegree1'           : 'College 1 Basic Educ./Degree/Course',
-                'collDegree2'           : 'College 2 Basic Educ./Degree/Course',
-                'gradDegree'            : 'Graduate Basic Educ./Degree/Course',
-                'elemYear'              : 'Elementary Year Graduated',
-                'secYear'               : 'Secondary Year Graduated',
-                'vocYear'               : 'Vocational Year Graduated',
-                'collYear1'             : 'College 1 Year Graduated',
-                'collYear2'             : 'College 2 Year Graduated',
-                'gradYear'              : 'Graduate Year Graduated',
-                'elemHighestLevel'      : 'Elementary Highest Level/Units Earned',
-                'secHighestLevel'       : 'Secondary Highest Level/Units Earned',
-                'vocHighestLevel'       : 'Vocational Highest Level/Units Earned',
-                'collHighestLevel1'     : 'College 1 Highest Level/Units Earned',
-                'collHighestLevel2'     : 'College 2 Highest Level/Units Earned',
-                'gradHighestLevel'      : 'Graduate Highest Level/Units Earned',
-                'elemFrom'              : 'Elementary Attendance From',
-                'elemTo'                : 'Elementary Attendance To',
-                'secFrom'               : 'Secondary Attendance From',
-                'secTo'                 : 'Secondary Attendance To',
-                'vocFrom'               : 'Vocational Attendance From',
-                'vocTo'                 : 'Vocational Attendance To',
-                'collFrom1'             : 'College 1 Attendance From',
-                'collFrom2'             : 'College 2 Attendance From',
-                'collTo1'               : 'College 1 Attendance To',
-                'collTo2'               : 'College 2 Attendance To',
-                'gradFrom'              : 'Graduate Attendance From',
-                'gradTo'                : 'Graduate Attendance To',
-                'elemSOA'               : 'Elementary Scholarship/Academic Honors Recevied',
-                'secSOA'                : 'Secondary Scholarship/Academic Honors Recevied',
-                'vocSOA'                : 'Vocational Scholarship/Academic Honors Recevied',
-                'collSOA1'              : 'College Scholarship/Academic Honors Recevied',
-                'collSOA2'              : 'College Scholarship/Academic Honors Recevied',
-                'gradSOA'               : 'Graduate Scholarship/Academic Honors Recevied',
-            }
-
-            let pdsquestion = {
-                'refname1'          : 'Reference Name 1',
-                'refaddress1'       : 'Reference Address 1',
-                'reftelephone1'     : 'Reference Telephone 1',
-                'refname2'          : 'Reference Name 2',
-                'refaddress2'       : 'Reference Address 2',
-                'reftelephone2'     : 'Reference Telephone 2',
-                'refname3'          : 'Reference Name 3',
-                'refaddress3'       : 'Reference Address 3',
-                'reftelephone3'     : 'Reference Telephone 3',
-                'govid'             : 'Government ID',
-                'idnumber'          : 'ID Number',
-                'dateissued'        : 'Date Issued',
-            }
-
             edits.forEach(e => {
                 if(e.model == "personalinformation")
                 {
                     e.model = 'Personal Information'
 
-                    for(var data in personalinformation)
+                    for(var data in this.personalinformation)
                     {
                         if(data == e.field)
                         {
-                            e.field = personalinformation[data]
+                            e.field = this.personalinformation[data]
                         }
                     }
                 }
@@ -768,11 +810,11 @@
                 {
                     e.model = 'Educational Background'
 
-                    for(var data in educationalbackground)
+                    for(var data in this.educationalbackground)
                     {
                         if(data == e.field)
                         {
-                            e.field = educationalbackground[data]
+                            e.field = this.educationalbackground[data]
                         }
                     }
                 }
@@ -826,11 +868,11 @@
                 {
                     e.model = 'Last Page'
 
-                    for(var data in pdsquestion)
+                    for(var data in this.pdsquestion)
                     {
                         if(data == e.field)
                         {
-                            e.field = pdsquestion[data]
+                            e.field = this.pdsquestion[data]
                         }
                     }
                 }

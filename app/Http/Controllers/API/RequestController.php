@@ -151,31 +151,58 @@ class RequestController extends Controller
 
         $employee = PersonalInformation::find($request->id);
 
+        $obj = array(
+            'children' => [],
+            'eligibilities' => [],
+            'workexperiences' => [],
+            'voluntaryworks' => [],
+            'trainingprograms' => [],
+            'otherinfos' => [],
+        );
+
+        $edit_id = [];
+
         foreach($edits as $data)
         {
-            if($data['status'] == 'APPROVED' && $data['model'] == 'personalinformation')
+
+            $record = EmployeePDSEdit::find($data);
+
+            if($record['status'] == 'APPROVED' && $record['model'] == 'personalinformation')
             {
-                $employee->update([$data['field'] => $data['oldValue']]);
-                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
-            }else if(($data['status'] == 'APPROVED') && $data['model'] == 'familybackground' || $data['model'] == 'educationalbackground' || $data['model'] == 'pdsquestion'){
-                $model = $data['model'];
-                $employee->$model()->updateOrCreate(['personal_information_id' => $employee->id], [$data['field'] => $data['oldValue']]);
-                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
+                $employee->update([$record['field'] => $record['oldValue']]);
+                $record->update(['status' => 'PENDING']);
             }
-            else if(($data['status'] == 'APPROVED')){
-                $model = $data['model'];
-                $employee->$model()->updateOrCreate(['id' => $data['model_id']], [$data['field'] => $data['oldValue']]);
-                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
-            }else if(($data['status'] == 'DENIED')){
-                EmployeePDSEdit::find($data['id'])->update(['status' => 'PENDING']);
+            else if(($record['status'] == 'APPROVED') && $record['model'] == 'familybackground' || $record['model'] == 'educationalbackground' || $record['model'] == 'pdsquestion'){
+                $model = $record['model'];
+                $employee->$model()->updateOrCreate(['personal_information_id' => $employee->id], [$record['field'] => $record['oldValue']]);
+                $record->update(['status' => 'PENDING']);
+            }
+            else if(($record['status'] == 'APPROVED')){
+                $model = $record['model'];
+                $obj[$model][$record['model_id']][$record['field']] =  $record['oldValue'];
+                array_push($edit_id, $data);
+            }
+            else if(($record['status'] == 'DENIED')){
+                    $record->update(['status' => 'PENDING']);
             }
         }
 
-        $req = EmployeePDSEdit::where('employee_edit_request_id', $edits[0]['employee_edit_request_id'])->where('status', 'PENDING')->get();
-
-        if(count($req) > 0)
+        foreach($obj as $model => $record)
         {
-            EmployeePDSEditRequest::find($edits[0]['employee_edit_request_id'])->update(['status' => 'PENDING']);
+            if(count($record) > 0)
+            {
+                foreach($record as $key => $data)
+                {
+                    $record = $employee->$model()->updateOrCreate(['id' => $key], $data);
+                }
+            }
+        }
+
+
+        if(count($edit_id) > 0)
+        {
+            EmployeePDSEdit::whereIn('id', $edit_id)->update(['status' => 'PENDING']);
+            $employee->employeeEditRequests()->update(['status' => 'PENDING']);
         }
 
         $this->deleteEmptyRecords($request->id);
@@ -208,7 +235,7 @@ class RequestController extends Controller
                 {
                     if(isset($value))
                     {
-                        $record = collect($value)->except(['id', 'personal_information_id', 'created_at', 'updated_at'])->toArray();
+                        $record = collect($value)->except(['id', 'personal_information_id', 'created_at', 'updated_at', 'orderNo'])->toArray();
                     }
 
                     if($record && count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
