@@ -202,8 +202,9 @@ class RequestController extends Controller
         if(count($edit_id) > 0)
         {
             EmployeePDSEdit::whereIn('id', $edit_id)->update(['status' => 'PENDING']);
-            $employee->employeeEditRequests()->update(['status' => 'PENDING']);
         }
+
+        $employee->employeeEditRequests()->update(['status' => 'PENDING']);
 
         $this->deleteEmptyRecords($request->id);
     }

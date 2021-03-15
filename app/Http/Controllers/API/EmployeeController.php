@@ -55,12 +55,12 @@ class EmployeeController extends Controller
 
             foreach ($request->except('id') as $key => $value) {
                 $editRequest->employeeEdits()->create([
-                    'model_id'  => isset($value['model_id']) ? $value['model_id'] : '',
-                    'model'     => isset($value['model']) ? $value['model'] : '',
-                    'field'     => isset($value['field']) ? $value['field'] : '',
-                    'oldValue'  => isset($value['oldValue']) ? $value['oldValue'] : '',
-                    'newValue'  => isset($value['newValue']) ? $value['newValue'] : '',
-                    'status'    => isset($value['status']) ? $value['status'] : '',
+                    'model_id'  => isset($value['model_id']) ? $value['model_id'] : null,
+                    'model'     => isset($value['model']) ? $value['model'] : null,
+                    'field'     => isset($value['field']) ? $value['field'] : null,
+                    'oldValue'  => isset($value['oldValue']) ? $value['oldValue'] : null,
+                    'newValue'  => isset($value['newValue']) ? $value['newValue'] : null,
+                    'status'    => isset($value['status']) ? $value['status'] : null,
                 ]);
             }
         }else{
