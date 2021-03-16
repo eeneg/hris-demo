@@ -147,7 +147,7 @@ class RequestController extends Controller
     public function revertRequest(Request $request)
     {
 
-        $edits = $request->except('id');
+        $edits = $request->except(['id', 'requestID']);
 
         $employee = PersonalInformation::find($request->id);
 
@@ -204,7 +204,11 @@ class RequestController extends Controller
             EmployeePDSEdit::whereIn('id', $edit_id)->update(['status' => 'PENDING']);
         }
 
-        $employee->employeeEditRequests()->update(['status' => 'PENDING']);
+        if(isset($edits[0]))
+        {
+            EmployeePDSEditRequest::find($request->requestID)->update(['status' => 'PENDING']);
+        }
+
 
         $this->deleteEmptyRecords($request->id);
     }

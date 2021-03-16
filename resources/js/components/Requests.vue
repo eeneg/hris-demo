@@ -334,6 +334,7 @@
             editIndex: '',
             revert: [],
             personal_information_id: '',
+            requestID: '',
             personalinformation: {
                 'surname':          'Surname',
                 'firstname':        'First name',
@@ -501,6 +502,7 @@
             this.changeData(edits, 1)
 
             this.acceptedRequest = {accept: [], deny: []}
+            this.requestID = this.pendingRequest.data[index].id
             $('#pendingRequestsModal').modal('show')
 
             this.editIndex = index
@@ -516,6 +518,7 @@
             this.acceptedRequest = {accept: [], deny: []}
             this.revert = []
             this.editIndex = index
+            this.requestID = this.pendingRequest.data[index].id
             this.personal_information_id = this.pendingRequest.data[this.editIndex]['personal_information_id']
             $('#reviewedModal').modal('show')
 
@@ -529,6 +532,7 @@
             this.acceptedRequest = {accept: [], deny: []}
             this.revert = []
             this.editIndex = index
+            this.requestID = this.reviwedRequest.data[index].id
             this.personal_information_id = this.reviwedRequest.data[this.editIndex]['personal_information_id']
             $('#validatedRequestModal').modal('show')
         },
@@ -732,7 +736,7 @@
                     }else{
                         this.$Progress.start()
 
-                        axios.post('api/revertRequest?id='+ this.personal_information_id, this.revert)
+                        axios.post('api/revertRequest?id='+ this.personal_information_id + '&requestID=' + this.requestID, this.revert)
                         .then(response => {
                             toast.fire({
                                 icon: 'success',
