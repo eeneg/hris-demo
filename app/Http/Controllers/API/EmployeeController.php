@@ -143,7 +143,7 @@ class EmployeeController extends Controller
     {
         $editRequest = EmployeePDSEditRequest::find($id);
 
-        if(count($editRequest->employeeEdits) == 0)
+        if(count($editRequest->employeeEdits->where('status', '!=' ,'PENDING')) == 0)
         {
             $editRequest->delete();
         }else{

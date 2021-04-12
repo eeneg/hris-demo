@@ -8,12 +8,12 @@
                     <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
                 </div>
 
-                <form autocomplete="off" @submit.prevent="submitForm()">
+                <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-4" style="position: relative;margin-bottom: 0.3rem;">
                             <label style="margin: 0;">Applicant</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="personalinformations" label="name" 
+                            <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="personalinformations" label="name"
                             :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
                             <has-error :form="form" field="personal_information_id"></has-error>
                         </div>
@@ -26,13 +26,13 @@
                     <div class="row">
                         <div class="form-group col-4">
                             <label style="margin: 0;">Type of leave</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.leave_type_id" :options="leavetypes" label="title" 
+                            <v-select class="form-control form-control-border border-width-2" v-model="form.leave_type_id" :options="leavetypes" label="title"
                             :reduce="leavetypes => leavetypes.id" :class="{ 'is-invalid': form.errors.has('leave_type_id') }"></v-select>
                             <has-error :form="form" field="leave_type_id"></has-error>
                         </div>
                         <div class="form-group col-4">
                             <label for="working_days" style="margin: 0;">Number of working days applied</label>
-                            <input v-model="form.working_days" id="working_days" class="form-control form-control-border border-width-2" type="text" 
+                            <input v-model="form.working_days" id="working_days" class="form-control form-control-border border-width-2" type="text"
                             name="working_days" placeholder="Number of working days" required>
                         </div>
                     </div>
@@ -124,6 +124,29 @@
                             <date-picker v-model="form.credit_as_of" id="credit_as_of" :config="options" class="form-control form-control-border border-width-2"></date-picker>
                         </div>
                     </div>
+                    <h5 class="green mt-3">Recommendation</h5>
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <div class="custom-control custom-radio">
+                                <input v-model="form.recommendation_status" value="APPROVED" class="custom-control-input" type="radio" id="recommendation_status_approved" name="recommendation_status">
+                                <label for="recommendation_status_approved" class="custom-control-label">Approved</label>
+                                <input v-model="form.recommendation_remark_approved" ref="recommendation_status_approved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'APPROVED'">
+                            </div>
+                        </div>
+                        <div class="form-group col-3">
+                            <div class="custom-control custom-radio">
+                                <input v-model="form.recommendation_status" class="custom-control-input" value="DISAPPROVED" type="radio" id="recommendation_status_disapproved" name="recommendation_status">
+                                <label for="recommendation_status_disapproved" class="custom-control-label">Dissaproved due to</label>
+                                <input v-model="form.recommendation_remark_disapproved" ref="recommendation_status_disapproved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'DISAPPROVED'">
+                            </div>
+                        </div>
+                        <div class="form-group col-6" style="position: relative;margin-bottom: 0.3rem;">
+                            <label style="margin: 0;">Administrative Officer IV (HRMO II)</label>
+                            <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" :options="personalinformations" label="name"
+                            :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
+                            <has-error :form="form" field="personal_information_id"></has-error>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
                     <button type="submit" class="btn btn-success" @click="status = 'final'">Finalize</button>
@@ -140,6 +163,7 @@
     export default {
         data() {
             return {
+                mode: null,
                 status: '',
                 personalinformations: [],
                 leavetypes: [],
@@ -148,8 +172,15 @@
                 balance_total: 0.0,
                 curr_vacation_balance: 0.0,
                 curr_sick_balance: 0.0,
+                leave_application_id: '',
                 form: new Form({
                     'personal_information_id': '',
+                    'personal_information_id_7b': '',
+                    'personal_information_id_7c': '',
+                    'personal_information_id_7d': '',
+                    'recommendation_officer_id': '',
+                    'noted_by_id': '',
+                    'governor_id': '',
                     'date_of_filing': moment(new Date()).format('YYYY-MM-DD'),
                     'leave_type_id': '',
                     'working_days': '',
@@ -166,7 +197,11 @@
                     'sick_balance': 0.0,
                     'vacation_less': 0.0,
                     'sick_less': 0.0,
-                    'status': ''
+                    'status': '',
+                    'stage_status': '',
+                    'recommendation_status': '',
+                    'recommendation_remark_approved': '',
+                    'recommendation_remark_disapproved': '',
                 }),
                 options: {
                     format: 'yyyy-MM-DD',
@@ -176,6 +211,26 @@
         },
         components: {
             datePicker
+        },
+         beforeRouteEnter (to, from, next) {
+            if(to.query.id == null)
+            {
+                    next()
+            }
+            else if(to.query.id != null && to.query.mode == 1){
+                axios.get('api/editLeaveApplication?id='+to.query.id)
+                .then(({data}) => {
+                    next(vm => vm.fetchData(data))
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire(
+                        'Oops...',
+                        error.response.data.message,
+                        'error'
+                    )
+                })
+            }
         },
         methods: {
             isNumberKey(evt) {
@@ -198,6 +253,12 @@
             },
             submitForm() {
                 this.$Progress.start();
+                this.form.personal_information_id_7b = this.form.personal_information_id
+                this.form.personal_information_id_7c = this.form.personal_information_id
+                this.form.personal_information_id_7d = this.form.personal_information_id
+                this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
+                                            this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
+
                 if (this.status == 'final') {
                     this.form.status = 'final';
                     this.form.post('api/leaveapplication')
@@ -206,6 +267,35 @@
                                 icon: 'success',
                                 title: 'Success',
                                 text: 'New leave application is created successfully',
+                            })
+                            this.$router.push({ path: '/leave-applications'});
+                            this.$Progress.finish();
+                        })
+                        .catch(error => {
+                            console.log(error.response.data.message);
+                            this.$Progress.fail();
+                        });
+                } else {
+
+                }
+            },
+            submitEdits: function()
+            {
+                this.$Progress.start();
+                this.form.personal_information_id_7b = this.form.personal_information_id
+                this.form.personal_information_id_7c = this.form.personal_information_id
+                this.form.personal_information_id_7d = this.form.personal_information_id
+                this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
+                                            this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
+
+                if (this.status == 'final') {
+                    this.form.status = 'final';
+                    axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
+                        .then(({data}) => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'New leave application is updated successfully',
                             })
                             this.$router.push({ path: '/leave-applications'});
                             this.$Progress.finish();
@@ -234,6 +324,12 @@
                         console.log(error.response.data.message);
                     });
 
+            },
+            fetchData: function(data){
+
+               this.form.fill(data.data[0])
+               this.mode = 1
+               this.leave_application_id = data.data[0].id
             }
         },
         created(){

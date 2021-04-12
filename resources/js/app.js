@@ -76,6 +76,7 @@ const routes = [
     { path: '/employees-pds', component: require('./components/employees/Pds-form.vue').default },
     { path: '/employees-pds-view', component: require('./components/employees/EmployeePDS.vue').default },
     { path: '/employee-pds-edit-requests', component: require('./components/employees/EmployeeEditRequests.vue').default },
+    { path: '/employee-reappointments', component: require('./components/employees/Reappointments.vue').default },
     { path: '/requests', component: require('./components/Requests.vue').default },
     { path: '/reports', component: require('./components/Reports.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },

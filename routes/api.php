@@ -34,7 +34,8 @@ Route::group(['middleware' => ['auth:api']], function() {
         'footnote' => 'API\FootnoteController',
         'leavetype' => 'API\LeaveTypeController',
         'leaveapplication' => 'API\LeaveApplicationController',
-        'request'   => 'API\RequestController'
+        'request'   => 'API\RequestController',
+        'reappointments'   => 'API\ReappointmentController',
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
@@ -65,10 +66,14 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('appointmentemployeelist', 'API\AppointmentController@employees');
 
     Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
+    Route::get('editLeaveApplication', 'API\LeaveApplicationController@edit');
+    Route::get('load_user', 'API\LeaveApplicationController@loadUserRole');
 
     Route::post('acceptEditRequest', 'API\RequestController@acceptEditRequest');
     Route::post('revertRequest', 'API\RequestController@revertRequest');
     Route::get('reviewedRequest', 'API\RequestController@reviewedRequest');
+
+    Route::get('employeeList', 'API\ReappointmentController@employeeList');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function() {

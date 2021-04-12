@@ -18,11 +18,11 @@ class LeaveApplicationResource extends ResourceCollection
             return [
                 'id' => $item->id,
                 'personal_information_id' => $item->personal_information_id,
-                'personalinformation' => [ 
-                    'firstname' => $item->firstname, 
-                    'middlename' => $item->middlename, 
-                    'nameextension' => $item->nameextension, 
-                    'surname' => $item->surname 
+                'personalinformation' => [
+                    'firstname' => $item->firstname,
+                    'middlename' => $item->middlename,
+                    'nameextension' => $item->nameextension,
+                    'surname' => $item->surname
                 ],
                 'leave_type_id' => $item->leave_type_id,
                 'leavetype' => [
@@ -32,6 +32,11 @@ class LeaveApplicationResource extends ResourceCollection
                     'status' => $item->status,
                     'title' => $item->title
                 ],
+                'role' => $item->role,
+                'dept' => $item->dept,
+                'recommendation_officer_id' => $item->recommendation_officer_id,
+                'noted_by_id' => $item->noted_by_id,
+                'governor_id' => $item->governor_id,
                 'date_of_filing' => $item->date_of_filing,
                 'working_days' => $item->working_days,
                 'spent' => $item->spent,
@@ -49,7 +54,11 @@ class LeaveApplicationResource extends ResourceCollection
                 'days_without_pay' => $item->days_without_pay,
                 'others' => $item->others,
                 'disapproved_due_to' => $item->disapproved_due_to,
-                'status' => $item->status
+                'status' => $item->status,
+                'stage_status' => $item->stage_status,
+                'recommendation_status' => $item->recommendation_status,
+                'recommendation_remark_approved' => $item->recommendation_remark_approved,
+                'recommendation_remark_disapproved' => $item->recommendation_remark_disapproved
                 // 'leavetype' => $item->leavetype,
                 // 'order_number' => $item->order_number,
                 // 'working_time' => $item->working_time,

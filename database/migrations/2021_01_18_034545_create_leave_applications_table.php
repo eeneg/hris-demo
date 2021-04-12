@@ -25,6 +25,18 @@ class CreateLeaveApplicationsTable extends Migration
             $table->foreign('personal_information_id_7c')->references('id')->on('personal_informations')->onDelete('cascade');
             $table->uuid('personal_information_id_7d');
             $table->foreign('personal_information_id_7d')->references('id')->on('personal_informations')->onDelete('cascade');
+            $table->uuid('recommendation_officer_id')->nullable();
+            $table->foreign('recommendation_officer_id')
+                    ->references('id')
+                    ->on('personal_informations');
+            $table->uuid('noted_by_id')->nullable();
+            $table->foreign('noted_by_id')
+                ->references('id')
+                ->on('users');
+            $table->uuid('governor_id')->nullable();
+            $table->foreign('governor_id')
+                ->references('id')
+                ->on('users');
             $table->date('date_of_filing');
             $table->string('working_days');
             $table->string('spent', 500)->nullable();
@@ -43,6 +55,10 @@ class CreateLeaveApplicationsTable extends Migration
             $table->string('others')->nullable();
             $table->string('disapproved_due_to', 900)->nullable();
             $table->string('status');
+            $table->string('stage_status', 100)->nullable();
+            $table->string('recommendation_status', 100)->nullable();
+            $table->string('recommendation_remark_approved', 100)->nullable();
+            $table->string('recommendation_remark_disapproved', 100)->nullable();
 
             $table->timestamps();
         });

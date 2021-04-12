@@ -10,7 +10,7 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<title>{{ config('app.name', 'Laravel') }}</title>
-		
+
 		{{-- <script src="https://unpkg.com/pdfobject@2.2.4/pdfobject.min.js"></script> --}}
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/master.css') }}" rel="stylesheet">
@@ -118,6 +118,14 @@
 											<p>PDS Edit Requests</p>
 										</router-link>
 									</li>
+                                   @can('isAdministratorORAuthor')
+                                   <li class="nav-item">
+                                        <router-link to="/employee-reappointments" class="nav-link">
+                                            <i class="nav-icon fas fa-briefcase"></i>
+                                            <p>Reappointments</p>
+                                        </router-link>
+                                    </li>
+                                   @endcan
 								</ul>
                             </li>
                             @endcannot

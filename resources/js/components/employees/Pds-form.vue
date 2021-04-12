@@ -1850,7 +1850,7 @@ export default {
              .catch(error =>{
                 Swal.fire(
                     'Oops...',
-                    error.response.data.message,
+                    'Something went wrong',
                     'error'
                 )
             })

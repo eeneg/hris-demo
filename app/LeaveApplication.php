@@ -13,8 +13,14 @@ class LeaveApplication extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 
+    protected $fillable = [
         'personal_information_id',
+        'personal_information_id_7b',
+        'personal_information_id_7c',
+        'personal_information_id_7d',
+        'recommendation_officer_id',
+        'noted_by_id',
+        'governor_id',
         'leave_type_id',
         'date_of_filing',
         'working_days',
@@ -33,7 +39,11 @@ class LeaveApplication extends Model
         'days_without_pay',
         'others',
         'disapproved_due_to',
-        'status'
+        'status',
+        'stage_status',
+        'recommendation_status',
+        'recommendation_remark_approved',
+        'recommendation_remark_disapproved'
     ];
 
     protected $with = [

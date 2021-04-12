@@ -15,7 +15,7 @@ use App\Plantilla;
 use App\UserAssignment;
 use App\Events\PersonalInfoRegistered;
 use App\Events\PersonalInfoUpdated;
-
+use App\Reappointment;
 
 class PersonalInformationController extends Controller
 {
@@ -55,6 +55,22 @@ class PersonalInformationController extends Controller
                 AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "'
                 AND departments.`id` = '" . $department_id . "'
                 ORDER BY personal_informations.`surname`");
+
+            $reapointments = Reappointment::select('reappointments.*')
+                                ->join('personal_informations', 'reappointments.personal_information_id', 'personal_informations.id')
+                                ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
+                                ->whereNotNull('plantilla_contents.personal_information_id')
+                                ->where('plantilla_contents.plantilla_id', $plantilla->id)
+                                ->where('reappointments.assigned_to', $department_id)
+                                ->select(
+                                    'personal_informations.id as id',
+                                    DB::raw("CONCAT(personal_informations.surname, ', ', personal_informations.firstname, ' ', personal_informations.nameextension, ' ', personal_informations.middlename) as name")
+                                )
+                                ->orderBy('personal_informations.surname', 'ASC')
+                                ->get();
+
+            $allEmployees = array_merge($allEmployees, $reapointments->toarray());
+
         } else {
             $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
                 CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', personal_informations.`nameextension`, ' ', personal_informations.`middlename`) AS `name`
@@ -66,7 +82,7 @@ class PersonalInformationController extends Controller
                 AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "'
                 ORDER BY personal_informations.`surname`");
         }
-        
+
         return $allEmployees;
     }
 
