@@ -47,6 +47,7 @@
                                 <th>Inclusive dates</th>
                                 <th>Date of filing</th>
                                 <th>Status</th>
+                                <th>Remark</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -54,9 +55,16 @@
                             <tr v-for="(leaveapplication, index) in leaveapplications" :key="leaveapplication.id">
                                 <td>{{ leaveapplication.personalinformation.surname + ', ' + leaveapplication.personalinformation.firstname + ' ' + leaveapplication.personalinformation.nameextension + ' ' + leaveapplication.personalinformation.middlename }}</td>
                                 <td>{{ leaveapplication.leavetype.title }}</td>
-                                <td>{{ leaveapplication.from + ' to ' + leaveapplication.to }}</td>
+                                <td class="text-center">{{ leaveapplication.from }} <br> {{ ' - ' }} <br> {{ leaveapplication.to   }}</td>
                                 <td>{{ leaveapplication.date_of_filing }}</td>
                                 <td>{{ leaveapplication.stage_status }}</td>
+                                <td>
+                                    {{
+                                        leaveapplication.stage_status == 'Pending Noted By' ? leaveapplication.recommendation_remark_approved :
+                                        leaveapplication.stage_status == 'Recommendation Disapproved' ? leaveapplication.recommendation_remark_disapproved :
+                                        leaveapplication.stage_status == 'Disapproved by the Governor' ? leaveapplication.disapproved_due_to : ''
+                                    }}
+                                </td>
                                 <td style="width: calc(100%-150px);">
                                     <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action
@@ -170,7 +178,10 @@
                                         {{ leave_details.from }} - {{ leave_details.to }}
                                     </p>
                                     <p>Commutation: {{ leave_details.commutation }}</p>
+
+                                     <p>Certification of Leave Credits as of: {{ leave_details.credit_as_of }}</p>
                                 </div>
+
                                 <div class="col-md-6">
 
                                     <p>Details of action on Application</p>
@@ -203,14 +214,36 @@
 
                                     <br>
 
-                                    <p>Certification of Leave Credits as of: {{ leave_details.credit_as_of }}</p>
+                                    <p>Reccomendation: {{ leave_details.credit_as_of }}</p>
+
+                                    <p>
+                                        Noted By: {{ leave_details.noted_by_id != null && leave_details.noted_by_id != '' ? 'APPROVED' : 'PENDING' }}<br>
+                                        Days with pay: {{ leave_details.days_with_pay }} <br>
+                                        Days without pay: {{ leave_details.days_without_pay }} <br>
+                                        Others: {{ leave_details.others }} <br>
+                                    </p>
+
+                                    <p>Governor Approval:
+                                        {{
+                                            leave_details.governor_id != null && leave_details.governor_id != '' &&
+                                            leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? 'DISAPPROVED' :
+                                            leave_details.governor_id != null && leave_details.governor_id != '' &&
+                                            leave_details.disapproved_due_to == null || leave_details.disapproved_due_to == '' ? 'APPROVED' : ''
+                                        }}
+                                    </p>
+
+                                    <p>
+                                        Disapproved due to:
+                                        {{ leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? leave_details.disapproved_due_to : '' }}
+                                    </p>
+
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button v-if="submit_mode == 'recommendation'" type="button" @click.prevent="review_recommendation(2)" class="btn btn-danger float-left">Undo Recommendation</button>
                             <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(2)" class="btn btn-danger float-left">Undo Noted By</button>
-                            <button v-if="submit_mode == 'gov'" type="button" @click.prevent="submit_noted_by(2)" class="btn btn-danger float-left">Undo Governor Approval</button>
+                            <button v-if="submit_mode == 'gov'" type="button" @click.prevent="submit_governor(2)" class="btn btn-danger float-left">Undo Governor Approval</button>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
@@ -549,8 +582,6 @@
 
                     this.form.noted_by_id = this.user.id
                     this.form.stage_status = 'Pending Governor Approval'
-
-                    console.log(this.form)
 
                     axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
                     .then(response => {
