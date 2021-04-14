@@ -250,6 +250,7 @@
                         <div class="modal-footer">
                             <button v-if="submit_mode == 'recommendation'" type="button" @click.prevent="review_recommendation(2)" class="btn btn-danger float-left">Undo Recommendation</button>
                             <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(2)" class="btn btn-danger float-left">Undo Noted By</button>
+                            <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(3)" class="btn btn-success float-left">Approve</button>
                             <button v-if="submit_mode == 'gov'" type="button" @click.prevent="submit_governor(2)" class="btn btn-danger float-left">Undo Governor Approval</button>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -545,7 +546,9 @@
                     this.modal = true
                     $('#leave_application_modal').modal('show')
 
-                }else if(leaveapplication.stage_status == 'Approved' || leaveapplication.stage_status == 'Pending Governor Approval'){
+                }else if(   leaveapplication.stage_status == 'Approved' ||
+                            leaveapplication.stage_status == 'Pending Governor Approval' ||
+                            leaveapplication.stage_status == 'Disapproved by the Governor'){
 
                     Swal.fire({
                     title: 'Ooops...',
@@ -632,6 +635,47 @@
                             this.form.days_without_pay = null
                             this.form.others = null
                             this.form.stage_status = 'Pending Noted By'
+
+                            axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
+                            .then(response => {
+                                this.$Progress.finish()
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Submitted'
+                                });
+                                $('#leave_application_modal').modal('hide')
+                                this.loadContent()
+                            })
+                            .catch(error => {
+                                console.log(error.response.data.message);
+                            })
+
+                        }
+                    })
+
+                }else if(mode == 3){
+
+                    Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This will skip the Governors approval and approve the application ending the transaction",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Proceed'
+                        }).then((result) => {
+                        if(result.isDismissed == true)
+                        {
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Cancelled'
+                            });
+                        }else{
+
+                            this.$Progress.start()
+
+                            this.form.noted_by_id = this.user.id
+                            this.form.stage_status = 'Approved'
 
                             axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
                             .then(response => {
