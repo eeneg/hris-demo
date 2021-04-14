@@ -172,8 +172,10 @@
                                     <p>Date of filing: {{ leave_details.date_of_filing }}</p>
                                     <p>Type of leave: {{ leave_details.leavetype.title }}</p>
                                     <p>Number of working days applied: {{ leave_details.working_days }}</p>
-                                    <p>Where leave will be spent: {{ leave_details.spent }}</p>
-                                    <p>Remark: {{ leave_details.spent_spec }}</p>
+                                    <p>
+                                        Where leave will be spent: {{ leave_details.spent }} <br>
+                                        Remark: {{ leave_details.spent_spec }}
+                                    </p>
                                     <p>Inclusive dates:
                                         {{ leave_details.from }} - {{ leave_details.to }}
                                     </p>
@@ -214,7 +216,14 @@
 
                                     <br>
 
-                                    <p>Reccomendation: {{ leave_details.credit_as_of }}</p>
+                                    <p>
+                                        Reccomendation: {{ leave_details.recommendation_status }} <br>
+                                        Remark: {{
+                                                    leave_details.recommendation_status != 'APPROVED' ? leave_details.recommendation_remark_approved :
+                                                    leave_details.recommendation_status != 'DISAPPROVED' ? leave_details.recommendation_remark_disapproved : ''
+                                                }}
+
+                                    </p>
 
                                     <p>
                                         Noted By: {{ leave_details.noted_by_id != null && leave_details.noted_by_id != '' ? 'APPROVED' : 'PENDING' }}<br>
@@ -230,9 +239,7 @@
                                             leave_details.governor_id != null && leave_details.governor_id != '' &&
                                             leave_details.disapproved_due_to == null || leave_details.disapproved_due_to == '' ? 'APPROVED' : ''
                                         }}
-                                    </p>
-
-                                    <p>
+                                        <br>
                                         Disapproved due to:
                                         {{ leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? leave_details.disapproved_due_to : '' }}
                                     </p>
