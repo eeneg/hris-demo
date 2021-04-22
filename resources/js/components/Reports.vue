@@ -11,48 +11,48 @@
               </div>
               <div class="card-footer p-0">
                 <ul class="nav flex-column">
-                  <li class="nav-item">
-                    <a href="#plantilla" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#plantilla" class="nav-link active nav-tabs" data-toggle="tab">
                       Plantilla <span class="float-right"><i class="fas fa-leaf"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#nosa" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#nosa" class="nav-link nav-tabs" data-toggle="tab">
                       NOSA (Notice of Salary Adjustment) <span class="float-right"><i class="fas fa-hand-holding-usd"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#nosi" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#nosi" class="nav-link nav-tabs" data-toggle="tab">
                       NOSI (Notice of Step Increment) <span class="float-right"><i class="fas fa-chart-line"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#service" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#service" class="nav-link nav-tabs" data-toggle="tab">
                       Service Record <span class="float-right"><i class="fas fa-book"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#salary" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#salary" class="nav-link nav-tabs" data-toggle="tab">
                       Salary Schedule <span class="float-right"><i class="fas fa-file-invoice-dollar"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#roster" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#roster" class="nav-link nav-tabs" data-toggle="tab">
                       Personnel Roster <span class="float-right"><i class="fas fa-people-arrows"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#alloc" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#alloc" class="nav-link nav-tabs" data-toggle="tab">
                       Allocation List <span class="float-right"><i class="fas fa-hands-helping"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#loyalty" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#loyalty" class="nav-link nav-tabs" data-toggle="tab">
                       Loyalty Benefits Schedule <span class="float-right"><i class="fas fa-hand-holding-heart"></i></span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#job" class="nav-link" data-toggle="tab">
+                  <li class="nav-item nav-tabs">
+                    <a href="#job" class="nav-link nav-tabs" data-toggle="tab">
                       Job Description <span class="float-right"><i class="fas fa-briefcase"></i></span>
                     </a>
                   </li>
@@ -65,7 +65,7 @@
 
             <!-- Plantilla Tab -->
            <div class="tab-content">
-            <div class="tab-pane" id="plantilla">
+            <div class="tab-pane active" id="plantilla">
               <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Plantilla <i class="fas fa-leaf"></i></h3>
@@ -541,7 +541,7 @@
 
           <!-- Job Description -->
 
-            <div class="tab-pane active" id="job">
+            <div class="tab-pane " id="job">
               <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Job Description <i class="fas fa-briefcase"></i></h3>
