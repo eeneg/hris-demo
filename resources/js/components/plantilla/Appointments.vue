@@ -335,7 +335,7 @@ export default {
         },
         getEmployees: function()
         {
-            axios.get('api/appointmentemployeelist')
+            axios.get('api/employeeList')
             .then(({data})=> {
                this.employees = data
             })

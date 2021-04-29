@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Barcode;
 use App\Department;
+use App\LeaveSummary;
 use App\PersonalInformation;
 use App\Position;
 use \Milon\Barcode\DNS1D;
@@ -89,5 +90,21 @@ class PDFcontroller extends Controller
         // return $pdf->download('invoice.pdf');
         return ['title' => $employee->firstname];
 
+    }
+
+
+    public function generateleavecard(Request $request)
+    {
+        $employee = PersonalInformation::find($request->id);
+
+        $data = LeaveSummary::where('personal_information_id', $request->id)->get();
+
+        $pdf = PDF::loadView('reports/employee-leavecard', compact('data'));
+
+        Storage::put('public/employee_leave_card/' . $employee->surname .'.pdf', $pdf->output());
+
+        return ['title' => $employee->surname .'.pdf'];
+
+        // return view('reports.employee-leavecard', compact('data'));
     }
 }

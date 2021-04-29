@@ -85,12 +85,6 @@ class AppointmentController extends Controller
 
     }
 
-    public function employees(Request $request)
-    {
-        $employees = PersonalInformation::all();
-        return new EmployeeAppointmentListResource($employees);
-    }
-
     public function fetchDepartments(Request $request)
     {
         return Department::select(['departments.id', 'departments.title'])->with('position')->get();

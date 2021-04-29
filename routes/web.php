@@ -31,6 +31,8 @@ Route::post('/generateId', 'PDFcontroller@employeeId');
 
 Route::post('/generatePDS', 'PDFcontroller@pds');
 
+Route::post('/generateleavecard', 'PDFcontroller@generateleavecard');
+
 Route::post('/generatePlantilla', 'PDFcontroller@plantilla');
 
 Route::get('{path}', 'HomeController@index')->where( 'path','([-a-z0-9_\s]+)' );
@@ -44,3 +46,5 @@ Route::get('/initializeSystem', 'Helpers@initialize');
 
 // Route::get('/updateIds', 'Helpers@updateIds');
 // Route::get('/updateSalaryGrades', 'Helpers@updateSalaryGrades');
+
+Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');

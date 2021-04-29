@@ -36,9 +36,11 @@ Route::group(['middleware' => ['auth:api']], function() {
         'leaveapplication' => 'API\LeaveApplicationController',
         'request'   => 'API\RequestController',
         'reappointments'   => 'API\ReappointmentController',
+        'leavecredits'  => 'API\LeaveCreditController'
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
+    Route::get('employeeList', 'API\PersonalInformationController@employees');
 
     Route::post('verifybarcode', 'Api\BarcodeController@verify');
 
@@ -63,7 +65,6 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::get('fetchDepartments', 'API\AppointmentController@fetchDepartments');
     Route::get('fetchSalarySched', 'API\AppointmentController@fetchSalarySched');
-    Route::get('appointmentemployeelist', 'API\AppointmentController@employees');
 
     Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
     Route::get('editLeaveApplication', 'API\LeaveApplicationController@edit');
@@ -73,7 +74,7 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('revertRequest', 'API\RequestController@revertRequest');
     Route::get('reviewedRequest', 'API\RequestController@reviewedRequest');
 
-    Route::get('employeeList', 'API\ReappointmentController@employeeList');
+    Route::get('getleavesummary', 'API\LeaveCreditController@getLeaveSummary');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function() {

@@ -15,6 +15,7 @@ use App\Plantilla;
 use App\UserAssignment;
 use App\Events\PersonalInfoRegistered;
 use App\Events\PersonalInfoUpdated;
+use App\Http\Resources\EmployeeAppointmentListResource;
 use App\Reappointment;
 
 class PersonalInformationController extends Controller
@@ -182,6 +183,13 @@ class PersonalInformationController extends Controller
 
         event(new PersonalInfoUpdated($pi));
     }
+
+    public function employees(Request $request)
+    {
+        $employees = PersonalInformation::orderBy('surname', 'ASC')->get();
+        return new EmployeeAppointmentListResource($employees);
+    }
+
 
     /**
      * Remove the specified resource from storage.
