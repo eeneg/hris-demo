@@ -8,7 +8,7 @@
                     <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
                 </div>
 
-                <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
+                <form autocomplete="off" @submit.prevent="mode == null ? check_credits() : mode == 1 ? submitEdits() : '' ">
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-4" style="position: relative;margin-bottom: 0.3rem;">
@@ -252,61 +252,133 @@
                 this.balance_total = parseFloat(this.curr_vacation_balance) + parseFloat(this.curr_sick_balance);
             },
             submitForm() {
-                this.$Progress.start();
-                this.form.personal_information_id_7b = this.form.personal_information_id
-                this.form.personal_information_id_7c = this.form.personal_information_id
-                this.form.personal_information_id_7d = this.form.personal_information_id
-                this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
-                                            this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
 
-                if (this.status == 'final') {
-                    this.form.status = 'final';
-                    this.form.post('api/leaveapplication')
-                        .then(({data}) => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'New leave application is created successfully',
+                 if((this.form.recommendation_officer_id == '' || this.form.recommendation_officer_id == null)  &&  (this.form.recommendation_status != '' && this.form.recommendation_status != null))
+                {
+
+                    Swal.fire(
+                        'Oops...',
+                        'Please select an Administrative Officer below the Recommendation section',
+                        'error'
+                    )
+
+                }else{
+                    this.$Progress.start();
+                    this.form.personal_information_id_7b = this.form.personal_information_id
+                    this.form.personal_information_id_7c = this.form.personal_information_id
+                    this.form.personal_information_id_7d = this.form.personal_information_id
+                    this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
+                                                this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
+
+                    if (this.status == 'final') {
+                        this.form.status = 'final';
+                        this.form.post('api/leaveapplication')
+                            .then(({data}) => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'New leave application is created successfully',
+                                })
+                                this.$router.push({ path: '/leave-applications'});
+                                this.$Progress.finish();
                             })
-                            this.$router.push({ path: '/leave-applications'});
-                            this.$Progress.finish();
-                        })
-                        .catch(error => {
-                            console.log(error.response.data.message);
-                            this.$Progress.fail();
-                        });
-                } else {
+                            .catch(error => {
+                                console.log(error.response.data.message);
+                                this.$Progress.fail();
+                            });
+                    } else {
 
+                    }
                 }
             },
             submitEdits: function()
             {
-                this.$Progress.start();
-                this.form.personal_information_id_7b = this.form.personal_information_id
-                this.form.personal_information_id_7c = this.form.personal_information_id
-                this.form.personal_information_id_7d = this.form.personal_information_id
-                this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
-                                            this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
 
-                if (this.status == 'final') {
-                    this.form.status = 'final';
-                    axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                        .then(({data}) => {
-                            Swal.fire({
+                if((this.form.recommendation_status != null && this.form.recommendation_status != '') && (this.form.recommendation_officer_id == null && this.form.recommendation_officer_id == ''))
+                {
+
+                     Swal.fire(
+                        'Oops...',
+                        'Please select an Administrative Officer below the Recommendation section',
+                        'error'
+                    )
+
+                }else{
+                    Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This will save and restart the application process",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Proceed'
+                    }).then((result) => {
+                        if(result.isDismissed == true)
+                        {
+                            toast.fire({
                                 icon: 'success',
-                                title: 'Success',
-                                text: 'New leave application is updated successfully',
-                            })
-                            this.$router.push({ path: '/leave-applications'});
-                            this.$Progress.finish();
-                        })
-                        .catch(error => {
-                            console.log(error.response.data.message);
-                            this.$Progress.fail();
-                        });
-                } else {
+                                title: 'Cancelled'
+                            });
+                        }else{
+                            this.$Progress.start();
+                            this.form.personal_information_id_7b = this.form.personal_information_id
+                            this.form.personal_information_id_7c = this.form.personal_information_id
+                            this.form.personal_information_id_7d = this.form.personal_information_id
+                            this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
+                                                        this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
+                            this.form.governor_id = null
+                            this.form.noted_by_id = null
+                            this.form.days_with_pay = null
+                            this.form.days_without_pay = null
+                            this.form.others = null
+                            this.form.disapproved_due_to = null
 
+                            if (this.status == 'final') {
+                                this.form.status = 'final';
+                                axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
+                                    .then(({data}) => {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: 'New leave application is updated successfully',
+                                        })
+                                        this.$router.push({ path: '/leave-applications'});
+                                        this.$Progress.finish();
+                                    })
+                                    .catch(error => {
+                                        console.log(error.response.data.message);
+                                        this.$Progress.fail();
+                                    });
+                            } else {
+
+                            }
+                        }
+                    })
                 }
+            },
+            check_credits: function()
+            {
+                axios.post('api/checkcredits', {personal_information_id: this.form.personal_information_id, leave_type_id: this.form.leave_type_id})
+                .then(response => {
+                    if(response.data.code == true)
+                    {
+                        this.submitForm()
+                    }else{
+                        Swal.fire(
+                        'Oops...',
+                        response.data.message,
+                        'error'
+                        )
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong',
+                        'error'
+                    )
+                })
             },
             loadFormData() {
                 axios.post('api/forleave')

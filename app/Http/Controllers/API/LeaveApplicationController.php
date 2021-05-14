@@ -12,9 +12,11 @@ use App\UserAssignment;
 use App\Setting;
 use App\Plantilla;
 use App\Http\Resources\LeaveApplicationResource;
+use App\LeaveCredit;
 use App\PersonalInformation;
 use App\Reappointment;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
 
 class LeaveApplicationController extends Controller
@@ -154,9 +156,7 @@ class LeaveApplicationController extends Controller
             'leave_type_id.required' => 'Type of leave is required.',
         ]);
 
-
         return LeaveApplication::create($request->all());
-
     }
 
     /**
@@ -222,6 +222,17 @@ class LeaveApplicationController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        if($request->stage_status == 'Approved')
+        {
+            $lc = LeaveCredit::where('leave_type_id', $request->leave_type_id)->where('personal_information_id', $request->personal_information_id)->first();
+
+            if($lc)
+            {
+                $lc->update(['balance' => $lc->balance - Carbon::parse($request->from)->diffInDays(Carbon::parse($request->to))]);
+            }
+        }
+
         return LeaveApplication::find($id)->update($request->all());
     }
 
@@ -234,6 +245,20 @@ class LeaveApplicationController extends Controller
         ];
 
         return $data;
+    }
+
+    public function checkCredits(Request $request)
+    {
+        $lc = LeaveCredit::where('personal_information_id', $request->personal_information_id)
+            ->where('leave_type_id', $request->leave_type_id)
+            ->first();
+
+        if(!$lc)
+        {
+            return ['code' => false, 'message' => 'Employee does not have Leave Credits, please encode first'];
+        }else{
+            return ['code' => true];
+        }
     }
 
     /**

@@ -851,11 +851,11 @@
                 if (employee.plantillacontents.length > 0) {
                     let details = {designation: '', department: '', sg: ''};
                     _.forEach(employee.plantillacontents, (value) => {
-                        // if (this.$parent.settings.plantilla.year == value.plantilla.year) {
-                        //     details.designation = value.position && value.position.title;
-                        //     details.department = value.position && value.position.department.description;
-                        //     details.sg = value.salaryproposed && value.salaryproposed.grade;
-                        // }
+                        if (this.$parent.settings.plantilla.year == value.plantilla.year) {
+                            details.designation = value.position && value.position.title;
+                            details.department = value.position && value.position.department.description;
+                            details.sg = value.salaryproposed && value.salaryproposed.grade;
+                        }
                     });
                     return details;
                 } else {

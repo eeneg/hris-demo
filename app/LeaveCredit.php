@@ -26,6 +26,7 @@ class LeaveCredit extends Model
         'balance',
         'detail1',
         'detail2',
+        'created_at'
     ];
 
 

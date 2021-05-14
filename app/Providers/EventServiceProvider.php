@@ -40,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\EditRequestApproved' => [
             'App\Listeners\EditRequestApprovedListener',
-        ]
+        ],
     ];
 
     /**

@@ -149,7 +149,6 @@ export default {
             .then(({data}) => {
                 this.reappointments = data
                 this.filter = data.data
-                console.log(data)
             })
             .catch(error => {
                 console.log(error)
@@ -158,7 +157,6 @@ export default {
             axios.get('api/department')
             .then(({data}) => {
                 this.departments = data
-                console.log(data)
             })
             .catch(error => {
                 console.log(error)
@@ -199,7 +197,6 @@ export default {
             this.form.fill(reappointment)
             this.reappointment_id = reappointment.id
             this.editMode = true
-            console.log(reappointment)
             $('#reappointment_modal').modal('show')
         },
         submit_reappointments: function()

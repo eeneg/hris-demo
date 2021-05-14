@@ -252,7 +252,8 @@
                             <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(2)" class="btn btn-danger float-left">Undo Noted By</button>
                             <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(3)" class="btn btn-success float-left">Approve</button>
                             <button v-if="submit_mode == 'gov'" type="button" @click.prevent="submit_governor(2)" class="btn btn-danger float-left">Undo Governor Approval</button>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button v-if="submit_mode == 'gov'" type="submit" class="btn btn-success">Approve</button>
+                            <button v-else type="submit" class="btn btn-primary">Save Changes</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -292,6 +293,9 @@
                 ],
                 form: new Form({
                     'personal_information_id': '',
+                    'leave_type_id': '',
+                    'from': '',
+                    'to': '',
                     'governor_id': '',
                     'noted_by_id': '',
                     'recommendation_officer_id': '',
