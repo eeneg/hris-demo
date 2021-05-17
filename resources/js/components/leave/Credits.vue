@@ -8,16 +8,32 @@
                             <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Credits</h2>
                             <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
                        </div>
-                       <div class="col-md-2">
-                            <div class="btn-group float-right" role="group" aria-label="Basic example">
-                                <button class="btn btn-primary" @click="getleavesummary()">Leave card</button>
-                            </div>
-                       </div>
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
                                 <v-select @input="getEmployeeLeaveCredit()" v-model="form.personal_information_id" class="form-control form-control-border border-width-2"
                                 :options="employees.data" label="name" placeholder="Search employee" :reduce="employees => employees.id">
                                 </v-select>
+                            </div>
+                       </div>
+                       <div class="col-md-1">
+                            <div class="btn-group dropleft float-right" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a type="button" class="dropdown-item" @click.prevent="balance_modal()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        Leave Credits
+                                    </a>
+                                    <a type="button" class="dropdown-item" @click.prevent="getleavesummary()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        Leave Card
+                                    </a>
+                                    <a type="button" class="dropdown-item" @click.prevent="slp_fl_modal()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        Forced and SLP Credits
+                                    </a>
+                                    <a type="button" class="dropdown-item" @click.prevent="global_credits()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        Global Credits
+                                    </a>
+                                </div>
                             </div>
                        </div>
                    </div>
@@ -62,19 +78,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-md-6 text-left">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button class="btn btn-primary" @click="global_credits()">Global credits</button>
-                            </div>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button class="btn btn-primary" @click="slp_fl_modal()">Forced and SLP credits</button>
-                            </div>
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button class="btn btn-primary" @click="balance_modal()">Leave Credits</button>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
