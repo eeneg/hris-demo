@@ -84,11 +84,11 @@ class LeaveCreditController extends Controller
             if(isset($lc))
             {
 
-                $result = floatval($lc->balance + ($request->vl_earned - $request->vl_withpay));
+                $vl_result = floatval($lc->balance + ($request->vl_earned - $request->vl_withpay));
 
-                $lc->update(['balance' => $result]);
+                $lc->update(['balance' => $vl_result]);
 
-                $ls->update(['vl_balance' => $result]);
+                $ls->update(['vl_balance' => $vl_result]);
 
 
             }else{
@@ -116,11 +116,11 @@ class LeaveCreditController extends Controller
             if(isset($lc))
             {
 
-                $result = floatval($lc->balance + ($request->sl_earned - $request->sl_withpay));
+                $sl_result = floatval($lc->balance + ($request->sl_earned - $request->sl_withpay));
 
-                $lc->update(['balance' => $result]);
+                $lc->update(['balance' => $sl_result]);
 
-                $ls->update(['sl_balance' => $result]);
+                $ls->update(['sl_balance' => $sl_result]);
 
             }else{
 
@@ -130,7 +130,7 @@ class LeaveCreditController extends Controller
                         'balance' => floatval(($ls->sl_earned - $ls->sl_withpay) + $ls->sl_balance),
                 ]);
 
-                $ls->update(['sl_balance' => floatval($ls->sl_earned)]);
+                $ls->update(['sl_balance' => floatval($ls->sl_earned - $ls->sl_withpay)]);
 
             }
 
@@ -170,9 +170,26 @@ class LeaveCreditController extends Controller
 
     public function editleavesummary(Request $request)
     {
+        $sl_balance = [];
+        $vl_balance = [];
+
         foreach($request->all() as $data)
         {
             LeaveSummary::find($data['id'])->update($data);
+
+            array_push($sl_balance, $data['sl_balance']);
+            array_push($vl_balance, $data['vl_balance']);
+        }
+
+        $lt_id = LeaveType::where('title', 'Sick Leave')->orWhere('title', 'Vacation Leave')->get();
+
+        foreach($lt_id as $lt)
+        {
+            $lc = LeaveCredit::where('personal_information_id', $request[0]['personal_information_id'])
+                    ->where('leave_type_id', $lt->id)
+                    ->first();
+
+            $lc->update(['balance' => $lt->title == 'Sick Leave' ? max($sl_balance) : max($vl_balance)]);
         }
     }
 
