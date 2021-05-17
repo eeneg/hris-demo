@@ -16,11 +16,11 @@
                             </div>
                        </div>
                        <div class="col-md-1">
-                            <div class="btn-group dropleft float-right" role="group" aria-label="Basic example">
+                            <div class="btn-group float-right" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action
                                 </button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu dropdown-menu-right">
                                     <a type="button" class="dropdown-item" @click.prevent="balance_modal()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                         Leave Credits
                                     </a>

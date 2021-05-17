@@ -116,7 +116,7 @@ class LeaveCreditController extends Controller
             if(isset($lc))
             {
 
-                $result = floatval($lc->balance + $request->sl_earned);
+                $result = floatval($lc->balance + ($request->sl_earned - $request->sl_withpay));
 
                 $lc->update(['balance' => $result]);
 
