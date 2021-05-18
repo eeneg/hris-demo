@@ -28,7 +28,8 @@ class PersonalInformationController extends Controller
     public function index()
     {
         if ($search = \Request::get('query')) {
-            $personalinformations = PersonalInformation::with('plantillacontents')->where(function($query) use ($search){
+            $personalinformations = PersonalInformation::with('plantillacontents')
+            ->where(function($query) use ($search){
                 $query->where('surname', 'LIKE', '%'.$search.'%')
                         ->orWhere('firstname', 'LIKE', '%'.$search.'%')
                         ->orWhere('middlename', 'LIKE', '%'.$search.'%')
