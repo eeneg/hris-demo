@@ -1,3 +1,4 @@
+
 <template>
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -87,15 +88,10 @@
         <!-- modal -->
 
         <div class="modal fade" id="balanceModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <div class="col-md-6">
-                        <h5 class="modal-title" id="balanceModal">Sick Leave</h5>
-                    </div>
-                    <div class="col-md-3">
-                        <h5 class="modal-title" id="balanceModal">Vacation Leave</h5>
-                    </div>
+                    <h4 class="horizon">Leave Credit</h4>
                     <div class="col-md-3">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -105,91 +101,115 @@
 
                     <form @submit.prevent="submit_leave_credits()" action="">
                         <div class="modal-body">
+                            <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="form-group col-md-4">
+                                            <label for="leave_earned">Month</label>
+                                                <select name="leave_earned" id="leave_earned" class="form-control form-control-border border-width-2" v-model="month" placeholder="Month">
+                                                        <option>January</option>
+                                                        <option>February</option>
+                                                        <option>March</option>
+                                                        <option>April</option>
+                                                        <option>May</option>
+                                                        <option>June</option>
+                                                        <option>July</option>
+                                                        <option>August</option>
+                                                        <option>September</option>
+                                                        <option>October</option>
+                                                        <option>November</option>
+                                                        <option>December</option>
+                                                </select>
+                                        </div>
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="leave_earned">Leave Earned</label>
-                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_earned" name="leave_earned" id="leave_earned">
+                                                <label for="leave_earned">Year</label>
+                                                <input type="text" class="form-control form-control-border border-width-2" v-model="year" name="year" id="year">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="leave_earned">Leave Absence Undertime w/ Pay</label>
-                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_withpay" name="leave_earned" id="leave_earned">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="leave_earned">Leave Absence Undertime w/o Pay</label>
-                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_withoutpay" name="leave_earned" id="leave_earned">
+                                                <label for="particulars">Particulars</label>
+                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.particulars" name="particulars" id="particulars">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+
+                                <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-2" style="color: #515151;">
+                                                <label class="disabled" for=""><i>Vacation Leave</i> </label>
+                                        </div>   
+                                    </div>
+
+                                    <div class="row">
+                                        
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="leave_earned">Leave Earned</label>
+                                                <label for="leave_earned">Earned</label>
                                                 <input type="text" class="form-control form-control-border border-width-2" v-model="form.vl_earned" name="leave_earned" id="leave_earned">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="leave_earned">Leave Absence Undertime w/ Pay</label>
+                                                <label for="leave_earned">Absence Undertime w/ Pay</label>
                                                 <input type="text" class="form-control form-control-border border-width-2" v-model="form.vl_withpay" name="leave_earned" id="leave_earned">
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4 ">
                                             <div class="form-group">
-                                                <label for="leave_earned">Leave Absence Undertime w/o Pay</label>
+                                                <label for="leave_earned">Absence Undertime w/o Pay</label>
                                                 <input type="text" class="form-control form-control-border border-width-2" v-model="form.vl_withoutpay" name="leave_earned" id="leave_earned">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="leave_earned">Month</label>
-                                        <select name="leave_earned" id="leave_earned" class="form-control form-control-border border-width-2" v-model="month" placeholder="Month">
-                                            <option>January</option>
-                                            <option>February</option>
-                                            <option>March</option>
-                                            <option>April</option>
-                                            <option>May</option>
-                                            <option>June</option>
-                                            <option>July</option>
-                                            <option>August</option>
-                                            <option>September</option>
-                                            <option>October</option>
-                                            <option>November</option>
-                                            <option>December</option>
-                                        </select>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                        <div class="col-md-2" style="color: #515151;">
+                                            <label class="disabled" for=""><i>Sick Leave</i> </label>
+                                        </div>  
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="leave_earned">Earned</label>
+                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_earned" name="leave_earned" id="leave_earned">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="leave_earned">Absence Undertime w/ Pay</label>
+                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_withpay" name="leave_earned" id="leave_earned">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="leave_earned">Absence Undertime w/o Pay</label>
+                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_withoutpay" name="leave_earned" id="leave_earned">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="leave_earned">Year</label>
-                                        <input type="text" class="form-control form-control-border border-width-2" v-model="year" name="year" id="year">
-                                    </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="particulars">Particulars</label>
-                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.particulars" name="particulars" id="particulars">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="remarks">Remarks</label>
-                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.remarks" name="remarks" id="remarks">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="remarks">Remarks</label>
+                                            <input type="text" class="form-control form-control-border border-width-2" v-model="form.remarks" name="remarks" id="remarks">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                           
                         </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
