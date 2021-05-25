@@ -72,7 +72,7 @@ class LeaveCreditController extends Controller
 
         $ls = LeaveSummary::create($request->all());
 
-        if($ls->vl_earned)
+        if($ls->vl_earned || $ls->vl_withpay)
         {
 
             $lt = LeaveType::where('title', 'Vacation Leave')->first()->id;
@@ -96,7 +96,7 @@ class LeaveCreditController extends Controller
                 LeaveCredit::create([
                         'personal_information_id' => $request->personal_information_id,
                         'leave_type_id' => $lt,
-                        'balance' => floatval(($ls->vl_earned - $ls->vl_withpay) + $ls->vl_balance),
+                        'balance' => floatval($ls->vl_balance + ($ls->vl_earned - $ls->vl_withpay)),
                 ]);
 
                 $ls->update(['vl_balance' => floatval($ls->vl_earned - $ls->vl_withpay)]);
@@ -105,7 +105,7 @@ class LeaveCreditController extends Controller
 
         }
 
-        if($ls->sl_earned){
+        if($ls->sl_earned || $ls->sl_withpay){
 
             $lt = LeaveType::where('title', 'Sick Leave')->first()->id;
 
@@ -127,7 +127,7 @@ class LeaveCreditController extends Controller
                 LeaveCredit::create([
                         'personal_information_id' => $request->personal_information_id,
                         'leave_type_id' => $lt,
-                        'balance' => floatval(($ls->sl_earned - $ls->sl_withpay) + $ls->sl_balance),
+                        'balance' => floatval($ls->sl_balance + ($ls->sl_earned - $ls->sl_withpay)),
                 ]);
 
                 $ls->update(['sl_balance' => floatval($ls->sl_earned - $ls->sl_withpay)]);
@@ -189,13 +189,13 @@ class LeaveCreditController extends Controller
                     ->where('leave_type_id', $lt->id)
                     ->first();
 
-            $lc->update(['balance' => $lt->title == 'Sick Leave' ? max($sl_balance) : max($vl_balance)]);
+            $lc->update(['balance' => $lt->title == 'Sick Leave' ? end($sl_balance) : end($vl_balance)]);
         }
     }
 
     public function global_credits(Request $request)
     {
-        $employees = PersonalInformation::all()->pluck('id');
+        $employees = PersonalInformation::has('plantillacontents')->pluck('id');
 
         $summary = LeaveSummary::where('period', Carbon::now()->format('F Y'))->get()->pluck('personal_information_id');
 

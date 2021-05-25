@@ -122,7 +122,7 @@
                                    <li class="nav-item">
                                         <router-link to="/employee-reappointments" class="nav-link">
                                             <i class="nav-icon fas fa-briefcase"></i>
-                                            <p>Reappointments</p>
+                                            <p>Reassignment</p>
                                         </router-link>
                                     </li>
                                    @endcan

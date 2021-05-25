@@ -110,6 +110,7 @@ class LeaveApplicationController extends Controller
                 $query->where('departments.id', '!=', $data['dept']['id'])
                 ->where('leave_applications.stage_status', '!=', 'Pending Recommendation')
                 ->where('leave_applications.stage_status', '!=', 'Pending Noted By')
+                ->where('leave_applications.stage_status', '!=', 'Approved by the HR Head')
                 ->where('leave_applications.stage_status', '!=', null)
                 ->where('leave_applications.stage_status', '!=', '');
             })

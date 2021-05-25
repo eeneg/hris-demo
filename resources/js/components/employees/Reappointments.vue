@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h3>Employee Reappointments</h3>
+                    <h3>Employee Reassignments</h3>
                 </div>
 
                 <div class="card-body">
