@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-1">
+                    <div class="row mt-3">
                         <div class="col-md-3">
                             <div class="form-group mb-0">
                                 <div class="custom-control custom-radio d-inline">
@@ -55,7 +55,7 @@
                                 <th>Date of filing</th>
                                 <th>Status</th>
                                 <th>Remark</th>
-                                <th>Action</th>
+                                <th style="text-align: right;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,7 +73,7 @@
                                     }}
                                 </td>
                                 <td style="width: calc(100%-150px);">
-                                    <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-sm btn-primary btn-info dropdown-toggle right" style="float: right; !important" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action
                                     </button>
                                     <div class="dropdown-menu">
