@@ -4,23 +4,27 @@
             <div class="card card-primary card-outline">
 
                 <div class="card-header">
-                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Applications</h2>
-                    <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
+                    <div class="row mt-1">
+                        <div class="col-md-6">
+                            <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Applications</h2>
+                            <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
+                        </div>
+                        <div class="form-group col-md-6 mb-0">
+                            <router-link class="btn btn-primary float-right" to="/leave-form">Create <span><i class="fas fa-plus"></i></span></router-link>
+                        </div>
+                    </div>
 
                     <div class="row mt-1">
-                        <div class="form-group col-md-3 mb-0">
+                        <div class="form-group col-md-4 mb-0">
                             <v-select @input="filter_data()" class="form-control form-control-border border-width-2" v-model="personal_information_id" placeholder="Select Employee" :options="personalinformations" label="name"
                             :reduce="personalinformations => personalinformations.id"></v-select>
                         </div>
-                        <div class="form-group col-md-3 mb-0">
+                        <div class="form-group col-md-4 mb-0">
                             <v-select v-model="selectedleavetype" @input="filter_data()" placeholder="Select specific leave type" class="form-control form-control-border border-width-2" :options="leavetypes" label="title" :reduce="leavetypes => leavetypes.id"></v-select>
                         </div>
                         <div class="form-group col-md-4 mb-0">
                             <v-select class="form-control form-control-border border-width-2" aria-label="Default select example" v-model="selected_stage_status" @input="filter_data()" :options="stage_status" placeholder="Filter">
                             </v-select>
-                        </div>
-                        <div class="form-group col-md-2 mb-0">
-                            <router-link class="btn btn-primary float-right" to="/leave-form">New Application</router-link>
                         </div>
                     </div>
 
