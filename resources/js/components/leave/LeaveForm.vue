@@ -100,9 +100,9 @@
                                 <label style="margin: 0;">Vacation</label>
                                 <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
                             </div>
-                            <div class="col-md-1  form-group">
+                            <div class="col-md-1 form-group">
                                 <label style="margin: 0;">Sick</label>
-                                <input v-model="form.vacation_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
                             </div>
                             <div class="col-md-1  form-group">
                                 <label style="margin: 0;">Total</label>
@@ -115,9 +115,9 @@
                             <div class="col-md-2">
                                 <label class="d-block" style="margin: 0; color: #495057;"><i>Less this Leave</i> </label>
                             </div>
-                            <div class="col-md-1 form-group">
+                            <div class="col-md-1  form-group">
                                 <label style="margin: 0;">Vacation</label>
-                                <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                <input v-model="form.vacation_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
                             </div>
                             <div class="col-md-1 form-group">
                                 <label style="margin: 0;">Sick</label>
@@ -151,7 +151,7 @@
                             <date-picker v-model="form.credit_as_of" id="credit_as_of" :config="options" class="form-control form-control-border border-width-2"></date-picker>
                         </div>
                     </div>
-                  
+
                     <h5 class="green mt-3">Recommendation</h5>
                     <div class="row">
                         <div class="form-group col-md-3">
