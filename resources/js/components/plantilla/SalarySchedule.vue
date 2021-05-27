@@ -397,6 +397,12 @@
                         'No Salary Schedule selected',
                         'error'
                     )
+                }else if($.inArray(this.salaryGradeForm.grade, $.map(this.salarygrades, function(v, i) { return v[0]['grade']; })) > -1){
+                    Swal.fire(
+                        'Oops...',
+                        'Salary Grade already exists',
+                        'error'
+                    )
                 }else{
                     this.$Progress.start()
                     var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]))
@@ -508,6 +514,6 @@
         },
         mounted() {
             // console.log(this.salarygrades);
-        }
+        },
     }
 </script>
