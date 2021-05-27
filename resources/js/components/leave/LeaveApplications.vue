@@ -77,6 +77,9 @@
                                         Action
                                     </button>
                                     <div class="dropdown-menu">
+                                        <a type="button" @click.prevent="viewApplication(leaveapplication)" class="dropdown-item">
+                                            View Application
+                                        </a>
                                         <a v-if="user.role == 'Administrator' || user.role != 'Office Head'" type="button" @click.prevent="editLeaveApplication(leaveapplication)" class="dropdown-item">
                                             Edit
                                         </a>
@@ -259,7 +262,7 @@
                             <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(3)" class="btn btn-success float-left">Approve</button>
                             <button v-if="submit_mode == 'gov'" type="button" @click.prevent="submit_governor(2)" class="btn btn-danger float-left">Undo Governor Approval</button>
                             <button v-if="submit_mode == 'gov'" type="submit" class="btn btn-primary">{{ form.disapproved_due_to != null && form.disapproved_due_to != '' ? 'Disapprove' : 'Approve' }}</button>
-                            <button v-else type="submit" class="btn btn-primary">{{ submit_mode == 'noted_by' ? 'Governor Approval' : 'Save Changes' }}</button>
+                            <button v-if="submit_mode != 'view'" type="submit" class="btn btn-primary">{{ submit_mode == 'noted_by' ? 'Governor Approval' : 'Save Changes' }}</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -453,6 +456,13 @@
                 .catch(error => {
                     console.log(error)
                 })
+            },
+            viewApplication: function(leaveapplication){
+                this.leave_details = leaveapplication
+                this.calculate()
+                this.submit_mode = 'view'
+                this.modal = true
+                $('#leave_application_modal').modal('show')
             },
             recommendation: function(leaveapplication)
             {
