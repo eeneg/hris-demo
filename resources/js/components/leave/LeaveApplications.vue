@@ -77,9 +77,9 @@
                                         Action
                                     </button>
                                     <div class="dropdown-menu">
-                                        <router-link v-if="user.role == 'Administrator' || user.role != 'Office Head'" type="button" v-bind:to="{path: '/leave-form', query: {id: leaveapplication.id, mode: 1}}" class="dropdown-item">
+                                        <a v-if="user.role == 'Administrator' || user.role != 'Office Head'" type="button" @click.prevent="editLeaveApplication(leaveapplication)" class="dropdown-item">
                                             Edit
-                                        </router-link>
+                                        </a>
                                         <a type="button" v-if="user.role == 'Administrator' || user.role == 'Office Head'" class="dropdown-item" @click.prevent="recommendation(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             Recommendation
                                         </a>
@@ -387,6 +387,19 @@
                     .catch(error => {
                         console.log(error.response.data.message);
                     });
+            },
+            editLeaveApplication: function(leaveapplication)
+            {
+                if(leaveapplication.stage_status == 'Pending Recommendation')
+                {
+                    this.$router.push({path: '/leave-form', query: {id: leaveapplication.id, mode: 1}})
+                }else{
+                    Swal.fire(
+                        'Oops...',
+                        'Cannot Edit Application at this point...',
+                        'error'
+                    )
+                }
             },
             deleteLeaveApplication: function(id, index)
             {

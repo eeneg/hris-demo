@@ -49,20 +49,25 @@ class EmployeeController extends Controller
     {
         $employee = PersonalInformation::find($request->id);
 
+        $data = [];
+
         if(!count($employee->employeeEditRequests->where('status', 'PENDING')))
         {
             $editRequest = $employee->employeeEditRequests()->create(['status' => 'PENDING']);
 
             foreach ($request->except('id') as $key => $value) {
-                $editRequest->employeeEdits()->create([
+                $data[] = [
                     'model_id'  => isset($value['model_id']) ? $value['model_id'] : null,
                     'model'     => isset($value['model']) ? $value['model'] : null,
                     'field'     => isset($value['field']) ? $value['field'] : null,
                     'oldValue'  => isset($value['oldValue']) ? $value['oldValue'] : null,
                     'newValue'  => isset($value['newValue']) ? $value['newValue'] : null,
                     'status'    => isset($value['status']) ? $value['status'] : null,
-                ]);
+                ];
             }
+
+            $insert = $editRequest->employeeEdits()->createMany($data);
+
         }else{
             abort(401, 'Can only have one requests at a time');
         }

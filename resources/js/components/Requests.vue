@@ -617,8 +617,24 @@
 
                         if(intersection.length == 0)
                         {
+
+                            Swal.fire({
+                            title: 'Dont reload or close the application ...',
+                            willOpen () {
+                                Swal.showLoading ()
+                            },
+                            didClose () {
+                                Swal.hideLoading()
+                            },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                showConfirmButton: false
+                            })
+
                             axios.post('api/acceptEditRequest?id='+this.pendingRequest.data[this.editIndex]['id'] + '&mode=' +mode, this.acceptedRequest)
                             .then(response => {
+                                Swal.close()
                                 toast.fire({
                                     icon: 'success',
                                     title: 'Submitted'
@@ -736,8 +752,23 @@
                     }else{
                         this.$Progress.start()
 
+                         Swal.fire({
+                            title: 'Dont reload or close the application ...',
+                            willOpen () {
+                                Swal.showLoading ()
+                            },
+                            didClose () {
+                                Swal.hideLoading()
+                            },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                showConfirmButton: false
+                        })
+
                         axios.post('api/revertRequest?id='+ this.personal_information_id + '&requestID=' + this.requestID, this.revert)
                         .then(response => {
+                            Swal.close()
                             toast.fire({
                                 icon: 'success',
                                 title: 'Submitted'

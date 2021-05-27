@@ -836,10 +836,10 @@
                         didClose () {
                             Swal.hideLoading()
                         },
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        allowEnterKey: false,
-                        showConfirmButton: false
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            showConfirmButton: false
                         })
 
                         axios.post('api/global_credits')
