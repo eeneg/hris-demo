@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
-                            <label style="margin: 0;">Administrative Officer IV (HRMO II)</label>
+                            <label style="margin: 0;">Recommendation Officer</label>
                             <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" :options="personalinformations" label="name"
                             :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
                             <has-error :form="form" field="personal_information_id"></has-error>
