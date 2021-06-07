@@ -9,12 +9,12 @@
                             <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Applications</h2>
                             <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
                         </div>
-                        <div class="form-group col-md-6 mb-0">
+                        <div class="form-group col-md-6 mt-2">
                             <router-link class="btn btn-primary float-right" to="/leave-form">Create <span><i class="fas fa-plus"></i></span></router-link>
                         </div>
                     </div>
 
-                    <div class="row mt-1">
+                    <div class="row mt-1 col-md-12">
                         <div class="form-group col-md-4 mb-0">
                             <v-select @input="filter_data()" class="form-control form-control-border border-width-2" v-model="personal_information_id" placeholder="Select Employee" :options="personalinformations" label="name"
                             :reduce="personalinformations => personalinformations.id"></v-select>
@@ -111,8 +111,8 @@
 
         <!-- modal -->
         <div class="modal fade" id="leave_application_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                <div class="modal-content">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content" style="overflow-y: auto;">
                 <div class="modal-header kuz-header">
                     <h5 class="modal-title" id="modal-grade">Leave Application</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -144,7 +144,7 @@
                                 </div>
                             </div>
 
-                            <div class="row" v-if="submit_mode == 'noted_by'">
+                            <div class="row col-md-12" v-if="submit_mode == 'noted_by'">
                                 <div class="col-md-4 form-group">
                                     <label for="days_with_pay">Days with pay:</label>
                                     <input v-model="form.days_with_pay" ref="days_with_pay" class="form-control form-control-border border-width-2" type="text" name="days_with_pay">
@@ -168,27 +168,29 @@
 
                             <hr>
 
-                            <div class="row" v-if="modal == true">
+                            <div class="row col-md-12" v-if="modal == true">
                                 <div class="col-md-6">
                                     <p>Name:
-                                        {{ leave_details.personalinformation.surname }},
-                                        {{ leave_details.personalinformation.firstname }}
-                                        {{ leave_details.personalinformation.middlename }}
-                                        {{ leave_details.personalinformation.nameextension }}
+                                        <strong>
+                                            {{ leave_details.personalinformation.surname }},
+                                            {{ leave_details.personalinformation.firstname }}
+                                            {{ leave_details.personalinformation.middlename }}
+                                            {{ leave_details.personalinformation.nameextension }}
+                                        </strong>
                                     </p>
-                                    <p>Date of filing: {{ leave_details.date_of_filing }}</p>
-                                    <p>Type of leave: {{ leave_details.leavetype.title }}</p>
-                                    <p>Number of working days applied: {{ leave_details.working_days }}</p>
+                                    <p>Date of filing: <strong> {{ leave_details.date_of_filing }} </strong></p>
+                                    <p>Type of leave: <strong> {{ leave_details.leavetype.title }} </strong></p>
+                                    <p>Number of working days applied: <strong> {{ leave_details.working_days }} </strong></p>
                                     <p>
-                                        Where leave will be spent: {{ leave_details.spent }} <br>
-                                        Remark: {{ leave_details.spent_spec }}
+                                        Where leave will be spent: <strong> {{ leave_details.spent }} </strong><br>
+                                        Remark: <strong> {{ leave_details.spent_spec }} </strong>
                                     </p>
                                     <p>Inclusive dates:
-                                        {{ leave_details.from }} - {{ leave_details.to }}
+                                       <strong> {{ leave_details.from }} - {{ leave_details.to }} </strong>
                                     </p>
-                                    <p>Commutation: {{ leave_details.commutation }}</p>
+                                    <p>Commutation: <strong> {{ leave_details.commutation }} </strong></p>
 
-                                     <p>Certification of Leave Credits as of: {{ leave_details.credit_as_of }}</p>
+                                     <p>Certification of Leave Credits as of: <strong> {{ leave_details.credit_as_of }} </strong></p>
                                 </div>
 
                                 <div class="col-md-6">
@@ -224,31 +226,31 @@
                                     <br>
 
                                     <p>
-                                        Reccomendation: {{ leave_details.recommendation_status }} <br>
-                                        Remark: {{
+                                        Reccomendation: <strong> {{ leave_details.recommendation_status }} </strong> <br>
+                                        Remark: <strong> {{
                                                     leave_details.recommendation_status != 'APPROVED' ? leave_details.recommendation_remark_approved :
                                                     leave_details.recommendation_status != 'DISAPPROVED' ? leave_details.recommendation_remark_disapproved : ''
-                                                }}
+                                                }} </strong>
 
                                     </p>
 
                                     <p>
-                                        Noted By: {{ leave_details.noted_by_id != null && leave_details.noted_by_id != '' ? 'APPROVED' : 'PENDING' }}<br>
-                                        Days with pay: {{ leave_details.days_with_pay }} <br>
-                                        Days without pay: {{ leave_details.days_without_pay }} <br>
-                                        Others: {{ leave_details.others }} <br>
+                                        Noted By: <strong> {{ leave_details.noted_by_id != null && leave_details.noted_by_id != '' ? 'APPROVED' : 'PENDING' }} </strong><br>
+                                        Days with pay: <strong> {{ leave_details.days_with_pay }} </strong> <br>
+                                        Days without pay: <strong> {{ leave_details.days_without_pay }} </strong> <br>
+                                        Others: <strong> {{ leave_details.others }} </strong> <br>
                                     </p>
 
                                     <p>Governor Approval:
-                                        {{
+                                       <strong> {{
                                             leave_details.governor_id != null && leave_details.governor_id != '' &&
                                             leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? 'DISAPPROVED' :
                                             leave_details.governor_id != null && leave_details.governor_id != '' &&
                                             leave_details.disapproved_due_to == null || leave_details.disapproved_due_to == '' ? 'APPROVED' : ''
-                                        }}
+                                        }} </strong>
                                         <br>
                                         Disapproved due to:
-                                        {{ leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? leave_details.disapproved_due_to : '' }}
+                                       <strong> {{ leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? leave_details.disapproved_due_to : '' }} </strong>
                                     </p>
 
                                 </div>
