@@ -25,9 +25,8 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
-        if(!$request->search && !$request->from && !$request->to)
-        {
-            $appointments = Appointment::select('appointment_records.*')
+
+        $appointments = Appointment::select('appointment_records.*')
             ->leftJoin('personal_informations', 'appointment_records.personal_information_id', '=', 'personal_informations.id')
             ->leftJoin('positions', 'appointment_records.position_id', '=', 'positions.id')
             ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
@@ -49,39 +48,45 @@ class AppointmentController extends Controller
                 'salary_grades.grade as grade',
                 'appointment_records.*'
             );
+
+        if(!$request->search && !$request->from && !$request->to)
+        {
+
+            return new AppointmentResource($appointments->paginate(20));
+
+        }else if(!$request->search && $request->from && $request->to){
+
+            $appointments->whereBetween('appointment_records.reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')));
+
+            return new AppointmentResource($appointments->paginate(20));
+
+        }else if($request->search && !$request->from && !$request->to){
+
+            $appointments->where(function ($query) use ($request) {
+                    $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orderBy('surname');
+                });
+
+            return new AppointmentResource($appointments->paginate(20));
+
         }else{
-            $appointments = Appointment::select('appointment_records.*')
-            ->leftJoin('personal_informations', 'appointment_records.personal_information_id', '=', 'personal_informations.id')
-            ->leftJoin('positions', 'appointment_records.position_id', '=', 'positions.id')
-            ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
-            ->leftJoin('salary_grades', 'appointment_records.salary_grade_id', '=', 'salary_grades.id')
-            ->leftJoin('salary_schedules', 'salary_grades.salary_sched_id', '=', 'salary_schedules.id')
-            ->select(
-                'personal_informations.id as personal_information_id',
-                'personal_informations.firstname as firstname',
-                'personal_informations.surname as surname',
-                'personal_informations.nameextension as nameextension',
-                'departments.id as dept_id',
-                'departments.title as dept_title',
-                'positions.id as position_id',
-                'positions.title as position_title',
-                'salary_schedules.id as salary_schedules_id',
-                'salary_schedules.tranche as tranche',
-                'salary_grades.id as salary_grade_id',
-                'salary_grades.step as step',
-                'salary_grades.grade as grade',
-                'appointment_records.*'
-            )
-            ->whereBetween('appointment_records.reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')))
-            ->where(function ($query) use ($request) {
-                $query->where('surname', 'LIKE', '%'.$request->search.'%')
-                ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
-                ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                ->orderBy('surname');
-            });
+
+            $appointments->whereBetween('appointment_records.reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')))
+                ->where(function ($query) use ($request) {
+                    $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orderBy('surname');
+                });
+
+            return new AppointmentResource($appointments->paginate(20));
+
         }
 
-        return new AppointmentResource($appointments->paginate(20));
 
     }
 

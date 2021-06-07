@@ -51,7 +51,6 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Type of leave</th>
-                                <th>Inclusive dates</th>
                                 <th>Date of filing</th>
                                 <th>Status</th>
                                 <th>Remark</th>
@@ -62,7 +61,6 @@
                             <tr v-for="(leaveapplication, index) in leaveapplications.data" :key="leaveapplication.id">
                                 <td>{{ leaveapplication.personalinformation.surname + ', ' + leaveapplication.personalinformation.firstname + ' ' + leaveapplication.personalinformation.nameextension + ' ' + leaveapplication.personalinformation.middlename }}</td>
                                 <td>{{ leaveapplication.leavetype.title }}</td>
-                                <td class="text-center">{{ leaveapplication.from }} <br> {{ ' - ' }} <br> {{ leaveapplication.to   }}</td>
                                 <td>{{ leaveapplication.date_of_filing }}</td>
                                 <td>{{ leaveapplication.stage_status }}</td>
                                 <td>

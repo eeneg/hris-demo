@@ -16,7 +16,7 @@
                         </div>
                        <div class="col-md-8">
                            <button type="button" class="btn btn-primary float-right" @click.prevent="reappointment_modal()">
-                                Reappoint <i class="fas fa-plus"></i>
+                                Reassign <i class="fas fa-plus"></i>
                             </button>
                        </div>
                     </div>
@@ -73,7 +73,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Reappoint</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Reassign</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -83,11 +83,11 @@
                         <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group col-12" style="position: relative;margin-bottom: 0.3rem;">
-                                        <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="employees.data" label="name" placeholder="Reappoint employee" :reduce="employees => employees.id"></v-select>
+                                        <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="employees.data" label="name" placeholder="Reassign employee" :reduce="employees => employees.id"></v-select>
                                         <has-error :form="form" field="personal_information_id"></has-error>
                                     </div>
                                     <div class="form-group col-12 mt-5">
-                                        <v-select class="form-control form-control-border border-width-2" v-model="form.assigned_to" :options="departments.data" label="title" placeholder="Reappoint to" :reduce="departments => departments.id"></v-select>
+                                        <v-select class="form-control form-control-border border-width-2" v-model="form.assigned_to" :options="departments.data" label="title" placeholder="Reassign to" :reduce="departments => departments.id"></v-select>
                                         <has-error :form="form" field="assigned_to"></has-error>
                                     </div>
                                 </div>

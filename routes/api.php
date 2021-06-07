@@ -79,6 +79,8 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('editleavesummary', 'API\LeaveCreditController@editleavesummary');
     Route::post('slp_fl_leave', 'API\LeaveCreditController@slp_fl_leave');
     Route::post('global_credits', 'API\LeaveCreditController@global_credits');
+
+    Route::post('checkChanges', 'API\LeaveApplicationController@checkChanges');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function() {

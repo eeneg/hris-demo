@@ -37,6 +37,8 @@ class LeaveApplicationController extends Controller
             'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id'))
         ];
 
+        $allEmployees = [];
+
         if ($department_id != '' && $department_id != null) {
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
@@ -66,8 +68,8 @@ class LeaveApplicationController extends Controller
 
             // $allEmployees = $allEmployees->merge($reappointments);
 
-            return $allEmployees;
-            return new LeaveApplicationResource($allEmployees);
+            // return $allEmployees;
+            // return new LeaveApplicationResource($allEmployees);
 
             // return $allEmployees->get('data') = 'asd';
 
@@ -91,7 +93,7 @@ class LeaveApplicationController extends Controller
                     })
                     ->orWhere('departments.id', $data['dept']['id'])->paginate(20);
 
-            return new LeaveApplicationResource($allEmployees);
+            // return new LeaveApplicationResource($allEmployees);
 
         } else if($data['role'] == 'Office Head' && $data['dept']['title'] == 'PGO-Executive'){
 
@@ -119,7 +121,7 @@ class LeaveApplicationController extends Controller
             ->orderBy('date_of_filing', 'desc')
             ->paginate(20);
 
-            return new LeaveApplicationResource($allEmployees);
+            // return new LeaveApplicationResource($allEmployees);
 
         }else{
 
@@ -134,9 +136,12 @@ class LeaveApplicationController extends Controller
                 ->whereNotNull('plantilla_contents.personal_information_id')
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
                 ->orderBy('date_of_filing', 'desc')->paginate(20);
-            return new LeaveApplicationResource($allEmployees);
+            // return new LeaveApplicationResource($allEmployees);
 
         }
+
+        return new LeaveApplicationResource($allEmployees);
+
     }
 
     /**

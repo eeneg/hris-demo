@@ -24,7 +24,7 @@
                 <img class="profile-user-img img-fluid img-circle" :src="getAvatar(personalinformation.picture)" alt="User profile picture">
             </div>
 
-            <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ personalinformation.firstname + ' ' + personalinformation.middlename + ' ' + personalinformation.surname + ' ' + personalinformation.nameextension }}</b></h3>
+            <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ personalinformation.firstname }} {{ personalinformation.middlename ? personalinformation.middlename : ' '  }} {{ personalinformation.surname }} {{ personalinformation.nameextension ? personalinformation.nameextension : ' '   }}</b></h3>
 
             <div class="view-profile-container">
                 <div class="row">

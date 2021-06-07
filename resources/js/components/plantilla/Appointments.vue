@@ -16,18 +16,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="" class="p-0">Reckoning date from: </label>
                                 <input type="date" name="reckoning_date_from" id="reckoning_date_from" class="form-control form-control-border border-width-2" v-model="reckoning_date_from" @change="searchAppointment">
                                 <!-- <date-picker v-model="reckoning_date_from" id="reckoning_date_from" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker> -->
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="" class="p-0">Reckoning date to: </label>
                                 <input type="date" name="reckoning_date_to" id="reckoning_date_to" class="form-control form-control-border border-width-2" v-model="reckoning_date_to" @change="searchAppointment">
                                 <!-- <date-picker v-model="reckoning_date_to" id="reckoning_date_to" :config="options" class="form-control form-control-border border-width-2" @change="searchAppointment" placeholder="(yyyy-mm-dd)"></date-picker> -->
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <button v-if="salaryschedules.length > 0 && departments.length > 0" class="btn btn-primary float-left mb-3" type="button" @click="resetSearch()" data-toggle="modal">Reset <i class="fas fa-redo"></i></button>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -326,12 +331,18 @@ export default {
         },
         getSearchResults: function(page = 1)
         {
+
+            this.$Progress.start()
+
             axios.get('api/appointment?page=' + page + '&search=' + this.search + '&from=' + this.reckoning_date_from + '&to=' + this.reckoning_date_to)
             .then(({data}) => {
                 this.appointments = data;
+                this.$Progress.finish()
             }).catch(error => {
                 console.log(error.reponse.data.message);
             });
+
+
         },
         getEmployees: function()
         {
@@ -518,6 +529,13 @@ export default {
                 })
             }
         },
+        resetSearch: function()
+        {
+            this.search = ''
+            this.reckoning_date_from = ''
+            this.reckoning_date_to = ''
+            this.getSearchResults()
+        }
     },
 }
 </script>
