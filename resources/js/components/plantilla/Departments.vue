@@ -44,8 +44,8 @@
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" type="button" @click="view_positions_modal(department.positions, department.id)">View Positions</a>
-                                                    <a class="dropdown-item" type="button" @click="edit_department_modal(department)">Edit Appointment</a>
-                                                    <a class="dropdown-item" type="button" @click="delete_department(department.id)">Delete Appointment</a>
+                                                    <a class="dropdown-item" type="button" @click="edit_department_modal(department)">Edit Department</a>
+                                                    <a class="dropdown-item" type="button" @click="delete_department(department.id)">Delete Department</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -166,7 +166,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary float-right" data-toggle="modal">Save <i class="fas fa-save"></i></button>
                     </div>
                 </div>
             </div>
