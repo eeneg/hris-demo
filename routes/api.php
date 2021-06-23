@@ -81,6 +81,11 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('global_credits', 'API\LeaveCreditController@global_credits');
 
     Route::post('checkChanges', 'API\LeaveApplicationController@checkChanges');
+
+    Route::get('fetch_depts', 'API\DepartmentController@fetch_depts');
+    Route::post('store_position', 'API\DepartmentController@store_position');
+    Route::patch('update_position/{id}', 'API\DepartmentController@update_position');
+    Route::delete('delete_position/{id}', 'API\DepartmentController@delete_position');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function() {

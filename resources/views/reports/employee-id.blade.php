@@ -6,7 +6,7 @@
 
         <title>Laravel</title>
 
-        <link href="{{ asset('css/id.css') }}" rel="stylesheet">
+        <link href="{{ public_path('css/id.css') }}" rel="stylesheet">
     </head>
     <body>
 
@@ -85,7 +85,7 @@
             </div>
         <div style="float: right; border: solid 1px; width: 204px; height: 324.768px;">
 
-            <img src="./storage/employee_id_files/peo-back.jpg" alt="logo" style="position: absolute; width: 100%; height: 100%; ">
+            <img src="./storage/employee_id_files/small-id-back/{{ $dept }}.jpg" alt="logo" style="position: absolute; width: 100%; height: 100%; ">
             <div class="sign">
                 <img src="./storage/employee_id_files/signatures/{{ $contact->signature }}.png" alt="sign" style="position: absolute; width: 100%; height: 100%; ">
             </div>

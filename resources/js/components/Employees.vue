@@ -924,6 +924,23 @@
             }
             ,
             generateId() {
+
+                $('#idModal').modal('hide');
+
+                Swal.fire({
+                    title: 'Dont reload or close the application ...',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
                 let idForm = new FormData()
 
                 idForm.append('id', this.contact.id)
@@ -941,6 +958,7 @@
                     };
                     $('#pdfModal').modal('show');
                     PDFObject.embed("/storage/employee_ids/" + response.data.title + ".pdf", "#pdf-viewer", options);
+                    Swal.close()
                 })
                 .catch(error => {
 

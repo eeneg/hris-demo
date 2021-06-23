@@ -9,6 +9,8 @@ use App\PlantillaContent;
 use App\Plantilla;
 use App\Setting;
 use App\Http\Resources\SortedDepartmentsResource;
+use App\Http\Resources\DepartmentsAndPositionsResource;
+use App\Position;
 
 class DepartmentController extends Controller
 {
@@ -29,6 +31,14 @@ class DepartmentController extends Controller
         return new SortedDepartmentsResource($plantillacontents);
     }
 
+    public function fetch_depts()
+    {
+        $departments = Department::with('position')->get();
+
+        return new DepartmentsAndPositionsResource($departments);
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -37,7 +47,7 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $department = Department::create($request->all());
     }
 
     /**
@@ -60,7 +70,9 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $department = Department::findOrFail($id);
+
+        $department->update($request->all());
     }
 
     /**
@@ -71,6 +83,30 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = Department::findOrFail($id);
+
+        $department->delete();
+    }
+
+    public function store_position(Request $request){
+
+        $position = Position::create($request->all());
+
+    }
+
+    public function update_position(Request $request, $id){
+
+        $position = Position::findOrFail($id);
+
+        $position->update($request->all());
+
+    }
+
+    public function delete_position($id){
+
+        $position = Position::findOrFail($id);
+
+        $position->delete();
+
     }
 }
