@@ -18,13 +18,13 @@ class CreatePlantillaContentsTable extends Migration
             $table->uuid('plantilla_id');
             $table->foreign('plantilla_id')->references('id')->on('plantillas')->onDelete('cascade');
             $table->uuid('salary_grade_auth_id')->nullable();
-            $table->foreign('salary_grade_auth_id')->references('id')->on('salary_grades')->onDelete('cascade');
+            $table->foreign('salary_grade_auth_id')->references('id')->on('salary_grades')->onDelete('set null');
             $table->uuid('salary_grade_prop_id')->nullable();
-            $table->foreign('salary_grade_prop_id')->references('id')->on('salary_grades')->onDelete('cascade');
-            $table->uuid('position_id');
-            $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
+            $table->foreign('salary_grade_prop_id')->references('id')->on('salary_grades')->onDelete('set null');
+            $table->uuid('position_id')->nullable();
+            $table->foreign('position_id')->references('id')->on('positions')->onDelete('set null');
             $table->uuid('personal_information_id')->nullable();
-            $table->foreign('personal_information_id')->references('id')->on('personal_informations')->onDelete('cascade');
+            $table->foreign('personal_information_id')->references('id')->on('personal_informations')->onDelete('set null');
             $table->string('old_number', 100)->nullable();
             $table->string('new_number', 100)->nullable();
             $table->decimal('difference_amount', 8, 2)->nullable();

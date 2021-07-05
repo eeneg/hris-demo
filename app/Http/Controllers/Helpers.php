@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Webpatser\Uuid\Uuid;
@@ -14,6 +15,7 @@ use App\Setting;
 use App\User;
 use App\SalaryGrade;
 use App\PlantillaContent;
+use App\Position;
 
 class Helpers extends Controller
 {
@@ -23,16 +25,16 @@ class Helpers extends Controller
         $on = '';
         $count = 0;
         foreach ($workexps as $workexp) {
-           
+
             if(str_contains($workexp->position, '^*')){
                 $count++;
                 $on = explode('^*', $workexp->position)[0];
                 $pos = explode('^*', $workexp->position)[1];
                 $workexp->position = $pos;
                 $workexp->orderNo = $on;
-                
+
             }
-            
+
             if(str_contains($workexp->inclusiveDateFrom, ' /*/ ')){
                 $dates = explode(' /*/ ', $workexp->inclusiveDateFrom);
                 $workexp->inclusiveDateFrom = $dates[0];
@@ -40,7 +42,7 @@ class Helpers extends Controller
             }
 
             $workexp->save();
-           
+
         }
     }
 
@@ -49,15 +51,15 @@ class Helpers extends Controller
         $nad = '';
         $on = '';
         foreach ($volworks as $volwork) {
-           
+
             if(str_contains($volwork->nameAndAddress, '^*')){
                 $on = explode('^*', $volwork->nameAndAddress)[0];
                 $nad = explode('^*', $volwork->nameAndAddress)[1];
                 $volwork->nameAndAddress = $nad;
                 $volwork->orderNo = $on;
-                
+
             }
-            
+
             if(str_contains($volwork->inclusiveDateFrom, ' /*/ ')){
                 $dates = explode(' /*/ ', $volwork->inclusiveDateFrom);
                 $volwork->inclusiveDateFrom = $dates[0];
@@ -65,7 +67,7 @@ class Helpers extends Controller
             }
 
             $volwork->save();
-           
+
         }
     }
 
@@ -74,24 +76,24 @@ class Helpers extends Controller
         $title = '';
         $on = '';
         foreach ($trainings as $training) {
-           
+
             if(str_contains($training->title, '^*')){
                 $on = explode('^*', $training->title)[0];
                 $title = explode('^*', $training->title)[1];
                 $training->title = $title;
                 $training->orderNo = $on;
-                
+
             }
-            
+
             if(str_contains($training->inclusiveDateFrom, ' /*/ ')){
                 $dates = explode(' /*/ ', $training->inclusiveDateFrom);
                 $training->inclusiveDateFrom = $dates[0];
                 $training->inclusiveDateTo = $dates[1];
             }
-            
+
 
             $training->save();
-           
+
         }
     }
 
@@ -153,6 +155,15 @@ class Helpers extends Controller
                 ->first();
             $value->salary_grade_prop_id = $salaryGrade->id;
             $value->save();
+        }
+    }
+
+    public function positions() {
+        $departments = Department::all();
+        foreach ($departments as $key => $value) {
+            $unique_positions = Position::where('department_id', $value->id)->groupBy('title')->get();
+            $all_positions = Position::where('department_id', $value->id)->get();
+
         }
     }
 }
