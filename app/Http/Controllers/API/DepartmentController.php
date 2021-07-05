@@ -38,6 +38,13 @@ class DepartmentController extends Controller
         return new DepartmentsAndPositionsResource($departments);
     }
 
+    public function fetch_positions(Request $request)
+    {
+        $positions = Position::where('department_id', $request->id)->get();
+
+        return $positions;
+    }
+
 
     /**
      * Store a newly created resource in storage.

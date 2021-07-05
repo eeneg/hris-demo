@@ -1,0 +1,268 @@
+<template>
+   <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3>Positions</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row justify-content-between">
+                        <div class="col-md-6">
+                                <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
+                                    <v-select @input="filter_positions()" class="form-control form-control-border border-width-2" v-model="search_pos" :options="positions" label="title" placeholder="Search positions" :reduce="positions => positions.id"></v-select>
+                                </div>
+                        </div>
+                        <div class="col-md-5">
+                                <button type="button" class="btn btn-primary float-right" @click.prevent="create_position_modal()">
+                                    Create <i class="fas fa-plus"></i>
+                                </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive p-0" style="height: 500px; overflow :auto;">
+                            <table class="table table-striped text-nowrap custom-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 90%">Position</th>
+                                        <th style="width: 10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(position, index) in positions" :key="position.id">
+                                        <td>
+                                            {{ position.title }}
+                                        </td>
+                                        <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" type="button" @click="edit_position_modal(position)">Edit Position</a>
+                                                    <a class="dropdown-item" type="button" @click="delete_position(position.id)">Delete Position</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- modal start -->
+
+        <div class="content-modal">
+            <div class="modal hide fade" id="positions_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ editMode == false ? 'Create Position' : 'Edit Position' }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="error = false">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form @submit.prevent="editMode == false ? submit_position() : submit_edit_position()" action="">
+                        <div class="modal-body">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-12 text-center">
+                                        <input v-model="pos_form.title" ref="title" class="form-control form-control-border border-width-2" type="text" name="title" placeholder="Title">
+                                        <small v-if="error == true" class="text-danger font-weight-bold">
+                                            {{
+                                                editMode == false ? 'Failed to create Position' : 'Failed to edit Position'
+                                            }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="error = false">Close</button>
+                            <button type="submit" class="btn btn-primary float-right" data-toggle="modal">Save <i class="fas fa-save"></i></button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal end -->
+
+
+
+    </div> <!-- row -->
+</template>
+
+<script>
+    export default {
+       data()
+       {
+           return {
+               editMode: false,
+               error: false,
+               positions: [],
+               filter_pos: [],
+               search_pos: '',
+               dept_id: '',
+               pos_form: new Form({
+                   'id': '',
+                   'department_id': '',
+                   'title': '',
+               })
+           }
+       },
+        beforeRouteEnter (to, from, next) {
+            if(to.query.dept_id == null)
+            {
+                    next()
+            }
+            else if(to.query.dept_id != null){
+                axios.get('api/fetch_positions?id='+to.query.dept_id)
+                .then(({data}) => {
+                    next(vm => vm.fetch_positions(data, to.query.dept_id))
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire(
+                        'Oops...',
+                        'Unable to retrieve positions',
+                        'error'
+                    )
+                })
+            }
+        },
+       methods: {
+            filter_positions: function()
+            {
+                let data = this.filter_pos
+
+                if (this.search_pos != null && this.search_pos != '') {
+                    data = _.filter(data, {'id': this.search_pos});
+                }
+
+                this.positions = data
+            },
+            refresh_positions: function()
+            {
+
+                this.$Progress.start()
+                axios.get('api/fetch_positions?id='+this.department_id)
+                .then(({data}) => {
+                    this.positions = data
+                    this.filter_pos = data
+                    this.$Progress.finish()
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire(
+                        'Oops...',
+                        'Unable to retrieve positions',
+                        'error'
+                    )
+                })
+
+            },
+           fetch_positions: function(data, id)
+           {
+               this.positions = data
+               this.filter_pos = data
+               this.department_id = id
+           },
+           create_position_modal: function(){
+               this.editMode = false
+               this.pos_form.reset()
+               $('#positions_modal').modal('show')
+           },
+           submit_position: function(){
+               this.$Progress.start()
+               this.pos_form.department_id = this.department_id
+               axios.post('api/store_position', this.pos_form)
+               .then(response => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Created'
+                    });
+                    this.refresh_positions()
+                    $('#positions_modal').modal('hide')
+                    this.$Progress.finish()
+               })
+                .catch(error => {
+                    console.log(error)
+                    this.error = true
+                })
+           },
+           edit_position_modal: function(data){
+               this.editMode = true
+               Object.assign(this.pos_form, data)
+               $('#positions_modal').modal('show')
+           },
+           submit_edit_position: function()
+           {
+               this.$Progress.start()
+               axios.patch('api/update_position/'+this.pos_form.id, this.pos_form)
+               .then(response => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Edited'
+                    });
+                    this.refresh_positions()
+                    $('#positions_modal').modal('hide')
+                    this.$Progress.finish()
+               })
+                .catch(error => {
+                    console.log(error)
+                    this.error = true
+                })
+           },
+           delete_position: function(id)
+           {
+
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "You wont be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Cancelled'
+                        });
+                    }else{
+                        this.$Progress.start()
+                        axios.delete('api/delete_position/'+id)
+                        .then(response => {
+                            this.$Progress.finish()
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Deleted successfully'
+                            });
+                            this.refresh_positions()
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            this.error = true
+                        })
+
+                    }
+                })
+
+           }
+       },
+       created(){
+           this.fetch_departments()
+       },
+        mounted() {
+            console.log('Component mounted.')
+        }
+    }
+</script>
