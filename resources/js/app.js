@@ -67,6 +67,7 @@ const routes = [
     { path: '/plantilla', component: require('./components/plantilla/AnnualPlantilla.vue').default },
     { path: '/salaryschedule', component: require('./components/plantilla/SalarySchedule.vue').default },
     { path: '/departments', component: require('./components/plantilla/Departments.vue').default },
+    { path: '/positions', component: require('./components/plantilla/Positions.vue').default },
     { path: '/appointments', component: require('./components/plantilla/Appointments.vue').default },
     { path: '/leave-credits', component: require('./components/leave/Credits.vue').default },
     { path: '/leave-applications', component: require('./components/leave/LeaveApplications.vue').default },
