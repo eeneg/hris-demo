@@ -159,11 +159,36 @@ class Helpers extends Controller
     }
 
     public function positions() {
-        $departments = Department::all();
-        foreach ($departments as $key => $value) {
-            $unique_positions = Position::where('department_id', $value->id)->groupBy('title')->get();
-            $all_positions = Position::where('department_id', $value->id)->get();
 
+        // e comment sa ang 'with = []' sa Position.app ug PlatillaContent.app before e run ni
+
+        $ar = [];
+
+        $pl = [];
+
+        $positions = Position::all()->groupBy('department_id');
+
+        $ar =   $positions->map(function($item, $key){
+                    return $item->groupBy('title')->map(function($item, $key){
+                        return $item->map(function($item, $key){
+                            return $item->id;
+                        });
+                    });
+                });
+
+        foreach($ar as $data)
+        {
+            foreach($data as $x)
+            {
+
+                PlantillaContent::whereIn('position_id', $x)->update(['position_id' => $x[0]]);
+
+                unset($x[0]);
+
+                Position::whereIn('id', $x)->delete();
+
+            }
         }
+
     }
 }
