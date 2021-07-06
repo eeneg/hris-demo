@@ -20,7 +20,7 @@
                        </div>
                     </div>
                     <div class="row">
-                        <div class="card-body table-responsive p-0" style="max-height: calc(100vh - 200px);">
+                        <div class="card-body table-responsive p-0" style="height: 650px;">
                             <table class="table table-striped text-nowrap custom-table">
                                 <thead>
                                     <tr>
