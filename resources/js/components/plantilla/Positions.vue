@@ -259,7 +259,7 @@
            }
        },
        created(){
-           this.fetch_departments()
+
        },
         mounted() {
             console.log('Component mounted.')
