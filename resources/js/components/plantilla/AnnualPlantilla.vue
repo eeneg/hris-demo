@@ -12,16 +12,14 @@
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom:0;">
                                 <label style="margin: 0;font-weight: normal;line-height:25px;">Select Department</label>
-                                <select class="custom-select form-control-border border-width-2" v-model="selectedDepartment" @change="loadContents()">
-                                    <option v-for="department in departments" :key="department.id">{{ department.address }}</option>
-                                </select>
+                                <v-select @input="loadContents()" class="form-control form-control-border border-width-2" v-model="selectedDepartment" :options="departments" label="address" placeholder="Search Department" :reduce="departments => departments.address"></v-select>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="generatePlantilla()"><i class="fas fa-print"></i></a>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="addItemModal()">Create New Item</button>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
 
@@ -281,8 +279,8 @@
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="edit_date_approved" style="font-weight: normal; margin: 0;">Date Approved (yyyy-mm-dd)</label>
                                         <input v-model="plantillaForm.date_approved" id="edit_date_approved" class="form-control form-control-border border-width-2" type="text" name="date_approved" placeholder="yyyy-mm-dd"
-                                        :class="{ 'is-invalid': plantillaForm.errors.has('date_approved') }" 
-                                            onkeypress="return event.charCode > 47 && event.charCode < 58;" 
+                                        :class="{ 'is-invalid': plantillaForm.errors.has('date_approved') }"
+                                            onkeypress="return event.charCode > 47 && event.charCode < 58;"
                                             onkeydown="var date = this.value;
                                                 if (window.event.keyCode == 8) {
                                                     this.value = date;
@@ -291,7 +289,7 @@
                                                 } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
                                                     this.value = date + '-';
                                                 }
-                                            " 
+                                            "
                                             maxlength="10">
                                         <has-error :form="plantillaForm" field="date_approved"></has-error>
                                     </div>
@@ -336,7 +334,7 @@
     export default {
         data() {
             return {
-                departments: {},
+                departments: [],
                 itemMin: 0,
                 itemMax: 0,
                 selectedDepartment: '',
@@ -429,7 +427,7 @@
                             text: 'Annual Plantilla ' + this.plantillaForm.year + ' updated successfully',
                         })
                         this.$parent.getSettings();
-                        $('#edit-plantilla-modal').modal('hide');     
+                        $('#edit-plantilla-modal').modal('hide');
                         this.$Progress.finish();
                         $('#editLoadingIcon').addClass('d-none');
                         $('#editButton').removeAttr('disabled');
@@ -457,7 +455,7 @@
                             title: 'Success',
                             text: 'Annual Plantilla ' + this.plantillaForm.year + ' created successfully',
                         })
-                        $('#duplicate-plantilla-modal').modal('hide');     
+                        $('#duplicate-plantilla-modal').modal('hide');
                         this.$Progress.finish();
                         $('#duplicateLoadingIcon').addClass('d-none');
                         $('#duplicateButton').removeAttr('disabled');
@@ -628,7 +626,7 @@
                             icon: 'success',
                             title: 'Item added successfully'
                         });
-                        $('#add-item-modal').modal('hide');     
+                        $('#add-item-modal').modal('hide');
                         this.$Progress.finish();
                     })
                     .catch(error => {
@@ -644,7 +642,7 @@
                             icon: 'success',
                             title: 'Record updated successfully'
                         });
-                        $('#plantilla-content-modal').modal('hide');    
+                        $('#plantilla-content-modal').modal('hide');
                         this.$Progress.finish();
                     })
                     .catch(() => {
@@ -685,7 +683,7 @@
                         this.itemMin = data.data[0].new_number;
                         this.itemMax = data.data[data.data.length - 1].new_number;
                         this.footnoteForm.department = this.selectedDepartment;
-                        
+
                         axios.post('api/footnotespec', {department: this.selectedDepartment})
                             .then(({data}) => {
                                 this.footnote = data.note;

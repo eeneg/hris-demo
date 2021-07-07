@@ -62,27 +62,24 @@
                     <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">{{ editMode == false ? 'Create Position' : 'Edit Position' }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="error = false">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editMode == false ? submit_position() : submit_edit_position()" action="">
+                    <form @submit.prevent="editMode == false ? submit_position() : submit_edit_position()" @keydown="form.onKeydown($event)">
                         <div class="modal-body">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="form-group col-12 text-center">
-                                        <input v-model="pos_form.title" ref="title" class="form-control form-control-border border-width-2" type="text" name="title" placeholder="Title">
-                                        <small v-if="error == true" class="text-danger font-weight-bold">
-                                            {{
-                                                editMode == false ? 'Failed to create Position' : 'Failed to edit Position'
-                                            }}
-                                        </small>
+                                    <div class="form-group col-12">
+                                        <input id="title" v-model="form.title" type="text" name="title" placeholder="Position Title"
+                                            class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('title') }">
+                                        <has-error :form="form" field="title"></has-error>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="error = false">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
                             <button type="submit" class="btn btn-primary float-right" data-toggle="modal">Save <i class="fas fa-save"></i></button>
                         </div>
                     </form>
@@ -104,12 +101,11 @@
        {
            return {
                editMode: false,
-               error: false,
                positions: [],
                filter_pos: [],
                search_pos: '',
                dept_id: '',
-               pos_form: new Form({
+               form: new Form({
                    'id': '',
                    'department_id': '',
                    'title': '',
@@ -175,13 +171,14 @@
            },
            create_position_modal: function(){
                this.editMode = false
-               this.pos_form.reset()
+               this.form.reset()
+               this.form.clear()
                $('#positions_modal').modal('show')
            },
            submit_position: function(){
                this.$Progress.start()
-               this.pos_form.department_id = this.department_id
-               axios.post('api/store_position', this.pos_form)
+               this.form.department_id = this.department_id
+               this.form.post('api/store_position', this.form)
                .then(response => {
                     toast.fire({
                         icon: 'success',
@@ -192,19 +189,20 @@
                     this.$Progress.finish()
                })
                 .catch(error => {
+                    this.$Progress.fail();
                     console.log(error)
-                    this.error = true
                 })
            },
            edit_position_modal: function(data){
                this.editMode = true
-               Object.assign(this.pos_form, data)
+               Object.assign(this.form, data)
+               this.form.clear()
                $('#positions_modal').modal('show')
            },
            submit_edit_position: function()
            {
                this.$Progress.start()
-               axios.patch('api/update_position/'+this.pos_form.id, this.pos_form)
+               this.form.patch('api/update_position/'+this.form.id, this.form)
                .then(response => {
                     toast.fire({
                         icon: 'success',
@@ -215,8 +213,8 @@
                     this.$Progress.finish()
                })
                 .catch(error => {
+                    this.$Progress.fail();
                     console.log(error)
-                    this.error = true
                 })
            },
            delete_position: function(id)
@@ -249,8 +247,13 @@
                             this.refresh_positions()
                         })
                         .catch(error => {
+                            this.$Progress.fail();
+                            Swal.fire(
+                                'Oops...',
+                                'Failed to delete position',
+                                'error'
+                            )
                             console.log(error)
-                            this.error = true
                         })
 
                     }

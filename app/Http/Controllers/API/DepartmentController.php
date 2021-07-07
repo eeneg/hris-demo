@@ -97,11 +97,19 @@ class DepartmentController extends Controller
 
     public function store_position(Request $request){
 
+        $this->validate($request, [
+            'title' => 'required|unique:positions,title'
+        ]);
+
         $position = Position::create($request->all());
 
     }
 
     public function update_position(Request $request, $id){
+
+        $this->validate($request, [
+            'title' => 'required|unique:positions,title'
+        ]);
 
         $position = Position::findOrFail($id);
 
