@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Positions <router-link to="/departments" style="float: right;"><i class="fas fa-arrow-left"></i></router-link></h2>
+                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Positions: {{ dept_title }} <router-link to="/departments" style="float: right;"><i class="fas fa-arrow-left"></i></router-link></h2>
                 </div>
 
                 <div class="card-body">
@@ -103,6 +103,7 @@
                editMode: false,
                positions: [],
                filter_pos: [],
+               dept_title: '',
                search_pos: '',
                dept_id: '',
                form: new Form({
@@ -168,6 +169,7 @@
                this.positions = data
                this.filter_pos = data
                this.department_id = id
+               this.dept_title = data[0].department.title
            },
            create_position_modal: function(){
                this.editMode = false
