@@ -24,7 +24,8 @@
                             <table class="table table-striped text-nowrap custom-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 90%">Position</th>
+                                        <th style="width: 45%">Position</th>
+                                        <th style="width: 45%">Number of Items</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -32,6 +33,8 @@
                                     <tr v-for="(position, index) in positions" :key="position.id">
                                         <td>
                                             {{ position.title }}
+                                        </td><td>
+                                            {{ position.count }}
                                         </td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
                                             <div class="btn-group">
@@ -119,9 +122,11 @@
                     next()
             }
             else if(to.query.dept_id != null){
+                Vue.prototype.$Progress.start()
                 axios.get('api/fetch_positions?id='+to.query.dept_id)
                 .then(({data}) => {
                     next(vm => vm.fetch_positions(data, to.query.dept_id))
+                    Vue.prototype.$Progress.finish()
                 })
                 .catch(error => {
                     console.log(error)
@@ -130,6 +135,7 @@
                         'Unable to retrieve positions',
                         'error'
                     )
+                    Vue.prototype.$Progress.fail()
                 })
             }
         },
@@ -166,10 +172,12 @@
             },
            fetch_positions: function(data, id)
            {
-               this.positions = data
-               this.filter_pos = data
-               this.department_id = id
-               this.dept_title = data[0].department.title
+                this.positions = data
+                this.filter_pos = data
+                this.department_id = id
+                this.dept_title = data[0].department.title
+
+                console.log(data)
            },
            create_position_modal: function(){
                this.editMode = false

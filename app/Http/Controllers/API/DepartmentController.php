@@ -42,6 +42,11 @@ class DepartmentController extends Controller
     {
         $positions = Position::where('department_id', $request->id)->orderBy('title')->get();
 
+        foreach($positions as $key => $data)
+        {
+            $positions[$key]['count']  = PlantillaContent::where('position_id', $data->id)->count();
+        }
+
         return $positions;
     }
 

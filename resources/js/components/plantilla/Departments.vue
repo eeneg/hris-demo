@@ -147,19 +147,22 @@
             },
            fetch_departments: function()
            {
-               return axios.get('api/fetch_depts')
-               .then(({data}) => {
-                   this.departments = data
-                   this.filter_depts = data.data
-               })
-               .catch(error => {
-                   console.log(error)
-                   Swal.fire(
-                       'Oopss..',
-                       'Unable to fetch Departments & Positions',
-                       'error',
-                   )
-               })
+                this.$Progress.start()
+                return axios.get('api/fetch_depts')
+                .then(({data}) => {
+                    this.departments = data
+                    this.filter_depts = data.data
+                    this.$Progress.finish()
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire(
+                        'Oopss..',
+                        'Unable to fetch Departments & Positions',
+                        'error',
+                    )
+                    this.$Progress.fail()
+                })
            },
             create_department_modal: function()
            {
@@ -187,6 +190,7 @@
                         'Unable to create Department',
                         'error',
                     )
+                    this.$Progress.fail()
                })
            },
            edit_department_modal: function(data)
@@ -215,6 +219,7 @@
                         'Unable to edit Department',
                         'error',
                     )
+                    this.$Progress.fail()
                })
            },
            delete_department: function(id)
@@ -252,6 +257,7 @@
                                 'Unable to delete Department',
                                 'error',
                             )
+                            this.$Progress.fail()
                         })
 
                     }
