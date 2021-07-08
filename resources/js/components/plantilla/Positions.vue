@@ -8,7 +8,7 @@
 
                 <div class="card-body">
                     <div class="row justify-content-between">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                                 <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
                                     <v-select @input="filter_positions()" class="form-control form-control-border border-width-2" v-model="search_pos" :options="positions" label="title" placeholder="Search positions" :reduce="positions => positions.id"></v-select>
                                 </div>

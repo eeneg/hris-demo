@@ -40,7 +40,7 @@ class DepartmentController extends Controller
 
     public function fetch_positions(Request $request)
     {
-        $positions = Position::where('department_id', $request->id)->get();
+        $positions = Position::where('department_id', $request->id)->orderBy('title')->get();
 
         return $positions;
     }
