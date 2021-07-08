@@ -23,7 +23,7 @@
                             <v-select v-model="selectedleavetype" @input="filter_data()" placeholder="Select specific leave type" class="form-control form-control-border border-width-2" :options="leavetypes" label="title" :reduce="leavetypes => leavetypes.id"></v-select>
                         </div>
                         <div class="form-group col-md-4 mb-0">
-                            <v-select class="form-control form-control-border border-width-2" aria-label="Default select example" v-model="selected_stage_status" @input="filter_data()" :options="stage_status" placeholder="Filter">
+                            <v-select class="form-control form-control-border border-width-2" aria-label="Default select example" v-model="selected_stage_status" @input="filter_data()" :options="stage_status" placeholder="Filter Status">
                             </v-select>
                         </div>
                     </div>
