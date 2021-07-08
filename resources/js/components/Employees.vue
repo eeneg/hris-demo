@@ -896,8 +896,27 @@
                     });
             },
             generatePDS(id){
+
+                Swal.fire({
+                    title: '<strong>Generating PDS</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
+
                 axios.post('generatePDS', {id: id})
                     .then(response => {
+                        Swal.close()
                         let options = {
                             height: screen.height * 0.65 + 'px',
                             page: '1'
@@ -928,7 +947,9 @@
                 $('#idModal').modal('hide');
 
                 Swal.fire({
-                    title: 'Dont reload or close the application ...',
+                    title: '<strong>Generating ID</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
                     willOpen () {
                         Swal.showLoading ()
                     },

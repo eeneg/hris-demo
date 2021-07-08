@@ -619,17 +619,18 @@
                         {
 
                             Swal.fire({
-                            title: 'Dont reload or close the application ...',
-                            willOpen () {
-                                Swal.showLoading ()
-                            },
-                            didClose () {
-                                Swal.hideLoading()
-                            },
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                allowEnterKey: false,
-                                showConfirmButton: false
+                                title: 'Loading ...',
+                                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                                willOpen () {
+                                    Swal.showLoading ()
+                                },
+                                didClose () {
+                                    Swal.hideLoading()
+                                },
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    allowEnterKey: false,
+                                    showConfirmButton: false
                             })
 
                             axios.post('api/acceptEditRequest?id='+this.pendingRequest.data[this.editIndex]['id'] + '&mode=' +mode, this.acceptedRequest)
@@ -752,8 +753,9 @@
                     }else{
                         this.$Progress.start()
 
-                         Swal.fire({
-                            title: 'Dont reload or close the application ...',
+                        Swal.fire({
+                            title: 'Loading ...',
+                            html: 'Dont <u>reload</u> or <u>close</u> the application ...',
                             willOpen () {
                                 Swal.showLoading ()
                             },
