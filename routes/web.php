@@ -43,7 +43,7 @@ Route::get('{path}', 'HomeController@index')->where( 'path','([-a-z0-9_\s]+)' );
 // Route::get('/trainingFormat', 'Helpers@trainingFormat');
 // Route::get('/makePlantilla', 'Helpers@makePlantilla');
 Route::get('/initializeSystem', 'Helpers@initialize');
-
+// Route::get('/post/post', 'Helpers@positions');
 // Route::get('/updateIds', 'Helpers@updateIds');
 // Route::get('/updateSalaryGrades', 'Helpers@updateSalaryGrades');
 

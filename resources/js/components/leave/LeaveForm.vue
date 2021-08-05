@@ -240,7 +240,7 @@
         components: {
             datePicker
         },
-         beforeRouteEnter (to, from, next) {
+        beforeRouteEnter (to, from, next) {
             if(to.query.id == null)
             {
                     next()
