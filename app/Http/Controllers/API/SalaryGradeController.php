@@ -23,6 +23,11 @@ class SalaryGradeController extends Controller
 
             foreach($sg->groupBy('grade') as $data)
             {
+                foreach($data as $value)
+                {
+                    $value['annual'] = $value->amount * 12;
+                }
+
                 array_push($ar, collect($data)->sortBy('step')->values());
             }
 

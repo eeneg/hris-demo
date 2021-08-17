@@ -11,6 +11,11 @@
                                     <option v-for="salaryschedule in salaryschedules" v-bind:value="salaryschedule.tranche" :key="salaryschedule.id"> {{ salaryschedule.tranche }} </option>
                                 </select>
                             </div>
+                             <div class="btn-group">
+                                <button v-if="$gate.isAdministrator()" @click.prevent="generate_salarysched()" type="button" class="btn btn-outline-success">
+                                    <i class="fa fa-print"></i>
+                                </button>
+                            </div>
                             <div class="btn-group">
                                 <button v-if="$gate.isAdministrator()" @click.prevent="editSalaryScheduleModal()" type="button" class="btn btn-outline-primary">
                                     <i class="fa fa-edit"></i>
@@ -57,7 +62,10 @@
                                 <tbody>
                                     <tr v-for="(salarygrade, index) in salarygrades" :key="salarygrade.id" class="text-center">
                                         <td style="width: calc(100%-150px);"> {{ salarygrade[0]['grade'] }} </td>
-                                        <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">{{ amounts.amount }}</td>
+                                        <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">
+                                            {{ amounts.amount }} <br>
+                                            ({{ amounts.annual | amount }})
+                                        </td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
                                             <a href="#" class="btn btn-sm btn-outline-primary" v-if="$gate.isAdministrator()" @click.prevent="editSalaryGradeModal(salarygrade)" data-toggle="modal" data-target="#salaryGradeModal">
                                                 <i class="fa fa-edit"></i>
@@ -152,6 +160,34 @@
             </div>
         </div>
         <!-- end sg modal -->
+
+         <!-- pdf modal -->
+
+        <div class="modal" id="pdfModal">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Print/Save as PDS</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body" id="pdf-viewer">
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- end pdf modal -->
     </div>
 </template>
 
@@ -504,6 +540,20 @@
                         })
                     }
                 })
+            },
+            generate_salarysched(id){
+                axios.post('generateSalarySched', {tranche: this.selected})
+                .then(response => {
+                    let options = {
+                        height: screen.height * 0.65 + 'px',
+                        page: '1'
+                    };
+                    $('#pdfModal').modal('show');
+                    PDFObject.embed("/storage/salary_sched_report/" + response.data.title, "#pdf-viewer", options);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
             },
             onlyNumber: function($event) {
             let keyCode = ($event.keyCode ? $event.keyCode : $event.which);

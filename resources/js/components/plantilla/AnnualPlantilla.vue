@@ -56,9 +56,9 @@
                                 <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename }}</td>
                                 <td v-else class="green"><b>VACANT</b></td>
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
-                                <td style="text-align: right;">{{ record.salaryauthorized !== null ? ((record.working_time == 'Full-time' ? record.salaryauthorized.amount * 12 : (record.salaryauthorized.amount / 2) * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
+                                <td style="text-align: right;">{{ (record.salaryauthorized !== null ? ((record.working_time == 'Full-time' ? record.salaryauthorized.amount * 12 : (record.salaryauthorized.amount / 2) * 12)) : '')  | amount}}</td>
                                 <td style="text-align: center;">{{ record.salaryproposed !== null ? (record.salaryproposed.grade + ' / ' + record.salaryproposed.step) : '' }}</td>
-                                <td style="text-align: right;">{{ record.salaryproposed !== null ? ((record.working_time == 'Full-time' ? record.salaryproposed.amount * 12 : (record.salaryproposed.amount / 2) * 12).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : '' }}</td>
+                                <td style="text-align: right;">{{ (record.salaryproposed !== null ? ((record.working_time == 'Full-time' ? record.salaryproposed.amount * 12 : (record.salaryproposed.amount / 2) * 12)) : '') | amount}}</td>
                                 <td style="text-align: right;">{{ getDifference(record) }}</td>
                                 <td style="text-align: center;"><a href="#" @click.prevent="record.new_number ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.new_number ?'fas fa-edit' : 'fas fa-history'"></i></a></td>
                             </tr>

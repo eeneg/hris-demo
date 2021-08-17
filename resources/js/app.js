@@ -127,6 +127,10 @@ Vue.filter('myDate', function(value){
     return moment(value).format('LL');
 })
 
+Vue.filter('amount', function(value){
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+})
+
 Vue.filter('initial', function(value){
     if (value == null) {
         return ''
@@ -134,6 +138,7 @@ Vue.filter('initial', function(value){
         return value.charAt(0).toUpperCase() +'.'
     }
 })
+
 
 window.Fire = new Vue();
 

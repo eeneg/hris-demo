@@ -7,6 +7,7 @@ use App\Department;
 use App\LeaveSummary;
 use App\PersonalInformation;
 use App\Position;
+use App\SalarySchedule;
 use \Milon\Barcode\DNS1D;
 use \Milon\Barcode\DNS2D;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -106,5 +107,29 @@ class PDFcontroller extends Controller
         return ['title' => $employee->surname .'.pdf'];
 
         // return view('reports.employee-leavecard', compact('data'));
+    }
+
+    public function generatesalarysched(Request $request)
+    {
+
+        $sg = SalarySchedule::firstWhere('tranche', $request->tranche)->salarygrades->sortBy('created_at');
+        $tranche = $request->tranche;
+        $salarysched = collect();
+
+        foreach($sg->sortBy('grade')->groupBy('grade') as $data)
+        {
+            foreach($data as $value)
+            {
+                $value['annual'] = $value->amount * 12;
+            }
+
+            $salarysched->push(($data)->sortBy('step')->values());
+        }
+
+        $pdf = PDF::loadView('reports/salary-sched', compact('salarysched', 'tranche'));
+
+        Storage::put('public/salary_sched_report/' . $request->tranche .'.pdf', $pdf->output());
+
+        return ['title' => $request->tranche . '.pdf'];
     }
 }

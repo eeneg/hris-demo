@@ -35,6 +35,9 @@ Route::post('/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::post('/generatePlantilla', 'PDFcontroller@plantilla');
 
+Route::any('/generateSalarySched', 'PDFcontroller@generatesalarysched');
+
+
 Route::get('{path}', 'HomeController@index')->where( 'path','([-a-z0-9_\s]+)' );
 
 
@@ -48,3 +51,5 @@ Route::get('/initializeSystem', 'Helpers@initialize');
 // Route::get('/updateSalaryGrades', 'Helpers@updateSalaryGrades');
 
 Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');
+
+Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
