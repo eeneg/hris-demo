@@ -35,6 +35,12 @@ Route::post('/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::post('/generatePlantilla', 'PDFcontroller@plantilla');
 
+Route::post('/generateNOSI', 'PDFcontroller@nosi');
+
+Route::post('/generateNOSA', 'PDFcontroller@nosa');
+
+Route::post('/generateSR', 'PDFcontroller@sr');
+
 Route::any('/generateSalarySched', 'PDFcontroller@generatesalarysched');
 
 

@@ -64,6 +64,42 @@ class PDFcontroller extends Controller
         return ['title' => 'plantilla_test'];
     }
 
+    public function sr(Request $request) {
+        $pdf = PDF::loadView('reports/sr');
+            // ->setPaper([0,0,1275,1950], 'port')
+            // ->setOptions([
+            //     'defaultMediaType' => 'screen',
+            //     'dpi' => 112,
+            // ])
+            // ;
+        Storage::put('public/pdf_reports/sr.pdf', $pdf->output());
+        return ['title' => 'sr_test'];
+    }
+
+    public function nosi(Request $request) {
+        $pdf = PDF::loadView('reports/nosi');
+            // ->setPaper([0,0,1275,1950], 'landscape')
+            // ->setOptions([
+            //     'defaultMediaType' => 'screen',
+            //     'dpi' => 112,
+            // ])
+            // ;
+        Storage::put('public/pdf_reports/nosi.pdf', $pdf->output());
+        return ['title' => 'nosi_test'];
+    }
+
+    public function nosa(Request $request) {
+        $pdf = PDF::loadView('reports/nosa');
+            // ->setPaper([0,0,1275,1950], 'landscape')
+            // ->setOptions([
+            //     'defaultMediaType' => 'screen',
+            //     'dpi' => 112,
+            // ])
+            // ;
+        Storage::put('public/pdf_reports/nosa.pdf', $pdf->output());
+        return ['title' => 'nosa_test'];
+    }
+
     public function employeeId(Request $request) {
 
         $request->validate(['name' => 'required|string', 'address' => 'required|string', 'signature' => 'required|file|image']);
