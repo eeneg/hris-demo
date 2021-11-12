@@ -169,7 +169,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Print/Save as PDS</h4>
+                    <h4 class="modal-title">Print/Save as Salary Schedule</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
