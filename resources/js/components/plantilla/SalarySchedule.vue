@@ -544,7 +544,7 @@
             generate_salarysched(id){
 
                 Swal.fire({
-                title: '<strong>Generating PDS</strong>',
+                title: '<strong>Generating Salary Schedule</strong>',
                 html: 'Dont <u>reload</u> or <u>close</u> the application ...',
                 icon: 'info',
                 willOpen () {
