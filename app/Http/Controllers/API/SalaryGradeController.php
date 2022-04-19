@@ -81,13 +81,21 @@ class SalaryGradeController extends Controller
     {
         $request->validate(['grade' => 'required|numeric']);
 
+        $check = SalaryGrade::where(['grade' => $request->grade, 'salary_sched_id' => $request->tranche])->exists();
 
-        foreach($request->id as $key => $id)
+        $grade = SalaryGrade::find($request->id[0]);
+
+        if($grade->grade != $request->grade && $check)
         {
-            $salarygrade = SalaryGrade::findOrFail($id);
+            return ['message' => 'error'];
+        }else{
+            foreach($request->id as $key => $id)
+            {
+                $salarygrade = SalaryGrade::findOrFail($id);
 
 
-            $salarygrade->update(['amount' => isset($request->amount[$key]) ? $request->amount[$key] : 0, 'grade' => $request->grade]);
+                $salarygrade->update(['amount' => isset($request->amount[$key]) ? $request->amount[$key] : 0, 'grade' => $request->grade]);
+            }
         }
 
     }

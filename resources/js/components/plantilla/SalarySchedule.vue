@@ -8,7 +8,7 @@
                             <label for="custom-select">Salary Schedule: </label>
                             <div class="btn-group">
                                 <select class="custom-select" v-model="selected">
-                                    <option v-for="salaryschedule in salaryschedules" v-bind:value="salaryschedule.tranche" :key="salaryschedule.id"> {{ salaryschedule.tranche }} </option>
+                                    <option v-for="salaryschedule in salaryschedules" v-bind:value="salaryschedule.id" :key="salaryschedule.id"> {{ salaryschedule.tranche }} </option>
                                 </select>
                             </div>
                              <div class="btn-group">
@@ -270,6 +270,7 @@
                 this.$Progress.start()
                 axios.get('api/salaryschedule')
                 .then(({data}) => {
+
                     this.salaryschedules = data
 
                     if(this.salaryschedules.length == 0 )
@@ -279,7 +280,7 @@
                         this.salarygrades = {}
                         this.selected = null
                     }else{
-                        this.selected = this.salarySchedForm.tranche != null ? this.salarySchedForm.tranche : this.salaryschedules[0].tranche
+                        this.selected = this.salarySchedForm.id != null ? this.salarySchedForm.id : this.salaryschedules[0].id
                     }
 
                     this.$Progress.finish()
@@ -390,8 +391,8 @@
 
                 if(this.salaryschedules.length > 0)
                 {
-                    var sched = _.find(this.salaryschedules, ['tranche', this.selected]) ? _.find(this.salaryschedules, ['tranche', this.selected]) : {}
-                    axios.get('api/salarygrade?id='+ sched.id)
+                    var sched = _.find(this.salaryschedules, ['id', this.selected]) ? _.find(this.salaryschedules, ['id', this.selected]) : {}
+                    axios.get('api/salarygrade?id='+ this.selected)
                     .then(({data}) => {
                         this.salarygrades = data.sort((a,b) => (a[0].grade > b[0].grade) ? 1 : ((b[0].grade > a[0].grade) ? -1 : 0))
                         this.display = sched
@@ -441,7 +442,7 @@
                     )
                 }else{
                     this.$Progress.start()
-                    var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['tranche', this.selected]))
+                    var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['id', this.selected]))
                     axios.post('api/salarygrade', ar)
                     .then(response => {
                         this.$Progress.finish()
@@ -475,15 +476,24 @@
                     )
                 }else{
                     this.$Progress.start()
-                    axios.patch('api/salarygrade/', {id: this.salaryGradeForm.id, grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount})
+                    axios.patch('api/salarygrade/', {id: this.salaryGradeForm.id, grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount, tranche: this.selected})
                     .then(response => {
                         this.$Progress.finish()
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Updated successfully'
-                        });
-                        this.getSalaryGrade()
-                        $('#salaryGradeModal').modal('hide')
+                        if(response.data.message)
+                        {
+                            Swal.fire(
+                                'Oops...',
+                                'Salary Grade already exists',
+                                'error'
+                            )
+                        }else{
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Updated successfully'
+                            });
+                            this.getSalaryGrade()
+                            $('#salaryGradeModal').modal('hide')
+                        }
                     })
                     .catch(error => {
                         this.errors.record(error.response.data.errors)
