@@ -5,7 +5,7 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Employees</h2>
-                    <small style="margin-left: 2px;">Positions are based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</small>
+                    <p style="margin: 2px 0 0 2px;">Positions are based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</p>
                     <div class="row mt-1">
                         <div class="col-md-3">
                             <div class="input-group">
@@ -53,12 +53,14 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                             <div class="dropdown-menu" role="menu">
                                                 <a class="dropdown-item" @click.prevent="viewProfileModal(employee.id)" href="#">View Profile</a>
-                                                <a class="dropdown-item" href="#">Basic Information</a>
-                                                <a class="dropdown-item" href="#">Latest Plantilla Record</a>
+                                                <!-- <a class="dropdown-item" href="#">Basic Information</a> -->
                                                 <a class="dropdown-item" @click="editInformationModal(employee.id)" href="#">Edit Information</a>
+                                                <a class="dropdown-item" href="#">Latest Plantilla Record</a>
                                                 <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
+                                                <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#">Service Record</a>
                                             </div>
                                         </button>
                                     </div>
@@ -812,24 +814,46 @@
             }, 400),
             editInformationModal(id)
             {
-                this.form.id = id;
-                this.mode = false;
-                $('#scanModal').modal('show');
-                $('#barcodeField').val('');
-                $('.barcode-validate').hide();
+                // this.form.id = id;
+                // this.mode = false;
+                // $('#scanModal').modal('show');
+                // $('#barcodeField').val('');
+                // $('.barcode-validate').hide();
 
 
-                this.focusBarcode();
+                // this.focusBarcode();
+                axios.get('api/personalinformation/' + id)
+                    .then(response => {
+                        if (response.data != '') {
+                            this.form.id = id;
+                            this.mode = false;
+                            this.form.fill(response.data);
+                            this.$router.push({path: '/employees-pds', query: {id: this.form.id, mode: 1}})
+                        }
+                    }).catch(error => {
+                        console.log(error.reponse.data.message);
+                    });
             },
             viewProfileModal(id) {
-                this.form.id = id;
-                this.mode = true;
-                $('#scanModal').modal('show');
-                $('#barcodeField').val('');
-                $('.barcode-validate').hide();
+                // this.form.id = id;
+                // this.mode = true;
+                // $('#scanModal').modal('show');
+                // $('#barcodeField').val('');
+                // $('.barcode-validate').hide();
 
 
-                this.focusBarcode();
+                // this.focusBarcode();
+                axios.get('api/personalinformation/' + id)
+                    .then(response => {
+                        if (response.data != '') {
+                            this.form.id = id;
+                            this.mode = true;
+                            this.form.fill(response.data);
+                            $('#viewProfileModal').modal('show');
+                        }
+                    }).catch(error => {
+                        console.log(error.reponse.data.message);
+                    });
             },
             getAvatar(picture) {
                 if (picture != null) {
@@ -876,11 +900,11 @@
                 this.$Progress.start();
                 axios.post('api/barcode', { id: employee.id })
                     .then(response => {
-                        if (response.data == '') {
+                        if (response.data.status == 'existing') {
                             Swal.fire(
-                                'Failed',
-                                'Barcode for this employee was already generated.',
-                                'warning'
+                                'Ooops!',
+                                'Barcode for this employee was already generated.<br>Barcode: ' + response.data.barcode.value,
+                                'info'
                             )
                         } else {
                             Swal.fire(

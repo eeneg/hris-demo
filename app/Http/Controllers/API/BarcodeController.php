@@ -38,6 +38,12 @@ class BarcodeController extends Controller
                 'personal_information_id' => $employee->id,
                 'value' => $code
             ]);
+        } else {
+            $data = [
+                'barcode' => Barcode::where('personal_information_id', $request['id'])->first(),
+                'status' => 'existing'
+            ];
+            return $data;
         }
     }
 

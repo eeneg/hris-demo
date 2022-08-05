@@ -9,9 +9,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>{{ config('app.name', 'Laravel') }}</title>
+		<title>HRIS - Davao del Sur</title>
 
 		{{-- <script src="https://unpkg.com/pdfobject@2.2.4/pdfobject.min.js"></script> --}}
+		<link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/project_files/ddsICON.ico') }}" />
+
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/master.css') }}" rel="stylesheet">
 	</head>
@@ -67,9 +69,11 @@
 			<aside class="main-sidebar sidebar-dark-primary elevation-4 fix">
 				<!-- Brand Logo -->
 				<a href="/" class="brand-link">
-				<img src="{{ asset('/storage/project_files/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-					style="opacity: .8">
-				<span class="brand-text font-weight-light">Transcade-HRIS</span>
+					<img src="{{ asset('/storage/project_files/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
+					<div style="line-height: 1.3;margin-bottom: -5px;">
+						<span class="brand-text font-weight-light" style="font-size: 13px;display: block;">Human Resource</span>
+						<span class="brand-text font-weight-light" style="font-size: 13px;display: block;">Information System</span>
+					</div>
 				</a>
 				<!-- Sidebar -->
 				<div class="sidebar">

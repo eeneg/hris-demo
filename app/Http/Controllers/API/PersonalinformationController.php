@@ -137,9 +137,9 @@ class PersonalInformationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-
+        return PersonalInformation::with('plantillacontents')->findOrFail($id);
     }
 
     public function edit(Request $request)
