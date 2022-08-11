@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <div v-if="$gate.isAdministratorORAuthor()" class="col-md-9">
-                            <router-link class="btn btn-primary float-right" to="/employees-pds">Create</router-link>
+                            <router-link class="btn btn-primary float-right" to="/employees-pds">Create New Employee</router-link>
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                                 <td style="width: calc(100%-150px);">
                                     <img style="width: 38px;height: 38px;" class="img-circle mr-2" :src="getAvatar(employee.picture)" alt="User Avatar">
                                     <div style="display: inline-block;vertical-align: middle;line-height: 1.2rem;height: 35px;">
-                                        <span style="font-size: 1rem;">{{ employee.surname + ', ' + employee.firstname + ' ' + employee.nameextension + ' ' + employee.middlename }}</span>
+                                        <span style="font-size: 1rem;">{{ employee.surname + ', ' + employee.firstname + ' ' + (employee.nameextension || '') + ' ' + (employee.middlename || '') }}</span>
                                         <br>
                                         <span style="font-size: 0.8rem;" class="text-muted"><i>{{ employee.status }}</i></span>
                                     </div>
@@ -55,7 +55,7 @@
                                                 <a class="dropdown-item" @click.prevent="viewProfileModal(employee.id)" href="#">View Profile</a>
                                                 <!-- <a class="dropdown-item" href="#">Basic Information</a> -->
                                                 <a class="dropdown-item" @click="editInformationModal(employee.id)" href="#">Edit Information</a>
-                                                <a class="dropdown-item" href="#">Latest Plantilla Record</a>
+                                                <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click="goToPlantilla(employee)" href="#">Go to Plantilla</a>
                                                 <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
@@ -87,7 +87,7 @@
                         <img class="profile-user-img img-fluid img-circle" :src="getAvatar(form.picture)" alt="User profile picture">
                     </div>
 
-                    <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ form.firstname + ' ' + form.middlename + ' ' + form.surname + ' ' + form.nameextension }}</b></h3>
+                    <h3 class="text-center mt-1" style="margin-bottom: 0;"><b>{{ form.firstname + ' ' + form.middlename + ' ' + form.surname + ' ' + (form.nameextension || '') }}</b></h3>
 
                     <span v-if="getPlantillaDetails(form)">
                         <p class="text-muted text-center mt-1" style="font-size: 1rem;line-height: 1.2rem;">
@@ -812,8 +812,16 @@
             searchit: _.debounce(function(){
                 this.getResults();
             }, 400),
-            editInformationModal(id)
-            {
+            goToPlantilla(employee) {
+                let department = '';
+                _.forEach(employee.plantillacontents, (value) => {
+                    if (this.$parent.settings.plantilla.year == value.plantilla.year) {
+                        department = value.position && value.position.department.address;
+                    }
+                });
+                this.$router.push({name: 'Plantilla', params: {dept: department}});
+            },
+            editInformationModal(id) {
                 // this.form.id = id;
                 // this.mode = false;
                 // $('#scanModal').modal('show');
@@ -860,7 +868,7 @@
                     let prefix = (picture.match(/\//) ? '' : '/storage/employee_pictures/');
                     return prefix + picture;
                 } else {
-                    return '/storage/project_files/profile.png';
+                    return '/storage/project_files/employee.png';
                 }
             },
             getResults(page = 1) {

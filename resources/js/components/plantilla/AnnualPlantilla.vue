@@ -667,9 +667,14 @@
                 axios.get('api/department')
                     .then(({data}) => {
                         this.departments = data.data;
-                        this.selectedDepartment = data.data[0].address;
+                        if (this.$route.params.dept != null) {
+                            this.selectedDepartment = this.$route.params.dept;
+                        } else {
+                            this.selectedDepartment = data.data[0].address;
+                        }
                         this.loadContents();
                         this.getPreviousPlantilla();
+                        
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
