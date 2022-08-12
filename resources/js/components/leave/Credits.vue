@@ -1,399 +1,118 @@
 
 <template>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" style="min-height: 100vh;">
         <div class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                   <div class="row">
-                       <div class="col-md-6">
-                            <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Credits</h2>
+
+                    <div class="row mt-1">
+                        <div class="col-md-6">
+                            <h2>Leave Credits</h2>
                             <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
-                       </div>
-                        <div class="col-md-5">
-                            <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
-                                <v-select @input="getEmployeeLeaveCredit()" v-model="form.personal_information_id" class="form-control form-control-border border-width-2"
-                                :options="employees.data" label="name" placeholder="Search employee" :reduce="employees => employees.id">
-                                </v-select>
-                            </div>
-                       </div>
-                       <div class="col-md-1">
-                            <div class="btn-group float-right" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-primary btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a type="button" class="dropdown-item" @click.prevent="balance_modal()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                        Leave Credits
-                                    </a>
-                                    <a type="button" class="dropdown-item" @click.prevent="getleavesummary()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                        Leave Card
-                                    </a>
-                                    <a type="button" class="dropdown-item" @click.prevent="slp_fl_modal()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                        Forced and SLP Credits
-                                    </a>
-                                    <a type="button" class="dropdown-item" @click.prevent="global_credits()" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                        Global Credits
-                                    </a>
-                                </div>
-                            </div>
-                       </div>
-                   </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                            <th scope="col" style="width: 800px">
-                                <h4>{{ display.name ? display.name : 'No Leave Credits data for this employee' }}</h4>
-                            </th>
-                            <th scope="col">Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">Vacation Leave</th>
-                                <td>{{ display.vacation_leave ? display.vacation_leave.balance : 0  }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Sick Leave</th>
-                                <td>{{ display.sick_leave ? display.sick_leave.balance : 0 }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Forced Leave</th>
-                                <td>{{ display.forced_leave && display.forced_leave.year ==  display_year ? display.forced_leave.balance : display.forced_leave.balance = 0 }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Special Leave Previliges (as of {{ display_year }})</th>
-                                <td>
-                                    {{
-                                        display.special_leave_previliges &&
-                                        display.special_leave_previliges.year == display_year ?
-                                        display.special_leave_previliges.balance :
-                                        display.special_leave_previliges.balance = 0
-                                    }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- modal -->
-
-        <div class="modal fade" id="balanceModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="horizon">Leave Credit</h4>
-                    <div class="col-md-3">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-
-                    <form @submit.prevent="submit_leave_credits()" action="">
-                        <div class="modal-body">
-                            <div class="col-md-12">
-                                <div class="row">
-
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-2" style="color: #515151;">
-                                                    <label class="disabled" for=""><i>Vacation Leave</i> </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="leave_earned">Earned</label>
-                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.vl_earned" name="leave_earned" id="leave_earned">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="leave_earned">Absence Undertime w/ Pay</label>
-                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.vl_withpay" name="leave_earned" id="leave_earned">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 ">
-                                                <div class="form-group">
-                                                    <label for="leave_earned">Absence Undertime w/o Pay</label>
-                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.vl_withoutpay" name="leave_earned" id="leave_earned">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                            <div class="col-md-12">
-                                <div class="row">
-                                        <div class="col-md-2" style="color: #515151;">
-                                            <label class="disabled" for=""><i>Sick Leave</i> </label>
-                                        </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="leave_earned">Earned</label>
-                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_earned" name="leave_earned" id="leave_earned">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="leave_earned">Absence Undertime w/ Pay</label>
-                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_withpay" name="leave_earned" id="leave_earned">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="leave_earned">Absence Undertime w/o Pay</label>
-                                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.sl_withoutpay" name="leave_earned" id="leave_earned">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label for="leave_earned">Month</label>
-                                                <select name="leave_earned" id="leave_earned" class="form-control form-control-border border-width-2" v-model="month" placeholder="Month">
-                                                        <option>January</option>
-                                                        <option>February</option>
-                                                        <option>March</option>
-                                                        <option>April</option>
-                                                        <option>May</option>
-                                                        <option>June</option>
-                                                        <option>July</option>
-                                                        <option>August</option>
-                                                        <option>September</option>
-                                                        <option>October</option>
-                                                        <option>November</option>
-                                                        <option>December</option>
-                                                </select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="leave_earned">Year</label>
-                                                <v-select class="form-control form-control-border border-width-2" aria-label="Year" v-model="year" :options="years"></v-select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="particulars">Particulars</label>
-                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.particulars" name="particulars" id="particulars">
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="remarks">Remarks</label>
-                                            <input type="text" class="form-control form-control-border border-width-2" v-model="form.remarks" name="remarks" id="remarks">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                    <div class="row mt-1">
+                        <div class="col-md-5">
+                            <v-select @input="get_leave_info(false)" class="form-control form-control-border border-width-2" v-model="selected_employee" placeholder="Select Employee" :options="employees" label="name"
+                            :reduce="employees => employees"></v-select>
                         </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary float-right" data-toggle="modal">Save <i class="fas fa-save"></i></button>
+                        <div class="col-md-7">
+                            <div class="float-right" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
+                                <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
+                                <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="submit_leave(false)"><i class="fas fa-save"></i> Save</button>
+                            </div>
+                        </div>
                     </div>
-                    </form>
 
-                </div>
-            </div>
-        </div>
+                    <div class="row mt-1" v-if="selected_employee !== null">
+                        <div class="col-md-6 p-2" v-for="(data, index) in leave_credit" :key="data.id">
+                            <div class="card">
+                                <div class="card-header bg-primary">
+                                    {{data.title}}
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">Balance: {{data.balance}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- modal end -->
-
-        <!-- modal -->
-
-        <div class="modal fade" id="summaryModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document" style="overflow-y: initial !important">
-                <div class="modal-content" style="height: 90vh;">
-                <div class="modal-header">
-                    <div class="col-md-6">
-                        <h5 class="modal-title" id="summaryModal">Leave Summary</h5>
-                    </div>
-                    <div class="col-md-3">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-                    <div class="modal-body" style="height: 80vh; overflow-y: auto;">
-                        <table class="table table-striped table-bordered text-center">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" colspan="1">
-                                        Period
-                                    </th>
-                                    <th rowspan="2" colspan="1">
-                                        Particulars
-                                    </th>
-                                    <th rowspan="1" colspan="4">
-                                        Vacation Leave
-                                    </th>
-                                    <th rowspan="1" colspan="4" >
-                                        Sick Leave
-                                    </th>
-                                    <th rowspan="2" colspan="1" >
-                                        Remarks
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>EARNED</th>
-                                    <th>Absence undertime w/ pay</th>
-                                    <th>Absence undertime w/o pay</th>
-                                    <th>BALANCE</th>
-                                    <th>EARNED</th>
-                                    <th>Absence undertime w/ pay</th>
-                                    <th>Absence undertime w/o pay</th>
-                                    <th>BALANCE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="leave_card in leave_cards" :key=leave_card.id>
-                                    <td>{{ leave_card.period }}</td>
-                                    <td>{{ leave_card.particulars }}</td>
-                                    <td>{{ leave_card.vl_earned }}</td>
-                                    <td>{{ leave_card.vl_withpay }}</td>
-                                    <td>{{ leave_card.vl_withoutpay }}</td>
-                                    <td>{{ leave_card.vl_balance }}</td>
-                                    <td>{{ leave_card.sl_earned }}</td>
-                                    <td>{{ leave_card.sl_withpay }}</td>
-                                    <td>{{ leave_card.sl_withoutpay }}</td>
-                                    <td>{{ leave_card.sl_balance }}</td>
-                                    <td>{{ leave_card.remarks }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" @click="editLeaveSummary()">Edit <i class="fas fa-edit"></i></button>
-                        <button type="submit" class="btn btn-primary float-right" data-toggle="modal" @click="generateleavecard()">Print <i class="fas fa-print"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- modal end -->
-
-        <!-- modal -->
-
-        <div class="modal fade" id="editSummary" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document" style="overflow-y: initial !important">
-                <div class="modal-content" style="height: 90vh;">
-                <div class="modal-header">
-                    <div class="col-md-6">
-                        <h5 class="modal-title" id="editSummary">Edit Leave Summary</h5>
-                    </div>
-                    <div class="col-md-3">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-                    <div class="modal-body" style="height: 80vh; overflow-y: auto;">
-                        <table class="table table-striped table-bordered text-center">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" colspan="1">
-                                        Period
-                                    </th>
-                                    <th rowspan="2" colspan="1">
-                                        Particulars
-                                    </th>
-                                    <th rowspan="1" colspan="4">
-                                        Vacation Leave
-                                    </th>
-                                    <th rowspan="1" colspan="4" >
-                                        Sick Leave
-                                    </th>
-                                    <th rowspan="2" colspan="1" >
-                                        Remarks
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>EARNED</th>
-                                    <th>Absence undertime w/ pay</th>
-                                    <th>Absence undertime w/o pay</th>
-                                    <th>BALANCE</th>
-                                    <th>EARNED</th>
-                                    <th>Absence undertime w/ pay</th>
-                                    <th>Absence undertime w/o pay</th>
-                                    <th>BALANCE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(leave_card, index) in leave_cards" :key=leave_card.id>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.period" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.particulars" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.vl_earned" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.vl_withpay" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.vl_withoutpay" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.vl_balance" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.sl_earned" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.sl_withpay" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.sl_withoutpay" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.sl_balance" style="border-radius: 0">
-                                    </td>
-                                    <td class='p-0'>
-                                        <input type="text" class="form-control p-0" v-model="leave_card.remarks" style="border-radius: 0">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="calculate_summary()">Calculate</button>
-                        <button type="submit" class="btn btn-primary float-right" data-toggle="modal" @click="submitEditSummary()">Save <i class="fas fa-save"></i></button>
+                    <div class="row mt-1">
+                        <div class="col-md-12 tableFixHead">
+                            <table class="table table-borderless text-center" v-if="selected_employee !== null">
+                                <thead>
+                                    <tr>
+                                        <!-- <th rowspan="2" colspan="1">1</th> -->
+                                        <th rowspan="2" colspan="1">#</th>
+                                        <th rowspan="2" colspan="1">
+                                            Period
+                                        </th>
+                                        <th rowspan="2" colspan="1">
+                                            Particulars
+                                        </th>
+                                        <th rowspan="1" colspan="4">
+                                            Vacation Leave
+                                        </th>
+                                        <th rowspan="1" colspan="4" >
+                                            Sick Leave
+                                        </th>
+                                        <th rowspan="2" colspan="1" >
+                                            Remarks
+                                        </th>
+                                        <th rowspan="2" colspan="1" v-if="edit_mode">Action</th>
+                                    </tr>
+                                    <tr>
+                                        <th>EARNED</th>
+                                        <th>Absence undertime w/ pay</th>
+                                        <th>Absence undertime w/o pay</th>
+                                        <th>BALANCE</th>
+                                        <th>EARNED</th>
+                                        <th>Absence undertime w/ pay</th>
+                                        <th>Absence undertime w/o pay</th>
+                                        <th>BALANCE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%">
+                                        <!-- <td class="p-0">
+                                            <input class="form-check-input p-0" type="checkbox" v-model="selected_summary" v-bind:value="data.id">
+                                            <div class="form-check" style="display:inline-flex">
+                                                <input class="form-check-input" type="checkbox" v-model="selected_summary" v-bind:value="data.id">
+                                            </div>
+                                        </td> -->
+                                        <td class="p-0"><input class="form-control p-0 text-center" type="checkbox" style="border-radius: 0; width: 33px" v-model="leave_summary[index].sort" :value="index+1" disabled hidden>{{ index+1 }}</td>
+                                        <td class='p-0'><input :disabled="edit_mode == false"  class="form-control p-0" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="particulars" v-model="leave_summary[index].particulars" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_earned', 'vl', $event)" v-on:blur="calculate_balance(index, 'vl_earned', 'vl')" v-on:focus="save_old_value(index, 'vl_earned')" id="vl_earned" v-model="leave_summary[index].vl_earned" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_withpay', 'vl',$event)" v-on:blur="calculate_balance(index, 'vl_withpay', 'vl')" v-on:focus="save_old_value(index, 'vl_withpay')" id="vl_withpay" v-model="leave_summary[index].vl_withpay" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="vl_withoutpay" v-model="leave_summary[index].vl_withoutpay" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="vl_balance" v-model="leave_summary[index].vl_balance" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'sl_earned', 'sl',$event)" v-on:blur="calculate_balance(index, 'sl_earned', 'sl')" v-on:focus="save_old_value(index, 'sl_earned')" id="sl_earned" v-model="leave_summary[index].sl_earned" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'sl_withpay', 'sl',$event)" v-on:blur="calculate_balance(index, 'sl_withpay', 'sl')" v-on:focus="save_old_value(index, 'sl_withpay')" id="sl_withpay" v-model="leave_summary[index].sl_withpay" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="psl_withoutpayeriod" v-model="leave_summary[index].sl_withoutpay" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="sl_balance" v-model="leave_summary[index].sl_balance" style="border-radius: 0"></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="remarks" v-model="leave_summary[index].remarks" style="border-radius: 0"></td>
+                                        <td class='p-0' v-if="edit_mode">
+                                            <div class="" style="display:inline-flex">
+                                                <button type="button" class="btn d-inline btn-primary" style="border-radius: 0" @click="add_leave_data(index)"><i class="fas fa-plus"></i></button>
+                                                <button type="button" class="btn d-inline btn-danger" style="border-radius: 0" @click="delete_leave_data(index)"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- modal end -->
-
-        <!-- pdf modal -->
-
-       <div class="modal" id="pdfModal">
+        <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
 
@@ -417,355 +136,243 @@
             </div>
         </div>
 
-        <!-- pdf modal -->
-
-        <div class="modal fade" id="slp_fl_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document" style="overflow-y: initial !important">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <div class="col-md-6">
-                        <h5 class="modal-title" id="summaryModal">Forced Leave and Special Leave Previliges credits</h5>
-                    </div>
-                    <div class="col-md-3">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="fl">Forced Leave</label>
-                                    <input v-model="slp_fl.fl" type="text" class="form-control form-control-border border-width-2" name="fl" id="fl">
-                                </div>
-                                <div class="form-group">
-                                    <label for="slp">Special Leave Previliges</label>
-                                    <input v-model="slp_fl.slp" type="text" class="form-control form-control-border border-width-2" name="slp" id="slp">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary float-right" data-toggle="modal" @click="slp_fl_credits()">Save <i class="fas fa-save"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- modal end -->
     </div>
 </template>
 
+<style>
+    .tableFixHead {
+        overflow-y: auto;
+        max-height: 55vh;
+    }
+    .tableFixHead thead {
+        position: sticky;
+        top: 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        padding: 8px 16px;
+        border: none;
+    }
+    th {
+        background: #eee;
+    }
+</style>
+
 <script>
+import axios from 'axios'
     export default {
         data() {
             return {
-                mode: '',
+                selected_employee: null,
+                selected_summary: [],
+                edit_mode: false,
+                disable: true,
+                edited: false,
                 employees: [],
-                employee_data: {},
-                display: {
-                    name: '',
-                    vacation_leave: {balance: 0, year: 0},
-                    sick_leave: {balance: 0, year: 0},
-                    forced_leave: {balance: 0, year: 0},
-                    special_leave_previliges: {balance: 0, year: 0}
-                },
-                display_year: '',
-                leave_cards: [],
-                leave_card_input: [],
-                month: '',
-                year: [],
-                slp_fl: {id: '', slp: 0, fl: 0},
-                form: new Form({
-                    'personal_information_id': '',
-                    'leave_type_id': '',
-                    'particulars': '',
-                    'period': '',
-                    'vl_earned': '',
-                    'vl_withpay': '',
-                    'vl_balance': '',
-                    'vl_withoutpay': '',
-                    'sl_earned': '',
-                    'sl_balance': '',
-                    'sl_withpay': '',
-                    'sl_withoutpay': '',
-                    'remarks': '',
-                    'detail1': '',
-                    'detail2': '',
-                    'detail3': '',
-                }),
+                leave_credit: [],
+                leave_summary: [],
+                form: [],
+                input_history: null,
+                running: false
             }
         },
-        computed : {
-        years () {
-            const year = new Date().getFullYear()
-            return Array.from({length: year - 1970}, (value, index) => 1971 + index)
+        components: {
+
+        },
+        beforeRouteLeave (to, from , next) {
+            if(this.edited)
+            {
+                const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+                if (answer) {
+                    next()
+                } else {
+                    next(false)
+                }
+            }else{
+                next()
+            }
+        },
+        beforeRouteUpdate()
+        {
+            window.confirm('Do you really want to leave? you have unsaved changes!')
+        },
+        computed: {
+            leave_summary_length: function()
+            {
+                return this.summary.length
+            }
+
+        },
+        watch: {
+            leave_summary: {
+                handler: function(){
+                    if(this.leave_summary.length == 0)
+                    {
+                        this.add_leave_data()
+                    }
+                },
+                deep: true
             }
         },
         methods: {
-            getEmployeeLeaveCredit: _.debounce(function(){
 
-                this.$Progress.start()
+            get_employees: function(){
 
-                this.display_year =  moment(new Date()).format('Y')
-
-                this.display =  this.employee_data[this.form.personal_information_id] != '' &&
-                                this.employee_data[this.form.personal_information_id] != null ?
-                                Object.assign(this.display, this.employee_data[this.form.personal_information_id]) :
-                                {
-                                    name: '',
-                                    vacation_leave: {balance: 0, year: 0},
-                                    sick_leave: {balance: 0, year: 0},
-                                    forced_leave: {balance: 0, year: 0},
-                                    special_leave_previliges: {balance: 0, year: 0}
-                                }
-
-                this.$Progress.finish()
-
-            }, 500),
-            getEmployees: function()
-            {
-                axios.get('api/employeeList')
-                .then(({data})=> {
-                this.employees = data
-                })
-                .catch(error => {
-                    console.log(error)
-                    toast.fire({
-                        icon: 'error',
-                        title: 'Employee data not retrieved'
-                    });
-                })
-            },
-            getLeaveCredits: function()
-            {
-                this.$Progress.start()
                 axios.get('api/leavecredits')
                 .then(({data}) => {
-
-                    this.$Progress.finish()
-                    this.employee_data = data
-                    this.display =  this.employee_data[this.form.personal_information_id] != '' &&
-                                this.employee_data[this.form.personal_information_id] != null ?
-                                Object.assign(this.display, this.employee_data[this.form.personal_information_id]) :
-                                {
-                                    name: '',
-                                    vacation_leave: {balance: 0, year: 0},
-                                    sick_leave: {balance: 0, year: 0},
-                                    forced_leave: {balance: 0, year: 0},
-                                    special_leave_previliges: {balance: 0, year: 0}
-                                }
-                })
-                .catch(error => {
-                    console.log(error)
-                    let e = error.response.data.message
-                    Swal.fire(
-                        'Oops...',
-                        e == 'Leave balance not found, possible leave type data change' ? e : 'Something went wrong',
-                        'error'
-                    )
+                    this.employees = data.data
+                }).catch(e => {
+                    console.log(e)
                 })
             },
-            balance_modal: function()
-            {
 
-                this.form.sl_earned = ''
-                this.form.vl_earned = ''
-                this.form.sl_withpay =''
-                this.form.sl_withoutpay = ''
-                this.form.vl_withpay =''
-                this.form.vl_withoutpay = ''
-                this.form.particulars = ''
-                this.form.remarks = ''
-                this.month = ''
-                this.year = ''
+            get_leave_info: function(edit){
 
-                if(this.form.personal_information_id != null && this.form.personal_information_id != '')
-                {
-                    $('#balanceModal').modal('show')
-                }else{
-                    Swal.fire(
-                        'Oops...',
-                        'Please select an employee first',
-                        'error'
-                    )
-                }
-
-            },
-            submit_leave_credits: function()
-            {
-                this.form.period = this.month+ ' ' +this.year
-
-                this.$Progress.start()
-                axios.post('api/leavecredits', this.form)
-                .then(response => {
-
-                    $('#balanceModal').modal('hide')
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Submitted'
-                    });
-                    this.getLeaveCredits()
-                    this.$Progress.finish()
-                })
-                .catch(error => {
-                    console.log(error)
-                    Swal.fire(
-                        'Oops...',
-                        'Something went wrong',
-                        'error'
-                    )
-                })
-            },
-            getleavesummary: function()
-            {
-                if(this.form.personal_information_id != null && this.form.personal_information_id != '')
+                if(this.selected_employee !== null)
                 {
                     this.$Progress.start()
-                    axios.get('api/getleavesummary?id=' + this.form.personal_information_id)
+                    axios.get('api/leavecredits/'+this.selected_employee.id)
                     .then(({data}) => {
-                        $('#summaryModal').modal('show')
-                        this.leave_cards = data
-                        this.leave_card_input = JSON.parse(JSON.stringify(data))
+
+                        this.leave_summary = data.summary
+
+                        this.leave_credit = data.credit
+
                         this.$Progress.finish()
+
+                        if(data.length == 0 && this.selected_employee.id !== null)
+                        {
+                            this.add_leave_data(-1)
+                        }
                     })
-                    .catch(error => {
-                        console.log(error)
-                        Swal.fire(
-                            'Oops...',
-                            'Unable to fetch leave card',
-                            'error'
-                        )
+                    .catch(e => {
+                        console.log(e)
                     })
-                }else{
-                    Swal.fire(
-                        'Oops...',
-                        'Please select and employee first',
-                        'error'
-                    )
+                }
+
+            },
+
+            submit_leave: function(delete_save)
+            {
+                if(delete_save == false)
+                {
+                    Swal.fire({
+                        title: '<strong>Saving...</strong>',
+                        html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                        icon: 'info',
+                        willOpen () {
+                            Swal.showLoading ()
+                        },
+                        didClose () {
+                            Swal.hideLoading()
+                        },
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            showConfirmButton: false
+                    })
+                }
+
+                axios.post('api/leavecredits', {data: this.leave_summary, id: this.selected_employee.id})
+                .then(e => {
+                    this.edited = false
+                    this.get_leave_info(true)
+                    if(delete_save == false)
+                    {
+                        Swal.close()
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+
+
+            },
+
+            add_leave_data(index)
+            {
+
+                this.leave_summary.splice(index+1, 0, {
+                    'personal_information_id': this.selected_employee.id,
+                    'particulars': '',
+                    'period': '',
+                    'vl_earned': 1.25,
+                    'vl_withpay': 0,
+                    'vl_balance': 1.25,
+                    'vl_withoutpay': '',
+                    'sl_earned': 1.25,
+                    'sl_balance': 1.25,
+                    'sl_withpay': 0,
+                    'sl_withoutpay': '',
+                    'remarks': '',
+                    'sort': index+1
+                })
+
+                  if(this.leave_summary.length != 1)
+                {
+                    for(let x = index+1; x < this.leave_summary.length; x++)
+                    {
+                        this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + 1.25
+                        this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + 1.25
+                    }
                 }
             },
-            generateleavecard(id){
-                axios.post('generateleavecard', {id: this.form.personal_information_id})
-                .then(response => {
-                    let options = {
-                        height: screen.height * 0.65 + 'px',
-                        page: '1'
-                    };
-                    $('#summaryModal').modal('hide');
-                    $('#pdfModal').modal('show');
-                    PDFObject.embed("/storage/employee_leave_card/" + response.data.title, "#pdf-viewer", options);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-            },
-            editLeaveSummary: function(){
-                $('#summaryModal').modal('hide');
-                $('#editSummary').modal('show')
-            },
-            submitEditSummary: function(){
-                this.$Progress.start()
-                axios.post('api/editleavesummary', this.leave_cards)
-                .then(response => {
-                    $('#editSummary').modal('hide')
-                    this.getleavesummary()
-                    this.getLeaveCredits()
-                    $('#editSummary').modal('show')
-                    this.$Progress.finish()
-                })
-                .catch(error => {
-                    console.log(error)
-                    Swal.fire(
-                        'Oops...',
-                        'Something went wrong',
-                        'error'
-                    )
-                })
-            },
-            calculate_summary: function(){
 
-                let result = 0
+            calculate_balance: function(index, field, leave_type)
+            {
 
-                let type = ['vl', 'sl']
+                if(this.running == false)
+                {
+                    let data = this.leave_summary
 
-                type.forEach(type => {
-                    for (let i = 0; i < this.leave_cards.length; i++) {
+                    let x = index
 
-                        if(this.leave_cards[i][type+'_earned'] != this.leave_card_input[i][type+'_earned'] && this.leave_cards[i][type+'_withpay'] == this.leave_card_input[i][type+'_withpay'])
-                        {
+                    if(this.input_history != data[index][field])
+                    {
+                        for (let index = x; index < data.length; index++) {
 
-                                result = this.leave_cards[i][type+'_earned'] - this.leave_card_input[i][type+'_earned']
-
-                                if(this.leave_cards[i][type+'_earned'] > this.leave_card_input[i][type+'_earned'])
-                                {
-                                    for (let x = i; x < this.leave_cards.length; x++) {
-                                        this.leave_cards[x][type+'_balance'] =  this.leave_cards[x][type+'_balance'] + result
-                                    }
-                                }else{
-                                    for (let x = i; x < this.leave_cards.length; x++) {
-                                        this.leave_cards[x][type+'_balance'] =  this.leave_cards[x][type+'_balance'] - result
-                                    }
-                                }
-
-                        }else if(this.leave_cards[i][type+'_withpay'] != this.leave_card_input[i][type+'_withpay'] && this.leave_cards[i][type+'_earned'] == this.leave_card_input[i][type+'_earned']){
-
-                                result = this.leave_cards[i][type+'_withpay'] - this.leave_card_input[i][type+'_withpay']
-
-                                for (let x = i; x < this.leave_cards.length; x++) {
-                                    this.leave_cards[x][type+'_balance'] =  this.leave_cards[x][type+'_balance'] - result
-                                }
-
-                        }else if(this.leave_cards[i][type+'_withpay'] != this.leave_card_input[i][type+'_withpay'] && this.leave_cards[i][type+'_earned'] != this.leave_card_input[i][type+'_earned']){
-
-                                result = this.leave_cards[i][type+'_earned'] - this.leave_cards[i][type+'_withpay']
-
-
-                                for (let x = i; x < this.leave_cards.length; x++) {
-                                    if(x == 0)
-                                    {
-                                        this.leave_cards[x][type+'_balance'] = result
-                                    }else{
-                                        this.leave_cards[x][type+'_balance'] = (this.leave_cards[x][type+'_earned'] - this.leave_cards[x][type+'_withpay']) +  this.leave_cards[x-1][type+'_balance']
-                                    }
-                                }
+                            this.leave_summary[index][leave_type + '_balance'] = 0
+                            this.leave_summary[index][leave_type + '_balance'] = data[index][leave_type + '_earned'] - data[index][leave_type + '_withpay'] + (this.leave_summary[index][leave_type + '_balance'] + this.leave_summary[index != 0 ? index-1 : index][leave_type + '_balance'])
 
                         }
 
+                        this.input_history = null
                     }
-                })
 
-
-            },
-            reset: function()
-            {
-                this.leave_cards = this.leave_card_input
-            },
-            slp_fl_modal: function()
-            {
-                if(this.form.personal_information_id != '' && this.form.personal_information_id != null)
-                {
-                    this.slp_fl.fl = this.display.forced_leave.balance
-                    this.slp_fl.slp = this.display.special_leave_previliges.balance
-                    $('#slp_fl_modal').modal('show')
-                }else{
-                    Swal.fire(
-                        'Oops...',
-                        'Please select an employee first',
-                        'error'
-                    )
+                    this.running = true
                 }
             },
-            slp_fl_credits: function()
+
+
+            press_enter(index, field, leave_type, event)
+            {
+                this.calculate_balance(index, field, leave_type)
+                event.target.blur()
+
+                console.log('1')
+            },
+
+            save_old_value(index, field)
+            {
+                this.running = false
+                this.input_history = this.leave_summary[index][field]
+            },
+
+            delete_leave_data: _.debounce(function(index)
             {
 
-                if(this.form.personal_information_id != null && this.form.personal_information_id != '')
+                var id = this.leave_summary[index].id
+
+                var length = this.leave_summary.length
+
+                if(id)
                 {
                     Swal.fire({
-                    title: 'Ooops...',
-                    text: "Are you sure you want to add Forced Leave and Special Leave Previliges credits this year to this employee?",
+                    title: 'Delete and Save Leave Summary?',
+                    text: "You cannot revert this!!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -779,57 +386,84 @@
                                 title: 'Cancelled'
                             });
                         }else{
-                            this.slp_fl.id = this.form.personal_information_id
-                            axios.post('api/slp_fl_leave', this.slp_fl)
-                            .then(response => {
+
+                            this.$Progress.start()
+
+                            Swal.fire({
+                                title: '<strong>Deleting...</strong>',
+                                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                                icon: 'info',
+                                willOpen () {
+                                    Swal.showLoading ()
+                                },
+                                didClose () {
+                                    Swal.hideLoading()
+                                },
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    allowEnterKey: false,
+                                    showConfirmButton: false
+                            })
+
+                            this.decrease_balance(index)
+                            axios.delete('api/leavecredits/'+this.leave_summary[index].id)
+                            .then(e => {
+                                this.leave_summary.splice(index, 1)
+                                this.submit_leave(true)
+                                this.$Progress.finish()
+                                Swal.close()
                                 toast.fire({
                                     icon: 'success',
-                                    title: 'Submitted'
+                                    title: 'Deleted'
                                 });
-                                $('#slp_fl_modal').modal('hide')
-                                this.getLeaveCredits()
                             })
-                            .catch(error => {
-                                console.log(error)
+                            .catch(e => {
                                 Swal.fire(
                                     'Oops...',
-                                    'Something went wrong',
+                                    'Failed to Delete Item',
                                     'error'
                                 )
+                                this.$Progress.finish()
+                                console.log(e)
                             })
+
                         }
                     })
                 }else{
-                    Swal.fire(
-                        'Oops...',
-                        'Please select an employee first',
-                        'error'
-                    )
+                    this.decrease_balance(index)
+                    this.leave_summary.splice(index, 1)
                 }
 
+            }, 300),
 
-            },
-            global_credits: function()
+            decrease_balance: function(index)
             {
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This will add leave credits for this month to all employees",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed'
-                    }).then((result) => {
-                    if(result.isDismissed == true)
-                    {
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Cancelled'
-                        });
-                    }else{
-                        Swal.fire({
-                        title: 'Dont reload or close the application ...',
+                let vl_balance = this.leave_summary[index]['vl_earned'] - this.leave_summary[index]['vl_withpay']
+
+                let sl_balance = this.leave_summary[index]['sl_earned'] - this.leave_summary[index]['sl_withpay']
+
+                for(let x = index; x < this.leave_summary.length; x++)
+                {
+                    this.leave_summary[x]['vl_balance'] = this.leave_summary[x]['vl_balance'] - vl_balance
+                    this.leave_summary[x]['sl_balance'] = this.leave_summary[x]['sl_balance'] - sl_balance
+                }
+
+            },
+
+            print_leave_card(){
+
+                if(this.edited)
+                {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Save Changes First'
+                    })
+                }else{
+                    Swal.fire({
+                        title: '<strong>Generating Leave Card</strong>',
+                        html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                        icon: 'info',
                         willOpen () {
                             Swal.showLoading ()
                         },
@@ -840,35 +474,36 @@
                             allowEscapeKey: false,
                             allowEnterKey: false,
                             showConfirmButton: false
-                        })
+                    })
 
-                        axios.post('api/global_credits')
-                        .then(response => {
-                            Swal.close()
-                            Swal.fire(
-                                'Done!',
-                                'Process Finished!',
-                                'success'
-                            )
-                        })
-                        .catch(error => {
-                            console.log(error)
-                            Swal.close()
-                            Swal.fire(
-                                    'Oopss ...',
-                                    'Something went wrong',
-                                    'error'
-                                )
-                        })
-                    }
-                })
+                    axios.post('generateleavecard', {id: this.selected_employee.id})
+                    .then(response => {
+                        let options = {
+                            height: screen.height * 0.65 + 'px',
+                            page: '1'
+                        };
+                        Swal.close()
+                        $('#summaryModal').modal('hide');
+                        $('#pdfModal').modal('show');
+                        PDFObject.embed("/storage/employee_leave_card/" + response.data.title, "#pdf-viewer", options);
+                    })
+                    .catch(error => {
+                        Swal.close()
+                        Swal.fire(
+                            'Failed',
+                            'Something went wrong',
+                            'warning'
+                        )
+                        console.log(error);
+                    });
+                }
 
-            }
+            },
+
         },
         mounted() {
             console.log('Component mounted.')
-            this.getEmployees()
-            this.getLeaveCredits()
+            this.get_employees()
         }
     }
 </script>

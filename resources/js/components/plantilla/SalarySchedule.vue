@@ -318,7 +318,7 @@
                         title: 'Nothing to edit'
                     });
                 }else{
-                    var ar =  _.find(this.salaryschedules, ['tranche', this.selected])
+                    var ar =  _.find(this.salaryschedules, ['id', this.selected])
                     this.salarySchedForm = {id: ar.id, tranche: ar.tranche, effective_date:ar.effective_date}
                     this.editMode = true
                     $('#salarySchedModal').modal('show')

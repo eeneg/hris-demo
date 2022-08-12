@@ -43,7 +43,7 @@ class PersonalInformationController extends Controller
     }
 
     public function forleave(Request $request) {
-        $department_id = Auth::user()->role == 'Office User' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
+        $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         if ($department_id != '') {
@@ -84,6 +84,7 @@ class PersonalInformationController extends Controller
                 AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "'
                 ORDER BY personal_informations.`surname`");
         }
+
 
         return $allEmployees;
     }

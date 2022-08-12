@@ -38,6 +38,11 @@ class LeaveSummary extends Model
     ];
 
 
+    public function personalinformation()
+    {
+        return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
+    }
+
 
     public static function boot(){
         parent::boot();

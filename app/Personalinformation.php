@@ -26,7 +26,7 @@ class PersonalInformation extends Authenticatable
 
     protected $with = [
         'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities',
-        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion',
+        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion'
     ];
 
     /**
@@ -105,6 +105,17 @@ class PersonalInformation extends Authenticatable
     {
         return $this->hasMany('App\EmployeePDSEditRequest');
     }
+
+    public function leavecredit()
+    {
+        return $this->hasMany('App\LeaveCredit', 'personal_information_id');
+    }
+
+    public function leavesummary()
+    {
+        return $this->hasMany('App\LeaveSummary', 'personal_information_id');
+    }
+
 
     public static function boot(){
         parent::boot();

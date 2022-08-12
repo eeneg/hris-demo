@@ -34,6 +34,7 @@ class CreateLeaveSummariesTable extends Migration
             $table->integer('detail1')->nullable();
             $table->string('detail2')->nullable();
             $table->string('detail3')->nullable();
+            $table->integer('sort')->nullable();
             $table->timestamps();
         });
     }

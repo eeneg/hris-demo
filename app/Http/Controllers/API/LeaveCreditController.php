@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EmployeeAppointmentListResource;
+use App\Http\Resources\LeaveCreditResource;
 use App\LeaveCredit;
 use App\LeaveSummary;
 use App\LeaveType;
 use App\PersonalInformation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LeaveCreditController extends Controller
 {
@@ -21,45 +22,12 @@ class LeaveCreditController extends Controller
     public function index(Request $request)
     {
 
-        $lt = LeaveType::where('title', 'Sick Leave')
-            ->orWhere('title', 'Vacation Leave')
-            ->orWhere('title', 'Forced Leave')
-            ->orWhere('title', 'Special Leave Previliges')
-            ->get();
+        $employee = PersonalInformation::orderBy('surname')->get();
 
-        $lc = LeaveCredit::select('leave_credits*')
-            ->leftJoin('personal_informations', 'leave_credits.personal_information_id', '=', 'personal_informations.id')
-            ->select(
-                'personal_informations.surname as surname',
-                'personal_informations.firstname as firstname',
-                'personal_informations.middlename as middlename',
-                'personal_informations.nameextension as nameextension',
-                'leave_credits.*'
-            )
-            ->get();
+        return new LeaveCreditResource($employee, $getLeave = false);
 
-        $ar = [];
-
-        foreach($lc as $key => $data)
-        {
-            $type = $lt->firstwhere('id', $data->leave_type_id);
-
-            $ar[$data->personal_information_id][str_replace(' ', '_', strtolower($type->title))]['balance'] = $data->balance;
-            $ar[$data->personal_information_id][str_replace(' ', '_', strtolower($type->title))]['year'] = Carbon::parse($data->created_at)->format('Y');
-
-            if(!isset($ar[$data->personal_information_id]['name']))
-            {
-                $ar[$data->personal_information_id]['name'] = $data->firstname . ' ' . $data->middlename . ' ' . $data->surname . ' ' . $data->nameextension;
-            }
-        }
-
-        return $ar;
     }
 
-    function getLeaveSummary(Request $request)
-    {
-        return LeaveSummary::where('personal_information_id', $request->id,)->orderBy('created_at', 'ASC')->get();
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -70,215 +38,56 @@ class LeaveCreditController extends Controller
     public function store(Request $request)
     {
 
-        $ls = LeaveSummary::create($request->all());
+        $forCreate = [];
+        $forUpdate = [];
 
-        if($ls->vl_earned || $ls->vl_withpay)
+        $vl_balance = null;
+        $sl_balance = null;
+
+        $vl_id = LeaveType::where('title', 'Vacation Leave')->first()->id;
+        $sl_id = LeaveType::where('title', 'Sick Leave')->first()->id;
+
+        foreach($request['data'] as $key => $value)
         {
-
-            $lt = LeaveType::where('title', 'Vacation Leave')->first()->id;
-
-            $lc = LeaveCredit::where('personal_information_id', $request->personal_information_id,)
-                ->where('leave_type_id', $lt)
-                ->first();
-
-            if(isset($lc))
+            if($vl_balance < $value['vl_balance'])
             {
+                $vl_balance = $value['vl_balance'];
+            }
 
-                $vl_result = floatval($lc->balance + ($request->vl_earned - $request->vl_withpay));
+            if($sl_balance < $value['sl_balance'])
+            {
+                $sl_balance = $value['sl_balance'];
+            }
 
-                $lc->update(['balance' => $vl_result]);
-
-                $ls->update(['vl_balance' => $vl_result]);
-
-
+            if(!isset($value['id']))
+            {
+                array_push($forCreate, $value);
             }else{
-
-                LeaveCredit::create([
-                        'personal_information_id' => $request->personal_information_id,
-                        'leave_type_id' => $lt,
-                        'balance' => floatval($ls->vl_balance + ($ls->vl_earned - $ls->vl_withpay)),
-                ]);
-
-                $ls->update(['vl_balance' => floatval($ls->vl_earned - $ls->vl_withpay)]);
-
+                array_push($forUpdate, $value);
             }
-
         }
 
-        if($ls->sl_earned || $ls->sl_withpay){
+        $vl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $vl_id], ['balance' => $vl_balance]);
+        $sl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $sl_id], ['balance' => $sl_balance]);
 
-            $lt = LeaveType::where('title', 'Sick Leave')->first()->id;
+        if(count($forCreate))
+        {
+           foreach($forCreate as $value)
+           {
+                $create = LeaveSummary::create($value);
+           }
+        }
 
-            $lc = LeaveCredit::where('personal_information_id', $request->personal_information_id,)
-                ->where('leave_type_id', $lt)
-                ->first();
-
-            if(isset($lc))
+        if(count($forUpdate))
+        {
+            foreach($forUpdate as $key => $value)
             {
-
-                $sl_result = floatval($lc->balance + ($request->sl_earned - $request->sl_withpay));
-
-                $lc->update(['balance' => $sl_result]);
-
-                $ls->update(['sl_balance' => $sl_result]);
-
-            }else{
-
-                LeaveCredit::create([
-                        'personal_information_id' => $request->personal_information_id,
-                        'leave_type_id' => $lt,
-                        'balance' => floatval($ls->sl_balance + ($ls->sl_earned - $ls->sl_withpay)),
-                ]);
-
-                $ls->update(['sl_balance' => floatval($ls->sl_earned - $ls->sl_withpay)]);
-
-            }
-
-        }
-
-    }
-
-    public function slp_fl_leave(Request $request){
-
-        $ar = [
-            'Forced Leave' => LeaveType::where('title', 'Forced Leave')->first(),
-            'Special Leave Previliges' => LeaveType::where('title', 'Special Leave Previliges')->first(),
-        ];
-
-        $response = [];
-
-        foreach($ar as $data){
-
-            LeaveCredit::updateOrCreate([
-                'personal_information_id'=> $request->id,
-                'leave_type_id' => $data->id,
-            ],
-            [
-                'personal_information_id'=> $request->id,
-                'leave_type_id' => $data->id,
-                'balance' => $data->title == 'Forced Leave' ? $request->fl : $request->slp,
-                'created_at' => Carbon::today()->toDateTimeString()
-            ]);
-
-        }
-
-        if(count($response) > 0)
-        {
-            return $response;
-        }
-    }
-
-    public function editleavesummary(Request $request)
-    {
-        $sl_balance = [];
-        $vl_balance = [];
-
-        foreach($request->all() as $data)
-        {
-            LeaveSummary::find($data['id'])->update($data);
-
-            array_push($sl_balance, $data['sl_balance']);
-            array_push($vl_balance, $data['vl_balance']);
-        }
-
-        $lt_id = LeaveType::where('title', 'Sick Leave')->orWhere('title', 'Vacation Leave')->get();
-
-        foreach($lt_id as $lt)
-        {
-            $lc = LeaveCredit::where('personal_information_id', $request[0]['personal_information_id'])
-                    ->where('leave_type_id', $lt->id)
-                    ->first();
-
-            $lc->update(['balance' => $lt->title == 'Sick Leave' ? end($sl_balance) : end($vl_balance)]);
-        }
-    }
-
-    public function global_credits(Request $request)
-    {
-        $employees = PersonalInformation::has('plantillacontents')->pluck('id');
-
-        $summary = LeaveSummary::where('period', Carbon::now()->format('F Y'))->get()->pluck('personal_information_id');
-
-        $idData = $employees->diff($summary);
-
-        $lt = LeaveType::where('title', 'Sick Leave')
-            ->orWhere('title', 'Vacation Leave')
-            ->orWhere('title', 'Forced Leave')
-            ->orWhere('title', 'Special Leave Previliges')
-            ->get();
-
-        foreach( $idData != null ? $idData : $employees  as $id)
-        {
-
-            $ls = LeaveSummary::create(
-                [
-                    'personal_information_id'=> $id,
-                    'period' => Carbon::now()->format('F Y'),
-                    'vl_earned' => 1.25,
-                    'sl_earned' => 1.25,
-                ]
-            );
-
-            foreach($lt as $type)
-            {
-
-                if($type->title == 'Forced Leave' || $type->title == 'Special Leave Previliges')
-                {
-                    $lc = LeaveCredit::where('personal_information_id', $id)
-                        ->where('leave_type_id', $type->id)
-                        ->whereYear('created_at', Carbon::now()->format('Y'))
-                        ->first();
-
-                    if($lc){
-
-                        $lc->update([
-                            'balance' => $type->title == 'Forced Leave' ? 5 : 3,
-                            'created_at' => Carbon::today()->toDateTimeString()
-                        ]);
-
-                    }else{
-
-                        LeaveCredit::create([
-                            'personal_information_id'=> $id,
-                            'leave_type_id' => $type->id,
-                            'balance' => $type->title == 'Forced Leave' ? 5 : 3,
-                            'created_at' => Carbon::today()->toDateTimeString()
-                        ]);
-
-                    }
-
-                }else{
-
-                    $lc = LeaveCredit::where('personal_information_id', $id)
-                        ->where('leave_type_id', $type->id)
-                        ->first();
-
-                    if($lc){
-
-                        $result = floatval($lc->balance + 1.25);
-
-                        $lc->update(['balance' => $result]);
-
-                        $ls->update([$type->title == 'Sick Leave' ? 'sl_balance' : 'vl_balance' => $result]);
-
-                    }else{
-
-                        LeaveCredit::create([
-                            'personal_information_id' => $id,
-                            'leave_type_id' => $type->id,
-                            'balance' => 1.25,
-                        ]);
-
-                        $ls->update([$type->title == 'Sick Leave' ? 'sl_balance' : 'vl_balance' => 1.25]);
-
-                    }
-
-                }
+                $update = LeaveSummary::find($value['id'])->update($value);
             }
         }
 
-        return 'ok';
     }
+
 
     /**
      * Display the specified resource.
@@ -288,7 +97,16 @@ class LeaveCreditController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $leaveSummary   = LeaveSummary::where('personal_information_id', $id)->orderByRaw('CASE WHEN `sort`= 0 THEN `created_at` ELSE `sort` END')->get();
+
+        $leaveCredit    =   DB::table('leave_credits')
+                            ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
+                            ->where('personal_information_id', $id)
+                            ->get();
+
+        return ['summary' => $leaveSummary, 'credit' => $leaveCredit];
+
     }
 
     /**
@@ -300,7 +118,8 @@ class LeaveCreditController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+
     }
 
     /**
@@ -311,6 +130,25 @@ class LeaveCreditController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $summary = LeaveSummary::find($id);
+
+        $vl_deduct  = $summary->vl_earned - $summary->vl_withpay;
+        $sl_deduct = $summary->sl_earned - $summary->sl_withpay;
+
+        $vl_id = LeaveType::where('title', 'Vacation Leave')->first()->id;
+        $sl_id = LeaveType::where('title', 'Sick Leave')->first()->id;
+
+        $vl_balance = LeaveCredit::where('personal_information_id', $summary->personal_information_id)->where('leave_type_id', $vl_id)->first();
+        $sl_balance = LeaveCredit::where('personal_information_id', $summary->personal_information_id)->where('leave_type_id', $sl_id)->first();
+
+        if($vl_balance && $sl_balance)
+        {
+            $update_vl_balance = $vl_balance->update(['balance' => (float)$vl_balance->balance - (float)$vl_deduct]);
+            $update_sl_balance = $sl_balance->update(['balance' => (float)$sl_balance->balance - (float)$sl_deduct]);
+        }
+
+        $summary->delete();
+
     }
 }

@@ -69,7 +69,8 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
     Route::get('editLeaveApplication', 'API\LeaveApplicationController@edit');
     Route::get('load_user', 'API\LeaveApplicationController@loadUserRole');
-    Route::post('checkcredits', 'API\LeaveApplicationController@checkCredits');
+    Route::get('getAllLeave', 'API\LeaveApplicationController@getAllLeave');
+    Route::post('searchLeave', 'API\LeaveApplicationController@searchLeave');
 
     Route::post('acceptEditRequest', 'API\RequestController@acceptEditRequest');
     Route::post('revertRequest', 'API\RequestController@revertRequest');
@@ -78,7 +79,6 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('getleavesummary', 'API\LeaveCreditController@getLeaveSummary');
     Route::post('editleavesummary', 'API\LeaveCreditController@editleavesummary');
     Route::post('slp_fl_leave', 'API\LeaveCreditController@slp_fl_leave');
-    Route::post('global_credits', 'API\LeaveCreditController@global_credits');
 
     Route::post('checkChanges', 'API\LeaveApplicationController@checkChanges');
 

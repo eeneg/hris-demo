@@ -15,16 +15,33 @@
                     </div>
 
                     <div class="row mt-1 col-md-12">
-                        <div class="form-group col-md-4 mb-0">
-                            <v-select @input="filter_data()" class="form-control form-control-border border-width-2" v-model="personal_information_id" placeholder="Select Employee" :options="personalinformations" label="name"
+                        <div class="form-group col-md-6 mb-0">
+                            <v-select class="form-control form-control-border border-width-2" v-model="search.personal_information_id" placeholder="Select Employee" :options="personalinformations" label="name"
                             :reduce="personalinformations => personalinformations.id"></v-select>
                         </div>
-                        <div class="form-group col-md-4 mb-0">
-                            <v-select v-model="selectedleavetype" @input="filter_data()" placeholder="Select specific leave type" class="form-control form-control-border border-width-2" :options="leavetypes" label="title" :reduce="leavetypes => leavetypes.id"></v-select>
+                        <div class="form-group col-md-6 mb-0">
+                            <v-select v-model="search.leave_type_id" placeholder="Select specific leave type" class="form-control form-control-border border-width-2" :options="leavetypes" label="title" :reduce="leavetypes => leavetypes.id"></v-select>
                         </div>
-                        <div class="form-group col-md-4 mb-0">
-                            <v-select class="form-control form-control-border border-width-2" aria-label="Default select example" v-model="selected_stage_status" @input="filter_data()" :options="stage_status" placeholder="Filter Status">
+                    </div>
+
+                    <div class="row mt-1 col-md-12">
+                        <div class="form-group col-md-6 mb-0">
+                            <v-select class="form-control form-control-border border-width-2" aria-label="Default select example" v-model="search.stage_status" :options="stage_status" placeholder="Filter Status">
                             </v-select>
+                        </div>
+                        <div class="form-group col-md-6 mb-0">
+                            <div class="form-group">
+                                <date-picker id="reckoning_date" :config="options" v-model="search.date_of_filing" class="form-control form-control-border border-width-2" placeholder="Date: (yyyy-mm-dd)"></date-picker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1 col-md-12">
+                        <div class="form-group col-md-6 mb-0">
+                            <button type="button" class="btn btn-danger btn-block" @click="clear()"><i class="fas fa-trash"></i> Clear</button>
+                        </div>
+                        <div class="form-group col-md-6 mb-0">
+                            <button type="button" class="btn btn-success btn-block" @click="filter_data()"><i class="fas fa-search"></i> Search</button>
                         </div>
                     </div>
 
@@ -32,11 +49,11 @@
                         <div class="col-md-3">
                             <div class="form-group mb-0">
                                 <div class="custom-control custom-radio d-inline">
-                                    <input v-model="status" @change="filter_data()" class="custom-control-input" type="radio" value="final" id="customRadio1" name="status">
+                                    <input v-model="search.status" @change="filter_data()" class="custom-control-input" type="radio" value="final" id="customRadio1" name="status">
                                     <label for="customRadio1" class="custom-control-label">Final</label>
                                 </div>
                                 <div class="custom-control custom-radio d-inline ml-3">
-                                    <input v-model="status" @change="filter_data()" class="custom-control-input" type="radio" value="draft" id="customRadio2" name="status">
+                                    <input v-model="search.status" @change="filter_data()" class="custom-control-input" type="radio" value="draft" id="customRadio2" name="status">
                                     <label for="customRadio2" class="custom-control-label">Drafts</label>
                                 </div>
                             </div>
@@ -88,7 +105,7 @@
                                             Noted by
                                         </a>
                                          <a type="button" v-if="user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PGO-Executive'" class="dropdown-item" @click.prevent="governor(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                            Governor
+                                            For Governor's Approval
                                         </a>
                                         <a class="dropdown-item" @click.prevent="deleteLeaveApplication(leaveapplication.id, index)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             Delete
@@ -122,20 +139,22 @@
                     <form @submit.prevent="submit_mode == 'recommendation' ? review_recommendation(1) : submit_mode == 'noted_by' ? submit_noted_by(1) : submit_mode == 'gov' ? submit_governor(1) : ''" action="">
                         <div class="modal-body">
                             <div class="row" v-if="submit_mode == 'recommendation'">
-                                <div class="form-group col-6" style="position: relative;margin-bottom: 0.3rem;">
+                                <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
                                     <label style="margin: 0;">Recommendation Officer</label>
-                                    <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" :options="personalinformations" label="name"
-                                    :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
+
+                                    <v-select @input="filter_data()" class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" placeholder="Select Employee" :options="personalinformations" item-text="label" label="name"
+                                    :reduce="personalinformations => personalinformations.id"></v-select>
+
                                     <has-error :form="form" field="personal_information_id"></has-error>
                                 </div>
-                                <div class="form-group col-3">
+                                <div class="form-group col-md-3">
                                     <div class="custom-control custom-radio">
                                         <input v-model="form.recommendation_status" value="APPROVED" class="custom-control-input" type="radio" id="recommendation_status_approved" name="recommendation_status">
                                         <label for="recommendation_status_approved" class="custom-control-label">Approved</label>
                                         <input v-model="form.recommendation_remark_approved" ref="recommendation_status_approved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'APPROVED'">
                                     </div>
                                 </div>
-                                <div class="form-group col-3">
+                                <div class="form-group col-md-3">
                                     <div class="custom-control custom-radio">
                                         <input v-model="form.recommendation_status" class="custom-control-input" value="DISAPPROVED" type="radio" id="recommendation_status_disapproved" name="recommendation_status">
                                         <label for="recommendation_status_disapproved" class="custom-control-label">Dissaproved due to</label>
@@ -160,7 +179,18 @@
                             </div>
 
                             <div class="row" v-if="submit_mode == 'gov'">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-2 form-group custom-control custom-radio d-inline ml-3">
+                                    <input v-model="gov_approval" class="custom-control-input" type="radio" value="1" id="gov_approval" name="gov_approval">
+                                    <label for="gov_approval" class="custom-control-label">Approve</label>
+                                </div>
+                                <div class="col-md-2 form-group custom-control custom-radio d-inline ml-3">
+                                    <input v-model="gov_approval" class="custom-control-input" type="radio" value="0" id="gov_dissaproval" name="gov_approval">
+                                    <label for="gov_dissaproval" class="custom-control-label">Disapprove</label>
+                                </div>
+                            </div>
+
+                            <div class="row" v-if="submit_mode == 'gov' && gov_approval == 0">
+                                <div class="col-md-12 form-group">
                                     <label for="disapproved_due_to">Disapproved due to:</label>
                                     <input v-model="form.disapproved_due_to" ref="disapproved_due_to" class="form-control form-control-border border-width-2" type="text" name="disapproved_due_to">
                                 </div>
@@ -257,12 +287,12 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-if="submit_mode == 'recommendation'" type="button" @click.prevent="review_recommendation(2)" class="btn btn-danger float-left">Undo Recommendation</button>
-                            <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(2)" class="btn btn-danger float-left">Undo Noted By</button>
+                            <button v-if="submit_mode == 'recommendation' && form.stage_status != 'Pending Recommendation'" type="button" @click.prevent="review_recommendation(2)" class="btn btn-danger float-left">Undo Recommendation</button>
+                            <button v-if="submit_mode == 'noted_by' && form.stage_status != 'Pending Noted By'" type="button" @click.prevent="submit_noted_by(2)" class="btn btn-danger float-left">Undo Noted By</button>
+                            <button v-if="submit_mode == 'gov' && form.stage_status != 'Pending Governor Approval'" type="button" @click.prevent="submit_governor(2)" class="btn btn-danger float-left">Undo</button>
                             <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(3)" class="btn btn-success float-left">Approve</button>
-                            <button v-if="submit_mode == 'gov'" type="button" @click.prevent="submit_governor(2)" class="btn btn-danger float-left">Undo Governor Approval</button>
-                            <button v-if="submit_mode == 'gov'" type="submit" class="btn btn-primary">{{ form.disapproved_due_to != null && form.disapproved_due_to != '' ? 'Disapprove' : 'Approve' }}</button>
-                            <button v-if="submit_mode != 'view'" type="submit" class="btn btn-primary">{{ submit_mode == 'noted_by' ? 'Governor Approval' : 'Save Changes' }}</button>
+                            <button v-if="submit_mode == 'gov'" type="submit" class="btn btn-primary">Save</button>
+                            <button v-if="submit_mode != 'view' && submit_mode != 'gov'" type="submit" class="btn btn-primary">{{ submit_mode == 'noted_by' ? 'Governors Approval' : 'Save Changes' }}</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -275,13 +305,13 @@
 </template>
 
 <script>
+import axios from 'axios';
     export default {
         data() {
             return {
                 modal: false,
                 submit_mode: '',
                 search: '',
-                status: 'final',
                 selectedleavetype: '',
                 leavetypes: [],
                 leaveapplications: {},
@@ -292,14 +322,15 @@
                 leave_details: {},
                 user: {id: '', role: '', dept:[]},
                 selected_stage_status: '',
+                gov_approval: null,
                 stage_status: [
                     'Pending Recommendation',
+                    'Recommendation Disapproved',
                     'Pending Noted By',
                     'Approved by the HR Head',
                     'Pending Governor Approval',
-                    'Recommendation Disapproved',
-                    'Disapproved by the Governor',
                     'Approved by the Governor',
+                    'Disapproved by the Governor',
                 ],
                 form: new Form({
                     'personal_information_id': '',
@@ -323,9 +354,28 @@
                 prev_balance_total: '',
                 less_total: '',
                 balance_total: '',
+                date: null,
+                search:{
+                    personal_information_id: null,
+                    leave_type_id: null,
+                    stage_status: null,
+                    date_of_filing: null,
+                    status: 'final',
+                },
+                options: {
+                    format: 'yyyy-MM-DD',
+                    useCurrent: false,
+                }
+
             }
         },
+        components: {
+            datePicker
+        },
         methods: {
+            showDate(date) {
+                this.date = date
+            },
             paginate(page = 1){
                 axios.get('api/leaveapplication?page=' + page)
                 .then(({data}) => {
@@ -348,30 +398,45 @@
 
                 this.balance_total = parseFloat(this.curr_vacation_balance) + parseFloat(this.curr_sick_balance);
             },
+
+            clear()
+            {
+                this.search = {
+                    personal_information_id: null,
+                    leave_type_id: null,
+                    stage_status: null,
+                    date_of_filing: null,
+                    status: this.search.status
+                }
+
+                this.filter_data()
+
+            },
+
             filter_data() {
-                let filtered = _.filter(this.leaveapplicationsdata, {'status': this.status});
-
-                if (this.personal_information_id != null && this.personal_information_id != '') {
-                    filtered = _.filter(filtered, {'personal_information_id': this.personal_information_id});
-                }
-
-                if (this.selectedleavetype != null && this.selectedleavetype != '') {
-                    filtered = _.filter(filtered, {'leave_type_id': this.selectedleavetype});
-                }
-
-                if(this.selected_stage_status != null && this.selected_stage_status != '')
-                {
-                    filtered = _.filter(filtered, {'stage_status': this.selected_stage_status})
-                }
-
-                this.leaveapplications.data = filtered;
+                this.$Progress.start()
+                axios.post('api/searchLeave', this.search)
+                .then(({data}) => {
+                    this.leaveapplications.data = data
+                    this.$Progress.finish()
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Done'
+                    })
+                })
+                .catch(e => {
+                    console.log(e)
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Error'
+                    })
+                })
             },
             loadContent() {
                 axios.get('api/leaveapplication')
                     .then( ({ data }) => {
-                        this.leaveapplicationsdata = data.data;
                         this.leaveapplications = data;
-                        this.leaveapplications.data = _.filter(data.data, {'status': this.status});
+                        this.leaveapplications.data = _.filter(data.data, {'status': this.search.status});
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -386,6 +451,16 @@
                 axios.post('api/forleave')
                     .then(({data}) => {
                         this.personalinformations = data;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+            },
+            getAllLeave: function(){
+                 axios.get('api/getAllLeave')
+                    .then(({data}) => {
+                        this.leaveapplicationsdata = data.data;
+                        console.log(this.leaveapplicationsdata)
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -511,68 +586,59 @@
 
                 let save = false
 
-                if(mode == 1 && this.form.recommendation_officer_id != null && this.form.recommendation_status != null)
-                {
+                switch(mode){
+                    case(1):
+                    {
 
-                    this.form.stage_status = this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' : this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : ''
-                    this.submit_reccomendation()
-
-                }else if(mode == 1 && this.form.recommendation_officer_id == null){
-                    Swal.fire(
-                        'Oops...',
-                        'Office head required',
-                        'error'
-                    )
-                }else if(mode == 1 && this.form.recommendation_status == null){
-                    Swal.fire(
-                        'Oops...',
-                        'Recommendation needs to be Approved or Disapproved',
-                        'error'
-                    )
-                }
-
-                if(mode == 2 && this.form.recommendation_officer_id != null && (this.form.stage_status == 'Recommendation Disapproved' || this.form.stage_status == 'Pending Noted By')){
-
-                    Swal.fire({
-                    title: 'Ooops...',
-                    text: "You cannot revert this!!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed'
-                        }).then((result) => {
-                        if(result.isDismissed == true)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Cancelled'
-                            });
-                        }else{
-
-                            this.form.recommendation_officer_id = null,
-                            this.form.recommendation_status = null,
-                            this.form.recommendation_remark_approved = null,
-                            this.form.recommendation_remark_disapproved = null,
-                            this.form.stage_status = 'Pending Recommendation'
-
+                        if(this.form.recommendation_officer_id != null && this.form.recommendation_status != null){
+                            this.form.stage_status = this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' : this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : ''
                             this.submit_reccomendation()
-
+                            break;
                         }
-                    })
 
-                }else if(mode == 2 && this.form.recommendation_officer_id == null){
-                    Swal.fire(
-                        'Oops...',
-                        'Nothing to undo',
-                        'error'
-                    )
-                }else if(mode == 2){
-                    Swal.fire(
-                        'Oops...',
-                        'Cannot undo Recommendation at this stage',
-                        'error'
-                    )
+                        Swal.fire(
+                            'Oops...',
+                            this.form.recommendation_officer_id == null ? 'Recommendation Officer Required' : 'Recommendation needs to be Approved or Disapproved',
+                            'error'
+                        )
+
+                        break
+
+                    }
+                    case(2):
+                    {
+
+                        Swal.fire({
+                            title: 'Ooops...',
+                            text: "You cannot revert this!!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Proceed'
+                        }).then((result) => {
+                            if(result.isDismissed == true)
+                            {
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Cancelled'
+                                });
+                            }else{
+
+                                this.form.recommendation_officer_id = null,
+                                this.form.recommendation_status = null,
+                                this.form.recommendation_remark_approved = null,
+                                this.form.recommendation_remark_disapproved = null,
+                                this.form.stage_status = 'Pending Recommendation'
+
+                                this.submit_reccomendation()
+
+                            }
+                        })
+
+                        break
+
+                    }
                 }
             },
             submit_reccomendation: function()
@@ -791,6 +857,11 @@
                 this.submit_mode = 'gov'
                 this.calculate()
 
+                if(leaveapplication.stage_status == 'Disapproved by the Governor')
+                {
+                    this.gov_approval = 0
+                }
+
                  if(leaveapplication.stage_status == 'Pending Governor Approval')
                 {
 
@@ -838,7 +909,14 @@
                     this.$Progress.start()
 
                     this.form.governor_id = this.user.id
-                    this.form.stage_status = this.form.disapproved_due_to != null && this.form.disapproved_due_to != '' ? 'Disapproved by the Governor' : 'Approved by the Governor'
+
+                    if(this.gov_approval == 0)
+                    {
+                        this.form.stage_status = 'Disapproved by the Governor'
+                    }else{
+                        this.form.stage_status = 'Approved by the Governor'
+                        this.form.disapproved_due_to = null
+                    }
 
                     axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
                     .then(response => {
@@ -855,7 +933,7 @@
                         console.log(error.response.data.message);
                     })
 
-                }else if(mode == 2){
+                }else if(mode == 2 && this.form.governor_id != null){
 
 
                     Swal.fire({
@@ -897,14 +975,21 @@
 
                         }
                     })
+                }else if(mode == 2 && this.form.governor_id == null){
+                    Swal.fire(
+                        'Oops...',
+                        'Nothing to undo',
+                        'error'
+                    )
                 }
             }
         },
         created() {
-            this.$Progress.start();
+            this.$Progress.start()
             this.load_user()
-            this.loadContent();
-            this.$Progress.finish();
+            this.loadContent()
+            this.getAllLeave()
+            this.$Progress.finish()
         },
         mounted() {
             // console.log('Component mounted.')

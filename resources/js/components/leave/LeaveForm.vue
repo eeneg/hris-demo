@@ -8,7 +8,7 @@
                     <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
                 </div>
 
-                <form autocomplete="off" @submit.prevent="mode == null ? check_credits() : mode == 1 ? submitEdits() : '' ">
+                <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
@@ -39,31 +39,32 @@
                     <div class="row">
                         <div class="form-group col-md-3">
                             <div class="custom-control custom-radio">
-                                <input v-model="form.spent" value="Within the Philippines" class="custom-control-input" type="radio" id="within_the_ph" name="spent" checked>
+                                <input v-model="form.spent" value="Within the Philippines" class="custom-control-input" type="radio" id="within_the_ph" name="spent">
                                 <label for="within_the_ph" class="custom-control-label">Within the Philippines <br> <span class="font-weight-normal">(in case of vacation leave)</span></label>
-                                <input v-model="form.spent_specify1" ref="within_the_ph_input" class="form-control form-control-border border-width-2" type="text" name="spent_spec1" placeholder="Specify" :disabled="form.spent != 'Within the Philippines'">
                             </div>
                         </div>
                         <div class="form-group col-md-3">
                             <div class="custom-control custom-radio">
                                 <input v-model="form.spent" class="custom-control-input" value="Abroad" type="radio" id="abroad" name="spent">
                                 <label for="abroad" class="custom-control-label">Abroad <br> <span class="font-weight-normal">(in case of vacation leave)</span></label>
-                                <input v-model="form.spent_specify2" ref="abroad_input" class="form-control form-control-border border-width-2" type="text" name="spent_spec2" placeholder="Specify" :disabled="form.spent != 'Abroad'">
                             </div>
                         </div>
                         <div class="form-group col-md-3">
                             <div class="custom-control custom-radio">
                                 <input v-model="form.spent" class="custom-control-input" value="In Hospital" type="radio" id="in_hospital" name="spent">
                                 <label for="in_hospital" class="custom-control-label">In Hospital <br> <span class="font-weight-normal">(in case of sick leave)</span></label>
-                                <input v-model="form.spent_specify3" ref="in_hospital_input" class="form-control form-control-border border-width-2" type="text" name="spent_spec3" placeholder="Specify" :disabled="form.spent != 'In Hospital'">
                             </div>
                         </div>
                         <div class="form-group col-md-3">
                             <div class="custom-control custom-radio">
                                 <input v-model="form.spent" class="custom-control-input" value="Out Patient" type="radio" id="out_patient" name="spent">
                                 <label for="out_patient" class="custom-control-label">Out Patient <br> <span class="font-weight-normal">(in case of sick leave)</span></label>
-                                <input v-model="form.spent_specify4" ref="out_patient_input" class="form-control form-control-border border-width-2" type="text" name="spent_spec4" placeholder="Specify" :disabled="form.spent != 'Out Patient'">
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <input v-model="form.spent_spec" id="spent_spec" class="form-control form-control-border border-width-2" type="text" name="spent_spec" placeholder="Specify" required>
                         </div>
                     </div>
                     <div class="row">
@@ -177,8 +178,8 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <button type="submit" class="btn btn-primary" @click="status = 'final'">Finalize</button>
-                    <button type="submit" class="btn btn-secondary" @click="status = 'draft'">Save as draft</button>
+                    <button type="submit" class="btn btn-primary" @click="form.status = 'final'">Finalize</button>
+                    <button type="submit" class="btn btn-secondary" @click="form.status = 'draft'">Save as draft</button>
                 </div>
                 </form>
             </div>
@@ -213,10 +214,7 @@
                     'leave_type_id': '',
                     'working_days': '',
                     'spent': 'Within the Philippines',
-                    'spent_specify1': '',
-                    'spent_specify2': '',
-                    'spent_specify3': '',
-                    'spent_specify4': '',
+                    'spent_spec': '',
                     'from': moment(new Date()).format('YYYY-MM-DD'),
                     'to': moment(new Date()).format('YYYY-MM-DD'),
                     'credit_as_of': moment(new Date()).format('YYYY-MM-DD'),
@@ -298,25 +296,20 @@
                     this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
                                                 this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
 
-                    if (this.status == 'final') {
-                        this.form.status = 'final';
-                        this.form.post('api/leaveapplication')
-                            .then(({data}) => {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: 'New leave application is created successfully',
-                                })
-                                this.$router.push({ path: '/leave-applications'});
-                                this.$Progress.finish();
+                    this.form.post('api/leaveapplication')
+                        .then(({data}) => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'New leave application is created successfully',
                             })
-                            .catch(error => {
-                                console.log(error.response.data.message);
-                                this.$Progress.fail();
-                            });
-                    } else {
-
-                    }
+                            this.$router.push({ path: '/leave-applications'});
+                            this.$Progress.finish();
+                        })
+                        .catch(error => {
+                            console.log(error.response.data.message);
+                            this.$Progress.fail();
+                        });
                 }
             },
             submitEdits: function()
@@ -383,30 +376,6 @@
                         }
                     })
                 }
-            },
-            check_credits: function()
-            {
-                axios.post('api/checkcredits', {personal_information_id: this.form.personal_information_id, leave_type_id: this.form.leave_type_id})
-                .then(response => {
-                    if(response.data.code == true)
-                    {
-                        this.submitForm()
-                    }else{
-                        Swal.fire(
-                        'Oops...',
-                        response.data.message,
-                        'error'
-                        )
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                    Swal.fire(
-                        'Oops...',
-                        'Something went wrong',
-                        'error'
-                    )
-                })
             },
             loadFormData() {
                 axios.post('api/forleave')

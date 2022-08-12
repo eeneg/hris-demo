@@ -132,24 +132,23 @@ class PDFcontroller extends Controller
 
     public function generateleavecard(Request $request)
     {
-        $employee = PersonalInformation::find($request->id);
+        $employee = PersonalInformation::find($request->id)->surname;
 
         $data = LeaveSummary::where('personal_information_id', $request->id)->get();
 
-        $pdf = PDF::loadView('reports/employee-leavecard', compact('data'));
+        $pdf = PDF::loadView('reports/employee-leavecard', compact('data'))->setPaper('legal', 'landscape');
 
-        Storage::put('public/employee_leave_card/' . $employee->surname .'.pdf', $pdf->output());
+        Storage::put('public/employee_leave_card/' . $employee .'.pdf', $pdf->output());
 
-        return ['title' => $employee->surname .'.pdf'];
+        return ['title' => $employee.'.pdf'];
 
-        // return view('reports.employee-leavecard', compact('data'));
     }
 
     public function generatesalarysched(Request $request)
     {
 
-        $sg = SalarySchedule::firstWhere('tranche', $request->tranche)->salarygrades->sortBy('created_at');
-        $tranche = $request->tranche;
+        $sg = SalarySchedule::find($request->tranche)->salarygrades->sortBy('created_at');
+        $tranche = SalarySchedule::find($request->tranche)->tranche;
         $salarysched = collect();
 
         foreach($sg->sortBy('grade')->groupBy('grade') as $data)
@@ -164,8 +163,8 @@ class PDFcontroller extends Controller
 
         $pdf = PDF::loadView('reports/salary-sched', compact('salarysched', 'tranche'));
 
-        Storage::put('public/salary_sched_report/' . $request->tranche .'.pdf', $pdf->output());
+        Storage::put('public/salary_sched_report/' . $tranche .'.pdf', $pdf->output());
 
-        return ['title' => $request->tranche . '.pdf'];
+        return ['title' => $tranche . '.pdf'];
     }
 }

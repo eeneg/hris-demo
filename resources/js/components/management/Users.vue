@@ -70,7 +70,7 @@
                     </pagination>
                     <span style="margin-left: 10px;">Showing {{ users.meta && users.meta.from | validateCount }} to {{ users.meta && users.meta.to | validateCount }} of {{ users.meta && users.meta.total }} records</span>
                 </div>
-                
+
                 <!-- /.card-body -->
             </div>
         <!-- /.card -->
@@ -191,7 +191,7 @@
                 this.editmode = false;
                 this.form.reset();
                 $('#department_user_select').css('display', 'none');
-                $('#userModal').modal('show');   
+                $('#userModal').modal('show');
             },
             editUserModal(user) {
                 this.editmode = true;
@@ -207,14 +207,14 @@
                 // this.form.department_id = user.userassignment && user.userassignment.department.id;
             },
             getAvatar(avatar) {
-                if (avatar != "profile.png") {
-                    let prefix = (avatar.match(/\//) ? '' : '/storage/user_avatars/');
-                    return prefix + avatar;
-                } else {
-                    let prefix = (avatar.match(/\//) ? '' : '/storage/project_files/');
-                    return prefix + avatar;
-                }
-            }, 
+                // if (avatar != "profile.png") {
+                //     let prefix = (avatar.match(/\//) ? '' : '/storage/user_avatars/');
+                //     return prefix + avatar;
+                // } else {
+                //     let prefix = (avatar.match(/\//) ? '' : '/storage/project_files/');
+                //     return prefix + avatar;
+                // }
+            },
             showDepartments() {
                 var value = $('#user_role_combo').val();
                 if ((value == 'Office User' || value == 'Office Head') && $('#department_user_select').is(":hidden")) {
@@ -242,7 +242,7 @@
                             icon: 'success',
                             title: 'User updated successfully'
                         });
-                        $('#userModal').modal('hide');    
+                        $('#userModal').modal('hide');
                         this.$Progress.finish();
                     })
                     .catch(() => {
@@ -258,7 +258,7 @@
                             icon: 'success',
                             title: 'User added successfully'
                         });
-                        $('#userModal').modal('hide');     
+                        $('#userModal').modal('hide');
                         this.$Progress.finish();
                     })
                     .catch(error => {
@@ -303,9 +303,9 @@
                 axios.get('api/department')
                     .then(({data}) => {
                         this.departments = data.data;
-                        if (!this.form.department_id) {
-                            this.form.department_id = this.departments[0].id;
-                        }
+                        // if (!this.form.department_id) {
+                        //     this.form.department_id = this.departments[0].id;
+                        // }
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -322,6 +322,6 @@
 
             // Refresh table every 3 seconds (not recommended ni siya, for test only)
             // setInterval(() => this.loadUsers(), 3000);
-        }
+        },
     }
 </script>
