@@ -53,7 +53,7 @@
                                 <td style="text-align: center;">{{ record.old_number }}</td>
                                 <td style="text-align: center;">{{ record.new_number }}</td>
                                 <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td>
-                                <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename }}</td>
+                                <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + record.middlename }}</td>
                                 <td v-else class="green"><b>VACANT</b></td>
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
                                 <td style="text-align: right;">{{ (record.salaryauthorized !== null ? ((record.working_time == 'Full-time' ? record.salaryauthorized.amount * 12 : (record.salaryauthorized.amount / 2) * 12)) : '')  | amount}}</td>
