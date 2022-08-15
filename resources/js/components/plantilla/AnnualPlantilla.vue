@@ -53,7 +53,7 @@
                                 <td style="text-align: center;">{{ record.old_number }}</td>
                                 <td style="text-align: center;">{{ record.new_number }}</td>
                                 <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td>
-                                <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + record.middlename }}</td>
+                                <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + ' ' + record.middlename }}</td>
                                 <td v-else class="green"><b>VACANT</b></td>
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
                                 <td style="text-align: right;">{{ (record.salaryauthorized !== null ? ((record.working_time == 'Full-time' ? record.salaryauthorized.amount * 12 : (record.salaryauthorized.amount / 2) * 12)) : '')  | amount}}</td>
@@ -667,6 +667,8 @@
                 axios.get('api/department')
                     .then(({data}) => {
                         this.departments = data.data;
+
+                        // Pre select Departments if from Employees component
                         if (this.$route.params.dept != null) {
                             this.selectedDepartment = this.$route.params.dept;
                         } else {
@@ -679,6 +681,21 @@
                     .catch(error => {
                         console.log(error.response.data.message);
                     });
+            },
+            highlight(element) {
+                let defaultBG = element.style.backgroundColor;
+                let defaultTransition = element.style.transition;
+
+                element.style.transition = "background 3s";
+                element.style.backgroundColor = "#FDFF47";
+
+                setTimeout(function()
+                {
+                    element.style.backgroundColor = defaultBG;
+                    setTimeout(function() {
+                        element.style.transition = defaultTransition;
+                    }, 3000);
+                }, 3000);
             },
             loadContents() {
                 this.$Progress.start();
@@ -696,7 +713,25 @@
                             })
                             .catch(error => {
                                 console.log(error.response.data.message);
-                            })
+                            });
+
+                        // Scroll to specific employee
+                        this.$nextTick(() => {
+                            if (this.$route.params.dept != null) {
+                                var table = document.getElementsByClassName("plantilla-table")[0].getElementsByTagName("tbody")[0];
+                                for (var r = 0; r < table.rows.length; r++) {
+                                    let newItemNo = parseInt(table.rows[r].cells[1].innerHTML);
+                                    let newNo = this.$route.params.newNo;
+                                    if (newNo == newItemNo) {
+                                        table.rows[r].scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'center'
+                                        });
+                                        this.highlight(table.rows[r]);
+                                    }
+                                }
+                            }
+                        });
 
                         this.$Progress.finish();
                     })
