@@ -687,7 +687,7 @@
                 let defaultTransition = element.style.transition;
 
                 element.style.transition = "background 3s";
-                element.style.backgroundColor = "#FDFF47";
+                element.style.backgroundColor = "#78ff9c";
 
                 setTimeout(function()
                 {
