@@ -47,7 +47,6 @@
                             <table class="table table-borderless text-center" v-if="selected_employee !== null">
                                 <thead>
                                     <tr>
-                                        <!-- <th rowspan="2" colspan="1">1</th> -->
                                         <th rowspan="2" colspan="1">#</th>
                                         <th rowspan="2" colspan="1">
                                             Period
@@ -79,13 +78,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%">
-                                        <!-- <td class="p-0">
-                                            <input class="form-check-input p-0" type="checkbox" v-model="selected_summary" v-bind:value="data.id">
-                                            <div class="form-check" style="display:inline-flex">
-                                                <input class="form-check-input" type="checkbox" v-model="selected_summary" v-bind:value="data.id">
-                                            </div>
-                                        </td> -->
-                                        <td class="p-0"><input class="form-control p-0 text-center" type="checkbox" style="border-radius: 0; width: 33px" v-model="leave_summary[index].sort" :value="index+1" disabled hidden>{{ index+1 }}</td>
+                                        <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="border-radius: 0; width: 33px" disabled></td>
                                         <td class='p-0'><input :disabled="edit_mode == false"  class="form-control p-0" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;"></td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="particulars" v-model="leave_summary[index].particulars" style="border-radius: 0"></td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_earned', 'vl', $event)" v-on:blur="calculate_balance(index, 'vl_earned', 'vl')" v-on:focus="save_old_value(index, 'vl_earned')" id="vl_earned" v-model="leave_summary[index].vl_earned" style="border-radius: 0"></td>
@@ -257,6 +250,7 @@ import axios from 'axios'
 
             submit_leave: function(delete_save)
             {
+
                 if(delete_save == false)
                 {
                     Swal.fire({
@@ -276,6 +270,10 @@ import axios from 'axios'
                     })
                 }
 
+                for (let x = 0; x < this.leave_summary.length; x++) {
+                    this.leave_summary[x].sort = x
+                }
+
                 axios.post('api/leavecredits', {data: this.leave_summary, id: this.selected_employee.id})
                 .then(e => {
                     this.edited = false
@@ -288,7 +286,6 @@ import axios from 'axios'
                 .catch(e => {
                     console.log(e)
                 })
-
 
             },
 
@@ -319,6 +316,8 @@ import axios from 'axios'
                         this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + 1.25
                     }
                 }
+
+
             },
 
             calculate_balance: function(index, field, leave_type)
@@ -453,7 +452,7 @@ import axios from 'axios'
 
             print_leave_card(){
 
-                if(this.edited)
+                if(this.edited && this.leave_summary.length == 0)
                 {
                     toast.fire({
                         icon: 'error',

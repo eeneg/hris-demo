@@ -24,7 +24,7 @@ class LeaveCreditController extends Controller
 
         $employee = PersonalInformation::orderBy('surname')->get();
 
-        return new LeaveCreditResource($employee, $getLeave = false);
+        return new LeaveCreditResource($employee);
 
     }
 
@@ -70,6 +70,7 @@ class LeaveCreditController extends Controller
         $vl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $vl_id], ['balance' => $vl_balance]);
         $sl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $sl_id], ['balance' => $sl_balance]);
 
+
         if(count($forCreate))
         {
            foreach($forCreate as $value)
@@ -98,11 +99,15 @@ class LeaveCreditController extends Controller
     public function show($id)
     {
 
-        $leaveSummary   = LeaveSummary::where('personal_information_id', $id)->orderByRaw('CASE WHEN `sort`= 0 THEN `created_at` ELSE `sort` END')->get();
+        $leaveSummary = LeaveSummary::where('personal_information_id', $id)->orderBy('sort', 'ASC')->get();
 
         $leaveCredit    =   DB::table('leave_credits')
                             ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
                             ->where('personal_information_id', $id)
+                            ->where(function ($query) {
+                                $query->where('leave_types.title', 'Sick Leave')
+                                ->orWhere('leave_types.title', 'Vacation Leave');
+                            })
                             ->get();
 
         return ['summary' => $leaveSummary, 'credit' => $leaveCredit];

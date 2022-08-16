@@ -32,6 +32,7 @@ class LeaveSummary extends Model
         'sl_withpay',
         'sl_withoutpay',
         'remarks',
+        'sort',
         'detail1',
         'detail2',
         'detail3',
