@@ -22,6 +22,7 @@
                         </div>
                         <div class="col-md-7">
                             <div class="float-right" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Scroll <i class="fas fa-arrow-down"></i></button>
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
                                 <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="submit_leave(false)"><i class="fas fa-save"></i> Save</button>
@@ -43,7 +44,7 @@
                     </div>
 
                     <div class="row mt-1">
-                        <div class="col-md-12 tableFixHead">
+                        <div class="col-md-12 tableFixHead" ref="credit_table">
                             <table class="table table-borderless text-center" v-if="selected_employee !== null">
                                 <thead>
                                     <tr>
@@ -77,9 +78,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%">
-                                        <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="border-radius: 0; width: 33px" disabled></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false"  class="form-control p-0" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;"></td>
+                                    <tr :class="{'border border-success': data.newly_added}" v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%;">
+                                        <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled></td>
+                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;"></td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="particulars" v-model="leave_summary[index].particulars" style="border-radius: 0"></td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_earned', 'vl', $event)" v-on:blur="calculate_balance(index, 'vl_earned', 'vl')" v-on:focus="save_old_value(index, 'vl_earned')" id="vl_earned" v-model="leave_summary[index].vl_earned" style="border-radius: 0"></td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_withpay', 'vl',$event)" v-on:blur="calculate_balance(index, 'vl_withpay', 'vl')" v-on:focus="save_old_value(index, 'vl_withpay')" id="vl_withpay" v-model="leave_summary[index].vl_withpay" style="border-radius: 0"></td>
@@ -212,6 +213,12 @@ import axios from 'axios'
         },
         methods: {
 
+            scroll_bottom()
+            {
+                var x = this.$refs.credit_table
+                x.scrollTop = x.scrollHeight
+            },
+
             get_employees: function(){
 
                 axios.get('api/leavecredits')
@@ -305,7 +312,8 @@ import axios from 'axios'
                     'sl_withpay': 0,
                     'sl_withoutpay': '',
                     'remarks': '',
-                    'sort': index+1
+                    'sort': index+1,
+                    'newly_added': true
                 })
 
                   if(this.leave_summary.length != 1)
