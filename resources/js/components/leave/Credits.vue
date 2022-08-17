@@ -316,12 +316,12 @@ import axios from 'axios'
                     'newly_added': true
                 })
 
-                  if(this.leave_summary.length != 1)
+                if(this.leave_summary.length != 1)
                 {
                     for(let x = index+1; x < this.leave_summary.length; x++)
                     {
-                        this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + 1.25
-                        this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + 1.25
+                        this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                        this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + this.leave_summary[x]['sl_earned'] - this.leave_summary[x]['sl_withpay']
                     }
                 }
 
@@ -455,6 +455,8 @@ import axios from 'axios'
                     this.leave_summary[x]['vl_balance'] = this.leave_summary[x]['vl_balance'] - vl_balance
                     this.leave_summary[x]['sl_balance'] = this.leave_summary[x]['sl_balance'] - sl_balance
                 }
+
+
 
             },
 
