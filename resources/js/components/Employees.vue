@@ -80,7 +80,7 @@
         </div>
 
         <!-- The Modal -->
-        <div class="modal fade" id="viewProfileModal" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" id="viewProfileModal">
             <div class="modal-dialog modal-xl modal-dialog-centered" style="height: 100%; margin-top: 0px;">
                 <div class="modal-content employee-modal-content" style="height: 95%;">
                     <div class="text-center">
