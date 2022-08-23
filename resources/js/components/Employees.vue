@@ -12,7 +12,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 </div>
-                                <input v-model="search" @keyup.prevent="searchit" type="text" class="form-control" placeholder="Search">
+                                <input v-model="search" @keyup.prevent="searchit" type="text" class="form-control" placeholder="Search" autocomplete="off">
                             </div>
                         </div>
                         <div v-if="$gate.isAdministratorORAuthor()" class="col-md-9">
