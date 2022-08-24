@@ -282,6 +282,10 @@
                                     <span v-if="form.educationalbackground.collSchoolName1">
                                         School: {{ form.educationalbackground.collSchoolName1 }}
                                     </span>
+                                    <span v-if="form.educationalbackground.collDegree1">
+                                        <br>
+                                        Degree: {{ form.educationalbackground.collDegree1 }}
+                                    </span>
                                     <span v-if="form.educationalbackground.collTo1">
                                         <br>
                                         Period: {{ form.educationalbackground.collFrom1 + ' - ' + form.educationalbackground.collTo1 }}
@@ -302,6 +306,10 @@
                                 <p class="text-muted" v-if="form.educationalbackground.collSchoolName2">
                                     <span v-if="form.educationalbackground.collSchoolName2">
                                         School: {{ form.educationalbackground.collSchoolName2 }}
+                                    </span>
+                                    <span v-if="form.educationalbackground.collDegree2">
+                                        <br>
+                                        Degree: {{ form.educationalbackground.collDegree2 }}
                                     </span>
                                     <span v-if="form.educationalbackground.collTo2">
                                         <br>
