@@ -21,14 +21,15 @@ class CreateLeaveSummariesTable extends Migration
                     ->on('personal_informations')
                     ->onDelete('cascade');
             $table->string('period')->nullable();
+            $table->string('custom_leave')->nullable();
             $table->string('particulars')->nullable();
             $table->double('vl_earned')->nullable();
             $table->string('vl_withpay')->nullable();
-            $table->double('vl_balance')->nullable();
+            $table->double('vl_balance', 10, 3)->nullable();
             $table->string('vl_withoutpay')->nullable();
             $table->double('sl_earned')->nullable();
             $table->string('sl_withpay')->nullable();
-            $table->double('sl_balance')->nullable();
+            $table->double('sl_balance', 10, 3)->nullable();
             $table->string('sl_withoutpay')->nullable();
             $table->string('remarks', 500)->nullable();
             $table->integer('detail1')->nullable();

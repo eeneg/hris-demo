@@ -25,8 +25,6 @@ class LeaveCredit extends Model
         'personal_information_id',
         'leave_type_id',
         'balance',
-        'detail1',
-        'detail2',
         'created_at'
     ];
 

@@ -23,23 +23,48 @@
                         <div class="col-md-7">
                             <div class="float-right" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Scroll <i class="fas fa-arrow-down"></i></button>
+                                <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Summary <i class="fas fa-calendar"></i></button>
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
-                                <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="submit_leave(false)"><i class="fas fa-save"></i> Save</button>
+                                <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="row mt-1" v-if="selected_employee !== null">
-                        <div class="col-md-6 p-2" v-for="(data, index) in leave_credit" :key="data.id">
-                            <div class="card">
-                                <div class="card-header bg-primary">
-                                    {{data.title}}
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Balance: {{data.balance}}</p>
-                                </div>
-                            </div>
+                        <div class="col-md-6 p-2">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Leave Title</th>
+                                    <th scope="col">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(data, index) in leave_credit" :key="data.id">
+                                        <td>{{ index+1 }}</td>
+                                        <td>{{ data.title }}</td>
+                                        <td>{{ data.balance }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6 p-2">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Leave</th>
+                                        <th scope="col">Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(data, index) in custom_leave" :key="data.id">
+                                        <td>{{ index }}</td>
+                                        <td>{{ data }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -80,8 +105,12 @@
                                 <tbody>
                                     <tr :class="{'border border-success': data.newly_added}" v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%;">
                                         <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="particulars" v-model="leave_summary[index].particulars" style="border-radius: 0"></td>
+                                        <td class='p-0' v-bind:class="{'border border-danger': leave_summary[index].particulars != null && leave_summary[index].period == null}">
+                                            <input :disabled="edit_mode == false" class="form-control p-0" type="month" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
+                                        </td>
+                                        <td class='p-0'>
+                                            <input :disabled="edit_mode == false" v-on:focus="particulars_input(index, false)" class="form-control p-0" id="particulars" :value="format_particulars(leave_summary[index].particulars)" style="border-radius: 0">
+                                        </td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_earned', 'vl', $event)" v-on:blur="calculate_balance(index, 'vl_earned', 'vl')" v-on:focus="save_old_value(index, 'vl_earned')" id="vl_earned" v-model="leave_summary[index].vl_earned" style="border-radius: 0"></td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_withpay', 'vl',$event)" v-on:blur="calculate_balance(index, 'vl_withpay', 'vl')" v-on:focus="save_old_value(index, 'vl_withpay')" id="vl_withpay" v-model="leave_summary[index].vl_withpay" style="border-radius: 0"></td>
                                         <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="vl_withoutpay" v-model="leave_summary[index].vl_withoutpay" style="border-radius: 0"></td>
@@ -102,6 +131,52 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 p-2">
+                            <label for="leave_type">Custom</label>
+                            <select :disabled="edit_mode == false" v-model="particulars.leave_type" class="form-control" id="leave_type">
+                                <option v-for="data in leave_types" :key="data.id" :value="data.abbreviation">{{data.title}}</option>
+                                <option value="Undertime">Undertime</option>
+                                <option value="Tardy">Tardy</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12" v-if="particulars.leave_type == 'Tardy' || particulars.leave_type == 'Undertime'">
+                            <label for="days">How many times</label>
+                            <input type="text" v-model="particulars.count" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="days">Days</label>
+                            <input type="text" v-model="particulars.days" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter Days">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="hours">Hours</label>
+                            <input type="text" v-model="particulars.hours" class="form-control" id="hours" aria-describedby="emailHelp" placeholder="Enter Hours">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="minutes">Minutes</label>
+                            <input type="text"  v-model="particulars.mins" class="form-control" id="minutes" aria-describedby="emailHelp" placeholder="Enter Minutes">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="populate_particulars">Save changes</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -169,11 +244,22 @@ import axios from 'axios'
                 leave_credit: [],
                 leave_summary: [],
                 form: [],
+                leave_types: [],
                 input_history: null,
-                running: false
+                validation: false,
+                running: false,
+                custom_leave: [],
+                particulars: {
+                    leave_type: null,
+                    count: null,
+                    days: null,
+                    hours: null,
+                    mins: null
+                },
+                index: null
             }
         },
-        components: {
+        computed: {
 
         },
         beforeRouteLeave (to, from , next) {
@@ -241,6 +327,8 @@ import axios from 'axios'
 
                         this.leave_credit = data.credit
 
+                        this.custom_leave = data.custom_leave
+
                         this.$Progress.finish()
 
                         if(data.length == 0 && this.selected_employee.id !== null)
@@ -252,6 +340,81 @@ import axios from 'axios'
                         console.log(e)
                     })
                 }
+
+            },
+
+            particulars_input: function(index)
+            {
+                $("#exampleModal").modal('show');
+                this.index = index
+                this.particulars = this.leave_summary[index].particulars ??
+                    {
+                        leave_type: null,
+                        days: null,
+                        hours: null,
+                        mins: null
+                    }
+            },
+
+            populate_particulars: function()
+            {
+                this.leave_summary[this.index].particulars = this.particulars
+                $("#exampleModal").modal('hide');
+            },
+
+            format_particulars: function(particulars)
+            {
+                return particulars?  `${particulars?.leave_type}${particulars?.leave_type == 'Tardy' || particulars?.leave_type == 'Undertime' ? particulars?.count+'x' : ''} ${particulars?.days ?? 0}-${particulars?.hours ?? 0}-${particulars?.mins ?? 0}` : '';
+            },
+
+            get_leave_types: function(){
+
+                this.$Progress.start()
+                axios.get('api/getleavetypes')
+                .then(({data}) => {
+
+                    this.leave_types = data.filter(function(e){
+                        if(e.title != 'Sick Leave' && e.title != 'Vacation Leave')
+                        {
+                            return e
+                        }
+                    })
+
+                    this.$Progress.finish()
+
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+
+            },
+
+            check_input: function(index)
+            {
+
+                let validation = true
+
+                this.leave_summary.map(function(e){
+
+                    if(e.particulars != null && e.period == null)
+                    {
+                        validation = false
+                    }
+
+                })
+
+                this.validation = validation
+
+                if(this.validation == true)
+                {
+                    this.submit_leave(false)
+                }else{
+                    toast.fire({
+                        icon:'error',
+                        title: 'Period Empty'
+                    })
+                }
+
 
             },
 
@@ -289,11 +452,19 @@ import axios from 'axios'
                     {
                         Swal.close()
                     }
+                    toast.fire({
+                        icon:'success',
+                        title: 'Saved'
+                    })
                 })
                 .catch(e => {
                     console.log(e)
                 })
 
+            },
+
+            formatNumber (num) {
+                return parseFloat(num).toFixed(2)
             },
 
             add_leave_data(index)
@@ -303,6 +474,7 @@ import axios from 'axios'
                     'personal_information_id': this.selected_employee.id,
                     'particulars': '',
                     'period': '',
+                    'custom_leave':'',
                     'vl_earned': 1.25,
                     'vl_withpay': 0,
                     'vl_balance': 1.25,
@@ -322,6 +494,7 @@ import axios from 'axios'
                     {
                         this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
                         this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + this.leave_summary[x]['sl_earned'] - this.leave_summary[x]['sl_withpay']
+                        this.formatNumber(this.leave_summary[x]['sl_balance'])
                     }
                 }
 
@@ -379,7 +552,7 @@ import axios from 'axios'
                 {
                     Swal.fire({
                     title: 'Delete and Save Leave Summary?',
-                    text: "You cannot revert this!!",
+                    text: "This is saved data!! You cannot revert this!!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -513,6 +686,7 @@ import axios from 'axios'
         mounted() {
             console.log('Component mounted.')
             this.get_employees()
+            this.get_leave_types()
         }
     }
 </script>

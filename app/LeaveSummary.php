@@ -15,6 +15,7 @@ class LeaveSummary extends Model
 
     protected $casts = [
         'id' => 'string',
+        'particulars' => 'object'
     ];
 
     protected $table = 'leave_summaries';
@@ -23,6 +24,7 @@ class LeaveSummary extends Model
         'personal_information_id',
         'particulars',
         'period',
+        'custom_leave',
         'vl_earned',
         'vl_withpay',
         'vl_balance',

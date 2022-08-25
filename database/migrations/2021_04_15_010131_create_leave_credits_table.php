@@ -26,8 +26,6 @@ class CreateLeaveCreditsTable extends Migration
                     ->on('leave_types')
                     ->onDelete('cascade');
             $table->double('balance')->nullable();
-            $table->string('detail1', 500)->nullable();
-            $table->string('detail2', 500)->nullable();
             $table->timestamps();
         });
     }
