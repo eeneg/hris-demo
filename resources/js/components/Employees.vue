@@ -748,7 +748,7 @@
                     'cellphone': '',
                     'agencynumber': '',
                     'tin': '',
-                    'picture': '',
+                    'picture': null,
                     'status': '',
                     'educationalbackground': {},
                     'familybackground': {},
