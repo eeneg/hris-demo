@@ -45,7 +45,17 @@
                     @foreach ($data as $leave_card)
                         <tr>
                             <td>{{ $leave_card->period }}</td>
-                            <td>{{ $leave_card->particulars }}</td>
+                            {{-- <td>{{ $leave_card?->particulars?->leave_type . ' ' . $leave_card?->particulars?->days . '-' $leave_card?->particulars?->hours . '-' . $leave_card?->particulars?->mins  }}</td> --}}
+                            <td>{{
+                                    $leave_card?->particulars?->leave_type .
+                                    ($leave_card?->particulars?->leave_type == 'Tardy' ||
+                                    $leave_card?->particulars?->leave_type == 'Undertime'
+                                    ? $leave_card?->particulars?->count . 'x' : "") . ' ' .
+                                    ($leave_card?->particulars?->days ? $leave_card?->particulars?->days : 0)  . '-' .
+                                    ($leave_card?->particulars?->hours ? $leave_card?->particulars?->hours : 0) . '-' .
+                                    ($leave_card?->particulars?->mins ? $leave_card?->particulars?->mins : 0)
+                                }}
+                            </td>
                             <td>{{ $leave_card->vl_earned }}</td>
                             <td>{{ $leave_card->vl_withpay }}</td>
                             <td>{{ $leave_card->vl_withoutpay }}</td>

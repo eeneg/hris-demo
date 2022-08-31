@@ -23,7 +23,6 @@
                         <div class="col-md-7">
                             <div class="float-right" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Scroll <i class="fas fa-arrow-down"></i></button>
-                                <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Summary <i class="fas fa-calendar"></i></button>
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
                                 <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>
@@ -106,7 +105,7 @@
                                     <tr :class="{'border border-success': data.newly_added}" v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%;">
                                         <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled></td>
                                         <td class='p-0' v-bind:class="{'border border-danger': leave_summary[index].particulars != null && leave_summary[index].period == null}">
-                                            <input :disabled="edit_mode == false" class="form-control p-0" type="month" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
+                                            <input :disabled="edit_mode == false" class="form-control p-0" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
                                         </td>
                                         <td class='p-0'>
                                             <input :disabled="edit_mode == false" v-on:focus="particulars_input(index, false)" class="form-control p-0" id="particulars" :value="format_particulars(leave_summary[index].particulars)" style="border-radius: 0">
@@ -140,7 +139,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Particulars</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -156,20 +155,20 @@
                             </select>
                         </div>
                         <div class="form-group col-md-12" v-if="particulars.leave_type == 'Tardy' || particulars.leave_type == 'Undertime'">
-                            <label for="days">How many times</label>
-                            <input type="text" v-model="particulars.count" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter">
+                            <label for="days">Number of times</label>
+                            <input type="number" v-model="particulars.count" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="days">Days</label>
-                            <input type="text" v-model="particulars.days" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter Days">
+                            <input type="number" v-model="particulars.days" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter Days">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="hours">Hours</label>
-                            <input type="text" v-model="particulars.hours" class="form-control" id="hours" aria-describedby="emailHelp" placeholder="Enter Hours">
+                            <input type="number" v-model="particulars.hours" class="form-control" id="hours" aria-describedby="emailHelp" placeholder="Enter Hours">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="minutes">Minutes</label>
-                            <input type="text"  v-model="particulars.mins" class="form-control" id="minutes" aria-describedby="emailHelp" placeholder="Enter Minutes">
+                            <input type="number"  v-model="particulars.mins" class="form-control" id="minutes" aria-describedby="emailHelp" placeholder="Enter Minutes">
                         </div>
                     </div>
                 </div>
