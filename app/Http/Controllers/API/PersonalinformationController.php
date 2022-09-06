@@ -27,17 +27,23 @@ class PersonalInformationController extends Controller
      */
     public function index()
     {
+        $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
         if ($search = \Request::get('query')) {
             $personalinformations = PersonalInformation::with('plantillacontents')
             ->where(function($query) use ($search){
-                $query->where('surname', 'LIKE', '%'.$search.'%')
+                $query->where('surname', 'LIKE', '%'.$search .'%')
                         ->orWhere('firstname', 'LIKE', '%'.$search.'%')
                         ->orWhere('middlename', 'LIKE', '%'.$search.'%')
                         ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%')
                         ->orWhere('status', 'LIKE', '%'.$search.'%');
             })->orderBy('surname')->paginate(20);
         } else {
-            $personalinformations = PersonalInformation::orderBy('surname')->paginate(20);
+            $personalinformations = PersonalInformation::with(['plantillacontents' => function ($query) use ($plantilla) {
+                $query->where('plantilla_id', $plantilla->id);
+            }])->orderBy('surname')->paginate(20);
         }
         return new EmployeesListResource($personalinformations);
     }
