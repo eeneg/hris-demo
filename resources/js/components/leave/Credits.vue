@@ -105,7 +105,7 @@
                                     <tr :class="{'border border-success': data.newly_added}" v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%;">
                                         <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled></td>
                                         <td class='p-0' v-bind:class="{'border border-danger': leave_summary[index].particulars != null && leave_summary[index].period == null}">
-                                            <input :disabled="edit_mode == false" class="form-control p-0" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
+                                            <input :disabled="edit_mode == false" class="form-control p-0" type="month" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
                                         </td>
                                         <td class='p-0'>
                                             <input :disabled="edit_mode == false" v-on:focus="particulars_input(index, false)" class="form-control p-0" id="particulars" :value="format_particulars(leave_summary[index].particulars)" style="border-radius: 0">
@@ -133,6 +133,55 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <!-- <div class="modal fade" id="periodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Particulars</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row"> -->
+                        <!-- <div class="col-md-12 p-2">
+                            <label for="leave_type">Single Date</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="col-md-12 p-2">
+                            <label for="leave_type">Date Range</label>
+                            <v-date-picker v-model="range" is-range>
+                                <template v-slot="{ inputValue, inputEvents }">
+                                    <div class="flex justify-center items-center">
+                                        <input
+                                            :value="inputValue.start"
+                                            v-on="inputEvents.start"
+                                            class="border px-2 py-1 w-32 rounded focus:outline-none focus:border-indigo-300"
+                                        />
+                                        <input
+                                            :value="inputValue.end"
+                                            v-on="inputEvents.end"
+                                            class="border px-2 py-1 w-32 rounded focus:outline-none focus:border-indigo-300"
+                                        />
+                                    </div>
+                                </template>
+                            </v-date-picker>
+                        </div> -->
+                        <!-- <div class="col-md-12 p-2">
+                            <label for="leave_type">Single Date</label>
+                            <input type="month" class="form-control" v-model="period_date">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="populate_period">Save changes</button>
+                </div>
+                </div>
+            </div>
+        </div> -->
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -255,10 +304,18 @@ import axios from 'axios'
                     hours: null,
                     mins: null
                 },
-                index: null
+                index: null,
+                period_date: null,
+                dragValue: null,
+                range: {
+                    start: null,
+                    end: null,
+                },
+
             }
         },
-        computed: {
+        components: {
+
 
         },
         beforeRouteLeave (to, from , next) {
@@ -282,7 +339,15 @@ import axios from 'axios'
             leave_summary_length: function()
             {
                 return this.summary.length
-            }
+            },
+            selectDragAttribute() {
+                return {
+                    popover: {
+                        visibility: 'hover',
+                        isInteractive: false, // Defaults to true when using slot
+                    },
+                };
+            },
 
         },
         watch: {
@@ -340,6 +405,11 @@ import axios from 'axios'
                     })
                 }
 
+            },
+
+            period_input: function(index)
+            {
+                $("#periodModal").modal('show');
             },
 
             particulars_input: function(index)

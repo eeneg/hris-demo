@@ -46,6 +46,28 @@ class LeaveSummary extends Model
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
+    public static function countCustomLeave($data)
+    {
+        $custom_leave = array();
+
+        foreach($data->groupBy('leave_type') as $index => $item)
+        {
+
+            foreach($item as $value)
+            {
+                if($value->leave_type != 'Undertime' && $value->leave_type != 'Tardy')
+                {
+
+                }
+                // else{
+                //     $custom_leave[$index][] += $value->count;
+                // }
+            }
+        }
+
+        return $custom_leave;
+    }
+
 
     public static function boot(){
         parent::boot();

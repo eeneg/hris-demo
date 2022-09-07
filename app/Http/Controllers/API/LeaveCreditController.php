@@ -99,8 +99,6 @@ class LeaveCreditController extends Controller
     public function show($id)
     {
 
-
-
         $leaveSummary = LeaveSummary::where('personal_information_id', $id)->orderBy('sort', 'ASC')->get();
 
         $leaveCredit    =   DB::table('leave_credits')
@@ -112,8 +110,15 @@ class LeaveCreditController extends Controller
                             })
                             ->get();
 
-        $custom_leave = LeaveSummary::where('personal_information_id', $id)->where('custom_leave', '!=', '')->where('custom_leave', '!=', null)
-                        ->where('period', 'like', Carbon::now()->year . '%')->get()->groupBy('custom_leave')->map->count();
+        $custom_leave = LeaveSummary::where('personal_information_id', $id)->where('particulars', '!=', '')
+                        ->where('period', 'like', Carbon::now()->year . '%')
+                        ->get()
+                        ->map(function($data){
+                            return $data->particulars;
+                        });
+                        // ->groupBy('particulars->leave_type');
+
+        return LeaveSummary::countCustomLeave($custom_leave);
 
         return ['summary' => $leaveSummary, 'credit' => $leaveCredit, 'custom_leave' => $custom_leave];
 
