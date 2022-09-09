@@ -116,12 +116,8 @@ class LeaveCreditController extends Controller
                         ->map(function($data){
                             return $data->particulars;
                         });
-                        // ->groupBy('particulars->leave_type');
 
-        return LeaveSummary::countCustomLeave($custom_leave);
-
-        return ['summary' => $leaveSummary, 'credit' => $leaveCredit, 'custom_leave' => $custom_leave];
-
+        return ['summary' => $leaveSummary, 'credit' => $leaveCredit, 'custom_leave' => LeaveSummary::countCustomLeave($custom_leave)];
     }
 
     /**

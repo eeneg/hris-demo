@@ -105,7 +105,7 @@
                                     <tr :class="{'border border-success': data.newly_added}" v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%;">
                                         <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled></td>
                                         <td class='p-0' v-bind:class="{'border border-danger': leave_summary[index].particulars != null && leave_summary[index].period == null}">
-                                            <input :disabled="edit_mode == false" class="form-control p-0" type="month" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
+                                            <input :disabled="edit_mode == false" class="form-control p-0" v-on:focus="period_input()" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
                                         </td>
                                         <td class='p-0'>
                                             <input :disabled="edit_mode == false" v-on:focus="particulars_input(index, false)" class="form-control p-0" id="particulars" :value="format_particulars(leave_summary[index].particulars)" style="border-radius: 0">
@@ -135,22 +135,34 @@
         </div>
 
         <!-- Modal -->
-        <!-- <div class="modal fade" id="periodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="periodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Particulars</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Period</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row"> -->
-                        <!-- <div class="col-md-12 p-2">
-                            <label for="leave_type">Single Date</label>
-                            <input type="date" class="form-control">
+                    <div class="row">
+                        <div class=" col-md-12 p-2 input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                            </div>
+                            <select v-model="options" class="custom-select" id="inputGroupSelect01">
+                                <option selected>Choose...</option>
+                                <option value="1">Single Date</option>
+                                <option value="2">Consecutive Dates</option>
+                                <option value="3">Non-Consecutive Dates</option>
+                            </select>
                         </div>
-                        <div class="col-md-12 p-2">
+
+                        <div class="col-md-12 p-2" v-if="options == 1">
+                            <label for="leave_type">Single Date</label>
+                            <input type="date" v-model="period_date" class="form-control">
+                        </div>
+                        <div class="col-md-12 p-2" v-if="options == 2">
                             <label for="leave_type">Date Range</label>
                             <v-date-picker v-model="range" is-range>
                                 <template v-slot="{ inputValue, inputEvents }">
@@ -168,20 +180,54 @@
                                     </div>
                                 </template>
                             </v-date-picker>
-                        </div> -->
-                        <!-- <div class="col-md-12 p-2">
-                            <label for="leave_type">Single Date</label>
-                            <input type="month" class="form-control" v-model="period_date">
+                        </div>
+                        <div class="col-md-12 p-2" v-if="options == 3">
+                            <label for="">Multiple Non-consecutive Dates</label>
+                            <div class="bg-white p-2 w-full border rounded">
+                                <v-date-picker v-model="selected.date">
+                                    <template #default="{ inputValue, togglePopover, hidePopover }">
+                                        <div class="flex flex-wrap">
+                                        <button
+                                            v-if="date.date != null"
+                                            v-for="(date, i) in dates"
+                                            :key="date?.date?.getTime()"
+                                            class="flex btn btn-info items-center bg-indigo-100 hover:bg-indigo-200 text-sm text-indigo-600 font-semibold h-8 px-2 m-1 rounded-lg border-2 border-transparent focus:border-indigo-600 focus:outline-none"
+                                            style=""
+                                            @click.stop="dateSelected($event, date, togglePopover)"
+                                            ref="button"
+                                        >
+                                            {{ date?.date?.toLocaleDateString() }}
+                                            <svg
+                                                class="w-4 h-4 text-gray-600 hover:text-indigo-600 ml-1 -mr-1"
+                                                style="height: 20px; width: 20px;"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                @click.stop="removeDate(date, hidePopover)"
+                                            >
+                                            <path d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                        </div>
+                                    </template>
+                                </v-date-picker>
+                                <button
+                                    class="btn btn-primary"
+                                    @click.stop="addDate"
+                                    >
+                                    + Add Date
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click="populate_period">Save changes</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -306,16 +352,20 @@ import axios from 'axios'
                 },
                 index: null,
                 period_date: null,
-                dragValue: null,
                 range: {
                     start: null,
                     end: null,
                 },
-
+                dates:[
+                    {
+                        date: null
+                    }
+                ],
+                selected: {},
+                options: null,
             }
         },
         components: {
-
 
         },
         beforeRouteLeave (to, from , next) {
@@ -340,15 +390,6 @@ import axios from 'axios'
             {
                 return this.summary.length
             },
-            selectDragAttribute() {
-                return {
-                    popover: {
-                        visibility: 'hover',
-                        isInteractive: false, // Defaults to true when using slot
-                    },
-                };
-            },
-
         },
         watch: {
             leave_summary: {
@@ -363,10 +404,72 @@ import axios from 'axios'
         },
         methods: {
 
+            clear(type)
+            {
+                if(type == 1)
+                {
+                    this.range = {
+                        start: null,
+                        end: null,
+                    }
+                    this.dates = [
+                        {
+                            date:new Date()
+                        }
+                    ]
+                }else if(type == 2)
+                {
+                    period_date = null,
+                    dates = [
+                        {
+                            date:new Date()
+                        }
+                    ]
+                }else if(type == 3){
+                    period_date = null,
+                    range = {
+                        start: null,
+                        end: null,
+                    }
+                }
+            },
+
+            addDate() {
+                this.dates.push({
+                    date: new Date(),
+                });
+                this.$nextTick(() => {
+                    const btn = this.$refs.button[this.$refs.button.length - 1];
+                    btn.click();
+                });
+            },
+
+            removeDate(date, hide) {
+                this.dates = this.dates.filter((d) => d !== date);
+                hide();
+            },
+
+            dateSelected(e, date, toggle) {
+                this.selected = date;
+                toggle({ ref: e.target });
+            },
+
             scroll_bottom()
             {
                 var x = this.$refs.credit_table
                 x.scrollTop = x.scrollHeight
+            },
+
+            onDayClick(day) {
+            const idx = this.days.findIndex(d => d.id === day.id);
+                if (idx >= 0) {
+                    this.days.splice(idx, 1);
+                } else {
+                    this.days.push({
+                    id: day.id,
+                    date: day.date,
+                });
+            }
             },
 
             get_employees: function(){
@@ -409,7 +512,14 @@ import axios from 'axios'
 
             period_input: function(index)
             {
+                this.index = index
+                this.options = null
                 $("#periodModal").modal('show');
+            },
+
+            populate_period: function()
+            {
+                // this.leave_summary[this.index]['period'] = this
             },
 
             particulars_input: function(index)

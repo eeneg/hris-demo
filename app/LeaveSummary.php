@@ -48,24 +48,15 @@ class LeaveSummary extends Model
 
     public static function countCustomLeave($data)
     {
-        $custom_leave = array();
+        $leave = collect($data)->reject(fn($leave)=>in_array($leave->leave_type, ['Tardy', 'Undertime']))
+            ->groupBy('leave_type')
+            ->map(fn ($leave) => collect($leave)->sum('days'))->toArray();
 
-        foreach($data->groupBy('leave_type') as $index => $item)
-        {
+        $tardy = collect($data)->filter(fn($leave)=>in_array($leave->leave_type, ['Tardy', 'Undertime']))
+            ->groupBy('leave_type')
+            ->map(fn ($leave) => collect($leave)->sum('count'))->toArray();
 
-            foreach($item as $value)
-            {
-                if($value->leave_type != 'Undertime' && $value->leave_type != 'Tardy')
-                {
-
-                }
-                // else{
-                //     $custom_leave[$index][] += $value->count;
-                // }
-            }
-        }
-
-        return $custom_leave;
+        return array_merge($leave, $tardy);
     }
 
 
