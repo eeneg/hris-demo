@@ -48,7 +48,7 @@ class PersonalInformation extends Authenticatable
 
     public function workexperiences()
     {
-        return $this->hasMany('App\WorkExperience', 'personal_information_id');
+        return $this->hasMany('App\WorkExperience', 'personal_information_id')->orderBy('orderNo');
     }
 
     public function children()
@@ -78,12 +78,12 @@ class PersonalInformation extends Authenticatable
 
     public function voluntaryworks()
     {
-        return $this->hasMany('App\VoluntaryWork', 'personal_information_id');
+        return $this->hasMany('App\VoluntaryWork', 'personal_information_id')->orderBy('orderNo');
     }
 
     public function trainingprograms()
     {
-        return $this->hasMany('App\TrainingProgram', 'personal_information_id');
+        return $this->hasMany('App\TrainingProgram', 'personal_information_id')->orderBy('orderNo');
     }
 
     public function otherinfos()
