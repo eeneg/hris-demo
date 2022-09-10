@@ -1527,7 +1527,7 @@ export default {
                     'agencynumber': '',
                     'tin': '',
                     'picture': '',
-                    'status': '',
+                    'status': 'Still in service',
                     'educationalbackground': {},
                     'familybackground': {},
                     'children': [{}],

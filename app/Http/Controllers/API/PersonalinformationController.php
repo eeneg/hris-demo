@@ -27,23 +27,50 @@ class PersonalInformationController extends Controller
      */
     public function index()
     {
-        $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
         if ($search = \Request::get('query')) {
-            $personalinformations = PersonalInformation::with('plantillacontents')
-            ->where(function($query) use ($search){
-                $query->where('surname', 'LIKE', '%'.$search .'%')
-                        ->orWhere('firstname', 'LIKE', '%'.$search.'%')
-                        ->orWhere('middlename', 'LIKE', '%'.$search.'%')
-                        ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%')
-                        ->orWhere('status', 'LIKE', '%'.$search.'%');
-            })->orderBy('surname')->paginate(20);
+            if (Gate::allows('isOfficeHead') || Gate::allows('isOfficeUser')) {
+                $department_id = UserAssignment::where('user_id', Auth::user()->id)->first()->department_id;
+                $personalinformations = PersonalInformation::with(['plantillacontents' => function ($query) use ($plantilla) {
+                    $query->where('plantilla_id', $plantilla->id);
+                }])->whereHas('plantillacontents', function ($query) use ($department_id){
+                    $query->whereHas('position', function ($query2) use ($department_id){
+                        $query2->where('department_id', $department_id);
+                    });
+                })->where(function($query) use ($search){
+                    $query->where('surname', 'LIKE', '%'.$search .'%')
+                            ->orWhere('firstname', 'LIKE', '%'.$search.'%')
+                            ->orWhere('middlename', 'LIKE', '%'.$search.'%')
+                            ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%')
+                            ->orWhere('status', 'LIKE', '%'.$search.'%');
+                })->orderBy('surname')->paginate(20);
+            } else {
+                $personalinformations = PersonalInformation::with('plantillacontents')
+                ->where(function($query) use ($search){
+                    $query->where('surname', 'LIKE', '%'.$search .'%')
+                            ->orWhere('firstname', 'LIKE', '%'.$search.'%')
+                            ->orWhere('middlename', 'LIKE', '%'.$search.'%')
+                            ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%')
+                            ->orWhere('status', 'LIKE', '%'.$search.'%');
+                })->orderBy('surname')->paginate(20);
+            }
         } else {
-            $personalinformations = PersonalInformation::with(['plantillacontents' => function ($query) use ($plantilla) {
-                $query->where('plantilla_id', $plantilla->id);
-            }])->orderBy('surname')->paginate(20);
+            if (Gate::allows('isOfficeHead') || Gate::allows('isOfficeUser')) {
+                $department_id = UserAssignment::where('user_id', Auth::user()->id)->first()->department_id;
+                $personalinformations = PersonalInformation::with(['plantillacontents' => function ($query) use ($plantilla) {
+                    $query->where('plantilla_id', $plantilla->id);
+                }])->whereHas('plantillacontents', function ($query) use ($department_id){
+                    $query->whereHas('position', function ($query2) use ($department_id){
+                        $query2->where('department_id', $department_id);
+                    });
+                })->orderBy('surname')->paginate(20);
+            } else {
+                $personalinformations = PersonalInformation::with(['plantillacontents' => function ($query) use ($plantilla) {
+                    $query->where('plantilla_id', $plantilla->id);
+                }])->orderBy('surname')->paginate(20);
+            }
         }
         return new EmployeesListResource($personalinformations);
     }
@@ -122,8 +149,8 @@ class PersonalInformationController extends Controller
             'surname'               => 'required|string',
             'firstname'             => 'required|string',
             'birthdate'             => 'required|string',
-            'permanentaddress'      => 'required|string',
-            'cellphone'             => 'required|string',
+            // 'permanentaddress'      => 'required|string',
+            // 'cellphone'             => 'required|string',
         ]);
 
         if ($request->picture != null) {

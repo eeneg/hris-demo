@@ -7,7 +7,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{ data_set.vacant_positions }}</h3>
 
                 <p>Vacant Positions</p>
               </div>
@@ -22,7 +22,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px"></sup></h3>
+                <h3>{{ data_set.active_employees }}<sup style="font-size: 20px"></sup></h3>
 
                 <p>Active Employees</p>
               </div>
@@ -565,9 +565,33 @@
 
 <script>
     export default {
-        mounted() {
-            // console.log('Component mounted.')
+      data() {
+        return {
+          data_set: {
+            vacant_positions: 0,
+            active_employees: 0
+          }
         }
+      },
+      methods: {
+        loadData() {
+          axios.get('api/dashboard')
+            .then(({data}) => {
+                this.data_set = data;
+            })
+            .catch(error => {
+                console.log(error.response.data.message);
+            });
+        }
+      },
+      created() {
+        this.$Progress.start();
+        this.loadData();
+        this.$Progress.finish();
+      },
+      mounted() {
+          // console.log('Component mounted.')
+      }
     }
 </script>
 

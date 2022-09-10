@@ -36,7 +36,8 @@ Route::group(['middleware' => ['auth:api']], function() {
         'leaveapplication' => 'API\LeaveApplicationController',
         'request'   => 'API\RequestController',
         'reappointments'   => 'API\ReappointmentController',
-        'leavecredits'  => 'API\LeaveCreditController'
+        'leavecredits'  => 'API\LeaveCreditController',
+        'dashboard' => 'API\DashboardController'
     ]);
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
