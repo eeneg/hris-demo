@@ -48,7 +48,7 @@ class VoluntaryWorkUpdateListener
                 }
             }
 
-            DB::table('voluntary_works')->whereNotIn('id', $arr)->delete();
+            DB::table('voluntary_works')->where('personal_information_id', $this->request->id)->whereNotIn('id', $arr)->delete();
 
         }
     }

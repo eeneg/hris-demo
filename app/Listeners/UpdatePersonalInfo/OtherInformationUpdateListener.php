@@ -49,7 +49,7 @@ class OtherInformationUpdateListener
                 }
             }
 
-            DB::table('other_infos')->whereNotIn('id', $arr)->delete();
+            DB::table('other_infos')->where('personal_information_id', $this->request->id)->whereNotIn('id', $arr)->delete();
 
         }
     }

@@ -67,7 +67,7 @@ class FamilyBackgroundUpdateListener
                 }
             }
 
-            DB::table('children')->whereNotIn('id', $arr)->delete();
+            DB::table('children')->where('personal_information_id', $this->request->id)->whereNotIn('id', $arr)->delete();
 
         }
     }

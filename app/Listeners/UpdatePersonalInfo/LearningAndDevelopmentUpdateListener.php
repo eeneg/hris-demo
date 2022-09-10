@@ -49,7 +49,7 @@ class LearningAndDevelopmentUpdateListener
                 }
             }
 
-            DB::table('training_programs')->whereNotIn('id', $arr)->delete();
+            DB::table('training_programs')->where('personal_information_id', $this->request->id)->whereNotIn('id', $arr)->delete();
 
         }
     }

@@ -41,7 +41,7 @@ class WorkExperienceUpdateListener
 
                 if($bool){
 
-                    DB::table('voluntary_works')->where('id', data_get($value, 'id'))->delete();
+                    DB::table('work_experiences')->where('id', data_get($value, 'id'))->delete();
 
                 }else if(count($value) > 0){
                     array_push($arr, data_get($value, 'id'));
@@ -49,7 +49,7 @@ class WorkExperienceUpdateListener
                 }
             }
 
-            DB::table('work_experiences')->whereNotIn('id', $arr)->delete();
+            DB::table('work_experiences')->where('personal_information_id', $this->request->id)->whereNotIn('id', $arr)->delete();
 
         }
     }
