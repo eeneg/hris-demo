@@ -20,7 +20,8 @@ use App\Position;
 class Helpers extends Controller
 {
     public function workExperienceFormat() {
-        $workexps = WorkExperience::get();
+        ini_set('max_execution_time', 300);
+        $workexps = WorkExperience::where('inclusiveDateFrom', 'like', '%/*/%')->orWhere('position', 'like', '%^*%')->get();
         $pos = '';
         $on = '';
         $count = 0;
@@ -44,10 +45,13 @@ class Helpers extends Controller
             $workexp->save();
 
         }
+
+        return 'Done';
     }
 
     public function voluntaryWorksFormat() {
-        $volworks = VoluntaryWork::get();
+        ini_set('max_execution_time', 300);
+        $volworks = VoluntaryWork::where('inclusiveDateFrom', 'like', '%/*/%')->orWhere('nameAndAddress', 'like', '%^*%')->get();
         $nad = '';
         $on = '';
         foreach ($volworks as $volwork) {
@@ -69,10 +73,13 @@ class Helpers extends Controller
             $volwork->save();
 
         }
+
+        return 'Done';
     }
 
     public function trainingFormat() {
-        $trainings = TrainingProgram::get();
+        ini_set('max_execution_time', 300);
+        $trainings = TrainingProgram::where('inclusiveDateFrom', 'like', '%/*/%')->orWhere('title', 'like', '%^*%')->get();
         $title = '';
         $on = '';
         foreach ($trainings as $training) {
@@ -95,6 +102,8 @@ class Helpers extends Controller
             $training->save();
 
         }
+
+        return 'Done';
     }
 
     public function makePlantilla() {
