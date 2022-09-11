@@ -42,7 +42,10 @@ class FamilyBackgroundUpdateListener
         }
         else if(!count($familyBackground) && array_key_exists('id', $this->request->familybackground)){
 
-            FamilyBackground::find($this->request->familybackground['id'])->delete();
+            $family_Background = FamilyBackground::find($this->request->familybackground['id']);
+            if ($family_Background) {
+                $family_Background->delete();
+            }
 
         }
 
