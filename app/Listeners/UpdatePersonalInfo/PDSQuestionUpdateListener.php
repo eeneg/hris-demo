@@ -37,9 +37,12 @@ class PDSQuestionUpdateListener
             $event->pi->pdsquestion()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->pdsquestion);
 
         }
-        else if(!count($pdsQuestions) && array_key_exists('id', $this->request->pdsquestion)){
+        else if(array_key_exists('id', $this->request->pdsquestion)){
 
-            PDSQuestion::find($this->request->pdsquestion['id'])->delete();
+            $pdsQuestions = PDSQuestion::find($this->request->pdsquestion['id']);
+            if ($pdsQuestions) {
+                $pdsQuestions->delete();
+            }
 
         }
 

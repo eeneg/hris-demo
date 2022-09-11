@@ -37,9 +37,12 @@ class EducationalBackgroundUpdateListener
             $event->pi->educationalbackground()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->educationalbackground);
 
         }
-        else if(!count($educationalBackground) && array_key_exists('id', $this->request->educationalbackground)){
+        else if(array_key_exists('id', $this->request->educationalbackground)){
 
-            EducationalBackground::find($this->request->educationalbackground['id'])->delete();
+            $educationalBackgrounds = EducationalBackground::find($this->request->educationalbackground['id']);
+            if ($educationalBackgrounds) {
+                $educationalBackgrounds->delete();
+            }
 
         }
 
