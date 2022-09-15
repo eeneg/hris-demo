@@ -15,7 +15,22 @@ class LeaveSummary extends Model
 
     protected $casts = [
         'id' => 'string',
-        'particulars' => 'object'
+        'particulars' => 'object',
+        'period' => 'object'
+    ];
+
+    protected $attributes = [
+        'period'=> [
+            'mode' => null,
+            'data' => null
+        ],
+        'particulars' => [
+            'leave_type' => null,
+            'count' => null,
+            'days' => null,
+            'hours' => null,
+            'mins' => null
+        ],
     ];
 
     protected $table = 'leave_summaries';
@@ -24,7 +39,6 @@ class LeaveSummary extends Model
         'personal_information_id',
         'particulars',
         'period',
-        'custom_leave',
         'vl_earned',
         'vl_withpay',
         'vl_balance',
@@ -35,9 +49,6 @@ class LeaveSummary extends Model
         'sl_withoutpay',
         'remarks',
         'sort',
-        'detail1',
-        'detail2',
-        'detail3',
     ];
 
 
@@ -48,7 +59,7 @@ class LeaveSummary extends Model
 
     public static function countCustomLeave($data)
     {
-        $leave = collect($data)->reject(fn($leave)=>in_array($leave->leave_type, ['Tardy', 'Undertime']))
+        $leave = collect($data)->filter(fn($leave)=>in_array($leave->leave_type, ['PL', 'FL', 'SPL']))
             ->groupBy('leave_type')
             ->map(fn ($leave) => collect($leave)->sum('days'))->toArray();
 

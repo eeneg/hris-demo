@@ -134,7 +134,7 @@ class PDFcontroller extends Controller
     {
         $employee = PersonalInformation::find($request->id)->surname;
 
-        $data = LeaveSummary::where('personal_information_id', $request->id)->get();
+        $data = LeaveSummary::where('personal_information_id', $request->id)->orderBy('sort')->get();
 
         $pdf = PDF::loadView('reports/employee-leavecard', compact('data'))->setPaper('legal', 'landscape');
 

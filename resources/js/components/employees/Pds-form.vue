@@ -1537,7 +1537,7 @@ export default {
                     'voluntaryworks': [{}],
                     'trainingprograms': [{}],
                     'plantillacontents': {},
-                    'pdsquestion': {}
+                    'pdsquestion': ''
             }),
             options: {
                     format: 'yyyy-MM-DD',
@@ -1676,6 +1676,7 @@ export default {
                     'Updated successfully',
                     'success'
                 )
+                this.populateAfterUpdate(this.form.id)
                 this.$Progress.finish();
             })
              .catch(error =>{
@@ -1899,6 +1900,63 @@ export default {
                 }
 
             })
+        },
+
+        populateAfterUpdate: function(id)
+        {
+            axios.get('api/personalinformation/' + id)
+            .then(({data}) => {
+
+            if(!data.familybackground)
+            {
+                data.familybackground = {}
+            }
+
+            if(!data.educationalbackground)
+            {
+                data.educationalbackground = {}
+            }
+
+            if(!data.pdsquestion)
+            {
+                data.pdsquestion = {}
+            }
+
+            this.form = data
+
+            if(this.form.children.length == 0)
+            {
+                this.form.children = [{}]
+            }
+
+            if(this.form.eligibilities.length == 0)
+            {
+                this.form.eligibilities = [{}]
+            }
+
+            if(this.form.workexperiences.length == 0)
+            {
+                this.form.workexperiences = [{}]
+            }
+
+            if(this.form.voluntaryworks.length == 0)
+            {
+                this.form.voluntaryworks = [{}]
+            }
+
+            if(this.form.trainingprograms.length == 0)
+            {
+                this.form.trainingprograms = [{}]
+            }
+
+            if(this.form.otherinfos.length == 0)
+            {
+                this.form.otherinfos = [{}]
+            }
+
+            }).catch(error => {
+                console.log(error.reponse.data.message);
+            });
         },
 
         fetchData: function(data, editMode)

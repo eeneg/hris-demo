@@ -53,7 +53,7 @@
                             <table class="table table-sm table-bordered">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Leave</th>
+                                        <th scope="col">Leave this Year</th>
                                         <th scope="col">Count</th>
                                     </tr>
                                 </thead>
@@ -104,8 +104,18 @@
                                 <tbody>
                                     <tr :class="{'border border-success': data.newly_added}" v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%;">
                                         <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled></td>
-                                        <td class='p-0' v-bind:class="{'border border-danger': leave_summary[index].particulars != null && leave_summary[index].period == null}">
-                                            <input :disabled="edit_mode == false" class="form-control p-0" v-on:focus="period_input()" type="text" id="period" v-model="leave_summary[index].period" style="border-radius: 0;" required>
+                                        <td class='p-0' v-bind:class="{'border border-danger': leave_summary[index].period == null || leave_summary[index].period.mode == null}">
+
+                                            <input
+                                                :disabled="edit_mode == false"
+                                                class="form-control p-0"
+                                                v-on:focus="period_input(index)"
+                                                type="text"
+                                                id="period"
+                                                :value="format_period(leave_summary[index].period)"
+                                                style="border-radius: 0; min-width: 300px;" required
+                                            >
+
                                         </td>
                                         <td class='p-0'>
                                             <input :disabled="edit_mode == false" v-on:focus="particulars_input(index, false)" class="form-control p-0" id="particulars" :value="format_particulars(leave_summary[index].particulars)" style="border-radius: 0">
@@ -150,11 +160,12 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Options</label>
                             </div>
-                            <select v-model="options" class="custom-select" id="inputGroupSelect01">
+                            <select v-model="options" @change="clear" class="custom-select" id="inputGroupSelect01">
                                 <option selected>Choose...</option>
                                 <option value="1">Single Date</option>
                                 <option value="2">Consecutive Dates</option>
                                 <option value="3">Non-Consecutive Dates</option>
+                                <option value="4">Month</option>
                             </select>
                         </div>
 
@@ -190,13 +201,13 @@
                                         <button
                                             v-if="date.date != null"
                                             v-for="(date, i) in dates"
-                                            :key="date?.date?.getTime()"
+                                            :key="i"
                                             class="flex btn btn-info items-center bg-indigo-100 hover:bg-indigo-200 text-sm text-indigo-600 font-semibold h-8 px-2 m-1 rounded-lg border-2 border-transparent focus:border-indigo-600 focus:outline-none"
                                             style=""
                                             @click.stop="dateSelected($event, date, togglePopover)"
                                             ref="button"
                                         >
-                                            {{ date?.date?.toLocaleDateString() }}
+                                            {{ format_date(date?.date) }}
                                             <svg
                                                 class="w-4 h-4 text-gray-600 hover:text-indigo-600 ml-1 -mr-1"
                                                 style="height: 20px; width: 20px;"
@@ -219,11 +230,18 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="col-md-12 p-2" v-if="options == 4">
+                            <label for="leave_type">Month</label>
+                            <input type="month" v-model="period_month" class="form-control">
+                        </div>
+                        <div class="col-md-12">
+                            <p v-if="period_validation == false" v-bind:class="{'text-danger': period_validation == false}">Input Required</p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" @click="validate_period()">Save changes</button>
                 </div>
                 </div>
             </div>
@@ -244,6 +262,7 @@
                         <div class="col-md-12 p-2">
                             <label for="leave_type">Custom</label>
                             <select :disabled="edit_mode == false" v-model="particulars.leave_type" class="form-control" id="leave_type">
+                                <option selected default>Choose...</option>
                                 <option v-for="data in leave_types" :key="data.id" :value="data.abbreviation">{{data.title}}</option>
                                 <option value="Undertime">Undertime</option>
                                 <option value="Tardy">Tardy</option>
@@ -326,6 +345,8 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
+import { re } from 'semver'
     export default {
         data() {
             return {
@@ -340,7 +361,8 @@ import axios from 'axios'
                 form: [],
                 leave_types: [],
                 input_history: null,
-                validation: false,
+                validation: true,
+                period_validation: true,
                 running: false,
                 custom_leave: [],
                 particulars: {
@@ -352,15 +374,12 @@ import axios from 'axios'
                 },
                 index: null,
                 period_date: null,
+                period_month: null,
                 range: {
                     start: null,
                     end: null,
                 },
-                dates:[
-                    {
-                        date: null
-                    }
-                ],
+                dates:[],
                 selected: {},
                 options: null,
             }
@@ -404,30 +423,28 @@ import axios from 'axios'
         },
         methods: {
 
-            clear(type)
+            format_date(date)
             {
-                if(type == 1)
+                return moment(date).format("YYYY/MM/DD")
+            },
+
+            clear()
+            {
+                if(this.options == 1)
                 {
                     this.range = {
                         start: null,
                         end: null,
                     }
-                    this.dates = [
-                        {
-                            date:new Date()
-                        }
-                    ]
-                }else if(type == 2)
+                    this.dates = []
+                }else if(this.options == 2)
                 {
-                    period_date = null,
-                    dates = [
-                        {
-                            date:new Date()
-                        }
-                    ]
-                }else if(type == 3){
-                    period_date = null,
-                    range = {
+                    this.period_date = null
+                    this.dates = []
+                    this.selected = []
+                }else if(this.options == 3){
+                    this.period_date = null
+                    this.range = {
                         start: null,
                         end: null,
                     }
@@ -435,8 +452,10 @@ import axios from 'axios'
             },
 
             addDate() {
+                let date = moment().format("YYYY/MM/DD")
+
                 this.dates.push({
-                    date: new Date(),
+                    date: date,
                 });
                 this.$nextTick(() => {
                     const btn = this.$refs.button[this.$refs.button.length - 1];
@@ -512,14 +531,135 @@ import axios from 'axios'
 
             period_input: function(index)
             {
+                let data = this.leave_summary[index].period
                 this.index = index
-                this.options = null
+
+                if(data == null || data.mode == null && data.data == null)
+                {
+                    this.options = null
+                    this.period_date = null
+                    this.range = {
+                            start: null,
+                            end: null,
+                        }
+                    this.dates = []
+                }else if(data != null && data.mode == 1){
+                    this.options = 1
+                    this.period_date = data.data
+                }else if(data != null && data.mode == 2){
+                    this.options = 2
+                    this.range = data.data
+                }else if(data != null && data.mode == 3){
+                    this.options = 3
+                    this.dates = data.data
+                }else if(data != null && data.mode == 4){
+                    this.options = 4
+                    this.period_date = data.data
+                }
+
                 $("#periodModal").modal('show');
+            },
+
+            format_period: function(data)
+            {
+                if(data != null)
+                {
+                    if(data.mode == 1){
+                        return moment(data.data).format("MMM DD, YYYY")
+                    }else if(data.mode == 2){
+                        return moment(data.data.start).format("MMM DD, YYYY") + ' to ' +  moment(data.data.end).format("MMM DD, YYYY")
+
+                    }else if(data.mode == 3){
+
+                        let dates = data.data
+                            .map(e => moment(e.date).format('YYYY-MM-DD'))
+                            .sort()
+                            .map(function (date) {
+                                return {
+                                    month: moment(date).format('YYYY-MM'),
+                                    date: moment(date).format('DD')
+                                }
+                            })
+
+                        let formatted = _.map(_.groupBy(dates, 'month'), function (dates) {
+                            return moment(_.head(dates).month).format('MMM') + ' ' + dates.map(e => e.date).join(',') + ' ' + moment(_.head(dates).month).format('YYYY')
+                        })
+
+                        return formatted.join(' — ')
+                    }else if(data.mode == 4){
+                        return moment(data.data).format('MMMM YYYY')
+                    }
+                }
+            },
+
+            validate_period: function()
+            {
+                if(this.options == 1)
+                {
+                   if(this.period_date == null)
+                   {
+                        this.period_validation = false
+                   }else{
+                        this.populate_period()
+
+                   }
+                }else if(this.options == 2){
+
+                    if(this.range.start == null || this.range.end == null)
+                    {
+                            this.period_validation = false
+                    }else{
+                            this.populate_period()
+                    }
+
+                }else if(this.options == 3){
+
+                    if(this.dates.length == 0)
+                    {
+                            this.period_validation = false
+                    }else{
+                            this.populate_period()
+                    }
+
+                }else if(this.options == 4){
+
+                    if(this.period_month == null){
+                        this.period_validation = false
+                    }else{
+                        this.populate_period()
+                    }
+
+                }
             },
 
             populate_period: function()
             {
-                // this.leave_summary[this.index]['period'] = this
+
+                let period = null
+
+                if(this.options == 1)
+                {
+                    period = this.period_date
+                }else if(this.options == 2){
+                    period = this.range
+                }else if(this.options == 3){
+                    period = this.dates
+                }else if(this.options == 4){
+                    period = this.period_month
+                }
+
+                this.leave_summary[this.index].period = {mode: this.options, data: period}
+
+                this.options = null
+                this.period_date = null
+                this.range = {
+                    start: null,
+                    end: null,
+                }
+                this.period_month = null
+
+                this.period_validation = true
+                $("#periodModal").modal('hide');
             },
 
             particulars_input: function(index)
@@ -568,23 +708,23 @@ import axios from 'axios'
 
             },
 
-            check_input: function(index)
+            check_input: function()
             {
 
-                let validation = true
 
-                this.leave_summary.map(function(e){
+                this.leave_summary.map((e) => {
 
-                    if(e.particulars != null && e.period == null)
+                    console.log(e)
+
+                    if(e.period == null || e.period.mode == null)
                     {
-                        validation = false
+                        this.validation = false
                     }
 
                 })
 
-                this.validation = validation
 
-                if(this.validation == true)
+                if(this.validation)
                 {
                     this.submit_leave(false)
                 }else{
@@ -651,9 +791,17 @@ import axios from 'axios'
 
                 this.leave_summary.splice(index+1, 0, {
                     'personal_information_id': this.selected_employee.id,
-                    'particulars': '',
-                    'period': '',
-                    'custom_leave':'',
+                    'period': {
+                        mode: null,
+                        data: null
+                    },
+                    'particulars': {
+                        leave_type: '',
+                        count: null,
+                        days: null,
+                        hours: null,
+                        mins: null
+                    },
                     'vl_earned': 1.25,
                     'vl_withpay': 0,
                     'vl_balance': 1.25,
@@ -710,8 +858,6 @@ import axios from 'axios'
             {
                 this.calculate_balance(index, field, leave_type)
                 event.target.blur()
-
-                console.log('1')
             },
 
             save_old_value(index, field)

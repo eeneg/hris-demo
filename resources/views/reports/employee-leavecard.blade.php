@@ -1,3 +1,4 @@
+@inject('carbon', 'Carbon\Carbon')
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -44,8 +45,34 @@
                 <tbody>
                     @foreach ($data as $leave_card)
                         <tr>
-                            <td>{{ $leave_card->period }}</td>
-                            {{-- <td>{{ $leave_card?->particulars?->leave_type . ' ' . $leave_card?->particulars?->days . '-' $leave_card?->particulars?->hours . '-' . $leave_card?->particulars?->mins  }}</td> --}}
+                            {{$leave_card}}
+                            <td>
+                                @switch($leave_card->period->mode)
+                                    @case(3)
+                                        @php
+                                            $date = collect($leave_card->period->data)
+                                                ->map(fn ($date) => (array) $date)
+                                                ->values()
+                                                ->sort()
+                                                ->map(fn ($date) => ['month'=> $carbon->parse($date['date'])->setTimeZone('Asia/Manila')->format('Y-m'), 'date' => $carbon->parse($date['date'])->setTimeZone('Asia/Manila')->format('d')])
+                                                ->groupBy('month')
+                                                ->map(function ($entry) use ($carbon) {
+                                                    return $carbon->parse($entry[0]['month'])->format('M') . ' ' . collect($entry)->map(fn ($e) => $e['date'])->join(',') . ' ' .$carbon->parse($entry[0]['month'])->format('Y');
+                                                });
+                                        @endphp
+                                        {{ collect($date)->join(' — ') }}
+                                        @break
+                                    @case(2)
+                                        {{
+                                            Carbon\Carbon::parse($leave_card->start)->format('F d, Y')
+                                            . ' to ' .
+                                            Carbon\Carbon::parse($leave_card->end)->format('F d, Y')
+                                        }}
+                                        @break
+                                    @default
+                                        {{ Carbon\Carbon::parse($leave_card->data)->format('F d, Y') }}
+                                @endswitch
+                            </td>
                             <td>{{
                                     $leave_card?->particulars?->leave_type .
                                     ($leave_card?->particulars?->leave_type == 'Tardy' ||
