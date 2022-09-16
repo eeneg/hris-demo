@@ -11,5 +11,6 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /public/fonts/vendor/@fortawesome
+/public/fonts/vendor/admin-lte
 /public/css/app.css
 /public/js/app.js
