@@ -8,28 +8,36 @@
 
         {{-- <link href="{{ public_path('css/app.css') }}" rel="stylesheet"> --}}
         <style>
+            html {
+                width: 8.5in;
+                height: 13in;
+            }
+            table{
+                border-collapse: collapse;
+            }
+
             .text-center {
                 text-align: center !important;
             }
             .amounts {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size: 80%;
-            }
-            .center {
-                margin-left: 20px !important;
+                font-size: 77%;
             }
 
             table td{
                 margin: 0px 20px !important;
+                border: 1px;
             }
         </style>
 
     </head>
     <body>
-        <div class="container-fluid center" style="" >
-            <p>{{ $tranche }}</p>
-            <table class="table table-striped">
-                <thead>
+        <div class="container-fluid center" style="margin: -40px 0 -20px 0;">
+            <div style="padding: 0;margin: 0;text-align: center;">
+                <h2><strong>{{ $tranche }}</strong></h2>
+            </div>
+            <table class="table table-striped table-bordered">
+                <thead >
                     <tr class="text-center">
                         <td style="width: calc(100%-150px); font-weight:bold">Grade</td>
                         <td style="width: calc(100%-150px); font-weight:bold" v-for="n in 8" :key="n.id">Step  1</td>
@@ -42,13 +50,13 @@
                         <td style="width: calc(100%-150px); font-weight:bold" v-for="n in 8" :key="n.id">Step  8</td>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     @foreach ($salarysched as $key => $salarygrade)
-                        <tr v-for="(salarygrade, index) in salarygrades" :key="salarygrade.id" class="text-center amounts">
-                            <td style="width: calc(100%-150px);"> {{ $key + 1 }} </td>
+                        <tr v-for="(salarygrade, index) in salarygrades" :key="salarygrade.id" class="text-center amounts"  style="border-top: solid 1px;" >
+                            <td style="width: calc(100%-150px);font-weight: bold;line-height: 1px;"><h3>{{ $key + 1 }}</h3></td>
                             @foreach ($salarygrade as $data)
-                                <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">
-                                    {{ $data->amount }} <br>
+                                <td style="width: 80px;" v-for="amounts in salarygrade" :key="amounts.id">
+                                    <strong>{{ number_format($data->amount, 0) }}</strong><br>
                                     ({{  number_format($data->annual, 0) }})
                                 </td>
                             @endforeach

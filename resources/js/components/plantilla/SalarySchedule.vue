@@ -63,7 +63,7 @@
                                     <tr v-for="(salarygrade, index) in salarygrades" :key="salarygrade.id" class="text-center">
                                         <td style="width: calc(100%-150px);"> {{ salarygrade[0]['grade'] }} </td>
                                         <td style="width: calc(100%-150px);" v-for="amounts in salarygrade" :key="amounts.id">
-                                            {{ amounts.amount }} <br>
+                                            <strong>{{ amounts.amount | amount }}</strong><br>
                                             ({{ amounts.annual | amount }})
                                         </td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
