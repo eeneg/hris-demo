@@ -262,7 +262,7 @@
                         <div class="col-md-12 p-2">
                             <label for="leave_type">Custom</label>
                             <select :disabled="edit_mode == false" v-model="particulars.leave_type" class="form-control" id="leave_type">
-                                <option selected default>Choose...</option>
+                                <option selected>Choose...</option>
                                 <option v-for="data in leave_types" :key="data.id" :value="data.abbreviation">{{data.title}}</option>
                                 <option value="Undertime">Undertime</option>
                                 <option value="Tardy">Tardy</option>
@@ -554,8 +554,10 @@ import { re } from 'semver'
                     this.dates = data.data
                 }else if(data != null && data.mode == 4){
                     this.options = 4
-                    this.period_date = data.data
+                    this.period_month = data.data
                 }
+
+                this.validation = true
 
                 $("#periodModal").modal('show');
             },
@@ -596,29 +598,31 @@ import { re } from 'semver'
             {
                 if(this.options == 1)
                 {
-                   if(this.period_date == null)
+                   if(this.period_date == null || this.period_date == '')
                    {
                         this.period_validation = false
                    }else{
                         this.populate_period()
-
+                        this.period_validation = true
                    }
                 }else if(this.options == 2){
 
                     if(this.range.start == null || this.range.end == null)
                     {
-                            this.period_validation = false
+                        this.period_validation = false
                     }else{
-                            this.populate_period()
+                        this.populate_period()
+                        this.period_validation = true
                     }
 
                 }else if(this.options == 3){
 
                     if(this.dates.length == 0)
                     {
-                            this.period_validation = false
+                        this.period_validation = false
                     }else{
-                            this.populate_period()
+                        this.populate_period()
+                        this.period_validation = true
                     }
 
                 }else if(this.options == 4){
@@ -627,6 +631,7 @@ import { re } from 'semver'
                         this.period_validation = false
                     }else{
                         this.populate_period()
+                        this.period_validation = true
                     }
 
                 }
@@ -714,15 +719,12 @@ import { re } from 'semver'
 
                 this.leave_summary.map((e) => {
 
-                    console.log(e)
-
-                    if(e.period == null || e.period.mode == null)
+                    if(e.period == null || e.period.mode == null || e.period.mode == '')
                     {
                         this.validation = false
                     }
 
                 })
-
 
                 if(this.validation)
                 {
@@ -766,6 +768,7 @@ import { re } from 'semver'
                 axios.post('api/leavecredits', {data: this.leave_summary, id: this.selected_employee.id})
                 .then(e => {
                     this.edited = false
+                    this.validation = true
                     this.get_leave_info(true)
                     if(delete_save == false)
                     {
