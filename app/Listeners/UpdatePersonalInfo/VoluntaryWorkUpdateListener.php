@@ -34,14 +34,14 @@ class VoluntaryWorkUpdateListener
 
             foreach($this->request->voluntaryworks as $key => $value)
             {
-                $bool = !is_null(data_get($value, 'id')) && !data_get($value, 'nameAndAddress') && !data_get($value, 'inclusiveDateFrom') && !data_get($value, 'inclusiveDateTo')
+                $bool = !data_get($value, 'id') && !data_get($value, 'nameAndAddress') && !data_get($value, 'inclusiveDateFrom') && !data_get($value, 'inclusiveDateTo')
                         && !data_get($value, 'hours') && !data_get($value, 'position');
 
                 if($bool){
 
                     DB::table('voluntary_works')->where('id', data_get($value, 'id'))->delete();
 
-                }else if(count($value) > 0){
+                }else if(!$bool && count($value) > 0){
 
                     array_push($arr, data_get($value, 'id'));
                     $event->pi->voluntaryworks()->updateOrCreate(['id'=> data_get($value, 'id')],$value);

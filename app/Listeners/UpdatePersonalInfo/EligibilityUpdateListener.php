@@ -35,14 +35,15 @@ class EligibilityUpdateListener
 
             foreach($this->request->eligibilities as $key => $value)
             {
-                $bool = !is_null(data_get($value, 'id')) && !data_get($value, 'careerService') && !data_get($value, 'rating') && !data_get($value, 'dateOfExam') && !data_get($value, 'placeOfExam') && !data_get($value, 'licenseNumber') && !data_get($value, 'licenseRelease');
+                $bool = !data_get($value, 'id') && !data_get($value, 'careerService') && !data_get($value, 'rating') && !data_get($value, 'dateOfExam') && !data_get($value, 'placeOfExam') && !data_get($value, 'licenseNumber') && !data_get($value, 'licenseRelease');
+
 
                 if($bool)
                 {
 
                     DB::table('eligibilities')->where('id', data_get($value, 'id'))->delete();
 
-                }else if(count($value) > 0){
+                }else if(!$bool && count($value) > 0){
 
                     array_push($arr, data_get($value, 'id'));
                     $event->pi->eligibilities()->updateOrCreate(['id' => data_get($value, 'id')], $value);

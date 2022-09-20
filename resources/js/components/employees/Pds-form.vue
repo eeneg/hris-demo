@@ -709,14 +709,14 @@
                                         <tr v-for="(workexperience, index) in form.workexperiences" :key="workexperience.id">
                                             <td>
                                                 <div class="form-group input-group-sm">
-                                                    <input type="date" :name="'we_inclusiveDateFrom'+index" :id="'we_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateFrom">
+                                                    <input type="text" :name="'we_inclusiveDateFrom'+index" :id="'we_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateFrom">
                                                     <!-- <date-picker v-model="workexperience.inclusiveDateFrom" id="we_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                                 </div>
                                             </td>
 
                                             <td>
                                                 <div class="form-group input-group-sm">
-                                                    <input type="date" :name="'we_inclusiveDateTo'+index" :id="'we_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateTo">
+                                                    <input type="text" :name="'we_inclusiveDateTo'+index" :id="'we_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateTo">
                                                     <!-- <date-picker v-model="workexperience.inclusiveDateTo" id="we_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                                 </div>
                                             </td>
@@ -749,6 +749,7 @@
                                                     <input type="text" :name="'statusOfAppointment'+index" :id="'statusOfAppointment'+index" class="form-control form-control-border border-width-2" v-model="workexperience.statusOfAppointment">
                                                 </div>
                                             </td>
+
                                             <td>
                                                 <div class="form-group input-group-sm">
                                                     <select :name="'govService'+index" :id="'govService'+index" class="form-control form-control-border border-width-2" v-model="workexperience.govService">
@@ -757,6 +758,13 @@
                                                     </select>
                                                 </div>
                                             </td>
+
+                                            <td hidden>
+                                                <div class="form-group input-group-sm">
+                                                    <input type="text" :name="'we_orderNo'+index" :id="'we_orderNo'+index" class="form-control form-control-border border-width-2" v-model="workexperience.orderNo = index">
+                                                </div>
+                                            </td>
+
                                             <td>
                                                 <div class="form-group input-group-sm" style="text-align: center;">
                                                     <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('workexperience', index)"><i class="fas fa-trash"></i></a>
@@ -815,6 +823,13 @@
                                                 <input type="text" :name="'vw_position'+index" :id="'vw_position'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.position">
                                             </div>
                                         </td>
+
+                                        <td hidden>
+                                            <div class="form-group input-group-sm">
+                                                <input type="text" :name="'vw_orderNo'+index" :id="'vw_orderNo'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.orderNo = index">
+                                            </div>
+                                        </td>
+
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center; display: grid;">
                                                 <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('voluntaryworks', index)"><i class="fas fa-trash"></i></a>
@@ -849,14 +864,14 @@
 
                                         <td>
                                             <div class="form-group input-group-sm">
-                                                <input type="date" :name="'tp_inclusiveDateFrom'+index" :id="'tp_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateFrom">
+                                                <input type="text" :name="'tp_inclusiveDateFrom'+index" :id="'tp_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateFrom">
                                                 <!-- <date-picker v-model="trainingprogram.inclusiveDateFrom" id="tp_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="form-group input-group-sm">
-                                                <input type="date" :name="'tp_inclusiveDateTo'+index" :id="'tp_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateTo">
+                                                <input type="text" :name="'tp_inclusiveDateTo'+index" :id="'tp_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.inclusiveDateTo">
                                                 <!-- <date-picker v-model="trainingprogram.inclusiveDateTo" id="tp_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                             </div>
                                         </td>
@@ -872,6 +887,13 @@
                                                 <input type="text" :name="'conductor'+index" :id="'conductor'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.conductor">
                                             </div>
                                         </td>
+
+                                        <td hidden>
+                                            <div class="form-group input-group-sm">
+                                                <input type="text" :name="'tp_orderNo'+index" :id="'tp_orderNo'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.orderNo = index">
+                                            </div>
+                                        </td>
+
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center;">
                                                 <button type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('trainingprograms', index)"><i class="fas fa-trash"></i></button>
@@ -1537,7 +1559,7 @@ export default {
                     'voluntaryworks': [{}],
                     'trainingprograms': [{}],
                     'plantillacontents': {},
-                    'pdsquestion': ''
+                    'pdsquestion': {}
             }),
             options: {
                     format: 'yyyy-MM-DD',

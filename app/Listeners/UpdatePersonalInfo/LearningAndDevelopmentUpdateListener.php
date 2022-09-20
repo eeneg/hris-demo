@@ -36,14 +36,14 @@ class LearningAndDevelopmentUpdateListener
             foreach($this->request->trainingprograms as $key => $value)
             {
 
-                $bool = !is_null(data_get($value, 'id')) && !data_get($value, 'title') && !data_get($value, 'inclusiveDateFrom')
+                $bool = !data_get($value, 'id') && !data_get($value, 'title') && !data_get($value, 'inclusiveDateFrom')
                         && !data_get($value, 'inclusiveDateTo') && !data_get($value, 'hours') && !data_get($value, 'conductor');
 
                 if($bool){
 
                     DB::table('training_programs')->where('id', data_get($value, 'id'))->delete();
 
-                }else if(count($value) > 0){
+                }else if(!$bool && count($value) > 0){
                     array_push($arr, data_get($value, 'id'));
                     $event->pi->trainingprograms()->updateOrCreate(['id'=> data_get($value, 'id')],$value);
                 }
