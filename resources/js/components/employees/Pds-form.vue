@@ -655,7 +655,7 @@
                                             </td>
                                             <td>
                                                 <div class="form-group input-group-sm">
-                                                    <input type="date" :name="'dateOfExam'+index" :id="'dateOfExam'+index" class="form-control form-control-border border-width-2" v-model="eligibility.dateOfExam">
+                                                    <input type="text" :name="'dateOfExam'+index" :id="'dateOfExam'+index" class="form-control form-control-border border-width-2" v-model="eligibility.dateOfExam">
                                                     <!-- <date-picker v-model="eligibility.dateOfExam" id="dateOfExam" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                                 </div>
                                             </td>
@@ -800,14 +800,14 @@
 
                                         <td>
                                             <div class="form-group input-group-sm">
-                                                <input type="date" :name="'vw_inclusiveDateFrom'+index" :id="'vw_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateFrom">
+                                                <input type="text" :name="'vw_inclusiveDateFrom'+index" :id="'vw_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateFrom">
                                                 <!-- <date-picker v-model="voluntarywork.inclusiveDateFrom" id="vw_inclusiveDateFrom" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="form-group input-group-sm">
-                                                <input type="date" :name="'vw_inclusiveDateTo'+index" :id="'vw_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateTo">
+                                                <input type="text" :name="'vw_inclusiveDateTo'+index" :id="'vw_inclusiveDateTo'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.inclusiveDateTo">
                                                 <!-- <date-picker v-model="voluntarywork.inclusiveDateFrom" id="vw_inclusiveDateTo" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                             </div>
                                         </td>
