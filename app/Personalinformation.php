@@ -40,6 +40,10 @@ class PersonalInformation extends Authenticatable
         'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status',
     ];
 
+    protected $appends = [
+        'fullName'
+    ];
+
     protected $guard = 'employee';
 
     public function barcode(){
@@ -114,6 +118,22 @@ class PersonalInformation extends Authenticatable
     public function leavesummary()
     {
         return $this->hasMany('App\LeaveSummary', 'personal_information_id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return trim(
+            preg_replace('/\s+/', ' ',
+                "$this->surname, $this->firstname" .
+                ( $this->middleinitial ? " $this->middleinitial." : "") .
+                ( $this->nameextension ? ", $this->nameextension" : "" )
+            )
+        );
+    }
+
+    public function getMiddleinitialAttribute()
+    {
+        return $this->middlename ? $this->middlename[0] : '';
     }
 
 

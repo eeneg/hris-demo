@@ -22,10 +22,13 @@ class LeaveCreditResource extends ResourceCollection
 
     public function toArray($request)
     {
+
         return $this->collection->map(function ($item, $key) {
-                return [
+            return [
                     'id'            => $item->id,
-                    'name'          => $item->firstname . ' ' . $item->middlename . ' ' . $item->surname . ' ' . $item->nameextentsion,
+                    'name'          => $item->fullName,
+                    'civilstatus'   => $item->civilstatus,
+                    'birthdate'     => $item->birthdate,
                 ];
         });
     }

@@ -9,6 +9,8 @@ use App\LeaveSummary;
 use App\LeaveType;
 use App\PersonalInformation;
 use Carbon\Carbon;
+use App\Setting;
+use App\Plantilla;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -61,6 +63,7 @@ class LeaveCreditController extends Controller
             }
         }
 
+
         $collection = collect($request->data)->map(function ($leave) {
             $ll = collect($leave)->mapWithKeys(fn ($data, $key) => in_array($key, ['particulars', 'period']) ? [$key => json_encode($data)] : [$key => $data])->reject(fn ($data, $key) => in_array($key, ['newly_added']));
 
@@ -90,6 +93,8 @@ class LeaveCreditController extends Controller
     public function show($id)
     {
 
+        $personalinformations = PersonalInformation::find($id)->plantillacontents->map(fn ($e) =>(object) [ 'position' => $e->position,  'salary' => $e->salaryauthorized])->first();
+
         $leaveSummary = LeaveSummary::where('personal_information_id', $id)->orderBy('sort', 'ASC')->get();
 
         $leaveCredit    =   DB::table('leave_credits')
@@ -107,7 +112,16 @@ class LeaveCreditController extends Controller
                             return $data->particulars;
                         });
 
-        return ['summary' => $leaveSummary, 'credit' => $leaveCredit, 'custom_leave' => LeaveSummary::countCustomLeave($custom_leave)];
+        // return $personalinformations;
+
+        return [
+                'summary' => $leaveSummary,
+                'credit' => $leaveCredit,
+                'custom_leave' => LeaveSummary::countCustomLeave($custom_leave),
+                'position' => $personalinformations->position,
+                'salary' => $personalinformations->salary
+            ];
+
     }
 
     /**

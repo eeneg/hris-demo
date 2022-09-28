@@ -28,28 +28,45 @@
                                 <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="row p-0">
+                                <div class="col-md-4">
+                                    Name: {{ selected_employee.name }} <br>
+                                    Birth Date: {{ selected_employee.birthdate }} <br>
+                                    Civil Status: {{ selected_employee.civilstatus }} <br>
+                                </div>
+                                <div class="col-md-4">
+                                    Office: {{ position.title }}<br>
+                                    Position: {{ dept.address }}<br>
+                                    Salary Grade: {{ salary.grade }}<br>
+                                </div>
+                                <div class="col-md-4">
+                                    Date Hired: <br>
+                                    Retirement Date: <br>
+                                    Status:
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row mt-1" v-if="selected_employee !== null">
-                        <div class="col-md-6 p-2">
+                        <div class="col-md-4 p-2">
                             <table class="table table-sm table-bordered">
                                 <thead>
                                     <tr>
-                                    <th scope="col">#</th>
                                     <th scope="col">Leave Title</th>
-                                    <th scope="col">Balance</th>
+                                    <th scope="col">Credit Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, index) in leave_credit" :key="data.id">
-                                        <td>{{ index+1 }}</td>
                                         <td>{{ data.title }}</td>
                                         <td>{{ data.balance }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-6 p-2">
+                        <div class="col-md-4 p-2">
                             <table class="table table-sm table-bordered">
                                 <thead>
                                     <tr>
@@ -58,7 +75,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, index) in custom_leave" :key="data.id">
+                                    <tr v-for="(data, index) in custom_leave.leave" :key="data.id">
+                                        <td>{{ index }}</td>
+                                        <td>{{ data }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-4 p-2">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tardy & Undertime</th>
+                                        <th scope="col">Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(data, index) in custom_leave.tardy" :key="data.id">
                                         <td>{{ index }}</td>
                                         <td>{{ data }}</td>
                                     </tr>
@@ -93,12 +126,12 @@
                                     <tr>
                                         <th>EARNED</th>
                                         <th>Absence undertime w/ pay</th>
-                                        <th>Absence undertime w/o pay</th>
-                                        <th>BALANCE</th>
+                                        <th class="text-success">BALANCE</th>
+                                        <th class="text-danger">Absence undertime w/o pay</th>
                                         <th>EARNED</th>
                                         <th>Absence undertime w/ pay</th>
-                                        <th>Absence undertime w/o pay</th>
-                                        <th>BALANCE</th>
+                                        <th class="text-success">BALANCE</th>
+                                        <th class="text-danger">Absence undertime w/o pay</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -120,15 +153,33 @@
                                         <td class='p-0'>
                                             <input :disabled="edit_mode == false" v-on:focus="particulars_input(index, false)" class="form-control p-0" id="particulars" :value="format_particulars(leave_summary[index].particulars)" style="border-radius: 0">
                                         </td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_earned', 'vl', $event)" v-on:blur="calculate_balance(index, 'vl_earned', 'vl')" v-on:focus="save_old_value(index, 'vl_earned')" id="vl_earned" v-model="leave_summary[index].vl_earned" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_withpay', 'vl',$event)" v-on:blur="calculate_balance(index, 'vl_withpay', 'vl')" v-on:focus="save_old_value(index, 'vl_withpay')" id="vl_withpay" v-model="leave_summary[index].vl_withpay" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="vl_withoutpay" v-model="leave_summary[index].vl_withoutpay" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="vl_balance" v-model="leave_summary[index].vl_balance" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'sl_earned', 'sl',$event)" v-on:blur="calculate_balance(index, 'sl_earned', 'sl')" v-on:focus="save_old_value(index, 'sl_earned')" id="sl_earned" v-model="leave_summary[index].sl_earned" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'sl_withpay', 'sl',$event)" v-on:blur="calculate_balance(index, 'sl_withpay', 'sl')" v-on:focus="save_old_value(index, 'sl_withpay')" id="sl_withpay" v-model="leave_summary[index].sl_withpay" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="psl_withoutpayeriod" v-model="leave_summary[index].sl_withoutpay" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="sl_balance" v-model="leave_summary[index].sl_balance" style="border-radius: 0"></td>
-                                        <td class='p-0'><input :disabled="edit_mode == false" class="form-control p-0" id="remarks" v-model="leave_summary[index].remarks" style="border-radius: 0"></td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_earned', 'vl', $event)" v-on:blur="calculate_balance(index, 'vl_earned', 'vl')" v-on:focus="save_old_value(index, 'vl_earned')" id="vl_earned" v-model="leave_summary[index].vl_earned" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_withpay', 'vl',$event)" v-on:blur="calculate_balance(index, 'vl_withpay', 'vl')" v-on:focus="save_old_value(index, 'vl_withpay')" id="vl_withpay" v-model="leave_summary[index].vl_withpay" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="vl_balance" v-model="leave_summary[index].vl_balance" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="vl_withoutpay" v-model="leave_summary[index].vl_withoutpay" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'sl_earned', 'sl',$event)" v-on:blur="calculate_balance(index, 'sl_earned', 'sl')" v-on:focus="save_old_value(index, 'sl_earned')" id="sl_earned" v-model="leave_summary[index].sl_earned" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'sl_withpay', 'sl',$event)" v-on:blur="calculate_balance(index, 'sl_withpay', 'sl')" v-on:focus="save_old_value(index, 'sl_withpay')" id="sl_withpay" v-model="leave_summary[index].sl_withpay" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="sl_balance" v-model="leave_summary[index].sl_balance" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="psl_withoutpayeriod" v-model="leave_summary[index].sl_withoutpay" style="border-radius: 0">
+                                        </td>
+                                        <td class='p-0'>
+                                            <input :disabled="edit_mode == false" class="form-control p-0" id="remarks" v-model="leave_summary[index].remarks" style="border-radius: 0; min-width: 200px;">
+                                        </td>
                                         <td class='p-0' v-if="edit_mode">
                                             <div class="" style="display:inline-flex">
                                                 <button type="button" class="btn d-inline btn-primary" style="border-radius: 0" @click="add_leave_data(index)"><i class="fas fa-plus"></i></button>
@@ -350,7 +401,7 @@ import { re } from 'semver'
     export default {
         data() {
             return {
-                selected_employee: null,
+                selected_employee: {},
                 selected_summary: [],
                 edit_mode: false,
                 disable: true,
@@ -365,6 +416,9 @@ import { re } from 'semver'
                 period_validation: true,
                 running: false,
                 custom_leave: [],
+                position: {},
+                dept: {},
+                salary: {},
                 particulars: {
                     leave_type: null,
                     count: null,
@@ -382,6 +436,7 @@ import { re } from 'semver'
                 dates:[],
                 selected: {},
                 options: null,
+                comments: 0
             }
         },
         components: {
@@ -499,6 +554,7 @@ import { re } from 'semver'
                 }).catch(e => {
                     console.log(e)
                 })
+
             },
 
             get_leave_info: function(edit){
@@ -514,6 +570,12 @@ import { re } from 'semver'
                         this.leave_credit = data.credit
 
                         this.custom_leave = data.custom_leave
+
+                        this.position = data.position
+
+                        this.dept = data.position.department
+
+                        this.salary = data.salary
 
                         this.$Progress.finish()
 
@@ -697,12 +759,14 @@ import { re } from 'semver'
                 axios.get('api/getleavetypes')
                 .then(({data}) => {
 
-                    this.leave_types = data.filter(function(e){
-                        if(e.title != 'Sick Leave' && e.title != 'Vacation Leave')
-                        {
-                            return e
-                        }
-                    })
+                    // this.leave_types = data.filter(function(e){
+                    //     if(e.title != 'Sick Leave' && e.title != 'Vacation Leave')
+                    //     {
+                    //         return e
+                    //     }
+                    // })
+
+                    this.leave_types = data
 
                     this.$Progress.finish()
 
@@ -818,13 +882,44 @@ import { re } from 'semver'
                     'newly_added': true
                 })
 
+                let prev_slbalance = 0
+
+                let prev_vlbalance = 0
+
                 if(this.leave_summary.length != 1)
                 {
                     for(let x = index+1; x < this.leave_summary.length; x++)
                     {
-                        this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
-                        this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + this.leave_summary[x]['sl_earned'] - this.leave_summary[x]['sl_withpay']
-                        this.formatNumber(this.leave_summary[x]['sl_balance'])
+
+                        if(this.leave_summary[x-1]['vl_balance'] == 0)
+                        {
+                            let index = x-1
+
+                            do{
+                                prev_vlbalance = this.leave_summary[index]['vl_balance']
+                                index--
+                            }while(prev_vlbalance == 0 && index != -1)
+
+                            this.leave_summary[x]['vl_balance'] = prev_vlbalance + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                        }else{
+                            this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                        }
+
+                        if(this.leave_summary[x-1]['sl_balance'] == 0)
+                        {
+                            let index = x-1
+
+                            do{
+                                prev_slbalance = this.leave_summary[index]['sl_balance']
+                                index--
+                            }while(prev_slbalance == 0 && index != -1)
+
+                            this.leave_summary[x]['sl_balance'] = prev_slbalance + this.leave_summary[x]['sl_balance'] - this.leave_summary[x]['vl_withpay']
+                        }else{
+                            this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                        }
+
+                        // this.formatNumber(this.leave_summary[x]['sl_balance'])
                     }
                 }
 
@@ -1009,7 +1104,6 @@ import { re } from 'semver'
                 }
 
             },
-
         },
         mounted() {
             console.log('Component mounted.')

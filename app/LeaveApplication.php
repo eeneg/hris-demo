@@ -58,6 +58,7 @@ class LeaveApplication extends Model
 
         $allEmployees = [];
 
+        //if no dept ID
         if ($department_id != '' && $department_id != null) {
 
             $allEmployees = LeaveApplication::select('leave_applications.*',
@@ -76,6 +77,7 @@ class LeaveApplication extends Model
                 ->orderBy('date_of_filing', 'desc')
                 ->paginate(20);
 
+        //if office head or PHRMO head
         }else if($data['role'] == 'Office Head' && $data['dept']['title'] == 'PHRMO'){
 
             $allEmployees = LeaveApplication::select('leave_applications.*',
@@ -96,6 +98,7 @@ class LeaveApplication extends Model
                 })
                 ->orWhere('departments.id', $data['dept']['id'])->paginate(20);
 
+        //if office head or PGO EXECUTIVE head
         } else if($data['role'] == 'Office Head' && $data['dept']['title'] == 'PGO-Executive'){
 
             $allEmployees = LeaveApplication::select('leave_applications.*',
@@ -122,6 +125,7 @@ class LeaveApplication extends Model
                 ->orderBy('date_of_filing', 'desc')
                 ->paginate(20);
 
+        //no filter (all)
         }else{
 
             $allEmployees = LeaveApplication::select('leave_applications.*',

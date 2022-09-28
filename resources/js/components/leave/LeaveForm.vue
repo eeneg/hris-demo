@@ -9,6 +9,7 @@
                 </div>
 
                 <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
+                    {{ mode }}
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
@@ -315,6 +316,8 @@
             submitEdits: function()
             {
 
+                alert('asd')
+
                 if((this.form.recommendation_status != null && this.form.recommendation_status != '') && (this.form.recommendation_officer_id == null && this.form.recommendation_officer_id == ''))
                 {
 
@@ -354,25 +357,20 @@
                             this.form.others = null
                             this.form.disapproved_due_to = null
 
-                            if (this.status == 'final') {
-                                this.form.status = 'final';
-                                axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                                    .then(({data}) => {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Success',
-                                            text: 'New leave application is updated successfully',
-                                        })
-                                        this.$router.push({ path: '/leave-applications'});
-                                        this.$Progress.finish();
+                            axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
+                                .then(({data}) => {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: 'New leave application is updated successfully',
                                     })
-                                    .catch(error => {
-                                        console.log(error.response.data.message);
-                                        this.$Progress.fail();
-                                    });
-                            } else {
-
-                            }
+                                    this.$router.push({ path: '/leave-applications'});
+                                    this.$Progress.finish();
+                                })
+                                .catch(error => {
+                                    console.log(error.response.data.message);
+                                    this.$Progress.fail();
+                                });
                         }
                     })
                 }

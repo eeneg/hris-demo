@@ -98,13 +98,13 @@
                                         <a v-if="user.role == 'Administrator' || user.role != 'Office Head'" type="button" @click.prevent="editLeaveApplication(leaveapplication)" class="dropdown-item">
                                             Edit
                                         </a>
-                                        <a type="button" v-if="user.role == 'Administrator' || user.role == 'Office Head'" class="dropdown-item" @click.prevent="recommendation(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        <a type="button" v-if="leaveapplication.status != 'draft' && (user.role == 'Administrator' || user.role == 'Office Head')" class="dropdown-item" @click.prevent="recommendation(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             Recommendation
                                         </a>
-                                        <a type="button" v-if="user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PHRMO'" class="dropdown-item"  @click.prevent="noted_by(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        <a type="button" v-if="leaveapplication.status != 'draft' && user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PHRMO' && leaveapplication.status != 'draft'" class="dropdown-item"  @click.prevent="noted_by(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             Noted by
                                         </a>
-                                         <a type="button" v-if="user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PGO-Executive'" class="dropdown-item" @click.prevent="governor(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                         <a type="button" v-if=" leaveapplication.status != 'draft' && user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PGO-Executive' && leaveapplication.status != 'draft'" class="dropdown-item" @click.prevent="governor(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             For Governor's Approval
                                         </a>
                                         <a class="dropdown-item" @click.prevent="deleteLeaveApplication(leaveapplication.id, index)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">

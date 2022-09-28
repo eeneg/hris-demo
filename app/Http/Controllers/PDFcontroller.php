@@ -132,15 +132,17 @@ class PDFcontroller extends Controller
 
     public function generateleavecard(Request $request)
     {
-        $employee = PersonalInformation::find($request->id)->surname;
+        $employee = PersonalInformation::find($request->id);
+
+        $employee_name = $employee->surname . ' ' . $employee->firstname . ' ' . $employee->nameextension;
 
         $data = LeaveSummary::where('personal_information_id', $request->id)->orderBy('sort')->get();
 
-        $pdf = PDF::loadView('reports/employee-leavecard', compact('data'))->setPaper('legal', 'landscape');
+        $pdf = PDF::loadView('reports/employee-leavecard', compact('data', 'employee_name'))->setPaper('legal', 'landscape');
 
-        Storage::put('public/employee_leave_card/' . $employee .'.pdf', $pdf->output());
+        Storage::put('public/employee_leave_card/' . $employee->surname .'.pdf', $pdf->output());
 
-        return ['title' => $employee.'.pdf'];
+        return ['title' => $employee->surname . '.pdf'];
 
     }
 
