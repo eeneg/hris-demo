@@ -112,6 +112,26 @@ class LeaveCreditController extends Controller
                             return $data->particulars;
                         });
 
+        $tardy = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
+                        ->whereIn('particulars->leave_type', ['Undertime', 'Tardy'])
+                        ->where('period->mode', 4)
+                        ->get()
+                        ->map(function($data){
+                            if($data->period->data == Carbon::parse(Carbon::now())->submonth()->format('Y-m'))
+                            {
+                                return $data;
+                            }else if($data->period->data == Carbon::now()->format('Y-m'))
+                            {
+                                return $data;
+                            }
+                        });
+
+
+            return collect($tardy)->groupBy('period.data')->map(function($data){
+                return collect($data)->groupBy($data['']);
+            });
+            return LeaveSummary::countCustomLeave($custom_leave);
+
         // return $personalinformations;
 
         return [
