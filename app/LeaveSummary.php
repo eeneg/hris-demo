@@ -63,11 +63,19 @@ class LeaveSummary extends Model
             ->groupBy('leave_type')
             ->map(fn ($leave) => collect($leave)->sum('days'))->toArray();
 
-        $tardy = collect($data)->filter(fn($leave)=>in_array($leave->leave_type, ['Tardy', 'Undertime']))
-            ->groupBy('leave_type')
-            ->map(fn ($leave) => collect($leave)->sum('count'))->toArray();
+        return ['leave' => $leave];
+    }
 
-        return ['leave' => $leave, 'tardy' => $tardy];
+    public static function violationCounter($tardy)
+    {
+        $count = collect($tardy)->groupBy('period.data')->map(function($data, $index){
+            return collect($data)->groupBy('particulars.leave_type')
+                    ->map(fn ($leave) => collect($leave)->sum('particulars.count'));
+            })->toArray();
+
+        ksort($count);
+
+        return $count;
     }
 
 

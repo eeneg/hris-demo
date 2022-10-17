@@ -50,19 +50,6 @@ class LeaveCreditController extends Controller
         $vl_id = LeaveType::where('title', 'Vacation Leave')->first()->id;
         $sl_id = LeaveType::where('title', 'Sick Leave')->first()->id;
 
-        foreach($request['data'] as $key => $value)
-        {
-            if($vl_balance < $value['vl_balance'])
-            {
-                $vl_balance = $value['vl_balance'];
-            }
-
-            if($sl_balance < $value['sl_balance'])
-            {
-                $sl_balance = $value['sl_balance'];
-            }
-        }
-
 
         $collection = collect($request->data)->map(function ($leave) {
             $ll = collect($leave)->mapWithKeys(fn ($data, $key) => in_array($key, ['particulars', 'period']) ? [$key => json_encode($data)] : [$key => $data])->reject(fn ($data, $key) => in_array($key, ['newly_added']));
@@ -74,8 +61,8 @@ class LeaveCreditController extends Controller
         $forCreate = $collection->reject(fn ($summary) => $summary->has('id'))->map(fn ($summary) => $summary->put('id', Str::orderedUuid()->toString()));
 
 
-        $vl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $vl_id], ['balance' => $vl_balance]);
-        $sl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $sl_id], ['balance' => $sl_balance]);
+        $vl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $vl_id], ['balance' => collect($request->data)->last()['vl_balance']]);
+        $sl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $sl_id], ['balance' => collect($request->data)->last()['sl_balance']]);
 
 
         $create = LeaveSummary::insert($forCreate->toArray());
@@ -115,31 +102,38 @@ class LeaveCreditController extends Controller
         $tardy = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
                         ->whereIn('particulars->leave_type', ['Undertime', 'Tardy'])
                         ->where('period->mode', 4)
+                        ->whereBetween('period->data', [Carbon::parse(Carbon::now())->submonths(2)->format('Y-m'), Carbon::parse(Carbon::now())->submonth()->format('Y-m')])
                         ->get()
                         ->map(function($data){
-                            if($data->period->data == Carbon::parse(Carbon::now())->submonth()->format('Y-m'))
+                            if($data->period->data == Carbon::parse(Carbon::now())->submonths(2)->format('Y-m'))
                             {
                                 return $data;
-                            }else if($data->period->data == Carbon::now()->format('Y-m'))
+                            }else if($data->period->data == Carbon::parse(Carbon::now())->submonth()->format('Y-m'))
+                            {
+                                return $data;
+                            }else{
+
+                            }
+                        });
+
+        $awol = LeaveSummary::where('personal_information_id', $id)->whereIn('particulars->leave_type', ['AWOL', 'UA'])
+                        ->where('period->mode', 4)
+                        ->get()
+                        ->map(function($data, $index){
+                            if(Carbon::parse($data->period->data)->format('Y') == date('Y'))
                             {
                                 return $data;
                             }
                         });
 
-
-            return collect($tardy)->groupBy('period.data')->map(function($data){
-                return collect($data)->groupBy($data['']);
-            });
-            return LeaveSummary::countCustomLeave($custom_leave);
-
-        // return $personalinformations;
-
         return [
                 'summary' => $leaveSummary,
                 'credit' => $leaveCredit,
                 'custom_leave' => LeaveSummary::countCustomLeave($custom_leave),
-                'position' => $personalinformations->position,
-                'salary' => $personalinformations->salary
+                'tardy' => LeaveSummary::violationCounter($tardy),
+                'position' => $personalinformations->position ?? '',
+                'salary' => $personalinformations->salary ?? '',
+                'awol' => LeaveSummary::violationCounter($awol)
             ];
 
     }

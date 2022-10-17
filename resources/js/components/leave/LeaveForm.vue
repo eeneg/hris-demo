@@ -14,7 +14,7 @@
                     <div class="row">
                         <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
                             <label style="margin: 0;">Applicant</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="personalinformations" label="name"
+                            <v-select @input="get_balance()" class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="personalinformations" label="name"
                             :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
                             <has-error :form="form" field="personal_information_id"></has-error>
                         </div>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="col-md-1  form-group">
                                 <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ curr_vacation_balance }}</label>
+                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ prev_balance_total }}</label>
                             </div>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                             </div>
                             <div class="col-md-1 form-group">
                                 <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ curr_sick_balance }}</label>
+                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ less_total }}</label>
                             </div>
                         </div>
                     </div>
@@ -137,10 +137,10 @@
                                 <label class="d-block" style="margin: 0; color: #495057;"><i>Leave Balance</i> </label>
                             </div>
                             <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ prev_balance_total }}</label>
+                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_vacation_balance }}</label>
                             </div>
                             <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ less_total }}</label>
+                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_sick_balance }}</label>
                             </div>
                             <div class="col-md-1 form-group">
                                 <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ balance_total }}</label>
@@ -392,6 +392,20 @@
                     });
 
             },
+
+            get_balance: function()
+            {
+                axios.get('api/getLeaveBalance?id=' + this.form.personal_information_id)
+                .then(({data}) => {
+                    this.form.vacation_balance = data.VL
+                    this.form.sick_balance = data.SL
+                    this.calculate()
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+
             fetchData: function(data){
 
                this.form.fill(data.data[0])

@@ -41,6 +41,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\EditRequestApproved' => [
             'App\Listeners\EditRequestApprovedListener',
         ],
+        'App\Events\LeaveProcessed' => [
+            'App\Listeners\LeaveApprovedListener'
+        ]
     ];
 
     /**

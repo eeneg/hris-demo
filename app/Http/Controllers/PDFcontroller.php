@@ -134,11 +134,15 @@ class PDFcontroller extends Controller
     {
         $employee = PersonalInformation::find($request->id);
 
-        $employee_name = $employee->surname . ' ' . $employee->firstname . ' ' . $employee->nameextension;
+        $employee_name = $employee->surname . ', ' . $employee->firstname . ' ' . $employee->middlename[0] . '. ' . $employee->nameextension;
+
+        $id = PersonalInformation::findOrFail($employee->id)->plantillacontents->first();
+        $position = Position::findOrFail($id->position_id);
+        $dept = Department::findOrFail($position->department_id);
 
         $data = LeaveSummary::where('personal_information_id', $request->id)->orderBy('sort')->get();
 
-        $pdf = PDF::loadView('reports/employee-leavecard', compact('data', 'employee_name'))->setPaper('legal', 'landscape');
+        $pdf = PDF::loadView('reports/employee-leavecard', compact('data', 'employee_name', 'position', 'dept', 'employee', 'id'))->setPaper('legal', 'landscape');
 
         Storage::put('public/employee_leave_card/' . $employee->surname .'.pdf', $pdf->output());
 

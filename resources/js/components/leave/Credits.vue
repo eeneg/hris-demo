@@ -23,6 +23,7 @@
                         <div class="col-md-7">
                             <div class="float-right" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Scroll <i class="fas fa-arrow-down"></i></button>
+                                <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="view_awol">AWOL/UA <i class="fas fa-calendar"></i></button>
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
                                 <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>
@@ -36,13 +37,13 @@
                                     Civil Status: {{ selected_employee.civilstatus }} <br>
                                 </div>
                                 <div class="col-md-4">
-                                    Office: {{ position.title }}<br>
-                                    Position: {{ dept.address }}<br>
-                                    Salary Grade: {{ salary.grade }}<br>
+                                    Office: {{ position.title ?? '' }}<br>
+                                    Position: {{ dept.address ?? '' }}<br>
+                                    Salary Grade: {{ salary.grade ?? '' }}<br>
                                 </div>
                                 <div class="col-md-4">
                                     Date Hired: <br>
-                                    Retirement Date: <br>
+                                    Retirement Date: {{ calculate_retirement_date(selected_employee.birthdate) }} <br>
                                     Status:
                                 </div>
                             </div>
@@ -66,12 +67,12 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-4 p-2">
-                            <table class="table table-sm table-bordered">
+                        <div class="col-md-4 mt-2 p-0 border" style="display:block; overflow-y: auto; max-height: 120px;">
+                            <table class="table table-sm table-bordered p-0">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Leave this Year</th>
-                                        <th scope="col">Count</th>
+                                        <th>Leave this Year</th>
+                                        <th>Count</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -86,14 +87,14 @@
                             <table class="table table-sm table-bordered">
                                 <thead>
                                     <tr>
+                                        <th scope="col">Month</th>
                                         <th scope="col">Tardy & Undertime</th>
-                                        <th scope="col">Count</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, index) in custom_leave.tardy" :key="data.id">
-                                        <td>{{ index }}</td>
-                                        <td>{{ data }}</td>
+                                    <tr v-for="(data, index) in tardy" :key="data.id">
+                                        <td>{{ format_tardy(index) }}</td>
+                                        <td><p class="p-0 m-0" style="display:inline-table" v-for="(tardy, index) in data" :key="tardy.id">{{ index + ' ' + tardy + ', ' }}</p></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -136,7 +137,9 @@
                                 </thead>
                                 <tbody>
                                     <tr :class="{'border border-success': data.newly_added}" v-for="(data, index) in leave_summary" :key="data.id" style="width: 100%;">
-                                        <td class="p-0"><input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled></td>
+                                        <td class="p-0">
+                                            <input class="form-control p-0 text-center" type="text" :value="index+1" style="width: 33px;" disabled>
+                                        </td>
                                         <td class='p-0' v-bind:class="{'border border-danger': leave_summary[index].period == null || leave_summary[index].period.mode == null}">
 
                                             <input
@@ -319,7 +322,8 @@
                                 <option value="Tardy">Tardy</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-12" v-if="particulars.leave_type == 'Tardy' || particulars.leave_type == 'Undertime'">
+                        <div class="form-group col-md-12" v-if="particulars.leave_type == 'Tardy' || particulars.leave_type == 'Undertime' || particulars.leave_type == 'AWOL' ||
+                        particulars.leave_type == 'UA'">
                             <label for="days">Number of times</label>
                             <input type="number" v-model="particulars.count" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter">
                         </div>
@@ -340,6 +344,45 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" @click="populate_particulars">Save changes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal -->
+        <div class="modal fade" id="awolModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">AWOL and UA {{ get_year() }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 p-2">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Month</th>
+                                        <th scope="col">Tardy & Undertime</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(data, index) in sortAwol" :key="data.id">
+                                        <td>{{ format_tardy(index) }}</td>
+                                        <td>
+                                            <p class="p-0 m-0" style="display:inline-table" v-for="(value, index) in data" :key="value.id">{{ '&nbsp' + index + ' ' + value + ', ' }}</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
                 </div>
             </div>
@@ -401,10 +444,11 @@ import { re } from 'semver'
     export default {
         data() {
             return {
+                prev_month: moment().subtract(1, "month").format("MMMM"),
+                current_month: moment().format("MMMM"),
                 selected_employee: {},
                 selected_summary: [],
                 edit_mode: false,
-                disable: true,
                 edited: false,
                 employees: [],
                 leave_credit: [],
@@ -416,6 +460,7 @@ import { re } from 'semver'
                 period_validation: true,
                 running: false,
                 custom_leave: [],
+                tardy: [],
                 position: {},
                 dept: {},
                 salary: {},
@@ -436,7 +481,7 @@ import { re } from 'semver'
                 dates:[],
                 selected: {},
                 options: null,
-                comments: 0
+                awol: {}
             }
         },
         components: {
@@ -464,6 +509,9 @@ import { re } from 'semver'
             {
                 return this.summary.length
             },
+            sortAwol: function () {
+                return this.awol
+            }
         },
         watch: {
             leave_summary: {
@@ -478,9 +526,23 @@ import { re } from 'semver'
         },
         methods: {
 
+            calculate_retirement_date: function(data)
+            {
+                return data == null ? '' : moment(data).add(60, 'years').format('YYYY-MM-DD')
+            },
+
+            format_tardy: function (date) {
+                return moment(date).format('MMMM');
+            },
+
             format_date(date)
             {
                 return moment(date).format("YYYY/MM/DD")
+            },
+
+            get_year()
+            {
+                return moment().format('YYYY')
             },
 
             clear()
@@ -504,6 +566,11 @@ import { re } from 'semver'
                         end: null,
                     }
                 }
+            },
+
+            view_awol: function()
+            {
+                $('#awolModal').modal('show')
             },
 
             addDate() {
@@ -535,15 +602,15 @@ import { re } from 'semver'
             },
 
             onDayClick(day) {
-            const idx = this.days.findIndex(d => d.id === day.id);
-                if (idx >= 0) {
-                    this.days.splice(idx, 1);
-                } else {
-                    this.days.push({
-                    id: day.id,
-                    date: day.date,
-                });
-            }
+                const idx = this.days.findIndex(d => d.id === day.id);
+                    if (idx >= 0) {
+                        this.days.splice(idx, 1);
+                    } else {
+                        this.days.push({
+                        id: day.id,
+                        date: day.date,
+                    });
+                }
             },
 
             get_employees: function(){
@@ -571,11 +638,15 @@ import { re } from 'semver'
 
                         this.custom_leave = data.custom_leave
 
-                        this.position = data.position
+                        this.tardy = data.tardy
 
-                        this.dept = data.position.department
+                        this.position = data.position ?? {}
 
-                        this.salary = data.salary
+                        this.dept = data.position.department ?? {}
+
+                        this.salary = data.salary ?? {}
+
+                        this.awol = data.awol
 
                         this.$Progress.finish()
 
@@ -636,6 +707,9 @@ import { re } from 'semver'
                     }else if(data.mode == 3){
 
                         let dates = data.data
+                            .filter(function(el){
+                                return el.date != null
+                            })
                             .map(e => moment(e.date).format('YYYY-MM-DD'))
                             .sort()
                             .map(function (date) {
@@ -735,7 +809,7 @@ import { re } from 'semver'
                 this.index = index
                 this.particulars = this.leave_summary[index].particulars ??
                     {
-                        leave_type: null,
+                        leave_type: "",
                         days: null,
                         hours: null,
                         mins: null
@@ -750,7 +824,7 @@ import { re } from 'semver'
 
             format_particulars: function(particulars)
             {
-                return particulars?  `${particulars?.leave_type}${particulars?.leave_type == 'Tardy' || particulars?.leave_type == 'Undertime' ? particulars?.count+'x' : ''} ${particulars?.days ?? 0}-${particulars?.hours ?? 0}-${particulars?.mins ?? 0}` : '';
+                return particulars?  `${particulars?.leave_type == 'Tardy' ? 'T' :  particulars?.leave_type == 'Undertime' ? 'UT' : particulars?.leave_type == null ? '' : particulars?.leave_type}${particulars?.leave_type == 'Tardy' || particulars?.leave_type == 'Undertime' || particulars?.leave_type == 'UA' || particulars?.leave_type == 'AWOL' ? particulars?.count+'x' : ''} ${particulars?.days ?? 0}-${particulars?.hours ?? 0}-${particulars?.mins ?? 0}` : '';
             },
 
             get_leave_types: function(){
@@ -758,13 +832,6 @@ import { re } from 'semver'
                 this.$Progress.start()
                 axios.get('api/getleavetypes')
                 .then(({data}) => {
-
-                    // this.leave_types = data.filter(function(e){
-                    //     if(e.title != 'Sick Leave' && e.title != 'Vacation Leave')
-                    //     {
-                    //         return e
-                    //     }
-                    // })
 
                     this.leave_types = data
 
@@ -882,6 +949,13 @@ import { re } from 'semver'
                     'newly_added': true
                 })
 
+                this.check_balance(index)
+
+            },
+
+            check_balance(index){
+
+
                 let prev_slbalance = 0
 
                 let prev_vlbalance = 0
@@ -891,38 +965,55 @@ import { re } from 'semver'
                     for(let x = index+1; x < this.leave_summary.length; x++)
                     {
 
-                        if(this.leave_summary[x-1]['vl_balance'] == 0)
+                        if(this.leave_summary[x-1]['vl_balance'] == 0 || this.leave_summary[x-1]['vl_balance'] == null)
                         {
                             let index = x-1
 
                             do{
                                 prev_vlbalance = this.leave_summary[index]['vl_balance']
                                 index--
-                            }while(prev_vlbalance == 0 && index != -1)
+                            }while(prev_vlbalance == 0 || prev_vlbalance == null && index != -1)
 
-                            this.leave_summary[x]['vl_balance'] = prev_vlbalance + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                            if(this.leave_summary[x]['particulars']['leave_type'] != 'SPL')
+                            {
+                                this.leave_summary[x]['vl_balance'] = prev_vlbalance + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                            }
+
                         }else{
-                            this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+
+                            if(this.leave_summary[x]['particulars']['leave_type'] != 'SPL')
+                            {
+                                this.leave_summary[x]['vl_balance'] = this.leave_summary[x-1]['vl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                            }
+
                         }
 
-                        if(this.leave_summary[x-1]['sl_balance'] == 0)
+                        if(this.leave_summary[x-1]['sl_balance'] == 0 || this.leave_summary[x-1]['sl_balance'] == null)
                         {
                             let index = x-1
 
                             do{
                                 prev_slbalance = this.leave_summary[index]['sl_balance']
                                 index--
-                            }while(prev_slbalance == 0 && index != -1)
+                            }while(prev_slbalance == 0 || prev_slbalance == null && index != -1)
 
-                            this.leave_summary[x]['sl_balance'] = prev_slbalance + this.leave_summary[x]['sl_balance'] - this.leave_summary[x]['vl_withpay']
+                            if(this.leave_summary[x]['particulars']['leave_type'] != 'SPL')
+                            {
+                                this.leave_summary[x]['sl_balance'] = prev_slbalance + this.leave_summary[x]['sl_balance'] - this.leave_summary[x]['vl_withpay']
+                            }
+
                         }else{
-                            this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+
+                            if(this.leave_summary[x]['particulars']['leave_type'] != 'SPL')
+                            {
+                                this.leave_summary[x]['sl_balance'] = this.leave_summary[x-1]['sl_balance'] + this.leave_summary[x]['vl_earned'] - this.leave_summary[x]['vl_withpay']
+                            }
+
                         }
 
                         // this.formatNumber(this.leave_summary[x]['sl_balance'])
                     }
                 }
-
 
             },
 

@@ -17,6 +17,7 @@ use App\PersonalInformation;
 use App\Reappointment;
 use App\User;
 use Carbon\Carbon;
+use App\Events\LeaveProcessed;
 use Illuminate\Pagination\Paginator;
 
 class LeaveApplicationController extends Controller
@@ -64,6 +65,20 @@ class LeaveApplicationController extends Controller
         }
 
         return LeaveApplication::where($data)->get();
+    }
+
+    public function getLeaveBalance(Request $request)
+    {
+        $leaveCredit    =   DB::table('leave_credits')
+                            ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
+                            ->where('personal_information_id', $request->id)
+                            ->where(function ($query) {
+                                $query->where('leave_types.title', 'Sick Leave')
+                                ->orWhere('leave_types.title', 'Vacation Leave');
+                            })
+                            ->pluck('balance', 'abbreviation');
+
+        return $leaveCredit;
     }
 
     /**
@@ -123,7 +138,21 @@ class LeaveApplicationController extends Controller
 
     public function update(Request $request, $id)
     {
-        return LeaveApplication::find($id)->update($request->all());
+        $application = LeaveApplication::find($id);
+
+        // if($request->stage_status == 'Approved by the HR Head')
+        // {
+        //     event(new LeaveProcessed($application));
+            $application->update($request->all());
+        // }
+
+        // if($application->stage_status == 'Approved by the HR Head' && $request->stage_status == 'Pending Noted By')
+        // {
+        //     $application->update($request->all());
+        // }
+
+        return event(new LeaveProcessed($application));
+
     }
 
     public function loadUserRole()

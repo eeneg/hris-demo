@@ -10,14 +10,34 @@
         <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
 
     </head>
-    <body>
+    <body style="background-color: white">
         <div class="container-fluid" style="display: flex;" >
-            <div class="row p-0">
+            <div class="row">
                 <div class="col-md-12 p-0">
-                    <h3 class="text-uppercase">Name: {{ $employee_name }}</h3>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Name: {{ $employee_name}} <br>
+                                    Birth Date: {{ $employee->birthdate }} <br>
+                                    Civil Status: {{ $employee->civilstatus }} <br>
+                                </td>
+                                <td>
+                                    Position: {{ $position->title }}<br>
+                                    Office: {{ $dept->address }}<br>
+                                    Salary Grade: {{ $id->salaryauthorized->grade }}<br>
+                                </td>
+                                <td>
+                                    Date Hired: <br>
+                                    Retirement Date: {{ Carbon\Carbon::parse($employee->birthdate )->addYears(60)->format('Y-m-d') }} <br>
+                                    Status:
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="col-md-12 p-0">
-                    <table class="table table-striped table-bordered text-center">
+                    <table class="table table-striped table-bordered text-center p-0">
                         <thead>
                             <tr>
                                 <th rowspan="2" colspan="1">
