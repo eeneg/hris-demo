@@ -140,18 +140,12 @@ class LeaveApplicationController extends Controller
     {
         $application = LeaveApplication::find($id);
 
-        // if($request->stage_status == 'Approved by the HR Head')
-        // {
-        //     event(new LeaveProcessed($application));
-            $application->update($request->all());
-        // }
+        $application->update($request->all());
 
-        // if($application->stage_status == 'Approved by the HR Head' && $request->stage_status == 'Pending Noted By')
-        // {
-        //     $application->update($request->all());
-        // }
-
-        return event(new LeaveProcessed($application));
+        if($request->stage_status == 'Approved by the HR Head')
+        {
+            return event(new LeaveProcessed($application));
+        }
 
     }
 

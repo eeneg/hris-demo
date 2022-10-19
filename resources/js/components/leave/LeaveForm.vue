@@ -296,6 +296,8 @@
                     this.form.personal_information_id_7d = this.form.personal_information_id
                     this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
                                                 this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
+                    this.form.sick_balance = this.curr_sick_balance
+                    this.form.vacation_balance = this.curr_vacation_balance
 
                     this.form.post('api/leaveapplication')
                         .then(({data}) => {

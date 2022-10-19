@@ -8,6 +8,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Http\Request;
 use App\LeaveCredit;
 use App\LeaveType;
+use App\LeaveSummary;
+use Illuminate\Support\Str;
+
 
 
 class LeaveApprovedListener
@@ -30,16 +33,41 @@ class LeaveApprovedListener
      */
     public function handle(LeaveProcessed $event)
     {
+
+        $data = $event->application;
+
         $sl = LeaveType::where('title', 'Sick Leave')->first();
         $vl = LeaveType::where('title', 'Vacation Leave')->first();
+
+        $is_sl = $sl->id == $data->leave_type_id;
+
+        $leave_type = LeaveType::find($data->leave_type_id);
 
         $sl_credit = LeaveCredit::where('personal_information_id', $this->request->personal_information_id)->where('leave_type_id', $sl->id)->first();
         $vl_credit = LeaveCredit::where('personal_information_id', $this->request->personal_information_id)->where('leave_type_id', $vl->id)->first();
 
+        $count = LeaveSummary::where('personal_information_id', $data->personal_information_id)->count();
 
+        $leave = [
+            'id' => Str::orderedUuid()->toString(),
+            'personal_information_id' => $data->personal_information_id,
+            'period' => json_encode(['mode' => 2, 'data' => ['start' => $data->from, 'end' => $data->to]]),
+            'particulars' => json_encode(['leave_type' => $leave_type->abbreviation, 'days' => $data->working_days, 'hours' => null, 'mins' => null]),
+            'vl_earned' => 0,
+            'vl_withpay' => $is_sl != true ? $data->days_with_pay : 0,
+            'vl_balance' => $data->vacation_balance,
+            'vl_withoutpay' => $is_sl != true ? $data->days_without_pay : 0,
+            'sl_earned' => 0,
+            'sl_withpay' => $is_sl ? $data->days_with_pay : 0,
+            'sl_balance' => $data->sick_balance,
+            'sl_withoutpay' => $is_sl ? $data->days_without_pay : 0,
+            'remarks' => '',
+            'sort' => $count == 0 ? 0 : LeaveSummary::select('personal_information_id', 'sort')->where('personal_information_id', $data->personal_information_id)->max('sort') + 1,
+        ];
 
+        $sl_credit->update(['balance' => $data->sick_balance]);
+        $vl_credit->update(['blanace' => $data->vacation_balance]);
 
-        return $leave_credit;
-
+        return LeaveSummary::insert($leave);
     }
 }

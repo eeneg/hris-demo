@@ -166,15 +166,15 @@
                             <div class="row col-md-12" v-if="submit_mode == 'noted_by'">
                                 <div class="col-md-4 form-group">
                                     <label for="days_with_pay">Days with pay:</label>
-                                    <input v-model="form.days_with_pay" ref="days_with_pay" class="form-control form-control-border border-width-2" type="text" name="days_with_pay">
+                                    <input v-model="form.days_with_pay" ref="days_with_pay" class="form-control form-control-border border-width-2" type="number" name="days_with_pay">
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label for="days_without_pay">Days without pay:</label>
-                                    <input v-model="form.days_without_pay" ref="days_without_pay" class="form-control form-control-border border-width-2" type="text" name="days_without_pay">
+                                    <input v-model="form.days_without_pay" ref="days_without_pay" class="form-control form-control-border border-width-2" type="number" name="days_without_pay">
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label for="others">others (specify):</label>
-                                    <input v-model="form.others" ref="others" class="form-control form-control-border border-width-2" type="text" name="others">
+                                    <input v-model="form.others" ref="others" class="form-control form-control-border border-width-2" type="number" name="others">
                                 </div>
                             </div>
 
