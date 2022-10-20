@@ -163,7 +163,7 @@
                                             <input type="number" :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'vl_withpay', 'vl',$event)" v-on:blur="calculate_balance(index, 'vl_withpay', 'vl')" v-on:focus="save_old_value(index, 'vl_withpay')" id="vl_withpay" v-model="leave_summary[index].vl_withpay" style="border-radius: 0">
                                         </td>
                                         <td class='p-0'>
-                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="vl_balance" v-model="leave_summary[index].vl_balance" style="border-radius: 0">
+                                            <input type="number" class="form-control p-0" id="vl_balance" v-model="leave_summary[index].vl_balance" style="border-radius: 0" disabled>
                                         </td>
                                         <td class='p-0'>
                                             <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="vl_withoutpay" v-model="leave_summary[index].vl_withoutpay" style="border-radius: 0">
@@ -175,7 +175,7 @@
                                             <input type="number" :disabled="edit_mode == false" class="form-control p-0" v-on:keyup.enter="press_enter(index, 'sl_withpay', 'sl',$event)" v-on:blur="calculate_balance(index, 'sl_withpay', 'sl')" v-on:focus="save_old_value(index, 'sl_withpay')" id="sl_withpay" v-model="leave_summary[index].sl_withpay" style="border-radius: 0">
                                         </td>
                                         <td class='p-0'>
-                                            <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="sl_balance" v-model="leave_summary[index].sl_balance" style="border-radius: 0">
+                                            <input type="number" class="form-control p-0" id="sl_balance" v-model="leave_summary[index].sl_balance" style="border-radius: 0" disabled>
                                         </td>
                                         <td class='p-0'>
                                             <input type="number" :disabled="edit_mode == false" class="form-control p-0" id="psl_withoutpayeriod" v-model="leave_summary[index].sl_withoutpay" style="border-radius: 0">
