@@ -534,6 +534,22 @@ import CreditsTable from './CreditsTable.vue'
 
             get_leave_info: function(edit){
 
+                Swal.fire({
+                    title: '<strong>LOADING...</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
                 if(this.selected_employee !== null)
                 {
                     this.$Progress.start()
@@ -562,6 +578,8 @@ import CreditsTable from './CreditsTable.vue'
                         {
                             this.add_leave_data(-1)
                         }
+
+                        Swal.close()
                     })
                     .catch(e => {
                         console.log(e)
@@ -669,25 +687,24 @@ import CreditsTable from './CreditsTable.vue'
 
             check_input: function()
             {
-                // this.leave_summary.map((e) => {
+                this.leave_summary.map((e) => {
 
-                //     if(e.period == null || e.period.mode == null || e.period.mode == '')
-                //     {
-                //         this.validation = false
-                //     }
+                    if(e.period == null || e.period.mode == null || e.period.mode == '')
+                    {
+                        this.validation = false
+                    }
 
-                // })
+                })
 
-                // if(this.validation)
-                // {
-                //     this.submit_leave(false)
-                // }else{
-                //     toast.fire({
-                //         icon:'error',
-                //         title: 'Period Empty'
-                //     })
-                // }
-                this.submit_leave(false)
+                if(this.validation)
+                {
+                    this.submit_leave(false)
+                }else{
+                    toast.fire({
+                        icon:'error',
+                        title: 'Period Empty'
+                    })
+                }
             },
 
             submit_leave: function(delete_save)
