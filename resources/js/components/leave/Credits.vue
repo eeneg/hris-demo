@@ -76,7 +76,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, index) in custom_leave.leave" :key="data.id">
+                                    <tr v-for="(data, index) in custom_leave" :key="data.id">
                                         <td>{{ index }}</td>
                                         <td>{{ data }}</td>
                                     </tr>
