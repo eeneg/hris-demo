@@ -372,6 +372,7 @@
                     .then(({data}) => {
                         this.create_data = _.assign({department: this.selectedDepartment}, data);
                         this.create_data = _.assign({plantillacontent: null}, this.create_data);
+                        this.create_data = _.assign({order_number: this.records.length}, this.create_data);
                         $('#item-form-modal').modal('show');
                     })
                     .catch(error => {

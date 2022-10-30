@@ -161,7 +161,8 @@
                 positions: [],
                 allEmployees: [],
                 department: {},
-                plantillacontent: {}
+                plantillacontent: {},
+                order_number: 0
             }
         },
         watch: {
@@ -184,6 +185,8 @@
                     this.form.order_number = planCont.order_number;
                     this.form.department_id = newData.department.id;
                     this.form.id = planCont.id;
+                } else {
+                    this.form.order_number = newData.order_number + 1;
                 }
             }
         },

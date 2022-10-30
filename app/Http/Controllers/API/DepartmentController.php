@@ -36,7 +36,7 @@ class DepartmentController extends Controller
 
     public function complete_depts()
     {
-        $departments = Department::all();
+        $departments = Department::where('status', 'active')->orderBy('order_number')->get();
         return new DepartmentsResource($departments);
     }
 

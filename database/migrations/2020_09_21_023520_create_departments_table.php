@@ -21,6 +21,8 @@ class CreateDepartmentsTable extends Migration
             $table->string('function', 500)->nullable();
             $table->string('projectactivity', 600)->nullable();
             $table->string('fund', 400)->nullable();
+            $table->string('status', 400)->nullable();
+            $table->integer('order_number')->nullable();
             $table->timestamps();
         });
     }
