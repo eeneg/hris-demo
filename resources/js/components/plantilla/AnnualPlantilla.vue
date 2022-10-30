@@ -12,27 +12,33 @@
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom:0;">
                                 <label style="margin: 0;font-weight: normal;line-height:25px;">Select Department</label>
-                                <v-select @input="loadContents()" class="form-control form-control-border border-width-2" v-model="selectedDepartment" :options="departments" label="address" placeholder="Search Department" :reduce="departments => departments.address"></v-select>
+                                <v-select @input="loadContents($event)" class="form-control form-control-border border-width-2" v-model="selectedDepartment" :getOptionLabel="dept => dept.address" :clearable="false" :options="departments" placeholder="Search Department"></v-select>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="generatePlantilla()"><i class="fas fa-print"></i></a>
-                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button>
-                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="addItemModal()">Create New Item</button>
+                            <!-- <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button> -->
+                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success ml-2" @click="createPlantillaModal()">Create New Plantilla</button>
+                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="createItemModal()">Create New Item</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body table-responsive p-0" style="height: 650px;">
                     <table class="table table-hover table-bordered table-striped text-nowrap custom-table plantilla-table">
-                        <thead>
+                        <thead class="plantilla-thead">
                             <tr>
-                                <th colspan="2" rowspan="2" style="font-size: 1rem;">Item No.</th>
-                                <th rowspan="3" style="font-size: 1rem;">Position Title</th>
-                                <th rowspan="3" style="font-size: 1rem;">Name of Incumbent</th>
-                                <th colspan="2" style="font-size: 1rem;">Current Year Authorized</th>
-                                <th colspan="2" style="font-size: 1rem;">Budget Year Proposed</th>
-                                <th rowspan="3" style="font-size: 1rem;">Increase / Decrease</th>
+                                <th rowspan="3" style="color: #0088ff;font-size: 0.7rem;">#</th>
+                                <th colspan="2" rowspan="2">Item No.</th>
+                                <th rowspan="3">Position Title<br>& Name of Incumbent</th>
+                                <!-- <th rowspan="3">Name of Incumbent</th> -->
+                                <th colspan="2">Current Year Authorized</th>
+                                <th colspan="2">Budget Year Proposed</th>
+                                <!-- <th rowspan="3">Increase / Decrease</th> -->
+                                <th rowspan="3">Date of Birth</th>
+                                <th rowspan="3">Date of<br>Original<br>Appointment</th>
+                                <th rowspan="3">Date of Last<br>Promotion/<br>Appointment</th>
+                                <th rowspan="3">Status</th>
                                 <th rowspan="3"></th>
                             </tr>
                             <tr>
@@ -48,19 +54,31 @@
                                 <th style="font-weight: normal;">Amount</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="plantilla-tbody">
                             <tr v-for="record in records" :key="record.id">
+                                <td style="text-align: center;color: #0088ff;font-size: 0.7rem;">{{ record.order_number }}</td>
                                 <td style="text-align: center;">{{ record.old_number }}</td>
                                 <td style="text-align: center;">{{ record.new_number }}</td>
-                                <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td>
-                                <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + ' ' + record.middlename }}</td>
-                                <td v-else class="green"><b>VACANT</b></td>
+                                <td>
+                                    <span style="font-weight: bold;">{{ record.position }}</span>
+                                    <br>
+                                    <span v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + ' ' + record.middlename }}</span>
+                                    <span v-else class="green"><b>VACANT</b></span>
+                                </td>
+                                <!-- <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td> -->
+                                <!-- <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + ' ' + record.middlename }}</td>
+                                <td v-else class="green"><b>VACANT</b></td> -->
                                 <td style="text-align: center;">{{ record.salaryauthorized !== null ? (record.salaryauthorized.grade + ' / ' + record.salaryauthorized.step) : '' }}</td>
                                 <td style="text-align: right;">{{ (record.salaryauthorized !== null ? ((record.working_time == 'Full-time' ? record.salaryauthorized.amount * 12 : (record.salaryauthorized.amount / 2) * 12)) : '')  | amount}}</td>
                                 <td style="text-align: center;">{{ record.salaryproposed !== null ? (record.salaryproposed.grade + ' / ' + record.salaryproposed.step) : '' }}</td>
                                 <td style="text-align: right;">{{ (record.salaryproposed !== null ? ((record.working_time == 'Full-time' ? record.salaryproposed.amount * 12 : (record.salaryproposed.amount / 2) * 12)) : '') | amount}}</td>
-                                <td style="text-align: right;">{{ getDifference(record) }}</td>
-                                <td style="text-align: center;"><a href="#" @click.prevent="record.new_number ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.new_number ?'fas fa-edit' : 'fas fa-history'"></i></a></td>
+                                <!-- <td style="text-align: right;">{{ getDifference(record) }}</td> -->
+                                <td>{{ record.birthdate }}</td>
+                                <td>{{ record.original_appointment }}</td>
+                                <td>{{ record.last_promotion }}</td>
+                                <td>{{ record.appointment_status }}</td>
+                                <td style="text-align: center;"><a href="#" @click.prevent="updateItemModal(record)"><i class="fas fa-edit"></i></a></td>
+                                <!-- <td style="text-align: center;"><a href="#" @click.prevent="record.new_number ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.new_number ?'fas fa-edit' : 'fas fa-history'"></i></a></td> -->
                             </tr>
                         </tbody>
                     </table>
@@ -85,121 +103,6 @@
                             <button type="submit" class="btn btn-success">Save</button>
                         </form>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Edit Modal -->
-        <div class="modal fade" id="plantilla-content-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header modal-border">
-                        <h5 class="modal-title">Edit Plantilla Record</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form autocomplete="off" @submit.prevent="updatePlantillaRecord()">
-                        <div class="modal-body">
-                            <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
-                                <label style="font-weight: normal; margin: 0;">Employee name</label>
-                                <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="forvacants" label="name" :reduce="forvacants => forvacants.id" id="employeesDropdown"></v-select>
-                            </div>
-                            <div class="row">
-                                <div class="col-3" style="padding-right: 5px;">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="new_number" style="font-weight: normal; margin: 0;">Item No.</label>
-                                        <input v-model="form.new_number" id="new_number" value="" class="form-control form-control-border border-width-2" step="1" :min="itemMin" :max="itemMax" type="number" name="new_number" placeholder="New Item Number" required>
-                                    </div>
-                                </div>
-                                <div class="col-9" style="padding-left: 5px;">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="position" style="font-weight: normal; margin: 0;">Position</label>
-                                        <input v-model="form.position" id="position" class="form-control form-control-border border-width-2" type="text" name="position" placeholder="Position" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
-                                        <input v-model="form.salaryproposed.grade" id="budget-grade" class="form-control form-control-border border-width-2" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
-                                        <input v-model="form.salaryproposed.step" id="budget-step" class="form-control form-control-border border-width-2" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer modal-border" style="display: block;">
-                            <button v-if="form.surname == '' && form.salaryauthorized" type="button" class="btn btn-danger" @click="abolishItem()">Abolish Item</button>
-                            <button v-if="form.surname == '' && form.salaryauthorized == null" type="button" class="btn btn-danger" @click="removeItem()">Remove</button>
-                            <button type="submit" class="btn btn-success mb-3" style="float: right;">Update</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Item Modal -->
-        <div class="modal fade" id="add-item-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header modal-border">
-                        <h5 class="modal-title">Add Plantilla Item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form autocomplete="off" @submit.prevent="addPlantillaItem()">
-                        <div class="modal-body">
-                            <p style="margin-bottom: 5px;"><b>Department: </b>{{ selectedDepartment }}</p>
-                            <div class="row">
-                                <div class="col-3" style="padding-right: 5px;">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_new_number" style="font-weight: normal; margin: 0;">Item No. (new)</label>
-                                        <input v-model="form.new_number" id="add_new_number" class="form-control form-control-border border-width-2" step="1" :min="itemMin" :max="(parseInt(itemMax) + 1)" type="number" name="new_number" placeholder="New Item Number" required>
-                                    </div>
-                                </div>
-                                <div class="col-9" style="padding-left: 5px;">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_position" style="font-weight: normal; margin: 0;">Position</label>
-                                        <input v-model="form.position" id="add_position" class="form-control form-control-border border-width-2" type="text" name="position" placeholder="Position" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group" style="margin-bottom: 0.3rem;">
-                                <div class="custom-control custom-radio mr-2" style="display: inline;">
-                                    <input class="custom-control-input" type="radio" id="customRadio1" value="Full-time" v-model="form.working_time" name="working_time" checked>
-                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal; margin: 0;">Full-time</label>
-                                </div>
-                                <div class="custom-control custom-radio" style="display: inline;">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" value="Part-time" v-model="form.working_time" name="working_time">
-                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal; margin: 0;">Part-time</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_budget-grade" style="font-weight: normal; margin: 0;">Budget Year Salary Grade</label>
-                                        <input v-model="form.salaryproposed.grade" id="add_budget-grade" class="form-control form-control-border border-width-2" step="1" min="1" max="30" type="number" name="budget-grade" placeholder="Grade" required>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="add_budget-step" style="font-weight: normal; margin: 0;">Budget Year Salary Step</label>
-                                        <input v-model="form.salaryproposed.step" id="add_budget-step" class="form-control form-control-border border-width-2" step="1" min="1" max="8" type="number" name="budget-step" placeholder="Step" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer modal-border">
-                            <button type="submit" class="btn btn-success">Create</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -307,6 +210,9 @@
             </div>
         </div>
 
+        <create-plantilla-modal :key="create_plantilla_modal_key" @exit="createPlantillaModalExit"></create-plantilla-modal>
+        <item-form :key="create_item_modal_key" @exit="createItemModalExit" :create_data="create_data"></item-form>
+
         <!-- Report Modal -->
         <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
@@ -331,13 +237,17 @@
 </template>
 
 <script>
+    import createplantillamodal from "./modals/CreatePlantillaModal"
+    import itemForm from "./modals/ItemForm"
+
     export default {
         data() {
             return {
-                departments: [],
+                departments: [{}],
                 itemMin: 0,
                 itemMax: 0,
-                selectedDepartment: '',
+                selectedDepartment: {},
+                create_data: {},
                 records: [],
                 forvacants: [],
                 schedules: [],
@@ -374,7 +284,9 @@
                     'working_time': 'Full-time',
                     'salaryauthorized': {},
                     'salaryproposed': {}
-                })
+                }),
+                create_plantilla_modal_key: 0,
+                create_item_modal_key: 1000,
             }
         },
         methods: {
@@ -438,10 +350,39 @@
                         $('#editButton').removeAttr('disabled');
                     });
             },
-            addItemModal() {
-                $('#add-item-modal').modal('show');
-                this.form.reset();
-                this.form.department = this.selectedDepartment;
+            createPlantillaModal() {
+                $('#create-plantilla-modal').modal('show');
+            },
+            createPlantillaModalExit(value) {
+                this.create_plantilla_modal_key += 1;
+            },
+            updateItemModal(plantillacontent) {
+                axios.post('api/department_positions', {department_id: this.selectedDepartment.id})
+                    .then(({data}) => {
+                        this.create_data = _.assign({department: this.selectedDepartment}, data);
+                        this.create_data = _.assign({plantillacontent: plantillacontent}, this.create_data);
+                        $('#item-form-modal').modal('show');
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+            },
+            createItemModal() {
+                axios.post('api/department_positions', {department_id: this.selectedDepartment.id})
+                    .then(({data}) => {
+                        this.create_data = _.assign({department: this.selectedDepartment}, data);
+                        this.create_data = _.assign({plantillacontent: null}, this.create_data);
+                        $('#item-form-modal').modal('show');
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+            },
+            createItemModalExit(value) {
+                this.create_item_modal_key += 1;
+                if (value == 'sync') {
+                    this.loadContents();
+                }
             },
             duplicatePlantilla() {
                 this.$Progress.start();
@@ -569,37 +510,6 @@
                     }
                 });
             },
-            showEditModal(record) {
-                $('#plantilla-content-modal').modal('show');
-                this.form.reset();
-                if (record.salaryproposed) {
-                    this.form.fill(record);
-                    this.form.original_position = record.position;
-                    this.form.original_item_number = record.new_number;
-                    this.plantillaNameForEdit =  record.surname ? (record.surname + ', ' + record.firstname + ' ' + (record.nameextension != '' ? record.nameextension + ' ' : '') + record.middlename) : 'VACANT';
-                } else {
-                    this.form.id = record.id;
-                    this.form.new_number = '';
-                    this.form.surname = '';
-                    this.form.original_item_number = '';
-                    this.form.original_position = record.position;
-                    this.form.personal_information_id = null;
-                    this.form.position = record.position;
-                    this.form.position_id = record.position_id;
-                    this.form.salaryauthorized = record.salaryauthorized;
-                    this.form.salaryproposed.grade = '';
-                    this.form.salaryproposed.step = '';
-                    this.form.working_time = record.working_time;
-                    this.plantillaNameForEdit = 'VACANT';
-                }
-                axios.post('api/forvacants', {personal_information_id: this.form.personal_information_id})
-                    .then(({data}) => {
-                        this.forvacants = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-            },
             getDifference(record) {
                 let difference = ((record.salaryproposed !== null ? record.salaryproposed.amount * 12 : 0) - (record.salaryauthorized !== null ? record.salaryauthorized.amount * 12 : 0));
                 if (record.working_time == 'Part-time') {
@@ -616,37 +526,6 @@
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
-                    });
-            },
-            addPlantillaItem() {
-                this.form.post('api/plantillacontent')
-                    .then(() => {
-                        this.loadContents();
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Item added successfully'
-                        });
-                        $('#add-item-modal').modal('hide');
-                        this.$Progress.finish();
-                    })
-                    .catch(error => {
-                        this.$Progress.fail();
-                    });
-            },
-            updatePlantillaRecord() {
-                this.$Progress.start();
-                this.form.put('api/plantillacontent/' + this.form.id)
-                    .then(() => {
-                        this.loadContents();
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Record updated successfully'
-                        });
-                        $('#plantilla-content-modal').modal('hide');
-                        this.$Progress.finish();
-                    })
-                    .catch(() => {
-                        this.$Progress.fail();
                     });
             },
             generatePlantilla(){
@@ -672,7 +551,7 @@
                         if (this.$route.params.dept != null) {
                             this.selectedDepartment = this.$route.params.dept;
                         } else {
-                            this.selectedDepartment = data.data[0].address;
+                            this.selectedDepartment = data.data[0];
                         }
                         this.loadContents();
                         this.getPreviousPlantilla();
@@ -697,32 +576,33 @@
                     }, 3000);
                 }, 3000);
             },
-            loadContents() {
-                this.$Progress.start();
+            loadContents(e) {
                 axios.post('api/plantilladepartmentcontent', {department: this.selectedDepartment})
                     .then(({data}) => {
                         this.records = data.data;
-                        this.itemMin = data.data[0].new_number;
-                        this.itemMax = data.data[data.data.length - 1].new_number;
-                        this.footnoteForm.department = this.selectedDepartment;
+                        if (data.data.length > 0) {
+                            this.itemMin = data.data[0].new_number;
+                            this.itemMax = data.data[data.data.length - 1].new_number;
+                        }
+                        // this.footnoteForm.department = this.selectedDepartment;
 
-                        axios.post('api/footnotespec', {department: this.selectedDepartment})
-                            .then(({data}) => {
-                                this.footnote = data.note;
-                                this.footnoteForm.footnote = data.note;
-                            })
-                            .catch(error => {
-                                console.log(error.response.data.message);
-                            });
+                        // axios.post('api/footnotespec', {department: this.selectedDepartment})
+                        //     .then(({data}) => {
+                        //         this.footnote = data.note;
+                        //         this.footnoteForm.footnote = data.note;
+                        //     })
+                        //     .catch(error => {
+                        //         console.log(error.response.data.message);
+                        //     });
 
                         // Scroll to specific employee
                         this.$nextTick(() => {
                             if (this.$route.params.dept != null) {
                                 var table = document.getElementsByClassName("plantilla-table")[0].getElementsByTagName("tbody")[0];
                                 for (var r = 0; r < table.rows.length; r++) {
-                                    let newItemNo = parseInt(table.rows[r].cells[1].innerHTML);
-                                    let newNo = this.$route.params.newNo;
-                                    if (newNo == newItemNo) {
+                                    let tb_order_number = parseInt(table.rows[r].cells[1].innerHTML);
+                                    let order_number = this.$route.params.order_number;
+                                    if (order_number == tb_order_number) {
                                         table.rows[r].scrollIntoView({
                                             behavior: 'smooth',
                                             block: 'center'
@@ -733,13 +613,16 @@
                             }
                         });
 
-                        this.$Progress.finish();
                     })
                     .catch(error => {
                         this.$Progress.fail();
                         console.log(error.response.data.message);
                     });
             }
+        },
+        components: {
+            'create-plantilla-modal': createplantillamodal,
+            'item-form': itemForm
         },
         created() {
             this.$Progress.start();

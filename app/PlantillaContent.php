@@ -29,6 +29,9 @@ class PlantillaContent extends Model
         'new_number',
         'difference_amount',
         'working_time',
+        'level',
+        'original_appointment',
+        'last_promotion',
         'appointment_status',
         'order_number'
     ];

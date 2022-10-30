@@ -207,13 +207,13 @@
                 // this.form.department_id = user.userassignment && user.userassignment.department.id;
             },
             getAvatar(avatar) {
-                // if (avatar != "profile.png") {
-                //     let prefix = (avatar.match(/\//) ? '' : '/storage/user_avatars/');
-                //     return prefix + avatar;
-                // } else {
-                //     let prefix = (avatar.match(/\//) ? '' : '/storage/project_files/');
-                //     return prefix + avatar;
-                // }
+                if (avatar != "profile.png") {
+                    let prefix = (avatar.match(/\//) ? '' : '/storage/user_avatars/');
+                    return prefix + avatar;
+                } else {
+                    let prefix = (avatar.match(/\//) ? '' : '/storage/project_files/');
+                    return prefix + avatar;
+                }
             },
             showDepartments() {
                 var value = $('#user_role_combo').val();

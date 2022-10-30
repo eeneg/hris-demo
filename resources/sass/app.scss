@@ -221,7 +221,7 @@
     border: 1px solid #e8eef1;
     border-radius: 2px;
     height: 34px;
-    margin-left:5px;
+    margin-left: 5px;
     font-size: 15px;
 }
 .text-right{
@@ -651,4 +651,16 @@ a:hover{
     max-height: 45px !important;
     margin-left: 8px !important;
     margin-top: -8px !important;
+  }
+
+  .tr-move-item {
+    cursor: move;
+  }
+
+  .plantilla-thead tr th {
+    font-size: 0.8rem;
+  }
+
+  .plantilla-tbody tr td {
+    font-size: 0.8rem;
   }

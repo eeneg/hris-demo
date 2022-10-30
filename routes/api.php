@@ -37,8 +37,11 @@ Route::group(['middleware' => ['auth:api']], function() {
         'request'   => 'API\RequestController',
         'reappointments'   => 'API\ReappointmentController',
         'leavecredits'  => 'API\LeaveCreditController',
-        'dashboard' => 'API\DashboardController'
+        'dashboard' => 'API\DashboardController',
+        'position' => 'API\PositionController',
     ]);
+    Route::post('department_positions', 'Api\PositionController@get_department_positions');
+
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
     Route::get('employeeList', 'API\PersonalInformationController@employees');
@@ -84,6 +87,7 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('checkChanges', 'API\LeaveApplicationController@checkChanges');
 
+    Route::get('complete_depts', 'API\DepartmentController@complete_depts');
     Route::get('fetch_depts', 'API\DepartmentController@fetch_depts');
     Route::get('fetch_positions', 'API\DepartmentController@fetch_positions');
     Route::post('store_position', 'API\DepartmentController@store_position');

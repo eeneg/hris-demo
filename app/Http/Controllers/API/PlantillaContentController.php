@@ -12,6 +12,7 @@ use App\SalaryGrade;
 use App\Department;
 use App\AbolishedItem;
 use App\Http\Resources\PlantillaContentResource;
+use Illuminate\Support\Facades\DB;
 
 class PlantillaContentController extends Controller
 {
@@ -31,7 +32,7 @@ class PlantillaContentController extends Controller
         $plantillacontents = PlantillaContent::select('plantilla_contents.*')
             ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
             ->join('departments', 'positions.department_id', '=', 'departments.id')
-            ->where('departments.address', $request->department)
+            ->where('departments.address', $request->department['address'])
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->orderBy('order_number')
             ->get();
@@ -48,32 +49,60 @@ class PlantillaContentController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $newPosition = Position::create([
-            'department_id' => Department::where('address', $request->department)->first()->id,
-            'title' => $request->position
-        ]);
-        
-        $newPositionOrder = PlantillaContent::where('plantilla_id', $plantilla->id)->where('new_number', $request->new_number)->first();
-        if ($newPositionOrder != null) {
-            $contentUpdates = PlantillaContent::where('plantilla_id', $plantilla->id)->where('order_number', '>=', $newPositionOrder->order_number)->get();
-            foreach ($contentUpdates as $key => $value) {
-                $value->order_number = $value->order_number + 1;
-                $value->new_number = $value->new_number != null ? intval($value->new_number) + 1 : $value->new_number;
-                $value->save();
+        $department_id = $request->department_id;
+        if (!isset($request->position['id'])) {
+            $position = Position::create([
+                'department_id' => $department_id,
+                'title' => $request->position['title']
+            ]);
+            $position_id = $position->id;
+        } else {
+            $position_id = $request->position['id'];
+        }
+
+        $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
+            $query->where('id', $department_id);
+        }])->orderBy('order_number', 'desc')->get();
+
+        if ($contents->count() > 0) {
+            if ($contents->first()->order_number >= $request->order_number) {
+                $adjustments = $contents->where('order_number', '>=', $request->order_number);
+                foreach ($adjustments as $key => $value) {
+                    $value->order_number = $value->order_number + 1;
+                    $value->save();
+                }
             }
         }
-        
-        $salaryproposed = SalaryGrade::where('salary_sched_id', $plantilla->salaryproposedschedule->id)
-                ->where('grade', intval(((object) $request->salaryproposed)->grade))->where('step', intval(((object) $request->salaryproposed)->step))
+
+        if ($request->salary_grade_auth != "") {
+            $salaryauthorized = SalaryGrade::where('salary_sched_id', $plantilla->salaryauthorizedschedule->id)
+                ->where('grade', explode("/", $request->salary_grade_auth)[0])
+                ->where('step', explode("/", $request->salary_grade_auth)[1])
                 ->first();
+        }
         
-        $lastOrderNumber = PlantillaContent::where('plantilla_id', $plantilla->id)->orderBy('order_number', 'desc')->first()->order_number;        
+        if ($request->salary_grade_prop != "") {
+            $salaryproposed = SalaryGrade::where('salary_sched_id', $plantilla->salaryproposedschedule->id)
+                ->where('grade', explode("/", $request->salary_grade_prop)[0])
+                ->where('step', explode("/", $request->salary_grade_prop)[1])
+                ->first();
+        }
+        
         return PlantillaContent::create([
             'plantilla_id' => $plantilla->id,
-            'salary_grade_prop_id' => $salaryproposed->id,
-            'position_id' => $newPosition->id,
+            'salary_grade_auth_id' => isset($salaryauthorized) ? $salaryauthorized->id : null,
+            'salary_grade_prop_id' => isset($salaryproposed) ? $salaryproposed->id : null,
+            'position_id' => $position_id,
+            'personal_information_id' => $request->personal_information_id,
             'new_number' => $request->new_number,
-            'order_number' => $newPositionOrder == null ? ($lastOrderNumber + 1) : $newPositionOrder->order_number
+            'old_number' => $request->old_number,
+            'difference_amount' => 0,
+            'working_time' => $request->working_time,
+            'level' => $request->level,
+            'original_appointment' => $request->original_appointment,
+            'last_promotion' => $request->last_promotion,
+            'appointment_status' => $request->appointment_status,
+            'order_number' => $request->order_number
         ]);
     }
 
@@ -126,61 +155,67 @@ class PlantillaContentController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontent = PlantillaContent::find($id);
 
-        $plantillacontent = PlantillaContent::findOrFail($id);
+        $department_id = $request->department_id;
+        if (!isset($request->position['id'])) {
+            $position = Position::create([
+                'department_id' => $department_id,
+                'title' => $request->position['title']
+            ]);
+            $position_id = $position->id;
+        } else {
+            $position_id = $request->position['id'];
+        }
+
+        $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
+            $query->where('id', $department_id);
+        }])->orderBy('order_number', 'desc')->get();
+
+        // Order Number
+        $originalOrderNumber = $plantillacontent->order_number;
+        $updateOrderNumber = $request->order_number;
+        if ($originalOrderNumber > $updateOrderNumber) {
+            PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
+                $query->where('id', $department_id);
+            }])->where('order_number', '>=', $updateOrderNumber)->where('order_number', '<', $originalOrderNumber)->update(['order_number' => DB::raw('order_number+1')]);
+        } else if($originalOrderNumber < $updateOrderNumber) {
+            PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
+                $query->where('id', $department_id);
+            }])->where('order_number', '<=', $updateOrderNumber)->where('order_number', '>', $originalOrderNumber)->update(['order_number' => DB::raw('order_number-1')]);
+        }
         
-        // Employee
-        $plantillacontent->personal_information_id = $request->personal_information_id == 'null' ? null : $request->personal_information_id;
 
-        // Item No.
-        $update = intval($request->new_number);
-        $original = $plantillacontent->new_number;
-        if ($update != $original) {
-            // New item record
-            $newUpdate = PlantillaContent::where('plantilla_id', $plantilla->id)->where('new_number', $update)->first();
-            
-            // New and old order numbers
-            $originalOrderNumber = $plantillacontent->order_number;
-            $updateOrderNumber = $newUpdate->order_number;
-            
-            // Update record
-            $plantillacontent->new_number = $update;
-            $plantillacontent->order_number = $updateOrderNumber;
-            
-            if ($originalOrderNumber > $updateOrderNumber) {
-                for ($i=$originalOrderNumber-1; $i >= $updateOrderNumber; $i--) {
-                    $forUpdate1 = PlantillaContent::where('plantilla_id', $plantilla->id)->where('order_number', $i)->first();
-                    $forUpdate1->order_number = $forUpdate1->order_number + 1;
-                    $forUpdate1->new_number = $forUpdate1->new_number != '' ? (intval($forUpdate1->new_number) + 1) : $forUpdate1->new_number;
-                    $forUpdate1->save();
-                }
-            } else {
-                for ($i=$originalOrderNumber+1; $i <= $updateOrderNumber; $i++) { 
-                    $forUpdate2 = PlantillaContent::where('plantilla_id', $plantilla->id)->where('order_number', $i)->first();
-                    $forUpdate2->order_number = $forUpdate2->order_number - 1;
-                    $forUpdate2->new_number = $forUpdate2->new_number != '' ? (intval($forUpdate2->new_number) - 1) : $forUpdate2->new_number;
-                    $forUpdate2->save();
-                }
-            }
-        }
-
-        // Update Position Name
-        $position = Position::findOrFail($request->position_id);
-        if ($request->position != $position->title) {
-            $position->title = $request->position;
-            $position->save();
-        }
-
-        // Salary Proposed Update
-        if ($plantillacontent->salaryproposed->grade != intval(((object) $request->salaryproposed)->grade) || $plantillacontent->salaryproposed->step != intval(((object) $request->salaryproposed)->step)) {
-            $salaryproposed = SalaryGrade::where('salary_sched_id', $plantillacontent->salaryproposed->salary_sched_id)
-                ->where('grade', intval(((object) $request->salaryproposed)->grade))->where('step', intval(((object) $request->salaryproposed)->step))
+        if ($request->salary_grade_auth != "") {
+            $salaryauthorized = SalaryGrade::where('salary_sched_id', $plantilla->salaryauthorizedschedule->id)
+                ->where('grade', explode("/", $request->salary_grade_auth)[0])
+                ->where('step', explode("/", $request->salary_grade_auth)[1])
                 ->first();
-            $plantillacontent->salary_grade_prop_id = $salaryproposed->id;
+        }
+        
+        if ($request->salary_grade_prop != "") {
+            $salaryproposed = SalaryGrade::where('salary_sched_id', $plantilla->salaryproposedschedule->id)
+                ->where('grade', explode("/", $request->salary_grade_prop)[0])
+                ->where('step', explode("/", $request->salary_grade_prop)[1])
+                ->first();
         }
 
-        $plantillacontent->save();
 
+        $plantillacontent->salary_grade_auth_id = isset($salaryauthorized) ? $salaryauthorized->id : null;
+        $plantillacontent->salary_grade_prop_id = isset($salaryproposed) ? $salaryproposed->id : null;
+        $plantillacontent->position_id = $position_id;
+        $plantillacontent->personal_information_id = $request->personal_information_id;
+        $plantillacontent->new_number = $request->new_number;
+        $plantillacontent->old_number = $request->old_number;
+        $plantillacontent->working_time = $request->working_time;
+        $plantillacontent->level = $request->level;
+        $plantillacontent->original_appointment = $request->original_appointment;
+        $plantillacontent->last_promotion = $request->last_promotion;
+        $plantillacontent->appointment_status = $request->appointment_status;
+        $plantillacontent->order_number = $request->order_number;
+        
+        $plantillacontent->save();
+        
         return $plantillacontent;
     }
 

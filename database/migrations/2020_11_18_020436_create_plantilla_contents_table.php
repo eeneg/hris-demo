@@ -44,6 +44,11 @@ class CreatePlantillaContentsTable extends Migration
             $table->string('new_number', 100)->nullable();
             $table->decimal('difference_amount', 8, 2)->nullable();
             $table->string('working_time', 100)->nullable();
+
+            $table->string('level', 100)->nullable();
+            $table->date('original_appointment')->nullable();
+            $table->date('last_promotion')->nullable();
+
             $table->string('appointment_status', 100)->nullable();
             $table->integer('order_number');
             $table->timestamps();

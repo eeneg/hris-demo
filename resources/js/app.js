@@ -16,6 +16,9 @@ import Swal from 'sweetalert2'
 import Gate from './gate'
 import PDFObject from 'pdfobject'
 import datePicker from 'vue-bootstrap-datetimepicker';
+import draggable from 'vuedraggable';
+
+// Components
 
 import Vue from "vue";
 import VueRx from "vue-rx";
@@ -50,6 +53,7 @@ window.Swal = Swal;
 window.Form = Form;
 window.PDFObject = PDFObject;
 window.datePicker = datePicker;
+window.draggable = draggable;
 
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);

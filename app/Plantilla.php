@@ -30,6 +30,10 @@ class Plantilla extends Model
         return $this->belongsTo('App\SalarySchedule', 'salary_schedule_auth_id');
     }
 
+    public function plantilla_depts() {
+        return $this->hasMany('App\PlantillaDept', 'plantilla_id');
+    }
+
     public static function boot(){
         parent::boot();
         self::creating(function($model){

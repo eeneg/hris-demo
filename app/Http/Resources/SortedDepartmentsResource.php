@@ -16,10 +16,10 @@ class SortedDepartmentsResource extends ResourceCollection
     {
         return $this->collection->map(function ($item) {
             return [
-                'id' => $item->position->department->id,
-                'title' => $item->position->department->title,
-                'description' => $item->position->department->description,
-                'address' => $item->position->department->address,
+                'id' => $item->department->id,
+                'title' => $item->department->title,
+                'description' => $item->department->description,
+                'address' => $item->department->address,
             ];
         });
     }

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Department;
+use App\PlantillaDept;
 use App\PlantillaContent;
 use App\Plantilla;
 use App\Setting;
 use App\Http\Resources\SortedDepartmentsResource;
 use App\Http\Resources\DepartmentsAndPositionsResource;
+use App\Http\Resources\DepartmentsResource;
 use App\Position;
 
 class DepartmentController extends Controller
@@ -23,17 +25,24 @@ class DepartmentController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)
-            ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
-            ->groupBy('positions.department_id')
-            ->orderBy('order_number')
-            ->get();
-        return new SortedDepartmentsResource($plantillacontents);
+        // $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)
+        //     ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+        //     ->groupBy('positions.department_id')
+        //     ->orderBy('order_number')
+        //     ->get();
+        $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
+        return new SortedDepartmentsResource($departments);
+    }
+
+    public function complete_depts()
+    {
+        $departments = Department::all();
+        return new DepartmentsResource($departments);
     }
 
     public function fetch_depts()
     {
-        $departments = Department::with('position')->get();
+        $departments = Department::with('positions')->get();
 
         return new DepartmentsAndPositionsResource($departments);
     }

@@ -2,12 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Department extends Model
+class PlantillaDept extends Model
 {
-
     public $incrementing = false;
 
     protected $keyType = 'string';
@@ -15,16 +15,22 @@ class Department extends Model
     protected $primaryKey = 'id';
 
     protected $with = [
-
+        'plantilla', 'department'
     ];
 
     protected $fillable = [
-        'title', 'description', 'address', 'function', 'projectactivity', 'fund'
+        'plantilla_id',
+        'department_id',
+        'footnote',
+        'order_number'
     ];
 
-    public function positions()
-    {
-        return $this->hasMany('App\Position', 'department_id');
+    public function plantilla(){
+        return $this->belongsTo('App\Plantilla', 'plantilla_id');
+    }
+
+    public function department(){
+        return $this->belongsTo('App\Department', 'department_id');
     }
 
     public static function boot(){

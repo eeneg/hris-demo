@@ -8,6 +8,7 @@ use App\Plantilla;
 use App\PlantillaContent;
 use App\SalaryGrade;
 use App\Setting;
+use App\PlantillaDept;
 
 class PlantillaController extends Controller
 {
@@ -42,23 +43,32 @@ class PlantillaController extends Controller
             'salary_schedule_prop_id' => $request['salary_prop']
         ]);
 
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
-        foreach ($plantillacontents as $key => $content) {
-            PlantillaContent::create([
+        $departments = $request['plantilla_depts'];
+        foreach ($departments as $key => $department) {
+            PlantillaDept::create([
                 'plantilla_id' => $newplantilla->id,
-                'salary_grade_auth_id' => $content->salaryproposed->id,
-                'salary_grade_prop_id' => SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id,
-                'position_id' => $content->position->id,
-                'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
-                'old_number' => $content->new_number,
-                'new_number' => $content->new_number,
-                'working_time' => $content->working_time,
-                'appointment_status' => $content->appointment_status,
-                'order_number' => $content->order_number
+                'department_id' => $department['id'],
+                'order_number' => $key
             ]);
         }
+
+        // $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        // $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        // $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
+        // foreach ($plantillacontents as $key => $content) {
+        //     PlantillaContent::create([
+        //         'plantilla_id' => $newplantilla->id,
+        //         'salary_grade_auth_id' => $content->salaryproposed->id,
+        //         'salary_grade_prop_id' => SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id,
+        //         'position_id' => $content->position->id,
+        //         'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
+        //         'old_number' => $content->new_number,
+        //         'new_number' => $content->new_number,
+        //         'working_time' => $content->working_time,
+        //         'appointment_status' => $content->appointment_status,
+        //         'order_number' => $content->order_number
+        //     ]);
+        // }
     }
 
     /**

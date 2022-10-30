@@ -822,14 +822,14 @@
             }, 400),
             goToPlantilla(employee) {
                 let department = '';
-                let newNo = 0;
+                let order_number = 0;
                 _.forEach(employee.plantillacontents, (value) => {
                     if (this.$parent.settings.plantilla.year == value.plantilla.year) {
-                        department = value.position && value.position.department.address;
-                        newNo = value.new_number;
+                        department = value.position && value.position.department;
+                        order_number = value.order_number;
                     }
                 });
-                this.$router.push({name: 'Plantilla', params: {dept: department, newNo: newNo}});
+                this.$router.push({name: 'Plantilla', params: {dept: department, order_number: order_number}});
             },
             editInformationModal(id) {
                 // this.form.id = id;
