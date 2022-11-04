@@ -979,8 +979,26 @@ import CreditsTable from './CreditsTable.vue'
                     this.leave_summary[x].sort = x
                 }
 
-                axios.post('api/leavecredits', {data: this.leave_summary, id: this.selected_employee.id})
-                .then(e => {
+                if(this.leave_summary.length != 0)
+                {
+                    axios.post('api/leavecredits', {data: this.leave_summary, id: this.selected_employee.id})
+                    .then(e => {
+                        this.edited = false
+                        this.validation = true
+                        this.get_leave_info(true)
+                        if(delete_save == false)
+                        {
+                            Swal.close()
+                        }
+                        toast.fire({
+                            icon:'success',
+                            title: 'Saved'
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+                }else{
                     this.edited = false
                     this.validation = true
                     this.get_leave_info(true)
@@ -992,10 +1010,7 @@ import CreditsTable from './CreditsTable.vue'
                         icon:'success',
                         title: 'Saved'
                     })
-                })
-                .catch(e => {
-                    console.log(e)
-                })
+                }
 
             },
 
@@ -1344,7 +1359,7 @@ import CreditsTable from './CreditsTable.vue'
                             axios.delete('api/leavecredits/'+this.leave_summary[index].id)
                             .then(e => {
                                 this.leave_summary.splice(index, 1)
-                                this.$parent.submit_leave(true)
+                                this.submit_leave(true)
                                 this.$Progress.finish()
                                 Swal.close()
                                 toast.fire({
