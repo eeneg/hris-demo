@@ -42,6 +42,7 @@ class CreatePersonalinformationsTable extends Migration
             $table->string('agencynumber', 100)->nullable();
             $table->string('tin', 100)->nullable();
             $table->string('picture', 300)->nullable();
+            $table->date('retirement_date')->nullable();
             $table->string('status', 100)->nullable();
             $table->timestamps();
         });

@@ -43,8 +43,8 @@
                                 </div>
                                 <div class="col-md-4">
                                     Date Hired: <br>
-                                    Retirement Date: {{ calculate_retirement_date(selected_employee.birthdate) }} <button v-if="selected_employee.id !== null"  type="button" @click="retirement_date_modal()" class="btn"><i class="fas fa-edit"></i></button><br>
-                                    Status: <button v-if="selected_employee.id !== null" @click="status_modal()" type="button" class="btn"><i class="fas fa-edit"></i></button>
+                                    Retirement Date: {{ selected_employee.retirement_date }} <button v-if="selected_employee.id !== null"  type="button" @click="retirement_date_modal()" class="btn"><i class="fas fa-edit"></i></button><br>
+                                    Status: {{ selected_employee.status }} <button v-if="selected_employee.id !== null" @click="status_modal()" type="button" class="btn"><i class="fas fa-edit"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -550,9 +550,7 @@
                         <div class="col-md-12 p-2">
                             <label for="leave_type">Status</label>
                             <select v-model.lazy="status" class="form-control" id="leave_type">
-                                <option value="asd">asd</option>
-                                <option value="asd">asd</option>
-                                <option value="asd">asd</option>
+                                <option v-for="status in status_data" :key="status.id" :value="status.status">{{status.status}}</option>
                             </select>
                         </div>
                     </div>
@@ -634,6 +632,7 @@ import CreditsTable from './CreditsTable.vue'
                 awol: {},
                 retirement_date: null,
                 status: null,
+                status_data: []
             }
         },
         components: {
@@ -1101,9 +1100,16 @@ import CreditsTable from './CreditsTable.vue'
                         showConfirmButton: false
                 })
 
-                axios.patch('api/editPersonalInfo', {id: this.selected_employee.id, data: data})
+                axios.patch('api/editPersonalInfo', {id: this.selected_employee.id, data: data, mode: mode})
                 .then(response => {
                     Swal.close()
+                    $('#retirementDate').modal('hide')
+                    $('#statusModal').modal('hide')
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Success'
+                    });
+                    mode == 1 ? this.selected_employee.retirement_date = this.retirement_date : this.selected_employee.status = this.status
                 })
                 .catch(error => {
                     Swal.close()
@@ -1425,11 +1431,24 @@ import CreditsTable from './CreditsTable.vue'
                     }
                 }
             },
+
+            get_status: function()
+            {
+                axios.get('api/status')
+                .then(({data}) => {
+                    this.status_data = data
+                    console.log(this.status_data)
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            }
         },
         mounted() {
             console.log('Component mounted.')
             this.get_employees()
             this.get_leave_types()
+            this.get_status()
         }
     }
 </script>

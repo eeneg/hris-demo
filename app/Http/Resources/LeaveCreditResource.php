@@ -25,10 +25,12 @@ class LeaveCreditResource extends ResourceCollection
 
         return $this->collection->map(function ($item, $key) {
             return [
-                    'id'            => $item->id,
-                    'name'          => $item->fullName,
-                    'civilstatus'   => $item->civilstatus,
-                    'birthdate'     => $item->birthdate,
+                    'id'                => $item->id,
+                    'name'              => $item->fullName,
+                    'civilstatus'       => $item->civilstatus,
+                    'birthdate'         => $item->birthdate,
+                    'retirement_date'   => $item->retirement_date,
+                    'status'            => $item->status
                 ];
         });
     }

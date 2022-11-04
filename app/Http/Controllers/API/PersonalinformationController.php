@@ -225,6 +225,17 @@ class PersonalInformationController extends Controller
         return new EmployeeAppointmentListResource($employees);
     }
 
+    public function editPersonalInfo(Request $request)
+    {
+        $employee = PersonalInformation::find($request->id);
+
+        return  $employee->update([
+                    $request->mode == 1 ? 'retirement_date' : 'status' => $request->data
+                ]);
+
+
+    }
+
 
     /**
      * Remove the specified resource from storage.

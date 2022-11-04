@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:api']], function() {
         'leavecredits'  => 'API\LeaveCreditController',
         'dashboard' => 'API\DashboardController',
         'position' => 'API\PositionController',
+        'status' => 'API\StatusController'
     ]);
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
 
@@ -93,6 +94,8 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('store_position', 'API\DepartmentController@store_position');
     Route::patch('update_position/{id}', 'API\DepartmentController@update_position');
     Route::delete('delete_position/{id}', 'API\DepartmentController@delete_position');
+
+    Route::patch('editPersonalInfo', 'API\PersonalInformationController@editPersonalInfo');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function() {

@@ -129,6 +129,12 @@
                                             <p>Reassignment</p>
                                         </router-link>
                                     </li>
+                                    <li class="nav-item">
+                                        <router-link to="/employee-status" class="nav-link">
+                                            <i class="nav-icon fas fa-user"></i>
+                                            <p>Employee status</p>
+                                        </router-link>
+                                    </li>
                                    @endcan
 								</ul>
                             </li>
