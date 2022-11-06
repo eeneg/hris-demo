@@ -60,9 +60,9 @@ class PlantillaContentController extends Controller
             $position_id = $request->position['id'];
         }
 
-        $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
-            $query->where('id', $department_id);
-        }])->orderBy('order_number', 'desc')->get();
+        $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
+            $query->where('department_id', $department_id);
+        })->orderBy('order_number', 'desc')->get();
 
         if ($contents->count() > 0) {
             if ($contents->first()->order_number >= $request->order_number) {
@@ -168,10 +168,10 @@ class PlantillaContentController extends Controller
             $position_id = $request->position['id'];
         }
 
-        $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
-            $query->where('id', $department_id);
-        }])->orderBy('order_number', 'desc')->get();
-
+        $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
+            $query->where('department_id', $department_id);
+        })->orderBy('order_number', 'desc')->get();
+        
         // Order Number
         $originalOrderNumber = $plantillacontent->order_number;
         $updateOrderNumber = $request->order_number;
