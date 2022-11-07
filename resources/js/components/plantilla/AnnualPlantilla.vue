@@ -578,6 +578,7 @@
                 }, 3000);
             },
             loadContents(e) {
+                this.$Progress.start();
                 axios.post('api/plantilladepartmentcontent', {department: this.selectedDepartment})
                     .then(({data}) => {
                         this.records = data.data;
@@ -613,6 +614,8 @@
                                 }
                             }
                         });
+
+                        this.$Progress.finish();
 
                     })
                     .catch(error => {
