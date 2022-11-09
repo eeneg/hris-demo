@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="generatePlantilla()"><i class="fas fa-print"></i></a>
+                            <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="plantillaReport()"><i class="fas fa-print"></i></a>
                             <!-- <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button> -->
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success ml-2" @click="createPlantillaModal()">Create New Plantilla</button>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="createItemModal()">Create New Item</button>
@@ -529,19 +529,50 @@
                         console.log(error.response.data.message);
                     });
             },
-            generatePlantilla(){
-                axios.post('generatePlantilla')
+            generatePlantilla(type){
+                axios.post('generatePlantilla', {type: type})
                     .then(response => {
                         let options = {
                             height: screen.height * 0.65 + 'px',
                             page: '1'
                         };
                         $('#pdfModal').modal('show');
-                        PDFObject.embed("/storage/plantilla_reports/test.pdf", "#pdf-viewer", options);
+                        PDFObject.embed(response.data.path, "#pdf-viewer", options);
                     })
                     .catch(error => {
                         console.log(error);
                     });
+            },
+            async plantillaReport() {
+                // const inputOptions = new Promise((resolve) => {
+                //     setTimeout(() => {
+                //         resolve({
+                //         'DBM': 'DBM',
+                //         'CSC': 'CSC',
+                //         'Summary': 'Summary'
+                //         })
+                //     }, 1000)
+                // })
+
+                const { value: report } = await Swal.fire({
+                    title: 'Select report',
+                    input: 'radio',
+                    inputOptions: {
+                        'DBM': 'DBM',
+                        'CSC': 'CSC',
+                        'Summary': 'Summary'
+                    },
+                    inputValidator: (value) => {
+                        if (!value) {
+                        return 'You need to choose a format!'
+                        }
+                    }
+                })
+
+                if (report) {
+                    this.generatePlantilla(report);
+                    // wal.fire({ html: `You selected: ${report}` })
+                }
             },
             loadDepartments() {
                 axios.get('api/department')

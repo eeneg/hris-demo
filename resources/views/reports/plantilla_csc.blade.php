@@ -7,9 +7,6 @@
         <title>Laravel</title>
 
         <link href="{{ asset('css/plantilla.css') }}" rel="stylesheet">
-        <style>    
-            
-        </style>
         <style>
             html {
                 font-family: sans-serif;
@@ -2713,73 +2710,7 @@
     <body id="po-body" style="width: 100%">
         
         <footer style="font-size: 12px; color: black; bottom: 0; position: fixed;">
-            <div class="rfq-report" style="width: 100%;">
-              <table style="width: 100%;">
-                <tfoot>
-                  <tr id="table-lines" style="border: solid 1px; table-layout: fixed;">
-                    <td style="width: 117px; border-top: solid 1px; height: 756px;"></td>
-                    <td style="width: 118px; border-top: solid 1px; "></td>
-                    <td style="width: 414px; border-top: solid 1px; "></td>
-                    <td style="width: 414px; border-top: solid 1px; "></td>
-                    <td style="width: 219px; border-top: solid 1px; "></td>
-                    <td style="width: 221px; border-top: solid 1px; "></td>
-                    <td style="width: 219px; border-top: solid 1px; "></td>
-                    <td style="width: 220px; border-top: solid 1px; "></td>
-                    <td style="width: 300px; border-top: solid 1px; "></td>
-                  </tr>
-                <tr style="border: none;">
-                  <td colspan="9" style="height: 60px; bordeR: none;">
-                   
-                  </td>
-                </tr>
-                <tr style="border: solid 1px;">
-                  <td colspan="3" style="font-size: 26px; text-align: left; border: none;">
-                    <p>Prepared by:</p>
-                  </td>
-                  <td colspan="3" style="font-size: 26px; text-align: left; border: none;">
-                    <p>Reviewed by:</p>
-                  </td>
-                  <td colspan="3" style="font-size: 26px; text-align: left; border: none;">
-                    <p>Approved by:</p>
-                  </td>
-                </tr>
-      
-                <!-- Conforme -->
-      
-                <tr>
-                    <div class="qr-code" style="position: absolute;">
-                        <img src="./storage/employee_id_files/blue.png" alt="..." class="img-thumbnail">
-                    </div>
-                  <td colspan="9" style=" border: none; height: 260px;">
-                  </td>
-                </tr>
-                
-                <tr>
-                   
-                    <td colspan="3" style="height: 30px; font-size: 32px; font-weight: 700; text-align: center; border: none;">
-                      RAUL D. RAUT, ENP, JD
-                    </td>
-                    <td colspan="3" style="font-size: 32px; font-weight: 700; text-align: center; border: none;">
-                      DESSAMIE H. BUAT-SANCHEZ, CPA
-                    </td>
-                    <td colspan="3" style="font-size: 32px; font-weight: 700; text-align: center; border: none;">
-                      DOUGLAS RA. CAGAS, LLB, MBA, MNSA
-                    </td>
-                  </tr>
-                <tr>
-                  <td colspan="3" style="font-size: 26px; text-align: center; border: none;">
-                    PGDH-Provincial Human Resource Management Officer
-                  </td>
-                  <td colspan="3" style="font-size: 26px; text-align: center; border: none;">
-                    PGDH-Provincial Budget Officer
-                  </td>
-                  <td colspan="3" style="font-size: 26px; text-align: center; border: none;">
-                    Provincial Governor
-                  </td>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
+            
         </footer>
         <main role="main" style="width: 100%">
             <div class="po-report" style="width: 100%">
@@ -2789,7 +2720,7 @@
                             <th colspan="9" style="border: none; width: 100%;margin-top: 0; margin-bottom: 30px;">
                                 <div class="row mb-2">
                                     <div class="col-sm-12 text-center">
-                                        <h1 style="margin-bottom: 25px; font-size: 40px;">PERSONNEL SCHEDULE</h1>
+                                        <h1 style="margin-bottom: 25px; font-size: 40px;">PERSONNEL SCHEDULE CSC</h1>
                                         
                                     </div>
                                 </div>

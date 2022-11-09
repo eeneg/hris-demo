@@ -53,15 +53,34 @@ class PDFcontroller extends Controller
     }
 
     public function plantilla(Request $request) {
-        $pdf = PDF::loadView('reports/plantilla')
-            ->setPaper([0,0,1275,1950], 'landscape')
-            // ->setOptions([
-            //     'defaultMediaType' => 'screen',
-            //     'dpi' => 112,
-            // ])
-            ;
-        Storage::put('public/plantilla_reports/test.pdf', $pdf->output());
-        return ['title' => 'plantilla_test'];
+        if ($request->type == 'DBM') {
+            $pdf = PDF::loadView('reports/plantilla_dbm')
+                ->setPaper([0,0,1275,1950], 'port')
+                ->setOptions([
+                    'defaultMediaType' => 'screen',
+                    'dpi' => 112,
+                ]); 
+                Storage::put('public/plantilla_reports/dbm.pdf', $pdf->output());
+            return ['path' => '/storage/plantilla_reports/dbm.pdf'];
+        } else if($request->type == 'CSC') {
+            $pdf = PDF::loadView('reports/plantilla_csc')
+                ->setPaper([0,0,1275,1950], 'landscape')
+                ->setOptions([
+                    'defaultMediaType' => 'screen',
+                    'dpi' => 112,
+                ]); 
+            Storage::put('public/plantilla_reports/csc.pdf', $pdf->output());
+            return ['path' => '/storage/plantilla_reports/csc.pdf'];
+        } else {
+            $pdf = PDF::loadView('reports/plantilla_summary')
+                ->setPaper([0,0,952,1456], 'port')
+                ->setOptions([
+                    'defaultMediaType' => 'screen',
+                    'dpi' => 112,
+                ]); 
+            Storage::put('public/plantilla_reports/summary.pdf', $pdf->output());
+            return ['path' => '/storage/plantilla_reports/summary.pdf'];
+        }
     }
 
     public function sr(Request $request) {
