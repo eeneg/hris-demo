@@ -45,7 +45,7 @@
                 width: 560px ;
                 height: 50px;
                 border: solid black 2px;
-                font-size: 1.3rem;
+                font-size: 1.1rem;
                 font-weight: bold;
             }
             .tdata2{
