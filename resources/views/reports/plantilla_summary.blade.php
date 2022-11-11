@@ -20,6 +20,7 @@
 
             }
             .tablemain{
+                width: 100%;
                 padding: 0;
                 margin: 0;
                 border-spacing: 0;
@@ -64,17 +65,25 @@
                 font-size: 1.3rem;
                 padding: 0 10px 0 0;
             }
+            .theadTitle{
+                width: 100%;
+            }
         </style>
     </head>
     <body style="width: 100%">
         <main role="main" style="width: 100% " >
             <div class="divmain" style="width: 100%">
-                <div class="header" style="text-align: center">
-                    <h1 style="font-weight: bold;margin:0">SUMMARY BY OFFICE</h1>
-                    <p style="font-size: 1.6rem;margin:0">{{ $current_year }}</p>
-                </div>
                 <div class="divtable">
                     <table class="tablemain">
+                        <thead class="theadTitle">
+                            <th colspan="4">
+                                <div class="header" style="text-align: center">
+                                    <h1 style="font-weight: bold;margin:0">SUMMARY BY OFFICE</h1>
+                                    <p style="font-size: 1.6rem;font-weight: normal;margin:0 0 20px 0">{{ $current_year }}</p>
+                                </div>
+                            </th>
+
+                        </thead>
                         <thead>
                             <tr class="trow">
                                 <th class="tthead" style="border-right: none; border-top: none; border-left: none;"></th>
@@ -82,6 +91,10 @@
                                 <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">{{ $current_year }} Proposed</th>
                                 <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">inc/dec</th>
                             </tr>
+
+
+                        </thead>
+                        <tbody>
 
                             @foreach ($plantilla_depts as $dept)
                             <tr>
@@ -91,17 +104,13 @@
                                 <td class="tdata2" style="border-top: none;"> {{ $dept->amount->inc_dec }} </td>
                             </tr>
                             @endforeach
-                            
+
                             <tr>
                                 <td class="tdata3" style="border-right: none; border-top: none;"> GRAND TOTAL ----- </td>
                                 <td class="tdata3" style="border-right: none; border-top: none;"> {{ $auth_grand_total }} </td>
                                 <td class="tdata3" style="border-right: none; border-top: none;"> {{ $prop_grand_total }} </td>
                                 <td class="tdata3" style="border-top: none;"> {{ $inc_dec_grand_total }} </td>
                             </tr>
-
-                        </thead>
-                        <tbody>
-
                         </tbody>
                     </table>
                 </div>
