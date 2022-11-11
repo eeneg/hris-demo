@@ -43,7 +43,7 @@
                                                     Action
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" type="button" @click="view_positions(department.positions, department.id)">View Positions</a>
+                                                    <a v-if="department.positions.length > 0" class="dropdown-item" type="button" @click="view_positions(department.positions, department.id)">View Positions</a>
                                                     <a class="dropdown-item" type="button" @click="edit_department_modal(department)">Edit Department</a>
                                                     <a class="dropdown-item" type="button" @click="delete_department(department.id)">Delete Department</a>
                                                 </div>

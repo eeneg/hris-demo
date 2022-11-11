@@ -8,6 +8,10 @@ use App\LeaveSummary;
 use App\PersonalInformation;
 use App\Position;
 use App\SalarySchedule;
+use App\Plantilla;
+use App\PlantillaContent;
+use App\PlantillaDept;
+use App\Setting;
 use \Milon\Barcode\DNS1D;
 use \Milon\Barcode\DNS2D;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -54,6 +58,7 @@ class PDFcontroller extends Controller
 
     public function plantilla(Request $request) {
         if ($request->type == 'DBM') {
+
             $pdf = PDF::loadView('reports/plantilla_dbm')
                 ->setPaper([0,0,1275,1950], 'port')
                 ->setOptions([
@@ -62,7 +67,9 @@ class PDFcontroller extends Controller
                 ]); 
                 Storage::put('public/plantilla_reports/dbm.pdf', $pdf->output());
             return ['path' => '/storage/plantilla_reports/dbm.pdf'];
+
         } else if($request->type == 'CSC') {
+
             $pdf = PDF::loadView('reports/plantilla_csc')
                 ->setPaper([0,0,1275,1950], 'landscape')
                 ->setOptions([
@@ -71,8 +78,50 @@ class PDFcontroller extends Controller
                 ]); 
             Storage::put('public/plantilla_reports/csc.pdf', $pdf->output());
             return ['path' => '/storage/plantilla_reports/csc.pdf'];
+
         } else {
-            $pdf = PDF::loadView('reports/plantilla_summary')
+
+            $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+            $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+            $plantilla_depts = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
+            $prev_plantilla = Plantilla::where('year', '!=', $plantilla->year)->latest('created_at')->first();
+
+            $auth_grand_total = 0;
+            $prop_grand_total = 0;
+            $inc_dec_grand_total = 0;
+            foreach ($plantilla_depts as $key => $dept) {
+                $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($dept) {
+                    $query->where('department_id', $dept->department_id);
+                })->orderBy('order_number', 'desc')->get();
+                $auth_total = 0;
+                $prop_total = 0;
+                foreach ($contents as $key => $content) {
+                    $auth_total = $auth_total + ($content->salaryauthorized != null ? $content->salaryauthorized->amount * 12 : 0);
+                    $prop_total = $prop_total + ($content->salaryproposed != null ? $content->salaryproposed->amount * 12 : 0);
+                }
+                $inc_dec = $prop_total - $auth_total;
+                $amount = new \stdClass();
+                $amount->auth_total = number_format($auth_total, 2, ".", ",");
+                $amount->prop_total = number_format($prop_total, 2, ".", ",");
+                $amount->inc_dec = $inc_dec < 0 ? ('('. number_format(abs($inc_dec), 2, ".", ",") .')') : number_format($inc_dec, 2, ".", ",");
+                $dept->amount = $amount;
+
+                // Totals
+                $auth_grand_total = $auth_grand_total + $auth_total;
+                $prop_grand_total = $prop_grand_total + $prop_total;
+                $inc_dec_grand_total = $inc_dec_grand_total + $inc_dec;
+            }
+
+            $data = [
+                'plantilla_depts' => $plantilla_depts,
+                'current_year' => $plantilla->year,
+                'previous_year' => $prev_plantilla->year,
+                'auth_grand_total' => number_format($auth_grand_total, 2, ".", ","),
+                'prop_grand_total' => number_format($prop_grand_total, 2, ".", ","),
+                'inc_dec_grand_total' => $inc_dec_grand_total < 0 ? ('('. number_format(abs($inc_dec_grand_total), 2, ".", ",") .')') : number_format($inc_dec_grand_total, 2, ".", ",")
+            ];
+
+            $pdf = PDF::loadView('reports/plantilla_summary', $data)
                 ->setPaper([0,0,952,1456], 'port')
                 ->setOptions([
                     'defaultMediaType' => 'screen',
@@ -80,6 +129,7 @@ class PDFcontroller extends Controller
                 ]); 
             Storage::put('public/plantilla_reports/summary.pdf', $pdf->output());
             return ['path' => '/storage/plantilla_reports/summary.pdf'];
+
         }
     }
 
