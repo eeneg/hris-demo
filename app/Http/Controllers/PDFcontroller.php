@@ -71,7 +71,7 @@ class PDFcontroller extends Controller
         } else if($request->type == 'CSC') {
 
             $pdf = PDF::loadView('reports/plantilla_csc')
-                ->setPaper([0,0,1275,1950], 'landscape')
+                ->setPaper([0,0,952,1456], 'landscape')
                 ->setOptions([
                     'defaultMediaType' => 'screen',
                     'dpi' => 112,
