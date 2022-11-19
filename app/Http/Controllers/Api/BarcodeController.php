@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -29,7 +29,7 @@ class BarcodeController extends Controller
     {
         if (!Barcode::where('personal_information_id', $request['id'])->exists()) {
             $employee = PersonalInformation::findOrFail($request['id']);
-        
+
             $code = $this->generateCode();
             while(Barcode::where('value', $code)->exists()){
                 $code = $this->generateCode();
@@ -50,7 +50,7 @@ class BarcodeController extends Controller
     public function generateCode(){
         $code = '';
         for($i = 0; $i < 12; $i++) {
-             $code .= mt_rand(0, 9); 
+             $code .= mt_rand(0, 9);
         }
         return $code;
     }
@@ -72,7 +72,7 @@ class BarcodeController extends Controller
      */
     public function show($id)
     {
-        
+
     }
 
     /**

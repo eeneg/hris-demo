@@ -1,25 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\LeaveType;
+use App\Position;
+use Illuminate\Support\Facades\DB;
 
-class LeaveTypeController extends Controller
+class PositionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return LeaveType::paginate(20);
+
     }
 
-    public function getleavetypes() {
-        return LeaveType::all();
+    public function get_department_positions(Request $request) {
+        $positions = Position::without('department')->where('department_id', $request->department_id)->orderBy('title')->get();
+        $allEmployees = DB::select("SELECT id, CONCAT(COALESCE(`surname`,''), ', ', COALESCE(`firstname`,''), ' ', COALESCE(`nameextension`,''), ' ', COALESCE(`middlename`,'')) AS `name` FROM personal_informations ORDER BY personal_informations.`surname`");
+        $data = [
+            'positions' => $positions,
+            'allEmployees' => $allEmployees
+        ];
+        return $data;
     }
 
     /**
@@ -30,10 +37,7 @@ class LeaveTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'title' => 'unique:leave_types',
-        ]);
-        return LeaveType::create($request->all());
+        //
     }
 
     /**
@@ -56,11 +60,7 @@ class LeaveTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $leavetype = LeaveType::findOrFail($id);
-        $this->validate($request, [
-            'title' => 'unique:leave_types,title,'.$leavetype->id
-        ]);
-        $leavetype->update($request->all());
+        //
     }
 
     /**

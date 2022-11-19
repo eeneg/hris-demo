@@ -1,32 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Position;
-use Illuminate\Support\Facades\DB;
 
-class PositionController extends Controller
+class UserAssignmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        
-    }
-
-    public function get_department_positions(Request $request) {
-        $positions = Position::without('department')->where('department_id', $request->department_id)->orderBy('title')->get();
-        $allEmployees = DB::select("SELECT id, CONCAT(COALESCE(`surname`,''), ', ', COALESCE(`firstname`,''), ' ', COALESCE(`nameextension`,''), ' ', COALESCE(`middlename`,'')) AS `name` FROM personal_informations ORDER BY personal_informations.`surname`");
-        $data = [
-            'positions' => $positions,
-            'allEmployees' => $allEmployees
-        ];
-        return $data;
+        //
     }
 
     /**
