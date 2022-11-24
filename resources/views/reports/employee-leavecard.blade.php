@@ -72,6 +72,9 @@
                                 <tr>
                                     <td style="max-width: 200px;">
                                         @switch($leave_card->period->mode)
+                                            @case(4)
+                                                {{ Carbon\Carbon::parse($leave_card->period->data)->format('F Y') }}
+                                            @break
                                             @case(3)
                                                 @php
                                                     $date = collect($leave_card->period->data)
@@ -88,13 +91,13 @@
                                                 @break
                                             @case(2)
                                                 {{
-                                                    Carbon\Carbon::parse($leave_card->start)->format('F d, Y')
+                                                    Carbon\Carbon::parse($leave_card->period->data->start)->format('F d, Y')
                                                     . ' to ' .
-                                                    Carbon\Carbon::parse($leave_card->end)->format('F d, Y')
+                                                    Carbon\Carbon::parse($leave_card->period->data->end)->format('F d, Y')
                                                 }}
                                                 @break
                                             @default
-                                                {{ Carbon\Carbon::parse($leave_card->data)->format('F d, Y') }}
+                                                {{ Carbon\Carbon::parse($leave_card->period->data)->format('F d, Y') }}
                                         @endswitch
                                     </td>
                                     <td>{{
