@@ -204,6 +204,12 @@
 											<p>Leave Types</p>
 										</router-link>
 									</li>
+                                    <li class="nav-item">
+										<router-link to="/leave-reports" class="nav-link">
+											<i class="fas fa-print nav-icon"></i>
+											<p>Leave Reports</p>
+										</router-link>
+									</li>
 								</ul>
                             </li>
                             @endcannot

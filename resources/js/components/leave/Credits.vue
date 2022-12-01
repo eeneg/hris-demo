@@ -1172,8 +1172,6 @@ import CreditsTable from './CreditsTable.vue'
             {
                 console.log(1)
 
-                if(this.running == false)
-                {
                     let data = this.leave_summary
 
                     let x = index
@@ -1190,8 +1188,6 @@ import CreditsTable from './CreditsTable.vue'
                         this.input_history = null
                     }
 
-                    this.running = true
-                }
             }, 100),
 
 
@@ -1205,7 +1201,6 @@ import CreditsTable from './CreditsTable.vue'
             save_old_value(index, field)
             {
                 console.log(2)
-                this.running = false
                 this.input_history = this.leave_summary[index][field]
             },
 

@@ -81,6 +81,7 @@ const routes = [
     { path: '/leave-applications', component: require('./components/leave/LeaveApplications.vue').default },
     { path: '/leave-form', component: require('./components/leave/LeaveForm.vue').default },
     { path: '/leave-types', component: require('./components/leave/LeaveTypes.vue').default },
+    { path: '/leave-reports', component: require('./components/leave/LeaveReports.vue').default },
     { path: '/employees', component: require('./components/Employees.vue').default },
     { path: '/employees-pds', component: require('./components/employees/Pds-form.vue').default },
     { path: '/employees-pds-view', component: require('./components/employees/EmployeePDS.vue').default },
