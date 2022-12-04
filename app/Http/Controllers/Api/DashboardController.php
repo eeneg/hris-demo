@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Status;
+use App\Setting;
+use App\Plantilla;
+use App\PlantillaContent;
 
-class StatusController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,16 @@ class StatusController extends Controller
      */
     public function index()
     {
-        return Status::orderBy('created_at', 'desc')->get();
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        $vacant_positions = PlantillaContent::where('plantilla_id', $plantilla->id)->whereNull('personal_information_id')->get();
+        $active_employees = PlantillaContent::where('plantilla_id', $plantilla->id)->whereNotNull('personal_information_id')->get();
+        $data = [
+            'vacant_positions' => count($vacant_positions),
+            'active_employees' => count($active_employees)
+        ];
+        return $data;
     }
 
     /**
@@ -26,10 +37,7 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-
-        $request->validate(['status' => 'required'], ['status.required' => 'Field cannot be empty!!']);
-
-        return Status::create($request->all());
+        //
     }
 
     /**
@@ -40,7 +48,7 @@ class StatusController extends Controller
      */
     public function show($id)
     {
-        return Status::find($id);
+        //
     }
 
     /**
@@ -52,9 +60,7 @@ class StatusController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate(['status' => 'required'], ['status.required' => 'Field cannot be empty!!']);
-
-        return Status::find($id)->update($request->all());
+        //
     }
 
     /**
@@ -65,6 +71,6 @@ class StatusController extends Controller
      */
     public function destroy($id)
     {
-        return Status::find($id)->delete();
+        //
     }
 }

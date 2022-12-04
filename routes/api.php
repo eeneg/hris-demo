@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,26 +19,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:api']], function() {
     Route::apiResources([
-        'user' => 'API\UserController',
-        'personalinformation' => 'API\PersonalInformationController',
-        'barcode' => 'API\BarcodeController',
-        'plantilla' => 'API\PlantillaController',
-        'salaryschedule' => 'API\SalaryScheduleController',
-        'salarygrade' => 'API\SalaryGradeController',
-        'setting' => 'API\SettingsController',
-        'department' => 'API\DepartmentController',
-        'appointment' => 'API\AppointmentController',
-        'plantillacontent' => 'API\PlantillaContentController',
-        'abolisheditem' => 'API\AbolishedItemController',
-        'footnote' => 'API\FootnoteController',
-        'leavetype' => 'API\LeaveTypeController',
-        'leaveapplication' => 'API\LeaveApplicationController',
-        'request'   => 'API\RequestController',
-        'reappointments'   => 'API\ReappointmentController',
-        'leavecredits'  => 'API\LeaveCreditController',
-        'dashboard' => 'API\DashboardController',
-        'position' => 'API\PositionController',
-        'status' => 'API\StatusController'
+        'user' => 'Api\UserController',
+        'personalinformation' => 'Api\PersonalInformationController',
+        'barcode' => 'Api\BarcodeController',
+        'plantilla' => 'Api\PlantillaController',
+        'salaryschedule' => 'Api\SalaryScheduleController',
+        'salarygrade' => 'Api\SalaryGradeController',
+        'setting' => 'Api\SettingsController',
+        'department' => 'Api\DepartmentController',
+        'appointment' => 'Api\AppointmentController',
+        'plantillacontent' => 'Api\PlantillaContentController',
+        'abolisheditem' => 'Api\AbolishedItemController',
+        'footnote' => 'Api\FootnoteController',
+        'leavetype' => 'Api\LeaveTypeController',
+        'leaveapplication' => 'Api\LeaveApplicationController',
+        'request'   => 'Api\RequestController',
+        'reappointments'   => 'Api\ReappointmentController',
+        'leavecredits'  => 'Api\LeaveCreditController',
+        'dashboard' => 'Api\DashboardController',
+        'position' => 'Api\PositionController',
+        'status' => 'Api\StatusController'
     ]);
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
 
@@ -52,64 +51,65 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('salaryschedule', 'Api\SalaryScheduleController@store');
     Route::patch('salaryschedule', 'Api\SalaryScheduleController@update');
 
-    Route::post('salarygrade', 'API\SalaryGradeController@store');
-    Route::patch('salarygrade', 'API\SalaryGradeController@update');
-    Route::post('deleteSalaryGrade', 'API\SalaryGradeController@deleteSalaryGrade');
+    Route::post('salarygrade', 'Api\SalaryGradeController@store');
+    Route::patch('salarygrade', 'Api\SalaryGradeController@update');
+    Route::post('deleteSalaryGrade', 'Api\SalaryGradeController@deleteSalaryGrade');
 
     Route::put('plantillacontentabolish', 'Api\PlantillaContentController@plantillacontentabolish');
-    Route::post('plantilladepartmentcontent', 'API\PlantillaContentController@plantilladepartmentcontent');
+    Route::post('plantilladepartmentcontent', 'Api\PlantillaContentController@plantilladepartmentcontent');
 
-    Route::post('previousplantilla', 'API\PlantillaController@previousplantilla');
+    Route::post('previousplantilla', 'Api\PlantillaController@previousplantilla');
 
-    Route::post('forvacants', 'API\PersonalInformationController@forvacants');
-    Route::post('forleave', 'API\PersonalInformationController@forleave');
-    Route::get('edit', 'API\PersonalInformationController@edit');
-    Route::patch('personalinformation', 'API\PersonalInformationController@update');
+    Route::post('forvacants', 'Api\PersonalInformationController@forvacants');
+    Route::post('forleave', 'Api\PersonalInformationController@forleave');
+    Route::get('edit', 'Api\PersonalInformationController@edit');
+    Route::patch('personalinformation', 'Api\PersonalInformationController@update');
 
-    Route::post('footnotespec', 'API\FootnoteController@getfootnote');
+    Route::post('footnotespec', 'Api\FootnoteController@getfootnote');
 
-    Route::get('fetchDepartments', 'API\AppointmentController@fetchDepartments');
-    Route::get('fetchSalarySched', 'API\AppointmentController@fetchSalarySched');
+    Route::get('fetchDepartments', 'Api\AppointmentController@fetchDepartments');
+    Route::get('fetchSalarySched', 'Api\AppointmentController@fetchSalarySched');
 
-    Route::get('getleavetypes', 'API\LeaveTypeController@getleavetypes');
-    Route::get('editLeaveApplication', 'API\LeaveApplicationController@edit');
-    Route::get('load_user', 'API\LeaveApplicationController@loadUserRole');
-    Route::get('getAllLeave', 'API\LeaveApplicationController@getAllLeave');
-    Route::post('searchLeave', 'API\LeaveApplicationController@searchLeave');
-    Route::get('getLeaveBalance', 'API\LeaveApplicationController@getLeaveBalance');
+    Route::get('getleavetypes', 'Api\LeaveTypeController@getleavetypes');
+    Route::get('editLeaveApplication', 'Api\LeaveApplicationController@edit');
+    Route::get('load_user', 'Api\LeaveApplicationController@loadUserRole');
+    Route::get('getAllLeave', 'Api\LeaveApplicationController@getAllLeave');
+    Route::post('searchLeave', 'Api\LeaveApplicationController@searchLeave');
+    Route::get('getLeaveBalance', 'Api\LeaveApplicationController@getLeaveBalance');
+    Route::get('generateLeaveReport', 'Api\LeaveCreditController@generateReport');
 
-    Route::post('acceptEditRequest', 'API\RequestController@acceptEditRequest');
-    Route::post('revertRequest', 'API\RequestController@revertRequest');
-    Route::get('reviewedRequest', 'API\RequestController@reviewedRequest');
+    Route::post('acceptEditRequest', 'Api\RequestController@acceptEditRequest');
+    Route::post('revertRequest', 'Api\RequestController@revertRequest');
+    Route::get('reviewedRequest', 'Api\RequestController@reviewedRequest');
 
-    Route::get('getleavesummary', 'API\LeaveCreditController@getLeaveSummary');
-    Route::post('editleavesummary', 'API\LeaveCreditController@editleavesummary');
-    Route::post('slp_fl_leave', 'API\LeaveCreditController@slp_fl_leave');
+    Route::get('getleavesummary', 'Api\LeaveCreditController@getLeaveSummary');
+    Route::post('editleavesummary', 'Api\LeaveCreditController@editleavesummary');
+    Route::post('slp_fl_leave', 'Api\LeaveCreditController@slp_fl_leave');
 
-    Route::post('checkChanges', 'API\LeaveApplicationController@checkChanges');
+    Route::post('checkChanges', 'Api\LeaveApplicationController@checkChanges');
 
-    Route::get('complete_depts', 'API\DepartmentController@complete_depts');
-    Route::get('fetch_depts', 'API\DepartmentController@fetch_depts');
-    Route::get('fetch_positions', 'API\DepartmentController@fetch_positions');
-    Route::post('store_position', 'API\DepartmentController@store_position');
-    Route::patch('update_position/{id}', 'API\DepartmentController@update_position');
-    Route::delete('delete_position/{id}', 'API\DepartmentController@delete_position');
+    Route::get('complete_depts', 'Api\DepartmentController@complete_depts');
+    Route::get('fetch_depts', 'Api\DepartmentController@fetch_depts');
+    Route::get('fetch_positions', 'Api\DepartmentController@fetch_positions');
+    Route::post('store_position', 'Api\DepartmentController@store_position');
+    Route::patch('update_position/{id}', 'Api\DepartmentController@update_position');
+    Route::delete('delete_position/{id}', 'Api\DepartmentController@delete_position');
 
-    Route::patch('editPersonalInfo', 'API\PersonalInformationController@editPersonalInfo');
+    Route::patch('editPersonalInfo', 'Api\PersonalInformationController@editPersonalInfo');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function() {
     Route::apiResources([
-        'employeepersonalinformation' => 'API\EmployeeController',
+        'employeepersonalinformation' => 'Api\EmployeeController',
     ]);
 
-    Route::get('editemployee', 'API\EmployeeController@edit');
-    Route::get('getpdsEdits', 'API\EmployeeController@getpdsEdits');
-    Route::post('cancelEdits', 'API\EmployeeController@cancelEdits');
+    Route::get('editemployee', 'Api\EmployeeController@edit');
+    Route::get('getpdsEdits', 'Api\EmployeeController@getpdsEdits');
+    Route::post('cancelEdits', 'Api\EmployeeController@cancelEdits');
 });
 
-Route::get('asd1', 'API\RequestController@reviewedRequest');
-Route::get('asd', 'API\RequestController@index');
+Route::get('asd1', 'Api\RequestController@reviewedRequest');
+Route::get('asd', 'Api\RequestController@index');
 
 
 

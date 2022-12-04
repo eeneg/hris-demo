@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -29,7 +29,7 @@ class UserController extends Controller
             } else {
                 $users = User::latest()->paginate(15);
             }
-    
+
             return new UserResource($users);
         // }
     }
@@ -137,7 +137,7 @@ class UserController extends Controller
         if ($request->password) {
             $request->merge(['password' => Hash::make($request->password)]);
         }
-        
+
         $user->update($request->all());
 
         $user_assignment = UserAssignment::where('user_id', $user->id)->first();
