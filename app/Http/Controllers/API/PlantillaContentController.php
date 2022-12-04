@@ -12,6 +12,7 @@ use App\SalaryGrade;
 use App\Department;
 use App\AbolishedItem;
 use App\Http\Resources\PlantillaContentResource;
+use App\Http\Resources\PlantillaEmployeesResource;
 use Illuminate\Support\Facades\DB;
 
 class PlantillaContentController extends Controller
@@ -24,6 +25,18 @@ class PlantillaContentController extends Controller
     public function index()
     {
         
+    }
+
+    public function plantillaEmployees(Request $request) {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontents = PlantillaContent::select('plantilla_contents.*')
+            ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->join('departments', 'positions.department_id', '=', 'departments.id')
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->whereNotNull('personal_information_id')
+            ->get();
+        return new PlantillaEmployeesResource($plantillacontents);
     }
 
     public function plantilladepartmentcontent(Request $request) {
@@ -53,7 +66,7 @@ class PlantillaContentController extends Controller
         if (!isset($request->position['id'])) {
             $position = Position::create([
                 'department_id' => $department_id,
-                'title' => $request->position['title']
+                'title' => $request->position
             ]);
             $position_id = $position->id;
         } else {
