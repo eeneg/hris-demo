@@ -12,7 +12,7 @@ use App\SalaryGrade;
 use App\Department;
 use App\AbolishedItem;
 use App\Http\Resources\PlantillaContentResource;
-use App\Http\Resources\PlantillaEmployeesResource;
+use App\Http\Resources\PlantillaEmployeesNOSIResource;
 use Illuminate\Support\Facades\DB;
 
 class PlantillaContentController extends Controller
@@ -27,16 +27,21 @@ class PlantillaContentController extends Controller
         
     }
 
-    public function plantillaEmployees(Request $request) {
+    public function plantillaForNosi(Request $request) {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $plantillacontents = PlantillaContent::select('plantilla_contents.*')
             ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
             ->join('departments', 'positions.department_id', '=', 'departments.id')
+            // ->join('salary_grades', function ($join) use ($salaryproposed) {
+            //     $join->on('salary_grades.grade', '=', $salaryproposed.grade)
+            //          ->where('salary_grades.step', '=', $salaryproposed.step + 1);
+            // })
+            // ->leftJoin('salary_grades', 'id', '=', '036988f2-eaf9-4e32-84b7-eabfdf0566bb')
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->whereNotNull('personal_information_id')
             ->get();
-        return new PlantillaEmployeesResource($plantillacontents);
+        return new PlantillaEmployeesNOSIResource($plantillacontents);
     }
 
     public function plantilladepartmentcontent(Request $request) {
@@ -66,7 +71,7 @@ class PlantillaContentController extends Controller
         if (!isset($request->position['id'])) {
             $position = Position::create([
                 'department_id' => $department_id,
-                'title' => $request->position
+                'title' => $request->position['title']
             ]);
             $position_id = $position->id;
         } else {
@@ -189,13 +194,13 @@ class PlantillaContentController extends Controller
         $originalOrderNumber = $plantillacontent->order_number;
         $updateOrderNumber = $request->order_number;
         if ($originalOrderNumber > $updateOrderNumber) {
-            PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
-                $query->where('id', $department_id);
-            }])->where('order_number', '>=', $updateOrderNumber)->where('order_number', '<', $originalOrderNumber)->update(['order_number' => DB::raw('order_number+1')]);
+            PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
+                $query->where('department_id', $department_id);
+            })->where('order_number', '>=', $updateOrderNumber)->where('order_number', '<', $originalOrderNumber)->update(['order_number' => DB::raw('order_number+1')]);
         } else if($originalOrderNumber < $updateOrderNumber) {
-            PlantillaContent::where('plantilla_id', $plantilla->id)->with(['position.department' => function ($query) use ($department_id){
-                $query->where('id', $department_id);
-            }])->where('order_number', '<=', $updateOrderNumber)->where('order_number', '>', $originalOrderNumber)->update(['order_number' => DB::raw('order_number-1')]);
+            PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
+                $query->where('department_id', $department_id);
+            })->where('order_number', '<=', $updateOrderNumber)->where('order_number', '>', $originalOrderNumber)->update(['order_number' => DB::raw('order_number-1')]);
         }
         
 

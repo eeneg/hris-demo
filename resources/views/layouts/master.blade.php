@@ -215,10 +215,33 @@
                             @endcannot
                             @can('isAdministratorORAuthor')
 							<li class="nav-item">
-								<router-link to="/reports" class="nav-link">
+                                <a href="" class="nav-link">
 									<i class="nav-icon fas fa-print blue"></i>
-									<p>Reports</p>
-								</router-link>
+									<p>
+										Reports
+										<i class="right fas fa-angle-left"></i>
+									</p>
+								</a>
+								<ul class="nav nav-treeview">
+									<li class="nav-item">
+										<router-link to="/nosi" class="nav-link">
+											<i class="fas fa-file-word nav-icon"></i>
+											<p>NOSI</p>
+										</router-link>
+									</li>
+									<li class="nav-item">
+										<router-link to="/nosa" class="nav-link">
+											<i class="fas fa-file-word nav-icon"></i>
+											<p>NOSA</p>
+										</router-link>
+									</li>
+									<li class="nav-item">
+										<router-link to="/reports" class="nav-link">
+											<i class="fas fa-list nav-icon"></i>
+											<p>Others</p>
+										</router-link>
+									</li>
+								</ul>
 							</li>
 							@endcan
 							@can('isAdministrator')
