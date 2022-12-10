@@ -9,13 +9,13 @@
                     </div>
                     <p style="margin: 0;">Date Approved: <span>{{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.date_approved }}</span> </p>
                     <div class="row mt-2">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <div class="form-group" style="margin-bottom:0;">
                                 <label style="margin: 0;font-weight: normal;line-height:25px;">Select Department</label>
                                 <v-select @input="loadContents($event)" class="form-control form-control-border border-width-2" v-model="selectedDepartment" :getOptionLabel="dept => dept.address" :clearable="false" :options="departments" placeholder="Search Department"></v-select>
                             </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                             <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="plantillaReport()"><i class="fas fa-print"></i></a>
                             <!-- <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button> -->
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success ml-2" @click="createPlantillaModal()">Create New Plantilla</button>
