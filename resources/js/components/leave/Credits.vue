@@ -122,6 +122,9 @@
                                         <th rowspan="2" colspan="1" >
                                             Remarks
                                         </th>
+                                        <th rowspan="2" colspan="1" >
+                                            FT
+                                        </th>
                                         <th rowspan="2" colspan="1" v-if="edit_mode">Action</th>
                                     </tr>
                                     <tr>
@@ -155,7 +158,7 @@
                                                 type="text"
                                                 id="period"
                                                 :value="format_period(leave_summary[index].period)"
-                                                style="border-radius: 0; min-width: 300px;"
+                                                style="border-radius: 0; min-width: 200px;"
                                                 required
                                             >
 
@@ -166,7 +169,7 @@
                                                 v-on:focus="particulars_input(index, false)"
                                                 class="form-control p-0" id="particulars"
                                                 :value="format_particulars(leave_summary[index].particulars)"
-                                                style="border-radius: 0"
+                                                style="border-radius: 0; min-width: 150px;"
                                             >
                                         </td>
                                         <td class='p-0'>
@@ -268,6 +271,15 @@
                                                 id="remarks"
                                                 v-model.lazy="leave_summary[index].remarks"
                                                 style="border-radius: 0; min-width: 200px;"
+                                            >
+                                        </td>
+                                        <td class='p-0 border' style="vertical-align: middle; width: 3px;">
+                                            <input
+                                                type="checkbox"
+                                                :disabled="edit_mode == false"
+                                                class="p-0"
+                                                id="foreign_travel"
+                                                v-model.lazy="leave_summary[index].foreign_travel"
                                             >
                                         </td>
                                         <td class='p-0' v-if="edit_mode">

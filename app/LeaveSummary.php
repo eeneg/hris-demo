@@ -49,6 +49,7 @@ class LeaveSummary extends Model
         'sl_withoutpay',
         'remarks',
         'sort',
+        'foreign_travel'
     ];
 
 

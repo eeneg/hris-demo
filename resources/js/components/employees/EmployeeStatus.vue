@@ -6,6 +6,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h3>Employee Status</h3>
+                            <p>Input Employee Status</p>
                         </div>
                         <div class="col-md-6">
                             <button class="btn btn-primary float-right" @click="status_modal(1, null, false, null)"><i class="fas fa-save"></i> Add Status</button>

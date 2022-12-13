@@ -32,6 +32,7 @@ class CreateLeaveSummariesTable extends Migration
             $table->double('sl_withoutpay')->nullable();
             $table->string('remarks', 500)->nullable();
             $table->integer('sort')->nullable();
+            $table->boolean('foreign_travel')->default(0)->nullable();
             $table->timestamps();
         });
     }

@@ -38,7 +38,8 @@ Route::group(['middleware' => ['auth:api']], function() {
         'leavecredits'  => 'Api\LeaveCreditController',
         'dashboard' => 'Api\DashboardController',
         'position' => 'Api\PositionController',
-        'status' => 'Api\StatusController'
+        'status' => 'Api\StatusController',
+        'leaveReport' => 'Api\LeaveReportController'
     ]);
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
 
@@ -77,7 +78,7 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('getAllLeave', 'Api\LeaveApplicationController@getAllLeave');
     Route::post('searchLeave', 'Api\LeaveApplicationController@searchLeave');
     Route::get('getLeaveBalance', 'Api\LeaveApplicationController@getLeaveBalance');
-    Route::get('generateLeaveReport', 'Api\LeaveCreditController@generateReport');
+    Route::post('generateLeaveReport', 'Api\LeaveReportController@generateReport');
 
     Route::post('acceptEditRequest', 'Api\RequestController@acceptEditRequest');
     Route::post('revertRequest', 'Api\RequestController@revertRequest');

@@ -59,3 +59,7 @@ Route::get('/initializeSystem', 'Helpers@initialize');
 Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
+
+Route::get('/asd/asd', function() {
+    return view('reports.leave_report');
+});
