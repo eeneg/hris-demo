@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\LeaveReport;
 use App\LeaveSummary;
 use App\PersonalInformation;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LeaveReportController extends Controller
 {
@@ -39,19 +41,6 @@ class LeaveReportController extends Controller
      */
     public function store(Request $request)
     {
-        $sg = SalarySchedule::find($request->tranche)->salarygrades->sortBy('created_at');
-        $tranche = SalarySchedule::find($request->tranche)->tranche;
-        $salarysched = collect();
-
-        foreach($sg->sortBy('grade')->groupBy('grade') as $data)
-        {
-            foreach($data as $value)
-            {
-                $value['annual'] = $value->amount * 12;
-            }
-
-            $salarysched->push(($data)->sortBy('step')->values());
-        }
 
         $pdf = PDF::loadView('reports/salary-sched', compact('salarysched', 'tranche'));
 
@@ -110,16 +99,12 @@ class LeaveReportController extends Controller
         $this->validate($request,
         [
             'year' => 'required',
-            'months' => 'required'
+            'month' => 'required'
         ],
         [
             'year.required' => 'Year Required',
-            'months.required' => 'Months Required'
+            'month.required' => 'Months Required'
         ]);
-
-        $ar = [];
-
-
 
         $i = LeaveSummary::
                 where(function ($query) {
@@ -134,21 +119,21 @@ class LeaveReportController extends Controller
                         case 1:
                         case 4:
                             return  Carbon::parse($e->period->data)->format('Y') == $request->year &&
-                                    in_array(Carbon::parse($e->period->data)->format('m'), $request->months);
+                                    Carbon::parse($e->period->data)->format('m') == $request->month;
                             break;
                         case 2:
                             return  Carbon::parse($e->period->data->start)->format('Y') == $request->year &&
-                                    in_array(Carbon::parse($e->period->data->start)->format('m'), $request->months);
+                                    Carbon::parse($e->period->data->start)->format('m') == $request->month;
                             break;
                         case 3:
                             break;
                     }
 
                 })
-                ->map( function($e) use ($ar){
+                ->map( function($e){
 
                     $employee = PersonalInformation::find($e->personal_information_id);
-                    $office = $employee->plantillacontents;
+                    $office = $employee->plantillacontents->first();
 
                     switch($e->period->mode)
                     {
@@ -161,6 +146,8 @@ class LeaveReportController extends Controller
                             $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
                             $date = $e->period->data->start;
                             break;
+                        case 3:
+                            break;
                     }
 
 
@@ -170,16 +157,41 @@ class LeaveReportController extends Controller
                         'type' => $e->particulars->leave_type,
                         'mins' => $mins,
                         'count' => $e->particulars->count,
-                        'office' => $office->first()->new_number
+                        'office' => $office
                     ];
 
                 });
 
+
+
                 foreach($i as $data)
                 {
-                    $ar[$data['employee']][$data['month']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
+                    $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
                 }
 
-                return $ar;
+                // $this->pdfGenerate(['month' => $request->month, 'records' => $ar]);
+
+                $d = ['month' => $request->month, 'records' => $ar];
+
+                $pdf = PDF::loadView('reports/leave_report', compact('d'))
+                        ->setPaper('legal', 'landscape')
+                        ->setOptions([
+                            'defaultMediaType' => 'screen',
+                            'dpi' => 120,
+                        ]);
+
+                Storage::put('public/leave_reports/' . 'asd' .'.pdf', $pdf->output());
+
+                return ['title' => 'asd' . '.pdf'];
+
+    }
+
+    public function pdfGenerate($d)
+    {
+        $pdf = PDF::loadView('reports/leave_report', compact('d'))->setPaper('legal', 'landscape');
+
+        Storage::put('public/leave_reports/' . 'asd' .'.pdf', $pdf->output());
+
+        return ['title' => 'asd' . '.pdf'];
     }
 }

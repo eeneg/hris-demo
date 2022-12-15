@@ -70,76 +70,23 @@
                                 {{ year }}
                             </p>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(1) name="jan" id="jan">
-                                <label class="form-check-label" for="jan">January</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(2) name="feb" id="feb">
-                                <label class="form-check-label" for="feb">February</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(3) name="mar" id="mar">
-                                <label class="form-check-label" for="mar">March</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(4) name="apr" id="apr">
-                                <label class="form-check-label" for="apr">April</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(5) name="may" id="may">
-                                <label class="form-check-label" for="may">May</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(6) name="jun" id="jun">
-                                <label class="form-check-label" for="jun">June</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(7) name="jul" id="jul">
-                                <label class="form-check-label" for="jul">July</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(8) name="aug" id="aug">
-                                <label class="form-check-label" for="aug">August</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(9) name="sept" id="sept">
-                                <label class="form-check-label" for="sept">September</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(10) name="oct" id="oct">
-                                <label class="form-check-label" for="oct">October</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(11) name="nov" id="nov">
-                                <label class="form-check-label" for="nov">November</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check ml-3 mt-3">
-                                <input type="checkbox" class="form-check-input" @change=checked(12) name="dec" id="dec">
-                                <label class="form-check-label" for="dec">December</label>
+                        <div class="col-md-12">
+                            <div class="form-group mt-2">
+                                <label for="month">Month</label>
+                                <select class="form-control" style="width: 100%;" id="month" v-model="form.month">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
@@ -157,6 +104,32 @@
             </div>
         </div>
 
+        <!-- The Modal -->
+        <div class="modal" id="pdfModal">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Report</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body" id="pdf-viewer">
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </template>
 
@@ -169,7 +142,7 @@ import axios from 'axios'
                 reports: [],
                 form: new Form({
                     'year': null,
-                    'months': []
+                    'month': null
                 }),
                 errors: {year: null, months: null}
             }
@@ -194,10 +167,17 @@ import axios from 'axios'
             generateReport: function()
             {
                 axios.post('api/generateLeaveReport', this.form)
-                .then(({data}) => {
-                    data = this.null
+                .then(e => {
+                    // $('#exampleModal').modal('hide')
+                    let options = {
+                        height: screen.height * 0.65 + 'px',
+                        page: '1'
+                    };
+                    $('#pdfModal').modal('show');
+                    PDFObject.embed("/storage/leave_reports/" + e.data.title, "#pdf-viewer", options);
+
                 }).catch(e => {
-                    this.errors = e.response.data.errors
+                    // this.errors = e.response.data.errors
                 })
             },
 
@@ -205,16 +185,6 @@ import axios from 'axios'
             {
                 this.generateReport()
             },
-
-            checked: function(month)
-            {
-                if(!this.form.months.includes(month))
-                {
-                    this.form.months.push(month)
-                }else{
-                    this.form.months = this.form.months.filter(function(e){ return e !== month })
-                }
-            }
         },
 
         mounted() {
