@@ -1,5 +1,9 @@
 <?php
 
+use App\LeaveReport;
+use App\LeaveSummary;
+use App\PersonalInformation;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,6 +64,79 @@ Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
 
+class asd{
+
+}
+
 Route::get('/asd/asd', function() {
-    return view('reports.leave_report');
+
+    $request = new asd;
+    $request->year = 2022;
+    $request->month = '02';
+
+    $ar = [];
+
+    $i = LeaveSummary::
+                where(function ($query) {
+                    $query->orWhere('particulars->leave_type', 'Tardy')
+                    ->orWhere('particulars->leave_type', 'Undertime')
+                    ->orWhere('particulars->leave_type', 'UA');
+                })->where('particulars->count', '<', 10)
+                ->get()
+                ->filter(function($e) use ($request) {
+
+                    switch($e->period->mode){
+                        case 1:
+                        case 4:
+                            return  Carbon::parse($e->period->data)->format('Y') == $request->year &&
+                                    Carbon::parse($e->period->data)->format('m') == $request->month;
+                            break;
+                        case 2:
+                            return  Carbon::parse($e->period->data->start)->format('Y') == $request->year &&
+                                    Carbon::parse($e->period->data->start)->format('m') == $request->month;
+                            break;
+                        case 3:
+                            break;
+                    }
+
+                })
+                ->map( function($e){
+
+                    $employee = PersonalInformation::find($e->personal_information_id);
+                    $office = $employee->plantillacontents->first();
+
+                    switch($e->period->mode)
+                    {
+                        case 1:
+                        case 4:
+                            $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
+                            $date = $e->period->data;
+                            break;
+                        case 2:
+                            $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
+                            $date = $e->period->data->start;
+                            break;
+                        case 3:
+                            break;
+                    }
+
+                    return[
+                        'employee'  => $employee->firstname . ' ' . $employee->surname,
+                        'month' => Carbon::parse($date)->format('m'),
+                        'type' => $e->particulars->leave_type,
+                        'mins' => $mins,
+                        'count' => $e->particulars->count,
+                        'office' => '$office'
+                    ];
+
+                });
+
+                foreach($i as $data)
+                {
+                    $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
+                }
+
+    $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar];
+
+    return view('reports.leave_report', compact('d'));
 });

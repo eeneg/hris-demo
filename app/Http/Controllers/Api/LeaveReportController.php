@@ -20,7 +20,7 @@ class LeaveReportController extends Controller
      */
     public function index()
     {
-        return LeaveReport::paginate(15);
+        return LeaveReport::orderBy('created_at')->paginate(15);
     }
 
     /**
@@ -42,66 +42,14 @@ class LeaveReportController extends Controller
     public function store(Request $request)
     {
 
-        $pdf = PDF::loadView('reports/salary-sched', compact('salarysched', 'tranche'));
-
-        Storage::put('public/salary_sched_report/' . $tranche .'.pdf', $pdf->output());
-
-        return ['title' => $tranche . '.pdf'];
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function generateReport(Request $request)
-    {
         $this->validate($request,
         [
+            'title' => 'required',
             'year' => 'required',
             'month' => 'required'
         ],
         [
+            'title.required' => 'Title Required',
             'year.required' => 'Year Required',
             'month.required' => 'Months Required'
         ]);
@@ -160,38 +108,84 @@ class LeaveReportController extends Controller
                         'office' => $office
                     ];
 
-                });
+        });
 
 
 
-                foreach($i as $data)
-                {
-                    $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
-                }
+        foreach($i as $data)
+        {
+            $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
+        }
 
-                // $this->pdfGenerate(['month' => $request->month, 'records' => $ar]);
+        $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar];
 
-                $d = ['month' => $request->month, 'records' => $ar];
+        $pdf = PDF::loadView('reports/leave_report', compact('d'))
+                ->setPaper('legal', 'landscape')
+                ->setOptions([
+                    'defaultMediaType' => 'screen',
+                    'dpi' => 120,
+                ]);
 
-                $pdf = PDF::loadView('reports/leave_report', compact('d'))
-                        ->setPaper('legal', 'landscape')
-                        ->setOptions([
-                            'defaultMediaType' => 'screen',
-                            'dpi' => 120,
-                        ]);
+        $id = LeaveReport::generateUuid();
 
-                Storage::put('public/leave_reports/' . 'asd' .'.pdf', $pdf->output());
+        $i = LeaveReport::create([
+            'id' => $id,
+            'title' => $request->title,
+            'file_name' => $id . '.pdf',
+            'path' => '/storage/leave_reports/' . $id . '.pdf'
+        ]);
 
-                return ['title' => 'asd' . '.pdf'];
+        Storage::put('public/leave_reports/' . $id .'.pdf', $pdf->output());
+
+        return ['title' => $id . '.pdf'];
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
 
     }
 
-    public function pdfGenerate($d)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        $pdf = PDF::loadView('reports/leave_report', compact('d'))->setPaper('legal', 'landscape');
+        //
+    }
 
-        Storage::put('public/leave_reports/' . 'asd' .'.pdf', $pdf->output());
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
 
-        return ['title' => 'asd' . '.pdf'];
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+
+        Storage::delete('public/leave_reports/' . $id . '.pdf');
+
+        LeaveReport::find($id)->delete();
+
     }
 }

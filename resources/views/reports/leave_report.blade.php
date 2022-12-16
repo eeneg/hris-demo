@@ -49,7 +49,9 @@
                     <td colspan=18 height="28" align="center" valign=middle><b><font size=4 color="#000000">ATTENDANCE REPORT </font></b></td>
                 </tr>
                 <tr>
-                    <td colspan=18 height="20" align="center" valign=middle><b><font color="#000000">March to May 2022</font></b></td>
+                    <td colspan=18 height="20" align="center" valign=middle><b><font color="#000000">
+                        {{ Carbon\Carbon::create()->month($d['month'])->format('F') }} {{ $d['year'] }}</font></b>
+                    </td>
                 </tr>
                 <tr>
                     <td height="20" align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -125,7 +127,7 @@
                     <td style="border: 1px solid #000000;" rowspan=3 height="75" align="center" valign=middle><b><font color="#000000">No.</font></b></td>
                     <td style="border: 1px solid #000000;" rowspan=3 align="center" valign=middle><b><font color="#000000">Name</font></b></td>
                     <td style="border: 1px solid #000000;" rowspan=3 align="center" valign=middle><b><font color="#000000">Office</font></b></td>
-                    <td style="border: 1px solid #000000;" colspan=15  align="center" valign=top bgcolor="#FFB3B5"><b><font color="#000000">MARCH</font></b></td>
+                    <td style="border: 1px solid #000000;" colspan=15  align="center" valign=top bgcolor="#FFB3B5"><b><font color="#000000">{{ Carbon\Carbon::create()->month($d['month'])->format('F') }} </font></b></td>
                 </tr>
                 <tr>
                     <td style="border: 1px solid #000000;" colspan=5 align="center" valign=top bgcolor="#FFB3B5"><b><font color="#000000">Tardiness</font></b></td>
@@ -143,7 +145,6 @@
                     $i = 1;
                 @endphp
                 @foreach ($d['records'] as $key => $data)
-
                     <tr>
                         <td style="border: 1px solid #000000; text-align: center;" height="20" align="left" valign=top>
                             @php
@@ -172,7 +173,6 @@
                            {{ @$data['UA']['count'] }}
                         </td>
                     </tr>
-
                 @endforeach
             </table>
             {{-- <img src="result_htm_bb54089728bbfb65.jpg" width=147 height=147> --}}

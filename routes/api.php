@@ -78,7 +78,6 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::get('getAllLeave', 'Api\LeaveApplicationController@getAllLeave');
     Route::post('searchLeave', 'Api\LeaveApplicationController@searchLeave');
     Route::get('getLeaveBalance', 'Api\LeaveApplicationController@getLeaveBalance');
-    Route::post('generateLeaveReport', 'Api\LeaveReportController@generateReport');
 
     Route::post('acceptEditRequest', 'Api\RequestController@acceptEditRequest');
     Route::post('revertRequest', 'Api\RequestController@revertRequest');

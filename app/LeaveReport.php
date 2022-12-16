@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Webpatser\Uuid\Uuid;
+
 
 class LeaveReport extends Model
 {
@@ -18,15 +20,12 @@ class LeaveReport extends Model
     protected $table = 'leave_reports';
 
     protected $fillable = [
-        'title'
+        'id', 'title', 'file_name', 'path'
     ];
 
 
-    public static function boot(){
-        parent::boot();
-        self::creating(function($model){
-            $model->id = self::generateUuid();
-        });
+    public static function generateUuid(){
+        return Uuid::generate()->string;
     }
 
 
