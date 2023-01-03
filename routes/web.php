@@ -73,6 +73,8 @@ Route::get('/asd/asd', function() {
     $request = new asd;
     $request->year = 2022;
     $request->month = '02';
+    $request->prep = [['name' => 'Gene Rellanos', 'position' => 'Assessment Clerk II']];
+    $request->noted = ['name' => 'Gene Rellanos', 'position' => 'Assessment Clerk II'];
 
     $ar = [];
 
@@ -136,7 +138,7 @@ Route::get('/asd/asd', function() {
                     $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
                 }
 
-    $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar];
+    $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar, 'prep' => $request->prep, 'noted' => $request->noted];
 
     return view('reports.leave_report', compact('d'));
 });

@@ -58,7 +58,7 @@
         </div>
 
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Input Year & Dates</h5>
@@ -108,6 +108,35 @@
                                 {{ months }}
                             </p>
                         </div>
+                        <div class="col-md-12" v-for="(preparedBy, index) in form.preparedBy" :key="preparedBy.id">
+                            <label for="author">Prepared By:</label>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" v-model="preparedBy.name" name="author" id="author" placeholder="Name">
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" v-model="preparedBy.position" name="position" id="position"  placeholder="Position">
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger" @click="destroyPreparedBy(index)"><i class="fas fa-minus"></i></button>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-success" @click="addPreparedBy(index)"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="noted">Noted By:</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="form.notedBy.name" name="noted" id="noted" placeholder="Name">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="form.notedBy.position" name="positionN" id="positionN" placeholder="Position">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -158,7 +187,9 @@ import moment from 'moment'
                 form: new Form({
                     'title': null,
                     'year': null,
-                    'month': null
+                    'month': null,
+                    'preparedBy': [{ name: null, position: null }],
+                    'notedBy': { name: null, position: null }
                 }),
                 errors: {year: null, months: null}
             }
@@ -168,6 +199,21 @@ import moment from 'moment'
 
         },
         methods: {
+
+            destroyPreparedBy: function(index)
+            {
+                if(this.form.preparedBy.length !== 1)
+                {
+                    this.form.preparedBy.splice(index, 1)
+                }else{
+                    this.form.preparedBy[index] = {name: null, position: null}
+                }
+            },
+
+            addPreparedBy: function(index)
+            {
+                this.form.preparedBy.splice(index+1, 0, {name: null, position: null})
+            },
 
             formatDate: function()
             {

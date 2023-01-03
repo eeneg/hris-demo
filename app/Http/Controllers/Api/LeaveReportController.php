@@ -117,7 +117,7 @@ class LeaveReportController extends Controller
             $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
         }
 
-        $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar];
+        $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar, 'prep' => $request->preparedBy, 'noted' => $request->notedBy];
 
         $pdf = PDF::loadView('reports/leave_report', compact('d'))
                 ->setPaper('legal', 'landscape')

@@ -10,9 +10,9 @@
             font-family:"Calibri"; font-size:x-small
         }
 
-        tr, td{
+        /* tr, td{
             border: 1px solid #000000;
-        }
+        } */
 	</style>
 
 </head>
@@ -34,22 +34,26 @@
                 <colgroup span="3" width="64"></colgroup>
                 <colgroup width="68"></colgroup>
                 <tr>
-                    <td colspan=18 height="20" align="center" valign=bottom><font face="Times New Roman" color="#000000">Republic of the Philippines</font></td>
+                    <td colspan="3" rowspan="6" height="21" align="center" valign=bottom><b><font face="Times New Roman" size=3 color="#000000">
+                        @include('reports.leave_report_logo.leave-report-logo')
+                    </td>
+                    <td colspan=10 height="20" align="center" style="text-align: center;" valign=bottom><font face="Times New Roman" color="#000000">Republic of the Philippines</font></td>
                 </tr>
                 <tr>
-                    <td colspan=18 height="21" align="center" valign=bottom><b><font face="Times New Roman" size=3 color="#000000">PROVINCE OF DAVAO DEL SUR</font></b></td>
+                    <td colspan=10 height="21" align="center" valign=bottom><b><font face="Times New Roman" size=3 color="#000000">PROVINCE OF DAVAO DEL SUR</font></b></td>
+                    <td colspan=4 rowspan="5" height="21" align="center" valign=bottom><b><font face="Times New Roman" size=3 color="#000000"></font></b></td>
                 </tr>
                 <tr>
-                    <td colspan=18 height="20" align="center" valign=middle><font face="Times New Roman" color="#000000">Matti, Digos City</font></td>
+                    <td colspan=10 height="20" align="center" valign=middle><font face="Times New Roman" color="#000000">Matti, Digos City</font></td>
                 </tr>
                 <tr>
-                    <td colspan=18 height="25" align="center" valign=bottom><b><font face="Times New Roman" size=4 color="#000000">PROVINCIAL HUMAN RESOURCE MANAGEMENT OFFICE</font></b></td>
+                    <td colspan=10 height="25" align="center" valign=bottom><b><font face="Times New Roman" size=4 color="#000000">PROVINCIAL HUMAN RESOURCE MANAGEMENT OFFICE</font></b></td>
                 </tr>
                 <tr>
-                    <td colspan=18 height="28" align="center" valign=middle><b><font size=4 color="#000000">ATTENDANCE REPORT </font></b></td>
+                    <td colspan=10 height="28" align="center" valign=middle><b><font size=4 color="#000000">ATTENDANCE REPORT </font></b></td>
                 </tr>
                 <tr>
-                    <td colspan=18 height="20" align="center" valign=middle><b><font color="#000000">
+                    <td colspan=10 height="20" align="center" valign=middle><b><font color="#000000">
                         {{ Carbon\Carbon::create()->month($d['month'])->format('F') }} {{ $d['year'] }}</font></b>
                     </td>
                 </tr>
@@ -174,11 +178,126 @@
                         </td>
                     </tr>
                 @endforeach
+                    <tr>
+                        <td style="text-align: center;" height="20" align="left" valign=top>
+
+                        </td>
+                        <td style="" align="left" valign=top>
+                            <font color="#000000">
+                        </td>
+                        <td style="" align="left" valign=top>
+
+                        </td>
+                        <td style="" colspan=3 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=2 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=3 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=2 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=5 align="center" valign=top>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;" align="left" valign=top>
+
+                        </td>
+                        <td style="" align="left" valign=top>
+                            <font color="#000000">
+                                <h2>Prepared By:</h2>
+                        </td>
+                        <td style="" align="left" valign=top>
+
+                        </td>
+                        <td style="" colspan=3 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=2 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=3 valign=top>
+                            <h2>Noted By:</h2>
+                        </td>
+                        <td style="" colspan=2 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=5 align="center" valign=top>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;" height="20" align="left" valign=top>
+
+                        </td>
+                        <td style="" align="left" valign=top>
+                            <font color="#000000">
+                        </td>
+                        <td style="" align="left" valign=top>
+
+                        </td>
+                        <td style="" colspan=3 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=2 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=3 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=2 align="center" valign=top>
+
+                        </td>
+                        <td style="" colspan=5 align="center" valign=top>
+
+                        </td>
+                    </tr>
             </table>
             {{-- <img src="result_htm_bb54089728bbfb65.jpg" width=147 height=147> --}}
             <br clear=left>
+            <div style="display: flex;">
+                @foreach ($d['prep'] as $prep)
+                    <div style="display:inline-block;width:50%">
+                        <div style="display:inline-block;width:10%">
+
+                        </div>
+                        <div style="display:inline-block;width:33%; text-align:center">
+                            <h3 style="font-weight: bold; margin: 0%; padding: 0%">
+                                {{$prep['name']}}
+                            </h3> <br>
+                                {{$prep['position']}}
+                        </div>
+                        <div style="display:inline-block;width:33%">
+
+                        </div>
+                    </div>
+                @endforeach
+
+                <div style="display:inline-block;width:50%">
+                    <div class="">
+                        <div style="display:inline-block;width:50%">
+                            <div style="display:inline-block;width:10%">
+
+                            </div>
+                            <div style="text-align:center; margin: 0%; padding: 0%">
+                                <h3 style="font-weight: bold; margin: 0%; padding: 0%">
+                                    {{$d['noted']['name']}}
+                                </h3> <br>
+                                    {{$d['noted']['position']}}
+                            </div>
+                            <div style="display:inline-block;width:33%">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
-
 </html>
