@@ -60,7 +60,7 @@ class LeaveSummary extends Model
 
     public static function countCustomLeave($data)
     {
-        $leave = collect($data)->filter(fn($leave)=>in_array($leave->leave_type, ['PL', 'FL', 'SPL', 'SP']))
+        $leave = collect($data)
             ->groupBy('leave_type')
             ->map(fn ($leave) => collect($leave)->sum('days'))->toArray();
 

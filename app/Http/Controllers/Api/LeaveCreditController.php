@@ -94,9 +94,38 @@ class LeaveCreditController extends Controller
                             ->get();
 
         $custom_leave = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
+                        ->where(function($query) {
+                            $query->where('particulars->leave_type', 'PL')
+                            ->orWhere('particulars->leave_type', 'FL')
+                            ->orWhere('particulars->leave_type', 'SPL')
+                            ->orWhere('particulars->leave_type', 'SP');
+                        })
                         ->get()
                         ->map(function($data){
+
+                            $year = null;
+
+                            switch($data->period->mode){
+                                case 1:
+                                case 4:
+                                    $year = Carbon::parse($data->period->data)->format('Y');
+                                    break;
+                                case 2:
+                                    $year = Carbon::parse($data->period->data->start)->format('Y');
+                                    break;
+                                case 3:
+                                    $year = Carbon::parse($data->period->data[0]->date)->format('Y');
+                                    break;
+                            }
+
+                            $particulars = $data->particulars;
+
+                            $particulars->leave_type = $data->particulars->leave_type . ' ' . $year;
+
+                            $data->particulars = $particulars;
+
                             return $data->particulars;
+
                         });
 
         $tardy = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
