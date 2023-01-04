@@ -476,7 +476,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Month</th>
-                                        <th scope="col">Tardy & Undertime</th>
+                                        <th scope="col">AWOL and Unauthorized Absence</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -130,18 +130,34 @@ class LeaveCreditController extends Controller
 
         $tardy = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
                         ->whereIn('particulars->leave_type', ['Undertime', 'Tardy'])
-                        ->where('period->mode', 4)
-                        ->whereBetween('period->data', [Carbon::parse(Carbon::now())->submonths(2)->format('Y-m'), Carbon::parse(Carbon::now())->submonth()->format('Y-m')])
                         ->get()
-                        ->map(function($data){
-                            if($data->period->data == Carbon::parse(Carbon::now())->submonths(2)->format('Y-m'))
-                            {
-                                return $data;
-                            }else if($data->period->data == Carbon::parse(Carbon::now())->submonth()->format('Y-m'))
-                            {
-                                return $data;
-                            }else{
+                        ->filter(function($data){
+                            switch($data->period->mode){
+                                case 1:
+                                case 4:
+                                    $year = Carbon::parse($data->period->data)->format('Y');
 
+                                    if($year == Carbon::now()->format('Y')){
+                                        return $data;
+                                    }
+
+                                    break;
+                                case 2:
+                                    $year = Carbon::parse($data->period->data->start)->format('Y');
+
+                                    if($year == Carbon::now()->format('Y')){
+                                        return $data;
+                                    }
+
+                                    break;
+                                case 3:
+                                    $year = Carbon::parse($data->period->data[0]->date)->format('Y');
+
+                                    if($year == Carbon::now()->format('Y')){
+                                        return $data;
+                                    }
+
+                                    break;
                             }
                         });
 
@@ -149,9 +165,32 @@ class LeaveCreditController extends Controller
                         ->where('period->mode', 4)
                         ->get()
                         ->map(function($data, $index){
-                            if(Carbon::parse($data->period->data)->format('Y') == date('Y'))
-                            {
-                                return $data;
+                            switch($data->period->mode){
+                                case 1:
+                                case 4:
+                                    $year = Carbon::parse($data->period->data)->format('Y');
+
+                                    if($year == Carbon::now()->format('Y')){
+                                        return $data;
+                                    }
+
+                                    break;
+                                case 2:
+                                    $year = Carbon::parse($data->period->data->start)->format('Y');
+
+                                    if($year == Carbon::now()->format('Y')){
+                                        return $data;
+                                    }
+
+                                    break;
+                                case 3:
+                                    $year = Carbon::parse($data->period->data[0]->date)->format('Y');
+
+                                    if($year == Carbon::now()->format('Y')){
+                                        return $data;
+                                    }
+
+                                    break;
                             }
                         });
 
