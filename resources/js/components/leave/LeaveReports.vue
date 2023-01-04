@@ -212,7 +212,10 @@ import moment from 'moment'
 
             addPreparedBy: function(index)
             {
-                this.form.preparedBy.splice(index+1, 0, {name: null, position: null})
+                if(this.form.preparedBy.length <= 2)
+                {
+                    this.form.preparedBy.splice(index+1, 0, {name: null, position: null})
+                }
             },
 
             formatDate: function()

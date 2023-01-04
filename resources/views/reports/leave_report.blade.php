@@ -165,7 +165,7 @@
                            {{ @$data['Tardy']['count'] }}
                         </td>
                         <td style="border: 1px solid #000000;" colspan=2 align="center" valign=top>
-                           {{ @$data['Tardy']['mins'] }}
+                           {{ @$data['Tardy']['mins'] }} minutes
                         </td>
                         <td style="border: 1px solid #000000;" colspan=3 align="center" valign=top>
                            {{ @$data['Undertime']['count'] }}
@@ -204,79 +204,80 @@
 
                         </td>
                     </tr>
-                    <tr>
-                        <td style="text-align: center;" align="left" valign=top>
-
-                        </td>
-                        <td style="" align="left" valign=top>
-                            <font color="#000000">
-                                <h2>Prepared By:</h2>
-                        </td>
-                        <td style="" align="left" valign=top>
-
-                        </td>
-                        <td style="" colspan=3 align="center" valign=top>
-
-                        </td>
-                        <td style="" colspan=2 align="center" valign=top>
-
-                        </td>
-                        <td style="" colspan=3 valign=top>
-                            <h2>Noted By:</h2>
-                        </td>
-                        <td style="" colspan=2 align="center" valign=top>
-
-                        </td>
-                        <td style="" colspan=5 align="center" valign=top>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center;" height="20" align="left" valign=top>
-
-                        </td>
-                        <td style="" align="left" valign=top>
-                            <font color="#000000">
-                        </td>
-                        <td style="" align="left" valign=top>
-
-                        </td>
-                        <td style="" colspan=3 align="center" valign=top>
-
-                        </td>
-                        <td style="" colspan=2 align="center" valign=top>
-
-                        </td>
-                        <td style="" colspan=3 align="center" valign=top>
-
-                        </td>
-                        <td style="" colspan=2 align="center" valign=top>
-
-                        </td>
-                        <td style="" colspan=5 align="center" valign=top>
-
-                        </td>
-                    </tr>
             </table>
             {{-- <img src="result_htm_bb54089728bbfb65.jpg" width=147 height=147> --}}
             <br clear=left>
-            <div style="display: flex;">
-                @foreach ($d['prep'] as $prep)
-                    <div style="display:inline-block;width:50%">
-                        <div style="display:inline-block;width:10%">
+            <div style="width: 1215px;">
+                <table style="display:inline-table; width: 604px;">
+                    <thead>
+                         <tr>
+                            <th style="width: 50%"></th>
+                            <th style="width: 30%"></th>
+                            <th style="width: 30%"></th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <tr>
+                             <td>
+                                 <h1>Prepared By:</h1>
+                             </td>
+                             <td></td>
+                         </tr>
+                         @foreach ($d['prep'] as $prep)
+                             <tr>
+                                 <td></td>
+                                 <td style="padding: 0%; text-align: center; height: 50px;">
+                                     <h3 style="margin: 0px; padding: 0%;">{{$prep['name']}}</h3>
+                                     <h4 style="margin: 0%; padding: 0%;"> {{$prep['position']}}</h4>
+                                 </td>
+                                <th></th>
+                             </tr>
+                         @endforeach
+                    </tbody>
+                </table>
+                <table style="display:inline-table; width: 604px;">
+                    <thead>
+                         <tr>
+                            <th style="width: 50%"></th>
+                            <th style="width: 30%"></th>
+                            <th style="width: 30%"></th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <tr>
+                             <td>
+                                 <h1>Prepared By:</h1>
+                             </td>
+                             <td></td>
+                         </tr>
+                        <tr>
+                            <td></td>
+                            <td style="padding: 0%; text-align: center; height: 50px;">
+                                <h3 style="margin: 0px; padding: 0%;">{{$d['noted']['name']}}</h3>
+                                <h4 style="margin: 0%; padding: 0%;">{{$d['noted']['position']}}</h4>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {{-- <div style="display: flex;">
+                <div style="display:inline-block;width:50%">
+                    <div style="display:inline-block;width:10%">
 
-                        </div>
-                        <div style="display:inline-block;width:33%; text-align:center">
-                            <h3 style="font-weight: bold; margin: 0%; padding: 0%">
-                                {{$prep['name']}}
-                            </h3> <br>
-                                {{$prep['position']}}
-                        </div>
-                        <div style="display:inline-block;width:33%">
-
-                        </div>
                     </div>
-                @endforeach
+                    <div style="display:inline-block;width:33%; text-align:center; padding:0%; margin: 0%;">
+                        @foreach ($d['prep'] as $prep)
+                            <h3 style="font-weight: bold; margin-top: 10px; padding: 0%">
+                                {{$prep['name']}} <br>
+                                {{$prep['position']}}
+                            </h3>
+                        @endforeach
+                    </div>
+                    <div style="display:inline-block;width:33%">
+
+                    </div>
+                </div>
 
                 <div style="display:inline-block;width:50%">
                     <div class="">
@@ -286,9 +287,9 @@
                             </div>
                             <div style="text-align:center; margin: 0%; padding: 0%">
                                 <h3 style="font-weight: bold; margin: 0%; padding: 0%">
-                                    {{$d['noted']['name']}}
-                                </h3> <br>
+                                    {{$d['noted']['name']}} <br>
                                     {{$d['noted']['position']}}
+                                </h3>
                             </div>
                             <div style="display:inline-block;width:33%">
 
@@ -296,7 +297,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </body>

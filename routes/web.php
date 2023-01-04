@@ -73,7 +73,11 @@ Route::get('/asd/asd', function() {
     $request = new asd;
     $request->year = 2022;
     $request->month = '02';
-    $request->prep = [['name' => 'Gene Rellanos', 'position' => 'Assessment Clerk II']];
+    $request->prep = [
+        ['name' => 'Gene Rellanos', 'position' => 'Assessment Clerk II'],
+        ['name' => 'Gene Rellanos', 'position' => 'Assessment Clerk II'],
+        ['name' => 'Gene Rellanos', 'position' => 'Assessment Clerk II'],
+    ];
     $request->noted = ['name' => 'Gene Rellanos', 'position' => 'Assessment Clerk II'];
 
     $ar = [];
