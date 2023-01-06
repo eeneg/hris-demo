@@ -14,6 +14,7 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
      */
     public function toArray($request)
     {
+        // return $this->collection->map->toArray($request)->all();
         return $this->collection->map(function ($item) {
             return [
                 'original_appointment' => $item->original_appointment,
@@ -21,6 +22,7 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
                 'position' => $item->position ? $item->position->title : '',
                 'name'  => $item->personalinformation->firstname . ' ' . $item->personalinformation->middlename . ' ' . $item->personalinformation->surname . ' ' . $item->personalinformation->nameextentsion,
                 'salaryproposed' => $item->salaryproposed,
+                'nextStepAmount' => $item->amount
             ];
         });
     }

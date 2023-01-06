@@ -30,17 +30,17 @@ class PlantillaContentController extends Controller
     public function plantillaForNosi(Request $request) {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::select('plantilla_contents.*')
-            ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
-            ->join('departments', 'positions.department_id', '=', 'departments.id')
-            // ->join('salary_grades', function ($join) use ($salaryproposed) {
-            //     $join->on('salary_grades.grade', '=', $salaryproposed.grade)
-            //          ->where('salary_grades.step', '=', $salaryproposed.step + 1);
-            // })
-            // ->leftJoin('salary_grades', 'id', '=', '036988f2-eaf9-4e32-84b7-eabfdf0566bb')
-            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+        $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->leftJoin('salary_grades as salaryproposed', 'plantilla_contents.salary_grade_prop_id', '=', 'salaryproposed.id')
+            ->leftJoin('salary_grades as nextStep', function($join) {
+                $join->on('salaryproposed.salary_sched_id', '=', 'nextStep.salary_sched_id');
+                $join->on('salaryproposed.grade', '=', 'nextStep.grade');
+                $join->on(DB::raw('salaryproposed.step + 1'), '=', 'nextStep.step');
+            })
+            ->select('*')
             ->whereNotNull('personal_information_id')
             ->get();
+
         return new PlantillaEmployeesNOSIResource($plantillacontents);
     }
 
@@ -71,7 +71,7 @@ class PlantillaContentController extends Controller
         if (!isset($request->position['id'])) {
             $position = Position::create([
                 'department_id' => $department_id,
-                'title' => $request->position['title']
+                'title' => isset($request->position['title']) ? $request->position['title'] : $request->position
             ]);
             $position_id = $position->id;
         } else {
@@ -179,7 +179,7 @@ class PlantillaContentController extends Controller
         if (!isset($request->position['id'])) {
             $position = Position::create([
                 'department_id' => $department_id,
-                'title' => $request->position['title']
+                'title' => isset($request->position['title']) ? $request->position['title'] : $request->position
             ]);
             $position_id = $position->id;
         } else {
