@@ -98,7 +98,9 @@ class LeaveCreditController extends Controller
                             $query->where('particulars->leave_type', 'PL')
                             ->orWhere('particulars->leave_type', 'FL')
                             ->orWhere('particulars->leave_type', 'SPL')
-                            ->orWhere('particulars->leave_type', 'SP');
+                            ->orWhere('particulars->leave_type', 'SP')
+                            ->orWhere('particulars->leave_type', 'SOLO')
+                            ->orWhere('particulars->leave_type', 'PL');
                         })
                         ->get()
                         ->map(function($data){
@@ -120,7 +122,7 @@ class LeaveCreditController extends Controller
 
                             $particulars = $data->particulars;
 
-                            $particulars->leave_type = $data->particulars->leave_type . ' ' . $year;
+                            $particulars->year = $year;
 
                             $data->particulars = $particulars;
 
@@ -128,37 +130,40 @@ class LeaveCreditController extends Controller
 
                         });
 
-        $tardy = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
-                        ->whereIn('particulars->leave_type', ['Undertime', 'Tardy'])
+        $tardy = LeaveSummary::where('personal_information_id', $id)
+                        ->whereNotNull('particulars->leave_type')
+                        ->whereIn('particulars->leave_type', ['Undertime', 'Tardy', 'UA', 'AWOL'])
                         ->get()
-                        ->filter(function($data){
+                        ->map(function($data){
+
+                            $year = null;
+                            $month = null;
+
                             switch($data->period->mode){
                                 case 1:
                                 case 4:
                                     $year = Carbon::parse($data->period->data)->format('Y');
-
-                                    if($year == Carbon::now()->format('Y')){
-                                        return $data;
-                                    }
-
+                                    $month = Carbon::parse($data->period->data)->format('F');
                                     break;
                                 case 2:
                                     $year = Carbon::parse($data->period->data->start)->format('Y');
-
-                                    if($year == Carbon::now()->format('Y')){
-                                        return $data;
-                                    }
-
+                                    $month = Carbon::parse($data->period->data->start)->format('F');
                                     break;
                                 case 3:
                                     $year = Carbon::parse($data->period->data[0]->date)->format('Y');
-
-                                    if($year == Carbon::now()->format('Y')){
-                                        return $data;
-                                    }
-
+                                    $month = Carbon::parse($data->period->data[0]->date)->format('F');
                                     break;
                             }
+
+                            $data->year = $year;
+                            $data->month = $month;
+
+                            return [
+                                'month' => $data->month,
+                                'year'  => $data->year,
+                                'type'  => $data->particulars->leave_type,
+                                'count'  => $data->particulars->count
+                            ];
                         });
 
         $awol = LeaveSummary::where('personal_information_id', $id)->whereIn('particulars->leave_type', ['AWOL', 'UA'])

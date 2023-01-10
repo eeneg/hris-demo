@@ -8,7 +8,7 @@
                     <div class="row mt-1">
                         <div class="col-md-6">
                             <h2>Leave Credits</h2>
-                            <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
+                            <small style="margin-left: 2px;">Employee Leave Credit</small>
                         </div>
                     </div>
 
@@ -23,13 +23,12 @@
                         <div class="col-md-7">
                             <div class="float-right" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Scroll <i class="fas fa-arrow-down"></i></button>
-                                <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="view_awol">AWOL/UA <i class="fas fa-calendar"></i></button>
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
                                 <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-3">
                             <div class="row p-0">
                                 <div class="col-md-4">
                                     Name: {{ selected_employee.name }} <br>
@@ -43,10 +42,16 @@
                                 </div>
                                 <div class="col-md-4">
                                     Date Hired: <br>
-                                    Retirement Date: {{ selected_employee.retirement_date }} <button v-if="selected_employee.id !== null"  type="button" @click="retirement_date_modal()" class="btn"><i class="fas fa-edit"></i></button><br>
-                                    Status: {{ selected_employee.status }} <button v-if="selected_employee.id !== null" @click="status_modal()" type="button" class="btn"><i class="fas fa-edit"></i></button>
+                                    Retirement Date: {{ selected_employee.retirement_date }} <button v-if="selected_employee.id !== null"  type="button" @click="retirement_date_modal()" class="btn p-0"><i class="fas fa-edit"></i></button><br>
+                                    Status: {{ selected_employee.status }} <button v-if="selected_employee.id !== null" @click="status_modal()" type="button" class="btn p-0"><i class="fas fa-edit"></i></button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <input type="number" name="year" id="year" placeholder="Input Year" v-model="year" class="form-control">
                         </div>
                     </div>
 
@@ -76,7 +81,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, index) in custom_leave.leave" :key="data.id">
+                                    <tr v-for="(data, index) in custom_leave[year]" :key="data.id">
                                         <td>{{ index }}</td>
                                         <td>{{ data }}</td>
                                     </tr>
@@ -84,17 +89,31 @@
                             </table>
                         </div>
                         <div class="col-md-4 p-2">
-                            <table class="table table-sm table-bordered">
+                            <table class="table table-sm table-bordered" style="display:block; overflow-y: auto; max-height: 120px;">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Month</th>
-                                        <th scope="col">Tardy & Undertime</th>
+                                        <th scope="col" style="width: 40%;">Month</th>
+                                        <th scope="col" style="width: 15%;">Tardy</th>
+                                        <th scope="col" style="width: 15%;">Undertime</th>
+                                        <th scope="col" style="width: 15%;">UA</th>
+                                        <th scope="col" style="width: 15%;">AWOL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, index) in tardy" :key="data.id">
-                                        <td>{{ format_tardy(index) }}</td>
-                                        <td><p class="p-0 m-0" style="display:inline-table" v-for="(tardy, index) in data" :key="tardy.id">{{ index + ' ' + tardy + ', ' }}</p></td>
+                                    <tr v-for="(data, index) in tardy[year]" :key="data.id">
+                                        <td>{{ index }}</td>
+                                        <td>
+                                            {{ data.Tardy }}
+                                        </td>
+                                         <td>
+                                            {{ data.Undertime }}
+                                        </td>
+                                         <td>
+                                            {{ data.UA }}
+                                        </td>
+                                         <td>
+                                            {{ data.AWOL }}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -459,44 +478,6 @@
             </div>
         </div>
 
-        <!-- modal -->
-        <div class="modal fade" id="awolModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">AWOL and UA {{ get_year() }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12 p-2">
-                            <table class="table table-sm table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Month</th>
-                                        <th scope="col">AWOL and Unauthorized Absence</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(data, index) in sortAwol" :key="data.id">
-                                        <td>{{ format_tardy(index) }}</td>
-                                        <td>
-                                            <p class="p-0 m-0" style="display:inline-table" v-for="(value, index) in data" :key="value.id">{{ '&nbsp' + index + ' ' + value + ', ' }}</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-                </div>
-            </div>
-        </div>
 
         <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
@@ -641,10 +622,10 @@ import CreditsTable from './CreditsTable.vue'
                 dates:[],
                 selected: {},
                 options: null,
-                awol: {},
                 retirement_date: null,
                 status: null,
-                status_data: []
+                status_data: [],
+                year: moment().year()
             }
         },
         components: {
@@ -672,9 +653,6 @@ import CreditsTable from './CreditsTable.vue'
             {
                 return this.summary.length
             },
-            sortAwol: function () {
-                return this.awol
-            }
         },
         watch: {
             leave_summary: {
@@ -729,11 +707,6 @@ import CreditsTable from './CreditsTable.vue'
                         end: null,
                     }
                 }
-            },
-
-            view_awol: function()
-            {
-                $('#awolModal').modal('show')
             },
 
             addDate() {
@@ -805,8 +778,6 @@ import CreditsTable from './CreditsTable.vue'
                         showConfirmButton: false
                 })
 
-                console.log(this.selected_employee)
-
                 if(this.selected_employee !== null)
                 {
                     this.$Progress.start()
@@ -826,8 +797,6 @@ import CreditsTable from './CreditsTable.vue'
                         this.dept = data.position.department ?? {}
 
                         this.salary = data.salary ?? {}
-
-                        this.awol = data.awol
 
                         this.$Progress.finish()
 
@@ -890,7 +859,6 @@ import CreditsTable from './CreditsTable.vue'
 
             populate_period: function()
             {
-                console.log(this.index)
 
                 let period = null
 
@@ -1182,7 +1150,6 @@ import CreditsTable from './CreditsTable.vue'
 
             calculate_balance: _.debounce(function(index, field, leave_type)
             {
-                console.log(1)
 
                     let data = this.leave_summary
 
@@ -1205,14 +1172,12 @@ import CreditsTable from './CreditsTable.vue'
 
             press_enter(index, field, leave_type, event)
             {
-                console.log(3)
                 this.calculate_balance(index, field, leave_type)
                 event.target.blur()
             },
 
             save_old_value(index, field)
             {
-                console.log(2)
                 this.input_history = this.leave_summary[index][field]
             },
 
@@ -1444,7 +1409,6 @@ import CreditsTable from './CreditsTable.vue'
                 axios.get('api/status')
                 .then(({data}) => {
                     this.status_data = data
-                    console.log(this.status_data)
                 })
                 .catch(e => {
                     console.log(e)

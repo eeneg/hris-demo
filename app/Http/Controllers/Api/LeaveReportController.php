@@ -51,16 +51,25 @@ class LeaveReportController extends Controller
         [
             'title.required' => 'Title Required',
             'year.required' => 'Year Required',
-            'month.required' => 'Months Required'
+            'month.required' => 'Month Required'
         ]);
 
         $i = LeaveSummary::
                 where(function ($query) {
                     $query->orWhere('particulars->leave_type', 'Tardy')
                     ->orWhere('particulars->leave_type', 'Undertime')
-                    ->orWhere('particulars->leave_type', 'UA');
-                })->where('particulars->count', '<', 10)
+                    ->orWhere('particulars->leave_type', 'UA')
+                    ->orWhere('particulars->leave_type', 'AWOL');
+                })
                 ->get()
+                ->filter(function($e){
+                    if(($e->particulars->leave_type == 'UA' || $e->particulars->leave_type == 'AWOL') && $e->particulars->count >= 2){
+                        // dd($e);
+                        return $e;
+                    }else if(($e->particulars->leave_type == 'Tardy' || $e->particulars->leave_type == 'Undertime') && $e->particulars->count >= 10){
+                        return $e;
+                    }
+                })
                 ->filter(function($e) use ($request) {
 
                     switch($e->period->mode){
@@ -74,6 +83,8 @@ class LeaveReportController extends Controller
                                     Carbon::parse($e->period->data->start)->format('m') == $request->month;
                             break;
                         case 3:
+                            return  Carbon::parse($e->period->data[0]->date)->format('Y') == $request->year &&
+                                    Carbon::parse($e->period->data[0]->date)->format('m') == $request->month;
                             break;
                     }
 
@@ -95,6 +106,8 @@ class LeaveReportController extends Controller
                             $date = $e->period->data->start;
                             break;
                         case 3:
+                            $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
+                            $date = $e->period->data[0]->date;
                             break;
                     }
 
@@ -110,34 +123,38 @@ class LeaveReportController extends Controller
 
         });
 
-
-
-        foreach($i as $data)
+        if(count($i) > 0)
         {
-            $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
+            foreach($i as $data)
+            {
+                $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
+            }
+
+            $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar, 'prep' => $request->preparedBy, 'noted' => $request->notedBy];
+
+            $pdf = PDF::loadView('reports/leave_report', compact('d'))
+                    ->setPaper('legal', 'landscape')
+                    ->setOptions([
+                        'defaultMediaType' => 'screen',
+                        'dpi' => 120,
+                    ]);
+
+            $id = LeaveReport::generateUuid();
+
+            $i = LeaveReport::create([
+                'id' => $id,
+                'title' => $request->title,
+                'file_name' => $id . '.pdf',
+                'path' => '/storage/leave_reports/' . $id . '.pdf'
+            ]);
+
+            Storage::put('public/leave_reports/' . $id .'.pdf', $pdf->output());
+
+            return ['title' => $id . '.pdf'];
+        }else{
+            return abort(401, 'Empty Record');
         }
 
-        $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar, 'prep' => $request->preparedBy, 'noted' => $request->notedBy];
-
-        $pdf = PDF::loadView('reports/leave_report', compact('d'))
-                ->setPaper('legal', 'landscape')
-                ->setOptions([
-                    'defaultMediaType' => 'screen',
-                    'dpi' => 120,
-                ]);
-
-        $id = LeaveReport::generateUuid();
-
-        $i = LeaveReport::create([
-            'id' => $id,
-            'title' => $request->title,
-            'file_name' => $id . '.pdf',
-            'path' => '/storage/leave_reports/' . $id . '.pdf'
-        ]);
-
-        Storage::put('public/leave_reports/' . $id .'.pdf', $pdf->output());
-
-        return ['title' => $id . '.pdf'];
     }
 
     /**

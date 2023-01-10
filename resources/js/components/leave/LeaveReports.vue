@@ -47,11 +47,11 @@
                 </div>
 
                <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <!-- <pagination size="default" :data="reports" :limit="5">
+                    <pagination size="default" :data="reports" @pagination-change-page="paginate" :limit="5">
                         <span slot="prev-nav">&lt; Previous</span>
 	                    <span slot="next-nav">Next &gt;</span>
                     </pagination>
-                    <span style="margin-left: 10px;">Showing {{ reports.meta && reports.meta.from | validateCount }} to {{ reports.meta && reports.meta.to | validateCount }} of {{ reports.meta && reports.meta.total }} records</span> -->
+                    <span style="margin-left: 10px;">Showing {{ reports.from }} to {{ reports.to }} of {{ reports.total }} records</span>
                 </div>
 
             </div>
@@ -71,7 +71,7 @@
                         <div class="col-md-12">
                             <label for="title">Report Title</label>
                             <input type="title" class="form-control" v-model="form.title" name="title" id="title" placeholder="Input Title">
-                            <p class="text-danger" v-for="title in errors.yetitlear" :key="title.id">
+                            <p class="text-danger" v-for="title in errors.title" :key="title.id">
                                 {{ title }}
                             </p>
                         </div>
@@ -104,8 +104,8 @@
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
-                            <p class="text-danger" v-for="months in errors.months" :key="months.id">
-                                {{ months }}
+                            <p class="text-danger" v-for="month in errors.month" :key="month.id">
+                                {{ month }}
                             </p>
                         </div>
                         <div class="col-md-12" v-for="(preparedBy, index) in form.preparedBy" :key="preparedBy.id">
@@ -183,7 +183,7 @@ import moment from 'moment'
     export default{
         data() {
             return{
-                reports: [],
+                reports: {},
                 form: new Form({
                     'title': null,
                     'year': null,
@@ -238,9 +238,27 @@ import moment from 'moment'
                 axios.get('api/leaveReport')
                 .then(({data}) => {
                     this.reports = data
-                }).catch(e => {
-
+                }).catch(error => {
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong',
+                        'error'
+                    )
                 })
+            },
+
+            paginate(page = 1){
+                axios.get('api/leaveReport?page=' + page)
+                .then(({data}) => {
+                    this.reports = data
+                }).catch(error => {
+                    console.log(error.reponse.data.message);
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong',
+                        'error'
+                    )
+                });
             },
 
             generateReport: function()
@@ -256,6 +274,11 @@ import moment from 'moment'
                     PDFObject.embed("/storage/leave_reports/" + e.data.title, "#pdf-viewer", options);
                     this.getReports()
                 }).catch(e => {
+                    Swal.fire(
+                        'Failed!!',
+                        e.response.data.message,
+                        'warning'
+                    )
                     this.errors = e.response.data.errors
                 })
             },
@@ -272,8 +295,8 @@ import moment from 'moment'
                 })
                 .catch(e => {
                     Swal.fire(
-                        'failed',
-                        'Failed',
+                        'Failed!!',
+                        'Something went wrong!',
                         'warning'
                     )
                     console.log(e)

@@ -61,17 +61,27 @@ class LeaveSummary extends Model
     public static function countCustomLeave($data)
     {
         $leave = collect($data)
-            ->groupBy('leave_type')
-            ->map(fn ($leave) => collect($leave)->sum('days'))->toArray();
+            ->groupBy('year')
+            ->map(function($leave){
+                return $leave->groupBy('leave_type')->map(function($data){
+                    return collect($data)->sum('days');
+                });
+            })
+            ->toArray();
 
-        return ['leave' => $leave];
+        return $leave;
     }
 
     public static function violationCounter($tardy)
     {
-        $count = collect($tardy)->groupBy('period.data')->map(function($data, $index){
-            return collect($data)->groupBy('particulars.leave_type')
-                    ->map(fn ($leave) => collect($leave)->sum('particulars.count'));
+        $count = collect($tardy)
+            ->groupBy('year')
+            ->map(function($leave){
+                return $leave->groupBy('month')->map(function($data){
+                    return $data->groupBy('type')->map(function($value){
+                        return collect($value)->sum('count');
+                    });
+                });
             })->toArray();
 
         ksort($count);
