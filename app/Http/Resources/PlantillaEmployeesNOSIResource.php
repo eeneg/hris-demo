@@ -18,6 +18,7 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
         return $this->collection->map(function ($item) {
             return [
                 'original_appointment' => $item->original_appointment,
+                'last_promotion' => $item->last_promotion,
                 'office' => $item->position->department->address,
                 'position' => $item->position ? $item->position->title : '',
                 'name'  => $item->personalinformation->firstname . ' ' . $item->personalinformation->middlename . ' ' . $item->personalinformation->surname . ' ' . $item->personalinformation->nameextentsion,

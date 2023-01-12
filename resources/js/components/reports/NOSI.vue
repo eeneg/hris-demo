@@ -15,33 +15,56 @@
                                 <label style="font-weight: bold; margin: 0;">Select Employee</label>
                                 <v-select class="form-control form-control-border border-width-2" v-model="employee" :options="plantilla_content" :getOptionLabel="employee => employee.name"></v-select>
                             </div>
-                            <div class="row">
+                            <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Date of last promotion / original appointment: <b class="text-primary">{{ employee.last_promotion ? employee.last_promotion : employee.original_appointment }}</b></span>
+                            <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">{{ employee.office }}</span>
+                            <div class="row mt-2 mb-1">
                                 <div class="col-md-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label style="font-weight: bold; margin: 0;">Print Date</label>
+                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Today's date (editable)</span>
                                         <input class="form-control form-control-border border-width-2" type="date" v-model="date_printed">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label style="font-weight: bold; margin: 0;">Date of Increment</label>
-                                        <input class="form-control form-control-border border-width-2" type="date" v-model="date_increment">
+                                        <label class="m-0" style="font-weight: normal;"><b>Date </b>(Last day of current step)</label>
+                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Based on date of original appointment / last promotion</span>
+                                        <input class="form-control form-control-border border-width-2" type="date" v-model="date_of_appointment">
                                     </div>
                                 </div>
                             </div>
-                            <button @click="print_report()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
-                            <!-- <hr>
+                            <button @click="print_report()" class="btn btn-primary btn-block"><i class="fas fa-print"></i> Print Report</button>
+                            <hr class="mt-5 mb-5">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label style="font-weight: bold; margin: 0;">NOSI Lookup</label>
-                                    <form class="form-inline">
+                                    <form class="form-inline" @submit.prevent="lookup()">
                                         <input class="form-control form-control-border border-width-2 mr-2" type="number" v-model="nosi_year">
-                                        <button type="button" class="btn btn-success" @click="lookup()">View</button>
+                                        <button type="submit" class="btn btn-success">View</button>
+                                        <button type="button" class="btn btn-primary ml-2" :disabled="lookup_data.length == 0" @click="print_report()"><i class="fas fa-print"></i> Print All</button>
                                     </form>
+                                    <span class="text-primary d-block" style="font-size: 0.8rem;font-weight: bold;">Lookup results: {{ lookup_data.length }} records</span>
                                 </div>
-                            </div> -->
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <div class="card-body table-responsive p-0" style="height: 450px;">
+                                        <table class="table table-striped text-nowrap custom-table">
+                                            <tbody>
+                                                <tr v-for="data in lookup_data" :key="data.id">
+                                                    <td>
+                                                        <b>{{ data.name }}</b> (SG {{ data.salaryproposed.grade + '-' + data.salaryproposed.step }})
+                                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Date of last promotion / original appointment: <b class="text-primary">{{ data.last_promotion ? data.last_promotion : data.original_appointment }}</b></span>
+                                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">{{ data.office }}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6" id="nosi_div" style="border: 1px solid #dfdfdf">
+                        <div class="col-md-6 nosi_div" style="border: 1px solid #dfdfdf; page-break-after: always;">
                             <div class="row mt-3 mb-2">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
@@ -51,32 +74,32 @@
                                 </div>
                             </div>
                             <div class="row mt-5">
-                                <div class="col-8 mt-3">
+                                <div class="col-9 mt-3">
                                     <h5 class="m-0">{{ employee.name }}</h5>
                                     <h5 class="m-0">{{ employee.position }}</h5>
                                     <h5 class="m-0">{{ employee.office }}</h5>
                                     <h5 class="m-0">Province of Davao del Sur</h5>
                                     <h5 class="mt-4">Sir/Madam:</h5>
                                 </div>
-                                <div class="col-4 text-right">
+                                <div class="col-3 text-right">
                                     <h5><u>{{ date_printed | myDate }}</u></h5>
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-12 text-justify">
                                     <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ date_increment | myDate }}</u>.
+                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>.
                                     </h5>
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-8">
                                     <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ date_previous | myDate }}</u></h5>
+                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ date_of_appointment | myDate }}</u></h5>
                                     <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
                                     <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
                                     <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ date_increment | myDate }}</u></h5>
+                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ date_of_effectivity | myDate }}</u></h5>
                                 </div>
                                 <div class="col-3 text-right">
                                     <h5 class="m-0" style="color: white;">.</h5>
@@ -119,6 +142,88 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Report -->
+                    <div class="row" style="visibility: hidden;">
+                        <div v-for="employee in lookup_data" :key="employee.id" class="col-md-6 nosi_div" style="border: 1px solid #dfdfdf; page-break-after: always; overflow:hidden;">
+                            <div class="row mt-3 mb-2">
+                                <div class="col-12 text-center">
+                                    <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
+                                    <h5 class="m-0">Matti, Digos City</h5>
+                                    <h4 class="m-0">OFFICE OF THE GOVERNOR</h4>
+                                    <h4 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-9 mt-3">
+                                    <h5 class="m-0">{{ employee.name }}</h5>
+                                    <h5 class="m-0">{{ employee.position }}</h5>
+                                    <h5 class="m-0">{{ employee.office }}</h5>
+                                    <h5 class="m-0">Province of Davao del Sur</h5>
+                                    <h5 class="mt-4">Sir/Madam:</h5>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <h5><u>{{ date_printed | myDate }}</u></h5>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12 text-justify">
+                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>.
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-8">
+                                    <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
+                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ date_of_appointment | myDate }}</u></h5>
+                                    <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
+                                    <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
+                                    <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
+                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ date_of_effectivity | myDate }}</u></h5>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <h5 class="m-0" style="color: white;">.</h5>
+                                    <h5 class="m-0">
+                                        <u v-if="employee.salaryproposed">{{ employee.salaryproposed.amount | amount }}</u>
+                                    </h5>
+                                    <h5 class="m-0" style="color: white;">.</h5>
+                                    <h5 class="m-0" style="color: white;">.</h5>
+                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
+                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>{{ employee.nextStepAmount | amount }}</u></h5>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row mt-4 mb-5">
+                                <div class="col-12 text-justify">
+                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                        The step increment/s is/are subject to review and Post Audit by the Department of Budget and Management and Subject to re-adjustment and refund if found not in order.
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-5">
+                                <div class="col-6"></div>
+                                <div class="col-6 mt-5">
+                                    <h5 class="m-0">Very truly yours,</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-6"></div>
+                                <div class="col-6 text-center mt-5">
+                                    <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
+                                    <h5 class="m-0">Provincial Governor</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-3">
+                                <div class="col-12">
+                                    <h5 class="m-0">Copy Furnished</h5>
+                                    <h5 class="m-0">- GSIS</h5>
+                                    <h5 class="m-0">- Office Concerned</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -128,10 +233,10 @@
 <style type="text/css">
     @media print {
         body * { visibility: hidden; }
-        #nosi_div * { visibility: visible; }
-        #nosi_div { position: absolute; top: 5px; left: 0; max-width: 100%; flex: unset;}
-        #nosi_div h4 { font-size: 1.5rem }
-        #nosi_div h5 { font-size: 1.275rem }
+        .nosi_div * { visibility: visible; }
+        .nosi_div { position: absolute; top: 5px; left: 0; max-width: 100%; flex: unset;}
+        .nosi_div h4 { font-size: 1.5rem }
+        .nosi_div h5 { font-size: 1.275rem }
     }
 </style>
 
@@ -140,17 +245,19 @@
         data() {
             return {
                 date_printed: moment(new Date()).format('YYYY-MM-DD'),
-                date_increment: moment(new Date()).format('YYYY-MM-DD'),
-                date_previous: moment(this.date_increment).subtract(1, "days"),
+                date_of_appointment: moment(new Date()).format('YYYY-MM-DD'),
+                date_of_effectivity: moment(this.date_of_appointment).add(1, "days"),
                 employee: {},
                 plantilla_content: [],
                 // nosi_year: moment(new Date()).add('1', 'year').format('YYYY')
-                nosi_year: moment(new Date()).format('YYYY')
+                nosi_year: moment(new Date()).format('YYYY'),
+                lookup_data: []
             }
         },
         watch: {
-            date_increment(newData) {
-                this.date_previous = moment(newData).subtract(1, "days")
+            employee(newData) {
+                this.date_of_appointment = newData.last_promotion ? moment(newData.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(newData.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
+                this.date_of_effectivity = moment(this.date_of_appointment).add(1, "days")
             }
         },
         methods: {
@@ -158,26 +265,49 @@
                 window.print()
             },
             fetch_employees() {
+                this.$Progress.start()
                 axios.get('api/plantillaForNosi')
                     .then(({data}) => {
                         this.plantilla_content = data.data;
-                        this.employee = data.data[0];
+                        var first_employee = data.data[0];
+                        this.employee = first_employee;
+                        this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
+                    })
+                    .finally(() => {
+                        this.$Progress.finish()
                     });
             },
             lookup() {
-
+                this.lookup_data = []
+                this.plantilla_content.forEach(content => {
+                    if (content.last_promotion && content.salaryproposed) {
+                        if (this.nosi_year > moment(content.last_promotion).format('YYYY')) {
+                            var divisible = (this.nosi_year - moment(content.last_promotion).format('YYYY')) % 3 == 0;
+                            var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.last_promotion).format('YYYY')) / 3);
+                            if (included && divisible) {
+                                this.lookup_data.push(content)
+                            }
+                        }
+                    } else if (content.original_appointment && content.salaryproposed) {
+                        if (this.nosi_year > moment(content.original_appointment).format('YYYY')) {
+                            var divisible = (this.nosi_year - moment(content.original_appointment).format('YYYY')) % 3 == 0;
+                            var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.original_appointment).format('YYYY')) / 3);
+                            if (included && divisible) {
+                                this.lookup_data.push(content)
+                            }
+                        }
+                    }
+                });
             }
         },
         mounted() {
             // console.log('Component mounted.')
         },
         created() {
-            this.$Progress.start()
             this.fetch_employees()
-            this.$Progress.finish()
         }
     }
 </script>
