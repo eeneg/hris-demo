@@ -88,7 +88,7 @@
                     <span class="handle ui-sortable-handle">
                       <i class="fas fa-bullhorn"></i>
                     </span>
-                    <span class="text">Walay Duty Next Week!</span>
+                    <span class="text">Monday Convocation will be held at Capitol Lobby.</span>
                     <!-- Emphasis label -->
                     <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
                   </li>
@@ -97,7 +97,7 @@
                     <span class="handle ui-sortable-handle">
                       <i class="fas fa-bullhorn"></i>
                     </span>
-                    <span class="text">Walay Duty Next Week!</span>
+                    <span class="text">Your announcement here!</span>
                     <!-- Emphasis label -->
                     <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
                   </li>
@@ -106,7 +106,7 @@
                     <span class="handle ui-sortable-handle">
                       <i class="fas fa-bullhorn"></i>
                     </span>
-                    <span class="text">Walay Duty Next Week!</span>
+                    <span class="text">Your announcement here!</span>
                     <!-- Emphasis label -->
                     <small class="badge badge-warning"><i class="far fa-clock"></i> 2 mins</small>
                   </li>
@@ -115,7 +115,7 @@
                     <span class="handle ui-sortable-handle">
                       <i class="fas fa-bullhorn"></i>
                     </span>
-                    <span class="text">Walay Duty Next Week!</span>
+                    <span class="text">Your announcement here!</span>
                     <!-- Emphasis label -->
                     <small class="badge badge-primary"><i class="far fa-clock"></i> 2 mins</small>
                   </li>
@@ -124,7 +124,7 @@
                     <span class="handle ui-sortable-handle">
                       <i class="fas fa-bullhorn"></i>
                     </span>
-                    <span class="text">Walay Duty Next Week!</span>
+                    <span class="text">Your announcement here!</span>
                     <!-- Emphasis label -->
                     <small class="badge badge-success"><i class="far fa-clock"></i> 2 mins</small>
                   </li>
@@ -207,7 +207,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                        <td><a href="pages/examples/invoice.html">Gene Gwapo</a></td>
+                        <td><a href="pages/examples/invoice.html">Vanessa Rellanos</a></td>
                         <td>Updated his plantilla</td>
                         <td style="text-align: right;"><span class="badge badge-success">04/20/21</span></td>
                         
@@ -225,14 +225,14 @@
                         
                         </tr>
                         <tr>
-                        <td><a href="pages/examples/invoice.html">Magic Sarap</a></td>
+                        <td><a href="pages/examples/invoice.html">Magic Johnson</a></td>
                         <td>Applied for leave</td>
                         <td style="text-align: right;"><span class="badge badge-info">Processing</span></td>
                         
                         </tr>
                         
                         <tr>
-                        <td><a href="pages/examples/invoice.html">Jayson Cags</a></td>
+                        <td><a href="pages/examples/invoice.html">Jayson Castro</a></td>
                         <td>Salary grade increase</td>
                         <td style="text-align: right;"><span class="badge badge-danger">06/11/21</span></td>
                         
@@ -274,53 +274,53 @@
                     <div class="col-md-12" style="display: flex; flex-wrap: wrap;"> 
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Edwin Rojo Jr.</a>
-                        <span class="users-list-date" style="line-height: 1;"><i> Jail Warden 1 </i></span>
-                        <span class="users-list-date">PWO</span>
+                        <a class="users-list-name" href="#">John Doe</a>
+                        <span class="users-list-date" style="line-height: 1;"><i> Security Officer I </i></span>
+                        <span class="users-list-date">PCSMO</span>
                       </div>
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Gene Gwapo</a>
+                        <a class="users-list-name" href="#">Luca Doncic</a>
                         <span class="users-list-date" style="line-height: 1;"><i> Executive Officer I </i></span>
                         <span class="users-list-date">PGO-Executive</span>
                       </div>
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Edwin Rojo Jr.</a>
-                        <span class="users-list-date" style="line-height: 1;"><i> Jail Warden 1 </i></span>
-                        <span class="users-list-date">PWO</span>
+                        <a class="users-list-name" href="#">Kyrie Irving</a>
+                        <span class="users-list-date" style="line-height: 1;"><i> Administrative Aide VI </i></span>
+                        <span class="users-list-date">PTO</span>
                       </div>
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Edwin Rojo Jr.</a>
-                        <span class="users-list-date" style="line-height: 1;"><i> Jail Warden 1 </i></span>
-                        <span class="users-list-date">PWO</span>
+                        <a class="users-list-name" href="#">James Harden</a>
+                        <span class="users-list-date" style="line-height: 1;"><i> Computer Programmer I </i></span>
+                        <span class="users-list-date">PPDO</span>
                       </div>
                     </div>
                     <div class="col-md-12" style="display: flex; flex-wrap: wrap;"> 
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Edwin Rojo Jr.</a>
-                        <span class="users-list-date" style="line-height: 1;"><i> Jail Warden 1 </i></span>
-                        <span class="users-list-date">PWO</span>
+                        <a class="users-list-name" href="#">Kevin Durant</a>
+                        <span class="users-list-date" style="line-height: 1;"><i> Administrative Officer II </i></span>
+                        <span class="users-list-date">PACCO</span>
                       </div>
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Edwin Rojo Jr.</a>
-                        <span class="users-list-date" style="line-height: 1;"><i> Jail Warden 1 </i></span>
-                        <span class="users-list-date">PWO</span>
+                        <a class="users-list-name" href="#">Stephen Curry</a>
+                        <span class="users-list-date" style="line-height: 1;"><i> Accountant I </i></span>
+                        <span class="users-list-date">PBO</span>
                       </div>
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Edwin Rojo Jr.</a>
-                        <span class="users-list-date" style="line-height: 1;"><i> Jail Warden 1 </i></span>
-                        <span class="users-list-date">PWO</span>
+                        <a class="users-list-name" href="#">Jason Tatum</a>
+                        <span class="users-list-date" style="line-height: 1;"><i> Human Resource Management Officer II </i></span>
+                        <span class="users-list-date">PHRMO</span>
                       </div>
                       <div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
                         <img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-                        <a class="users-list-name" href="#">Edwin Rojo Jr.</a>
-                        <span class="users-list-date" style="line-height: 1;"><i> Jail Warden 1 </i></span>
-                        <span class="users-list-date">PWO</span>
+                        <a class="users-list-name" href="#">Trae Young</a>
+                        <span class="users-list-date" style="line-height: 1;"><i> Assessment Clerk III </i></span>
+                        <span class="users-list-date">PASSO</span>
                       </div>
                     </div>    
                     <!-- /.users-list -->
@@ -359,13 +359,13 @@
                             </div>
                             <div class="product-info">
                             <a href="javascript:void(0)" class="product-title">
-                                Gene Gwapo
+                                Vanessa Rellanos
                                 <small class="product-description">
                                      01/01/2021 - 01/15/2021
                                 </small>
                             </a>
                             <span class="product-description">
-                               Type of Leave.
+                               Force Leave
                             </span>
                             </div>
                         </li>
@@ -376,13 +376,13 @@
                             </div>
                             <div class="product-info">
                             <a href="javascript:void(0)" class="product-title">
-                                Ian Dongky
+                                John Doe
                                 <small class="product-description">
                                      01/01/2021 - 01/15/2021
                                 </small>
                             </a>
                             <span class="product-description">
-                               Type of Leave.
+                               Vacation Leave
                             </span>
                             </div>
                         </li>
@@ -393,13 +393,13 @@
                             </div>
                             <div class="product-info">
                             <a href="javascript:void(0)" class="product-title">
-                                J-God 
+                                Jane Dela Cruz 
                                 <small class="product-description">
                                      01/01/2021 - 01/15/2021
                                 </small>
                             </a>
                             <span class="product-description">
-                               Type of Leave.
+                               Maternity Leave
                             </span>
                             
                             </div>
@@ -411,13 +411,13 @@
                             </div>
                             <div class="product-info">
                             <a href="javascript:void(0)" class="product-title">
-                                Raul Raut
+                                Jefferson White
                                 <small class="product-description">
                                      01/01/2021 - 01/15/2021
                                 </small>
                             </a>
                             <span class="product-description">
-                               Type of Leave.
+                               Special Leave
                             </span>
                             </div>
                         </li>
@@ -452,9 +452,9 @@
                             </div>
                             <div class="product-info">
                             <a href="javascript:void(0)" class="product-title">
-                                Gene Gwapo
+                                Vanessa Rellanos
                                 <small class="product-description">
-                                     06/09/1969
+                                     02/12/1987
                                 </small>
                             </a>
                             <span class="product-description">
@@ -473,7 +473,7 @@
             <!-- /.card -->
 
             <!-- Calendar -->
-            <div class="card">
+            <!-- <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Messages</h3>
 
@@ -483,7 +483,6 @@
                         </button>
                         </div>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body p-0">
                         <ul class="products-list product-list-in-card pl-2 pr-2">
                         <li class="item">
@@ -500,7 +499,6 @@
                             </span>
                             </div>
                         </li>
-                        <!-- /.item -->
                         <li class="item">
                             <div class="product-img">
                             <img src="/storage/project_files/davsur.png" alt="avatar" class="img-size-50">
@@ -515,7 +513,6 @@
                             </span>
                             </div>
                         </li>
-                        <!-- /.item -->
                         <li class="item">
                             <div class="product-img">
                             <img src="/storage/project_files/davsur.png" alt="avatar" class="img-size-50">
@@ -530,7 +527,6 @@
                             </span>
                             </div>
                         </li>
-                        <!-- /.item -->
                         <li class="item">
                             <div class="product-img">
                             <img src="/storage/project_files/davsur.png" alt="avatar" class="img-size-50">
@@ -545,15 +541,12 @@
                             </span>
                             </div>
                         </li>
-                        <!-- /.item -->
                         </ul>
                     </div>
-                    <!-- /.card-body -->
                     <div class="card-footer text-center">
                         <a href="javascript:void(0)" class="uppercase">View All Messages</a>
                     </div>
-                    <!-- /.card-footer -->
-            </div>
+            </div> -->
             <!-- /.card -->
           </section>
           <!-- right col -->

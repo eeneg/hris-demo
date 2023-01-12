@@ -7,7 +7,7 @@
                     <div class="row mt-1">
                         <div class="col-md-6">
                             <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Applications</h2>
-                            <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
+                            <small style="margin-left: 2px;">Create a leave application / View list of applications</small>
                         </div>
                         <div class="form-group col-md-6 mt-2">
                             <router-link class="btn btn-primary float-right" to="/leave-form">Create <span><i class="fas fa-plus"></i></span></router-link>

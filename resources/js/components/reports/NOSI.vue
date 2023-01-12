@@ -30,16 +30,16 @@
                                 </div>
                             </div>
                             <button @click="print_report()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
-                            <hr>
+                            <!-- <hr>
                             <div class="row">
                                 <div class="col-md-6">
                                     <label style="font-weight: bold; margin: 0;">NOSI Lookup</label>
                                     <form class="form-inline">
                                         <input class="form-control form-control-border border-width-2 mr-2" type="number" v-model="nosi_year">
-                                        <button type="button" class="btn btn-success">View</button>
+                                        <button type="button" class="btn btn-success" @click="lookup()">View</button>
                                     </form>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="col-md-6" id="nosi_div" style="border: 1px solid #dfdfdf">
                             <div class="row mt-3 mb-2">
@@ -144,7 +144,8 @@
                 date_previous: moment(this.date_increment).subtract(1, "days"),
                 employee: {},
                 plantilla_content: [],
-                nosi_year: moment(new Date()).add('1', 'year').format('YYYY'),
+                // nosi_year: moment(new Date()).add('1', 'year').format('YYYY')
+                nosi_year: moment(new Date()).format('YYYY')
             }
         },
         watch: {
@@ -166,21 +167,8 @@
                         console.log(error.response.data.message);
                     });
             },
-            test() {
-                axios.get('https://kf.kobotoolbox.org/api/v2/assets/aJeAe6swtog2YvZU663XNq/data.json',
-                    {
-                        headers: { 
-                            'Access-Control-Allow-Origin' : '*',
-                            'Authorization': 'Basic ZWR3aW5yb2pvOml0Y3Bhc3MxMDA=',                             
-                        }
-                    }
-                )
-                .then(function (response) {
-                    console.log(JSON.stringify(response.data));
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            lookup() {
+
             }
         },
         mounted() {
@@ -189,7 +177,6 @@
         created() {
             this.$Progress.start()
             this.fetch_employees()
-            this.test()
             this.$Progress.finish()
         }
     }

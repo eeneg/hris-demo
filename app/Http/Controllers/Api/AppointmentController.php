@@ -92,7 +92,7 @@ class AppointmentController extends Controller
 
     public function fetchDepartments(Request $request)
     {
-        return Department::select(['departments.id', 'departments.title'])->with('position')->get();
+        return Department::select(['departments.id', 'departments.title'])->with('positions')->get();
     }
 
     public function fetchSalarySched(Request $request)

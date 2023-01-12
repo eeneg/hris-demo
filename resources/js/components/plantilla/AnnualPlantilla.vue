@@ -530,6 +530,7 @@
                     });
             },
             generatePlantilla(type){
+                this.$Progress.start();
                 axios.post('generatePlantilla', {type: type})
                     .then(response => {
                         let options = {
@@ -541,6 +542,9 @@
                     })
                     .catch(error => {
                         console.log(error);
+                    })
+                    .finally(() => {
+                        this.$Progress.finish();
                     });
             },
             async plantillaReport() {
@@ -633,7 +637,7 @@
                             if (this.$route.params.dept != null) {
                                 var table = document.getElementsByClassName("plantilla-table")[0].getElementsByTagName("tbody")[0];
                                 for (var r = 0; r < table.rows.length; r++) {
-                                    let tb_order_number = parseInt(table.rows[r].cells[1].innerHTML);
+                                    let tb_order_number = parseInt(table.rows[r].cells[0].innerHTML);
                                     let order_number = this.$route.params.order_number;
                                     if (order_number == tb_order_number) {
                                         table.rows[r].scrollIntoView({
