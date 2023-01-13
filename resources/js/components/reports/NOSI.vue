@@ -41,7 +41,7 @@
                                     <form class="form-inline" @submit.prevent="lookup()">
                                         <input class="form-control form-control-border border-width-2 mr-2" type="number" v-model="nosi_year">
                                         <button type="submit" class="btn btn-success">View</button>
-                                        <button type="button" class="btn btn-primary ml-2" :disabled="lookup_data.length == 0" @click="print_report()"><i class="fas fa-print"></i> Print All</button>
+                                        <button type="button" class="btn btn-primary ml-2" :disabled="lookup_data.length == 0" @click="print_report_lookup()"><i class="fas fa-print"></i> Print All</button>
                                     </form>
                                     <span class="text-primary d-block" style="font-size: 0.8rem;font-weight: bold;">Lookup results: {{ lookup_data.length }} records</span>
                                 </div>
@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 nosi_div" style="border: 1px solid #dfdfdf; page-break-after: always;">
+                        <div class="col-md-6" style="border: 1px solid #dfdfdf;">
                             <div class="row mt-3 mb-2">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
@@ -144,8 +144,8 @@
                     </div>
 
                     <!-- Report -->
-                    <div class="row" style="visibility: hidden;">
-                        <div v-for="employee in lookup_data" :key="employee.id" class="col-md-6 nosi_div" style="border: 1px solid #dfdfdf; page-break-after: always; overflow:hidden;">
+                    <div class="row" id="nosi_div" style="display: none;">
+                        <div v-for="employee in print_data" :key="employee.id" class="col-md-12 nosi_div" style="page-break-after: always;">
                             <div class="row mt-3 mb-2">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
@@ -223,7 +223,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -234,9 +233,10 @@
     @media print {
         body * { visibility: hidden; }
         .nosi_div * { visibility: visible; }
-        .nosi_div { position: absolute; top: 5px; left: 0; max-width: 100%; flex: unset;}
+        .nosi_div {  max-width: 100%; flex: unset; margin-top: 50px !important; }
         .nosi_div h4 { font-size: 1.5rem }
         .nosi_div h5 { font-size: 1.275rem }
+        #nosi_div { display: block !important; margin-top: -1270px; }
     }
 </style>
 
@@ -249,9 +249,9 @@
                 date_of_effectivity: moment(this.date_of_appointment).add(1, "days"),
                 employee: {},
                 plantilla_content: [],
-                // nosi_year: moment(new Date()).add('1', 'year').format('YYYY')
                 nosi_year: moment(new Date()).format('YYYY'),
-                lookup_data: []
+                lookup_data: [],
+                print_data: []
             }
         },
         watch: {
@@ -262,7 +262,17 @@
         },
         methods: {
             print_report() {
-                window.print()
+                this.print_data = []
+                this.print_data.push(this.employee)
+                this.$nextTick(function () {
+                    window.print()
+                })
+            },
+            print_report_lookup() {
+                this.print_data = this.lookup_data
+                this.$nextTick(function () {
+                    window.print()
+                })
             },
             fetch_employees() {
                 this.$Progress.start()
@@ -272,6 +282,7 @@
                         var first_employee = data.data[0];
                         this.employee = first_employee;
                         this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
+                        this.print_data.push(first_employee)
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
