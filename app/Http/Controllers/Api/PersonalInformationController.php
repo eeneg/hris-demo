@@ -81,7 +81,7 @@ class PersonalInformationController extends Controller
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         if ($department_id != '') {
             $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
-                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', personal_informations.`nameextension`, ' ', personal_informations.`middlename`) AS `name`
+                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', IFNULL(personal_informations.`nameextension`, ''), ' ', IFNULL(personal_informations.`middlename`, '')) AS `name`
                 FROM plantilla_contents
                 JOIN personal_informations ON plantilla_contents.`personal_information_id` =  personal_informations.`id`
                 JOIN positions ON plantilla_contents.`position_id` =  positions.`id`
@@ -108,7 +108,7 @@ class PersonalInformationController extends Controller
 
         } else {
             $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
-                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', personal_informations.`nameextension`, ' ', personal_informations.`middlename`) AS `name`
+                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', IFNULL(personal_informations.`nameextension`, ''), ' ', IFNULL(personal_informations.`middlename`, '')) AS `name`
                 FROM plantilla_contents
                 JOIN personal_informations ON plantilla_contents.`personal_information_id` =  personal_informations.`id`
                 JOIN positions ON plantilla_contents.`position_id` =  positions.`id`

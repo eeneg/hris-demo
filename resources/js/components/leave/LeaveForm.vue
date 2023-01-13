@@ -5,7 +5,7 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Form <router-link to="/leave-applications" style="float: right;"><i class="fas fa-arrow-left"></i></router-link></h2>
-                    <small style="margin-left: 2px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</small>
+                    <small style="margin-left: 2px;">Leave Application Form</small>
                 </div>
 
                 <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
