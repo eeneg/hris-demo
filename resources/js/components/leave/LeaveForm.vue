@@ -108,7 +108,7 @@
                             </div>
                             <div class="col-md-1  form-group">
                                 <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ prev_balance_total }}</label>
+                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ prev_balance_total.toFixed(3) }}</label>
                             </div>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                             </div>
                             <div class="col-md-1 form-group">
                                 <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ less_total }}</label>
+                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ less_total.toFixed(3) }}</label>
                             </div>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                                 <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_sick_balance }}</label>
                             </div>
                             <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ balance_total }}</label>
+                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ balance_total.toFixed(3) }}</label>
                             </div>
                         </div>
                     </div>
