@@ -145,7 +145,7 @@
 
                     <!-- Report -->
                     <div class="row" id="nosi_div" style="display: none;">
-                        <div v-for="employee in print_data" :key="employee.id" class="col-md-12 nosi_div" style="page-break-after: always;">
+                        <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosi_div" :style="index > print_data.length ? 'page-break-after: always;' : ''">
                             <div class="row mt-3 mb-2">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
