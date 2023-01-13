@@ -9,8 +9,8 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
+                    <div class="row pr-3">
+                        <div class="col-md-6 pr-5">
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label style="font-weight: bold; margin: 0;">Select Employee</label>
                                 <v-select class="form-control form-control-border border-width-2" v-model="employee" :options="plantilla_content" :getOptionLabel="employee => employee.name"></v-select>
@@ -33,7 +33,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button @click="print_report()" class="btn btn-primary btn-block"><i class="fas fa-print"></i> Print Report</button>
+                            <button @click="print_report()" class="btn btn-primary btn-block" :disabled="!button_enable"><i class="fas fa-print"></i> Print Report</button>
                             <hr class="mt-5 mb-5">
                             <div class="row">
                                 <div class="col-md-12">
@@ -64,8 +64,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6" style="border: 1px solid #dfdfdf;">
+                        <div class="col-md-6" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
+                            <div class="ribbon-wrapper ribbon-lg">
+                                <div class="ribbon bg-primary">
+                                    PREVIEW
+                                </div>
+                            </div>
                             <div class="row mt-3 mb-2">
+                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" width="120">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
                                     <h5 class="m-0">Matti, Digos City</h5>
@@ -145,7 +151,8 @@
 
                     <!-- Report -->
                     <div class="row" id="nosi_div" style="display: none;">
-                        <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosi_div" :style="index > print_data.length ? 'page-break-after: always;' : ''">
+                        <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosi_div" :style="index + 1 == print_data.length ? '' : 'page-break-after: always;'">
+                            <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" style="top: 0; margin-top: -20px;">
                             <div class="row mt-3 mb-2">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
@@ -251,7 +258,8 @@
                 plantilla_content: [],
                 nosi_year: moment(new Date()).format('YYYY'),
                 lookup_data: [],
-                print_data: []
+                print_data: [],
+                button_enable: false
             }
         },
         watch: {
@@ -288,6 +296,7 @@
                         console.log(error.response.data.message);
                     })
                     .finally(() => {
+                        this.button_enable = true
                         this.$Progress.finish()
                     });
             },
