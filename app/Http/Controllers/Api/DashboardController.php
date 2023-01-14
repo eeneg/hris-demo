@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Setting;
 use App\Plantilla;
 use App\PlantillaContent;
+use Carbon\Carbon;
+use App\Http\Resources\BirthdaysResource;
 
 class DashboardController extends Controller
 {
@@ -20,11 +22,20 @@ class DashboardController extends Controller
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
-        $vacant_positions = PlantillaContent::where('plantilla_id', $plantilla->id)->whereNull('personal_information_id')->get();
-        $active_employees = PlantillaContent::where('plantilla_id', $plantilla->id)->whereNotNull('personal_information_id')->get();
+        $plantilla_contents = PlantillaContent::where('plantilla_id', $plantilla->id)->get();
+        $vacant_positions = $plantilla_contents->whereNull('personal_information_id');
+        $active_employees = $plantilla_contents->whereNotNull('personal_information_id');
+        $birthdays = PlantillaContent::where('plantilla_id', $plantilla->id)->whereNotNull('personal_information_id')
+            ->with('personalinformation')
+            ->whereHas('personalinformation', function($q){
+                $q->whereMonth('birthdate', Carbon::now()->format('m'))
+                ->whereDay('birthdate', Carbon::now()->format('d'));
+            })->get();
+
         $data = [
             'vacant_positions' => count($vacant_positions),
-            'active_employees' => count($active_employees)
+            'active_employees' => count($active_employees),
+            'birthdays' => new BirthdaysResource($birthdays)
         ];
         return $data;
     }
