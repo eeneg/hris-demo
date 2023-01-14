@@ -49,13 +49,6 @@ class PlantillaContent extends Model
         return $this->belongsTo('App\SalaryGrade', 'salary_grade_prop_id');
     }
 
-    // public function nextStep($salaryproposed){
-    //     return SalaryGrade::where('grade', $salaryproposed->grade)
-    //         ->where('step', $salaryproposed->step + 1)
-    //         ->where('salary_sched_id', $salaryproposed->salary_sched_id)
-    //         ->first();
-    // }
-
     public function position(){
         return $this->belongsTo('App\Position', 'position_id');
     }

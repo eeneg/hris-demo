@@ -13,6 +13,7 @@ use App\Department;
 use App\AbolishedItem;
 use App\Http\Resources\PlantillaContentResource;
 use App\Http\Resources\PlantillaEmployeesNOSIResource;
+use App\Http\Resources\PlantillaEmployeesNOSAResource;
 use Illuminate\Support\Facades\DB;
 
 class PlantillaContentController extends Controller
@@ -42,6 +43,16 @@ class PlantillaContentController extends Controller
             ->get();
 
         return new PlantillaEmployeesNOSIResource($plantillacontents);
+    }
+
+    public function plantillaForNosa(Request $request) {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->whereNotNull('personal_information_id')
+            ->get();
+
+        return new PlantillaEmployeesNOSAResource($plantillacontents);
     }
 
     public function plantilladepartmentcontent(Request $request) {

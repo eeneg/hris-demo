@@ -1,35 +1,281 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h2>NOSA</h2>
+                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">NOSA Report</h2>
+                    <p style="margin: 2px 0 0 2px;">Notice of Salary Adjustment
+                    (Employees are based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})
+                    </p>
                 </div>
-                
+                <div class="card-body">
+                    <div class="row pr-3">
+                        <div class="col-md-6 pr-5">
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label style="font-weight: bold; margin: 0;">Select Employee</label>
+                                <v-select class="form-control form-control-border border-width-2" v-model="employee" :options="plantilla_content" :getOptionLabel="employee => employee.name"></v-select>
+                            </div>
+                            <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Date of last promotion / original appointment: <b class="text-primary">{{ employee.last_promotion ? employee.last_promotion : employee.original_appointment }}</b></span>
+                            <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">{{ employee.office }}</span>
+                            <div class="row mt-2 mb-1">
+                                <div class="col-md-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Print Date</label>
+                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Today's date (editable)</span>
+                                        <input class="form-control form-control-border border-width-2" type="date" v-model="date_printed">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label class="m-0" style="font-weight: normal;"><b>Effectivity Date</b></label>
+                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">New Salary Schedule effectivity date</span>
+                                        <input class="form-control form-control-border border-width-2" type="date" v-model="date_of_effectivity">
+                                    </div>
+                                </div>
+                            </div>
+                            <button @click="print_report()" class="btn btn-primary btn-block" :disabled="!button_enable"><i class="fas fa-print"></i> Print Selected Employee</button>
+                            <button @click="print_report_all()" class="btn btn-info btn-block" :disabled="!button_enable"><i class="fas fa-print"></i> Print All Employees</button>
+                        </div>
+
+                        <!-- Report Preview -->
+                        <div class="col-md-6" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
+                            <div class="ribbon-wrapper ribbon-lg">
+                                <div class="ribbon bg-primary">
+                                    PREVIEW
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-2">
+                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" width="120">
+                                <div class="col-12 text-center">
+                                    <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
+                                    <h5 class="m-0">Matti, Digos City</h5>
+                                    <h4 class="m-0">OFFICE OF THE GOVERNOR</h4>
+                                    <h4 class="m-0 font-weight-bold">NOTICE OF SALARY ADJUSTMENT</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-9 mt-3">
+                                    <h5 class="m-0">{{ employee.name }}</h5>
+                                    <h5 class="m-0">{{ employee.position }}</h5>
+                                    <h5 class="m-0">{{ employee.office }}</h5>
+                                    <h5 class="m-0">Province of Davao del Sur</h5>
+                                    <h5 class="mt-4">Sir/Madam:</h5>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <h5><u>{{ date_printed | myDate }}</u></h5>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12 text-justify">
+                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                        Pursuant to Local Budget Circular No. <u>1</u> dated <u>input date</u>, implementing Republic Act No. 11466 dated January 8, 2020 your salary is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u> as follows.
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-9">
+                                    <h5 class="m-0">1. Adjusted monthly basic salary effective <u>{{ date_of_effectivity | myDate }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="text-indent: 20px;">Under the New Salary Schedule: SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u></h5>
+                                    <h5 class="m-0">2. Actual monthly basic salary as of <u>{{ date_of_effectivity | yesterday | myDate }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="text-indent: 20px;">SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u></h5>
+                                    <h5 class="m-0">3. Monthly salary adjustment effective <u>{{ date_of_effectivity | myDate }} (1-2)</u></h5>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <h5 class="m-0"><u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="color: white;">.</h5>
+                                    <h5 class="m-0"><u v-if="employee.salaryauthorized">₱{{ employee.salaryauthorized.amount | amount }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="color: white;">.</h5>
+                                    <h5 class="m-0" v-if="employee.salaryproposed && employee.salaryauthorized"><u>₱{{ (employee.salaryproposed.amount - employee.salaryauthorized.amount) | amount }}.00</u></h5>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row mt-4 mb-5">
+                                <div class="col-12 text-justify">
+                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                        It is understood that this salary adjustment is subject to usual accounting and auditing rules and regulations, and to appropriate re-adjustment and refund if found not in order.
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-5">
+                                <div class="col-6"></div>
+                                <div class="col-6 mt-5">
+                                    <h5 class="m-0">Very truly yours,</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-6"></div>
+                                <div class="col-6 text-center mt-5">
+                                    <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
+                                    <h5 class="m-0">Provincial Governor</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-3">
+                                <div class="col-12">
+                                    <h5 class="m-0">Position Title: <u>{{ employee.position }}</u></h5>
+                                    <h5 class="m-0">Salary Grade: <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u></h5>
+                                    <h5 class="m-0 mb-3">Item No.: <u>{{ employee.item_no }}</u>, FY <u>{{ date_of_effectivity | get_year }}</u> Plantilla of Personnel</h5>
+                                    <h5 class="m-0">Copy Furnished: GSIS</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report -->
+                    <div class="row" id="nosa_div" style="display: none;">
+                        <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosa_div" :style="index + 1 == print_data.length ? '' : 'page-break-after: always;'">
+                            <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" style="top: 0; margin-top: -20px;">
+                            <div class="row mt-3 mb-2">
+                                <div class="col-12 text-center">
+                                    <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
+                                    <h5 class="m-0">Matti, Digos City</h5>
+                                    <h4 class="m-0">OFFICE OF THE GOVERNOR</h4>
+                                    <h4 class="m-0 font-weight-bold">NOTICE OF SALARY ADJUSTMENT</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-9 mt-3">
+                                    <h5 class="m-0">{{ employee.name }}</h5>
+                                    <h5 class="m-0">{{ employee.position }}</h5>
+                                    <h5 class="m-0">{{ employee.office }}</h5>
+                                    <h5 class="m-0">Province of Davao del Sur</h5>
+                                    <h5 class="mt-4">Sir/Madam:</h5>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <h5><u>{{ date_printed | myDate }}</u></h5>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12 text-justify">
+                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                        Pursuant to Local Budget Circular No. <u>1</u> dated <u>input date</u>, implementing Republic Act No. 11466 dated January 8, 2020 your salary is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u> as follows.
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-9">
+                                    <h5 class="m-0">1. Adjusted monthly basic salary effective <u>{{ date_of_effectivity | myDate }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="text-indent: 20px;">Under the New Salary Schedule: SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u></h5>
+                                    <h5 class="m-0">2. Actual monthly basic salary as of <u>{{ date_of_effectivity | yesterday | myDate }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="text-indent: 20px;">SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u></h5>
+                                    <h5 class="m-0">3. Monthly salary adjustment effective <u>{{ date_of_effectivity | myDate }} (1-2)</u></h5>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <h5 class="m-0"><u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="color: white;">.</h5>
+                                    <h5 class="m-0"><u v-if="employee.salaryauthorized">₱{{ employee.salaryauthorized.amount | amount }}</u></h5>
+                                    <h5 class="m-0 mb-3" style="color: white;">.</h5>
+                                    <h5 class="m-0" v-if="employee.salaryproposed && employee.salaryauthorized"><u>₱{{ (employee.salaryproposed.amount - employee.salaryauthorized.amount) | amount }}.00</u></h5>
+                                </div>
+                                <div class="col-1"></div>
+                            </div>
+                            <div class="row mt-4 mb-5">
+                                <div class="col-12 text-justify">
+                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                        It is understood that this salary adjustment is subject to usual accounting and auditing rules and regulations, and to appropriate re-adjustment and refund if found not in order.
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-5">
+                                <div class="col-6"></div>
+                                <div class="col-6 mt-5">
+                                    <h5 class="m-0">Very truly yours,</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-6"></div>
+                                <div class="col-6 text-center mt-5">
+                                    <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
+                                    <h5 class="m-0">Provincial Governor</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-5 mb-3">
+                                <div class="col-12">
+                                    <h5 class="m-0">Position Title: <u>{{ employee.position }}</u></h5>
+                                    <h5 class="m-0">Salary Grade: <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u></h5>
+                                    <h5 class="m-0 mb-3">Item No.: <u>{{ employee.item_no }}</u>, FY <u>{{ date_of_effectivity | get_year }}</u> Plantilla of Personnel</h5>
+                                    <h5 class="m-0">Copy Furnished: GSIS</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
+<style type="text/css">
+    @media print {
+        body * { visibility: hidden; }
+        .nosa_div * { visibility: visible; }
+        .nosa_div {  max-width: 100%; flex: unset; margin-top: 50px !important; }
+        .nosa_div h4 { font-size: 1.5rem }
+        .nosa_div h5 { font-size: 1.275rem }
+        #nosa_div { display: block !important; margin-top: -1340px; }
+    }
+</style>
+
 <script>
     export default {
         data() {
             return {
-                form: new Form({
-                    
-                })
+                date_printed: moment(new Date()).format('YYYY-MM-DD'),
+                date_of_effectivity: moment(new Date()).format('YYYY-MM-DD'),
+                employee: {},
+                plantilla_content: [],
+                print_data: [],
+                button_enable: false
             }
         },
+        filters: {
+            get_year: (value) => {
+                return moment(value).format('YYYY')
+            },
+            yesterday: (value) => {
+                return moment(value).subtract(1, 'days').format('YYYY-MM-DD')
+            }
+        },
+        watch: {
+
+        },
         methods: {
-            
+            print_report() {
+                this.print_data = []
+                this.print_data.push(this.employee)
+                this.$nextTick(function () {
+                    window.print()
+                })
+            },
+            print_report_all() {
+                this.print_data = this.plantilla_content
+                this.$nextTick(function () {
+                    window.print()
+                })
+            },
+            fetch_employees() {
+                this.$Progress.start()
+                axios.get('api/plantillaForNosa')
+                    .then(({data}) => {
+                        this.plantilla_content = data.data;
+                        var first_employee = data.data[0];
+                        this.employee = first_employee;
+                        this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
+                        this.print_data.push(first_employee)
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    })
+                    .finally(() => {
+                        this.button_enable = true
+                        this.$Progress.finish()
+                    });
+            }
         },
         mounted() {
             // console.log('Component mounted.')
         },
         created() {
-            this.$Progress.start();
-
-            this.$Progress.finish();
+            this.fetch_employees()
         }
     }
 </script>

@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::put('plantillacontentabolish', 'Api\PlantillaContentController@plantillacontentabolish');
     Route::post('plantilladepartmentcontent', 'Api\PlantillaContentController@plantilladepartmentcontent');
     Route::get('plantillaForNosi', 'Api\PlantillaContentController@plantillaForNosi');
+    Route::get('plantillaForNosa', 'Api\PlantillaContentController@plantillaForNosa');
 
     Route::post('previousplantilla', 'Api\PlantillaController@previousplantilla');
 

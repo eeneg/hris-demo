@@ -4,7 +4,7 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">NOSI Report</h2>
-                    <p style="margin: 2px 0 0 2px;">Notice of Salary Increment
+                    <p style="margin: 2px 0 0 2px;">Notice of Step Increment
                     (Employees are based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})
                     </p>
                 </div>
@@ -110,12 +110,12 @@
                                 <div class="col-3 text-right">
                                     <h5 class="m-0" style="color: white;">.</h5>
                                     <h5 class="m-0">
-                                        <u v-if="employee.salaryproposed">{{ employee.salaryproposed.amount | amount }}</u>
+                                        <u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u>
                                     </h5>
                                     <h5 class="m-0" style="color: white;">.</h5>
                                     <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>{{ employee.nextStepAmount | amount }}</u></h5>
+                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
+                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ employee.nextStepAmount | amount }}</u></h5>
                                 </div>
                                 <div class="col-1"></div>
                             </div>
@@ -192,12 +192,12 @@
                                 <div class="col-3 text-right">
                                     <h5 class="m-0" style="color: white;">.</h5>
                                     <h5 class="m-0">
-                                        <u v-if="employee.salaryproposed">{{ employee.salaryproposed.amount | amount }}</u>
+                                        <u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u>
                                     </h5>
                                     <h5 class="m-0" style="color: white;">.</h5>
                                     <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>{{ employee.nextStepAmount | amount }}</u></h5>
+                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
+                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ employee.nextStepAmount | amount }}</u></h5>
                                 </div>
                                 <div class="col-1"></div>
                             </div>
