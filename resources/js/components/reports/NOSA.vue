@@ -34,18 +34,23 @@
                                 </div>
                             </div>
                             <button @click="print_report()" class="btn btn-primary btn-block" :disabled="!button_enable"><i class="fas fa-print"></i> Print Selected Employee</button>
-                            <button @click="print_report_all()" class="btn btn-info btn-block" :disabled="!button_enable"><i class="fas fa-print"></i> Print All Employees</button>
+                            <hr class="mt-4 mb-3">
+                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                <label style="font-weight: bold; margin: 0;">Print by Department</label>
+                                <v-select class="form-control form-control-border border-width-2" v-model="department" :options="departments" :getOptionLabel="department => department.address"></v-select>
+                            </div>
+                            <button @click="print_report_all()" class="btn btn-info btn-block mt-2" :disabled="!button_enable"><i class="fas fa-print"></i> Print All Employees from selected Department</button>
                         </div>
 
                         <!-- Report Preview -->
-                        <div class="col-md-6" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
+                        <div class="col-md-6 p-5" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
                             <div class="ribbon-wrapper ribbon-lg">
                                 <div class="ribbon bg-primary">
                                     PREVIEW
                                 </div>
                             </div>
                             <div class="row mt-3 mb-2">
-                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" width="120">
+                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid" width="120" style="position: absolute;top: 55px;left: 50px;">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
                                     <h5 class="m-0">Matti, Digos City</h5>
@@ -211,7 +216,7 @@
         .nosa_div {  max-width: 100%; flex: unset; margin-top: 50px !important; }
         .nosa_div h4 { font-size: 1.5rem }
         .nosa_div h5 { font-size: 1.275rem }
-        #nosa_div { display: block !important; margin-top: -1340px; }
+        #nosa_div { display: block !important; margin-top: -1485px; }
     }
 </style>
 
@@ -223,6 +228,8 @@
                 date_of_effectivity: moment(new Date()).format('YYYY-MM-DD'),
                 employee: {},
                 plantilla_content: [],
+                departments: [],
+                department: {},
                 print_data: [],
                 button_enable: false
             }
@@ -247,7 +254,10 @@
                 })
             },
             print_report_all() {
-                this.print_data = this.plantilla_content
+                var filtered = _.filter(this.plantilla_content, (content) => { 
+                    return content.office == this.department.address
+                });
+                this.print_data = filtered
                 this.$nextTick(function () {
                     window.print()
                 })
@@ -256,8 +266,12 @@
                 this.$Progress.start()
                 axios.get('api/plantillaForNosa')
                     .then(({data}) => {
-                        this.plantilla_content = data.data;
-                        var first_employee = data.data[0];
+                        this.departments = data.departments;
+                        var first_department = data.departments[0];
+                        this.department = first_department;
+
+                        this.plantilla_content = data.plantillacontents;
+                        var first_employee = data.plantillacontents[0];
                         this.employee = first_employee;
                         this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
                         this.print_data.push(first_employee)

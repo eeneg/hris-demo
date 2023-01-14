@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\PlantillaContent;
 use App\Setting;
 use App\Plantilla;
+use App\PlantillaDept;
 use App\Position;
 use App\SalaryGrade;
 use App\Department;
@@ -14,6 +15,7 @@ use App\AbolishedItem;
 use App\Http\Resources\PlantillaContentResource;
 use App\Http\Resources\PlantillaEmployeesNOSIResource;
 use App\Http\Resources\PlantillaEmployeesNOSAResource;
+use App\Http\Resources\DepartmentsResource;
 use Illuminate\Support\Facades\DB;
 
 class PlantillaContentController extends Controller
@@ -51,8 +53,16 @@ class PlantillaContentController extends Controller
         $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
             ->whereNotNull('personal_information_id')
             ->get();
+        $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
 
-        return new PlantillaEmployeesNOSAResource($plantillacontents);
+        $nosi_resource = new PlantillaEmployeesNOSAResource($plantillacontents);
+        $department_resource = new DepartmentsResource($departments);
+        $data = [
+            'plantillacontents' => $nosi_resource,
+            'departments' => $department_resource
+        ];
+
+        return $data;
     }
 
     public function plantilladepartmentcontent(Request $request) {

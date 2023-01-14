@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <button @click="print_report()" class="btn btn-primary btn-block" :disabled="!button_enable"><i class="fas fa-print"></i> Print Report</button>
-                            <hr class="mt-5 mb-5">
+                            <hr class="mt-4 mb-3">
                             <div class="row">
                                 <div class="col-md-12">
                                     <label style="font-weight: bold; margin: 0;">NOSI Lookup</label>
@@ -64,14 +64,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
+
+                        <!-- Report Preview -->
+                        <div class="col-md-6 p-5" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
                             <div class="ribbon-wrapper ribbon-lg">
                                 <div class="ribbon bg-primary">
                                     PREVIEW
                                 </div>
                             </div>
                             <div class="row mt-3 mb-2">
-                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" width="120">
+                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid" width="120" style="position: absolute;top: 55px;left: 50px;">
                                 <div class="col-12 text-center">
                                     <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
                                     <h5 class="m-0">Matti, Digos City</h5>
@@ -243,7 +245,7 @@
         .nosi_div {  max-width: 100%; flex: unset; margin-top: 50px !important; }
         .nosi_div h4 { font-size: 1.5rem }
         .nosi_div h5 { font-size: 1.275rem }
-        #nosi_div { display: block !important; margin-top: -1270px; }
+        #nosi_div { display: block !important; margin-top: -1405px; }
     }
 </style>
 
