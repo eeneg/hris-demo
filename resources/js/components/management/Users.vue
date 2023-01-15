@@ -1,6 +1,9 @@
 <template>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 text-center" v-if="!$gate.isAdministrator()">
+            <not-authorized></not-authorized>
+        </div>
+        <div v-else class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h2>System Users</h2>

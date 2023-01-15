@@ -86,6 +86,7 @@ class PlantillaContentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $department_id = $request->department_id;
@@ -157,6 +158,7 @@ class PlantillaContentController extends Controller
     }
 
     public function plantillacontentabolish(Request $request) {
+        $this->authorize('isAdministratorORAuthor');
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
@@ -192,6 +194,7 @@ class PlantillaContentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $plantillacontent = PlantillaContent::find($id);
@@ -266,6 +269,7 @@ class PlantillaContentController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 

@@ -22,6 +22,7 @@ class SettingsController extends Controller
             'plantilla' => $plantilla
         ];
         return $data;
+        
     }
 
     /**
@@ -32,6 +33,7 @@ class SettingsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministrator');
         $this->validate($request, [
             'plantilla' => 'required'
         ]);

@@ -25,6 +25,6 @@ export default class Gate {
     }
 
     isEmployee(){
-        return !this.user;
+        return !this.user.role;
     }
 }

@@ -68,6 +68,7 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         $department = Department::create($request->all());
     }
 
@@ -91,6 +92,7 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $department = Department::findOrFail($id);
 
         $department->update($request->all());
@@ -104,6 +106,7 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $department = Department::findOrFail($id);
 
         $department->delete();
@@ -111,6 +114,7 @@ class DepartmentController extends Controller
 
     public function store_position(Request $request){
 
+        $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
             'title' => 'required|unique:positions,title'
         ]);
@@ -121,6 +125,7 @@ class DepartmentController extends Controller
 
     public function update_position(Request $request, $id){
 
+        $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
             'title' => 'required|unique:positions,title'
         ]);
@@ -133,6 +138,7 @@ class DepartmentController extends Controller
 
     public function delete_position($id){
 
+        $this->authorize('isAdministratorORAuthor');
         $position = Position::findOrFail($id);
 
         $position->delete();

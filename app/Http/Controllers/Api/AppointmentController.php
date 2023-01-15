@@ -110,6 +110,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         $salaryGradeId = SalaryGrade::where('salary_sched_id', $request->salary_sched_id)->where('grade', $request->grade)->where('step', $request->step)->value('id');
 
         $request->merge(['salary_grade_id' => $salaryGradeId]);
@@ -154,6 +155,7 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $appointment = Appointment::findOrFail($id);
 
         $salaryGradeId = SalaryGrade::where('salary_sched_id', $request->salary_sched_id)->where('grade', $request->grade)->where('step', $request->step)->value('id');
@@ -188,6 +190,7 @@ class AppointmentController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $appointment = Appointment::findOrFail($id);
 
         $appointment->delete();

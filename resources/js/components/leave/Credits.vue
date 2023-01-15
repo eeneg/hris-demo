@@ -1,7 +1,10 @@
 
 <template>
     <div class="row justify-content-center" style="min-height: 100vh;">
-        <div class="col-md-12">
+        <div class="col-md-12 text-center" v-if="$gate.isEmployee()">
+            <not-authorized></not-authorized>
+        </div>
+        <div v-else class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
 

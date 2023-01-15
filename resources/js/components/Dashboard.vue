@@ -1,6 +1,11 @@
 <template>
 	<section class="content">
-		<div class="container-fluid">
+        <div class="row" v-if="$gate.isEmployee()">
+            <div class="col-md-12 text-center">
+                <not-authorized></not-authorized>
+            </div>
+        </div>
+		<div v-else class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 			<div class="row">
 				<div class="col-lg-3 col-6">

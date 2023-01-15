@@ -43,6 +43,7 @@ class SalaryGradeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         $salarysched = SalarySchedule::find($request->id);
 
         $request->validate(['grade' => 'required|numeric']);
@@ -56,6 +57,7 @@ class SalaryGradeController extends Controller
 
     public function deleteSalaryGrade(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         return SalaryGrade::whereIn('id', $request->all())->delete();
     }
 
@@ -79,6 +81,7 @@ class SalaryGradeController extends Controller
      */
     public function update(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         $request->validate(['grade' => 'required|numeric']);
 
         $check = SalaryGrade::where(['grade' => $request->grade, 'salary_sched_id' => $request->tranche])->exists();

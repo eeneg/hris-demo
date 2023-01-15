@@ -27,6 +27,7 @@ class BarcodeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         if (!Barcode::where('personal_information_id', $request['id'])->exists()) {
             $employee = PersonalInformation::findOrFail($request['id']);
 

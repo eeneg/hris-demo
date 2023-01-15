@@ -1,6 +1,9 @@
 <template>
    <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-12 text-center" v-if="!$gate.isAdministrator() && !$gate.isAuthor()">
+            <not-authorized></not-authorized>
+        </div>
+        <div v-else class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Positions: {{ dept_title }} <router-link to="/departments" style="float: right;"><i class="fas fa-arrow-left"></i></router-link></h2>

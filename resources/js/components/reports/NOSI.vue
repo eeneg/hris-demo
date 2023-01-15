@@ -1,6 +1,9 @@
 <template>
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-12 text-center" v-if="!$gate.isAdministrator() && !$gate.isAuthor()">
+            <not-authorized></not-authorized>
+        </div>
+        <div v-else class="col-md-12">
             <!-- Report -->
             <div class="row" id="nosi_div" style="display: none;margin-top: -1.4rem !important;">
                 <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosi_div" :style="index + 1 == print_data.length ? '' : 'page-break-after: always;'">

@@ -28,6 +28,7 @@ class SalaryScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         $request->validate(['tranche' => 'required|string', 'effective_date' => 'required|date']);
 
         SalarySchedule::create($request->all());
@@ -53,6 +54,7 @@ class SalaryScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $sc = SalarySchedule::findOrFail($id);
 
         $request->validate(['tranche' => 'required|string', 'effective_date' => 'required|date']);
@@ -68,6 +70,7 @@ class SalaryScheduleController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdministratorORAuthor');
         return SalarySchedule::findOrFail($id)->delete();
     }
 }

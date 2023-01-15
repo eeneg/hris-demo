@@ -34,6 +34,7 @@ class PlantillaController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
             'year' => 'unique:plantillas'
         ]);
@@ -91,6 +92,7 @@ class PlantillaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
             'year' => 'unique:plantillas,year,'.$id
         ]);

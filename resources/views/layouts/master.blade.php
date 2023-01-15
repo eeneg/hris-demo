@@ -78,9 +78,11 @@
 				<!-- Sidebar -->
 				<div class="sidebar">
 					<!-- Sidebar user panel (optional) -->
-					<div class="user-panel mt-3 pb-3 mb-3 d-flex" style="align-items: center;">
+                    @can('employee')
+                    @else
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex" style="align-items: center;">
 						<div class="image">
-							<img src="{{ auth()->user()->avatar == "profile.png" ?  asset('/storage/project_files/profile.png') : asset('/storage/user_avatars/' . auth()->user()->avatar) }}" class="img-circle elevation-2" alt="User Image">
+                            <img src="{{ auth()->user()->avatar == "profile.png" ?  asset('/storage/project_files/profile.png') : asset('/storage/user_avatars/' . auth()->user()->avatar) }}" class="img-circle elevation-2" alt="User Image">
 						</div>
 						<div class="info">
 							<router-link to="/profile" class="d-block" style="background-color: unset !important;color: #C2C7D0 !important;">
@@ -89,6 +91,8 @@
 							</router-link>
 						</div>
 					</div>
+                    @endcan
+					
 					<!-- Sidebar Menu -->
 					<nav class="mt-2">
 						<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">

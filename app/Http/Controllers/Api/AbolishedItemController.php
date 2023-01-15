@@ -52,6 +52,7 @@ class AbolishedItemController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('isAdministratorORAuthor');
         $abolished_item = AbolishedItem::findOrFail($id);
         $plantilla_content = PlantillaContent::findOrFail($abolished_item->plantillacontent->id);
         $plantilla_content->new_number = $abolished_item->new_number;
