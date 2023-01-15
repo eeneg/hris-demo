@@ -8,9 +8,9 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Types of leave</h2>
-                    <small style="margin-left: 2px;">Description Description Description Description Description</small>
-                    <div class="row mt-3">
-                        <div v-if="$gate.isAdministratorORAuthor()" class="col-md-12">
+                    <small style="margin: 2px 0 0 2px;">List of all types of leave</small>
+                    <div v-if="$gate.isAdministratorORAuthor()" class="row mt-3">
+                        <div class="col-md-12">
                             <button type="button" class="btn btn-primary" @click="addNewTypeModal()">Add New Type</button>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                                 <th>Description</th>
                                 <th>Max Duration</th>
                                 <th>Status</th>
-                                <th></th>
+                                <th v-if="$gate.isAdministrator()"></th>
                             </tr>
                         </thead>
                         <tbody>

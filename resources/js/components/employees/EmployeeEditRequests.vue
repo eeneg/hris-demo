@@ -1,4 +1,4 @@
-`<template>
+<template>
 
   <div class="row justify-content-center">
         <div class="col-md-12">
@@ -101,7 +101,6 @@
                                                     'text-danger': edit.status == 'DENIED',
                                                     'text-primary': edit.status == 'PENDING',
                                                 }">{{ edit.status }}</td>
-                                        <td>
                                         <td v-if="mode == 1" >
                                              <div class="col">
                                                 <div class="form-check">

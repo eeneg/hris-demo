@@ -120,13 +120,13 @@
 											<p>Employee List</p>
 										</router-link>
 									</li>
+                                    @can('isAdministratorORAuthor')
 									<li class="nav-item">
 										<router-link to="/requests" class="nav-link">
 											<i class="nav-icon fas fa-file-signature"></i>
 											<p>PDS Edit Requests</p>
 										</router-link>
 									</li>
-                                   @can('isAdministratorORAuthor')
                                    <li class="nav-item">
                                         <router-link to="/employee-reappointments" class="nav-link">
                                             <i class="nav-icon fas fa-briefcase"></i>
