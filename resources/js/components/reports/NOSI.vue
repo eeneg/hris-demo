@@ -1,7 +1,88 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card card-primary card-outline">
+            <!-- Report -->
+            <div class="row" id="nosi_div" style="display: none;margin-top: -1.4rem !important;">
+                <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosi_div" :style="index + 1 == print_data.length ? '' : 'page-break-after: always;'">
+                    <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo">
+                    <div class="row mt-3 mb-2">
+                        <div class="col-12 text-center">
+                            <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
+                            <h5 class="m-0">Matti, Digos City</h5>
+                            <h4 class="m-0">OFFICE OF THE GOVERNOR</h4>
+                            <h4 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-9 mt-3">
+                            <h5 class="m-0">{{ employee.name }}</h5>
+                            <h5 class="m-0">{{ employee.position }}</h5>
+                            <h5 class="m-0">{{ employee.office }}</h5>
+                            <h5 class="m-0">Province of Davao del Sur</h5>
+                            <h5 class="mt-4">Sir/Madam:</h5>
+                        </div>
+                        <div class="col-3 text-right">
+                            <h5><u>{{ date_printed | myDate }}</u></h5>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 text-justify">
+                            <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>.
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-8">
+                            <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
+                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ date_of_appointment | myDate }}</u></h5>
+                            <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
+                            <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
+                            <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
+                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ date_of_effectivity | myDate }}</u></h5>
+                        </div>
+                        <div class="col-3 text-right">
+                            <h5 class="m-0" style="color: white;">.</h5>
+                            <h5 class="m-0">
+                                <u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u>
+                            </h5>
+                            <h5 class="m-0" style="color: white;">.</h5>
+                            <h5 class="m-0" style="color: white;">.</h5>
+                            <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
+                            <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ employee.nextStepAmount | amount }}</u></h5>
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                    <div class="row mt-4 mb-5">
+                        <div class="col-12 text-justify">
+                            <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                The step increment/s is/are subject to review and Post Audit by the Department of Budget and Management and Subject to re-adjustment and refund if found not in order.
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row mt-5 mb-5">
+                        <div class="col-6"></div>
+                        <div class="col-6 mt-5">
+                            <h5 class="m-0">Very truly yours,</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-6"></div>
+                        <div class="col-6 text-center mt-5">
+                            <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
+                            <h5 class="m-0">Provincial Governor</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-5 mb-3">
+                        <div class="col-12">
+                            <h5 class="m-0">Copy Furnished</h5>
+                            <h5 class="m-0">- GSIS</h5>
+                            <h5 class="m-0">- Office Concerned</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-primary card-outline nosi_card">
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">NOSI Report</h2>
                     <p style="margin: 2px 0 0 2px;">Notice of Step Increment
@@ -66,101 +147,19 @@
                         </div>
 
                         <!-- Report Preview -->
-                        <div class="col-md-6 p-5" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
+                        <div class="col-md-6 p-5 nosi_nosa_preview" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
                             <div class="ribbon-wrapper ribbon-lg">
                                 <div class="ribbon bg-primary">
                                     PREVIEW
                                 </div>
                             </div>
                             <div class="row mt-3 mb-2">
-                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid" width="120" style="position: absolute;top: 55px;left: 50px;">
+                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid" width="100" style="position: absolute;top: 55px;left: 80px;">
                                 <div class="col-12 text-center">
-                                    <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
+                                    <h5 class="m-0">PROVINCE OF DAVAO DEL SUR</h5>
                                     <h5 class="m-0">Matti, Digos City</h5>
-                                    <h4 class="m-0">OFFICE OF THE GOVERNOR</h4>
-                                    <h4 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h4>
-                                </div>
-                            </div>
-                            <div class="row mt-5">
-                                <div class="col-9 mt-3">
-                                    <h5 class="m-0">{{ employee.name }}</h5>
-                                    <h5 class="m-0">{{ employee.position }}</h5>
-                                    <h5 class="m-0">{{ employee.office }}</h5>
-                                    <h5 class="m-0">Province of Davao del Sur</h5>
-                                    <h5 class="mt-4">Sir/Madam:</h5>
-                                </div>
-                                <div class="col-3 text-right">
-                                    <h5><u>{{ date_printed | myDate }}</u></h5>
-                                </div>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="col-12 text-justify">
-                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>.
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="col-8">
-                                    <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ date_of_appointment | myDate }}</u></h5>
-                                    <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ date_of_effectivity | myDate }}</u></h5>
-                                </div>
-                                <div class="col-3 text-right">
-                                    <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0">
-                                        <u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u>
-                                    </h5>
-                                    <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ employee.nextStepAmount | amount }}</u></h5>
-                                </div>
-                                <div class="col-1"></div>
-                            </div>
-                            <div class="row mt-4 mb-5">
-                                <div class="col-12 text-justify">
-                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        The step increment/s is/are subject to review and Post Audit by the Department of Budget and Management and Subject to re-adjustment and refund if found not in order.
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="row mt-5 mb-5">
-                                <div class="col-6"></div>
-                                <div class="col-6 mt-5">
-                                    <h5 class="m-0">Very truly yours,</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-5">
-                                <div class="col-6"></div>
-                                <div class="col-6 text-center mt-5">
-                                    <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
-                                    <h5 class="m-0">Provincial Governor</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-5 mb-3">
-                                <div class="col-12">
-                                    <h5 class="m-0">Copy Furnished</h5>
-                                    <h5 class="m-0">- GSIS</h5>
-                                    <h5 class="m-0">- Office Concerned</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Report -->
-                    <div class="row" id="nosi_div" style="display: none;">
-                        <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosi_div" :style="index + 1 == print_data.length ? '' : 'page-break-after: always;'">
-                            <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" style="top: 0; margin-top: -20px;">
-                            <div class="row mt-3 mb-2">
-                                <div class="col-12 text-center">
-                                    <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
-                                    <h5 class="m-0">Matti, Digos City</h5>
-                                    <h4 class="m-0">OFFICE OF THE GOVERNOR</h4>
-                                    <h4 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h4>
+                                    <h5 class="m-0">OFFICE OF THE GOVERNOR</h5>
+                                    <h5 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h5>
                                 </div>
                             </div>
                             <div class="row mt-5">
@@ -240,12 +239,13 @@
 
 <style type="text/css">
     @media print {
-        body * { visibility: hidden; }
-        .nosi_div * { visibility: visible; }
-        .nosi_div {  max-width: 100%; flex: unset; margin-top: 50px !important; }
+        body * { visibility: hidden !important; }
+        .nosi_div * { visibility: visible !important; }
+        .nosi_div {  max-width: 100%; flex: unset; padding-top: 30px !important; }
         .nosi_div h4 { font-size: 1.5rem }
         .nosi_div h5 { font-size: 1.275rem }
-        #nosi_div { display: block !important; margin-top: -1405px; }
+        #nosi_div { display: block !important; }
+        .nosi_card { display: none; }
     }
 </style>
 
