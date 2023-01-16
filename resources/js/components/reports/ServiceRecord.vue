@@ -87,10 +87,8 @@
             </div>
             <div class="card card-primary card-outline nosi_card">
                 <div class="card-header">
-                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">NOSI Report</h2>
-                    <p style="margin: 2px 0 0 2px;">Notice of Step Increment
-                    (Employees are based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})
-                    </p>
+                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Service Record</h2>
+                    <p style="margin: 2px 0 0 2px;">Generate Service Record Report based on PDS Work Experiences</p>
                 </div>
                 <div class="card-body">
                     <div class="row pr-3">

@@ -239,6 +239,12 @@
 											<p>NOSA</p>
 										</router-link>
 									</li>
+                                    <li class="nav-item">
+										<router-link to="/service-record" class="nav-link">
+											<i class="fas fa-file-word nav-icon"></i>
+											<p>Service Record</p>
+										</router-link>
+									</li>
 									{{-- <li class="nav-item">
 										<router-link to="/reports" class="nav-link">
 											<i class="fas fa-list nav-icon"></i>
