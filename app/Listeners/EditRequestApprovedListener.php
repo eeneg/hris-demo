@@ -68,7 +68,7 @@ class EditRequestApprovedListener
 
                 if($record->model == 'children')
                 {
-                    if(strlen($record->model_id) > 30)
+                    if(strlen($record->model_id) > 0)
                     {
                         $data = $employee->children()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
@@ -79,7 +79,7 @@ class EditRequestApprovedListener
                 if($record->model == 'eligibilities')
                 {
 
-                    if(strlen($record->model_id) > 30)
+                    if(strlen($record->model_id) > 0)
                     {
                         $employee->eligibilities()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
@@ -90,7 +90,7 @@ class EditRequestApprovedListener
                 if($record->model == 'workexperiences')
                 {
 
-                    if(strlen($record->model_id) > 30)
+                    if(strlen($record->model_id) > 0)
                     {
                         $employee->workexperiences()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
@@ -101,7 +101,7 @@ class EditRequestApprovedListener
                 if($record->model == 'voluntaryworks')
                 {
 
-                    if(strlen($record->model_id) > 30)
+                    if(strlen($record->model_id) > 0)
                     {
                         $employee->voluntaryworks()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
@@ -113,7 +113,7 @@ class EditRequestApprovedListener
                 if($record->model == 'trainingprograms')
                 {
 
-                    if(strlen($record->model_id) > 30)
+                    if(strlen($record->model_id) > 0)
                     {
                         $employee->trainingprograms()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{
@@ -125,7 +125,7 @@ class EditRequestApprovedListener
                 if($record->model == 'otherinfos')
                 {
 
-                    if(strlen($record->model_id) > 30)
+                    if(strlen($record->model_id) > 0)
                     {
                         $employee->otherinfos()->updateOrCreate(['id' => $record->model_id], [$record->field => $record->newValue]);
                     }else{

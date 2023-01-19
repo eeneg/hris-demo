@@ -706,7 +706,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(workexperience, index) in form.workexperiences" :key="workexperience.id">
+                                        <tr v-for="(workexperience, index) in sortOrderNo(form.workexperiences)" :key="workexperience.id">
                                             <td>
                                                 <div class="form-group input-group-sm">
                                                     <input type="text" :name="'we_inclusiveDateFrom'+index" :id="'we_inclusiveDateFrom'+index" class="form-control form-control-border border-width-2" v-model="workexperience.inclusiveDateFrom">
@@ -761,7 +761,7 @@
 
                                             <td hidden>
                                                 <div class="form-group input-group-sm">
-                                                    <input type="text" :name="'we_orderNo'+index" :id="'we_orderNo'+index" class="form-control form-control-border border-width-2" v-model="workexperience.orderNo = index">
+                                                    <input type="text" :name="'we_orderNo'+index" :id="'we_orderNo'+index" class="form-control form-control-border border-width-2" value="index" v-model="workexperience.orderNo">
                                                 </div>
                                             </td>
 
@@ -791,7 +791,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(voluntarywork, index) in form.voluntaryworks" :key="voluntarywork.id">
+                                    <tr v-for="(voluntarywork, index) in sortOrderNo(form.voluntaryworks)" :key="voluntarywork.id">
                                         <td>
                                             <div class="form-group input-group-sm">
                                                 <input type="text" :name="'nameAndAddress'+index" :id="'nameAndAddress'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.nameAndAddress">
@@ -855,7 +855,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(trainingprogram, index) in form.trainingprograms" :key="trainingprogram.id">
+                                    <tr v-for="(trainingprogram, index) in sortOrderNo(form.trainingprograms)" :key="trainingprogram.id">
                                         <td>
                                             <div class="form-group input-group-sm">
                                                 <input type="text" :name="'title'+index" :id="'title'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.title">
@@ -1606,6 +1606,17 @@ export default {
     },
     methods:
     {
+
+        sortOrderNo: function(data)
+        {
+            data.forEach(function(e, i) {
+                e.orderNo = i
+                return e
+            });
+
+            return _.sortBy(data, [function(o) {return o.orderNo}])
+        },
+
         reset: function()
         {
             $('#picture').val('');
@@ -1781,7 +1792,7 @@ export default {
                     if(this.editMode == 3)
                     {
                         _.each(this.form.children[index], function(value, key){
-                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at' && key != 'orderNo')
                             {
                                 vm.edits.push({model_id: vm.form.children[index]['id'], model: 'children', field: key, oldValue: value, newValue: null, status: 'PENDING'})
                             }
@@ -1792,10 +1803,10 @@ export default {
                 case data = 'eligibility':
                      if(this.editMode == 3)
                     {
-                        _.each(this.form.eligibility[index], function(value, key){
-                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                        _.each(this.form.eligibilities[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at' && key != 'orderNo')
                             {
-                                vm.edits.push({model_id: vm.form.eligibility[index]['id'], model: 'eligibility', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                                vm.edits.push({model_id: vm.form.eligibilities[index]['id'], model: 'eligibilities', field: key, oldValue: value, newValue: null, status: 'PENDING'})
                             }
                         })
                     }
@@ -1804,10 +1815,10 @@ export default {
                 case data = 'workexperience':
                      if(this.editMode == 3)
                     {
-                        _.each(this.form.workexperience[index], function(value, key){
-                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                        _.each(this.form.workexperiences[index], function(value, key){
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at' && key != 'orderNo')
                             {
-                                vm.edits.push({model_id: vm.form.workexperience[index]['id'], model: 'workexperience', field: key, oldValue: value, newValue: null, status: 'PENDING'})
+                                vm.edits.push({model_id: vm.form.workexperiences[index]['id'], model: 'workexperiences', field: key, oldValue: value, newValue: null, status: 'PENDING'})
                             }
                         })
                     }
@@ -1817,7 +1828,7 @@ export default {
                      if(this.editMode == 3)
                     {
                         _.each(this.form.voluntaryworks[index], function(value, key){
-                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at' && key != 'orderNo')
                             {
                                 vm.edits.push({model_id: vm.form.voluntaryworks[index]['id'], model: 'voluntaryworks', field: key, oldValue: value, newValue: null, status: 'PENDING'})
                             }
@@ -1829,7 +1840,7 @@ export default {
                      if(this.editMode == 3)
                     {
                         _.each(this.form.trainingprograms[index], function(value, key){
-                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at' && key != 'orderNo')
                             {
                                 vm.edits.push({model_id: vm.form.trainingprograms[index]['id'], model: 'trainingprograms', field: key, oldValue: value, newValue: null, status: 'PENDING'})
                             }
@@ -1841,7 +1852,7 @@ export default {
                      if(this.editMode == 3)
                     {
                         _.each(this.form.otherinfos[index], function(value, key){
-                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at')
+                            if(key != 'id' && key != 'personal_information_id' && key != 'created_at' && key != 'updated_at' && key != 'orderNo')
                             {
                                 vm.edits.push({model_id: vm.form.otherinfos[index]['id'], model: 'otherinfos', field: key, oldValue: value, newValue: null, status: 'PENDING'})
                             }
@@ -1862,21 +1873,31 @@ export default {
 
             this.difference(this.form, this.oldData)
 
-            axios.post('api/employeepersonalinformation?id='+this.form.id, this.edits)
-             .then(response => {
-                toast.fire({
-                    icon: 'success',
-                    title: 'Request sent successfully'
-                });
+            if(this.edits.length > 0)
+            {
+                axios.post('api/employeepersonalinformation?id='+this.form.id, this.edits)
+                .then(response => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Request sent successfully'
+                    });
+                    this.$Progress.finish();
+                })
+                .catch(error =>{
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong',
+                        'error'
+                    )
+                })
+            }else{
                 this.$Progress.finish();
-            })
-             .catch(error =>{
                 Swal.fire(
                     'Oops...',
-                    'Something went wrong',
-                    'error'
+                    'No changes made!!',
+                    'error',
                 )
-            })
+            }
         },
 
         difference: function(newValue, oldValue)
@@ -1909,10 +1930,10 @@ export default {
                         value.forEach(function(data, index){
                             for(var field in data)
                             {
-                                if(data['id'] && data[field] != oldValue[key][index][field])
+                                if((data['id'] && data[field] != oldValue[key][index][field]) && field !== 'orderNo' && data[field] !== null)
                                 {
                                     vm.edits.push({model_id: data['id'], model: key, field: field, oldValue: oldValue[key][index][field], newValue: data[field], status: 'PENDING'})
-                                }else if(!data['id']){
+                                }else if(!data['id'] && field !== 'orderNo' && data[field] !== null){
                                     vm.edits.push({model_id: key+index, model: key, field: field, oldValue: null, newValue: data[field], status: 'PENDING'})
                                 }
                             }

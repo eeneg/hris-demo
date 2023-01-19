@@ -109,6 +109,7 @@ class RequestController extends Controller
 
     public function acceptEditRequest(Request $request)
     {
+
         $edits = $request->except('id');
 
         $ar = [];
@@ -137,7 +138,7 @@ class RequestController extends Controller
             $data->update(['status' => 'VALIDATED']);
         }
 
-        if($data != '' || $data != null)
+        if(($data != '' || $data != null) && $data->status == 'APPROVED' || $data->status == 'VALIDATED')
         {
             event(new EditRequestApproved($data));
             $this->deleteEmptyRecords($data->personal_information_id);

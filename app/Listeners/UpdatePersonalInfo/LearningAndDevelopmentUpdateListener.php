@@ -45,11 +45,12 @@ class LearningAndDevelopmentUpdateListener
 
                 }else if(!$bool && count($value) > 0){
                     array_push($arr, data_get($value, 'id'));
-                    $event->pi->trainingprograms()->updateOrCreate(['id'=> data_get($value, 'id')],$value);
+                    $x = $event->pi->trainingprograms()->updateOrCreate(['id'=> data_get($value, 'id')],$value);
+                    array_push($arr, $x->id);
                 }
             }
 
-            DB::table('training_programs')->where('personal_information_id', $this->request->id)->whereNotIn('id', $arr)->delete();
+            DB::table('training_programs')->where('personal_information_id', $this->request->id)->whereNotIn('id', array_unique(array_filter($arr)))->delete();
 
         }
     }
