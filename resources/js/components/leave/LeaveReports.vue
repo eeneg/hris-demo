@@ -8,13 +8,16 @@
                 <div class="card-header">
 
                     <div class="row mt-1">
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <h2>Leave Reports</h2>
                             <small style="margin-left: 2px;">Generate Leave Reports</small>
                         </div>
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal">
-                                <i class="fas fa-print"></i>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#foreign_travel">
+                                <i class="fas fa-print"></i> Foreign Travel
+                            </button>
+                            <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#exampleModal">
+                                <i class="fas fa-print"></i> Summary
                             </button>
                         </div>
                     </div>
@@ -60,6 +63,62 @@
             </div>
         </div>
 
+        <!-- Modal -->
+
+        <div class="modal fade" id="foreign_travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Foreign Travel Report</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" v-model="foreignForm.title" id="title" class="form-control" placeholder="Enter Title">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="year">Year</label>
+                                <input type="number" v-model="foreignForm.year" id="year" class="form-control" placeholder="Enter Year">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="month">Month</label>
+                                <select class="custom-select" v-model="foreignForm.month">
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="generateForeignTravelReport()">Generate report</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -73,7 +132,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="title">Report Title</label>
-                            <input type="title" class="form-control" v-model="form.title" name="title" id="title" placeholder="Input Title">
+                            <input type="title" class="form-control" v-model="summaryForm.title" name="title" id="title" placeholder="Input Title">
                             <p class="text-danger" v-for="title in errors.title" :key="title.id">
                                 {{ title }}
                             </p>
@@ -81,7 +140,7 @@
                         <div class="col-md-12">
                             <div class="form-group mt-2">
                                 <label for="year">Year</label>
-                                <input type="number" class="form-control" v-model="form.year" name="year" id="year" placeholder="Input Year">
+                                <input type="number" class="form-control" v-model="summaryForm.year" name="year" id="year" placeholder="Input Year">
                                 <p class="text-danger" v-for="year in errors.year" :key="year.id">
                                     {{ year }}
                                 </p>
@@ -90,7 +149,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="month">Month</label>
-                                <select class="form-control" style="width: 100%;" id="month" v-model="form.month">
+                                <select class="form-control" style="width: 100%;" id="month" v-model="summaryForm.month">
                                     <option value="1">January</option>
                                     <option value="2">February</option>
                                     <option value="3">March</option>
@@ -111,7 +170,7 @@
                                 {{ month }}
                             </p>
                         </div>
-                        <div class="col-md-12" v-for="(preparedBy, index) in form.preparedBy" :key="preparedBy.id">
+                        <div class="col-md-12" v-for="(preparedBy, index) in summaryForm.preparedBy" :key="preparedBy.id">
                             <label for="author">Prepared By:</label>
                             <div class="row">
                                 <div class="col-md-5">
@@ -132,10 +191,10 @@
                             <label for="noted">Noted By:</label>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" v-model="form.notedBy.name" name="noted" id="noted" placeholder="Name">
+                                    <input type="text" class="form-control" v-model="summaryForm.notedBy.name" name="noted" id="noted" placeholder="Name">
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" v-model="form.notedBy.position" name="positionN" id="positionN" placeholder="Position">
+                                    <input type="text" class="form-control" v-model="summaryForm.notedBy.position" name="positionN" id="positionN" placeholder="Position">
                                 </div>
                             </div>
                         </div>
@@ -144,7 +203,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click="submit()">Generate report</button>
+                    <button type="button" class="btn btn-primary" @click="generateSummaryReport()">Generate report</button>
                 </div>
                 </div>
             </div>
@@ -187,12 +246,17 @@ import moment from 'moment'
         data() {
             return{
                 reports: {},
-                form: new Form({
+                summaryForm: new Form({
                     'title': null,
                     'year': null,
                     'month': null,
                     'preparedBy': [{ name: null, position: null }],
                     'notedBy': { name: null, position: null }
+                }),
+                foreignForm: new Form({
+                    'title': 'null',
+                    'year': 2023,
+                    'month': 'January',
                 }),
                 errors: {year: null, months: null}
             }
@@ -205,19 +269,19 @@ import moment from 'moment'
 
             destroyPreparedBy: function(index)
             {
-                if(this.form.preparedBy.length !== 1)
+                if(this.summaryForm.preparedBy.length !== 1)
                 {
-                    this.form.preparedBy.splice(index, 1)
+                    this.summaryForm.preparedBy.splice(index, 1)
                 }else{
-                    this.form.preparedBy[index] = {name: null, position: null}
+                    this.summaryForm.preparedBy[index] = {name: null, position: null}
                 }
             },
 
             addPreparedBy: function(index)
             {
-                if(this.form.preparedBy.length <= 2)
+                if(this.summaryForm.preparedBy.length <= 2)
                 {
-                    this.form.preparedBy.splice(index+1, 0, {name: null, position: null})
+                    this.summaryForm.preparedBy.splice(index+1, 0, {name: null, position: null})
                 }
             },
 
@@ -264,9 +328,9 @@ import moment from 'moment'
                 });
             },
 
-            generateReport: function()
+            generateSummaryReport: function()
             {
-                axios.post('api/leaveReport', this.form)
+                axios.post('api/leaveReport', this.summaryForm)
                 .then(e => {
                     $('#exampleModal').modal('hide')
                     let options = {
@@ -288,27 +352,71 @@ import moment from 'moment'
 
             deleteReport: function($id)
             {
-                axios.delete('api/leaveReport/'+ $id)
-                .then(response => {
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Deleted'
-                    })
-                    this.getReports()
-                })
-                .catch(e => {
-                    Swal.fire(
-                        'Failed!!',
-                        'Something went wrong!',
-                        'warning'
-                    )
-                    console.log(e)
+
+                Swal.fire({
+                title: 'Delete Report?',
+                text: "You cannot revert this!!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Proceed'
+                    }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Cancelled'
+                        });
+                    }else{
+
+                        this.$Progress.start()
+
+                        axios.delete('api/leaveReport/'+ $id)
+                        .then(response => {
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Deleted'
+                            })
+                            this.getReports()
+                            this.$Progress.finish()
+                        })
+                        .catch(e => {
+                            Swal.fire(
+                                'Failed!!',
+                                'Something went wrong!',
+                                'warning'
+                            )
+                            console.log(e)
+                        })
+
+                    }
                 })
             },
 
-            submit()
+            generateForeignTravelReport()
             {
-                this.generateReport()
+                this.$Progress.start()
+                axios.post('api/foreignTravel', this.foreignForm)
+                .then(e => {
+                    this.$Progress.finish()
+                    $('#foreign_travel').modal('hide')
+                    let options = {
+                        height: screen.height * 0.65 + 'px',
+                        page: '1'
+                    };
+                    $('#pdfModal').modal('show');
+                    PDFObject.embed("/storage/leave_reports/" + e.data.title, "#pdf-viewer", options);
+                    this.getReports()
+                })
+                .catch(e => {
+                    console.log(e)
+                    Swal.fire(
+                        'Error!',
+                        'Something went wrong!!',
+                        'error'
+                    )
+                })
             },
         },
 

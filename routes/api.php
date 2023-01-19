@@ -98,6 +98,8 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::delete('delete_position/{id}', 'Api\DepartmentController@delete_position');
 
     Route::patch('editPersonalInfo', 'Api\PersonalInformationController@editPersonalInfo');
+
+    Route::post('foreignTravel', 'Api\LeaveReportController@generateForeignTravelReport');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function() {

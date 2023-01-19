@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\LeaveReport;
 use App\LeaveSummary;
 use App\PersonalInformation;
+use App\Plantilla;
+use App\PlantillaContent;
+use App\Setting;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class LeaveReportController extends Controller
@@ -64,7 +68,6 @@ class LeaveReportController extends Controller
                 ->get()
                 ->filter(function($e){
                     if(($e->particulars->leave_type == 'UA' || $e->particulars->leave_type == 'AWOL') && $e->particulars->count >= 2){
-                        // dd($e);
                         return $e;
                     }else if(($e->particulars->leave_type == 'Tardy' || $e->particulars->leave_type == 'Undertime') && $e->particulars->count >= 10){
                         return $e;
@@ -92,7 +95,12 @@ class LeaveReportController extends Controller
                 ->map( function($e){
 
                     $employee = PersonalInformation::find($e->personal_information_id);
-                    $office = $employee->plantillacontents->first();
+                    $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+                    $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+                    $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+                        ->where('personal_information_id', $e->personal_information_id)
+                        ->first();
+
 
                     switch($e->period->mode)
                     {
@@ -111,14 +119,13 @@ class LeaveReportController extends Controller
                             break;
                     }
 
-
                     return[
                         'employee'  => $employee->firstname . ' ' . $employee->surname,
                         'month' => Carbon::parse($date)->format('m'),
                         'type' => $e->particulars->leave_type,
                         'mins' => $mins,
                         'count' => $e->particulars->count,
-                        'office' => $office
+                        'office' => $plantillacontents->position->department->title ?? ''
                     ];
 
         });
@@ -127,7 +134,8 @@ class LeaveReportController extends Controller
         {
             foreach($i as $data)
             {
-                $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
+                $ar[$data['employee']]['office'] = $data['office'];
+                $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count']];
             }
 
             $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar, 'prep' => $request->preparedBy, 'noted' => $request->notedBy];
@@ -155,6 +163,109 @@ class LeaveReportController extends Controller
             return abort(401, 'Empty Record');
         }
 
+    }
+
+    public function generateForeignTravelReport(Request $request)
+    {
+        $data = LeaveSummary::where('foreign_travel', 1)->get()
+            ->filter(function($leave) use ($request) {
+                switch($leave->period->mode){
+                    case 1:
+                    case 4:
+                        $date = Carbon::parse($leave->period->data)->format('F') == $request->month && Carbon::parse($leave->period->data)->format('Y') == $request->year;
+                        if($date){ return $leave; }
+                        break;
+                    case 2:
+                        $startMonth = Carbon::parse($leave->period->start)->format('F');
+                        $endMonth = Carbon::parse($leave->period->end)->format('F');
+                        $startYear = Carbon::parse($leave->period->start)->format('Y');
+                        $endYear = Carbon::parse($leave->period->end)->format('Y');
+                        if($startMonth == $request->month && $startYear == $request->year || $endMonth == $request->month && $endYear == $request->year) { return $leave; }
+                        break;
+                    case 3:
+                        foreach($leave->period->data as $dates)
+                        {
+                            if(Carbon::parse($dates->date)->format('F') == $request->month && Carbon::parse($dates->date)->format('Y') == $request->year)
+                            {
+                                return $leave;
+                                break;
+                            }
+                        }
+                }
+            })
+            ->map(function($leave){
+
+                $employee = DB::table('personal_informations')->where('id', $leave->personal_information_id)->first();
+                $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+                $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+                $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+                    ->where('personal_information_id', $leave->personal_information_id)
+                    ->first();
+
+                switch($leave->period->mode){
+                    case 1:
+                        $date = Carbon::parse($leave->period->data)->format('F d, Y');
+                        $leave_info = $leave->particulars->days;
+                        break;
+                    case 2:
+                        $date = Carbon::parse($leave->period->start)->format('F d, Y') . ' to ' . Carbon::parse($leave->period->end)->format('F d, Y');
+                        $leave_info = $leave->particulars->days ?? $leave->particulars->count;
+                        break;
+                    case 3:
+                        $date = collect($leave->period->data)
+                        ->sort()
+                        ->map(function($dates){
+                            return [
+                                    'month' => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('F'),
+                                    'day'   => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('d'),
+                                    'year'  => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('Y')
+                                ];
+                        })
+                        ->groupBy('month')
+                        ->map(function($dates, $index)
+                        {
+                            return $index . ' ' . collect($dates)->map(fn ($e) => $e['day'])->join(', ') . ', ' . $dates[0]['year'];
+                        });
+                        $date = collect($date)->join(' — ');
+                        $leave_info = $leave->particulars->days ?? $leave->particulars->count;
+                        break;
+                    case 4:
+                        $date = Carbon::parse($leave->period->data)->format('F d, Y');
+                        $leave_info = $leave->particulars->days ?? $leave->particulars->count;
+                        break;
+                }
+
+                return  collect([
+                    'name' => $employee->firstname . ' ' . ucfirst($employee->middlename[0] ?? '') . '. ' . $employee->surname,
+                    'office' => $plantillacontents->position->department->title ?? '',
+                    'leave_type' => $leave->particulars->leave_type,
+                    'days' => $leave_info,
+                    'inclusive_dates' => $date
+                ]);
+
+            });
+
+            $pdf = PDF::loadView('reports/foreign_travel_report', compact('data'))
+            ->setPaper('legal', 'landscape')
+            ->setOptions([
+                'defaultMediaType' => 'screen',
+                'dpi' => 120,
+            ]);
+
+            $id = LeaveReport::generateUuid();
+
+            $i = LeaveReport::create([
+                'id' => $id,
+                'title' => $request->title,
+                'file_name' => $id . '.pdf',
+                'path' => '/storage/leave_reports/' . $id . '.pdf'
+            ]);
+
+            Storage::put('public/leave_reports/' . $id .'.pdf', $pdf->output());
+
+            return ['title' => $id . '.pdf'];
+
+        // return $data;
     }
 
     /**
