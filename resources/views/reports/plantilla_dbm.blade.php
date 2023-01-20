@@ -30,17 +30,17 @@
 		</style>
 	</head>
 	<body id="po-body" style="width: 100%">
-		<footer style="position: fixed; right: 0; left: 0; margin-top: 530px; height: 1000px; width: 100%;">
+		<footer style="position: fixed; right: 0; left: 0; margin-top: 530px; height: 2200px; width: 100%;">
 			<div style="display: table;">
 				<thead style="width: 100%; border: solid black 1px;">
-					<th style="font-size: 10px;  width: 73px; height: 2000px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
+					<th style="font-size: 10px;  width: 73px; height: 1800px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 73px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 438px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 438px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 79px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 220px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 12px;  width: 79px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
-					<th style="font-size: 12px;  width: 220px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
+					<th style="font-size: 12px;  width: 225px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 12px;  width: 220px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 				</thead>
 				<tfoot style="top: 0; bottom: 50; width: 100%;">
@@ -48,22 +48,27 @@
                     {{-- TOTAL --}}
                     <tr>
                         <td colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none;"></td>
-                        <td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"> TOTAL</td>
-                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> 2,228340.00 </td>
+                        <td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"><p style="margin-left: 10px; border-right: none;"> TOTAL </p></td>
+                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold; "><p style="margin-right: 10px;">  2,228340.00 </p></td>
                         <td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> </td>
-                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> 2,270,388.00 </td>
-                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"> 42,048.00 </td>
+                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"><p style="margin-right: 10px;">  2,270,388.00 </p></td>
+                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"><p style="margin-right: 10px;">  42,048.00 </p></td>
                     </tr>
+                    <tr>
+						<td colspan="9" style="font-size: 16pt; height: 50px;">
+
+						</td>
+					</tr>
 					<tr style="">
-                        <td colspan="5" style="font-size: 16pt;">
+                        <td colspan="4" style="font-size: 16pt;">
                             Prepared by:
                         </td>
-                        <td colspan="4" style="font-size: 16pt;">
+                        <td colspan="5" style="font-size: 16pt;">
                             Reviewed by:
                         </td>
 					</tr>
                     <tr>
-						<td colspan="9" style="font-size: 16pt; ">
+						<td colspan="9" style="font-size: 16pt; height: 50px;">
 
 						</td>
 					</tr>
@@ -71,7 +76,7 @@
                         <td colspan="2">
                         </td>
                         <td colspan="2" style="font-size: 16pt; font-weight: bold; text-align: center;">
-                            RAUL D. RAUT, ENP, JD
+                             RAUL D. RAUT, ENP, JD 
                         </td>
                         <td>
                         </td>
@@ -92,9 +97,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="5">
+						<td colspan="9" style="font-size: 16pt; height: 50px;">
+
+						</td>
+					</tr>
+                    <tr>
+                        <td colspan="4">
                         </td>
-                        <td colspan="4" style="font-size: 16pt;">
+                        <td colspan="5" style="font-size: 16pt;">
                             Approved by:
                         </td>
 					</tr>
@@ -113,7 +123,7 @@
                         </td>
                     </tr>
 					<tr>
-						<td colspan="9" style="font-size: 14px; height: 20px;">
+						<td colspan="9" style="font-size: 14px; height: 70px;">
 
 						</td>
 					</tr>
@@ -129,7 +139,7 @@
 
 			<div>
 				<div style="height: 1000px;">
-					<table class="tableM" style="width: 100%; margin-bottom: 200px; height: 200px; top: 0;">
+					<table class="tableM" style="width: 100%; margin-bottom: 400px; height: 200px; top: 0;">
                         <thead style="width: 100%;">
                         <th colspan="9">
                             <p style="font-size: 18px; text-align: right;">Local Budget Preparation From No. 153</p>
@@ -221,24 +231,706 @@
 							</tr> --}}
                             {{-- Table Data --}}
                             <tr>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">1 </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
 								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
-								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"> PROVINCIAL GOVERNOR </td>
-								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"> YVONNE R. CAGAS </td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"> 30/1 </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"> 2,228340.00 </td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"> 30/1 </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"> 2,270,388.00 </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"> 42,048.00 </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
+							</tr>
+                            <tr>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 1 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">  </td>
+								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;">PROVINCIAL GOVERNOR </p> </p></td>
+								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-left: 10px;"> YVONNE R. CAGAS </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,228340.00 </p></td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p > 30/1 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p style="margin-right: 10px;"> 42,048.00 </p></td>
 							</tr>
                             {{-- Subtotal --}}
 							<tr>
 								<td colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-bottom: none; border-right: none;"></td>
-								<td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-bottom: none; font-weight: normal;"> SUBTOTAL</td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-bottom: none; border-right: none; font-weight: normal;"> 2,228340.00 </td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-bottom: none; border-right: none; font-weight: bold;"> </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-bottom: none; border-right: none; font-weight: normal;"> 2,270,388.00 </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-bottom: none; font-weight: normal;"> 42,048.00 </td>
+								<td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p style="margin-left: 10px;"> SUBTOTAL </p> </td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-bottom: none; border-right: none; font-weight: normal; border-left: none;"><p style="margin-right: 10px;">  2,228340.00 </p> </td>
+								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p style="margin-right: 10px;">  2,270,388.00 </p></td>
+								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p style="margin-right: 10px;">  42,048.00 </p></td>
 							</tr>
                             {{-- TOTAL --}}
 							{{-- <tr>
