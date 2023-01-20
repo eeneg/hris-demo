@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-md-7">
                             <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="plantillaReport()"><i class="fas fa-print"></i></a>
-                            <!-- <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button> -->
+                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success ml-2" @click="createPlantillaModal()">Create New Plantilla</button>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="createItemModal()">Create New Item</button>
                         </div>
@@ -108,48 +108,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Duplicate Plantilla Modal -->
-        <div class="modal fade" id="duplicate-plantilla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header modal-border">
-                        <h5 class="modal-title">Duplicate Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form autocomplete="off" @submit.prevent="duplicatePlantilla()">
-                        <div class="modal-body">
-                            <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ prevSalaryproposed.tranche }}</p>
-                            <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
-                                <label style="font-weight: normal; margin: 0;">Proposed Salary Schedule</label>
-                                <select v-model="plantillaForm.salary_prop" class="custom-select form-control-border border-width-2">
-                                    <option :value="salaryschedule.id" v-for="salaryschedule in schedules" :key="salaryschedule.id">{{ salaryschedule.tranche }}</option>
-                                </select>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label for="year" style="font-weight: normal; margin: 0;">Plantilla Year</label>
-                                        <input v-model="plantillaForm.year" id="year" class="form-control form-control-border border-width-2" type="text" name="year" placeholder="Year"
-                                        :class="{ 'is-invalid': plantillaForm.errors.has('year') }" required>
-                                        <has-error :form="plantillaForm" field="year"></has-error>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer modal-border" style="display: flow-root;padding: 6px 10px;">
-                            <div id="duplicateLoadingIcon" class="spinner-border text-success d-none" role="status" style="float: left;">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                            <button id="duplicateButton" type="submit" class="btn btn-success" style="float: right;">Create</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        </div>        
 
         <!-- Edit Plantilla Modal -->
         <div class="modal fade" id="edit-plantilla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -215,6 +174,7 @@
 
         <create-plantilla-modal :key="create_plantilla_modal_key" @exit="createPlantillaModalExit"></create-plantilla-modal>
         <item-form :key="create_item_modal_key" @exit="createItemModalExit" :create_data="create_data"></item-form>
+        <duplicate-plantilla-modal :key="duplicate_plantilla_modal_key" @exit="duplicatePlantillaModalExit"></duplicate-plantilla-modal>
 
         <!-- Report Modal -->
         <div class="modal" id="pdfModal">
@@ -242,6 +202,7 @@
 <script>
     import createplantillamodal from "./modals/CreatePlantillaModal"
     import itemForm from "./modals/ItemForm"
+    import duplicateplantillamodal from "./modals/DuplicatePlantillaModal"
 
     export default {
         data() {
@@ -290,6 +251,7 @@
                 }),
                 create_plantilla_modal_key: 0,
                 create_item_modal_key: 1000,
+                duplicate_plantilla_modal_key: 2000,
             }
         },
         methods: {
@@ -358,6 +320,9 @@
             },
             createPlantillaModalExit(value) {
                 this.create_plantilla_modal_key += 1;
+            },
+            duplicatePlantillaModalExit(value) {
+                this.duplicate_plantilla_modal_key += 1;
             },
             updateItemModal(plantillacontent) {
                 axios.post('api/department_positions', {department_id: this.selectedDepartment.id})
@@ -534,7 +499,7 @@
             },
             generatePlantilla(type){
                 this.$Progress.start();
-                axios.post('generatePlantilla', {type: type})
+                axios.post('generatePlantilla', {type: type, dept_id: this.selectedDepartment.id})
                     .then(response => {
                         let options = {
                             height: screen.height * 0.65 + 'px',
@@ -551,16 +516,6 @@
                     });
             },
             async plantillaReport() {
-                // const inputOptions = new Promise((resolve) => {
-                //     setTimeout(() => {
-                //         resolve({
-                //         'DBM': 'DBM',
-                //         'CSC': 'CSC',
-                //         'Summary': 'Summary'
-                //         })
-                //     }, 1000)
-                // })
-
                 const { value: report } = await Swal.fire({
                     title: 'Select report',
                     input: 'radio',
@@ -664,7 +619,8 @@
         },
         components: {
             'create-plantilla-modal': createplantillamodal,
-            'item-form': itemForm
+            'item-form': itemForm,
+            'duplicate-plantilla-modal': duplicateplantillamodal
         },
         created() {
             this.$Progress.start();
