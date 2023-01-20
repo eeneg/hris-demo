@@ -58,8 +58,28 @@ class PDFcontroller extends Controller
 
     public function plantilla(Request $request) {
         if ($request->type == 'DBM') {
+            $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+            $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+            $department = Department::find($request->dept_id);
 
-            $pdf = PDF::loadView('reports/plantilla_dbm')
+            $plantillacontents = PlantillaContent::whereHas('position', function($q) use($department) {
+                    $q->where('department_id', $department->id);
+                })
+                ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+                ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+                ->leftJoin('plantilla_depts', function($join) {
+                    $join->on('departments.id', '=', 'plantilla_depts.department_id');
+                    $join->on('plantilla_contents.plantilla_id', '=', 'plantilla_depts.plantilla_id');
+                })
+                ->where('plantilla_contents.plantilla_id', $plantilla->id)
+                ->orderBy('plantilla_depts.order_number')->orderBy('plantilla_contents.order_number')->get();
+            
+            $data = [
+                'plantillacontents' => $plantillacontents,
+                'department' => $department
+            ];
+
+            $pdf = PDF::loadView('reports/plantilla_dbm', $data)
                 ->setPaper([0,0,1275,1950], 'port')
                 ->setOptions([
                     'defaultMediaType' => 'screen',
