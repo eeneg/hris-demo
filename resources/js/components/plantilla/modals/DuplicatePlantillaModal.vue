@@ -2,13 +2,13 @@
     <div class="modal fade" id="duplicate-plantilla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header modal-border">
+                <!-- <div class="modal-header modal-border">
                     <h5 class="modal-title">Duplicate Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
-                <form autocomplete="off" @submit.prevent="duplicatePlantilla()">
+                </div> -->
+                <!-- <form autocomplete="off" @submit.prevent="duplicatePlantilla()">
                     <div class="modal-body">
                         <p style="margin-bottom: 5px;"><b>Authorized Salary Schedule: </b>{{ prevSalaryproposed.tranche }}</p>
                         <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
@@ -34,7 +34,7 @@
                         </div>
                         <button id="duplicateButton" type="submit" class="btn btn-success" style="float: right;">Create</button>
                     </div>
-                </form>
+                </form> -->
             </div>
         </div>
     </div>
@@ -44,73 +44,73 @@
     export default {
         data() {
             return {
-                plantillaForm: new Form({
-                    'year': '',
-                    'salary_auth': '',
-                    'salary_prop': '',
-                    'date_approved': '',
-                    'plantilla_depts': [],
-                }),
-                schedules: [],
-                departments: [],
-                loading: false,
+                // plantillaForm: new Form({
+                //     'year': '',
+                //     'salary_auth': '',
+                //     'salary_prop': '',
+                //     'date_approved': '',
+                //     'plantilla_depts': [],
+                // }),
+                // schedules: [],
+                // departments: [],
+                // loading: false,
             }
         },
         components: {
-            draggable
+            // draggable
         },
         props: {
             // key: Number,
         },
         methods: {
-            createPlantilla() {
-                this.$Progress.start();
-                this.loading = true;
-                this.plantillaForm.plantilla_depts = this.departments;
-                this.plantillaForm.post('api/plantilla')
-                    .then(() => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'Annual Plantilla ' + this.plantillaForm.year + ' created successfully',
-                        })
-                        $('#create-plantilla-modal').modal('hide');
-                        this.$Progress.finish();
-                        this.loading = false;
-                        this.$emit('exit');
-                    })
-                    .catch(error => {
-                        this.$Progress.fail();
-                        console.log(error.response.data.message);
-                        this.loading = false;
-                    });
-            },
-            exitModal() {
-                this.$emit('exit');
-            },
-            remove_item(index) {
-                this.departments.splice(index, 1);
-            },
-            init_contents() {
-                axios.get('api/salaryschedule')
-                    .then(({data}) => {
-                        this.schedules = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
+            // createPlantilla() {
+            //     this.$Progress.start();
+            //     this.loading = true;
+            //     this.plantillaForm.plantilla_depts = this.departments;
+            //     this.plantillaForm.post('api/plantilla')
+            //         .then(() => {
+            //             Swal.fire({
+            //                 icon: 'success',
+            //                 title: 'Success',
+            //                 text: 'Annual Plantilla ' + this.plantillaForm.year + ' created successfully',
+            //             })
+            //             $('#create-plantilla-modal').modal('hide');
+            //             this.$Progress.finish();
+            //             this.loading = false;
+            //             this.$emit('exit');
+            //         })
+            //         .catch(error => {
+            //             this.$Progress.fail();
+            //             console.log(error.response.data.message);
+            //             this.loading = false;
+            //         });
+            // },
+            // exitModal() {
+            //     this.$emit('exit');
+            // },
+            // remove_item(index) {
+            //     this.departments.splice(index, 1);
+            // },
+            // init_contents() {
+            //     axios.get('api/salaryschedule')
+            //         .then(({data}) => {
+            //             this.schedules = data;
+            //         })
+            //         .catch(error => {
+            //             console.log(error.response.data.message);
+            //         });
 
-                axios.get('api/complete_depts')
-                    .then(({data}) => {
-                        this.departments = data.data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-            }
+            //     axios.get('api/complete_depts')
+            //         .then(({data}) => {
+            //             this.departments = data.data;
+            //         })
+            //         .catch(error => {
+            //             console.log(error.response.data.message);
+            //         });
+            // }
         },
         mounted() {
-            this.init_contents()
+            // this.init_contents()
         },
         created() {
             
