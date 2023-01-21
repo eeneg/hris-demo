@@ -29,7 +29,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group" style="margin-bottom: 0.3rem;">
                                     <label style="font-weight: bold; margin: 0;">Employee name</label>
-                                    <v-select class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="create_data.allEmployees" label="name" :reduce="employee => employee.id" placeholder="Select Employee"></v-select>
+                                    <v-select @input="selectEmployee()" class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="create_data.allEmployees" label="name" :reduce="employee => employee.id" placeholder="Select Employee"></v-select>
                                 </div>
                             </div>
                         </div>
@@ -229,6 +229,9 @@
                             this.$Progress.fail();
                         });
                 }
+            },
+            selectEmployee() {
+                
             },
             selectPos(e) {
                 

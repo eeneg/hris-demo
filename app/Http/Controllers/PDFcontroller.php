@@ -61,6 +61,7 @@ class PDFcontroller extends Controller
             $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
             $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
             $department = Department::find($request->dept_id);
+            $previous_plantilla = Plantilla::where('year', '!=', $plantilla->year)->latest('created_at')->first();
 
             $plantillacontents = PlantillaContent::whereHas('position', function($q) use($department) {
                     $q->where('department_id', $department->id);
@@ -76,7 +77,9 @@ class PDFcontroller extends Controller
             
             $data = [
                 'plantillacontents' => $plantillacontents,
-                'department' => $department
+                'department' => $department,
+                'previous_plantilla' => $previous_plantilla,
+                'plantilla' => $plantilla
             ];
 
             $pdf = PDF::loadView('reports/plantilla_dbm', $data)
@@ -104,6 +107,9 @@ class PDFcontroller extends Controller
             $data = [
                 'plantillacontents' => $plantillacontents,
             ];
+
+            ini_set('max_execution_time', 300);
+            ini_set("memory_limit","2048M");
 
             $pdf = PDF::loadView('reports/plantilla_csc', $data)
                 ->setPaper([0,0,952,1456], 'landscape')

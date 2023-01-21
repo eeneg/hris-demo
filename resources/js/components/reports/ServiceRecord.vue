@@ -331,7 +331,7 @@
             // console.log('Component mounted.')
         },
         created() {
-            this.fetch_employees()
+            // this.fetch_employees()
         }
     }
 </script>

@@ -201,8 +201,8 @@
 							<th colspan="2" class="th2" style="font-size: 14pt; font-weight: normal; text-align: left; border-top: none; border-bottom: none; border-right: none;"></th>
 							<th colspan="1" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-right: none; border-top: none; border-bottom: none;"> Title of Position</th>
                             <th colspan="1" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-top: none; border-bottom: none; border-right: none;"> Name of Incumbent</th>
-                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-right: none; border-top: none;"> Per Annum 2nd Amended CY 2022</th>
-                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-top: none;"> Rate/Annum CY 2023</th>
+                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-right: none; border-top: none; line-height: 2.7rem;"> Per Annum {{ $previous_plantilla->year }}</th>
+                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-top: none;"> Rate/Annum {{ $plantilla->year }}</th>
                             <th colspan="1" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-left: none; border-top: none;"></th>
 						</thead>
 						<thead style="width: 100%;">
