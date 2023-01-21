@@ -72,25 +72,30 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="11" style="font-size: 18px;">
+						<td colspan="2" style="font-size: 18px;">
 							<p>Prepared by:</p>
 						</td>
-						<td colspan="6" style="font-size: 18px;">
+                        <td colspan="8">
+
+                        </td>
+						<td colspan="7" style="font-size: 18px;">
 							<p>Approved by:</p>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3" style="font-size: 25px; font-weight: bold;"> RAUL D. RAUT, EnP, J.D. </td>
-						<td colspan="3" style="font-size: 18px;"> __________________ </td>
-						<td colspan="5"></td>
-						<td colspan="4" style="font-size: 25px; font-weight: bold;"> YVONNE R. CAGAS </td>
+                        <td colspan="1"></td>
+						<td colspan="5" style="font-size: 25px; font-weight: bold; text-align: center;"> RAUL D. RAUT, EnP, J.D. </td>
+						<td colspan="4" style="font-size: 18px;"> __________________ </td>
+                        <td colspan="1"></td>
+						<td colspan="3" style="font-size: 25px; font-weight: bold; text-align: center;"> YVONNE R. CAGAS </td>
 						<td colspan="2" style="font-size: 18px;"> ___________________ </td>
 					</tr>
 					<tr>
-						<td colspan="3" style="font-size: 18px;"> PGDH-Provincial Human Resource Management Officer </td>
-						<td colspan="3" style="font-size: 18px;"> (Date) </td>
-						<td colspan="5"></td>
-						<td colspan="4" style="font-size: 18px;"> Provincial Governor </td>
+                        <td colspan="1"></td>
+						<td colspan="5" style="font-size: 18px; text-align: center;"> PGDH-Provincial Human Resource Management Officer </td>
+						<td colspan="4" style="font-size: 18px;"> (Date) </td>
+                        <td colspan="1"></td>
+						<td colspan="3" style="font-size: 18px; text-align: center;"> Provincial Governor </td>
 						<td colspan="2" style="font-size: 18px;"> (Date) </td>
 					</tr>
 				</tfoot>
@@ -224,27 +229,47 @@
 						<tbody style="margin-bottom: 200px;">
                             @foreach ($plantillacontents as $content)
                             <tr>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->new_number ? $content->new_number : $content->old_number }} </td>
-								<td style="text-align: left; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->position->title }} </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->salaryauthorized ? $content->salaryauthorized->grade : '' }} </td>
-								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {!! $content->salaryauthorized ? number_format($content->salaryauthorized->amount * 12) : '' !!} </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->salaryproposed ? $content->salaryproposed->grade : '' }} </td>
-								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {!! $content->salaryproposed ? number_format($content->salaryproposed->amount * 12) : '' !!} </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->salaryproposed ? $content->salaryproposed->step : '' }} </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> 11 </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> P </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> {{ substr($content->level,0,1) }} </td>
-								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;">
-                                    {{ $content->personalinformation ? $content->personalinformation->surname . ($content->personalinformation->nameextension ? ', '.$content->personalinformation->nameextension : '') : '' }}
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content->new_number ? $content->new_number : $content->old_number }} </p> </td>
+								<td style="text-align: left; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-left: 10px;>{{ $content->position->title }} </p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content->salaryauthorized ? $content->salaryauthorized->grade : '' }} </p> </td>
+								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-right: 10px;">{!! $content->salaryauthorized ? number_format($content->salaryauthorized->amount * 12) : '' !!} </p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content->salaryproposed ? $content->salaryproposed->grade : '' }} </p> </td>
+								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-right: 10px;">{!! $content->salaryproposed ? number_format($content->salaryproposed->amount * 12) : '' !!} </p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content->salaryproposed ? $content->salaryproposed->step : '' }} </p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>11 </p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> P</p>  </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> {{ substr($content->level,0,1) }} </p> </td>
+								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p>
+                                    {{ $content->personalinformation ? $content->personalinformation->surname . ($content->personalinformation->nameextension ? ', '.$content->personalinformation->nameextension : '') : '' }}</p>
                                 </td>
-								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->personalinformation ? $content->personalinformation->firstname : 'VACANT' }} </td>
-								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->personalinformation ? $content->personalinformation->middlename : '' }} </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->personalinformation ? $content->personalinformation->birthdate : '' }} </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->original_appointment }} </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"> {{ $content->last_promotion }} </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none;"> {{ substr($content->appointment_status,0,1) }} </td>
+								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p p style="margin-left: 10px;"> {{ $content->personalinformation ? $content->personalinformation->firstname : 'VACANT' }} </p> </td>
+								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p p style="margin-left: 10px;"> {{ $content->personalinformation ? $content->personalinformation->middlename : '' }}</p>  </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p p style="margin-left: 10px;"> {{ $content->personalinformation ? $content->personalinformation->birthdate : '' }} </p> </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content->original_appointment }} </p> </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content->last_promotion }} </p> </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none;"><p> {{ substr($content->appointment_status,0,1) }} </p> </td>
 							</tr>
                             @endforeach
+                            {{-- <tr>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>1</p> </td>
+								<td style="text-align: left; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-left: 10px;">PGDH - Provincial Correctional & Security Management Officer</p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>3</p> </td>
+								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-right: 10px;">4</p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>5</p> </td>
+								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-right: 10px;">6</p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>7</p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>11 </p> </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> P</p>  </td>
+								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> 8</p></td>
+								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;">9</p>
+                                </td>
+								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;">10</p> </td>
+								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;">11</p>  </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p>12</p> </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p>13</p> </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p>14</p> </td>
+								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none;"><p>15</p> </td>
+							</tr> --}}
 						</tbody>
 					</table>
 				</div>
