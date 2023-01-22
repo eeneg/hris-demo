@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Redactors\LeftRedactor;
 use Webpatser\Uuid\Uuid;
 
 class User extends Authenticatable implements Auditable
@@ -15,6 +16,8 @@ class User extends Authenticatable implements Auditable
     use HasApiTokens, Notifiable;
 
     public $incrementing = false;
+
+    protected $auditStrict = false;
 
     protected $keyType = 'string';
 
@@ -47,6 +50,14 @@ class User extends Authenticatable implements Auditable
 
     protected $with = [
         'userassignment',
+    ];
+
+    protected $auditExlude = [
+        'remember_token',
+    ];
+
+    protected $attributeModifiers = [
+        'password' => LeftRedactor::class,
     ];
 
     public function userassignment()
