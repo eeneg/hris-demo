@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Audit;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BirthdaysResource;
 use App\Plantilla;
@@ -36,6 +37,7 @@ class DashboardController extends Controller
             'vacant_positions' => count($vacant_positions),
             'active_employees' => count($active_employees),
             'birthdays' => new BirthdaysResource($birthdays),
+            'audits' => Audit::with(['user'])->latest('created_at')->take(15)->get(),
         ];
 
         return $data;

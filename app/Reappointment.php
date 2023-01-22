@@ -2,10 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Reappointment extends Model
+class Reappointment extends Auditable
 {
     public $incrementing = false;
 

@@ -3,10 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class LeaveReport extends Model
+class LeaveReport extends Auditable
 {
     use HasFactory;
 

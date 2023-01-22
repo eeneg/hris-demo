@@ -23,6 +23,7 @@
         "lcobucci/jwt": "3.4|^4.0",
         "milon/barcode": "^8.0",
         "nesbot/carbon": "^2.42",
+        "owen-it/laravel-auditing": "^13.0",
         "webpatser/laravel-uuid": "^4.0"
     },
     "require-dev": {

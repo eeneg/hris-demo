@@ -2,10 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class AbolishedItem extends Model
+class AbolishedItem extends Auditable
 {
     public $incrementing = false;
 

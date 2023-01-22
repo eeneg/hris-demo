@@ -179,6 +179,9 @@ return [
         //milon barcode
         Milon\Barcode\BarcodeServiceProvider::class,
 
+        //owenit auditing
+        OwenIt\Auditing\AuditingServiceProvider::class,
+
     ],
 
     /*

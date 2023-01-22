@@ -210,62 +210,26 @@
 										<tr>
 											<th>User</th>
 											<th>Activity</th>
+											<th>Details</th>
 											<th style="text-align: right;">Status</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
+										<tr v-for="audit in data_set.audits">
 											<td>
-												<a href="pages/examples/invoice.html">Vanessa Rellanos</a>
+												{{ audit.user.name }}
 											</td>
-											<td>Updated his plantilla</td>
-											<td style="text-align: right;">
-												<span class="badge badge-success">04/20/21</span>
-											</td>
-										</tr>
-										<tr>
 											<td>
-												<a href="pages/examples/invoice.html">John Doe</a>
+												<span class="text-capitalize">{{ audit.event }}</span>
+												{{ audit.audited }}.
 											</td>
-											<td>Applied for leave</td>
-											<td style="text-align: right;">
-												<span class="badge badge-warning">Pending</span>
-											</td>
-										</tr>
-										<tr>
 											<td>
-												<a href="pages/examples/invoice.html">Jane Doe</a>
+												<div style="overflow: hidden; width: 280px; text-align: left; valign: top; word-break: break-all;">
+													{{ audit.modified }}
+												</div>
 											</td>
-											<td>Updated his profile</td>
 											<td style="text-align: right;">
-												<span class="badge badge-danger">Delivered</span>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<a href="pages/examples/invoice.html">Magic Johnson</a>
-											</td>
-											<td>Applied for leave</td>
-											<td style="text-align: right;">
-												<span class="badge badge-info">Processing</span>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<a href="pages/examples/invoice.html">Jayson Castro</a>
-											</td>
-											<td>Salary grade increase</td>
-											<td style="text-align: right;">
-												<span class="badge badge-danger">06/11/21</span>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<a href="pages/examples/invoice.html">Mark Hernan</a>
-											</td>
-											<td>Appointed as Vice Governor</td>
-											<td style="text-align: right;">
-												<span class="badge badge-success">06/15/21</span>
+												{{ audit.ip_address }} <span class="badge badge-success">{{ moment(audit.created_at).format('lll') }}</span>
 											</td>
 										</tr>
 									</tbody>
@@ -506,6 +470,8 @@
 	</section>
 </template>
 <script>
+	import moment from 'moment';
+
 	export default {
 		data() {
 			return {
@@ -525,6 +491,9 @@
 				}).catch(error => {
 					console.log(error.response.data.message);
 				});
+			},
+			moment: function () {
+				return moment();
 			}
 		},
 		created() {
