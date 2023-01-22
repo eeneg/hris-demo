@@ -15,33 +15,38 @@ class Plantilla extends Model
 
     protected $with = ['salaryproposedschedule', 'salaryauthorizedschedule'];
 
-    protected $fillable = [ 'year', 'salary_schedule_auth_id', 'salary_schedule_prop_id' ];
+    protected $fillable = ['year', 'salary_schedule_auth_id', 'salary_schedule_prop_id'];
 
     public function plantilla_contents()
     {
         return $this->hasMany('App\PlantillaContent', 'plantilla_id');
     }
 
-    public function salaryproposedschedule(){
+    public function salaryproposedschedule()
+    {
         return $this->belongsTo('App\SalarySchedule', 'salary_schedule_prop_id');
     }
 
-    public function salaryauthorizedschedule(){
+    public function salaryauthorizedschedule()
+    {
         return $this->belongsTo('App\SalarySchedule', 'salary_schedule_auth_id');
     }
 
-    public function plantilla_depts() {
+    public function plantilla_depts()
+    {
         return $this->hasMany('App\PlantillaDept', 'plantilla_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

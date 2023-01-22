@@ -7,7 +7,6 @@ use Webpatser\Uuid\Uuid;
 
 class Department extends Model
 {
-
     public $incrementing = false;
 
     protected $keyType = 'string';
@@ -19,7 +18,7 @@ class Department extends Model
     ];
 
     protected $fillable = [
-        'title', 'description', 'address', 'function', 'projectactivity', 'fund'
+        'title', 'description', 'address', 'function', 'projectactivity', 'fund',
     ];
 
     public function positions()
@@ -27,14 +26,16 @@ class Department extends Model
         return $this->hasMany('App\Position', 'department_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

@@ -23,7 +23,7 @@ class UserResource extends ResourceCollection
                 'email' => $item->email,
                 'role' => $item->role,
                 'status' => $item->status,
-                'userassignment' => $item->userassignment
+                'userassignment' => $item->userassignment,
             ];
         });
     }
@@ -32,7 +32,7 @@ class UserResource extends ResourceCollection
     {
         return [
             'version' => '1.0.0',
-            'author_url' => url('http://www.davsurians.com.ph/')
+            'author_url' => url('http://www.davsurians.com.ph/'),
         ];
     }
 }

@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Facades\DB;
 use App\Appointment;
 use App\Department;
-use App\Position;
 use App\Http\Controllers\Controller;
-use App\PersonalInformation;
 use App\Http\Resources\AppointmentResource;
-use App\Http\Resources\EmployeeAppointmentListResource;
 use App\SalaryGrade;
 use App\SalarySchedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
@@ -25,7 +21,6 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
-
         $appointments = Appointment::select('appointment_records.*')
             ->leftJoin('personal_informations', 'appointment_records.personal_information_id', '=', 'personal_informations.id')
             ->leftJoin('positions', 'appointment_records.position_id', '=', 'positions.id')
@@ -49,32 +44,24 @@ class AppointmentController extends Controller
                 'appointment_records.*'
             );
 
-        if(!$request->search && !$request->from && !$request->to)
-        {
+        if (! $request->search && ! $request->from && ! $request->to) {
+            return new AppointmentResource($appointments->paginate(20));
+        } elseif (! $request->search && $request->from && $request->to) {
+            $appointments->whereBetween('appointment_records.reckoning_date', [$request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')]);
 
             return new AppointmentResource($appointments->paginate(20));
-
-        }else if(!$request->search && $request->from && $request->to){
-
-            $appointments->whereBetween('appointment_records.reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')));
-
-            return new AppointmentResource($appointments->paginate(20));
-
-        }else if($request->search && !$request->from && !$request->to){
-
+        } elseif ($request->search && ! $request->from && ! $request->to) {
             $appointments->where(function ($query) use ($request) {
-                    $query->where('surname', 'LIKE', '%'.$request->search.'%')
-                    ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
-                    ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                    ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
-                    ->orderBy('surname');
-                });
+                $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
+                ->orderBy('surname');
+            });
 
             return new AppointmentResource($appointments->paginate(20));
-
-        }else{
-
-            $appointments->whereBetween('appointment_records.reckoning_date', array($request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')))
+        } else {
+            $appointments->whereBetween('appointment_records.reckoning_date', [$request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')])
                 ->where(function ($query) use ($request) {
                     $query->where('surname', 'LIKE', '%'.$request->search.'%')
                     ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
@@ -84,10 +71,7 @@ class AppointmentController extends Controller
                 });
 
             return new AppointmentResource($appointments->paginate(20));
-
         }
-
-
     }
 
     public function fetchDepartments(Request $request)
@@ -116,20 +100,20 @@ class AppointmentController extends Controller
         $request->merge(['salary_grade_id' => $salaryGradeId]);
 
         $request->validate([
-            'personal_information_id'   => 'required',
-            'salary_grade_id'           => 'required',
-            'position_id'               => 'required',
-            'salary_sched_id'           => 'required',
-            'grade'                     => 'required',
-            'step'                      => 'required',
-            'status'                    => 'required',
-            'agency'                    => 'required',
-            'nature_of_appointment'     => 'required',
-            'previous_employee'         => 'required',
-            'previous_status'           => 'required',
-            'itemno'                    => 'required|integer',
-            'page'                      => 'required|integer',
-            'reckoning_date'            => 'required|date'
+            'personal_information_id' => 'required',
+            'salary_grade_id' => 'required',
+            'position_id' => 'required',
+            'salary_sched_id' => 'required',
+            'grade' => 'required',
+            'step' => 'required',
+            'status' => 'required',
+            'agency' => 'required',
+            'nature_of_appointment' => 'required',
+            'previous_employee' => 'required',
+            'previous_status' => 'required',
+            'itemno' => 'required|integer',
+            'page' => 'required|integer',
+            'reckoning_date' => 'required|date',
         ]);
 
         $appointment = Appointment::create($request->all());
@@ -163,20 +147,20 @@ class AppointmentController extends Controller
         $request->merge(['salary_grade_id' => $salaryGradeId]);
 
         $request->validate([
-            'personal_information_id'   => 'required',
-            'salary_grade_id'           => 'required',
-            'position_id'               => 'required',
-            'salary_sched_id'           => 'required',
-            'grade'                     => 'required',
-            'step'                      => 'required',
-            'status'                    => 'required',
-            'agency'                    => 'required',
-            'nature_of_appointment'     => 'required',
-            'previous_employee'         => 'required',
-            'previous_status'           => 'required',
-            'itemno'                    => 'required|integer',
-            'page'                      => 'required|integer',
-            'reckoning_date'            => 'required|date'
+            'personal_information_id' => 'required',
+            'salary_grade_id' => 'required',
+            'position_id' => 'required',
+            'salary_sched_id' => 'required',
+            'grade' => 'required',
+            'step' => 'required',
+            'status' => 'required',
+            'agency' => 'required',
+            'nature_of_appointment' => 'required',
+            'previous_employee' => 'required',
+            'previous_status' => 'required',
+            'itemno' => 'required|integer',
+            'page' => 'required|integer',
+            'reckoning_date' => 'required|date',
         ]);
 
         $appointment->update($request->all());

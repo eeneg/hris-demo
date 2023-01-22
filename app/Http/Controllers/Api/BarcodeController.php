@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Barcode;
+use App\Http\Controllers\Controller;
 use App\PersonalInformation;
+use Illuminate\Http\Request;
 
 class BarcodeController extends Controller
 {
@@ -28,35 +28,40 @@ class BarcodeController extends Controller
     public function store(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');
-        if (!Barcode::where('personal_information_id', $request['id'])->exists()) {
+        if (! Barcode::where('personal_information_id', $request['id'])->exists()) {
             $employee = PersonalInformation::findOrFail($request['id']);
 
             $code = $this->generateCode();
-            while(Barcode::where('value', $code)->exists()){
+            while (Barcode::where('value', $code)->exists()) {
                 $code = $this->generateCode();
             }
+
             return Barcode::create([
                 'personal_information_id' => $employee->id,
-                'value' => $code
+                'value' => $code,
             ]);
         } else {
             $data = [
                 'barcode' => Barcode::where('personal_information_id', $request['id'])->first(),
-                'status' => 'existing'
+                'status' => 'existing',
             ];
+
             return $data;
         }
     }
 
-    public function generateCode(){
+    public function generateCode()
+    {
         $code = '';
-        for($i = 0; $i < 12; $i++) {
-             $code .= mt_rand(0, 9);
+        for ($i = 0; $i < 12; $i++) {
+            $code .= mt_rand(0, 9);
         }
+
         return $code;
     }
 
-    public function verify(Request $request) {
+    public function verify(Request $request)
+    {
         $barcode = Barcode::where('value', $request->barcode)->where('personal_information_id', $request->employee_id)->first();
         if ($barcode != null) {
             return PersonalInformation::with('plantillacontents')->findOrFail($barcode->personal_information_id);
@@ -73,7 +78,6 @@ class BarcodeController extends Controller
      */
     public function show($id)
     {
-
     }
 
     /**

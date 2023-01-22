@@ -15,10 +15,10 @@ class Position extends Model
 
     protected $table = 'positions';
 
-    protected $fillable = [ 'department_id', 'title' ];
+    protected $fillable = ['department_id', 'title'];
 
     protected $with = [
-        'department'
+        'department',
     ];
 
     public function department()
@@ -26,14 +26,16 @@ class Position extends Model
         return $this->belongsTo('App\Department', 'department_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

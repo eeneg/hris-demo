@@ -22,7 +22,7 @@ class LeaveApplicationResource extends ResourceCollection
                     'firstname' => $item->firstname,
                     'middlename' => $item->middlename,
                     'nameextension' => $item->nameextension,
-                    'surname' => $item->surname
+                    'surname' => $item->surname,
                 ],
                 'leave_type_id' => $item->leave_type_id,
                 'leavetype' => [
@@ -30,7 +30,7 @@ class LeaveApplicationResource extends ResourceCollection
                     'description' => $item->description,
                     'max_duration' => $item->max_duration,
                     'status' => $item->status,
-                    'title' => $item->title
+                    'title' => $item->title,
                 ],
                 'role' => $item->role,
                 'dept' => $item->dept,
@@ -58,7 +58,7 @@ class LeaveApplicationResource extends ResourceCollection
                 'stage_status' => $item->stage_status,
                 'recommendation_status' => $item->recommendation_status,
                 'recommendation_remark_approved' => $item->recommendation_remark_approved,
-                'recommendation_remark_disapproved' => $item->recommendation_remark_disapproved
+                'recommendation_remark_disapproved' => $item->recommendation_remark_disapproved,
                 // 'leavetype' => $item->leavetype,
                 // 'order_number' => $item->order_number,
                 // 'working_time' => $item->working_time,
@@ -78,7 +78,7 @@ class LeaveApplicationResource extends ResourceCollection
     {
         return [
             'version' => '1.0.0',
-            'author_url' => url('http://www.davsurians.com.ph/')
+            'author_url' => url('http://www.davsurians.com.ph/'),
         ];
     }
 }

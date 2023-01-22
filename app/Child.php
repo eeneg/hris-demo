@@ -7,30 +7,31 @@ use Webpatser\Uuid\Uuid;
 
 class Child extends Model
 {
-
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'id', 'personal_information_id', 'name', 'birthday' ];
+    protected $fillable = ['id', 'personal_information_id', 'name', 'birthday'];
 
-    public function personalinformation(){
+    public function personalinformation()
+    {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
-            if($model->id == null || $model->id == '')
-            {
+        self::creating(function ($model) {
+            if ($model->id == null || $model->id == '') {
                 $model->id = self::generateUuid();
             }
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

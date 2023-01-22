@@ -17,7 +17,7 @@ class RevertItemResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'new_number' => $this->new_number
+            'new_number' => $this->new_number,
         ];
     }
 }

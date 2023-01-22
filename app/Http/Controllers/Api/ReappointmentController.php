@@ -44,6 +44,7 @@ class ReappointmentController extends Controller
     public function employeeList()
     {
         $employees = PersonalInformation::orderBy('surname')->get();
+
         return new EmployeeAppointmentListResource($employees);
     }
 
@@ -56,19 +57,18 @@ class ReappointmentController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,
-        [
-            'personal_information_id' => 'required',
-            'assigned_to' => 'required',
-        ],
-        [
-            'personal_information_id.required' => 'Employee required.',
-            'assigned_to.required' => 'Department required',
-        ]);
+            [
+                'personal_information_id' => 'required',
+                'assigned_to' => 'required',
+            ],
+            [
+                'personal_information_id.required' => 'Employee required.',
+                'assigned_to.required' => 'Department required',
+            ]);
 
         $employee = PersonalInformation::find($request->personal_information_id)->plantillacontents;
 
         $department = Department::find($employee[0]->position->department_id);
-
 
         return Reappointment::create(array_merge($request->all(), ['assigned_from' => $department->id]));
     }
@@ -96,15 +96,14 @@ class ReappointmentController extends Controller
         $data = Reappointment::find($id);
 
         $this->validate($request,
-        [
-            'personal_information_id' => 'required',
-            'assigned_to' => 'required',
-        ],
-        [
-            'personal_information_id.required' => 'Employee required.',
-            'assigned_to.required' => 'Department required',
-        ]);
-
+            [
+                'personal_information_id' => 'required',
+                'assigned_to' => 'required',
+            ],
+            [
+                'personal_information_id.required' => 'Employee required.',
+                'assigned_to.required' => 'Department required',
+            ]);
 
         return $data->update($request->all());
     }

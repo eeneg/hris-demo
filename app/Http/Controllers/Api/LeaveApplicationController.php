@@ -3,22 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Department;
+use App\Events\LeaveProcessed;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LeaveApplicationResource;
+use App\LeaveApplication;
+use App\Plantilla;
+use App\Setting;
+use App\UserAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\LeaveApplication;
-use App\UserAssignment;
-use App\Setting;
-use App\Plantilla;
-use App\Http\Resources\LeaveApplicationResource;
-use App\LeaveCredit;
-use App\PersonalInformation;
-use App\Reappointment;
-use App\User;
-use Carbon\Carbon;
-use App\Events\LeaveProcessed;
-use Illuminate\Pagination\Paginator;
 
 class LeaveApplicationController extends Controller
 {
@@ -29,14 +23,14 @@ class LeaveApplicationController extends Controller
      */
     public function index()
     {
-        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
-        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
-        $department_id      =   Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head'  ?
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ?
                                 UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
 
         $data = [
             'role' => Auth::user()->role,
-            'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id'))
+            'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id')),
         ];
 
         return new LeaveApplicationResource(LeaveApplication::leaveapplications($default_plantilla, $plantilla, $department_id, $data));
@@ -44,9 +38,9 @@ class LeaveApplicationController extends Controller
 
     public function getAllLeave()
     {
-        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
-        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
-        $department_id      =   Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ?
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ?
                                 UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
 
         return new LeaveApplicationResource(LeaveApplication::getAllLeave($default_plantilla, $plantilla, $department_id));
@@ -56,11 +50,9 @@ class LeaveApplicationController extends Controller
     {
         $data = [];
 
-        foreach($request->all() as $key => $item)
-        {
-            if($item != null)
-            {
-                $data[$key]=$item;
+        foreach ($request->all() as $key => $item) {
+            if ($item != null) {
+                $data[$key] = $item;
             }
         }
 
@@ -69,7 +61,7 @@ class LeaveApplicationController extends Controller
 
     public function getLeaveBalance(Request $request)
     {
-        $leaveCredit    =   DB::table('leave_credits')
+        $leaveCredit = DB::table('leave_credits')
                             ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
                             ->where('personal_information_id', $request->id)
                             ->where(function ($query) {
@@ -90,14 +82,14 @@ class LeaveApplicationController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,
-        [
-            'personal_information_id' => 'required',
-            'leave_type_id' => 'required'
-        ],
-        [
-            'personal_information_id.required' => 'Name of applicant is required.',
-            'leave_type_id.required' => 'Type of leave is required.',
-        ]);
+            [
+                'personal_information_id' => 'required',
+                'leave_type_id' => 'required',
+            ],
+            [
+                'personal_information_id.required' => 'Name of applicant is required.',
+                'leave_type_id.required' => 'Type of leave is required.',
+            ]);
 
         return LeaveApplication::create($request->all());
     }
@@ -120,17 +112,15 @@ class LeaveApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function edit(Request $request)
     {
-
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $department_id = Auth::user()->role == 'Office User' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
 
         $data = [
             'role' => Auth::user()->role,
-            'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id'))
+            'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id')),
         ];
 
         return new LeaveApplicationResource(LeaveApplication::leaveapplications($default_plantilla, $plantilla, $department_id, $data));
@@ -142,11 +132,9 @@ class LeaveApplicationController extends Controller
 
         $application->update($request->all());
 
-        if($request->stage_status == 'Approved by the HR Head')
-        {
+        if ($request->stage_status == 'Approved by the HR Head') {
             return event(new LeaveProcessed($application));
         }
-
     }
 
     public function loadUserRole()
@@ -154,7 +142,7 @@ class LeaveApplicationController extends Controller
         $data = [
             'role' => Auth::user()->role,
             'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id')),
-            'id'   => Auth::user()->id
+            'id' => Auth::user()->id,
         ];
 
         return $data;

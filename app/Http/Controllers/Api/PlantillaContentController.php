@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\AbolishedItem;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\PlantillaContent;
-use App\Setting;
+use App\Http\Resources\DepartmentsResource;
+use App\Http\Resources\PlantillaContentResource;
+use App\Http\Resources\PlantillaEmployeesNOSAResource;
+use App\Http\Resources\PlantillaEmployeesNOSIResource;
 use App\Plantilla;
+use App\PlantillaContent;
 use App\PlantillaDept;
 use App\Position;
 use App\SalaryGrade;
-use App\Department;
-use App\AbolishedItem;
-use App\Http\Resources\PlantillaContentResource;
-use App\Http\Resources\PlantillaEmployeesNOSIResource;
-use App\Http\Resources\PlantillaEmployeesNOSAResource;
-use App\Http\Resources\DepartmentsResource;
+use App\Setting;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PlantillaContentController extends Controller
@@ -27,15 +26,15 @@ class PlantillaContentController extends Controller
      */
     public function index()
     {
-        
     }
 
-    public function plantillaForNosi(Request $request) {
+    public function plantillaForNosi(Request $request)
+    {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
             ->leftJoin('salary_grades as salaryproposed', 'plantilla_contents.salary_grade_prop_id', '=', 'salaryproposed.id')
-            ->leftJoin('salary_grades as nextStep', function($join) {
+            ->leftJoin('salary_grades as nextStep', function ($join) {
                 $join->on('salaryproposed.salary_sched_id', '=', 'nextStep.salary_sched_id');
                 $join->on('salaryproposed.grade', '=', 'nextStep.grade');
                 $join->on(DB::raw('salaryproposed.step + 1'), '=', 'nextStep.step');
@@ -47,7 +46,8 @@ class PlantillaContentController extends Controller
         return new PlantillaEmployeesNOSIResource($plantillacontents);
     }
 
-    public function plantillaForNosa(Request $request) {
+    public function plantillaForNosa(Request $request)
+    {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
@@ -59,13 +59,14 @@ class PlantillaContentController extends Controller
         $department_resource = new DepartmentsResource($departments);
         $data = [
             'plantillacontents' => $nosi_resource,
-            'departments' => $department_resource
+            'departments' => $department_resource,
         ];
 
         return $data;
     }
 
-    public function plantilladepartmentcontent(Request $request) {
+    public function plantilladepartmentcontent(Request $request)
+    {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $plantillacontents = PlantillaContent::select('plantilla_contents.*')
@@ -75,6 +76,7 @@ class PlantillaContentController extends Controller
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->orderBy('order_number')
             ->get();
+
         return new PlantillaContentResource($plantillacontents);
     }
 
@@ -90,10 +92,10 @@ class PlantillaContentController extends Controller
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $department_id = $request->department_id;
-        if (!isset($request->position['id'])) {
+        if (! isset($request->position['id'])) {
             $position = Position::create([
                 'department_id' => $department_id,
-                'title' => isset($request->position['title']) ? $request->position['title'] : $request->position
+                'title' => isset($request->position['title']) ? $request->position['title'] : $request->position,
             ]);
             $position_id = $position->id;
         } else {
@@ -114,20 +116,20 @@ class PlantillaContentController extends Controller
             }
         }
 
-        if ($request->salary_grade_auth != "") {
+        if ($request->salary_grade_auth != '') {
             $salaryauthorized = SalaryGrade::where('salary_sched_id', $plantilla->salaryauthorizedschedule->id)
-                ->where('grade', explode("/", $request->salary_grade_auth)[0])
-                ->where('step', explode("/", $request->salary_grade_auth)[1])
+                ->where('grade', explode('/', $request->salary_grade_auth)[0])
+                ->where('step', explode('/', $request->salary_grade_auth)[1])
                 ->first();
         }
-        
-        if ($request->salary_grade_prop != "") {
+
+        if ($request->salary_grade_prop != '') {
             $salaryproposed = SalaryGrade::where('salary_sched_id', $plantilla->salaryproposedschedule->id)
-                ->where('grade', explode("/", $request->salary_grade_prop)[0])
-                ->where('step', explode("/", $request->salary_grade_prop)[1])
+                ->where('grade', explode('/', $request->salary_grade_prop)[0])
+                ->where('step', explode('/', $request->salary_grade_prop)[1])
                 ->first();
         }
-        
+
         return PlantillaContent::create([
             'plantilla_id' => $plantilla->id,
             'salary_grade_auth_id' => isset($salaryauthorized) ? $salaryauthorized->id : null,
@@ -142,7 +144,7 @@ class PlantillaContentController extends Controller
             'original_appointment' => $request->original_appointment,
             'last_promotion' => $request->last_promotion,
             'appointment_status' => $request->appointment_status,
-            'order_number' => $request->order_number
+            'order_number' => $request->order_number,
         ]);
     }
 
@@ -157,7 +159,8 @@ class PlantillaContentController extends Controller
         //
     }
 
-    public function plantillacontentabolish(Request $request) {
+    public function plantillacontentabolish(Request $request)
+    {
         $this->authorize('isAdministratorORAuthor');
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
@@ -168,9 +171,8 @@ class PlantillaContentController extends Controller
         AbolishedItem::create([
             'plantilla_content_id' => $plantillacontent->id,
             'salary_grade_prop_id' => $plantillacontent->salary_grade_prop_id,
-            'new_number' => $plantillacontent->new_number
+            'new_number' => $plantillacontent->new_number,
         ]);
-
 
         $plantillacontent->new_number = null;
         $plantillacontent->salary_grade_prop_id = null;
@@ -200,10 +202,10 @@ class PlantillaContentController extends Controller
         $plantillacontent = PlantillaContent::find($id);
 
         $department_id = $request->department_id;
-        if (!isset($request->position['id'])) {
+        if (! isset($request->position['id'])) {
             $position = Position::create([
                 'department_id' => $department_id,
-                'title' => isset($request->position['title']) ? $request->position['title'] : $request->position
+                'title' => isset($request->position['title']) ? $request->position['title'] : $request->position,
             ]);
             $position_id = $position->id;
         } else {
@@ -213,7 +215,7 @@ class PlantillaContentController extends Controller
         $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
             $query->where('department_id', $department_id);
         })->orderBy('order_number', 'desc')->get();
-        
+
         // Order Number
         $originalOrderNumber = $plantillacontent->order_number;
         $updateOrderNumber = $request->order_number;
@@ -221,27 +223,25 @@ class PlantillaContentController extends Controller
             PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
                 $query->where('department_id', $department_id);
             })->where('order_number', '>=', $updateOrderNumber)->where('order_number', '<', $originalOrderNumber)->update(['order_number' => DB::raw('order_number+1')]);
-        } else if($originalOrderNumber < $updateOrderNumber) {
+        } elseif ($originalOrderNumber < $updateOrderNumber) {
             PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
                 $query->where('department_id', $department_id);
             })->where('order_number', '<=', $updateOrderNumber)->where('order_number', '>', $originalOrderNumber)->update(['order_number' => DB::raw('order_number-1')]);
         }
-        
 
-        if ($request->salary_grade_auth != "") {
+        if ($request->salary_grade_auth != '') {
             $salaryauthorized = SalaryGrade::where('salary_sched_id', $plantilla->salaryauthorizedschedule->id)
-                ->where('grade', explode("/", $request->salary_grade_auth)[0])
-                ->where('step', explode("/", $request->salary_grade_auth)[1])
-                ->first();
-        }
-        
-        if ($request->salary_grade_prop != "") {
-            $salaryproposed = SalaryGrade::where('salary_sched_id', $plantilla->salaryproposedschedule->id)
-                ->where('grade', explode("/", $request->salary_grade_prop)[0])
-                ->where('step', explode("/", $request->salary_grade_prop)[1])
+                ->where('grade', explode('/', $request->salary_grade_auth)[0])
+                ->where('step', explode('/', $request->salary_grade_auth)[1])
                 ->first();
         }
 
+        if ($request->salary_grade_prop != '') {
+            $salaryproposed = SalaryGrade::where('salary_sched_id', $plantilla->salaryproposedschedule->id)
+                ->where('grade', explode('/', $request->salary_grade_prop)[0])
+                ->where('step', explode('/', $request->salary_grade_prop)[1])
+                ->first();
+        }
 
         $plantillacontent->salary_grade_auth_id = isset($salaryauthorized) ? $salaryauthorized->id : null;
         $plantillacontent->salary_grade_prop_id = isset($salaryproposed) ? $salaryproposed->id : null;
@@ -255,9 +255,9 @@ class PlantillaContentController extends Controller
         $plantillacontent->last_promotion = $request->last_promotion;
         $plantillacontent->appointment_status = $request->appointment_status;
         $plantillacontent->order_number = $request->order_number;
-        
+
         $plantillacontent->save();
-        
+
         return $plantillacontent;
     }
 

@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Department;
-use App\PlantillaDept;
-use App\PlantillaContent;
-use App\Plantilla;
-use App\Setting;
-use App\Http\Resources\SortedDepartmentsResource;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentsAndPositionsResource;
 use App\Http\Resources\DepartmentsResource;
+use App\Http\Resources\SortedDepartmentsResource;
+use App\Plantilla;
+use App\PlantillaContent;
+use App\PlantillaDept;
 use App\Position;
+use App\Setting;
+use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
@@ -31,12 +31,14 @@ class DepartmentController extends Controller
         //     ->orderBy('order_number')
         //     ->get();
         $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
+
         return new SortedDepartmentsResource($departments);
     }
 
     public function complete_depts()
     {
         $departments = Department::where('status', 'active')->orderBy('order_number')->get();
+
         return new DepartmentsResource($departments);
     }
 
@@ -51,14 +53,12 @@ class DepartmentController extends Controller
     {
         $positions = Position::where('department_id', $request->id)->orderBy('title')->get();
 
-        foreach($positions as $key => $data)
-        {
-            $positions[$key]['count']  = PlantillaContent::where('position_id', $data->id)->count();
+        foreach ($positions as $key => $data) {
+            $positions[$key]['count'] = PlantillaContent::where('position_id', $data->id)->count();
         }
 
         return $positions;
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -112,36 +112,33 @@ class DepartmentController extends Controller
         $department->delete();
     }
 
-    public function store_position(Request $request){
-
+    public function store_position(Request $request)
+    {
         $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
-            'title' => 'required|unique:positions,title'
+            'title' => 'required|unique:positions,title',
         ]);
 
         $position = Position::create($request->all());
-
     }
 
-    public function update_position(Request $request, $id){
-
+    public function update_position(Request $request, $id)
+    {
         $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
-            'title' => 'required|unique:positions,title'
+            'title' => 'required|unique:positions,title',
         ]);
 
         $position = Position::findOrFail($id);
 
         $position->update($request->all());
-
     }
 
-    public function delete_position($id){
-
+    public function delete_position($id)
+    {
         $this->authorize('isAdministratorORAuthor');
         $position = Position::findOrFail($id);
 
         $position->delete();
-
     }
 }

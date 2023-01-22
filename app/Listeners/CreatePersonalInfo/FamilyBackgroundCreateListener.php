@@ -3,9 +3,7 @@
 namespace App\Listeners\CreatePersonalInfo;
 
 use App\Events\PersonalInfoRegistered;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
-use Illuminate\Queue\InteractsWithQueue;
 
 class FamilyBackgroundCreateListener
 {
@@ -27,18 +25,14 @@ class FamilyBackgroundCreateListener
      */
     public function handle(PersonalInfoRegistered $event)
     {
-        if(true)
-        {
+        if (true) {
             $event->pi->familybackground()->create($this->request->familybackground);
 
-            foreach($this->request->children as $key => $value)
-            {
-                if(count($value) > 0)
-                {
+            foreach ($this->request->children as $key => $value) {
+                if (count($value) > 0) {
                     $event->pi->children()->createMany([$value]);
                 }
             }
-
         }
     }
 }

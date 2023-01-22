@@ -16,10 +16,10 @@ class BirthdaysResource extends ResourceCollection
     {
         return $this->collection->map(function ($item) {
             return [
-                'fullName'    => $item->personalinformation->fullName,
+                'fullName' => $item->personalinformation->fullName,
                 'birthdate' => $item->personalinformation->birthdate,
                 'office' => $item->position->department->address,
-                'position' => $item->position->title
+                'position' => $item->position->title,
             ];
         });
     }

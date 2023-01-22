@@ -1,6 +1,5 @@
 <?php
 
-use App\LeaveReport;
 use App\LeaveSummary;
 use App\PersonalInformation;
 use App\Plantilla;
@@ -24,13 +23,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'HomeController@index');
 
 Route::group(['prefix' => 'employee'], function () {
-
     Route::get('/login/step-one', 'Auth\EmployeeLoginController@employeelogin')->name('step-one');
     Route::post('/login/step-one/post', 'Auth\EmployeeLoginController@authenticateEmployeeLogin')->name('employee_login');
 
     Route::get('/login/step-two', 'Auth\EmployeeLoginController@employeeloginbarcode')->name('step-two');
     Route::post('/login/step-two/post', 'Auth\EmployeeLoginController@authenticateEmployeeLoginBarcode')->name('employee_login_barcode');
-
 });
 
 Auth::routes(['register' => false]);
@@ -51,9 +48,7 @@ Route::post('/generateSR', 'PDFcontroller@sr');
 
 Route::any('/generateSalarySched', 'PDFcontroller@generatesalarysched');
 
-
-Route::get('{path}', 'HomeController@index')->where( 'path','([-a-z0-9_\s]+)' );
-
+Route::get('{path}', 'HomeController@index')->where('path', '([-a-z0-9_\s]+)');
 
 // Route::get('/workExpFormat', 'Helpers@workExperienceFormat');
 // Route::get('/volWorkFormat', 'Helpers@voluntaryWorksFormat');
@@ -68,40 +63,40 @@ Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
 
-class asd{
-
+class asd
+{
 }
 
-Route::get('/a/a', function(){
-
+Route::get('/a/a', function () {
     $month = Carbon::parse('December')->format('F');
 
     return LeaveSummary::where('foreign_travel', 1)->get()
-        ->filter(function($leave) use ($month) {
-            switch($leave->period->mode){
+        ->filter(function ($leave) use ($month) {
+            switch($leave->period->mode) {
                 case 1:
                 case 4:
                     $date = Carbon::parse($leave->period->data)->format('F') == $month;
-                    if($date){ return $leave; }
+                    if ($date) {
+                        return $leave;
+                    }
                     break;
                 case 2:
                     $start = Carbon::parse($leave->period->start)->format('F');
                     $end = Carbon::parse($leave->period->end)->format('F');
-                    if($start == $month || $end == $month) { return $leave; }
+                    if ($start == $month || $end == $month) {
+                        return $leave;
+                    }
                     break;
                 case 3:
-                    foreach($leave->period->data as $dates)
-                    {
-                        if(Carbon::parse($dates->date)->format('F') == $month)
-                        {
+                    foreach ($leave->period->data as $dates) {
+                        if (Carbon::parse($dates->date)->format('F') == $month) {
                             return $leave;
                             break;
                         }
                     }
             }
         })
-        ->map(function($leave){
-
+        ->map(function ($leave) {
             $employee = DB::table('personal_informations')->where('id', $leave->personal_information_id)->first();
             $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
             $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
@@ -109,29 +104,28 @@ Route::get('/a/a', function(){
                 ->where('personal_information_id', $leave->personal_information_id)
                 ->first();
 
-            switch($leave->period->mode){
+            switch($leave->period->mode) {
                 case 1:
                     $date = Carbon::parse($leave->period->data)->format('F d, Y');
                     $leave_info = $leave->particulars->days;
                     break;
                 case 2:
-                    $date = Carbon::parse($leave->period->start)->format('F d, Y') . ' to ' . Carbon::parse($leave->period->end)->format('F d, Y');
+                    $date = Carbon::parse($leave->period->start)->format('F d, Y').' to '.Carbon::parse($leave->period->end)->format('F d, Y');
                     $leave_info = $leave->particulars->days ?? $leave->particulars->count;
                     break;
                 case 3:
                     $date = collect($leave->period->data)
                     ->sort()
-                    ->map(function($dates){
+                    ->map(function ($dates) {
                         return [
-                                'month' => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('F'),
-                                'day'   => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('d'),
-                                'year'  => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('Y')
-                            ];
+                            'month' => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('F'),
+                            'day' => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('d'),
+                            'year' => Carbon::parse($dates->date)->setTimeZone('Asia/Manila')->format('Y'),
+                        ];
                     })
                     ->groupBy('month')
-                    ->map(function($dates, $index)
-                    {
-                        return $index . ' ' . collect($dates)->map(fn ($e) => $e['day'])->join(', ') . ', ' . $dates[0]['year'];
+                    ->map(function ($dates, $index) {
+                        return $index.' '.collect($dates)->map(fn ($e) => $e['day'])->join(', ').', '.$dates[0]['year'];
                     });
                     $date = collect($date)->join(' — ');
                     $leave_info = $leave->particulars->days ?? $leave->particulars->count;
@@ -143,18 +137,16 @@ Route::get('/a/a', function(){
             }
 
             return  collect([
-                'name' => $employee->firstname . ' ' . ucfirst($employee->middlename[0] ?? '') . '. ' . $employee->surname,
+                'name' => $employee->firstname.' '.ucfirst($employee->middlename[0] ?? '').'. '.$employee->surname,
                 'office' => $plantillacontents->position->department->title ?? '',
                 'leave_type' => $leave->particulars->leave_type,
                 'inclusive_dates' => $date,
-                'days' => $leave_info
+                'days' => $leave_info,
             ]);
-
         });
-    });
+});
 
-Route::get('/asd/asd', function() {
-
+Route::get('/asd/asd', function () {
     $request = new asd;
     $request->year = 2022;
     $request->month = '02';
@@ -167,16 +159,14 @@ Route::get('/asd/asd', function() {
 
     $ar = [];
 
-    $i = LeaveSummary::
-                where(function ($query) {
+    $i = LeaveSummary::where(function ($query) {
                     $query->orWhere('particulars->leave_type', 'Tardy')
                     ->orWhere('particulars->leave_type', 'Undertime')
                     ->orWhere('particulars->leave_type', 'UA');
                 })->where('particulars->count', '<', 10)
                 ->get()
-                ->filter(function($e) use ($request) {
-
-                    switch($e->period->mode){
+                ->filter(function ($e) use ($request) {
+                    switch($e->period->mode) {
                         case 1:
                         case 4:
                             return  Carbon::parse($e->period->data)->format('Y') == $request->year &&
@@ -189,15 +179,12 @@ Route::get('/asd/asd', function() {
                         case 3:
                             break;
                     }
-
                 })
-                ->map( function($e){
-
+                ->map(function ($e) {
                     $employee = PersonalInformation::find($e->personal_information_id);
                     $office = $employee->plantillacontents->first();
 
-                    switch($e->period->mode)
-                    {
+                    switch($e->period->mode) {
                         case 1:
                         case 4:
                             $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
@@ -212,20 +199,18 @@ Route::get('/asd/asd', function() {
                     }
 
                     return[
-                        'employee'  => $employee->firstname . ' ' . $employee->surname,
+                        'employee' => $employee->firstname.' '.$employee->surname,
                         'month' => Carbon::parse($date)->format('m'),
                         'type' => $e->particulars->leave_type,
                         'mins' => $mins,
                         'count' => $e->particulars->count,
-                        'office' => '$office'
+                        'office' => '$office',
                     ];
-
                 });
 
-                foreach($i as $data)
-                {
-                    $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
-                }
+    foreach ($i as $data) {
+        $ar[$data['employee']][$data['type']] = ['mins' => $data['mins'], 'count' => $data['count'], 'office' => $data['office']];
+    }
 
     $d = ['month' => $request->month, 'year' => $request->year, 'records' => $ar, 'prep' => $request->prep, 'noted' => $request->noted];
 

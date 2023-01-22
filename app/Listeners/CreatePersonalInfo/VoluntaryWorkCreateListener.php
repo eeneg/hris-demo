@@ -3,9 +3,7 @@
 namespace App\Listeners\CreatePersonalInfo;
 
 use App\Events\PersonalInfoRegistered;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
-use Illuminate\Queue\InteractsWithQueue;
 
 class VoluntaryWorkCreateListener
 {
@@ -14,7 +12,6 @@ class VoluntaryWorkCreateListener
      *
      * @return void
      */
-
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -28,10 +25,8 @@ class VoluntaryWorkCreateListener
      */
     public function handle(PersonalInfoRegistered $event)
     {
-        foreach($this->request->voluntaryworks as $key => $value)
-        {
-            if(count($value) > 0)
-            {
+        foreach ($this->request->voluntaryworks as $key => $value) {
+            if (count($value) > 0) {
                 $event->pi->voluntaryworks()->createMany([$value]);
             }
         }

@@ -16,9 +16,9 @@ class SalaryScheduleController extends Controller
     public function index(Request $request)
     {
         $sc = SalarySchedule::orderBy('effective_date', 'desc')->get();
+
         return $sc;
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -71,6 +71,7 @@ class SalaryScheduleController extends Controller
     public function destroy($id)
     {
         $this->authorize('isAdministratorORAuthor');
+
         return SalarySchedule::findOrFail($id)->delete();
     }
 }

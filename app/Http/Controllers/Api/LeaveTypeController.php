@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\LeaveType;
+use Illuminate\Http\Request;
 
 class LeaveTypeController extends Controller
 {
@@ -18,7 +18,8 @@ class LeaveTypeController extends Controller
         return LeaveType::paginate(20);
     }
 
-    public function getleavetypes() {
+    public function getleavetypes()
+    {
         return LeaveType::all();
     }
 
@@ -33,6 +34,7 @@ class LeaveTypeController extends Controller
         $this->validate($request, [
             'title' => 'unique:leave_types',
         ]);
+
         return LeaveType::create($request->all());
     }
 
@@ -58,7 +60,7 @@ class LeaveTypeController extends Controller
     {
         $leavetype = LeaveType::findOrFail($id);
         $this->validate($request, [
-            'title' => 'unique:leave_types,title,'.$leavetype->id
+            'title' => 'unique:leave_types,title,'.$leavetype->id,
         ]);
         $leavetype->update($request->all());
     }

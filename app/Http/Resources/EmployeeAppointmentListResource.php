@@ -16,8 +16,8 @@ class EmployeeAppointmentListResource extends ResourceCollection
     {
         return $this->collection->map(function ($item) {
             return [
-                'id'    => $item->id ? $item->id : '',
-                'name'  => $item->firstname . ' ' . $item->middlename . ' ' . $item->surname . ' ' . $item->nameextentsion
+                'id' => $item->id ? $item->id : '',
+                'name' => $item->firstname.' '.$item->middlename.' '.$item->surname.' '.$item->nameextentsion,
             ];
         });
     }

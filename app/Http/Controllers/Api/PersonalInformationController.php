@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use App\PersonalInformation;
-use App\PlantillaContent;
-use App\Http\Resources\EmployeesListResource;
-use App\Setting;
-use App\Plantilla;
-use App\UserAssignment;
 use App\Events\PersonalInfoRegistered;
 use App\Events\PersonalInfoUpdated;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeAppointmentListResource;
+use App\Http\Resources\EmployeesListResource;
+use App\PersonalInformation;
+use App\Plantilla;
 use App\Reappointment;
+use App\Setting;
+use App\UserAssignment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PersonalInformationController extends Controller
 {
@@ -35,12 +34,12 @@ class PersonalInformationController extends Controller
                 $department_id = UserAssignment::where('user_id', Auth::user()->id)->first()->department_id;
                 $personalinformations = PersonalInformation::with(['plantillacontents' => function ($query) use ($plantilla) {
                     $query->where('plantilla_id', $plantilla->id);
-                }])->whereHas('plantillacontents', function ($query) use ($department_id){
-                    $query->whereHas('position', function ($query2) use ($department_id){
+                }])->whereHas('plantillacontents', function ($query) use ($department_id) {
+                    $query->whereHas('position', function ($query2) use ($department_id) {
                         $query2->where('department_id', $department_id);
                     });
-                })->where(function($query) use ($search){
-                    $query->where('surname', 'LIKE', '%'.$search .'%')
+                })->where(function ($query) use ($search) {
+                    $query->where('surname', 'LIKE', '%'.$search.'%')
                             ->orWhere('firstname', 'LIKE', '%'.$search.'%')
                             ->orWhere('middlename', 'LIKE', '%'.$search.'%')
                             ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%')
@@ -48,8 +47,8 @@ class PersonalInformationController extends Controller
                 })->orderBy('surname')->paginate(20);
             } else {
                 $personalinformations = PersonalInformation::with('plantillacontents')
-                ->where(function($query) use ($search){
-                    $query->where('surname', 'LIKE', '%'.$search .'%')
+                ->where(function ($query) use ($search) {
+                    $query->where('surname', 'LIKE', '%'.$search.'%')
                             ->orWhere('firstname', 'LIKE', '%'.$search.'%')
                             ->orWhere('middlename', 'LIKE', '%'.$search.'%')
                             ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$search.'%')
@@ -61,8 +60,8 @@ class PersonalInformationController extends Controller
                 $department_id = UserAssignment::where('user_id', Auth::user()->id)->first()->department_id;
                 $personalinformations = PersonalInformation::with(['plantillacontents' => function ($query) use ($plantilla) {
                     $query->where('plantilla_id', $plantilla->id);
-                }])->whereHas('plantillacontents', function ($query) use ($department_id){
-                    $query->whereHas('position', function ($query2) use ($department_id){
+                }])->whereHas('plantillacontents', function ($query) use ($department_id) {
+                    $query->whereHas('position', function ($query2) use ($department_id) {
                         $query2->where('department_id', $department_id);
                     });
                 })->orderBy('surname')->paginate(20);
@@ -72,10 +71,12 @@ class PersonalInformationController extends Controller
                 }])->orderBy('surname')->paginate(20);
             }
         }
+
         return new EmployeesListResource($personalinformations);
     }
 
-    public function forleave(Request $request) {
+    public function forleave(Request $request)
+    {
         $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
@@ -87,8 +88,8 @@ class PersonalInformationController extends Controller
                 JOIN positions ON plantilla_contents.`position_id` =  positions.`id`
                 JOIN departments ON positions.`department_id` =  departments.`id`
                 WHERE plantilla_contents.`personal_information_id` IS NOT NULL
-                AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "'
-                AND departments.`id` = '" . $department_id . "'
+                AND plantilla_contents.`plantilla_id` = '".$plantilla->id."'
+                AND departments.`id` = '".$department_id."'
                 ORDER BY personal_informations.`surname`");
 
             $reapointments = Reappointment::select('reappointments.*')
@@ -105,7 +106,6 @@ class PersonalInformationController extends Controller
                                 ->get();
 
             $allEmployees = array_merge($allEmployees, $reapointments->toarray());
-
         } else {
             $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
                 CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', IFNULL(personal_informations.`nameextension`, ''), ' ', IFNULL(personal_informations.`middlename`, '')) AS `name`
@@ -114,20 +114,20 @@ class PersonalInformationController extends Controller
                 JOIN positions ON plantilla_contents.`position_id` =  positions.`id`
                 JOIN departments ON positions.`department_id` =  departments.`id`
                 WHERE plantilla_contents.`personal_information_id` IS NOT NULL
-                AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "'
+                AND plantilla_contents.`plantilla_id` = '".$plantilla->id."'
                 ORDER BY personal_informations.`surname`");
         }
-
 
         return $allEmployees;
     }
 
-    public function forvacants(Request $request) {
+    public function forvacants(Request $request)
+    {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $allEmployees = DB::select("SELECT id, CONCAT(surname, ', ', firstname, ' ', nameextension, ' ', middlename) AS `name` FROM personal_informations
-            WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id` AND plantilla_contents.`plantilla_id` = '" . $plantilla->id . "') = 0
-            OR personal_informations.`id` = '" . $request->personal_information_id . "'
+            WHERE (SELECT count(*) FROM plantilla_contents WHERE personal_informations.`id` = plantilla_contents.`personal_information_id` AND plantilla_contents.`plantilla_id` = '".$plantilla->id."') = 0
+            OR personal_informations.`id` = '".$request->personal_information_id."'
             ORDER BY personal_informations.`surname`");
         // $collection = collect($allEmployees);
         // $personalinformation = PersonalInformation::select('id','firstname','middlename','surname','nameextension')->where('id', $request->personal_information_id)->first();
@@ -146,15 +146,15 @@ class PersonalInformationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'surname'               => 'required|string',
-            'firstname'             => 'required|string',
-            'birthdate'             => 'required|string',
+            'surname' => 'required|string',
+            'firstname' => 'required|string',
+            'birthdate' => 'required|string',
             // 'permanentaddress'      => 'required|string',
             // 'cellphone'             => 'required|string',
         ]);
 
         if ($request->picture != null) {
-            $name = time() . '.' . explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
+            $name = time().'.'.explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
             \Image::make($request->picture)->save(public_path('storage/employee_pictures/').$name);
 
             $request->merge(['picture' => $name]);
@@ -191,11 +191,11 @@ class PersonalInformationController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'surname'               => 'required|string',
-            'firstname'             => 'required|string',
-            'birthdate'             => 'required|string',
-            'permanentaddress'      => 'required|string',
-            'cellphone'             => 'required|string',
+            'surname' => 'required|string',
+            'firstname' => 'required|string',
+            'birthdate' => 'required|string',
+            'permanentaddress' => 'required|string',
+            'cellphone' => 'required|string',
         ]);
 
         $pi = PersonalInformation::findOrFail($id);
@@ -203,7 +203,7 @@ class PersonalInformationController extends Controller
         $currentPhoto = $pi->picture;
 
         if ($request->picture != $currentPhoto) {
-            $name = time() . '.' . explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
+            $name = time().'.'.explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
             \Image::make($request->picture)->save(public_path('storage/employee_pictures/').$name);
 
             $request->merge(['picture' => $name]);
@@ -222,6 +222,7 @@ class PersonalInformationController extends Controller
     public function employees(Request $request)
     {
         $employees = PersonalInformation::orderBy('surname', 'ASC')->get();
+
         return new EmployeeAppointmentListResource($employees);
     }
 
@@ -230,12 +231,9 @@ class PersonalInformationController extends Controller
         $employee = PersonalInformation::find($request->id);
 
         return  $employee->update([
-                    $request->mode == 1 ? 'retirement_date' : 'status' => $request->data
-                ]);
-
-
+            $request->mode == 1 ? 'retirement_date' : 'status' => $request->data,
+        ]);
     }
-
 
     /**
      * Remove the specified resource from storage.

@@ -21,9 +21,9 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
                 'last_promotion' => $item->last_promotion,
                 'office' => $item->position->department->address,
                 'position' => $item->position ? $item->position->title : '',
-                'name'  => $item->personalinformation->firstname . ' ' . $item->personalinformation->middlename . ' ' . $item->personalinformation->surname . ' ' . $item->personalinformation->nameextentsion,
+                'name' => $item->personalinformation->firstname.' '.$item->personalinformation->middlename.' '.$item->personalinformation->surname.' '.$item->personalinformation->nameextentsion,
                 'salaryproposed' => $item->salaryproposed,
-                'nextStepAmount' => $item->amount
+                'nextStepAmount' => $item->amount,
             ];
         });
     }
@@ -32,7 +32,7 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
     {
         return [
             'version' => '1.0.0',
-            'author_url' => url('http://www.davsurians.com.ph/')
+            'author_url' => url('http://www.davsurians.com.ph/'),
         ];
     }
 }

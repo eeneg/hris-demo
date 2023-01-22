@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => ['auth:api']], function() {
+Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResources([
         'user' => 'Api\UserController',
         'personalinformation' => 'Api\PersonalInformationController',
@@ -33,13 +33,13 @@ Route::group(['middleware' => ['auth:api']], function() {
         'footnote' => 'Api\FootnoteController',
         'leavetype' => 'Api\LeaveTypeController',
         'leaveapplication' => 'Api\LeaveApplicationController',
-        'request'   => 'Api\RequestController',
-        'reappointments'   => 'Api\ReappointmentController',
-        'leavecredits'  => 'Api\LeaveCreditController',
+        'request' => 'Api\RequestController',
+        'reappointments' => 'Api\ReappointmentController',
+        'leavecredits' => 'Api\LeaveCreditController',
         'dashboard' => 'Api\DashboardController',
         'position' => 'Api\PositionController',
         'status' => 'Api\StatusController',
-        'leaveReport' => 'Api\LeaveReportController'
+        'leaveReport' => 'Api\LeaveReportController',
     ]);
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
 
@@ -102,7 +102,7 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('foreignTravel', 'Api\LeaveReportController@generateForeignTravelReport');
 });
 
-Route::group(['middleware' => ['auth:employee-api']], function() {
+Route::group(['middleware' => ['auth:employee-api']], function () {
     Route::apiResources([
         'employeepersonalinformation' => 'Api\EmployeeController',
     ]);
@@ -114,11 +114,3 @@ Route::group(['middleware' => ['auth:employee-api']], function() {
 
 Route::get('asd1', 'Api\RequestController@reviewedRequest');
 Route::get('asd', 'Api\RequestController@index');
-
-
-
-
-
-
-
-

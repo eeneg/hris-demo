@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-
 class LeaveReport extends Model
 {
     use HasFactory;
@@ -20,13 +19,11 @@ class LeaveReport extends Model
     protected $table = 'leave_reports';
 
     protected $fillable = [
-        'id', 'title', 'file_name', 'path'
+        'id', 'title', 'file_name', 'path',
     ];
 
-
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
-
-
 }

@@ -28,7 +28,7 @@ class SortedDepartmentsResource extends ResourceCollection
     {
         return [
             'version' => '1.0.0',
-            'author_url' => url('http://www.davsurians.com.ph/')
+            'author_url' => url('http://www.davsurians.com.ph/'),
         ];
     }
 }

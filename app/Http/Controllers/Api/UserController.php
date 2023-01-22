@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 use App\User;
 use App\UserAssignment;
-use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -20,17 +20,17 @@ class UserController extends Controller
     public function index()
     {
         // if (Gate::allows('isAdministrator') || Gate::allows('isAuthor')) {
-            if ($search = \Request::get('query')) {
-                $users = User::where(function($query) use ($search){
-                    $query->where('name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('email', 'LIKE', '%'.$search.'%')
-                            ->orWhere('role', 'LIKE', '%'.$search.'%');
-                })->paginate(15);
-            } else {
-                $users = User::latest()->paginate(15);
-            }
+        if ($search = \Request::get('query')) {
+            $users = User::where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('email', 'LIKE', '%'.$search.'%')
+                        ->orWhere('role', 'LIKE', '%'.$search.'%');
+            })->paginate(15);
+        } else {
+            $users = User::latest()->paginate(15);
+        }
 
-            return new UserResource($users);
+        return new UserResource($users);
         // }
     }
 
@@ -47,7 +47,7 @@ class UserController extends Controller
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required'
+            'role' => 'required',
         ]);
         $user = User::create([
             'name' => $request['name'],
@@ -61,7 +61,7 @@ class UserController extends Controller
         if ($request->department_id != '') {
             UserAssignment::create([
                 'user_id' => $user->id,
-                'department_id' => $request->department_id
+                'department_id' => $request->department_id,
             ]);
         }
     }
@@ -87,19 +87,20 @@ class UserController extends Controller
         return auth('api')->user();
     }
 
-    public function updateProfile(Request $request) {
+    public function updateProfile(Request $request)
+    {
         $user = auth('api')->user();
 
         $this->validate($request, [
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-            'password' => 'sometimes|confirmed|min:6'
+            'password' => 'sometimes|confirmed|min:6',
         ]);
 
         $currentPhoto = $user->avatar;
 
         if ($request->avatar != $currentPhoto) {
-            $name = time() . '.' . explode('/', explode(':', substr($request->avatar, 0, strpos($request->avatar, ';')))[1])[1];
+            $name = time().'.'.explode('/', explode(':', substr($request->avatar, 0, strpos($request->avatar, ';')))[1])[1];
             \Image::make($request->avatar)->save(public_path('storage/user_avatars/').$name);
 
             $request->merge(['avatar' => $name]);
@@ -115,6 +116,7 @@ class UserController extends Controller
         }
 
         $user->update($request->all());
+
         return $user;
     }
 
@@ -132,7 +134,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-            'password' => 'sometimes|min:6'
+            'password' => 'sometimes|min:6',
         ]);
 
         if ($request->password) {
@@ -149,7 +151,7 @@ class UserController extends Controller
         if ($request->role == 'Office User' || $request->role == 'Office Head') {
             UserAssignment::create([
                 'user_id' => $user->id,
-                'department_id' => $request->department_id
+                'department_id' => $request->department_id,
             ]);
         }
 

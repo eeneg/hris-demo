@@ -12,33 +12,37 @@ class Footnote extends Model
     protected $keyType = 'string';
 
     protected $primaryKey = 'id';
- 
+
     protected $with = [
-        'plantilla', 'department'
+        'plantilla', 'department',
     ];
 
     protected $fillable = [
         'plantilla_id',
         'department_id',
-        'note'
+        'note',
     ];
 
-    public function plantilla(){
+    public function plantilla()
+    {
         return $this->belongsTo('App\Plantilla', 'plantilla_id');
     }
 
-    public function department(){
+    public function department()
+    {
         return $this->belongsTo('App\Department', 'department_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

@@ -3,8 +3,6 @@
 namespace App\Listeners\UpdatePersonalInfo;
 
 use App\Events\PersonalInfoUpdated;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use App\PDSQuestion;
 use Illuminate\Http\Request;
 
@@ -28,23 +26,15 @@ class PDSQuestionUpdateListener
      */
     public function handle(PersonalInfoUpdated $event)
     {
-
         $pdsQuestions = array_filter(collect($this->request->pdsquestion)->except('id', 'personal_information_id', 'created_at', 'updated_at')->toArray());
 
-        if(count($pdsQuestions) > 0)
-        {
-
+        if (count($pdsQuestions) > 0) {
             $event->pi->pdsquestion()->updateOrCreate(['personal_information_id' => $this->request->id], $this->request->pdsquestion);
-
-        }
-        else if(array_key_exists('id', $this->request->pdsquestion)){
-
+        } elseif (array_key_exists('id', $this->request->pdsquestion)) {
             $pdsQuestions = PDSQuestion::find($this->request->pdsquestion['id']);
             if ($pdsQuestions) {
                 $pdsQuestions->delete();
             }
-
         }
-
     }
 }

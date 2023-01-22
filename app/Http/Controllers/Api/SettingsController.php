@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Setting;
 use App\Plantilla;
+use App\Setting;
+use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
@@ -19,10 +19,10 @@ class SettingsController extends Controller
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $data = [
-            'plantilla' => $plantilla
+            'plantilla' => $plantilla,
         ];
+
         return $data;
-        
     }
 
     /**
@@ -35,7 +35,7 @@ class SettingsController extends Controller
     {
         $this->authorize('isAdministrator');
         $this->validate($request, [
-            'plantilla' => 'required'
+            'plantilla' => 'required',
         ]);
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $default_plantilla->value = $request->plantilla['year'];

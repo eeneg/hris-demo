@@ -58,15 +58,16 @@ class PDSQuestion extends Model
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
-
 }

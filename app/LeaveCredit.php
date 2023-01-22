@@ -4,8 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
-use App\Http\Resources\leaveCreditResource;
-
 
 class LeaveCredit extends Model
 {
@@ -25,7 +23,7 @@ class LeaveCredit extends Model
         'personal_information_id',
         'leave_type_id',
         'balance',
-        'created_at'
+        'created_at',
     ];
 
     public function personalinformation()
@@ -33,15 +31,16 @@ class LeaveCredit extends Model
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
-
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

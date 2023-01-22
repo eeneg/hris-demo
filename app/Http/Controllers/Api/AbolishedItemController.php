@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\AbolishedItem;
-use App\PlantillaContent;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\RevertItemResource;
+use App\PlantillaContent;
+use Illuminate\Http\Request;
 
 class AbolishedItemController extends Controller
 {
@@ -40,6 +40,7 @@ class AbolishedItemController extends Controller
     public function show($id)
     {
         $abolished_item = AbolishedItem::where('plantilla_content_id', $id)->first();
+
         return new RevertItemResource($abolished_item);
     }
 

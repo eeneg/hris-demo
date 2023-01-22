@@ -16,20 +16,20 @@ class LeaveSummary extends Model
     protected $casts = [
         'id' => 'string',
         'particulars' => 'object',
-        'period' => 'object'
+        'period' => 'object',
     ];
 
     protected $attributes = [
-        'period'=> [
+        'period' => [
             'mode' => null,
-            'data' => null
+            'data' => null,
         ],
         'particulars' => [
             'leave_type' => null,
             'count' => null,
             'days' => null,
             'hours' => null,
-            'mins' => null
+            'mins' => null,
         ],
     ];
 
@@ -49,9 +49,8 @@ class LeaveSummary extends Model
         'sl_withoutpay',
         'remarks',
         'sort',
-        'foreign_travel'
+        'foreign_travel',
     ];
-
 
     public function personalinformation()
     {
@@ -62,8 +61,8 @@ class LeaveSummary extends Model
     {
         $leave = collect($data)
             ->groupBy('year')
-            ->map(function($leave){
-                return $leave->groupBy('leave_type')->map(function($data){
+            ->map(function ($leave) {
+                return $leave->groupBy('leave_type')->map(function ($data) {
                     return collect($data)->sum('days');
                 });
             })
@@ -76,9 +75,9 @@ class LeaveSummary extends Model
     {
         $count = collect($tardy)
             ->groupBy('year')
-            ->map(function($leave){
-                return $leave->groupBy('month')->map(function($data){
-                    return $data->groupBy('type')->map(function($value){
+            ->map(function ($leave) {
+                return $leave->groupBy('month')->map(function ($data) {
+                    return $data->groupBy('type')->map(function ($value) {
                         return collect($value)->sum('count');
                     });
                 });
@@ -89,15 +88,16 @@ class LeaveSummary extends Model
         return $count;
     }
 
-
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

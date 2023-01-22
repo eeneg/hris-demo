@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use View;
-use Illuminate\Support\ServiceProvider;
 use App\Plantilla;
+use Illuminate\Support\ServiceProvider;
+use View;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -29,7 +29,7 @@ class ComposerServiceProvider extends ServiceProvider
             $plantillas = Plantilla::orderBy('date_prepared');
 
             $data = [
-                'plantillas' => $plantillas
+                'plantillas' => $plantillas,
             ];
 
             $view->with($data);

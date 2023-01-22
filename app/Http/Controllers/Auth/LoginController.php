@@ -36,12 +36,10 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-       if(Auth::guard('employee')->check())
-       {
-           $this->middleware('guest:employee')->except('logout');
-        }else if(Auth::check())
-        {
-           $this->middleware('guest')->except('logout');
-       }
+        if (Auth::guard('employee')->check()) {
+            $this->middleware('guest:employee')->except('logout');
+        } elseif (Auth::check()) {
+            $this->middleware('guest')->except('logout');
+        }
     }
 }

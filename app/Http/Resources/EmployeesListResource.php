@@ -23,17 +23,16 @@ class EmployeesListResource extends ResourceCollection
                 'surname' => $item->surname,
                 'status' => $item->status,
                 'plantillacontents' => $item->plantillacontents,
-                'picture' => $item->picture
+                'picture' => $item->picture,
             ];
         });
-        
     }
 
     public function with($request)
     {
         return [
             'version' => '1.0.0',
-            'author_url' => url('http://www.davsurians.com.ph/')
+            'author_url' => url('http://www.davsurians.com.ph/'),
         ];
     }
 }

@@ -7,7 +7,6 @@ use Webpatser\Uuid\Uuid;
 
 class Appointment extends Model
 {
-
     public $incrementing = false;
 
     protected $keyType = 'string';
@@ -15,22 +14,22 @@ class Appointment extends Model
     protected $primaryKey = 'id';
 
     protected $casts = [
-        'id' => 'string'
+        'id' => 'string',
     ];
 
     protected $table = 'appointment_records';
 
-    protected $fillable = [ 'personal_information_id',
-                            'position_id',
-                            'salary_grade_id',
-                            'status',
-                            'agency',
-                            'nature_of_appointment',
-                            'previous_employee',
-                            'previous_status',
-                            'itemno',
-                            'page',
-                            'reckoning_date'
+    protected $fillable = ['personal_information_id',
+        'position_id',
+        'salary_grade_id',
+        'status',
+        'agency',
+        'nature_of_appointment',
+        'previous_employee',
+        'previous_status',
+        'itemno',
+        'page',
+        'reckoning_date',
     ];
 
     public function personalinformation()
@@ -48,17 +47,16 @@ class Appointment extends Model
         return $this->belongsTo('App\SalaryGrade', 'salary_grade_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
-
-
-
 }

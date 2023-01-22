@@ -3,15 +3,11 @@
 namespace App\Listeners;
 
 use App\Events\LeaveProcessed;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Http\Request;
 use App\LeaveCredit;
-use App\LeaveType;
 use App\LeaveSummary;
+use App\LeaveType;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
-
 
 class LeaveApprovedListener
 {
@@ -33,7 +29,6 @@ class LeaveApprovedListener
      */
     public function handle(LeaveProcessed $event)
     {
-
         $data = $event->application;
 
         $sl = LeaveType::where('title', 'Sick Leave')->first();

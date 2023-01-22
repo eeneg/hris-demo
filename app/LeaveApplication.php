@@ -43,7 +43,7 @@ class LeaveApplication extends Model
         'stage_status',
         'recommendation_status',
         'recommendation_remark_approved',
-        'recommendation_remark_disapproved'
+        'recommendation_remark_disapproved',
     ];
 
     protected $with = [
@@ -51,16 +51,15 @@ class LeaveApplication extends Model
         'leavetype',
         'personalinformation_7b',
         'personalinformation_7c',
-        'personalinformation_7d'
+        'personalinformation_7d',
     ];
 
-    public static function leaveapplications($default_plantilla, $plantilla, $department_id, $data) {
-
+    public static function leaveapplications($default_plantilla, $plantilla, $department_id, $data)
+    {
         $allEmployees = [];
 
         //if no dept ID
         if ($department_id != '' && $department_id != null) {
-
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
                 'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
@@ -78,8 +77,7 @@ class LeaveApplication extends Model
                 ->paginate(20);
 
         //if office head or PHRMO head
-        }else if($data['role'] == 'Office Head' && $data['dept']['title'] == 'PHRMO'){
-
+        } elseif ($data['role'] == 'Office Head' && $data['dept']['title'] == 'PHRMO') {
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
                 'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
@@ -90,7 +88,7 @@ class LeaveApplication extends Model
                 ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
                 ->whereNotNull('plantilla_contents.personal_information_id')
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
-                ->where(function ($query) use($data) {
+                ->where(function ($query) use ($data) {
                     $query->where('departments.id', '!=', $data['dept']['id'])
                     ->where('leave_applications.stage_status', '!=', 'Pending Recommendation')
                     ->where('leave_applications.stage_status', '!=', null)
@@ -99,8 +97,7 @@ class LeaveApplication extends Model
                 ->orWhere('departments.id', $data['dept']['id'])->paginate(20);
 
         //if office head or PGO EXECUTIVE head
-        } else if($data['role'] == 'Office Head' && $data['dept']['title'] == 'PGO-Executive'){
-
+        } elseif ($data['role'] == 'Office Head' && $data['dept']['title'] == 'PGO-Executive') {
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
                 'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
@@ -112,7 +109,7 @@ class LeaveApplication extends Model
                 ->leftJoin('reappointments', 'personal_informations.id', '=', 'reappointments.personal_information_id')
                 ->whereNotNull('plantilla_contents.personal_information_id')
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
-                ->where(function ($query) use($data) {
+                ->where(function ($query) use ($data) {
                     $query->where('departments.id', '!=', $data['dept']['id'])
                     ->where('leave_applications.stage_status', '!=', 'Pending Recommendation')
                     ->where('leave_applications.stage_status', '!=', 'Pending Noted By')
@@ -126,8 +123,7 @@ class LeaveApplication extends Model
                 ->paginate(20);
 
         //no filter (all)
-        }else{
-
+        } else {
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
                 'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
@@ -139,19 +135,17 @@ class LeaveApplication extends Model
                 ->whereNotNull('plantilla_contents.personal_information_id')
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
                 ->orderBy('date_of_filing', 'desc')->paginate(20);
-
         }
 
         return $allEmployees;
     }
 
-    public static function getAllLeave($default_plantilla, $plantilla, $department_id){
-
-        if($department_id != null && $department_id != "")
-        {
+    public static function getAllLeave($default_plantilla, $plantilla, $department_id)
+    {
+        if ($department_id != null && $department_id != '') {
             $allEmployees = LeaveApplication::select('leave_applications.*',
-            'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
-            'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
+                'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
+                'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
             ->leftJoin('leave_types', 'leave_applications.leave_type_id', '=', 'leave_types.id')
             ->leftJoin('personal_informations', 'leave_applications.personal_information_id', '=', 'personal_informations.id')
             ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
@@ -164,10 +158,10 @@ class LeaveApplication extends Model
             ->orWhere('reappointments.assigned_to', $department_id)
             ->orderBy('date_of_filing', 'desc')
             ->get();
-        }else{
+        } else {
             $allEmployees = LeaveApplication::select('leave_applications.*',
-            'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
-            'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
+                'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
+                'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
             ->leftJoin('leave_types', 'leave_applications.leave_type_id', '=', 'leave_types.id')
             ->leftJoin('personal_informations', 'leave_applications.personal_information_id', '=', 'personal_informations.id')
             ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
@@ -183,34 +177,41 @@ class LeaveApplication extends Model
         return $allEmployees;
     }
 
-    public function personalinformation() {
+    public function personalinformation()
+    {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
-    public function personalinformation_7b() {
+    public function personalinformation_7b()
+    {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id_7b');
     }
 
-    public function personalinformation_7c() {
+    public function personalinformation_7c()
+    {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id_7c');
     }
 
-    public function personalinformation_7d() {
+    public function personalinformation_7d()
+    {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id_7d');
     }
 
-    public function leavetype() {
+    public function leavetype()
+    {
         return $this->belongsTo('App\LeaveType', 'leave_type_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

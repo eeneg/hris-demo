@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Status;
+use Illuminate\Http\Request;
 
 class StatusController extends Controller
 {
@@ -26,7 +26,6 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate(['status' => 'required'], ['status.required' => 'Field cannot be empty!!']);
 
         return Status::create($request->all());

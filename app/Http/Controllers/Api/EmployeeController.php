@@ -51,24 +51,22 @@ class EmployeeController extends Controller
 
         $data = [];
 
-        if(!count($employee->employeeEditRequests->where('status', 'PENDING')))
-        {
+        if (! count($employee->employeeEditRequests->where('status', 'PENDING'))) {
             $editRequest = $employee->employeeEditRequests()->create(['status' => 'PENDING']);
 
             foreach ($request->except('id') as $key => $value) {
                 $data[] = [
-                    'model_id'  => isset($value['model_id']) ? $value['model_id'] : null,
-                    'model'     => isset($value['model']) ? $value['model'] : null,
-                    'field'     => isset($value['field']) ? $value['field'] : null,
-                    'oldValue'  => isset($value['oldValue']) ? $value['oldValue'] : null,
-                    'newValue'  => isset($value['newValue']) ? $value['newValue'] : null,
-                    'status'    => isset($value['status']) ? $value['status'] : null,
+                    'model_id' => isset($value['model_id']) ? $value['model_id'] : null,
+                    'model' => isset($value['model']) ? $value['model'] : null,
+                    'field' => isset($value['field']) ? $value['field'] : null,
+                    'oldValue' => isset($value['oldValue']) ? $value['oldValue'] : null,
+                    'newValue' => isset($value['newValue']) ? $value['newValue'] : null,
+                    'status' => isset($value['status']) ? $value['status'] : null,
                 ];
             }
 
             $insert = $editRequest->employeeEdits()->createMany($data);
-
-        }else{
+        } else {
             abort(401, 'Can only have one requests at a time');
         }
     }
@@ -77,9 +75,9 @@ class EmployeeController extends Controller
     {
         $editsRequest = PersonalInformation::find($request->id)->employeeEditRequests->where('status', 'PENDING');
 
-        if(count($editsRequest)){
+        if (count($editsRequest)) {
             abort(401, 'Can only have one requests at a time');
-        }else{
+        } else {
             return PersonalInformation::find($request->id);
         }
     }
@@ -92,24 +90,20 @@ class EmployeeController extends Controller
 
         $editRequest = EmployeePDSEditRequest::where('personal_information_id', Auth::user()->id)->first();
 
-        if($cancel)
-        {
-            foreach($editRequest->employeeEdits as $value)
-            {
+        if ($cancel) {
+            foreach ($editRequest->employeeEdits as $value) {
                 array_push($ar, $value->status);
             }
 
-            if(!in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
+            if (! in_array('PENDING', $ar) && ! in_array('DENIED', $ar)) {
                 $editRequest->update(['status' => 'APPROVED']);
-            }else if (!in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
+            } elseif (! in_array('PENDING', $ar) && ! in_array('APPROVED', $ar)) {
                 $editRequest->update(['status' => 'DENIED']);
-            }else if(!in_array('PENDING', $ar)){
+            } elseif (! in_array('PENDING', $ar)) {
                 $editRequest->update(['status' => 'VALIDATED']);
             }
 
-
-            if(count($editRequest->employeeEdits) == 0)
-            {
+            if (count($editRequest->employeeEdits) == 0) {
                 $editRequest->delete();
             }
         }
@@ -148,10 +142,9 @@ class EmployeeController extends Controller
     {
         $editRequest = EmployeePDSEditRequest::find($id);
 
-        if(count($editRequest->employeeEdits->where('status', '!=' ,'PENDING')) == 0)
-        {
+        if (count($editRequest->employeeEdits->where('status', '!=', 'PENDING')) == 0) {
             $editRequest->delete();
-        }else{
+        } else {
             abort(401, 'Cannot cancel validated requests');
         }
     }

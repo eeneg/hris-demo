@@ -2,11 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Webpatser\Uuid\Uuid;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Webpatser\Uuid\Uuid;
 
 class PersonalInformation extends Authenticatable
 {
@@ -26,7 +25,7 @@ class PersonalInformation extends Authenticatable
 
     protected $with = [
         'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities',
-        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion'
+        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion',
     ];
 
     /**
@@ -37,16 +36,17 @@ class PersonalInformation extends Authenticatable
     protected $fillable = [
         'surname', 'firstname', 'middlename', 'nameextension', 'birthdate', 'birthplace', 'sex', 'civilstatus', 'citizenship', 'height',
         'weight', 'bloodtype', 'gsis', 'pagibig', 'philhealth', 'sss', 'residentialaddress', 'zipcode1', 'telephone1', 'permanentaddress',
-        'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status', 'retirement_date'
+        'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status', 'retirement_date',
     ];
 
     protected $appends = [
-        'fullName'
+        'fullName',
     ];
 
     protected $guard = 'employee';
 
-    public function barcode(){
+    public function barcode()
+    {
         return $this->hasOne('App\Barcode', 'personal_information_id');
     }
 
@@ -124,9 +124,9 @@ class PersonalInformation extends Authenticatable
     {
         return trim(
             preg_replace('/\s+/', ' ',
-                "$this->surname, $this->firstname" .
-                ( $this->middleinitial ? " $this->middleinitial." : "") .
-                ( $this->nameextension ? ", $this->nameextension" : "" )
+                "$this->surname, $this->firstname".
+                ($this->middleinitial ? " $this->middleinitial." : '').
+                ($this->nameextension ? ", $this->nameextension" : '')
             )
         );
     }
@@ -136,15 +136,16 @@ class PersonalInformation extends Authenticatable
         return $this->middlename ? $this->middlename[0] : '';
     }
 
-
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

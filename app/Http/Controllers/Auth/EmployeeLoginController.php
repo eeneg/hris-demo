@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\PersonalInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
 
 class EmployeeLoginController extends Controller
 {
     public function index()
     {
-
     }
 
-    public function employeelogin ()
+    public function employeelogin()
     {
         return view('employee_login.employee-login');
     }
@@ -25,8 +23,8 @@ class EmployeeLoginController extends Controller
     {
         $request->validate([
             'firstname' => 'required|exists:personal_informations,firstname',
-            'surname'   => 'required|exists:personal_informations,surname',
-            'birthdate' => 'required|exists:personal_informations,birthdate'
+            'surname' => 'required|exists:personal_informations,surname',
+            'birthdate' => 'required|exists:personal_informations,birthdate',
         ]);
 
         $barcode = '';
@@ -37,17 +35,17 @@ class EmployeeLoginController extends Controller
                         ->where('nameextension', $request->nameextension)
                         ->value('id');
 
-
-        if(!$employee){
+        if (! $employee) {
             return Redirect::back()->withErrors(['msg' => 'Credentials not found'])->withInput();
-        }else{
+        } else {
             $barcode = PersonalInformation::find($employee)->barcode;
         }
 
-        if(!$barcode){
+        if (! $barcode) {
             return Redirect::back()->withErrors(['barcode' => 'Employee does not have a barcode'])->withInput();
-        }else if($employee && $barcode->value){
+        } elseif ($employee && $barcode->value) {
             session(['id' => $employee, 'barcode' => $barcode->value]);
+
             return redirect()->route('step-two');
         }
     }
@@ -59,18 +57,17 @@ class EmployeeLoginController extends Controller
 
     public function authenticateEmployeeLoginBarcode(Request $request)
     {
-
         $request->validate([
-            'barcode' => 'required|exists:barcodes,value'
+            'barcode' => 'required|exists:barcodes,value',
         ]);
 
-        if(session('barcode') != $request->barcode)
-        {
+        if (session('barcode') != $request->barcode) {
             return Redirect::back()->withErrors(['barcode' => 'Invalid Barcode']);
-        }else{
+        } else {
             Auth::guard('employee')->loginUsingId(session('id'));
             session()->forget('id');
             session()->forget('barcode');
+
             return redirect('/employees-pds-view');
         }
     }

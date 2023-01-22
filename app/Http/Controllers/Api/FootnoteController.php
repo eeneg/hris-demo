@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Department;
 use App\Footnote;
+use App\Http\Controllers\Controller;
 use App\Plantilla;
 use App\Setting;
-use App\Department;
+use Illuminate\Http\Request;
 
 class FootnoteController extends Controller
 {
@@ -37,18 +37,21 @@ class FootnoteController extends Controller
         if ($footnote) {
             $footnote->note = $request->footnote;
             $footnote->save();
+
             return $footnote;
         } else {
             $newfn = Footnote::create([
                 'plantilla_id' => $plantilla->id,
                 'department_id' => $department->id,
-                'note' => $request->footnote
+                'note' => $request->footnote,
             ]);
+
             return $newfn;
         }
     }
 
-    public function getfootnote(Request $request) {
+    public function getfootnote(Request $request)
+    {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
         $department = Department::where('address', $request->department)->first();

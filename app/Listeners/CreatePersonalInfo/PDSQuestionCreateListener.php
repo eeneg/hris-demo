@@ -3,9 +3,7 @@
 namespace App\Listeners\CreatePersonalInfo;
 
 use App\Events\PersonalInfoRegistered;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
-use Illuminate\Queue\InteractsWithQueue;
 
 class PDSQuestionCreateListener
 {

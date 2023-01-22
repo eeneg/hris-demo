@@ -27,7 +27,7 @@ class PlantillaContentResource extends ResourceCollection
                 'last_promotion' => $item->last_promotion,
                 'appointment_status' => $item->appointment_status,
                 'position' => $item->position ? $item->position->title : '',
-                'position_id' =>$item->position ? $item->position->id : '',
+                'position_id' => $item->position ? $item->position->id : '',
                 'firstname' => $item->personalinformation ? $item->personalinformation->firstname : '',
                 'middlename' => $item->personalinformation ? $item->personalinformation->middlename : '',
                 'surname' => $item->personalinformation ? $item->personalinformation->surname : '',
@@ -43,7 +43,7 @@ class PlantillaContentResource extends ResourceCollection
     {
         return [
             'version' => '1.0.0',
-            'author_url' => url('http://www.davsurians.com.ph/')
+            'author_url' => url('http://www.davsurians.com.ph/'),
         ];
     }
 }

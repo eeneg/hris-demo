@@ -9,8 +9,6 @@ use App\LeaveSummary;
 use App\LeaveType;
 use App\PersonalInformation;
 use Carbon\Carbon;
-use App\Setting;
-use App\Plantilla;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -24,13 +22,10 @@ class LeaveCreditController extends Controller
      */
     public function index(Request $request)
     {
-
         $employee = PersonalInformation::orderBy('surname')->get();
 
         return new LeaveCreditResource($employee);
-
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -40,7 +35,6 @@ class LeaveCreditController extends Controller
      */
     public function store(Request $request)
     {
-
         $forCreate = [];
         $forUpdate = [];
 
@@ -49,7 +43,6 @@ class LeaveCreditController extends Controller
 
         $vl_id = LeaveType::where('title', 'Vacation Leave')->first()->id;
         $sl_id = LeaveType::where('title', 'Sick Leave')->first()->id;
-
 
         $collection = collect($request->data)->map(function ($leave) {
             $ll = collect($leave)->mapWithKeys(fn ($data, $key) => in_array($key, ['particulars', 'period']) ? [$key => json_encode($data)] : [$key => $data])->reject(fn ($data, $key) => in_array($key, ['newly_added']));
@@ -60,16 +53,12 @@ class LeaveCreditController extends Controller
         $forUpdate = $collection->filter(fn ($summary) => $summary->has('id'));
         $forCreate = $collection->reject(fn ($summary) => $summary->has('id'))->map(fn ($summary) => $summary->put('id', Str::orderedUuid()->toString()));
 
-
         $vl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $vl_id], ['balance' => collect($request->data)->last()['vl_balance']]);
         $sl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $sl_id], ['balance' => collect($request->data)->last()['sl_balance']]);
 
-
         $create = LeaveSummary::insert($forCreate->toArray());
         $update = LeaveSummary::upsert($forUpdate->toArray(), 'id');
-
     }
-
 
     /**
      * Display the specified resource.
@@ -79,12 +68,11 @@ class LeaveCreditController extends Controller
      */
     public function show($id)
     {
-
-        $personalinformations = PersonalInformation::find($id)->plantillacontents->map(fn ($e) =>(object) [ 'position' => $e->position,  'salary' => $e->salaryauthorized])->first();
+        $personalinformations = PersonalInformation::find($id)->plantillacontents->map(fn ($e) => (object) ['position' => $e->position,  'salary' => $e->salaryauthorized])->first();
 
         $leaveSummary = LeaveSummary::where('personal_information_id', $id)->orderBy('sort', 'ASC')->get();
 
-        $leaveCredit    =   DB::table('leave_credits')
+        $leaveCredit = DB::table('leave_credits')
                             ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
                             ->where('personal_information_id', $id)
                             ->where(function ($query) {
@@ -94,7 +82,7 @@ class LeaveCreditController extends Controller
                             ->get();
 
         $custom_leave = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
-                        ->where(function($query) {
+                        ->where(function ($query) {
                             $query->where('particulars->leave_type', 'PL')
                             ->orWhere('particulars->leave_type', 'FL')
                             ->orWhere('particulars->leave_type', 'SPL')
@@ -103,11 +91,10 @@ class LeaveCreditController extends Controller
                             ->orWhere('particulars->leave_type', 'PL');
                         })
                         ->get()
-                        ->map(function($data){
-
+                        ->map(function ($data) {
                             $year = null;
 
-                            switch($data->period->mode){
+                            switch($data->period->mode) {
                                 case 1:
                                 case 4:
                                     $year = Carbon::parse($data->period->data)->format('Y');
@@ -127,19 +114,17 @@ class LeaveCreditController extends Controller
                             $data->particulars = $particulars;
 
                             return $data->particulars;
-
                         });
 
         $tardy = LeaveSummary::where('personal_information_id', $id)
                         ->whereNotNull('particulars->leave_type')
                         ->whereIn('particulars->leave_type', ['Undertime', 'Tardy', 'UA', 'AWOL'])
                         ->get()
-                        ->map(function($data){
-
+                        ->map(function ($data) {
                             $year = null;
                             $month = null;
 
-                            switch($data->period->mode){
+                            switch($data->period->mode) {
                                 case 1:
                                 case 4:
                                     $year = Carbon::parse($data->period->data)->format('Y');
@@ -160,22 +145,22 @@ class LeaveCreditController extends Controller
 
                             return [
                                 'month' => $data->month,
-                                'year'  => $data->year,
-                                'type'  => $data->particulars->leave_type,
-                                'count'  => $data->particulars->count
+                                'year' => $data->year,
+                                'type' => $data->particulars->leave_type,
+                                'count' => $data->particulars->count,
                             ];
                         });
 
         $awol = LeaveSummary::where('personal_information_id', $id)->whereIn('particulars->leave_type', ['AWOL', 'UA'])
                         ->where('period->mode', 4)
                         ->get()
-                        ->map(function($data, $index){
-                            switch($data->period->mode){
+                        ->map(function ($data, $index) {
+                            switch($data->period->mode) {
                                 case 1:
                                 case 4:
                                     $year = Carbon::parse($data->period->data)->format('Y');
 
-                                    if($year == Carbon::now()->format('Y')){
+                                    if ($year == Carbon::now()->format('Y')) {
                                         return $data;
                                     }
 
@@ -183,7 +168,7 @@ class LeaveCreditController extends Controller
                                 case 2:
                                     $year = Carbon::parse($data->period->data->start)->format('Y');
 
-                                    if($year == Carbon::now()->format('Y')){
+                                    if ($year == Carbon::now()->format('Y')) {
                                         return $data;
                                     }
 
@@ -191,7 +176,7 @@ class LeaveCreditController extends Controller
                                 case 3:
                                     $year = Carbon::parse($data->period->data[0]->date)->format('Y');
 
-                                    if($year == Carbon::now()->format('Y')){
+                                    if ($year == Carbon::now()->format('Y')) {
                                         return $data;
                                     }
 
@@ -200,15 +185,14 @@ class LeaveCreditController extends Controller
                         });
 
         return [
-                'summary' => $leaveSummary,
-                'credit' => $leaveCredit,
-                'custom_leave' => LeaveSummary::countCustomLeave($custom_leave),
-                'tardy' => LeaveSummary::violationCounter($tardy),
-                'position' => $personalinformations->position ?? '',
-                'salary' => $personalinformations->salary ?? '',
-                'awol' => LeaveSummary::violationCounter($awol)
-            ];
-
+            'summary' => $leaveSummary,
+            'credit' => $leaveCredit,
+            'custom_leave' => LeaveSummary::countCustomLeave($custom_leave),
+            'tardy' => LeaveSummary::violationCounter($tardy),
+            'position' => $personalinformations->position ?? '',
+            'salary' => $personalinformations->salary ?? '',
+            'awol' => LeaveSummary::violationCounter($awol),
+        ];
     }
 
     /**
@@ -220,8 +204,6 @@ class LeaveCreditController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-
     }
 
     /**
@@ -232,10 +214,9 @@ class LeaveCreditController extends Controller
      */
     public function destroy($id)
     {
-
         $summary = LeaveSummary::find($id);
 
-        $vl_deduct  = $summary->vl_earned - $summary->vl_withpay;
+        $vl_deduct = $summary->vl_earned - $summary->vl_withpay;
         $sl_deduct = $summary->sl_earned - $summary->sl_withpay;
 
         $vl_id = LeaveType::where('title', 'Vacation Leave')->first()->id;
@@ -244,13 +225,11 @@ class LeaveCreditController extends Controller
         $vl_balance = LeaveCredit::where('personal_information_id', $summary->personal_information_id)->where('leave_type_id', $vl_id)->first();
         $sl_balance = LeaveCredit::where('personal_information_id', $summary->personal_information_id)->where('leave_type_id', $sl_id)->first();
 
-        if($vl_balance && $sl_balance)
-        {
-            $update_vl_balance = $vl_balance->update(['balance' => (float)$vl_balance->balance - (float)$vl_deduct]);
-            $update_sl_balance = $sl_balance->update(['balance' => (float)$sl_balance->balance - (float)$sl_deduct]);
+        if ($vl_balance && $sl_balance) {
+            $update_vl_balance = $vl_balance->update(['balance' => (float) $vl_balance->balance - (float) $vl_deduct]);
+            $update_sl_balance = $sl_balance->update(['balance' => (float) $sl_balance->balance - (float) $sl_deduct]);
         }
 
         $summary->delete();
-
     }
 }

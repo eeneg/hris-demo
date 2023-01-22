@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\EmployeePDSEdit;
 use App\EmployeePDSEditRequest;
-use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Events\EditRequestApproved;
-use App\FamilyBackground;
+use App\Http\Controllers\Controller;
 use App\PersonalInformation;
-use Throwable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RequestController extends Controller
 {
@@ -23,8 +19,7 @@ class RequestController extends Controller
      */
     public function index(Request $request)
     {
-        if(!$request->search)
-        {
+        if (! $request->search) {
             $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
                             ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
                             ->select(
@@ -39,8 +34,7 @@ class RequestController extends Controller
                             ->paginate(10);
 
             return $editRequest;
-
-        }else if($request->search){
+        } elseif ($request->search) {
             $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
                             ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
                             ->select(
@@ -61,13 +55,11 @@ class RequestController extends Controller
 
             return $editRequest;
         }
-
     }
 
     public function reviewedRequest(Request $request)
     {
-        if(!$request->search)
-        {
+        if (! $request->search) {
             $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
                             ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
                             ->select(
@@ -82,8 +74,7 @@ class RequestController extends Controller
                             ->paginate(10);
 
             return $editRequest;
-
-        }else if($request->search){
+        } elseif ($request->search) {
             $editRequest = EmployeePDSEditRequest::select('employee_p_d_s_edit_requests.*')
                             ->join('personal_informations', 'employee_p_d_s_edit_requests.personal_information_id', '=', 'personal_informations.id')
                             ->select(
@@ -104,42 +95,38 @@ class RequestController extends Controller
 
             return $editRequest;
         }
-
     }
 
     public function acceptEditRequest(Request $request)
     {
-
         $edits = $request->except('id');
 
         $ar = [];
         $data = '';
 
-        if(count($edits['accept']) > 0){
+        if (count($edits['accept']) > 0) {
             EmployeePDSEdit::whereIn('id', $edits['accept'])->update(['status' => 'APPROVED']);
         }
 
-        if(count($edits['deny']) > 0){
+        if (count($edits['deny']) > 0) {
             EmployeePDSEdit::whereIn('id', $edits['deny'])->update(['status' => 'DENIED']);
         }
 
         $data = EmployeePDSEditRequest::find($request->id);
 
-        foreach($data->employeeEdits as $value)
-        {
+        foreach ($data->employeeEdits as $value) {
             array_push($ar, $value->status);
         }
 
-        if(!in_array('PENDING', $ar) && !in_array('DENIED', $ar)){
+        if (! in_array('PENDING', $ar) && ! in_array('DENIED', $ar)) {
             $data->update(['status' => 'APPROVED']);
-        }else if (!in_array('PENDING', $ar) && !in_array('APPROVED', $ar)){
+        } elseif (! in_array('PENDING', $ar) && ! in_array('APPROVED', $ar)) {
             $data->update(['status' => 'DENIED']);
-        }else if(!in_array('PENDING', $ar)){
+        } elseif (! in_array('PENDING', $ar)) {
             $data->update(['status' => 'VALIDATED']);
         }
 
-        if(($data != '' || $data != null) && $data->status == 'APPROVED' || $data->status == 'VALIDATED')
-        {
+        if (($data != '' || $data != null) && $data->status == 'APPROVED' || $data->status == 'VALIDATED') {
             event(new EditRequestApproved($data));
             $this->deleteEmptyRecords($data->personal_information_id);
         }
@@ -147,69 +134,55 @@ class RequestController extends Controller
 
     public function revertRequest(Request $request)
     {
-
         $edits = $request->except(['id', 'requestID']);
 
         $employee = PersonalInformation::find($request->id);
 
-        $obj = array(
+        $obj = [
             'children' => [],
             'eligibilities' => [],
             'workexperiences' => [],
             'voluntaryworks' => [],
             'trainingprograms' => [],
             'otherinfos' => [],
-        );
+        ];
 
         $edit_id = [];
 
-        foreach($edits as $data)
-        {
-
+        foreach ($edits as $data) {
             $record = EmployeePDSEdit::find($data);
 
-            if($record['status'] == 'APPROVED' && $record['model'] == 'personalinformation')
-            {
+            if ($record['status'] == 'APPROVED' && $record['model'] == 'personalinformation') {
                 $employee->update([$record['field'] => $record['oldValue']]);
                 $record->update(['status' => 'PENDING']);
-            }
-            else if(($record['status'] == 'APPROVED') && $record['model'] == 'familybackground' || $record['model'] == 'educationalbackground' || $record['model'] == 'pdsquestion'){
+            } elseif (($record['status'] == 'APPROVED') && $record['model'] == 'familybackground' || $record['model'] == 'educationalbackground' || $record['model'] == 'pdsquestion') {
                 $model = $record['model'];
                 $employee->$model()->updateOrCreate(['personal_information_id' => $employee->id], [$record['field'] => $record['oldValue']]);
                 $record->update(['status' => 'PENDING']);
-            }
-            else if(($record['status'] == 'APPROVED')){
+            } elseif (($record['status'] == 'APPROVED')) {
                 $model = $record['model'];
-                $obj[$model][$record['model_id']][$record['field']] =  $record['oldValue'];
+                $obj[$model][$record['model_id']][$record['field']] = $record['oldValue'];
                 array_push($edit_id, $data);
-            }
-            else if(($record['status'] == 'DENIED')){
-                    $record->update(['status' => 'PENDING']);
+            } elseif (($record['status'] == 'DENIED')) {
+                $record->update(['status' => 'PENDING']);
             }
         }
 
-        foreach($obj as $model => $record)
-        {
-            if(count($record) > 0)
-            {
-                foreach($record as $key => $data)
-                {
+        foreach ($obj as $model => $record) {
+            if (count($record) > 0) {
+                foreach ($record as $key => $data) {
                     $record = $employee->$model()->updateOrCreate(['id' => $key], $data);
                 }
             }
         }
 
-
-        if(count($edit_id) > 0)
-        {
+        if (count($edit_id) > 0) {
             EmployeePDSEdit::whereIn('id', $edit_id)->update(['status' => 'PENDING']);
         }
 
-        if(isset($edits[0]))
-        {
+        if (isset($edits[0])) {
             EmployeePDSEditRequest::find($request->requestID)->update(['status' => 'PENDING']);
         }
-
 
         $this->deleteEmptyRecords($request->id);
     }
@@ -217,35 +190,32 @@ class RequestController extends Controller
     public function deleteEmptyRecords($id)
     {
         $models = ['familybackground', 'children', 'educationalbackground', 'eligibilities',
-                    'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion',];
+            'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion', ];
 
         $employee = PersonalInformation::find($id);
 
         $record = null;
 
-        foreach($models as $data)
-        {
-            if($data == 'familybackground' || $data == 'educationalbackground' || $data == 'pdsquestion')
-            {
-                if(isset($employee->$data))
-                {
+        foreach ($models as $data) {
+            if ($data == 'familybackground' || $data == 'educationalbackground' || $data == 'pdsquestion') {
+                if (isset($employee->$data)) {
                     $record = collect($employee->$data)->except(['id', 'personal_information_id', 'created_at', 'updated_at'])->toArray();
                 }
 
-                if($record && count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
-                {
+                if ($record && count(array_filter($record, function ($a) {
+                return $a !== null && $a != '';
+                })) == 0) {
                     $employee->$data()->delete();
                 }
-            }else{
-                foreach($employee->$data as $value)
-                {
-                    if(isset($value))
-                    {
+            } else {
+                foreach ($employee->$data as $value) {
+                    if (isset($value)) {
                         $record = collect($value)->except(['id', 'personal_information_id', 'created_at', 'updated_at', 'orderNo'])->toArray();
                     }
 
-                    if($record && count(array_filter($record, function ($a) { return $a !== null && $a != "";})) == 0)
-                    {
+                    if ($record && count(array_filter($record, function ($a) {
+                    return $a !== null && $a != '';
+                    })) == 0) {
                         $employee->$data->find($value->id)->delete();
                     }
                 }

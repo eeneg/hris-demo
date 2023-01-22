@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -22,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'landline', 'role', 'avatar', 'status'
+        'name', 'email', 'password', 'landline', 'role', 'avatar', 'status',
     ];
 
     /**
@@ -44,7 +43,7 @@ class User extends Authenticatable
     ];
 
     protected $with = [
-        'userassignment'
+        'userassignment',
     ];
 
     public function userassignment()
@@ -52,14 +51,16 @@ class User extends Authenticatable
         return $this->hasOne('App\UserAssignment', 'user_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

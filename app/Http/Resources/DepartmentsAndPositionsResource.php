@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Arr;
 
 class DepartmentsAndPositionsResource extends ResourceCollection
 {
@@ -17,7 +16,7 @@ class DepartmentsAndPositionsResource extends ResourceCollection
     {
         return $this->collection->map(function ($item) {
             return [
-                'id'    => $item->id,
+                'id' => $item->id,
                 'title' => $item->title,
                 'description' => $item->description,
                 'address' => $item->address,
@@ -26,7 +25,7 @@ class DepartmentsAndPositionsResource extends ResourceCollection
                 'fund' => $item->fund,
                 'positions' => $item->positions->map(function ($item, $key) {
                     return $item->only(['id', 'department_id', 'title']);
-                })
+                }),
             ];
         });
     }

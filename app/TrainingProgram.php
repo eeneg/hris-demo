@@ -13,24 +13,25 @@ class TrainingProgram extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = [ 'id', 'personal_information_id', 'title', 'inclusiveDateFrom', 'inclusiveDateTo', 'hours', 'conductor' ];
+    protected $fillable = ['id', 'personal_information_id', 'title', 'inclusiveDateFrom', 'inclusiveDateTo', 'hours', 'conductor'];
 
     public function personalinformation()
     {
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
-            if($model->id == null || $model->id == '')
-            {
+        self::creating(function ($model) {
+            if ($model->id == null || $model->id == '') {
                 $model->id = self::generateUuid();
             }
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }

@@ -3,9 +3,7 @@
 namespace App\Listeners\CreatePersonalInfo;
 
 use App\Events\PersonalInfoRegistered;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
-use Illuminate\Queue\InteractsWithQueue;
 
 class EligibilityCreateListener
 {
@@ -27,10 +25,8 @@ class EligibilityCreateListener
      */
     public function handle(PersonalInfoRegistered $event)
     {
-        foreach($this->request->eligibilities as $key => $value)
-        {
-            if(count($value) > 0)
-            {
+        foreach ($this->request->eligibilities as $key => $value) {
+            if (count($value) > 0) {
                 $event->pi->eligibilities()->createMany([$value]);
             }
         }

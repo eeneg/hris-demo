@@ -13,15 +13,16 @@ class SalarySchedule extends Model
 
     protected $fillable = ['tranche', 'effective_date'];
 
-
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 
@@ -29,5 +30,4 @@ class SalarySchedule extends Model
     {
         return $this->hasMany('App\SalaryGrade', 'salary_sched_id');
     }
-
 }

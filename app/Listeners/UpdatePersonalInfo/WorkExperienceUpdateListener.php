@@ -3,9 +3,6 @@
 namespace App\Listeners\UpdatePersonalInfo;
 
 use App\Events\PersonalInfoUpdated;
-use App\WorkExperience;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,34 +26,24 @@ class WorkExperienceUpdateListener
      */
     public function handle(PersonalInfoUpdated $event)
     {
-        if($this->request->workexperiences !== null)
-        {
-
+        if ($this->request->workexperiences !== null) {
             $arr = [];
 
-            foreach($this->request->workexperiences as $key => $value)
-            {
+            foreach ($this->request->workexperiences as $key => $value) {
+                $bool = ! data_get($value, 'id') && ! data_get($value, 'inclusiveDateFrom') && ! data_get($value, 'inclusiveDateTo') && ! data_get($value, 'position')
+                        && ! data_get($value, 'department') && ! data_get($value, 'monthlySalary') && ! data_get($value, 'salaryGrade') && ! data_get($value, 'statusOfAppointment')
+                        && ! data_get($value, 'govService');
 
-                $bool = !data_get($value, 'id') && !data_get($value, 'inclusiveDateFrom') && !data_get($value, 'inclusiveDateTo') && !data_get($value, 'position')
-                        && !data_get($value, 'department') && !data_get($value, 'monthlySalary') && !data_get($value, 'salaryGrade') && !data_get($value, 'statusOfAppointment')
-                        && !data_get($value, 'govService');
-
-
-                if($bool){
-
+                if ($bool) {
                     DB::table('work_experiences')->where('id', data_get($value, 'id'))->delete();
-
-                }else if(!$bool && count($value) > 0){
-
+                } elseif (! $bool && count($value) > 0) {
                     array_push($arr, data_get($value, 'id'));
                     $x = $event->pi->workexperiences()->updateOrCreate(['id' => data_get($value, 'id')], $value);
                     array_push($arr, $x->id);
-
                 }
             }
 
             DB::table('work_experiences')->where('personal_information_id', $this->request->id)->whereNotIn('id', array_unique(array_filter($arr)))->delete();
-
         }
     }
 }

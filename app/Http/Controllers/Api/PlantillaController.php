@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Plantilla;
 use App\PlantillaContent;
+use App\PlantillaDept;
 use App\SalaryGrade;
 use App\Setting;
-use App\PlantillaDept;
+use Illuminate\Http\Request;
 
 class PlantillaController extends Controller
 {
@@ -22,7 +22,8 @@ class PlantillaController extends Controller
         return Plantilla::orderBy('created_at', 'desc')->get();
     }
 
-    public function previousplantilla(Request $request) {
+    public function previousplantilla(Request $request)
+    {
         return Plantilla::where('year', '!=', $request->current)->latest('created_at')->first();
     }
 
@@ -36,12 +37,12 @@ class PlantillaController extends Controller
     {
         $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
-            'year' => 'unique:plantillas'
+            'year' => 'unique:plantillas',
         ]);
         $newplantilla = Plantilla::create([
             'year' => $request['year'],
             'salary_schedule_auth_id' => $request['salary_auth'],
-            'salary_schedule_prop_id' => $request['salary_prop']
+            'salary_schedule_prop_id' => $request['salary_prop'],
         ]);
 
         $departments = $request['plantilla_depts'];
@@ -49,7 +50,7 @@ class PlantillaController extends Controller
             PlantillaDept::create([
                 'plantilla_id' => $newplantilla->id,
                 'department_id' => $department['id'],
-                'order_number' => $key
+                'order_number' => $key,
             ]);
         }
 
@@ -94,7 +95,7 @@ class PlantillaController extends Controller
     {
         $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
-            'year' => 'unique:plantillas,year,'.$id
+            'year' => 'unique:plantillas,year,'.$id,
         ]);
         $plantilla = Plantilla::findOrFail($id);
         $plantilla->year = $request->year;

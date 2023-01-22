@@ -3,10 +3,7 @@
 namespace App\Listeners\CreatePersonalInfo;
 
 use App\Events\PersonalInfoRegistered;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Http\Request;
-
 
 class WorkExperienceCreateListener
 {
@@ -28,10 +25,8 @@ class WorkExperienceCreateListener
      */
     public function handle(PersonalInfoRegistered $event)
     {
-        foreach($this->request->workexperiences as $key => $value)
-        {
-            if(count($value) > 0)
-            {
+        foreach ($this->request->workexperiences as $key => $value) {
+            if (count($value) > 0) {
                 $event->pi->workexperiences()->createMany([$value]);
             }
         }

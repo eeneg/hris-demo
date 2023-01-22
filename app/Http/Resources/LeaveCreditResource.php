@@ -3,12 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Arr;
-use App\LeaveType;
-use App\LeaveSummary;
-
-
-
 
 class LeaveCreditResource extends ResourceCollection
 {
@@ -17,22 +11,18 @@ class LeaveCreditResource extends ResourceCollection
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
-     *
      */
-
     public function toArray($request)
     {
-
         return $this->collection->map(function ($item, $key) {
             return [
-                    'id'                => $item->id,
-                    'name'              => $item->fullName,
-                    'civilstatus'       => $item->civilstatus,
-                    'birthdate'         => $item->birthdate,
-                    'retirement_date'   => $item->retirement_date,
-                    'status'            => $item->status
-                ];
+                'id' => $item->id,
+                'name' => $item->fullName,
+                'civilstatus' => $item->civilstatus,
+                'birthdate' => $item->birthdate,
+                'retirement_date' => $item->retirement_date,
+                'status' => $item->status,
+            ];
         });
     }
-
 }

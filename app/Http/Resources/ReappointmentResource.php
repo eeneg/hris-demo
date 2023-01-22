@@ -18,12 +18,12 @@ class ReappointmentResource extends ResourceCollection
             return [
                 'id' => $item->id,
                 'personal_information_id' => $item->personal_information_id,
-                'name' => $item->surname. ', ' .$item->firstname. ' ' .$item->middlename. ' ' .$item->nameextension,
+                'name' => $item->surname.', '.$item->firstname.' '.$item->middlename.' '.$item->nameextension,
                 'dept_from' => $item->dept_from,
-                'dept_to'   => $item->dept_to,
+                'dept_to' => $item->dept_to,
                 'assigned_from' => $item->assigned_from,
                 'assigned_to' => $item->assigned_to,
-                'date'  => $item->date
+                'date' => $item->date,
             ];
         });
     }

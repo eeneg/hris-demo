@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
-
+use Webpatser\Uuid\Uuid;
 
 class EmployeePDSEditRequest extends Model
 {
@@ -19,7 +18,7 @@ class EmployeePDSEditRequest extends Model
     ];
 
     protected $with = [
-        'employeeEdits'
+        'employeeEdits',
     ];
 
     protected $casts = [
@@ -37,14 +36,16 @@ class EmployeePDSEditRequest extends Model
         return $this->hasMany('App\EmployeePDSEdit', 'employee_edit_request_id');
     }
 
-    public static function boot(){
+    public static function boot()
+    {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             $model->id = self::generateUuid();
         });
     }
 
-    public static function generateUuid(){
+    public static function generateUuid()
+    {
         return Uuid::generate()->string;
     }
 }
