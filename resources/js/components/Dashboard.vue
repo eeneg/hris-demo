@@ -205,17 +205,17 @@
 						<!-- /.card-header -->
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table m-0">
+								<table class="table m-0 table-hover table-sm">
 									<thead>
 										<tr>
 											<th>User</th>
 											<th>Activity</th>
-											<th>Details</th>
-											<th style="text-align: right;">Status</th>
+											<th>IP Address</th>
+											<th>Time</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="audit in data_set.audits">
+										<tr class="cursor-pointer" v-for="audit in data_set.audits">
 											<td>
 												{{ audit.user.name }}
 											</td>
@@ -224,12 +224,10 @@
 												{{ audit.audited }}.
 											</td>
 											<td>
-												<div style="overflow: hidden; width: 280px; text-align: left; valign: top; word-break: break-all;">
-													{{ audit.modified }}
-												</div>
+												{{ audit.ip_address }}
 											</td>
-											<td style="text-align: right;">
-												{{ audit.ip_address }} <span class="badge badge-success">{{ moment(audit.created_at).format('lll') }}</span>
+											<td class="text-monospace">
+												{{ moment(audit.created_at).format('llll') }}
 											</td>
 										</tr>
 									</tbody>
