@@ -8,6 +8,10 @@ use App\LeaveCredit;
 use App\LeaveSummary;
 use App\LeaveType;
 use App\PersonalInformation;
+use App\Plantilla;
+use App\PlantillaContent;
+use App\Setting;
+use App\UserAssignment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +26,21 @@ class LeaveCreditController extends Controller
      */
     public function index(Request $request)
     {
-        $employee = PersonalInformation::orderBy('surname')->get();
+
+        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
+        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
+                                UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
+
+        $role = auth('api')->user()->role;
+
+        if($department_id && $role == 'Office User' || $role == 'Office Head')
+        {
+            $employee = PlantillaContent::has('personalinformation')->with('personalinformation')->get()->where('position.department_id', $department_id)
+                ->map(fn($employee) => $employee->personalinformation);
+        }else{
+            $employee = PersonalInformation::orderBy('surname')->get();
+        }
 
         return new LeaveCreditResource($employee);
     }

@@ -594,7 +594,6 @@ import CreditsTable from './CreditsTable.vue'
                 prev_month: moment().subtract(1, "month").format("MMMM"),
                 current_month: moment().format("MMMM"),
                 selected_employee: { id: null },
-                selected_summary: [],
                 edit_mode: false,
                 edited: false,
                 employees: [],
