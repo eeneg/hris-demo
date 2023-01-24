@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
 use OwenIt\Auditing\Models\Audit as AuditModel;
 
 class Audit extends AuditModel
@@ -15,7 +16,7 @@ class Audit extends AuditModel
      */
     public function auditable()
     {
-        return $this->morphTo(null, 'auditable_type', 'auditable_id');
+        return $this->morphTo();
     }
 
     /**
@@ -23,7 +24,7 @@ class Audit extends AuditModel
      */
     public function user()
     {
-        return $this->morphTo(null, 'user_type', 'user_id');
+        return $this->morphTo();
     }
 
     public static function boot()
@@ -36,7 +37,7 @@ class Audit extends AuditModel
 
     public function getAuditedAttribute()
     {
-        return (new \ReflectionClass($this->auditable_type))->getShortName();
+        return Str::headline(class_basename($this->auditable_type));
     }
 
     public function getModifiedAttribute()
