@@ -23,14 +23,14 @@ class LeaveApplicationController extends Controller
      */
     public function index()
     {
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ?
-                                UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
+        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
+        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
+                                UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
         $data = [
-            'role' => Auth::user()->role,
-            'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id')),
+            'role' => auth('api')->user()->role,
+            'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id'))
         ];
 
         return new LeaveApplicationResource(LeaveApplication::leaveapplications($default_plantilla, $plantilla, $department_id, $data));
@@ -38,10 +38,10 @@ class LeaveApplicationController extends Controller
 
     public function getAllLeave()
     {
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ?
-                                UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
+        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
+        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head' ?
+                                UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
         return new LeaveApplicationResource(LeaveApplication::getAllLeave($default_plantilla, $plantilla, $department_id));
     }
@@ -56,7 +56,19 @@ class LeaveApplicationController extends Controller
             }
         }
 
-        return LeaveApplication::where($data)->get();
+        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
+        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
+                                UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
+
+        $data = [
+            'role' => auth('api')->user()->role,
+            'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id'))
+        ];
+
+        // dd($data);
+
+        return new LeaveApplicationResource(LeaveApplication::getAllLeave($default_plantilla, $plantilla, $department_id));
     }
 
     public function getLeaveBalance(Request $request)
@@ -116,11 +128,11 @@ class LeaveApplicationController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $department_id = Auth::user()->role == 'Office User' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
+        $department_id = auth('api')->user()->role == 'Office User' ? UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
         $data = [
-            'role' => Auth::user()->role,
-            'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id')),
+            'role' => auth('api')->user()->role,
+            'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id'))
         ];
 
         return new LeaveApplicationResource(LeaveApplication::leaveapplications($default_plantilla, $plantilla, $department_id, $data));
@@ -140,9 +152,9 @@ class LeaveApplicationController extends Controller
     public function loadUserRole()
     {
         $data = [
-            'role' => Auth::user()->role,
-            'dept' => Department::find(UserAssignment::where('user_id', Auth::user()->id)->value('department_id')),
-            'id' => Auth::user()->id,
+            'role' => auth('api')->user()->role,
+            'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id')),
+            'id'   => auth('api')->user()->id
         ];
 
         return $data;

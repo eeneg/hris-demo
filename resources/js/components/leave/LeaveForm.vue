@@ -4,12 +4,14 @@
             <div class="card card-primary card-outline">
 
                 <div class="card-header">
-                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Form <router-link to="/leave-applications" style="float: right;"><i class="fas fa-arrow-left"></i></router-link></h2>
+                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Form
+                         <router-link to="/leave-applications" v-if="mode != 2" style="float: right;"><i class="fas fa-arrow-left"></i></router-link>
+                         <router-link to="/employee-leave-applications" v-if="mode == 2" style="float: right;"><i class="fas fa-arrow-left"></i></router-link>
+                    </h2>
                     <small style="margin-left: 2px;">Leave Application Form</small>
                 </div>
 
-                <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
-                    {{ mode }}
+                <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : mode  == 2 ? submitForm() : '' ">
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
@@ -92,89 +94,91 @@
                             </div>
                         </div>
                     </div>
-                    <h5 class="green mt-3">Details of action on Application</h5>
-                    <div class="row">
-                        <div class="col-md-12 form-group" style="display: contents;">
-                            <div class="col-md-2">
-                                <label class="d-block" style="margin: 0; color: #495057;"><i>Previous Balance</i> </label>
-                            </div>
-                            <div class="col-md-1  form-group">
-                                <label style="margin: 0;">Vacation</label>
-                                <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label style="margin: 0;">Sick</label>
-                                <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
-                            </div>
-                            <div class="col-md-1  form-group">
-                                <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ prev_balance_total.toFixed(3) }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group" style="display: contents;">
-                            <div class="col-md-2">
-                                <label class="d-block" style="margin: 0; color: #495057;"><i>Less this Leave</i> </label>
-                            </div>
-                            <div class="col-md-1  form-group">
-                                <label style="margin: 0;">Vacation</label>
-                                <input v-model="form.vacation_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label style="margin: 0;">Sick</label>
-                                <input v-model="form.sick_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ less_total.toFixed(3) }}</label>
+                    <div v-if="mode !== 2">
+                        <h5 class="green mt-3">Details of action on Application</h5>
+                        <div class="row">
+                            <div class="col-md-12 form-group" style="display: contents;">
+                                <div class="col-md-2">
+                                    <label class="d-block" style="margin: 0; color: #495057;"><i>Previous Balance</i> </label>
+                                </div>
+                                <div class="col-md-1  form-group">
+                                    <label style="margin: 0;">Vacation</label>
+                                    <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <label style="margin: 0;">Sick</label>
+                                    <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                </div>
+                                <div class="col-md-1  form-group">
+                                    <label style="margin: 0;">Total</label>
+                                    <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ prev_balance_total.toFixed(3) }}</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group" style="display: contents;">
-                            <div class="col-md-2">
-                                <label class="d-block" style="margin: 0; color: #495057;"><i>Leave Balance</i> </label>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_vacation_balance }}</label>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_sick_balance }}</label>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ balance_total.toFixed(3) }}</label>
+                        <div class="row">
+                            <div class="col-md-12 form-group" style="display: contents;">
+                                <div class="col-md-2">
+                                    <label class="d-block" style="margin: 0; color: #495057;"><i>Less this Leave</i> </label>
+                                </div>
+                                <div class="col-md-1  form-group">
+                                    <label style="margin: 0;">Vacation</label>
+                                    <input v-model="form.vacation_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <label style="margin: 0;">Sick</label>
+                                    <input v-model="form.sick_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <label style="margin: 0;">Total</label>
+                                    <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ less_total.toFixed(3) }}</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <label for="credit_as_of" class="d-block" style="margin: 0; color: #495057;">Certification of Leave Credits <span style="font-weight: normal; color: black;">As of</span></label>
-                            <date-picker v-model="form.credit_as_of" id="credit_as_of" :config="options" class="form-control form-control-border border-width-2"></date-picker>
+                        <div class="row">
+                            <div class="col-md-12 form-group" style="display: contents;">
+                                <div class="col-md-2">
+                                    <label class="d-block" style="margin: 0; color: #495057;"><i>Leave Balance</i> </label>
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_vacation_balance }}</label>
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_sick_balance }}</label>
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ balance_total.toFixed(3) }}</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="credit_as_of" class="d-block" style="margin: 0; color: #495057;">Certification of Leave Credits <span style="font-weight: normal; color: black;">As of</span></label>
+                                <date-picker v-model="form.credit_as_of" id="credit_as_of" :config="options" class="form-control form-control-border border-width-2"></date-picker>
+                            </div>
+                        </div>
 
-                    <h5 class="green mt-3">Recommendation</h5>
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.recommendation_status" value="APPROVED" class="custom-control-input" type="radio" id="recommendation_status_approved" name="recommendation_status">
-                                <label for="recommendation_status_approved" class="custom-control-label">Approved</label>
-                                <input v-model="form.recommendation_remark_approved" ref="recommendation_status_approved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'APPROVED'">
+                        <h5 class="green mt-3">Recommendation</h5>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <div class="custom-control custom-radio">
+                                    <input v-model="form.recommendation_status" value="APPROVED" class="custom-control-input" type="radio" id="recommendation_status_approved" name="recommendation_status">
+                                    <label for="recommendation_status_approved" class="custom-control-label">Approved</label>
+                                    <input v-model="form.recommendation_remark_approved" ref="recommendation_status_approved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'APPROVED'">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.recommendation_status" class="custom-control-input" value="DISAPPROVED" type="radio" id="recommendation_status_disapproved" name="recommendation_status">
-                                <label for="recommendation_status_disapproved" class="custom-control-label">Dissaproved due to</label>
-                                <input v-model="form.recommendation_remark_disapproved" ref="recommendation_status_disapproved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'DISAPPROVED'">
+                            <div class="form-group col-md-3">
+                                <div class="custom-control custom-radio">
+                                    <input v-model="form.recommendation_status" class="custom-control-input" value="DISAPPROVED" type="radio" id="recommendation_status_disapproved" name="recommendation_status">
+                                    <label for="recommendation_status_disapproved" class="custom-control-label">Dissaproved due to</label>
+                                    <input v-model="form.recommendation_remark_disapproved" ref="recommendation_status_disapproved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'DISAPPROVED'">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
-                            <label style="margin: 0;">Recommendation Officer</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" :options="personalinformations" label="name"
-                            :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
-                            <has-error :form="form" field="personal_information_id"></has-error>
+                            <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
+                                <label style="margin: 0;">Recommendation Officer</label>
+                                <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" :options="personalinformations" label="name"
+                                :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
+                                <has-error :form="form" field="personal_information_id"></has-error>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -240,9 +244,9 @@
             datePicker
         },
         beforeRouteEnter (to, from, next) {
-            if(to.query.id == null)
+            if(to.query.id == null && to.query.mode == null)
             {
-                    next()
+                next()
             }
             else if(to.query.id != null && to.query.mode == 1){
                 axios.get('api/editLeaveApplication?id='+to.query.id)
@@ -257,6 +261,8 @@
                         'error'
                     )
                 })
+            }else if(to.query.employee_id !== null && to.query.mode == 2){
+                next(vm => vm.setEmployee(to.query))
             }
         },
         methods: {
@@ -413,11 +419,21 @@
                this.form.fill(data.data[0])
                this.mode = 1
                this.leave_application_id = data.data[0].id
+            },
+
+            setEmployee: function(data)
+            {
+                this.mode = 2
+                this.personalinformations.push({name: data.name, id: data.employee_id})
+                this.form.personal_information_id = data.employee_id
             }
         },
         created(){
             this.$Progress.start();
-            this.loadFormData();
+            if(this.mode !== 2)
+            {
+                this.loadFormData();
+            }
             this.$Progress.finish();
         },
         mounted() {

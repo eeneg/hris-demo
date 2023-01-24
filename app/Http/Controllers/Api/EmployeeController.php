@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\EmployeePDSEdit;
 use App\EmployeePDSEditRequest;
 use App\Http\Controllers\Controller;
+use App\LeaveApplication;
 use App\PersonalInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +38,14 @@ class EmployeeController extends Controller
                         ->paginate(10);
 
         return $editRequest;
+    }
+
+    public function getApplications(){
+
+        $data = LeaveApplication::where('personal_information_id',  Auth::user()->id)->paginate(10);
+
+        return collect(['id' => Auth::user()->id, 'data' => $data]);
+
     }
 
     /**

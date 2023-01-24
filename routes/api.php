@@ -105,8 +105,13 @@ Route::group(['middleware' => ['auth:api']], function () {
 Route::group(['middleware' => ['auth:employee-api']], function () {
     Route::apiResources([
         'employeepersonalinformation' => 'Api\EmployeeController',
+        'setting' => 'Api\SettingsController',
+        // 'leaveapplication' => 'Api\LeaveApplicationController',
     ]);
 
+    // Route::get('getLeaveBalance', 'Api\LeaveApplicationController@getLeaveBalance');
+    // Route::get('getleavetypes', 'Api\LeaveTypeController@getleavetypes');
+    Route::get('getLeaveApplications', 'Api\EmployeeController@getApplications');
     Route::get('editemployee', 'Api\EmployeeController@edit');
     Route::get('getpdsEdits', 'Api\EmployeeController@getpdsEdits');
     Route::post('cancelEdits', 'Api\EmployeeController@cancelEdits');
