@@ -29,6 +29,7 @@ return [
         'guards' => [
             'web',
             'api',
+            'employee-api'
         ],
         'resolver' => OwenIt\Auditing\Resolvers\UserResolver::class,
     ],
