@@ -27,6 +27,15 @@
 				border: solid black 2px;
 				padding: 0 10px 0 0;
 			}
+            .tdHeight{
+                height: 70px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+            }
+            .pHeight{
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
 		</style>
 	</head>
 	<body id="po-body" style="width: 100%">
@@ -40,26 +49,26 @@
 					<th style="font-size: 14px;  width: 75px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 210px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 12px;  width: 75px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
-					<th style="font-size: 12px;  width: 215px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
-					<th style="font-size: 12px;  width: 210px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
+					<th style="font-size: 12px;  width: 209px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
+					<th style="font-size: 12px;  width: 211px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 				</thead>
 				<tfoot style="top: 0; bottom: 50; width: 100%;">
 
                     {{-- TOTAL --}}
-                    {{-- <tr>
-                        <td colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none;"></td>
-                        <td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold; border-right: none;"><p style="margin-left: 10px; border-right: none;"> TOTAL </p></td>
-                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold; "><p style="margin-right: 10px;">  2,228340.00 </p></td>
-                        <td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> </td>
-                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"><p style="margin-right: 10px;">  2,270,388.00 </p></td>
-                        <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"><p style="margin-right: 10px;">  42,048.00 </p></td>
-                    </tr> --}}
+                    <tr>
+                        <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none;"></td>
+                        <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold; border-right: none;"><p class="pHeight" style="margin-left: 10px; border-right: none;"> TOTAL </p></td>
+                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold; "><p class="pHeight" style="margin-right: 10px;">  2,228340.00 </p></td>
+                        <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> </td>
+                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"><p class="pHeight" style="margin-right: 10px;">  2,270,388.00 </p></td>
+                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"><p class="pHeight" style="margin-right: 10px;">  42,048.00 </p></td>
+                    </tr>
                     <tr>
 						<td colspan="9" style="font-size: 16pt; height: 50px;">
 
 						</td>
 					</tr>
-					<tr style="">
+					<tr>
                         <td colspan="4" style="font-size: 16pt;">
                             Prepared by:
                         </td>
@@ -139,7 +148,7 @@
 
 			<div>
 				<div style="height: 1000px; width: 100%;">
-					<table class="tableM" style=" margin-bottom: 350px; height: 200px; top: 0; width: 100%;">
+					<table class="tableM" style=" margin-bottom: 400px; height: 200px; top: 0; width: 100%;">
                         <thead style="width: 100%;">
                         <th colspan="9">
                             <p style="font-size: 18px; text-align: right;">Local Budget Preparation From No. 153</p>
@@ -148,7 +157,7 @@
                         </thead>
                         <thead>
                         <th colspan="9">
-                            <h1>PERSONAL SCHEDULE</h1>
+                            <h1>PERSONNEL SCHEDULE</h1>
                         </th>
                         </thead>
                         <thead>
@@ -237,34 +246,34 @@
                             ?>
                             @foreach ($plantillacontents as $content)
                             <tr>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;  height: 70px; padding-top: 0px; padding-bottom: 0px;"><p style="margin-top: 0px; margin-bottom: 0px;">{{ $content->old_number }}</p> </td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="margin-top: 0px; margin-bottom: 0px;">{{ $content->new_number }}</p></td>
-								<td style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none; padding-right: 10px; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="margin-left: 10px; margin-top: 0px; margin-bottom: 0px;">{{ $content->position->title }}</p></td>
-								<td style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none; padding-right: 10px; height: 30px; padding-top: 0px; padding-bottom: 0px;">
-                                    <p style="margin-left: 10px; margin-top: 0px; margin-bottom: 0px;">
+								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{{ $content->old_number }}</p> </td>
+								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{{ $content->new_number }}</p></td>
+								<td class="tdHeight" style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none; padding-right: 10px;"><p class="pHeight" style="margin-left: 10px;">{{ $content->position->title }}</p></td>
+								<td class="tdHeight" style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none; padding-right: 10px;">
+                                    <p class="pHeight" style="margin-left: 10px;">
                                       {!! $content->personalinformation ? $content->personalinformation->firstname . ' ' . $content->personalinformation->middlename[0] . '. ' . $content->personalinformation->surname . ($content->personalinformation->nameextension ? ', '.$content->personalinformation->nameextension : '') : 'VACANT' !!}
                                     </p>
                                 </td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="padding-top: 0; padding-bottom: 0; margin-top: 0px; margin-bottom: 0px;">{!! $content->salaryauthorized ? $content->salaryauthorized->grade.'/'.$content->salaryauthorized->step : '' !!}</p></td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="margin-right: 10px; padding-top: 0; padding-bottom: 0; margin-top: 0px; margin-bottom: 0px;">{!! $content->salaryauthorized ? number_format($content->salaryauthorized->amount * 12) : '' !!}</p></td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="padding-top: 0; padding-bottom: 0; margin-top: 0px; margin-bottom: 0px;">{!! $content->salaryproposed ? $content->salaryproposed->grade.'/'.$content->salaryproposed->step : '' !!}</p></td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="margin-right: 10px; padding-top: 0; padding-bottom: 0; margin-top: 0px; margin-bottom: 0px;">{!! $content->salaryproposed ? number_format($content->salaryproposed->amount * 12) : '' !!}</p></td>
+								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{!! $content->salaryauthorized ? $content->salaryauthorized->grade.'/'.$content->salaryauthorized->step : '' !!}</p></td>
+								<td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">{!! $content->salaryauthorized ? number_format($content->salaryauthorized->amount * 12) : '' !!}</p></td>
+								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{!! $content->salaryproposed ? $content->salaryproposed->grade.'/'.$content->salaryproposed->step : '' !!}</p></td>
+								<td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">{!! $content->salaryproposed ? number_format($content->salaryproposed->amount * 12) : '' !!}</p></td>
                                 <?php $diff = $content->salaryproposed ? (($content->salaryproposed->amount * 12) - ($content->salaryauthorized->amount * 12)) : 0; ?>
                                 @if ($diff == 0)
-                                <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="margin-right: 10px; padding-top: 0; padding-bottom: 0; margin-top: 0px; margin-bottom: 0px;">-</p></td>
+                                <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">-</p></td>
                                 @else
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none; height: 30px; padding-top: 0px; padding-bottom: 0px;"><p style="margin-right: 10px; padding-top: 0; padding-bottom: 0; margin-top: 0px; margin-bottom: 0px;">{!! $diff < 0 ? '('.number_format($diff * -1).')' : number_format($diff) !!}</p></td>
+								<td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">{!! $diff < 0 ? '('.number_format($diff * -1).')' : number_format($diff) !!}</p></td>
                                 @endif
 							</tr>
 
                             @if (fmod($loop->index + 1, 19) == 0 || $loop->index + 1 == count($plantillacontents))
                             <tr style="page-break-after: always !important;">
-                                <td colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
-                                <td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
-                                <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none;"><p style="margin-right: 10px;"> <i>{!! $total_auth < 0 ? '('.number_format($total_auth * -1).')' : number_format($total_auth) !!}</i>  </p> </td>
-                                <td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
-                                <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p style="margin-right: 10px;"> <i>{!! $total_prop < 0 ? '('.number_format($total_prop * -1).')' : number_format($total_prop) !!}</i>  </p></td>
-                                <td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p style="margin-right: 10px;"> <i>{!! $total_diff < 0 ? '('.number_format($total_diff * -1).')' : number_format($total_diff) !!}</i>  </p></td>
+                                <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
+                                <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
+                                <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_auth < 0 ? '('.number_format($total_auth * -1).')' : number_format($total_auth) !!}</i>  </p> </td>
+                                <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
+                                <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_prop < 0 ? '('.number_format($total_prop * -1).')' : number_format($total_prop) !!}</i>  </p></td>
+                                <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_diff < 0 ? '('.number_format($total_diff * -1).')' : number_format($total_diff) !!}</i>  </p></td>
                             </tr>
                             <?php 
                                 $total_auth = 0;
