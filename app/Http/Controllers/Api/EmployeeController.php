@@ -6,7 +6,9 @@ use App\EmployeePDSEdit;
 use App\EmployeePDSEditRequest;
 use App\Http\Controllers\Controller;
 use App\LeaveApplication;
+use App\LeaveType;
 use App\PersonalInformation;
+use Illuminate\Console\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,10 +44,59 @@ class EmployeeController extends Controller
 
     public function getApplications(){
 
-        $data = LeaveApplication::where('personal_information_id',  Auth::user()->id)->paginate(10);
+        $data = LeaveApplication::where('personal_information_id',  Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
 
-        return collect(['id' => Auth::user()->id, 'data' => $data]);
+        return $data;
 
+    }
+
+    public function getLeaveApplication(Request $request){
+
+        $data = LeaveApplication::find($request->id);
+
+        return $data;
+
+    }
+
+    public function getLeaveTypesForEmployee()
+    {
+        return LeaveType::all();
+    }
+
+    public function deleteLeaveApplication($id)
+    {
+        LeaveApplication::find($id)->delete();
+    }
+
+    public function submitLeaveApplication(Request $request)
+    {
+
+        $this->validate($request,
+        [
+            'personal_information_id' => 'required',
+            'leave_type_id' => 'required',
+        ],
+        [
+            'personal_information_id.required' => 'No Applicant Inserted',
+            'leave_type_id.required' => 'Type of leave is required.',
+        ]);
+
+        return LeaveApplication::create($request->all());
+    }
+
+    public function editLeaveApplication(Request $request, $id)
+    {
+        $this->validate($request,
+        [
+            'personal_information_id' => 'required',
+            'leave_type_id' => 'required',
+        ],
+        [
+            'personal_information_id.required' => 'No Applicant Inserted',
+            'leave_type_id.required' => 'Type of leave is required.',
+        ]);
+
+        return LeaveApplication::find($id)->update($request->all());
     }
 
     /**

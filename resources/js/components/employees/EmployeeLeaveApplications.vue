@@ -26,6 +26,7 @@
                                 <th class="text-center">Date of filing</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Remark</th>
+                                <th class="text-center">State</th>
                                 <th class="text-center" style="text-align: right;">Action</th>
                             </tr>
                         </thead>
@@ -34,8 +35,29 @@
                                 <td class="text-center">{{ application.leavetype.title }}</td>
                                 <td class="text-center">{{ application.date_of_filing }}</td>
                                 <td class="text-center">{{ application.stage_status }}</td>
-                                <td class="text-center">{{ application.disapproved_due_to }}</td>
-                                <td class="text-center">{{  }}</td>
+                                <td class="text-center">
+                                    {{
+                                        application.stage_status == 'Pending Noted By' ? leaveapplication.recommendation_remark_approved :
+                                        application.stage_status == 'Recommendation Disapproved' ? leaveapplication.recommendation_remark_disapproved :
+                                        application.stage_status == 'Disapproved by the Governor' ? leaveapplication.disapproved_due_to :
+                                        application.sick_balance == 0 && application.vacation_balance == 0 ? 'Leave Credits Uncalculated' : ''
+                                    }}
+                                </td>
+                                <td class="text-center">
+                                    {{ application.status == 'final' ? 'Final' : 'Draft' }}
+                                </td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button class="dropdown-item" href="#">View</button>
+                                            <button class="dropdown-item" @click="editApplication(application.id, application.stage_status)">Edit</button>
+                                            <button class="dropdown-item" @click="deleteApplication(application.id)">Delete</button>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -56,12 +78,12 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default{
     data()
     {
         return{
-            id: '',
             applications: {},
         }
     },
@@ -69,15 +91,28 @@ export default{
 
         createApplication: function()
         {
-            this.$router.push({path: '/leave-form', query: {id: this.id, mode: 2}})
+            this.$router.push({path: '/employee-leave-form', query: {mode: 1}})
+        },
+
+        editApplication: function(data ,status)
+        {
+            if(status == 'Pending Recommendation')
+            {
+                this.$router.push({path: '/employee-leave-form', query: {mode: 2, applicationId: data}})
+            }else{
+                Swal.fire(
+                    'Forbidden!',
+                    'Cannot edit at this point',
+                    'error'
+                )
+            }
         },
 
         getApplications: function()
         {
             axios.get('api/getLeaveApplications')
             .then(({data}) => {
-                this.applications = data.data
-                this.id = data.id
+                this.applications = data
             })
             .catch(e => {
                 console.log(e)
@@ -88,10 +123,51 @@ export default{
         {
             axios.get('api/getLeaveApplications?page=' + page)
             .then(({data}) => {
-                this.applications = data.data
+                this.applications = data
             })
             .catch(e => {
                 console.log(e)
+            })
+        },
+
+        deleteApplication: function(id)
+        {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.isDismissed == true)
+                {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Cancelled'
+                    });
+                }else{
+                    this.$Progress.start()
+                    axios.delete('api/deleteLeaveApplication/' + id)
+                    .then(response => {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Deleted successfully'
+                        });
+
+                        this.getApplications()
+                        this.$Progress.finish()
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        Swal.fire(
+                            'Oops...',
+                            'Something went wrong',
+                            'error'
+                        )
+                    })
+                }
             })
         }
     },
