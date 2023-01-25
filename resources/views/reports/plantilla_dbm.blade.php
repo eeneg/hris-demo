@@ -42,15 +42,15 @@
 		<footer style="position: fixed; right: 0; left: 0; margin-top: 530px; height: 2200px; width: 100%;">
 			<div style="display: table;">
 				<thead style="width: 100%; border: solid black 1px;">
-					<th style="font-size: 10px;  width: 72px; height: 1800px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
+					<th style="font-size: 10px;  width: 72px; height: 1802px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 67px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 492px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; padding-right: 10px;"></th>
 					<th style="font-size: 14px;  width: 401px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; padding-right: 10px; padding-left: 10px;"></th>
 					<th style="font-size: 14px;  width: 75px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 14px;  width: 210px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 12px;  width: 75px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
-					<th style="font-size: 12px;  width: 209px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 					<th style="font-size: 12px;  width: 211px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
+					<th style="font-size: 12px;  width: 209px; border: solid black 2px; border-top: none; border-right: none; border-bottom: none;"></th>
 				</thead>
 				<tfoot style="top: 0; bottom: 50; width: 100%;">
 
@@ -61,7 +61,7 @@
                         <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold; "><p class="pHeight" style="margin-right: 10px;">  2,228340.00 </p></td>
                         <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> </td>
                         <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"><p class="pHeight" style="margin-right: 10px;">  2,270,388.00 </p></td>
-                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"><p class="pHeight" style="margin-right: 10px;">  42,048.00 </p></td>
+                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold; "><p class="pHeight" style="">  42,048.00 </p></td>
                     </tr>
                     <tr>
 						<td colspan="9" style="font-size: 16pt; height: 50px;">
@@ -148,7 +148,7 @@
 
 			<div>
 				<div style="height: 1000px; width: 100%;">
-					<table class="tableM" style=" margin-bottom: 400px; height: 200px; top: 0; width: 100%;">
+					<table class="tableM" style=" margin-bottom: 401px; height: 200px; top: 0; width: 100%;">
                         <thead style="width: 100%;">
                         <th colspan="9">
                             <p style="font-size: 18px; text-align: right;">Local Budget Preparation From No. 153</p>
@@ -222,8 +222,8 @@
 							<th style="font-size: 14pt; font-weight: normal; width: 50px; border: solid black 2px; border-top: none; border-right: none;"> Grade <br> /Step</th>
 							<th style="font-size: 14pt; font-weight: normal; width: 150px; border: solid black 2px; border-top: none; border-right: none;"> Amount</th>
 							<th style="font-size: 14pt; font-weight: normal; width: 50px; border: solid black 2px; border-top: none; border-right: none;"> Grade <br> /Step</th>
-							<th style="font-size: 14pt; font-weight: normal; width: 150px; border: solid black 2px; border-top: none; border-right: none;"> Amount</th>
 							<th style="font-size: 14pt; font-weight: normal; width: 150px; border: solid black 2px; border-top: none; "> Amount</th>
+							<th style="font-size: 14pt; font-weight: normal; width: 150px; border: solid black 2px; border-left: none; border-top: none; "> Amount</th>
 						</thead>
 						<tbody style="margin-bottom: 200px; width: 100%;">
                             {{-- Department Data --}}
@@ -239,7 +239,7 @@
 								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none;"></td>
 							</tr> --}}
                             {{-- Table Data --}}
-                            <?php 
+                            <?php
                                 $total_auth = 0;
                                 $total_prop = 0;
                                 $total_diff = 0;
@@ -275,13 +275,13 @@
                                 <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_prop < 0 ? '('.number_format($total_prop * -1).')' : number_format($total_prop) !!}</i>  </p></td>
                                 <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_diff < 0 ? '('.number_format($total_diff * -1).')' : number_format($total_diff) !!}</i>  </p></td>
                             </tr>
-                            <?php 
+                            <?php
                                 $total_auth = 0;
                                 $total_prop = 0;
                                 $total_diff = 0;
                             ?>
                             @else
-                            <?php 
+                            <?php
                                 $total_auth += $content->salaryauthorized ? $content->salaryauthorized->amount * 12 : 0;
                                 $total_prop += $content->salaryproposed ? $content->salaryproposed->amount * 12 : 0;
                                 $total_diff += $diff;
@@ -289,7 +289,7 @@
                             @endif
                             @endforeach
                             {{-- Subtotal --}}
-                            
+
 							{{-- <tr>
 								<td colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
 								<td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
