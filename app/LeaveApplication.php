@@ -53,7 +53,7 @@ class LeaveApplication extends Auditable
         'personalinformation_7d',
     ];
 
-    public static function leaveapplications($default_plantilla, $plantilla, $department_id, $data)
+    public static function leaveapplications($plantilla, $department_id, $data)
     {
         $allEmployees = [];
 
@@ -139,7 +139,7 @@ class LeaveApplication extends Auditable
         return $allEmployees;
     }
 
-    public static function getAllLeave($default_plantilla, $plantilla, $department_id)
+    public static function getAllLeave($plantilla, $department_id)
     {
         if ($department_id != null && $department_id != '') {
             $allEmployees = LeaveApplication::select('leave_applications.*',
@@ -170,6 +170,95 @@ class LeaveApplication extends Auditable
             ->whereNotNull('plantilla_contents.personal_information_id')
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->orderBy('date_of_filing', 'desc')
+            ->get();
+        }
+
+        return $allEmployees;
+    }
+
+    public static function searchLeaveApplication($plantilla, $department_id, $data)
+    {
+        if ($department_id != null && $department_id != '') {
+            $allEmployees = LeaveApplication::select('leave_applications.*',
+                'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
+                'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
+            ->leftJoin('leave_types', 'leave_applications.leave_type_id', '=', 'leave_types.id')
+            ->leftJoin('personal_informations', 'leave_applications.personal_information_id', '=', 'personal_informations.id')
+            ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+            ->leftJoin('reappointments', 'personal_informations.id', '=', 'reappointments.personal_information_id')
+            ->whereNotNull('plantilla_contents.personal_information_id')
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->where('departments.id', $department_id)
+            ->orWhere('reappointments.assigned_to', $department_id)
+            ->orderBy('date_of_filing', 'desc')
+            ->where(function ($query) use ($data) {
+                if($data['personal_information_id'])
+                {
+                    $query->where('leave_applications.personal_information_id', $data['personal_information_id']);
+                }
+
+                if($data['date_of_filing'])
+                {
+                    $query->where('leave_applications.date_of_filing', $data['date_of_filing']);
+                }
+
+                if($data['leave_type_id'])
+                {
+                    $query->where('leave_applications.leave_type_id', $data['leave_type_id']);
+                }
+
+                if($data['stage_status'])
+                {
+                    $query->where('leave_applications.stage_status', $data['stage_status']);
+                }
+
+                if($data['status'])
+                {
+                    $query->where('leave_applications.status', $data['status']);
+                }
+            })
+            ->get();
+        } else {
+            $allEmployees = LeaveApplication::select('leave_applications.*',
+                'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
+                'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
+            ->leftJoin('leave_types', 'leave_applications.leave_type_id', '=', 'leave_types.id')
+            ->leftJoin('personal_informations', 'leave_applications.personal_information_id', '=', 'personal_informations.id')
+            ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+            ->leftJoin('reappointments', 'personal_informations.id', '=', 'reappointments.personal_information_id')
+            ->whereNotNull('plantilla_contents.personal_information_id')
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->orderBy('date_of_filing', 'desc')
+            ->where(function ($query) use ($data) {
+                if($data['personal_information_id'])
+                {
+                    $query->where('leave_applications.personal_information_id', $data['personal_information_id']);
+                }
+
+                if($data['date_of_filing'])
+                {
+                    $query->where('leave_applications.date_of_filing', $data['date_of_filing']);
+                }
+
+                if($data['leave_type_id'])
+                {
+                    $query->where('leave_applications.leave_type_id', $data['leave_type_id']);
+                }
+
+                if($data['stage_status'])
+                {
+                    $query->where('leave_applications.stage_status', $data['stage_status']);
+                }
+
+                if($data['status'])
+                {
+                    $query->where('leave_applications.status', $data['status']);
+                }
+            })
             ->get();
         }
 

@@ -33,7 +33,7 @@ class LeaveApplicationController extends Controller
             'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id'))
         ];
 
-        return new LeaveApplicationResource(LeaveApplication::leaveapplications($default_plantilla, $plantilla, $department_id, $data));
+        return new LeaveApplicationResource(LeaveApplication::leaveapplications($plantilla, $department_id, $data));
     }
 
     public function getAllLeave()
@@ -43,19 +43,11 @@ class LeaveApplicationController extends Controller
         $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head' ?
                                 UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
-        return new LeaveApplicationResource(LeaveApplication::getAllLeave($default_plantilla, $plantilla, $department_id));
+        return new LeaveApplicationResource(LeaveApplication::getAllLeave($plantilla, $department_id));
     }
 
     public function searchLeave(Request $request)
     {
-        $data = [];
-
-        foreach ($request->all() as $key => $item) {
-            if ($item != null) {
-                $data[$key] = $item;
-            }
-        }
-
         $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
         $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
         $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
@@ -66,9 +58,7 @@ class LeaveApplicationController extends Controller
             'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id'))
         ];
 
-        // dd($data);
-
-        return new LeaveApplicationResource(LeaveApplication::getAllLeave($default_plantilla, $plantilla, $department_id));
+        return new LeaveApplicationResource(LeaveApplication::searchLeaveApplication($plantilla, $department_id, $request->all()));
     }
 
     public function getLeaveBalance(Request $request)

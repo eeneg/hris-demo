@@ -87,7 +87,8 @@
                                     {{
                                         leaveapplication.stage_status == 'Pending Noted By' ? leaveapplication.recommendation_remark_approved :
                                         leaveapplication.stage_status == 'Recommendation Disapproved' ? leaveapplication.recommendation_remark_disapproved :
-                                        leaveapplication.stage_status == 'Disapproved by the Governor' ? leaveapplication.disapproved_due_to : ''
+                                        leaveapplication.stage_status == 'Disapproved by the Governor' ? leaveapplication.disapproved_due_to :
+                                        leaveapplication.sick_balance == 0 && leaveapplication.vacation_balance == 0 ? 'Leave Credits Uncalculated' : ''
                                     }}
                                 </td>
                                 <td style="width: calc(100%-150px);">
@@ -404,23 +405,14 @@ import axios from 'axios';
 
             clear()
             {
-                this.search = {
-                    personal_information_id: null,
-                    leave_type_id: null,
-                    stage_status: null,
-                    date_of_filing: null,
-                    status: this.search.status
-                }
-
-                this.filter_data()
-
+                this.loadContent()
             },
 
             filter_data() {
                 this.$Progress.start()
                 axios.post('api/searchLeave', this.search)
                 .then(({data}) => {
-                    this.leaveapplications.data = data
+                    this.leaveapplications.data = data.data
                     this.$Progress.finish()
                     toast.fire({
                         icon: 'success',
@@ -484,7 +476,7 @@ import axios from 'axios';
             },
             deleteLeaveApplication: function(id, index)
             {
-                 Swal.fire({
+                Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
