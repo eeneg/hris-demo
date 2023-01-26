@@ -72,7 +72,7 @@ class LeaveApplication extends Auditable
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
                 ->where('departments.id', $department_id)
                 ->orWhere('reappointments.assigned_to', $department_id)
-                ->orderBy('date_of_filing', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(20);
 
         //if office head or PHRMO head
@@ -93,6 +93,7 @@ class LeaveApplication extends Auditable
                     ->where('leave_applications.stage_status', '!=', null)
                     ->where('leave_applications.stage_status', '!=', '');
                 })
+                ->orderBy('created_at', 'desc')
                 ->orWhere('departments.id', $data['dept']['id'])->paginate(20);
 
         //if office head or PGO EXECUTIVE head
@@ -118,7 +119,7 @@ class LeaveApplication extends Auditable
                 })
                 ->orWhere('departments.id', $data['dept']['id'])
                 ->orWhere('reappointments.assigned_to', $department_id)
-                ->orderBy('date_of_filing', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(20);
 
         //no filter (all)
@@ -133,7 +134,8 @@ class LeaveApplication extends Auditable
                 ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
                 ->whereNotNull('plantilla_contents.personal_information_id')
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
-                ->orderBy('date_of_filing', 'desc')->paginate(20);
+                ->orderBy('created_at', 'desc')
+                ->paginate(20);
         }
 
         return $allEmployees;
@@ -155,7 +157,7 @@ class LeaveApplication extends Auditable
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->where('departments.id', $department_id)
             ->orWhere('reappointments.assigned_to', $department_id)
-            ->orderBy('date_of_filing', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
         } else {
             $allEmployees = LeaveApplication::select('leave_applications.*',
@@ -169,7 +171,7 @@ class LeaveApplication extends Auditable
             ->leftJoin('reappointments', 'personal_informations.id', '=', 'reappointments.personal_information_id')
             ->whereNotNull('plantilla_contents.personal_information_id')
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
-            ->orderBy('date_of_filing', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
         }
 
@@ -192,7 +194,7 @@ class LeaveApplication extends Auditable
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->where('departments.id', $department_id)
             ->orWhere('reappointments.assigned_to', $department_id)
-            ->orderBy('date_of_filing', 'desc')
+            ->orderBy('created_at', 'desc')
             ->where(function ($query) use ($data) {
                 if($data['personal_information_id'])
                 {
@@ -232,7 +234,7 @@ class LeaveApplication extends Auditable
             ->leftJoin('reappointments', 'personal_informations.id', '=', 'reappointments.personal_information_id')
             ->whereNotNull('plantilla_contents.personal_information_id')
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
-            ->orderBy('date_of_filing', 'desc')
+            ->orderBy('created_at', 'desc')
             ->where(function ($query) use ($data) {
                 if($data['personal_information_id'])
                 {
