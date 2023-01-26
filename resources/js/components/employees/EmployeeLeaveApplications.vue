@@ -37,9 +37,9 @@
                                 <td class="text-center">{{ application.stage_status }}</td>
                                 <td class="text-center">
                                     {{
-                                        application.stage_status == 'Pending Noted By' ? leaveapplication.recommendation_remark_approved :
-                                        application.stage_status == 'Recommendation Disapproved' ? leaveapplication.recommendation_remark_disapproved :
-                                        application.stage_status == 'Disapproved by the Governor' ? leaveapplication.disapproved_due_to :
+                                        application.stage_status == 'Pending Noted By' ? application.recommendation_remark_approved :
+                                        application.stage_status == 'Recommendation Disapproved' ? application.recommendation_remark_disapproved :
+                                        application.stage_status == 'Disapproved by the Governor' ? application.disapproved_due_to :
                                         application.sick_balance == 0 && application.vacation_balance == 0 ? 'Leave Credits Uncalculated' : ''
                                     }}
                                 </td>
@@ -54,7 +54,7 @@
                                         <div class="dropdown-menu">
                                             <button class="dropdown-item" href="#">View</button>
                                             <button class="dropdown-item" @click="editApplication(application.id, application.stage_status)">Edit</button>
-                                            <button class="dropdown-item" @click="deleteApplication(application.id)">Delete</button>
+                                            <button class="dropdown-item" @click="deleteApplication(application.id, application.stage_status)">Delete</button>
                                         </div>
                                     </div>
                                 </td>
@@ -130,45 +130,54 @@ export default{
             })
         },
 
-        deleteApplication: function(id)
+        deleteApplication: function(id, status)
         {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if(result.isDismissed == true)
-                {
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Cancelled'
-                    });
-                }else{
-                    this.$Progress.start()
-                    axios.delete('api/deleteLeaveApplication/' + id)
-                    .then(response => {
+            if(status == 'Pending Recommendation')
+            {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
                         toast.fire({
                             icon: 'success',
-                            title: 'Deleted successfully'
+                            title: 'Cancelled'
                         });
+                    }else{
+                        this.$Progress.start()
+                        axios.delete('api/deleteLeaveApplication/' + id)
+                        .then(response => {
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Deleted successfully'
+                            });
 
-                        this.getApplications()
-                        this.$Progress.finish()
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong',
-                            'error'
-                        )
-                    })
-                }
-            })
+                            this.getApplications()
+                            this.$Progress.finish()
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            Swal.fire(
+                                'Oops...',
+                                'Something went wrong',
+                                'error'
+                            )
+                        })
+                    }
+                })
+            }else{
+                Swal.fire(
+                    'Forbidden!',
+                    'Cannot delete at this point',
+                    'error'
+                )
+            }
         }
     },
     mounted(){
