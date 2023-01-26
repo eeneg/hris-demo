@@ -317,7 +317,7 @@ export default {
             let vm = this
             this.positions = []
 
-            _.each(this.selectedDept.position, function(value){
+            _.each(this.selectedDept.positions, function(value){
                 vm.positions.push(value)
             })
         },
