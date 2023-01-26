@@ -38,9 +38,6 @@ class LeaveApprovedListener
 
         $leave_type = LeaveType::find($data->leave_type_id);
 
-        $sl_credit = LeaveCredit::where('personal_information_id', $this->request->personal_information_id)->where('leave_type_id', $sl->id)->first();
-        $vl_credit = LeaveCredit::where('personal_information_id', $this->request->personal_information_id)->where('leave_type_id', $vl->id)->first();
-
         $count = LeaveSummary::where('personal_information_id', $data->personal_information_id)->count();
 
         $leave = [
@@ -60,8 +57,8 @@ class LeaveApprovedListener
             'sort' => $count == 0 ? 0 : LeaveSummary::select('personal_information_id', 'sort')->where('personal_information_id', $data->personal_information_id)->max('sort') + 1,
         ];
 
-        $sl_credit->update(['balance' => $data->sick_balance]);
-        $vl_credit->update(['blanace' => $data->vacation_balance]);
+        LeaveCredit::updateOrCreate(['personal_information_id' => $this->request->personal_information_id, 'leave_type_id' => $sl->id], ['balance' => $data->sick_balance]);
+        LeaveCredit::updateOrCreate(['personal_information_id' => $this->request->personal_information_id, 'leave_type_id' => $vl->id], ['blanace' => $data->vacation_balance]);
 
         return LeaveSummary::insert($leave);
     }

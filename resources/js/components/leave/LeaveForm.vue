@@ -9,7 +9,6 @@
                 </div>
 
                 <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
-                    {{ mode }}
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
@@ -245,7 +244,7 @@
                     next()
             }
             else if(to.query.id != null && to.query.mode == 1){
-                axios.get('api/editLeaveApplication?id='+to.query.id)
+                axios.post('api/editLeaveApplication/'+to.query.id)
                 .then(({data}) => {
                     next(vm => vm.fetchData(data))
                 })
@@ -280,12 +279,20 @@
             },
             submitForm() {
 
-                 if((this.form.recommendation_officer_id == '' || this.form.recommendation_officer_id == null)  &&  (this.form.recommendation_status != '' && this.form.recommendation_status != null))
+                 if(this.form.recommendation_status != '' && this.form.recommendation_officer_id == '')
                 {
 
                     Swal.fire(
                         'Oops...',
                         'Please select an Administrative Officer below the Recommendation section',
+                        'error'
+                    )
+
+                }else if(this.form.recommendation_status == '' && this.form.recommendation_officer_id != ''){
+
+                    Swal.fire(
+                        'Oops...',
+                        'Please Approve or Dissaprove Recommendation',
                         'error'
                     )
 
@@ -317,15 +324,20 @@
             },
             submitEdits: function()
             {
-
-                alert('asd')
-
-                if((this.form.recommendation_status != null && this.form.recommendation_status != '') && (this.form.recommendation_officer_id == null && this.form.recommendation_officer_id == ''))
+                if(this.form.recommendation_status != null && this.form.recommendation_officer_id == null)
                 {
 
-                     Swal.fire(
+                    Swal.fire(
                         'Oops...',
                         'Please select an Administrative Officer below the Recommendation section',
+                        'error'
+                    )
+
+                }else if(this.form.recommendation_status == null && this.form.recommendation_officer_id != null){
+
+                    Swal.fire(
+                        'Oops...',
+                        'Please Approve or Dissaprove Recommendation',
                         'error'
                     )
 
@@ -409,10 +421,9 @@
             },
 
             fetchData: function(data){
-
-               this.form.fill(data.data[0])
+               this.form.fill(data)
                this.mode = 1
-               this.leave_application_id = data.data[0].id
+               this.leave_application_id = data.id
             }
         },
         created(){

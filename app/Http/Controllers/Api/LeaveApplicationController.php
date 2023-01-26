@@ -114,27 +114,19 @@ class LeaveApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit($id)
     {
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $department_id = auth('api')->user()->role == 'Office User' ? UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
-
-        $data = [
-            'role' => auth('api')->user()->role,
-            'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id'))
-        ];
-
-        return new LeaveApplicationResource(LeaveApplication::leaveapplications($default_plantilla, $plantilla, $department_id, $data));
+        return LeaveApplication::find($id);
     }
 
     public function update(Request $request, $id)
     {
+
         $application = LeaveApplication::find($id);
 
         $application->update($request->all());
 
-        if ($request->stage_status == 'Approved by the HR Head') {
+        if ($request->stage_status == 'Approved by the HR Head' || $request->stage_status == 'Approved by the Governor') {
             return event(new LeaveProcessed($application));
         }
     }

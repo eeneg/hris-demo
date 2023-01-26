@@ -79,7 +79,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(leaveapplication, index) in leaveapplications.data" :key="leaveapplication.id">
-                                <td>{{ leaveapplication.personalinformation.surname + ', ' + leaveapplication.personalinformation.firstname + ' ' + leaveapplication.personalinformation.nameextension + ' ' + leaveapplication.personalinformation.middlename }}</td>
+                                <td>{{ leaveapplication.personalinformation.surname + ', ' + leaveapplication.personalinformation.firstname + ' ' + leaveapplication.personalinformation.middlename }}{{  leaveapplication.personalinformation.nameextension ? ', ' + leaveapplication.personalinformation.nameextension : '' }}</td>
                                 <td>{{ leaveapplication.leavetype.title }}</td>
                                 <td>{{ leaveapplication.date_of_filing }}</td>
                                 <td>{{ leaveapplication.stage_status }}</td>
@@ -403,10 +403,18 @@ import axios from 'axios';
                 this.balance_total = parseFloat(this.curr_vacation_balance) + parseFloat(this.curr_sick_balance);
             },
 
-            clear()
-            {
+            clear: _.debounce(function(){
+
+                this.search = {
+                    personal_information_id: null,
+                    leave_type_id: null,
+                    stage_status: null,
+                    date_of_filing: null,
+                    status: 'final',
+                },
                 this.loadContent()
-            },
+
+            }, 1000),
 
             filter_data() {
                 this.$Progress.start()
@@ -455,7 +463,6 @@ import axios from 'axios';
                  axios.get('api/getAllLeave')
                     .then(({data}) => {
                         this.leaveapplicationsdata = data.data;
-                        console.log(this.leaveapplicationsdata)
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -867,7 +874,7 @@ import axios from 'axios';
 
                     Swal.fire({
                     title: 'Ooops...',
-                    text: "Employee leave is already approved!!",
+                    text: "Employee leave is already reviewed!!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -987,7 +994,7 @@ import axios from 'axios';
             this.$Progress.finish()
         },
         mounted() {
-            // console.log('Component mounted.')
+            console.log('Component mounted.')
         }
     }
 </script>
