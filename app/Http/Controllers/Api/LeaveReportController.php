@@ -24,7 +24,7 @@ class LeaveReportController extends Controller
      */
     public function index()
     {
-        return LeaveReport::orderBy('created_at')->paginate(15);
+        return LeaveReport::orderBy('created_at', 'DESC')->paginate(15);
     }
 
     /**
