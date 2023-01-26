@@ -350,47 +350,14 @@
 						<!-- /.card-header -->
 						<div class="card-body p-0">
 							<ul class="products-list product-list-in-card pl-2 pr-2">
-								<li class="item">
+								<li class="item" v-for="employees in data_set.onLeaveEmployees" :key="employees.id">
 									<div class="product-img">
-										<img src="/storage/project_files/davsur.png" alt="avatar" class="img-size-50">
+										<img :src="getAvatar(employees.avatar)" alt="avatar" class="img-size-50">
 									</div>
 									<div class="product-info">
-										<a href="javascript:void(0)" class="product-title"> Vanessa Rellanos <small class="product-description"> 01/01/2021 - 01/15/2021 </small>
+										<a href="javascript:void(0)" class="product-title"> {{ employees.name }} <small class="product-description"> {{ employees.dates }} </small>
 										</a>
-										<span class="product-description"> Force Leave </span>
-									</div>
-								</li>
-								<!-- /.item -->
-								<li class="item">
-									<div class="product-img">
-										<img src="/storage/project_files/davsur.png" alt="avatar" class="img-size-50">
-									</div>
-									<div class="product-info">
-										<a href="javascript:void(0)" class="product-title"> John Doe <small class="product-description"> 01/01/2021 - 01/15/2021 </small>
-										</a>
-										<span class="product-description"> Vacation Leave </span>
-									</div>
-								</li>
-								<!-- /.item -->
-								<li class="item">
-									<div class="product-img">
-										<img src="/storage/project_files/davsur.png" alt="avatar" class="img-size-50">
-									</div>
-									<div class="product-info">
-										<a href="javascript:void(0)" class="product-title"> Jane Dela Cruz <small class="product-description"> 01/01/2021 - 01/15/2021 </small>
-										</a>
-										<span class="product-description"> Maternity Leave </span>
-									</div>
-								</li>
-								<!-- /.item -->
-								<li class="item">
-									<div class="product-img">
-										<img src="/storage/project_files/davsur.png" alt="avatar" class="img-size-50">
-									</div>
-									<div class="product-info">
-										<a href="javascript:void(0)" class="product-title"> Jefferson White <small class="product-description"> 01/01/2021 - 01/15/2021 </small>
-										</a>
-										<span class="product-description"> Special Leave </span>
+										<span class="product-description"> {{ employees.leaveType }} </span>
 									</div>
 								</li>
 								<!-- /.item -->
@@ -398,7 +365,7 @@
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer text-center">
-							<a href="javascript:void(0)" class="uppercase">View All On-Leave Employees</a>
+							<router-link to="leave-applications" class="uppercase">View All On-Leave Employees</router-link>
 						</div>
 						<!-- /.card-footer -->
 					</div>
@@ -476,7 +443,8 @@
 				data_set: {
 					vacant_positions: 0,
 					active_employees: 0,
-					birthdays: []
+					birthdays: [],
+                    onLeaveEmployees: []
 				}
 			}
 		},
@@ -490,6 +458,14 @@
 					console.log(error.response.data.message);
 				});
 			},
+            getAvatar(picture) {
+                if (picture != null) {
+                    let prefix = (picture.match(/\//) ? '' : '/storage/employee_pictures/');
+                    return prefix + picture;
+                } else {
+                    return '/storage/project_files/employee.png';
+                }
+            },
 			moment: function () {
 				return moment();
 			}

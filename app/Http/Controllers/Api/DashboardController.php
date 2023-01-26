@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Audit;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BirthdaysResource;
+use App\LeaveApplication;
+use App\LeaveType;
 use App\Plantilla;
 use App\PlantillaContent;
 use App\Setting;
@@ -33,7 +35,26 @@ class DashboardController extends Controller
                 ->whereDay('birthdate', Carbon::now()->format('d'));
             })->get();
 
+        $onLeaveEmployees = LeaveApplication::has('personalinformation')->with('personalinformation')
+            ->whereBetweenColumns('from', ['from', 'to'])
+            ->where(function($query){
+                $query->where('stage_status', 'Approved by the HR Head')
+                ->orWhere('stage_status', 'Approved by the Governor	');
+            })
+            ->get()
+            ->map(function($employee){
+                return [
+                    'name' => $employee->personalinformation->firstname . ' '. $employee->personalinformation->surname,
+                    'leaveType' => LeaveType::find($employee->leave_type_id)->title,
+                    'dates' => $employee->from . ' - ' . $employee->to,
+                    'avatar' => $employee->personalinformation->picture
+                ];
+            });
+
+        // dd($onLeaveEmployees->toArray());
+
         $data = [
+            'onLeaveEmployees' => $onLeaveEmployees,
             'vacant_positions' => count($vacant_positions),
             'active_employees' => count($active_employees),
             'birthdays' => new BirthdaysResource($birthdays),
