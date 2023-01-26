@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Api Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
+| Here is where you can register Api routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| is assigned the "api" middleware group. Enjoy building your Api!
 |
 */
 
@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
-    Route::get('employeeList', 'API\PersonalInformationController@employees');
+    Route::get('employeeList', 'Api\PersonalInformationController@employees');
 
     Route::post('verifybarcode', 'Api\BarcodeController@verify');
 
@@ -74,7 +74,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('fetchSalarySched', 'Api\AppointmentController@fetchSalarySched');
 
     Route::get('getleavetypes', 'Api\LeaveTypeController@getleavetypes');
-    Route::get('editLeaveApplication', 'Api\LeaveApplicationController@edit');
+    Route::post('editLeaveApplication/{id}', 'Api\LeaveApplicationController@edit');
     Route::get('load_user', 'Api\LeaveApplicationController@loadUserRole');
     Route::get('getAllLeave', 'Api\LeaveApplicationController@getAllLeave');
     Route::post('searchLeave', 'Api\LeaveApplicationController@searchLeave');

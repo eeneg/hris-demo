@@ -35,9 +35,9 @@ class ReappointmentController extends Controller
                                 'assigned_to_table.title as dept_to',
                                 'reappointments.*'
                             )
-                            ->orderBy('reappointments.date', 'desc')->paginate(20);
+                            ->orderBy('reappointments.created_at', 'desc')
+                            ->paginate(20);
 
-        // return $reappointment;
         return new ReappointmentResource($reappointment);
     }
 
