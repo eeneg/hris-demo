@@ -62,6 +62,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('plantillaForNosa', 'Api\PlantillaContentController@plantillaForNosa');
 
     Route::post('previousplantilla', 'Api\PlantillaController@previousplantilla');
+    Route::post('duplicateplantilla', 'Api\PlantillaController@duplicateplantilla');
 
     Route::post('forvacants', 'Api\PersonalInformationController@forvacants');
     Route::post('forleave', 'Api\PersonalInformationController@forleave');

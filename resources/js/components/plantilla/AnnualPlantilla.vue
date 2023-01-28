@@ -174,7 +174,7 @@
 
         <create-plantilla-modal :key="create_plantilla_modal_key" @exit="createPlantillaModalExit"></create-plantilla-modal>
         <item-form :key="create_item_modal_key" @exit="createItemModalExit" :create_data="create_data"></item-form>
-        <duplicate-plantilla-modal :key="duplicate_plantilla_modal_key" @exit="duplicatePlantillaModalExit"></duplicate-plantilla-modal>
+        <duplicate-plantilla-modal :key="duplicate_plantilla_modal_key" @exit="duplicatePlantillaModalExit" :plantilla="plantilla" :schedules="schedules"></duplicate-plantilla-modal>
 
         <!-- Report Modal -->
         <div class="modal" id="pdfModal">
@@ -210,6 +210,7 @@
                 departments: [{}],
                 itemMin: 0,
                 itemMax: 0,
+                plantilla: {},
                 selectedDepartment: {},
                 create_data: {},
                 records: [],
@@ -279,17 +280,10 @@
             showEditPlantillaModal() {
                 $('#edit-plantilla-modal').modal('show');
                 this.plantillaForm.reset();
-                axios.get('api/salaryschedule')
-                    .then(({data}) => {
-                        this.schedules = data;
-                        this.plantillaForm.salary_prop = this.$parent.settings.plantilla.salaryproposedschedule.id;
-                        this.plantillaForm.salary_auth = this.prevSalaryproposed.id;
-                        this.plantillaForm.year = this.$parent.settings.plantilla.year;
-                        this.plantillaForm.date_approved = this.$parent.settings.plantilla.date_approved;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
+                this.plantillaForm.salary_prop = this.$parent.settings.plantilla.salaryproposedschedule.id;
+                this.plantillaForm.salary_auth = this.prevSalaryproposed.id;
+                this.plantillaForm.year = this.$parent.settings.plantilla.year;
+                this.plantillaForm.date_approved = this.$parent.settings.plantilla.date_approved;
             },
             editPlantilla() {
                 this.$Progress.start();
@@ -353,42 +347,13 @@
                     this.loadContents();
                 }
             },
-            duplicatePlantilla() {
-                this.$Progress.start();
-                $('#duplicateLoadingIcon').removeClass('d-none');
-                $('#duplicateButton').attr('disabled','disabled');
-                this.plantillaForm.post('api/plantilla')
-                    .then(() => {
-                        this.loadContents();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'Annual Plantilla ' + this.plantillaForm.year + ' created successfully',
-                        })
-                        $('#duplicate-plantilla-modal').modal('hide');
-                        this.$Progress.finish();
-                        $('#duplicateLoadingIcon').addClass('d-none');
-                        $('#duplicateButton').removeAttr('disabled');
-                    })
-                    .catch(error => {
-                        this.$Progress.fail();
-                        console.log(error.response.data.message);
-                        $('#duplicateLoadingIcon').addClass('d-none');
-                        $('#duplicateButton').removeAttr('disabled');
-                    });
-            },
             duplicatePlantillaModal() {
                 $('#duplicate-plantilla-modal').modal('show');
+                this.plantilla = this.$parent.settings.plantilla;
                 this.plantillaForm.reset();
-                axios.get('api/salaryschedule')
-                    .then(({data}) => {
-                        this.schedules = data;
-                        this.plantillaForm.salary_prop = data[0].id;
-                        this.plantillaForm.salary_auth = this.prevSalaryproposed.id;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
+
+                this.plantillaForm.salary_prop = this.schedules[0].id;
+                this.plantillaForm.salary_auth = this.prevSalaryproposed.id;
             },
             showRevertConfirmation(record) {
                 axios.get('api/abolisheditem/' + record.id)
@@ -555,6 +520,15 @@
                         console.log(error.response.data.message);
                     });
             },
+            loadSchedules() {
+                axios.get('api/salaryschedule')
+                    .then(({data}) => {
+                        this.schedules = data;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+            },
             highlight(element) {
                 let defaultBG = element.style.backgroundColor;
                 let defaultTransition = element.style.transition;
@@ -624,12 +598,12 @@
         },
         created() {
             this.$Progress.start();
-
             this.loadDepartments();
-
+            this.loadSchedules();
             this.$Progress.finish();
         },
         mounted() {
+            
             // console.log('Component mounted.')
         }
     }

@@ -30,6 +30,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Position <span style="font-weight: 100;">({{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})</span></th>
+                                <th>Barcode</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -48,6 +49,9 @@
                                 <td>
                                     <p style="margin: 0;line-height: 1.2rem;" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).designation + (getPlantillaDetails(employee).sg ? ' (SG-' + getPlantillaDetails(employee).sg + ')' : '')  }}</p>
                                     <p style="margin: 0;line-height: 1.2rem;" class="text-muted" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).department }}</p>
+                                </td>
+                                <td>
+                                    <span style="font-size: 1rem;">{{ employee.barcode }}</span>
                                 </td>
                                 <td style="width: 150px;">
                                     <div class="btn-group" style="float:right;">

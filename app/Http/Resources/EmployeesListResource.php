@@ -24,6 +24,7 @@ class EmployeesListResource extends ResourceCollection
                 'status' => $item->status,
                 'plantillacontents' => $item->plantillacontents,
                 'picture' => $item->picture,
+                'barcode' => $item->barcode ? $item->barcode->value : ''
             ];
         });
     }

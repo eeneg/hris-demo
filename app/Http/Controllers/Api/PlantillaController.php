@@ -27,6 +27,48 @@ class PlantillaController extends Controller
         return Plantilla::where('year', '!=', $request->current)->latest('created_at')->first();
     }
 
+    public function duplicateplantilla(Request $request)
+    {
+        $this->authorize('isAdministratorORAuthor');
+        $this->validate($request, [
+            'year' => 'unique:plantillas',
+        ]);
+        $newplantilla = Plantilla::create([
+            'year' => $request['year'],
+            'salary_schedule_auth_id' => $request['salary_auth'],
+            'salary_schedule_prop_id' => $request['salary_prop'],
+        ]);
+
+        $plantilla_depts = PlantillaDept::where('plantilla_id', $request['id'])->get();
+        foreach ($plantilla_depts as $key => $department) {
+            PlantillaDept::create([
+                'plantilla_id' => $newplantilla->id,
+                'department_id' => $department->department->id,
+                'order_number' => $department->order_number,
+            ]);
+        }
+
+        $plantillacontents = PlantillaContent::where('plantilla_id', $request['id'])->get();
+        foreach ($plantillacontents as $key => $content) {
+            PlantillaContent::create([
+                'plantilla_id' => $newplantilla->id,
+                'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
+                'salary_grade_prop_id' => $content->salaryproposed ? (SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id) : null,
+                'position_id' => $content->position->id,
+                'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
+                'old_number' => $content->new_number,
+                'new_number' => $content->new_number,
+                'working_time' => $content->working_time,
+                'appointment_status' => $content->appointment_status,
+                'order_number' => $content->order_number,
+                'level' => $content->level,
+                'original_appointment' => $content->original_appointment,
+                'last_promotion' => $content->last_promotion,
+                'appointment_status' => $content->appointment_status,
+            ]);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -55,6 +55,8 @@
 				<tfoot style="top: 0; bottom: 50; width: 100%;">
 
                     {{-- TOTAL --}}
+                    <?php $last_page=false; ?>
+                    @if ($last_page)
                     <tr>
                         <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none;"></td>
                         <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold; border-right: none;"><p class="pHeight" style="margin-left: 10px; border-right: none;"> TOTAL </p></td>
@@ -63,6 +65,7 @@
                         <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"><p class="pHeight" style="margin-right: 10px;">  2,270,388.00 </p></td>
                         <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold; "><p class="pHeight" style="">  42,048.00 </p></td>
                     </tr>
+                    @endif
                     <tr>
 						<td colspan="9" style="font-size: 16pt; height: 50px;">
 
@@ -266,7 +269,7 @@
                                 @endif
 							</tr>
 
-                            @if (fmod($loop->index + 1, 19) == 0 || $loop->index + 1 == count($plantillacontents))
+                            @if (fmod($loop->index + 1, 24) == 0 || $loop->index + 1 == count($plantillacontents))
                             <tr style="page-break-after: always !important;">
                                 <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
                                 <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
@@ -287,6 +290,13 @@
                                 $total_diff += $diff;
                             ?>
                             @endif
+
+                            @if ($loop->last)
+                                <?php $last_page=true; ?>
+                            @else
+                                <?php $last_page=false; ?>
+                            @endif
+
                             @endforeach
                             {{-- Subtotal --}}
 
@@ -316,13 +326,6 @@
 			</div>
 
 		</main>
-
-		<main role="main" style="width: 100%">
-			<table>
-
-			</table>
-		</main>
-
 		<script type="text/php"></script>
 	</body>
 

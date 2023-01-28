@@ -29,7 +29,11 @@
                             <div class="col-sm-6">
                                 <div class="form-group" style="margin-bottom: 0.3rem;">
                                     <label style="font-weight: bold; margin: 0;">Employee name</label>
-                                    <v-select @input="selectEmployee()" class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="create_data.allEmployees" label="name" :reduce="employee => employee.id" placeholder="Select Employee"></v-select>
+                                    <v-select @input="selectEmployee" class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="create_data.allEmployees" label="name" :reduce="employee => employee.id" placeholder="Select Employee"></v-select>
+                                </div>
+                                <div v-if="selected_employee.data">
+                                    <p class="m-0"><b>Current Position</b>: <span class="text-primary">{{ selected_employee.data.position }}</span></p>
+                                    <p class="m-0"><b>Office</b>: <span class="text-primary">{{ selected_employee.data.office }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -134,6 +138,7 @@
                 loading: false,
                 level: ['Key Positions', 'Administrative Positions', 'Support to Key Positions', 'Technical Positions'],
                 appointment_status: ['Permanent', 'Elected', 'Temporary', 'Co-terminous', 'Presidential Appointee'],
+                selected_employee: {},
                 form: new Form( {
                     'id': '',
                     'personal_information_id': null,
@@ -166,6 +171,13 @@
             }
         },
         watch: {
+            selected_employee: function(newData, oldData) {
+                if (newData.data) {
+                    this.form.original_appointment = newData.data.original_appointment
+                } else {
+                    this.form.original_appointment = ''
+                }
+            },
             create_data: function(newData, oldData) {
                 if(newData.plantillacontent != null) {
                     const planCont = newData.plantillacontent;
@@ -230,8 +242,14 @@
                         });
                 }
             },
-            selectEmployee() {
-                
+            selectEmployee(value) {
+                axios.get('api/plantillacontent/' + value)
+                    .then(({data}) => {
+                        this.selected_employee = data
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
             },
             selectPos(e) {
                 

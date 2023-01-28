@@ -20,6 +20,10 @@ class PositionController extends Controller
 
     public function get_department_positions(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
+        // $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        // $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
         $positions = Position::without('department')->where('department_id', $request->department_id)->orderBy('title')->get();
         $allEmployees = DB::select("SELECT id, CONCAT(COALESCE(`surname`,''), ', ', COALESCE(`firstname`,''), ' ', COALESCE(`nameextension`,''), ' ', COALESCE(`middlename`,'')) AS `name` FROM personal_informations ORDER BY personal_informations.`surname`");
         $data = [

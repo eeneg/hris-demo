@@ -8,6 +8,7 @@ use App\Http\Resources\DepartmentsResource;
 use App\Http\Resources\PlantillaContentResource;
 use App\Http\Resources\PlantillaEmployeesNOSAResource;
 use App\Http\Resources\PlantillaEmployeesNOSIResource;
+use App\Http\Resources\PlantillaContentEmployeeResource;
 use App\Plantilla;
 use App\PlantillaContent;
 use App\PlantillaDept;
@@ -130,7 +131,16 @@ class PlantillaContentController extends Controller
                 ->first();
         }
 
-        return PlantillaContent::create([
+        $tbd = PlantillaContent::where('plantilla_id', $plantilla->id)->where('personal_information_id', $request->personal_information_id)->first();
+        if ($tbd != null) {
+            $tbd->personal_information_id = null;
+            $tbd->original_appointment = null;
+            $tbd->last_promotion = null;
+            $tbd->appointment_status = '';
+            $tbd->save();
+        }
+
+        $new_plantilla_content = PlantillaContent::create([
             'plantilla_id' => $plantilla->id,
             'salary_grade_auth_id' => isset($salaryauthorized) ? $salaryauthorized->id : null,
             'salary_grade_prop_id' => isset($salaryproposed) ? $salaryproposed->id : null,
@@ -146,6 +156,8 @@ class PlantillaContentController extends Controller
             'appointment_status' => $request->appointment_status,
             'order_number' => $request->order_number,
         ]);
+
+        return $new_plantilla_content;
     }
 
     /**
@@ -156,7 +168,16 @@ class PlantillaContentController extends Controller
      */
     public function show($id)
     {
-        //
+        $this->authorize('isAdministratorORAuthor');
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        $plantillacontent = PlantillaContent::where('plantilla_id', $plantilla->id)->where('personal_information_id', $id)->first();
+        if ($plantillacontent != null) {
+            return new PlantillaContentEmployeeResource($plantillacontent);
+        } else {
+            return ['response' => 'Employee is not on current plantilla.'];
+        }
     }
 
     public function plantillacontentabolish(Request $request)
@@ -241,6 +262,17 @@ class PlantillaContentController extends Controller
                 ->where('grade', explode('/', $request->salary_grade_prop)[0])
                 ->where('step', explode('/', $request->salary_grade_prop)[1])
                 ->first();
+        }
+
+        $tbd = PlantillaContent::where('plantilla_id', $plantilla->id)->where('personal_information_id', $request->personal_information_id)->first();
+        if ($tbd != null) {
+            if ($plantillacontent->id != $tbd->id) {
+                $tbd->personal_information_id = null;
+                $tbd->original_appointment = null;
+                $tbd->last_promotion = null;
+                $tbd->appointment_status = '';
+                $tbd->save();
+            }
         }
 
         $plantillacontent->salary_grade_auth_id = isset($salaryauthorized) ? $salaryauthorized->id : null;
