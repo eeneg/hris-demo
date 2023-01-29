@@ -7,7 +7,7 @@
         <div v-else class="col-md-12">
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h2>Audit trail</h2>
+                    <h2>User Activity Logs</h2>
                     <hr>
                     <div class="row">
                         <div class="col-md-3">
