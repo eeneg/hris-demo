@@ -99,6 +99,7 @@ const routes = [
     { path: '/settings', component: require('./components/management/Settings.vue').default },
     { path: '/users', component: require('./components/management/Users.vue').default },
     { path: '/developer', component: require('./components/management/Developer.vue').default },
+    { path: '/audits', component: require('./components/management/Audits.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default },
 ]
 
