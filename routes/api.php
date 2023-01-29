@@ -101,6 +101,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::patch('editPersonalInfo', 'Api\PersonalInformationController@editPersonalInfo');
 
     Route::post('foreignTravel', 'Api\LeaveReportController@generateForeignTravelReport');
+
+    Route::resource('audits', 'Api\AuditController')->only('index', 'show');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function () {
