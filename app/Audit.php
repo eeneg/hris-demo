@@ -7,6 +7,12 @@ use OwenIt\Auditing\Models\Audit as AuditModel;
 
 class Audit extends AuditModel
 {
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
+    protected $primaryKey = 'id';
+
     protected $appends = [
         'audited', 'modified'
     ];
