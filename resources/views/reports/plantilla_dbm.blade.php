@@ -55,17 +55,14 @@
 				<tfoot style="top: 0; bottom: 50; width: 100%;">
 
                     {{-- TOTAL --}}
-                    <?php $last_page=false; ?>
-                    @if ($last_page)
-                    <tr>
+                    {{-- <tr class="grand-total">
                         <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none;"></td>
                         <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold; border-right: none;"><p class="pHeight" style="margin-left: 10px; border-right: none;"> TOTAL </p></td>
                         <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold; "><p class="pHeight" style="margin-right: 10px;">  2,228340.00 </p></td>
                         <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> </td>
                         <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"><p class="pHeight" style="margin-right: 10px;">  2,270,388.00 </p></td>
                         <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold; "><p class="pHeight" style="">  42,048.00 </p></td>
-                    </tr>
-                    @endif
+                    </tr> --}}
                     <tr>
 						<td colspan="9" style="font-size: 16pt; height: 50px;">
 
@@ -148,14 +145,13 @@
 			</div>
 		</footer>
 		<main role="main" style="width: 100%; font-size: 20px;">
-
 			<div>
 				<div style="height: 1000px; width: 100%;">
 					<table class="tableM" style=" margin-bottom: 401px; height: 200px; top: 0; width: 100%;">
                         <thead style="width: 100%;">
                         <th colspan="9">
                             <p style="font-size: 18px; text-align: right;">Local Budget Preparation From No. 153</p>
-                            <p style="font-size: 18px; text-align: right;">Page 1</p>
+                            <p style="font-size: 18px; text-align: right; color: white;">Page 1</p>
                         </th>
                         </thead>
                         <thead>
@@ -243,6 +239,10 @@
 							</tr> --}}
                             {{-- Table Data --}}
                             <?php
+                                $grand_total_auth = 0;
+                                $grand_total_prop = 0;
+                                $grand_total_diff = 0;
+
                                 $total_auth = 0;
                                 $total_prop = 0;
                                 $total_diff = 0;
@@ -268,55 +268,51 @@
 								<td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">{!! $diff < 0 ? '('.number_format($diff * -1).')' : number_format($diff) !!}</p></td>
                                 @endif
 							</tr>
+                                <?php
+                                    $grand_total_auth += $content->salaryauthorized ? $content->salaryauthorized->amount * 12 : 0;
+                                    $grand_total_prop += $content->salaryproposed ? $content->salaryproposed->amount * 12 : 0;
+                                    $grand_total_diff += $diff;
 
-                            @if (fmod($loop->index + 1, 24) == 0 || $loop->index + 1 == count($plantillacontents))
-                            <tr style="page-break-after: always !important;">
-                                <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
-                                <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
-                                <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_auth < 0 ? '('.number_format($total_auth * -1).')' : number_format($total_auth) !!}</i>  </p> </td>
-                                <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
-                                <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_prop < 0 ? '('.number_format($total_prop * -1).')' : number_format($total_prop) !!}</i>  </p></td>
-                                <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_diff < 0 ? '('.number_format($total_diff * -1).')' : number_format($total_diff) !!}</i>  </p></td>
-                            </tr>
-                            <?php
-                                $total_auth = 0;
-                                $total_prop = 0;
-                                $total_diff = 0;
-                            ?>
-                            @else
-                            <?php
-                                $total_auth += $content->salaryauthorized ? $content->salaryauthorized->amount * 12 : 0;
-                                $total_prop += $content->salaryproposed ? $content->salaryproposed->amount * 12 : 0;
-                                $total_diff += $diff;
-                            ?>
-                            @endif
-
-                            @if ($loop->last)
-                                <?php $last_page=true; ?>
-                            @else
-                                <?php $last_page=false; ?>
-                            @endif
+                                    $total_auth += $content->salaryauthorized ? $content->salaryauthorized->amount * 12 : 0;
+                                    $total_prop += $content->salaryproposed ? $content->salaryproposed->amount * 12 : 0;
+                                    $total_diff += $diff;
+                                ?>
+                                @if (fmod($loop->index + 1, 24) == 0)
+                                    <tr style="page-break-after: always !important;">
+                                        <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
+                                        <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_auth < 0 ? '('.number_format($total_auth * -1).')' : number_format($total_auth) !!}</i>  </p> </td>
+                                        <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_prop < 0 ? '('.number_format($total_prop * -1).')' : number_format($total_prop) !!}</i>  </p></td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_diff < 0 ? '('.number_format($total_diff * -1).')' : number_format($total_diff) !!}</i>  </p></td>
+                                    </tr>
+                                    <?php
+                                        $total_auth = 0;
+                                        $total_prop = 0;
+                                        $total_diff = 0;
+                                    ?>
+                                @endif
+                                @if ($loop->last)
+                                    {{-- TOTAL --}}
+                                    <tr>
+                                        <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
+                                        <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_auth < 0 ? '('.number_format($total_auth * -1).')' : number_format($total_auth) !!}</i>  </p> </td>
+                                        <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_prop < 0 ? '('.number_format($total_prop * -1).')' : number_format($total_prop) !!}</i>  </p></td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> <i>{!! $total_diff < 0 ? '('.number_format($total_diff * -1).')' : number_format($total_diff) !!}</i>  </p></td>
+                                    </tr>
+                                    <tr style="page-break-after: always !important;">
+                                        <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
+                                        <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 20pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: bold; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;margin-left: 10px;">TOTAL</p> </td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 20pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-left: none;"><p class="pHeight" style="margin-right: 10px;"> {!! $grand_total_auth < 0 ? '('.number_format($grand_total_auth * -1).')' : number_format($grand_total_auth) !!}  </p> </td>
+                                        <td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 20pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;"> {!! $total_prop < 0 ? '('.number_format($grand_total_prop * -1).')' : number_format($grand_total_prop) !!}  </p></td>
+                                        <td class="tdHeight" style="text-align: right; font-size: 20pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: bold; border-left: none; border-right: none;"><p class="pHeight" style="margin-right: 10px;">{!! $grand_total_diff < 0 ? '('.number_format($grand_total_diff * -1).')' : number_format($grand_total_diff) !!}  </p></td>
+                                    </tr>
+                                @endif
 
                             @endforeach
-                            {{-- Subtotal --}}
-
-							{{-- <tr>
-								<td colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
-								<td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none;"><p style="margin-right: 10px;"> <i>2,228340.00</i>  </p> </td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: bold; border-right: none;"> </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none; font-weight: normal; border-left: none; border-right: none;"><p style="margin-right: 10px;"> <i>2,270,388.00</i>  </p></td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"><p style="margin-right: 10px;"> <i>42,048.00</i>  </p></td>
-							</tr> --}}
-                            {{-- TOTAL --}}
-							{{-- <tr>
-								<td colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none;"></td>
-								<td colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"> TOTAL</td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> 2,228340.00 </td>
-								<td style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; font-weight: bold;"> 2,270,388.00 </td>
-								<td style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; font-weight: bold;"> 42,048.00 </td>
-							</tr> --}}
 						</tbody>
 
 					</table>
@@ -326,7 +322,9 @@
 			</div>
 
 		</main>
-		<script type="text/php"></script>
+		<script type="text/php">
+
+        </script>
 	</body>
 
 </html>
