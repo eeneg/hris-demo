@@ -35,7 +35,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="audit in audits?.data" :key="audit.id">
+                            <tr v-for="audit in audits?.data" :key="audit.id" style="cursor: pointer;" @click="showActivityLog(audit)">
                                 <td>
                                     <img style="width: 35px; height: 35px;" class="img-circle mr-2" :src="getAvatar(audit.user.avatar)" alt="User Avatar">
                                     <span style="vertical-align: middle;">{{ audit.user.name }}</span>
@@ -64,7 +64,47 @@
                         <span slot="prev-nav">&lt; Previous</span>
 	                    <span slot="next-nav">Next &gt;</span>
                     </pagination>
-                    <span style="margin-left: 10px;">Showing {{ audits.from }} to {{ audits.to }} of {{ audits.total }} results | Page {{ audits.current_page }} of {{ audits.last_page }}</span>
+                    <span style="margin-left: 10px;">Showing {{ audits?.from }} to {{ audits?.to }} of {{ audits?.total }} results | Page {{ audits?.current_page }} of {{ audits?.last_page }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="showActivity" ref="showActivity" tabindex="-1" role="dialog" aria-labelledby="showAcitivityLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="showAcitivityLabel">
+                            {{ `${activity?.audited} ${activity?.event} by ${activity?.user?.name}` }}
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ `${activity?.ip_address} ${moment(activity?.time)?.format('ddd, ll @LTS')}` }}
+                    </div>
+                    <table class="table text-nowrap table-striped custom-table table-fixed">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>New</th>
+                                <th>Old</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(values, field) of activity ? JSON.parse(activity.modified) : []">
+                                <th class="pl-4">
+                                    {{ field }}
+                                </th>
+                                <td>
+                                    {{ values.new ?? 'null' }}
+                                </td>
+                                <td class="text-truncate">
+                                    {{ values.old ?? 'null' }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -78,6 +118,7 @@
         data() {
             return {
                 audits: null,
+                activity: null,
                 search: '',
             }
         },
@@ -112,6 +153,12 @@
                     .catch(error => {
                         console.error(error.response.data.message);
                     });
+            },
+
+            showActivityLog(activity) {
+                this.activity = activity
+
+                $('#showActivity').modal('show')
             },
 
             moment: moment
