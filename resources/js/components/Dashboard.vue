@@ -256,78 +256,20 @@
 						<!-- /.card-header -->
 						<div class="card-body p-0">
 							<div class="col-md-12" style="display: flex; flex-wrap: wrap;">
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">John Doe</a>
+								<div v-for="(employee, index) in data_set.newlyAppointedEmployees" :key="index" class="col-md-3 col-6" style="text-align: center; padding: 5px;">
+									<img :src="getAvatar(employee.avatar)" class="text-center" alt="avatar" width="100px" height="100px">
+									<a class="users-list-name" href="#">{{ employee.name }}</a>
 									<span class="users-list-date" style="line-height: 1;">
-										<i> Security Officer I </i>
+										<i> {{ employee.position }} </i>
 									</span>
-									<span class="users-list-date">PCSMO</span>
-								</div>
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">Luca Doncic</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> Executive Officer I </i>
-									</span>
-									<span class="users-list-date">PGO-Executive</span>
-								</div>
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">Kyrie Irving</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> Administrative Aide VI </i>
-									</span>
-									<span class="users-list-date">PTO</span>
-								</div>
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">James Harden</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> Computer Programmer I </i>
-									</span>
-									<span class="users-list-date">PPDO</span>
-								</div>
-							</div>
-							<div class="col-md-12" style="display: flex; flex-wrap: wrap;">
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">Kevin Durant</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> Administrative Officer II </i>
-									</span>
-									<span class="users-list-date">PACCO</span>
-								</div>
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">Stephen Curry</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> Accountant I </i>
-									</span>
-									<span class="users-list-date">PBO</span>
-								</div>
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">Jason Tatum</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> Human Resource Management Officer II </i>
-									</span>
-									<span class="users-list-date">PHRMO</span>
-								</div>
-								<div class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img src="/storage/project_files/davsur.png" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">Trae Young</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> Assessment Clerk III </i>
-									</span>
-									<span class="users-list-date">PASSO</span>
+									<span class="users-list-date">{{ employee.department }}</span>
 								</div>
 							</div>
 							<!-- /.users-list -->
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer text-center">
-							<a href="javascript:" class="float-right">View All Newly Appointed</a>
+                            <router-link to="/appointments" class="nav-link float-right">View All Newly Appointed</router-link>
 						</div>
 						<!-- /.card-footer -->
 					</div>
@@ -444,7 +386,8 @@
 					vacant_positions: 0,
 					active_employees: 0,
 					birthdays: [],
-                    onLeaveEmployees: []
+                    onLeaveEmployees: [],
+                    newlyAppointedEmployees: [],
 				}
 			}
 		},

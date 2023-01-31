@@ -10,6 +10,9 @@ use App\LeaveType;
 use App\Plantilla;
 use App\PlantillaContent;
 use App\Setting;
+use App\Appointment;
+use App\Position;
+use App\Department;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -51,9 +54,23 @@ class DashboardController extends Controller
                 ];
             });
 
-        // dd($onLeaveEmployees->toArray());
+        $newlyAppointedEmployees = Appointment::has('personalinformation')->with('personalinformation')
+            ->take(8)
+            ->get()
+            ->map(function($employee){
+
+                $position = Position::find($employee->position_id)->first();
+
+                return[
+                    'name' => $employee->personalinformation->firstname . ' '. $employee->personalinformation->surname,
+                    'position' => $position->title,
+                    'department' => Department::find($position->department_id)->title,
+                    'avatar' => $employee->personalinformation->picture
+                ];
+            });
 
         $data = [
+            'newlyAppointedEmployees' => $newlyAppointedEmployees,
             'onLeaveEmployees' => $onLeaveEmployees,
             'vacant_positions' => count($vacant_positions),
             'active_employees' => count($active_employees),
