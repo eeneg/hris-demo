@@ -136,7 +136,6 @@ class PlantillaContentController extends Controller
             $tbd->personal_information_id = null;
             $tbd->original_appointment = null;
             $tbd->last_promotion = null;
-            $tbd->appointment_status = '';
             $tbd->save();
         }
 
@@ -270,7 +269,6 @@ class PlantillaContentController extends Controller
                 $tbd->personal_information_id = null;
                 $tbd->original_appointment = null;
                 $tbd->last_promotion = null;
-                $tbd->appointment_status = '';
                 $tbd->save();
             }
         }
