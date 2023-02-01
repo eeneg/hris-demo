@@ -71,6 +71,16 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');
+
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'address' => 'required',
+            'function' => 'required',
+            'projectactivity' => 'required',
+            'fund' => 'required',
+        ]);
+
         $department = Department::create($request->all());
     }
 
@@ -95,6 +105,16 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         $this->authorize('isAdministratorORAuthor');
+
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'address' => 'required',
+            'function' => 'required',
+            'projectactivity' => 'required',
+            'fund' => 'required',
+        ]);
+
         $department = Department::findOrFail($id);
 
         $department->update($request->all());

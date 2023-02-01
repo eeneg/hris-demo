@@ -17,7 +17,7 @@ class Department extends Auditable
     ];
 
     protected $fillable = [
-        'title', 'description', 'address', 'function', 'projectactivity', 'fund',
+        'title', 'description', 'address', 'function', 'projectactivity', 'fund', 'status'
     ];
 
     public function positions()

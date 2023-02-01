@@ -82,25 +82,41 @@
                             <div class="row">
                                 <div class="form-group col-6">
                                     <input v-model="dept_form.title" ref="title" class="form-control form-control-border border-width-2" type="text" name="title" placeholder="Title">
+                                    <span v-if="error.title" class="text-danger">{{ error.title[0] }}</span>
                                 </div>
                                 <div class="form-group col-6">
                                     <input v-model="dept_form.address" ref="address" class="form-control form-control-border border-width-2" type="text" name="address" placeholder="Address">
+                                    <span v-if="error.address" class="text-danger">{{ error.address[0] }}</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-12">
                                     <input v-model="dept_form.description" ref="description" class="form-control form-control-border border-width-2" type="text" name="description" placeholder="Description">
+                                    <span v-if="error.description" class="text-danger">{{ error.description[0] }}</span>
                                 </div>
                                 <div class="form-group col-12">
                                     <input v-model="dept_form.projectactivity" ref="projectactivity" class="form-control form-control-border border-width-2" type="text" name="projectactivity" placeholder="Project Activity">
+                                    <span v-if="error.projectactivity" class="text-danger">{{ error.projectactivity[0] }}</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-6">
                                     <input v-model="dept_form.function" ref="function" class="form-control form-control-border border-width-2" type="text" name="function" placeholder="Function">
+                                    <span v-if="error.function" class="text-danger">{{ error.function[0] }}</span>
                                 </div>
                                 <div class="form-group col-6">
                                     <input v-model="dept_form.fund" ref="fund" class="form-control form-control-border border-width-2" type="text" name="fund" placeholder="Fund">
+                                    <span v-if="error.fund" class="text-danger">{{ error.fund[0] }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12">
+                                    <label for="exampleFormControlSelect1">Status</label>
+                                    <select class="form-control" v-model="dept_form.status" id="exampleFormControlSelect1" required>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                    <span v-if="error.status" class="text-danger">{{ error.status[0] }}</span>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +154,9 @@
                    'function': '',
                    'projectactivity': '',
                    'fund': '',
+                   'status': '',
                }),
+               error: {}
            }
        },
        methods: {
@@ -173,9 +191,10 @@
            },
             create_department_modal: function()
            {
-               this.editMode = false
-               this.dept_form.reset()
-               $('#department_modal').modal('show')
+                this.error = {}
+                this.editMode = false
+                this.dept_form.reset()
+                $('#department_modal').modal('show')
            },
            submit_departments: function()
            {
@@ -191,7 +210,7 @@
                     this.$Progress.finish()
                })
                .catch(error => {
-                   console.log(error)
+                    this.error = error.response.data.errors
                     Swal.fire(
                         'Oopss..',
                         'Unable to create Department',
@@ -202,9 +221,10 @@
            },
            edit_department_modal: function(data)
            {
-               Object.assign(this.dept_form, data)
-               this.editMode = true
-               $('#department_modal').modal('show')
+                this.error = {}
+                Object.assign(this.dept_form, data)
+                this.editMode = true
+                $('#department_modal').modal('show')
            },
            submit_edits_departments: function()
            {
@@ -220,7 +240,8 @@
                     this.$Progress.finish()
                })
                .catch(error => {
-                   console.log(error)
+                    console.log(error)
+                    this.error = error.response.data.errors
                     Swal.fire(
                         'Oopss..',
                         'Unable to edit Department',
