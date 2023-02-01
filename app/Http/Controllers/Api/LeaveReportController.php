@@ -233,7 +233,9 @@ class LeaveReportController extends Controller
                 ]);
             });
 
-        $pdf = PDF::loadView('reports/foreign_travel_report', compact('data'))
+        $d = collect(['data' => $data, 'prepared_by' =>  $request->preparedBy, 'noted_by' =>  $request->notedBy]);
+
+        $pdf = PDF::loadView('reports/foreign_travel_report', compact('d'))
         ->setPaper('legal', 'landscape')
         ->setOptions([
             'defaultMediaType' => 'screen',
@@ -252,8 +254,6 @@ class LeaveReportController extends Controller
         Storage::put('public/leave_reports/'.$id.'.pdf', $pdf->output());
 
         return ['title' => $id.'.pdf'];
-
-        // return $data;
     }
 
     /**

@@ -66,7 +66,7 @@
         <!-- Modal -->
 
         <div class="modal fade" id="foreign_travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Foreign Travel Report</h5>
@@ -105,6 +105,34 @@
                                     <option value="November">November</option>
                                     <option value="December">December</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12" v-for="(preparedBy, index) in foreignForm.preparedBy" :key="preparedBy.id">
+                            <label for="author">Prepared By:</label>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" v-model="preparedBy.name" name="author" id="author" placeholder="Name">
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" v-model="preparedBy.position" name="position" id="position"  placeholder="Position">
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger" @click="destroyPreparedBy(index, 2)"><i class="fas fa-minus"></i></button>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-success" @click="addPreparedBy(index, 2)"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="noted">Noted By:</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="foreignForm.notedBy.name" name="noted" id="noted" placeholder="Name">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="foreignForm.notedBy.position" name="positionN" id="positionN" placeholder="Position">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -180,10 +208,10 @@
                                     <input type="text" class="form-control" v-model="preparedBy.position" name="position" id="position"  placeholder="Position">
                                 </div>
                                 <div class="col-md-1">
-                                    <button class="btn btn-danger" @click="destroyPreparedBy(index)"><i class="fas fa-minus"></i></button>
+                                    <button class="btn btn-danger" @click="destroyPreparedBy(index, 1)"><i class="fas fa-minus"></i></button>
                                 </div>
                                 <div class="col-md-1">
-                                    <button class="btn btn-success" @click="addPreparedBy(index)"><i class="fas fa-plus"></i></button>
+                                    <button class="btn btn-success" @click="addPreparedBy(index, 1)"><i class="fas fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -254,9 +282,11 @@ import moment from 'moment'
                     'notedBy': { name: null, position: null }
                 }),
                 foreignForm: new Form({
-                    'title': 'null',
+                    'title': 'Foreign Travel Report',
                     'year': 2023,
                     'month': 'January',
+                    'preparedBy': [{ name: 'Gene Rellanos', position: 'Assessment Clerk II'}, { name: 'Gene Rellanos', position: 'Assessment Clerk II'}, { name: 'Gene Rellanos', position: 'Assessment Clerk II'}],
+                    'notedBy': { name: 'Gene Rellanos', position: 'Assessment Clerk II' }
                 }),
                 errors: {year: null, months: null}
             }
@@ -267,21 +297,33 @@ import moment from 'moment'
         },
         methods: {
 
-            destroyPreparedBy: function(index)
+            destroyPreparedBy: function(index, mode)
             {
-                if(this.summaryForm.preparedBy.length !== 1)
+                if(this.summaryForm.preparedBy.length !== 1 && mode == 1)
                 {
                     this.summaryForm.preparedBy.splice(index, 1)
-                }else{
+                }else if(this.summaryForm.preparedBy.length == 1 && mode == 1){
                     this.summaryForm.preparedBy[index] = {name: null, position: null}
+                }
+
+                if(this.foreignForm.preparedBy.length !== 1 && mode == 2)
+                {
+                    this.foreignForm.preparedBy.splice(index, 1)
+                }else if(this.foreignForm.preparedBy.length == 1 && mode == 2){
+                    this.foreignForm.preparedBy[index] = {name: null, position: null}
                 }
             },
 
-            addPreparedBy: function(index)
+            addPreparedBy: function(index, mode)
             {
-                if(this.summaryForm.preparedBy.length <= 2)
+                if(this.summaryForm.preparedBy.length <= 2 && mode == 1)
                 {
                     this.summaryForm.preparedBy.splice(index+1, 0, {name: null, position: null})
+                }
+
+                if(this.foreignForm.preparedBy.length <= 2 && mode == 2)
+                {
+                    this.foreignForm.preparedBy.splice(index+1, 0, {name: null, position: null})
                 }
             },
 
