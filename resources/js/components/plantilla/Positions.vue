@@ -27,6 +27,7 @@
                             <table class="table table-striped text-nowrap custom-table">
                                 <thead>
                                     <tr>
+                                        <th style="width: 1%">#</th>
                                         <th style="width: 45%">Position</th>
                                         <th style="width: 45%">Number of Items</th>
                                         <th style="width: 10%">Action</th>
@@ -34,6 +35,9 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(position, index) in positions" :key="position.id">
+                                        <td>
+                                            {{ index+1 }}
+                                        </td>
                                         <td>
                                             {{ position.title }}
                                         </td><td>

@@ -52,9 +52,11 @@ class DepartmentController extends Controller
     public function fetch_positions(Request $request)
     {
         $positions = Position::where('department_id', $request->id)->orderBy('title')->get();
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
         foreach ($positions as $key => $data) {
-            $positions[$key]['count'] = PlantillaContent::where('position_id', $data->id)->count();
+            $positions[$key]['count'] = PlantillaContent::where('plantilla_id', $plantilla->id)->where('position_id', $data->id)->count();
         }
 
         return $positions;

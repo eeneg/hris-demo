@@ -27,12 +27,16 @@
                             <table class="table table-striped text-nowrap custom-table">
                                 <thead>
                                     <tr>
+                                        <th style="width:5px">#</th>
                                         <th>Department</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(department, index) in departments.data" :key="department.id">
+                                        <td>
+                                            {{ index+1 }}
+                                        </td>
                                         <td>
                                             <div style="display: inline-block;vertical-align: middle;line-height: 1.2rem;height: 35px;">
                                                 <span style="font-size: 1rem;">{{ department.title }}</span>
