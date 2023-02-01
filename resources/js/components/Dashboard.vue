@@ -193,6 +193,37 @@
 				<!-- Left col -->
 				<section class="col-lg-8 connectedSortable ui-sortable">
 					<!-- Custom tabs (Charts with tabs)-->
+
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">Newly Appointed Employees</h3>
+							<div class="card-tools">
+								<span class="badge badge-danger">8 Newly Appointed</span>
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body p-0">
+							<div class="col-md-12" style="display: flex; flex-wrap: wrap;">
+								<div v-for="(employee, index) in data_set.newlyAppointedEmployees" :key="index" class="col-md-3 col-6" style="text-align: center; padding: 5px;">
+									<img :src="getAvatar(employee.avatar)" class="text-center" alt="avatar" width="100px" height="100px">
+									<a class="users-list-name" href="#">{{ employee.name }}</a>
+									<span class="users-list-date" style="line-height: 1;">
+										<i> {{ employee.position }} </i>
+									</span>
+									<span class="users-list-date">{{ employee.department }}</span>
+								</div>
+							</div>
+							<!-- /.users-list -->
+						</div>
+						<!-- /.card-body -->
+						<div class="card-footer text-center">
+                            <router-link to="/appointments" class="nav-link float-right">View All Newly Appointed</router-link>
+						</div>
+						<!-- /.card-footer -->
+					</div>
 					<div class="card">
 						<div class="card-header border-transparent">
 							<h3 class="card-title">Activity Logs</h3>
@@ -243,36 +274,6 @@
 					</div>
 					<!-- /.card -->
 					<!-- DIRECT CHAT -->
-					<div class="card">
-						<div class="card-header">
-							<h3 class="card-title">Newly Appointed Employees</h3>
-							<div class="card-tools">
-								<span class="badge badge-danger">8 Newly Appointed</span>
-								<button type="button" class="btn btn-tool" data-card-widget="collapse">
-									<i class="fas fa-minus"></i>
-								</button>
-							</div>
-						</div>
-						<!-- /.card-header -->
-						<div class="card-body p-0">
-							<div class="col-md-12" style="display: flex; flex-wrap: wrap;">
-								<div v-for="(employee, index) in data_set.newlyAppointedEmployees" :key="index" class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img :src="getAvatar(employee.avatar)" class="text-center" alt="avatar" width="100px" height="100px">
-									<a class="users-list-name" href="#">{{ employee.name }}</a>
-									<span class="users-list-date" style="line-height: 1;">
-										<i> {{ employee.position }} </i>
-									</span>
-									<span class="users-list-date">{{ employee.department }}</span>
-								</div>
-							</div>
-							<!-- /.users-list -->
-						</div>
-						<!-- /.card-body -->
-						<div class="card-footer text-center">
-                            <router-link to="/appointments" class="nav-link float-right">View All Newly Appointed</router-link>
-						</div>
-						<!-- /.card-footer -->
-					</div>
 					<!-- TO DO List -->
 					<!-- /.card -->
 				</section>
