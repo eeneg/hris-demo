@@ -55,11 +55,12 @@ class DashboardController extends Controller
             });
 
         $newlyAppointedEmployees = Appointment::has('personalinformation')->with('personalinformation')
+            ->orderBy('created_at', 'desc')
             ->take(8)
             ->get()
             ->map(function($employee){
 
-                $position = Position::find($employee->position_id)->first();
+                $position = Position::find($employee->position_id);
 
                 return[
                     'name' => $employee->personalinformation->firstname . ' '. $employee->personalinformation->surname,

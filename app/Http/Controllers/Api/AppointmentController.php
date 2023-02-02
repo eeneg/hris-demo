@@ -45,7 +45,7 @@ class AppointmentController extends Controller
             );
 
         if (! $request->search && ! $request->from && ! $request->to) {
-            return new AppointmentResource($appointments->paginate(20));
+            return new AppointmentResource($appointments->orderBy('created_at', 'desc')->paginate(20));
         } elseif (! $request->search && $request->from && $request->to) {
             $appointments->whereBetween('appointment_records.reckoning_date', [$request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')]);
 
