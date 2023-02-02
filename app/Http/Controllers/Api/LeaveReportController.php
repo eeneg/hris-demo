@@ -156,6 +156,7 @@ class LeaveReportController extends Controller
 
     public function generateForeignTravelReport(Request $request)
     {
+
         $data = LeaveSummary::where('foreign_travel', 1)->get()
             ->filter(function ($leave) use ($request) {
                 switch($leave->period->mode) {
@@ -233,13 +234,13 @@ class LeaveReportController extends Controller
                 ]);
             });
 
-        $d = collect(['data' => $data, 'prepared_by' =>  $request->preparedBy, 'noted_by' =>  $request->notedBy]);
+        $d = collect(['data' => $data, 'prepared_by' =>  $request->preparedBy, 'noted_by' =>  $request->notedBy, 'current_year' => $request->year, 'current_month' => $request->month]);
 
         $pdf = PDF::loadView('reports/foreign_travel_report', compact('d'))
-        ->setPaper('legal', 'landscape')
-        ->setOptions([
-            'defaultMediaType' => 'screen',
-            'dpi' => 120,
+        ->setPaper([0, 0, 952, 1456], 'port')
+                ->setOptions([
+                    'defaultMediaType' => 'screen',
+                    'dpi' => 112,
         ]);
 
         $id = LeaveReport::generateUuid();

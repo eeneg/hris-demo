@@ -1,68 +1,189 @@
 <!DOCTYPE html>
-<html>
-<head>
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+        <title>Laravel</title>
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
-</head>
-<body>
+        <style>
+            html {
+                font-family: sans-serif;
+                -ms-text-size-adjust: 100%;
+                -webkit-text-size-adjust: 100%
+            }
+            body {
+                height: 13in;
+                width: 8.5in;
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 0
+            }
+            .divmain{
 
-<h2>HTML Table</h2>
+            }
+            .tablemain{
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                border-spacing: 0;
+            }
+            .divtable{
+                margin: 20 0 0 0;
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Employee</th>
-            <th scope="col">Type of Leave</th>
-            <th scope="col">Days</th>
-            <th scope="col">Inclusive Dates</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($d['data'] as $values)
-        <tr>
-            <th scope="row">{{ $values['name'] }}</th>
-            <td>{{ $values['leave_type'] }}</td>
-            <td>{{ $values['days'] }}</td>
-            <td>{{ $values['inclusive_dates'] }}</td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+            }
+            .trow{
+                width: 100%;
 
-<div style="margin-top: 100px;">
-    <div style="display: inline-block; width: 700px; height:100px; margin-left: 50px;">
-        Prepared By: <br>
-        @foreach ($d['prepared_by'] as $value)
-            <div style="text-align: center; margin-top: 20px;">
-                {{ $d['noted_by']['name'] }} <br>
-                {{ $d['noted_by']['position'] }}
+            }
+            .tthead{
+                width: 560px ;
+                border: solid black 2px;
+                font-size: 1.3rem;
+            }
+            .tthead2{
+                width: 260px;
+                border: solid 2px;
+                font-size: 1.3rem;
+            }
+            .tdata{
+                width: 360px ;
+                height: 50px;
+                border: solid black 2px;
+                font-size: 1.1rem;
+                font-weight: bold;
+            }
+            .tdata2{
+                width: 260px;
+                border: solid black 2px;
+                text-align: right;
+                font-size: 1.3rem;
+                padding: 0 10px 0 0;
+            }
+            .tdata3{
+                text-align: right;
+                height: 50px;
+                font-weight: bold;
+                border: solid black 2px;
+                font-weight: bold;
+                font-size: 1.3rem;
+                padding: 0 10px 0 0;
+            }
+            .theadTitle{
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body style="width: 100%">
+        <main role="main" style="width: 100% " >
+            <div class="divmain" style="width: 100%">
+                <div class="divtable">
+                    <table class="tablemain" style="margin-bottom: 200px;">
+                        <thead class="theadTitle">
+                            <th colspan="4">
+                                <div class="header" style="text-align: center">
+                                    <h1 style="font-weight: bold;margin:0">FOREIGN TRAVEL</h1>
+                                    <p style="font-size: 1.6rem;font-weight: normal;margin:0 0 20px 0">{{ $d['current_month'] }} {{ $d['current_year'] }}</p>
+                                </div>
+                            </th>
+
+                        </thead>
+                        <thead>
+                            <tr class="trow">
+                                <th class="tthead" style="border-right: none; border-top: none; border-left: none;">Employee</th>
+                                <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">Type of Leave</th>
+                                <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">{{ $d['current_year'] }}Days</th>
+                                <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">Inclusive Dates</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($d['data'] as $values)
+                            <tr>
+                                <td class="tdata" style="border-right: none; border-top: none;">{{ $values['name'] }}</td>
+                                <td class="tdata2" style="border-right: none; border-top: none;">{{ $values['leave_type'] }}</td>
+                                <td class="tdata2" style="border-right: none; border-top: none;">{{ $values['days'] }}</td>
+                                <td class="tdata2" style="border-top: none;">{{ $values['inclusive_dates'] }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" style="height: 40px;">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1">
+                                    Prepared by:
+                                </td>
+                                <td>
+
+                                </td>
+                                <td colspan="2">
+                                    Noted by:
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="height: 40px;">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" style="text-align: center;">
+                                    <p style="margin-bottom: 0;">Gene Rellanos</p>
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: center; margin-bottom: 0;">
+                                    <p>Jayson Cagampang</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" style="text-align: center;">
+                                   Governor
+                                </td>
+                                <td></td>
+                                <td colspan="2" style="text-align: center;">
+                                    Vice Governor
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="height: 40px;">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" style="text-align: center;">
+                                    <p style="margin-bottom: 0;">Gene Rellanos</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" style="text-align: center;">
+                                   Governor
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="height: 40px;">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" style="text-align: center;">
+                                    <p style="margin-bottom: 0;">Gene Rellanos</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" style="text-align: center;">
+                                   Governor
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
-        @endforeach
-    </div>
-    <div style="display: inline-block; width: 500px; height:100px;">
-        Noted By: <br>
-        <div style="text-align: center;">
-            {{ $d['noted_by']['name'] }} <br>
-            {{ $d['noted_by']['position'] }}
-        </div>
-    </div>
-</div>
+        </main>
+        <script type="text/php">
 
-</body>
+        </script>
+    </body>
 </html>
+
 
