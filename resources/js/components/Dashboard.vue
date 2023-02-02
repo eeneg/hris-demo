@@ -208,7 +208,7 @@
 						<div class="card-body p-0">
 							<div class="col-md-12" style="display: flex; flex-wrap: wrap;">
 								<div v-for="(employee, index) in data_set.newlyAppointedEmployees" :key="index" class="col-md-3 col-6" style="text-align: center; padding: 5px;">
-									<img :src="getAvatar(employee.avatar)" class="text-center" alt="avatar" width="100px" height="100px">
+									<img :src="getAvatar(employee.avatar)" class="text-center rounded-circle" alt="avatar" width="100px" height="100px">
 									<a class="users-list-name" href="#">{{ employee.name }}</a>
 									<span class="users-list-date" style="line-height: 1;">
 										<i> {{ employee.position }} </i>
