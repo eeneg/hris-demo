@@ -109,10 +109,6 @@ class AppointmentController extends Controller
             'status' => 'required',
             'agency' => 'required',
             'nature_of_appointment' => 'required',
-            'previous_employee' => 'required',
-            'previous_status' => 'required',
-            'itemno' => 'required|integer',
-            'page' => 'required|integer',
             'reckoning_date' => 'required|date',
         ]);
 
@@ -156,10 +152,6 @@ class AppointmentController extends Controller
             'status' => 'required',
             'agency' => 'required',
             'nature_of_appointment' => 'required',
-            'previous_employee' => 'required',
-            'previous_status' => 'required',
-            'itemno' => 'required|integer',
-            'page' => 'required|integer',
             'reckoning_date' => 'required|date',
         ]);
 
