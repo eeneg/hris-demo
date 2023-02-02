@@ -129,20 +129,20 @@
                             </tr>
                             <tr>
                                 <td colspan="1" style="text-align: center;">
-                                    <p style="margin-bottom: 0;">Gene Rellanos</p>
+                                    <p style="margin-bottom: 0;">{{ @$d['prepared_by'][0]['name'] }}</p>
                                 </td>
                                 <td></td>
                                 <td colspan="2" style="text-align: center; margin-bottom: 0;">
-                                    <p>Jayson Cagampang</p>
+                                    <p>{{ @$d['noted_by']['name'] }}</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="1" style="text-align: center;">
-                                   Governor
+                                   {{ @$d['prepared_by'][0]['position'] }}
                                 </td>
                                 <td></td>
                                 <td colspan="2" style="text-align: center;">
-                                    Vice Governor
+                                    {{ @$d['noted_by']['position'] }}
                                 </td>
                             </tr>
                             <tr>
@@ -152,12 +152,12 @@
                             </tr>
                             <tr>
                                 <td colspan="1" style="text-align: center;">
-                                    <p style="margin-bottom: 0;">Gene Rellanos</p>
+                                    <p style="margin-bottom: 0;">{{ @$d['prepared_by'][1]['name'] }}</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="1" style="text-align: center;">
-                                   Governor
+                                    {{ @$d['prepared_by'][1]['position'] }}
                                 </td>
                             </tr>
                             <tr>
@@ -167,12 +167,12 @@
                             </tr>
                             <tr>
                                 <td colspan="1" style="text-align: center;">
-                                    <p style="margin-bottom: 0;">Gene Rellanos</p>
+                                    <p style="margin-bottom: 0;">{{ @$d['prepared_by'][2]['name'] }}</p>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="1" style="text-align: center;">
-                                   Governor
+                                    {{ @$d['prepared_by'][2]['position'] }}
                                 </td>
                             </tr>
                         </tfoot>

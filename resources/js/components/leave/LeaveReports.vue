@@ -282,11 +282,11 @@ import moment from 'moment'
                     'notedBy': { name: null, position: null }
                 }),
                 foreignForm: new Form({
-                    'title': 'Foreign Travel Report',
-                    'year': 2023,
-                    'month': 'January',
-                    'preparedBy': [{ name: 'Gene Rellanos', position: 'Assessment Clerk II'}, { name: 'Gene Rellanos', position: 'Assessment Clerk II'}, { name: 'Gene Rellanos', position: 'Assessment Clerk II'}],
-                    'notedBy': { name: 'Gene Rellanos', position: 'Assessment Clerk II' }
+                    'title': null,
+                    'year': null,
+                    'month': null,
+                    'preparedBy': [{ name: null, position: null }],
+                    'notedBy': { name: null, position: null }
                 }),
                 errors: {year: null, months: null}
             }
