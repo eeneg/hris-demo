@@ -499,9 +499,27 @@ import axios from 'axios';
                             title: 'Cancelled'
                         });
                     }else{
+
+                        Swal.fire({
+                            title: '<strong>LOADING...</strong>',
+                            html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                            icon: 'info',
+                            willOpen () {
+                                Swal.showLoading ()
+                            },
+                            didClose () {
+                                Swal.hideLoading()
+                            },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                showConfirmButton: false
+                        })
+
                         this.$Progress.start()
                         axios.delete('api/leaveapplication/'+ id)
                         .then(response => {
+                            Swal.close()
                             toast.fire({
                                 icon: 'success',
                                 title: 'Deleted successfully'
@@ -511,6 +529,7 @@ import axios from 'axios';
                             this.$Progress.finish()
                         })
                         .catch(error => {
+                            Swal.close()
                             console.log(error)
                             Swal.fire(
                                 'Oops...',

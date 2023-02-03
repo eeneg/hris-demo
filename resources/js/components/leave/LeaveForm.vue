@@ -92,6 +92,7 @@
                         </div>
                     </div>
                     <h5 class="green mt-3">Details of action on Application</h5>
+                    <h3 class="text-danger" v-if="form.personal_information_id != null && form.vacation_balance == null && form.sick_balance == null">Employee has no Leave Credits</h3>
                     <div class="row">
                         <div class="col-md-12 form-group" style="display: contents;">
                             <div class="col-md-2">
@@ -203,11 +204,11 @@
                 curr_sick_balance: 0.0,
                 leave_application_id: '',
                 form: new Form({
-                    'personal_information_id': '',
-                    'personal_information_id_7b': '',
-                    'personal_information_id_7c': '',
-                    'personal_information_id_7d': '',
-                    'recommendation_officer_id': '',
+                    'personal_information_id': null,
+                    'personal_information_id_7b': null,
+                    'personal_information_id_7c': null,
+                    'personal_information_id_7d': null,
+                    'recommendation_officer_id': null,
                     'noted_by_id': '',
                     'governor_id': '',
                     'date_of_filing': moment(new Date()).format('YYYY-MM-DD'),
@@ -303,23 +304,21 @@
                     this.form.personal_information_id_7d = this.form.personal_information_id
                     this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
                                                 this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
-                    this.form.sick_balance = this.curr_sick_balance
-                    this.form.vacation_balance = this.curr_vacation_balance
 
                     this.form.post('api/leaveapplication')
-                        .then(({data}) => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'New leave application is created successfully',
-                            })
-                            this.$router.push({ path: '/leave-applications'});
-                            this.$Progress.finish();
+                    .then(({data}) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'New leave application is created successfully',
                         })
-                        .catch(error => {
-                            console.log(error.response.data.message);
-                            this.$Progress.fail();
-                        });
+                        this.$router.push({ path: '/leave-applications'});
+                        this.$Progress.finish();
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                        this.$Progress.fail();
+                    });
                 }
             },
             submitEdits: function()
@@ -393,6 +392,8 @@
                 axios.post('api/forleave')
                     .then(({data}) => {
                         this.personalinformations = data;
+                        this.get_balance()
+                        this.calculate()
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
