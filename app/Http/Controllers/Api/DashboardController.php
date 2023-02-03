@@ -34,10 +34,9 @@ class DashboardController extends Controller
         $birthdays = PlantillaContent::where('plantilla_id', $plantilla->id)->whereNotNull('personal_information_id')
             ->with('personalinformation')
             ->whereHas('personalinformation', function ($q) {
-                $q->whereMonth('birthdate', Carbon::now()->format('m'))
-                ->whereDay('birthdate', Carbon::now()->format('d'));
+                $q->whereRaw("DAYOFYEAR(STR_TO_DATE(CONCAT(YEARWEEK(NOW(), 1),'Monday'), '%x%v %W')) <= DAYOFYEAR(birthdate) AND DAYOFYEAR(STR_TO_DATE(CONCAT(YEARWEEK(NOW(), 1),'Sunday'), '%x%v %W')) >=  DAYOFYEAR(birthdate)");
             })->get();
-
+            
         $onLeaveEmployees = LeaveApplication::has('personalinformation')->with('personalinformation')
             ->whereBetweenColumns('from', ['from', 'to'])
             ->where(function($query){
