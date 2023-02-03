@@ -72,6 +72,7 @@ class DashboardController extends Controller
 
         $data = [
             'newlyAppointedEmployees' => $newlyAppointedEmployees,
+            'newlyAppointedEmployeesCount' => $newlyAppointedEmployees->count(),
             'onLeaveEmployees' => $onLeaveEmployees,
             'vacant_positions' => count($vacant_positions),
             'active_employees' => count($active_employees),
