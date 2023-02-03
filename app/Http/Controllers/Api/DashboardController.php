@@ -54,9 +54,10 @@ class DashboardController extends Controller
                 ];
             });
 
-        $newlyAppointedEmployees = Appointment::has('personalinformation')->with('personalinformation')
+        $newlyAppointedEmployees = Appointment::has('personalinformation')
+            ->with('personalinformation')
+            ->whereBetween('reckoning_date', [Carbon::now()->subMonth(6)->format('Y-m-d'), Carbon::now()->format('Y-m-d')])
             ->orderBy('created_at', 'desc')
-            ->take(8)
             ->get()
             ->map(function($employee){
 
