@@ -11,6 +11,7 @@ use App\PlantillaDept;
 use App\Position;
 use App\SalarySchedule;
 use App\Setting;
+use App\Http\Resources\CSCResource;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -88,23 +89,27 @@ class PDFcontroller extends Controller
 
             return ['path' => '/storage/plantilla_reports/dbm.pdf'];
         } elseif ($request->type == 'CSC') {
+            ini_set('max_execution_time', 300);
+            ini_set('memory_limit', '2048M');
+
             $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
             $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-            $plantillacontents = PlantillaContent::leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            $allplantillacontents = PlantillaContent::leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
                 ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
                 ->leftJoin('plantilla_depts', function ($join) {
                     $join->on('departments.id', '=', 'plantilla_depts.department_id');
                     $join->on('plantilla_contents.plantilla_id', '=', 'plantilla_depts.plantilla_id');
                 })
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
+                ->select('plantilla_contents.*')
                 ->orderBy('plantilla_depts.order_number')->orderBy('plantilla_contents.order_number')->get();
-
+            
             $data = [
-                'plantillacontents' => $plantillacontents,
+                'plantillacontents' => $allplantillacontents,
+                // 'plantillacontents' => json_decode((new CSCResource($allplantillacontents))->toJson(), true),
             ];
 
-            ini_set('max_execution_time', 300);
-            ini_set('memory_limit', '2048M');
+            
 
             $pdf = PDF::loadView('reports/plantilla_csc', $data)
                 ->setPaper([0, 0, 952, 1456], 'landscape')

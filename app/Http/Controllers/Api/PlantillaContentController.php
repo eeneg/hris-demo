@@ -66,6 +66,24 @@ class PlantillaContentController extends Controller
         return $data;
     }
 
+    public function plantillaForOtherReports(Request $request)
+    {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->whereNotNull('personal_information_id')
+            ->get();
+        $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
+
+        $department_resource = new DepartmentsResource($departments);
+        $data = [
+            'plantillacontents' => $plantillacontents,
+            'departments' => $department_resource,
+        ];
+
+        return $data;
+    }
+
     public function plantilladepartmentcontent(Request $request)
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();

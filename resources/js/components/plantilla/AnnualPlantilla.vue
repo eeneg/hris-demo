@@ -472,12 +472,13 @@
                         };
                         $('#pdfModal').modal('show');
                         PDFObject.embed(response.data.path, "#pdf-viewer", options);
+                        this.$Progress.finish();
                     })
                     .catch(error => {
                         console.log(error);
                     })
                     .finally(() => {
-                        this.$Progress.finish();
+                        
                     });
             },
             async plantillaReport() {

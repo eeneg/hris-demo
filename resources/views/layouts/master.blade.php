@@ -245,12 +245,12 @@
 											<p>Service Record</p>
 										</router-link>
 									</li> --}}
-									{{-- <li class="nav-item">
+									<li class="nav-item">
 										<router-link to="/reports" class="nav-link">
 											<i class="fas fa-list nav-icon"></i>
 											<p>Others</p>
 										</router-link>
-									</li> --}}
+									</li>
 								</ul>
 							</li>
 							@endcan

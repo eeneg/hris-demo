@@ -1,611 +1,201 @@
 <template>
-  <div class="row justify-content-center">
-    <div class="col-md-12">
-      <div class="row">
-        <div class="col-md-3">
-          <!-- Widget: user widget style 2 -->
-          <div class="card card-widget card-primary widget-user-2">
-            <div class="card-header">
-              <h3 class="card-title">Reports</h3>
-            </div>
-            <div class="card-footer p-0">
-              <ul class="nav flex-column">
-                <li class="nav-item nav-tabs">
-                  <a href="#plantilla" class="nav-link active nav-tabs" data-toggle="tab">
-                  Plantilla <span class="float-right"><i class="fas fa-leaf"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#nosa" class="nav-link nav-tabs" data-toggle="tab">
-                  NOSA (Notice of Salary Adjustment) <span class="float-right"><i class="fas fa-hand-holding-usd"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#nosi" class="nav-link nav-tabs" data-toggle="tab">
-                  NOSI (Notice of Step Increment) <span class="float-right"><i class="fas fa-chart-line"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#service" class="nav-link nav-tabs" data-toggle="tab">
-                  Service Record <span class="float-right"><i class="fas fa-book"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#salary" class="nav-link nav-tabs" data-toggle="tab">
-                  Salary Schedule <span class="float-right"><i class="fas fa-file-invoice-dollar"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#roster" class="nav-link nav-tabs" data-toggle="tab">
-                  Personnel Roster <span class="float-right"><i class="fas fa-people-arrows"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#alloc" class="nav-link nav-tabs" data-toggle="tab">
-                  Allocation List <span class="float-right"><i class="fas fa-hands-helping"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#loyalty" class="nav-link nav-tabs" data-toggle="tab">
-                  Loyalty Benefits Schedule <span class="float-right"><i class="fas fa-hand-holding-heart"></i></span>
-                  </a>
-                </li>
-                <li class="nav-item nav-tabs">
-                  <a href="#job" class="nav-link nav-tabs" data-toggle="tab">
-                  Job Description <span class="float-right"><i class="fas fa-briefcase"></i></span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <!-- /.widget-user -->
+    <div class="row justify-content-center">
+        <div class="col-md-12 text-center" v-if="!$gate.isAdministrator() && !$gate.isAuthor()">
+            <not-authorized></not-authorized>
         </div>
-        <div class="col-md-9">
-          <!-- Plantilla Tab -->
-          <div class="tab-content">
-            <div class="tab-pane active" id="plantilla">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Plantilla <i class="fas fa-leaf"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div>
-                    <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                  </div>
-                  <div class="form-group" style="display: flex;">
-                    <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0" style="margin-right: 15px; width: 69%;">
-                      <option>Office of the Provincial Engineer</option>
-                      <option>Office of the Provincial Engineer</option>
-                      <option>Office of the Provincial Engineer</option>
-                    </select>
-                    <a class="btn bg-info" style="margin-right: 5px;">
-                    Plantilla
-                    <i class="fas fa-print"></i>
-                    </a>
-                    <a class="btn bg-success">
-                    Summary
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Plantilla Tab -->
-            <!-- NOSA -->
-            <div class="tab-pane" id="nosa">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">NOSA (Notice of Salary Adjustment) <i class="fas fa-hand-holding-usd"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-6" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Employee</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>All Employees</option>
-                        <option>Gene Rellanos</option>
-                        <option>Zak Ongkas</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Print Date</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Salary Adjusted Effectivity</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Monthly Basic Salary as of</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                  </div>
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-6">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Local Budget Circular No.</label>
-                      </div>
-                      <input type="text" class="form-control rounded-0 form-control-border border-width-2" id="exampleInputRounded0">
-                    </div>
-                    <div class="col-md-6">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Dated</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                  </div>
-                  <div class="col-md-12" style=" margin-top: 23px;">
-                    <a class="btn bg-primary float-right" @click.prevent="generateNOSA()">
-                    Print
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End NOSA -->
-            <!-- NOSI -->
-            <div class="tab-pane" id="nosi">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">NOSI (Notice of Step Increment) <i class="fas fa-chart-line"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-6" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Employee</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>All Employees</option>
-                        <option>Gene Rellanos</option>
-                        <option>Zak Ongkas</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-8">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Print Date</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                    <div class="col-md-4" style=" margin-top: 23px;">
-                      <a class="btn bg-primary float-right"  @click.prevent="generateNOSI()">
-                      Print
-                      <i class="fas fa-print"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- END NOSI -->
-            <!-- Service Record -->
-            <div class="tab-pane" id="service">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Service Record <i class="fas fa-book"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-6" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Employee</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>All Employees</option>
-                        <option>Gene Rellanos</option>
-                        <option>Zak Ongkas</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Date Issued</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Amount</label>
-                      </div>
-                      <input type="number" class="form-control rounded-0 form-control-border border-width-2" id="exampleInputRounded0">
-                    </div>
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Certified Correct</label>
-                      </div>
-                      <input type="text" class="form-control rounded-0 form-control-border border-width-2" id="exampleInputRounded0">
-                    </div>
-                  </div>
-                  <div class="col-md-12" style=" margin-top: 23px;">
-                    <a class="btn bg-primary float-right" @click.prevent="generateSR()">
-                    Print
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Service Record -->
-            <!-- Salary Schedule -->
-            <div class="tab-pane" id="salary">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Salary Schedule <i class="fas fa-file-invoice-dollar"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-12" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Salary Schedule</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-12" style=" margin-top: 23px;">
-                    <a class="btn bg-primary float-right">
-                    Print
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Salary Schedule -->
-            <!-- Personnel Schedule -->
-            <div class="tab-pane" id="roster">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Personnel Roster <i class="fas fa-people-arrows"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-8" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Print Date</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                  </div>
-                  <div class="col-md-12" style=" margin-top: 23px;">
-                    <a class="btn bg-primary float-right">
-                    Print
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Personnel Schedule -->
-            <!-- Allocation List -->
-            <div class="tab-pane" id="alloc">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Allocation List <i class="fas fa-hands-helping"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-8" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Print Date</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                  </div>
-                  <div class="col-md-12" style=" margin-top: 23px;">
-                    <a class="btn bg-primary float-right">
-                    Print
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Allocation list -->
-            <!-- Loyalty Benefits Schedule -->
-            <div class="tab-pane " id="loyalty">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Loyalty Benefits Schedule <i class="fas fa-hand-holding-heart"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-8" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Date Issued</label>
-                      </div>
-                      <input id="date_approved" type="text" name="date_approved" placeholder="yyyy-mm-dd" onkeypress="return event.charCode > 47 &amp;&amp; event.charCode < 58;" onkeydown="var date = this.value;
-                        if (window.event.keyCode == 8) {
-                        this.value = date;
-                        } else if (date.match(/^\d{4}$/) !== null) {
-                        this.value = date + '-';
-                        } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                        this.value = date + '-';
-                        }
-                        " maxlength="10" required="required" class="form-control rounded-0 form-control-border border-width-2">
-                    </div>
-                  </div>
-                  <div class="col-md-12" style=" margin-top: 23px;">
-                    <a class="btn bg-primary float-right">
-                    Print
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Loyalty Benefits Schedule -->
-            <!-- Job Description -->
-            <div class="tab-pane " id="job">
-              <div class="card card-primary">
-                <div class="card-header">
-                  <h3 class="card-title">Job Description <i class="fas fa-briefcase"></i></h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <div class="form-group" style="display: flex;">
-                    <div class="col-md-6" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Department</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6" >
-                      <div>
-                        <label class="text-muted" style="font-weight: 400; line-height: 10px;">Position</label>
-                      </div>
-                      <select class="custom-select rounded-0 form-control-border border-width-2" id="exampleSelectRounded0">
-                        <option>Imbalmer</option>
-                        <option>Office of the Provincial Engineer</option>
-                        <option>Office of the Provincial Engineer</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-12" style=" margin-top: 23px;">
-                    <a class="btn bg-primary float-right">
-                    Print
-                    <i class="fas fa-print"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Job Description -->
-          </div>
-        </div>
-      </div>
-    </div>
+        <div v-else class="col-md-12">
 
-    <!-- Report Modal -->
-    <div class="modal" id="pdfModal">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header modal-border">
-                    <h4 class="modal-title">Print Report</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <!-- Reports -->
+            <div class="row" id="report_div" style="display: none;margin-top: -1.4rem !important;">
+                <div class="col-md-12 report_div">
+                    <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" style="top: 20px;">
+                    <div class="row mt-3 mb-5">
+                        <div class="col-12 text-center">
+                            <h4 class="m-0">Republic of the Philippines</h4>
+                            <h4 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h4>
+                            <h5 class="m-0">Matti, Digos City</h5>
+                            <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 class="m-0"><b>Salary Grade:</b> {{ salary_grades_report.salary_grade }}</h3>
+                            <h3 class="m-0"><b>Status:</b></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-bordered m-0">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Position</th>
+                                        <th>SG</th>
+                                        <th>Salary</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in print_data" :key="item.id">
+                                        <td>{{ index + 1 }}.</td>
+                                        <td>{{ item.position.title }}</td>
+                                        <td>{{ item.salaryproposed.grade }}</td>
+                                        <td>{{ item.salaryproposed.amount | amount }} / month</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="modal-body" id="pdf-viewer">
-
+            <div class="card card-primary card-outline report_card">
+                <div class="card-header">
+                    <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Custom Reports</h2>
+                    <p style="margin: 2px 0 0 2px;">(Data is based on Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})</p>
                 </div>
+                <div class="card-body">
+                    <div class="row pr-3">
 
-                <div class="modal-footer modal-border">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <!-- Options -->
+                        <div class="col-md-6 pr-5">
+                            <div class="form-group">
+                                <label style="font-weight: bold;margin: 0;">Report</label>
+                                <select v-model="report_type" class="form-control form-control-border border-width-2">
+                                    <option value="">Select Report</option>
+                                    <option value="Salary Grades">Positions with specific salary grade/s</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight: bold; margin: 0;">Department</label>
+                                <v-select class="form-control form-control-border border-width-2" v-model="department" :options="departments" :getOptionLabel="department => department.address"></v-select>
+                            </div>
+                            <button @click="print_report_all()" class="btn btn-info btn-block mt-2" :disabled="!button_enable"><i class="fas fa-print"></i>  Generate Report</button>
+                        </div>
+
+                        <!-- Options Right -->
+                        <div v-if="report_type == 'Salary Grades'" class="col-md-6 pr-5">
+                            <h3>Options</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="m-0">Salary Grade</label>
+                                        <input v-model="salary_grades_report.salary_grade" type="text" class="form-control" placeholder="eg. 15 or 12-15" onkeypress="return event.charCode != 32">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label style="font-weight: bold;margin: 0;">Status</label>
+                                    <div class="form-group form-inline">
+                                        <div class="custom-control custom-checkbox mr-4">
+                                            <input class="custom-control-input" type="checkbox" checked="">
+                                            <label for="customCheckbox2" class="custom-control-label">Vacant</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" checked="">
+                                            <label for="customCheckbox2" class="custom-control-label">Occupied</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-  </div>
-        
 </template>
+
+<style type="text/css">
+    @media print {
+        body * { visibility: hidden !important; }
+        .report_div * { visibility: visible !important; }
+        .report_div {  max-width: 100%; flex: unset; padding-top: 30px !important; }
+        .report_div th { font-size: 1.275rem }
+        .report_div td { font-size: 1rem }
+        .report_div h3 { font-size: 1rem }
+        .report_div h4 { font-size: 1.5rem }
+        .report_div h5 { font-size: 1.275rem }
+        #report_div { display: block !important;  }
+        .report_card { display: none; }
+    }
+</style>
 
 <script>
     export default {
         data() {
             return {
-
+                date_printed: moment(new Date()).format('YYYY-MM-DD'),
+                plantilla_content: [],
+                departments: [],
+                department: {},
+                print_data: [],
+                button_enable: false,
+                report_type: '',
+                salary_grades_report: {
+                    salary_grade: '',
+                    status: ''
+                }
             }
         },
-        methods: {
-          generateNOSI() {
-            axios.post('generateNOSI')
-            .then(response => {
-                let options = {
-                    height: screen.height * 0.65 + 'px',
-                    page: '1'
-                };
-                $('#pdfModal').modal('show');
-                PDFObject.embed("/storage/pdf_reports/nosi.pdf", "#pdf-viewer", options);
-            })
-            .catch(error => {
-                console.log(error);
-                    });
-          },
-          generateNOSA() {
-            axios.post('generateNOSA')
-              .then(response => {
-                  let options = {
-                      height: screen.height * 0.65 + 'px',
-                      page: '1'
-                  };
-                  $('#pdfModal').modal('show');
-                  PDFObject.embed("/storage/pdf_reports/nosa.pdf", "#pdf-viewer", options);
-              })
-              .catch(error => {
-                  console.log(error);
-              });
+        filters: {
+            get_year: (value) => {
+                return moment(value).format('YYYY')
+            },
+            yesterday: (value) => {
+                return moment(value).subtract(1, 'days').format('YYYY-MM-DD')
+            }
+        },
+        watch: {
 
-          },
-          generateSR() {
-            axios.post('generateSR')
-            .then(response => {
-                let options = {
-                    height: screen.height * 0.65 + 'px',
-                    page: '1'
-                };
-                $('#pdfModal').modal('show');
-                PDFObject.embed("/storage/pdf_reports/sr.pdf", "#pdf-viewer", options);
-              })
-              .catch(error => {
-                  console.log(error);
-              });
-          }
+        },
+        methods: {
+            print_report() {
+                this.print_data = []
+                this.print_data.push(this.employee)
+                this.$nextTick(function () {
+                    window.print()
+                })
+            },
+            print_report_all() {
+                var filtered = _.filter(this.plantilla_content, (content) => { 
+                    return content.salaryproposed && content.salaryproposed.grade == this.salary_grades_report.salary_grade
+                });
+                this.print_data = filtered
+                this.$nextTick(function () {
+                    window.print()
+                })
+            },
+            fetch_employees() {
+                this.$Progress.start()
+                axios.get('api/plantillaForOtherReports')
+                    .then(({data}) => {
+                        let all_depts = [{'address': 'All'}]
+                        let for_select_depts = _.concat(all_depts, data.departments)
+                        this.departments = for_select_depts;
+                        var first_department = for_select_depts[0];
+                        this.department = first_department;
+
+                        this.plantilla_content = data.plantillacontents;
+                        // var first_employee = data.plantillacontents[0];
+                        // this.employee = first_employee;
+                        // this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
+                        // this.print_data.push(first_employee)
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    })
+                    .finally(() => {
+                        this.button_enable = true
+                        this.$Progress.finish()
+                    });
+            }
         },
         mounted() {
-            console.log('Component mounted.')
+            // console.log('Component mounted.')
+        },
+        created() {
+            this.fetch_employees()
         }
     }
 </script>
