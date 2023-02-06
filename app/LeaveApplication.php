@@ -57,26 +57,8 @@ class LeaveApplication extends Auditable
     {
         $allEmployees = [];
 
-        //if no dept ID
-        if ($department_id != '' && $department_id != null) {
-            $allEmployees = LeaveApplication::select('leave_applications.*',
-                'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
-                'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
-                ->leftJoin('leave_types', 'leave_applications.leave_type_id', '=', 'leave_types.id')
-                ->leftJoin('personal_informations', 'leave_applications.personal_information_id', '=', 'personal_informations.id')
-                ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
-                ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
-                ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
-                ->leftJoin('reappointments', 'personal_informations.id', '=', 'reappointments.personal_information_id')
-                ->whereNotNull('plantilla_contents.personal_information_id')
-                ->where('plantilla_contents.plantilla_id', $plantilla->id)
-                ->where('departments.id', $department_id)
-                ->orWhere('reappointments.assigned_to', $department_id)
-                ->orderBy('created_at', 'desc')
-                ->paginate(20);
-
-        //if office head or PHRMO head
-        } elseif ($data['role'] == 'Office Head' && $data['dept']['title'] == 'PHRMO') {
+        // hrmo head
+        if ($data['role'] == 'Office Head' && $data['dept']['title'] == 'PHRMO') {
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
                 'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
@@ -96,8 +78,8 @@ class LeaveApplication extends Auditable
                 ->orderBy('created_at', 'desc')
                 ->orWhere('departments.id', $data['dept']['id'])->paginate(20);
 
-        //if office head or PGO EXECUTIVE head
-        } elseif ($data['role'] == 'Office Head' && $data['dept']['title'] == 'PGO-Executive') {
+        //PGO EXECUTIVE head
+        } else if ($data['role'] == 'Office Head' && $data['dept']['title'] == 'PGO-Local Chief Executive') {
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
                 'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
@@ -122,8 +104,27 @@ class LeaveApplication extends Auditable
                 ->orderBy('created_at', 'desc')
                 ->paginate(20);
 
-        //no filter (all)
+        }else if($department_id != '' && $department_id != null){
+
+            $allEmployees = LeaveApplication::select('leave_applications.*',
+            'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
+            'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
+            ->leftJoin('leave_types', 'leave_applications.leave_type_id', '=', 'leave_types.id')
+            ->leftJoin('personal_informations', 'leave_applications.personal_information_id', '=', 'personal_informations.id')
+            ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+            ->leftJoin('reappointments', 'personal_informations.id', '=', 'reappointments.personal_information_id')
+            ->whereNotNull('plantilla_contents.personal_information_id')
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->where('departments.id', $department_id)
+            ->orWhere('reappointments.assigned_to', $department_id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+
         } else {
+
             $allEmployees = LeaveApplication::select('leave_applications.*',
                 'personal_informations.firstname', 'personal_informations.middlename', 'personal_informations.surname', 'personal_informations.nameextension',
                 'leave_types.title', 'leave_types.description', 'leave_types.abbreviation', 'leave_types.max_duration')
@@ -136,6 +137,7 @@ class LeaveApplication extends Auditable
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
                 ->orderBy('created_at', 'desc')
                 ->paginate(20);
+
         }
 
         return $allEmployees;

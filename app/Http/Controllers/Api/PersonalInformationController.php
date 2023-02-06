@@ -80,7 +80,23 @@ class PersonalInformationController extends Controller
         $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        if ($department_id != '') {
+        @$title = Auth::user()->userassignment->department->title;
+
+
+        if($department_id == null || (Auth::user()->role == 'Office Head' && $title == 'PHRMO') || (Auth::user()->role == 'Office Head' && $title == 'PGO-Local Chief Executive') || Auth::user()->role == 'Author'){
+
+            $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
+                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', IFNULL(personal_informations.`nameextension`, ''), ' ', IFNULL(personal_informations.`middlename`, '')) AS `name`
+                FROM plantilla_contents
+                JOIN personal_informations ON plantilla_contents.`personal_information_id` =  personal_informations.`id`
+                JOIN positions ON plantilla_contents.`position_id` =  positions.`id`
+                JOIN departments ON positions.`department_id` =  departments.`id`
+                WHERE plantilla_contents.`personal_information_id` IS NOT NULL
+                AND plantilla_contents.`plantilla_id` = '".$plantilla->id."'
+                ORDER BY personal_informations.`surname`");
+
+        }else if ($department_id != '') {
+
             $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
                 CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', IFNULL(personal_informations.`nameextension`, ''), ' ', IFNULL(personal_informations.`middlename`, '')) AS `name`
                 FROM plantilla_contents
@@ -106,16 +122,7 @@ class PersonalInformationController extends Controller
                                 ->get();
 
             $allEmployees = array_merge($allEmployees, $reapointments->toarray());
-        } else {
-            $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
-                CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', IFNULL(personal_informations.`nameextension`, ''), ' ', IFNULL(personal_informations.`middlename`, '')) AS `name`
-                FROM plantilla_contents
-                JOIN personal_informations ON plantilla_contents.`personal_information_id` =  personal_informations.`id`
-                JOIN positions ON plantilla_contents.`position_id` =  positions.`id`
-                JOIN departments ON positions.`department_id` =  departments.`id`
-                WHERE plantilla_contents.`personal_information_id` IS NOT NULL
-                AND plantilla_contents.`plantilla_id` = '".$plantilla->id."'
-                ORDER BY personal_informations.`surname`");
+
         }
 
         return $allEmployees;
