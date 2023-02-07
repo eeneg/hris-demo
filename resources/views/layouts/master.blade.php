@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--
-	This is a starter template page. Use this page to start your new project from
-	scratch. This page gets rid of all links and provides the needed markup only.
-	-->
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -106,31 +102,6 @@
 								</router-link>
 							</li>
 							@endcannot
-							@can('isAdministratorORAuthor')
-							<li class="nav-item has-treeview">
-								<a href="" class="nav-link">
-									<i class="nav-icon fas fa-bell purple"></i>
-									<p>
-										Activities
-										<i class="right fas fa-angle-left"></i>
-									</p>
-								</a>
-								<ul class="nav nav-treeview">
-									<li class="nav-item">
-										<router-link to="/activities" class="nav-link">
-											<i class="nav-icon fas fa-bullhorn"></i>
-											<p>All Activities</p>
-										</router-link>
-									</li>
-									<li class="nav-item">
-										<router-link to="/activities-create" class="nav-link">
-											<i class="nav-icon fas fa-plus-circle"></i>
-											<p>New Activity</p>
-										</router-link>
-									</li>
-								</ul>
-                            </li>
-							@endcan
 							@cannot('employee')
 							<li class="nav-item has-treeview">
 								<a href="" class="nav-link">
@@ -280,6 +251,31 @@
 									</li>
 								</ul>
 							</li>
+							@endcan
+                            @can('isAdministratorORAuthor')
+							<li class="nav-item has-treeview">
+								<a href="" class="nav-link">
+									<i class="nav-icon fas fa-bell purple"></i>
+									<p>
+										Activities
+										<i class="right fas fa-angle-left"></i>
+									</p>
+								</a>
+								<ul class="nav nav-treeview">
+									<li class="nav-item">
+										<router-link to="/activities" class="nav-link">
+											<i class="nav-icon fas fa-bullhorn"></i>
+											<p>All Activities</p>
+										</router-link>
+									</li>
+									<li class="nav-item">
+										<router-link to="/activities-create" class="nav-link">
+											<i class="nav-icon fas fa-plus-circle"></i>
+											<p>New Activity</p>
+										</router-link>
+									</li>
+								</ul>
+                            </li>
 							@endcan
 							@can('isAdministrator')
 							<li class="nav-item has-treeview">

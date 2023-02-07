@@ -9,6 +9,9 @@
             <div class="row" id="report_div" style="display: none;margin-top: -1.4rem !important;">
                 <div class="col-md-12 report_div">
                     <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" style="top: 20px;">
+                    <div class="row others-report-fixed">
+                        <p class="m-0"><small>THIS IS A SYSTEM GENERATED REPORT</small></p>
+                    </div>
                     <div class="row mt-3 mb-5">
                         <div class="col-12 text-center">
                             <h4 class="m-0">Republic of the Philippines</h4>
@@ -17,10 +20,12 @@
                             <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-2">
                         <div class="col-12">
                             <h3 class="m-0"><b>Salary Grade:</b> {{ salary_grades_report.salary_grade }}</h3>
-                            <h3 class="m-0"><b>Status:</b></h3>
+                            <h3 class="m-0"><b>Status:</b> <span class="badge bg-primary mr-2" v-if="salary_grades_report.status_occupied">OCCUPIED</span><span class="badge bg-success" v-if="salary_grades_report.status_vacant">VACANT</span></h3>
+                            <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
+                            <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
                         </div>
                     </div>
                     <div class="row">
@@ -35,11 +40,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(item, index) in print_data" :key="item.id">
-                                        <td>{{ index + 1 }}.</td>
-                                        <td>{{ item.position.title }}</td>
-                                        <td>{{ item.salaryproposed.grade }}</td>
-                                        <td>{{ item.salaryproposed.amount | amount }} / month</td>
+                                    <tr v-for="(item, index) in print_data" :key="index">
+                                        <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
+                                        <td class="align-middle pt-1 pb-1">
+                                            {{ item.position }}
+                                            <small class="d-block">{{ item.office }}</small>
+                                            <small class="d-block font-weight-bold" :class="item.name == 'VACANT' ? 'text-success' : 'text-primary'">{{ item.name }}</small>
+                                        </td>
+                                        <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.grade }}</td>
+                                        <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.amount | amount }} / month</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -67,7 +76,7 @@
                             </div>
                             <div class="form-group">
                                 <label style="font-weight: bold; margin: 0;">Department</label>
-                                <v-select class="form-control form-control-border border-width-2" v-model="department" :options="departments" :getOptionLabel="department => department.address"></v-select>
+                                <v-select class="form-control form-control-border border-width-2" v-model="department" :options="departments" :reduce="department => department.address"  :getOptionLabel="department => department.address"></v-select>
                             </div>
                             <button @click="print_report_all()" class="btn btn-info btn-block mt-2" :disabled="!button_enable"><i class="fas fa-print"></i>  Generate Report</button>
                         </div>
@@ -86,12 +95,12 @@
                                     <label style="font-weight: bold;margin: 0;">Status</label>
                                     <div class="form-group form-inline">
                                         <div class="custom-control custom-checkbox mr-4">
-                                            <input class="custom-control-input" type="checkbox" checked="">
-                                            <label for="customCheckbox2" class="custom-control-label">Vacant</label>
+                                            <input v-model="salary_grades_report.status_vacant" class="custom-control-input" type="checkbox" id="vacant-check-box">
+                                            <label for="vacant-check-box" class="custom-control-label">Vacant</label>
                                         </div>
                                         <div class="custom-control custom-checkbox">
-                                            <input class="custom-control-input" type="checkbox" checked="">
-                                            <label for="customCheckbox2" class="custom-control-label">Occupied</label>
+                                            <input v-model="salary_grades_report.status_occupied" class="custom-control-input" type="checkbox" id="occupied-check-box">
+                                            <label for="occupied-check-box" class="custom-control-label">Occupied</label>
                                         </div>
                                     </div>
                                 </div>
@@ -109,6 +118,8 @@
 <style type="text/css">
     @media print {
         body * { visibility: hidden !important; }
+        body { -webkit-print-color-adjust: exact; }
+        .others-report-fixed { position: fixed; top: -25px; right: 15px; }
         .report_div * { visibility: visible !important; }
         .report_div {  max-width: 100%; flex: unset; padding-top: 30px !important; }
         .report_div th { font-size: 1.275rem }
@@ -128,13 +139,14 @@
                 date_printed: moment(new Date()).format('YYYY-MM-DD'),
                 plantilla_content: [],
                 departments: [],
-                department: {},
+                department: '',
                 print_data: [],
                 button_enable: false,
                 report_type: '',
                 salary_grades_report: {
                     salary_grade: '',
-                    status: ''
+                    status_vacant: true,
+                    status_occupied: true
                 }
             }
         },
@@ -147,7 +159,9 @@
             }
         },
         watch: {
-
+            report_type: function(data) {
+                this.button_enable = data != ''
+            }
         },
         methods: {
             print_report() {
@@ -158,11 +172,32 @@
                 })
             },
             print_report_all() {
-                var filtered = _.filter(this.plantilla_content, (content) => { 
-                    return content.salaryproposed && content.salaryproposed.grade == this.salary_grades_report.salary_grade
-                });
+                this.print_data = []
+                var filtered = []
+
+                if (this.report_type == 'Salary Grades') {
+                    filtered = _.filter(this.plantilla_content, (content) => { 
+                        if (this.salary_grades_report.salary_grade.includes('-')) {
+                            let grade_from = this.salary_grades_report.salary_grade.split('-')[0]
+                            let grade_to = this.salary_grades_report.salary_grade.split('-')[1]
+                            return content.salaryproposed 
+                                && content.salaryproposed.grade >= grade_from 
+                                && content.salaryproposed.grade <= grade_to
+                                && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
+                                && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
+                                && (this.department != 'All' ? content.office == this.department : true);
+                        } else {
+                            return content.salaryproposed 
+                                && content.salaryproposed.grade == this.salary_grades_report.salary_grade
+                                && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
+                                && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
+                                && (this.department != 'All' ? content.office == this.department : true);
+                        }
+                    });
+                }
+                
                 this.print_data = filtered
-                this.$nextTick(function () {
+                this.$nextTick(() => {
                     window.print()
                 })
             },
@@ -174,7 +209,7 @@
                         let for_select_depts = _.concat(all_depts, data.departments)
                         this.departments = for_select_depts;
                         var first_department = for_select_depts[0];
-                        this.department = first_department;
+                        this.department = first_department.address;
 
                         this.plantilla_content = data.plantillacontents;
                         // var first_employee = data.plantillacontents[0];
@@ -186,7 +221,6 @@
                         console.log(error.response.data.message);
                     })
                     .finally(() => {
-                        this.button_enable = true
                         this.$Progress.finish()
                     });
             }

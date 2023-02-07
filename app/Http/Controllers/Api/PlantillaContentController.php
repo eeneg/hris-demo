@@ -6,6 +6,7 @@ use App\AbolishedItem;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentsResource;
 use App\Http\Resources\PlantillaContentResource;
+use App\Http\Resources\PlantillaContentReportsResource;
 use App\Http\Resources\PlantillaEmployeesNOSAResource;
 use App\Http\Resources\PlantillaEmployeesNOSIResource;
 use App\Http\Resources\PlantillaContentEmployeeResource;
@@ -33,7 +34,8 @@ class PlantillaContentController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+        $plantillacontents = PlantillaContent::with('personalinformation')
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->leftJoin('salary_grades as salaryproposed', 'plantilla_contents.salary_grade_prop_id', '=', 'salaryproposed.id')
             ->leftJoin('salary_grades as nextStep', function ($join) {
                 $join->on('salaryproposed.salary_sched_id', '=', 'nextStep.salary_sched_id');
@@ -51,15 +53,16 @@ class PlantillaContentController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+        $plantillacontents = PlantillaContent::with('personalinformation')
+            ->where('plantilla_id', $plantilla->id)
             ->whereNotNull('personal_information_id')
             ->get();
         $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
 
-        $nosi_resource = new PlantillaEmployeesNOSAResource($plantillacontents);
+        $nosa_resource = new PlantillaEmployeesNOSAResource($plantillacontents);
         $department_resource = new DepartmentsResource($departments);
         $data = [
-            'plantillacontents' => $nosi_resource,
+            'plantillacontents' => $nosa_resource,
             'departments' => $department_resource,
         ];
 
@@ -70,14 +73,21 @@ class PlantillaContentController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
-            ->whereNotNull('personal_information_id')
-            ->get();
+        $plantillacontents = PlantillaContent::with('personalinformation')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+                ->leftJoin('plantilla_depts', function ($join) {
+                    $join->on('departments.id', '=', 'plantilla_depts.department_id');
+                    $join->on('plantilla_contents.plantilla_id', '=', 'plantilla_depts.plantilla_id');
+                })
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->orderBy('plantilla_depts.order_number')->orderBy('plantilla_contents.order_number')->get();
         $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
 
         $department_resource = new DepartmentsResource($departments);
+        $plantillacontent_resource = new PlantillaContentReportsResource($plantillacontents);
         $data = [
-            'plantillacontents' => $plantillacontents,
+            'plantillacontents' => $plantillacontent_resource,
             'departments' => $department_resource,
         ];
 

@@ -28,11 +28,11 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
         });
     }
 
-    public function with($request)
-    {
-        return [
-            'version' => '1.0.0',
-            'author_url' => url('http://www.davsurians.com.ph/'),
-        ];
-    }
+    // public function with($request)
+    // {
+    //     return [
+    //         'version' => '1.0.0',
+    //         'author_url' => url('http://www.davsurians.com.ph/'),
+    //     ];
+    // }
 }
