@@ -40,7 +40,9 @@ Route::group(['middleware' => ['auth:api']], function () {
         'position' => 'Api\PositionController',
         'status' => 'Api\StatusController',
         'leaveReport' => 'Api\LeaveReportController',
+        'activity' => 'Api\ActivityController',
     ]);
+
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
 
     Route::get('profile', 'Api\UserController@profile');

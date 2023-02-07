@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Activity;
 use App\Audit;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BirthdaysResource;
@@ -78,6 +79,8 @@ class DashboardController extends Controller
             'active_employees' => count($active_employees),
             'birthdays' => new BirthdaysResource($birthdays),
             'audits' => Audit::with(['user'])->latest('created_at')->take(15)->get(),
+            'announcements' => Activity::whereType('announcement')->latest('created_at')->take(5)->get(),
+            'events' => Activity::whereType('event')->whereDate('time', '>=', now())->latest('time')->take(5)->get(),
         ];
 
         return $data;

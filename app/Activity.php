@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Webpatser\Uuid\Uuid;
 
 class Activity extends Model
 {
@@ -30,7 +31,7 @@ class Activity extends Model
         parent::boot();
 
         self::creating(function ($model) {
-            $model->id = self::generateUuid();
+            $model->id = Uuid::generate()->string;
         });
     }
 

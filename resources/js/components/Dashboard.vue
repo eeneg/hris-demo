@@ -89,61 +89,20 @@
 						<!-- /.card-header -->
 						<div class="card-body">
 							<ul class="todo-list ui-sortable" data-widget="todo-list">
-								<li>
+								<li v-for="announcement in data_set.announcements">
 									<!-- drag handle -->
-									<span class="handle ui-sortable-handle">
-										<i class="fas fa-bullhorn"></i>
-									</span>
-									<span class="text">Monday Convocation will be held at Capitol Lobby.</span>
-									<!-- Emphasis label -->
-									<small class="badge badge-danger">
-										<i class="far fa-clock"></i> 2 mins </small>
-								</li>
-								<li>
-									<!-- drag handle -->
-									<span class="handle ui-sortable-handle">
-										<i class="fas fa-bullhorn"></i>
-									</span>
-									<span class="text">Your announcement here!</span>
-									<!-- Emphasis label -->
-									<small class="badge badge-danger">
-										<i class="far fa-clock"></i> 2 mins </small>
-								</li>
-								<li>
-									<!-- drag handle -->
-									<span class="handle ui-sortable-handle">
-										<i class="fas fa-bullhorn"></i>
-									</span>
-									<span class="text">Your announcement here!</span>
-									<!-- Emphasis label -->
-									<small class="badge badge-warning">
-										<i class="far fa-clock"></i> 2 mins </small>
-								</li>
-								<li>
-									<!-- drag handle -->
-									<span class="handle ui-sortable-handle">
-										<i class="fas fa-bullhorn"></i>
-									</span>
-									<span class="text">Your announcement here!</span>
-									<!-- Emphasis label -->
-									<small class="badge badge-primary">
-										<i class="far fa-clock"></i> 2 mins </small>
-								</li>
-								<li>
-									<!-- drag handle -->
-									<span class="handle ui-sortable-handle">
-										<i class="fas fa-bullhorn"></i>
-									</span>
-									<span class="text">Your announcement here!</span>
-									<!-- Emphasis label -->
-									<small class="badge badge-success">
-										<i class="far fa-clock"></i> 2 mins </small>
+									<a :href="'activities-edit?id=' + announcement.id">
+										<span class="handle ui-sortable-handle">
+											<i class="fas fa-bullhorn"></i>
+										</span>
+										<div class="text"> {{ announcement.title }} </div>
+									</a>
 								</li>
 							</ul>
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer clearfix">
-							<a href="javascript:void(0)" class="uppercase float-right">View All Announcement</a>
+							<a href="/announcements" class="uppercase float-right">View All Announcement</a>
 						</div>
 					</div>
 				</section>
@@ -159,34 +118,24 @@
 							</div>
 						</div>
 						<div class="card-body ">
-							<div class="widget-49">
-								<div class="widget-49-title-wrapper">
-									<div class="widget-49-date-primary">
-										<span class="widget-49-date-day">09</span>
-										<span class="widget-49-date-month">apr</span>
-									</div>
-									<div class="widget-49-meeting-info">
-										<span class="widget-49-pro-title">Awarding Ceremony for Retiree</span>
-										<span class="widget-49-meeting-time">8:00 AM - Coliseum</span>
-									</div>
-								</div>
-							</div>
-							<hr>
-							<div class="widget-49">
-								<div class="widget-49-title-wrapper">
-									<div class="widget-49-date-success">
-										<span class="widget-49-date-day">20</span>
-										<span class="widget-49-date-month">apr</span>
-									</div>
-									<div class="widget-49-meeting-info">
-										<span class="widget-49-pro-title">Awarding Ceremony for Retiree</span>
-										<span class="widget-49-meeting-time">8:00 AM - Coliseum</span>
+							<template v-for="(event, i) in data_set.events">
+								<div class="widget-49">
+									<div class="widget-49-title-wrapper">
+										<div class="widget-49-date-primary">
+											<span class="widget-49-date-day">{{ moment(event.time).format('DD') }}</span>
+											<span class="widget-49-date-month">{{ moment(event.time).format('MMM') }}</span>
+										</div>
+										<div class="widget-49-meeting-info">
+											<span class="widget-49-pro-title">{{ event.title }}</span>
+											<span class="widget-49-meeting-time text-monospace">{{ `${moment(event.time).format('LT')} — ${event.info.substring(0,30)}` }}</span>
+										</div>
 									</div>
 								</div>
-							</div>
+								<hr v-if="i !== data_set.events.length - 1">
+							</template>
 						</div>
 						<div class="card-footer clearfix">
-							<a href="javascript:void(0)" class="uppercase float-right">View All Announcement</a>
+							<a href="/events" class="uppercase float-right">View All Events</a>
 						</div>
 					</div>
 				</section>

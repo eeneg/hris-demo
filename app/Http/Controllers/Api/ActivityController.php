@@ -11,15 +11,24 @@ class ActivityController extends Controller
     public function index(Request $request)
     {
         return Activity::query()
-            ->with('user:name,avatar')
+            ->with('user:id,name,avatar')
+            ->when($request->filled('type'), function ($query) use ($request) {
+                $query->whereType($request->type)
+                    ->when(
+                        $request->type === 'event',
+                        fn ($query) => $query->latest('time')->when($request->filled('upcoming'), fn ($q) => $q->whereDate('time', '>=', now())),
+                        fn ($query) => $query->latest('created_at')
+                    );
+            })
             ->when(
                 $request->filled('query'),
                 fn ($q) => $q->whereHas('user', fn ($q) => $q->whereName($request->query('query')))
                     ->orWhere('title', 'like', '%' . $request->query('query') . '%')
                     ->orWhere('info', 'like', '%' . $request->query('query') . '%')
             )->take(20)
-            ->get()
-            ->map(fn ($activity) => [
+            ->paginate()
+            ->through(fn ($activity) => [
+                'id' => $activity->id,
                 'info' => $activity->info,
                 'time' => $activity->time,
                 'title' => $activity->title,
@@ -28,20 +37,22 @@ class ActivityController extends Controller
                     'name' => $activity->user?->name,
                     'avatar' => $activity->user?->avatar,
                 ],
+                'created_at' => $activity->created_at,
             ]);
     }
 
-    public function store(Request $request, string $type)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:120',
             'info' => 'nullable|string',
-            'time' => 'nullable|date:Y-m-d H:i',
+            'type' => 'required|string|in:announcement,event',
+            'time' =>  'exclude_if:type,announcement|required_if:type,event|date:Y-m-d H:i',
         ]);
 
-        Activity::make($validated)->forceFill(['type' => $type, 'user_id' => $request->user()->id])->save();
-
-        return back();
+        Activity::make($validated)
+            ->forceFill(['type' => $request->type, 'user_id' => $request->user()->id])
+            ->save();
     }
 
     public function show(Activity $activity)
@@ -51,21 +62,15 @@ class ActivityController extends Controller
 
     public function update(Request $request, Activity $activity)
     {
-        $validated = $request->validate([
+        $activity->update($request->validate([
             'title' => 'required|string|max:120',
-            'info' => 'nullable|string',
+            'info' => 'required|string',
             'time' => 'nullable|date:Y-m-d H:i',
-        ]);
-
-        $activity->update($validated);
-
-        return back();
+        ]));
     }
 
     public function destroy(Activity $activity)
     {
         $activity->delete();
-
-        return back();
     }
 }

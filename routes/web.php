@@ -63,10 +63,6 @@ Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
 
-class asd
-{
-}
-
 Route::get('/a/a', function () {
     $month = Carbon::parse('December')->format('F');
 

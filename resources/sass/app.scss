@@ -23,6 +23,12 @@
 
 @import 'themify-icons/themify-icons';
 
+// Quill Editor
+@import "~vue2-editor/dist/vue2-editor.css";
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.bubble.css';
+@import '~quill/dist/quill.snow.css';
+
 .router-link-active {
     background-color: #1e8cad !important;
     color: white !important;
@@ -675,3 +681,12 @@ a:hover{
   .nosi_nosa_preview h5 {
     font-size: 1rem !important;
   }
+
+  .readonly .quillWrapper .ql-toolbar.ql-snow {
+    display: none !important;
+  }
+
+  .readonly .quillWrapper .ql-container {
+    border: none !important;
+  }
+
