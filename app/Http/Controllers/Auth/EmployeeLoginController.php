@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\PersonalInformation;
+use App\Plantilla;
+use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class EmployeeLoginController extends Controller
@@ -27,6 +30,9 @@ class EmployeeLoginController extends Controller
             'birthdate' => 'required|exists:personal_informations,birthdate',
         ]);
 
+        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
+
         $barcode = '';
 
         $employee = PersonalInformation::where('firstname', $request->firstname)
@@ -34,6 +40,17 @@ class EmployeeLoginController extends Controller
                         ->where('birthdate', $request->birthdate)
                         ->where('nameextension', $request->nameextension)
                         ->value('id');
+
+        $ePlantilla = PersonalInformation::select('personal_informations.id')
+        ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
+        ->where('personal_informations.id', $employee)
+        ->where('plantilla_contents.plantilla_id', $plantilla->id)
+        ->first();
+
+        if(! $ePlantilla)
+        {
+            return Redirect::back()->withErrors(['msg' => 'Employee not in Plantilla'])->withInput();
+        }
 
         if (! $employee) {
             return Redirect::back()->withErrors(['msg' => 'Credentials not found'])->withInput();
