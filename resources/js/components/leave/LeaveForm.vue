@@ -209,11 +209,11 @@
                     'personal_information_id_7c': null,
                     'personal_information_id_7d': null,
                     'recommendation_officer_id': null,
-                    'noted_by_id': '',
-                    'governor_id': '',
+                    'noted_by_id': null,
+                    'governor_id': null,
                     'date_of_filing': moment(new Date()).format('YYYY-MM-DD'),
-                    'leave_type_id': '',
-                    'working_days': '',
+                    'leave_type_id': null,
+                    'working_days': null,
                     'spent': 'Within the Philippines',
                     'spent_spec': '',
                     'from': moment(new Date()).format('YYYY-MM-DD'),
@@ -225,10 +225,10 @@
                     'vacation_less': 0.0,
                     'sick_less': 0.0,
                     'status': '',
-                    'stage_status': '',
-                    'recommendation_status': '',
-                    'recommendation_remark_approved': '',
-                    'recommendation_remark_disapproved': '',
+                    'stage_status': null,
+                    'recommendation_status': null,
+                    'recommendation_remark_approved': null,
+                    'recommendation_remark_disapproved': null,
                 }),
                 options: {
                     format: 'yyyy-MM-DD',
@@ -280,7 +280,7 @@
             },
             submitForm() {
 
-                 if(this.form.recommendation_status != '' && this.form.recommendation_officer_id == '')
+                 if(this.form.recommendation_status != null && this.form.recommendation_officer_id == null)
                 {
 
                     Swal.fire(
@@ -289,15 +289,15 @@
                         'error'
                     )
 
-                }else if(this.form.recommendation_status == '' && this.form.recommendation_officer_id != ''){
+                }else if(this.form.recommendation_status == null && this.form.recommendation_officer_id != null){
 
                     Swal.fire(
                         'Oops...',
                         'Please Approve or Dissaprove Recommendation',
                         'error'
                     )
-
                 }else{
+
                     this.$Progress.start();
                     this.form.personal_information_id_7b = this.form.personal_information_id
                     this.form.personal_information_id_7c = this.form.personal_information_id
