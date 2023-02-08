@@ -108,8 +108,8 @@ export default {
     data() {
         return {
             activities: null,
-            announcements: null,
-            events: null,
+            announcements: {},
+            events: {},
             form: new Form({
                 title: null,
                 type: null,
