@@ -139,7 +139,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div v-if="report_type == 'Employee Names'" class="col-md-6 pr-5">
+                        <div v-if="report_type == 'Employee Names'" class="col-md-6 pr-5">
                             <h3>Options</h3>
                             <div class="row">
                                 <div class="col-6">
@@ -152,7 +152,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
                     </div>
 
@@ -251,6 +251,9 @@
                         return content.name != 'VACANT'
                             && (this.department != 'All' ? content.office == this.department : true);
                     });
+                    if (this.employee_names_report.sort == 'Surname') {
+                        filtered = _.sortBy(filtered, [function(o) { return o.name; }]);
+                    }
                 }
                 
                 this.print_data = filtered

@@ -29,7 +29,7 @@ class PlantillaContentReportsResource extends ResourceCollection
                 'office' => $item->position ? $item->position->department->address : '',
                 'position' => $item->position ? $item->position->title : '',
                 'position_id' => $item->position ? $item->position->id : '',
-                'name' => $item->personalinformation ? $item->personalinformation->firstname.' '.$item->personalinformation->middlename.' '.$item->personalinformation->surname.' '.$item->personalinformation->nameextentsion : 'VACANT',
+                'name' => $item->personalinformation ? $item->personalinformation->surname.', '.$item->personalinformation->firstname.' '.$item->personalinformation->nameextension.' '.$item->personalinformation->middlename : 'VACANT',
                 'salaryauthorized' => $item->salaryauthorized,
                 'salaryproposed' => $item->salaryproposed,
             ];
