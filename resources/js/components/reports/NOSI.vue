@@ -31,18 +31,18 @@
                     <div class="row mt-4">
                         <div class="col-12 text-justify">
                             <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>.
+                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | addOneDay }}</u>.
                             </h5>
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-8">
                             <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ date_of_appointment | myDate }}</u></h5>
+                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | myDate }}</u></h5>
                             <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
                             <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
                             <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ date_of_effectivity | myDate }}</u></h5>
+                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | addOneDay }}</u></h5>
                         </div>
                         <div class="col-3 text-right">
                             <h5 class="m-0" style="color: white;">.</h5>
@@ -85,6 +85,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Settings -->
             <div class="card card-primary card-outline nosi_card">
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">NOSI Report</h2>
@@ -113,7 +115,7 @@
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label class="m-0" style="font-weight: normal;"><b>Date </b>(Last day of current step)</label>
                                         <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Based on date of original appointment / last promotion</span>
-                                        <input class="form-control form-control-border border-width-2" type="date" v-model="date_of_appointment">
+                                        <input class="form-control form-control-border border-width-2" type="date" v-model="employee.appointment_date">
                                     </div>
                                 </div>
                             </div>
@@ -181,18 +183,18 @@
                             <div class="row mt-4">
                                 <div class="col-12 text-justify">
                                     <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>.
+                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | addOneDay }}</u>.
                                     </h5>
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-8">
                                     <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ date_of_appointment | myDate }}</u></h5>
+                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | myDate }}</u></h5>
                                     <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
                                     <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
                                     <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ date_of_effectivity | myDate }}</u></h5>
+                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | addOneDay }}</u></h5>
                                 </div>
                                 <div class="col-3 text-right">
                                     <h5 class="m-0" style="color: white;">.</h5>
@@ -254,12 +256,14 @@
 </style>
 
 <script>
+    import moment from 'moment';
+
     export default {
         data() {
             return {
                 date_printed: moment(new Date()).format('YYYY-MM-DD'),
-                date_of_appointment: moment(new Date()).format('YYYY-MM-DD'),
-                date_of_effectivity: moment(this.date_of_appointment).add(1, "days"),
+                // date_of_appointment: moment(new Date()).format('YYYY-MM-DD'),
+                // date_of_effectivity: moment(this.date_of_appointment).add(1, "days"),
                 employee: {},
                 plantilla_content: [],
                 nosi_year: moment(new Date()).format('YYYY'),
@@ -269,10 +273,10 @@
             }
         },
         watch: {
-            employee(newData) {
-                this.date_of_appointment = newData.last_promotion ? moment(newData.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(newData.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
-                this.date_of_effectivity = moment(this.date_of_appointment).add(1, "days")
-            }
+            // employee(newData) {
+            //     this.date_of_appointment = newData.last_promotion ? moment(newData.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(newData.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
+            //     this.date_of_effectivity = moment(this.date_of_appointment).add(1, "days")
+            // }
         },
         methods: {
             print_report() {
@@ -309,18 +313,10 @@
             lookup() {
                 this.lookup_data = []
                 this.plantilla_content.forEach(content => {
-                    if (content.last_promotion && content.salaryproposed) {
-                        if (this.nosi_year > moment(content.last_promotion).format('YYYY')) {
-                            var divisible = (this.nosi_year - moment(content.last_promotion).format('YYYY')) % 3 == 0;
-                            var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.last_promotion).format('YYYY')) / 3);
-                            if (included && divisible) {
-                                this.lookup_data.push(content)
-                            }
-                        }
-                    } else if (content.original_appointment && content.salaryproposed) {
-                        if (this.nosi_year > moment(content.original_appointment).format('YYYY')) {
-                            var divisible = (this.nosi_year - moment(content.original_appointment).format('YYYY')) % 3 == 0;
-                            var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.original_appointment).format('YYYY')) / 3);
+                    if (content.appointment_date && content.salaryproposed) {
+                        if (this.nosi_year > moment(content.appointment_date).format('YYYY')) {
+                            var divisible = (this.nosi_year - moment(content.appointment_date).format('YYYY')) % 3 == 0;
+                            var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.appointment_date).format('YYYY')) / 3);
                             if (included && divisible) {
                                 this.lookup_data.push(content)
                             }

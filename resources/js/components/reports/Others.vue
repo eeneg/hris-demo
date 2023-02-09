@@ -20,38 +20,70 @@
                             <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
                         </div>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-12">
-                            <h3 class="m-0"><b>Salary Grade:</b> {{ salary_grades_report.salary_grade }}</h3>
-                            <h3 class="m-0"><b>Status:</b> <span class="badge bg-primary mr-2" v-if="salary_grades_report.status_occupied">OCCUPIED</span><span class="badge bg-success" v-if="salary_grades_report.status_vacant">VACANT</span></h3>
-                            <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
-                            <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+
+                    <!-- Reports -->
+                    <div v-if="report_type == 'Salary Grades'">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <h3 class="m-0"><b>Salary Grade:</b> {{ salary_grades_report.salary_grade }}</h3>
+                                <h3 class="m-0"><b>Status:</b> <span class="badge bg-primary mr-2" v-if="salary_grades_report.status_occupied">OCCUPIED</span><span class="badge bg-success" v-if="salary_grades_report.status_vacant">VACANT</span></h3>
+                                <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
+                                <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>Position</th>
+                                            <th>SG</th>
+                                            <th>Salary</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in print_data" :key="index">
+                                            <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
+                                            <td class="align-middle pt-1 pb-1">
+                                                {{ item.position }}
+                                                <small class="d-block">{{ item.office }}</small>
+                                                <small class="d-block font-weight-bold" :class="item.name == 'VACANT' ? 'text-success' : 'text-primary'">{{ item.name }}</small>
+                                            </td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.grade }}</td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.amount | amount }} / month</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <table class="table table-bordered m-0">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>Position</th>
-                                        <th>SG</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(item, index) in print_data" :key="index">
-                                        <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
-                                        <td class="align-middle pt-1 pb-1">
-                                            {{ item.position }}
-                                            <small class="d-block">{{ item.office }}</small>
-                                            <small class="d-block font-weight-bold" :class="item.name == 'VACANT' ? 'text-success' : 'text-primary'">{{ item.name }}</small>
-                                        </td>
-                                        <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.grade }}</td>
-                                        <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.amount | amount }} / month</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div v-if="report_type == 'Employee Names'">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
+                                <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in print_data" :key="index">
+                                            <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.name }}<small class="d-block">{{ item.office }}</small></td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.position }} (SG {{ item.salaryproposed.grade }})</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -72,6 +104,7 @@
                                 <select v-model="report_type" class="form-control form-control-border border-width-2">
                                     <option value="">Select Report</option>
                                     <option value="Salary Grades">Positions with specific salary grade/s</option>
+                                    <option value="Employee Names">Names & Position</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -106,6 +139,20 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- <div v-if="report_type == 'Employee Names'" class="col-md-6 pr-5">
+                            <h3>Options</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold;margin: 0;">Sort by</label>
+                                        <select v-model="employee_names_report.sort" class="form-control form-control-border border-width-2">
+                                            <option value="Surname">Surname</option>
+                                            <option value="Item No.">Item No.</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
 
                     </div>
 
@@ -147,6 +194,9 @@
                     salary_grade: '',
                     status_vacant: true,
                     status_occupied: true
+                },
+                employee_names_report: {
+                    sort: 'Surname'
                 }
             }
         },
@@ -193,6 +243,13 @@
                                 && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
                                 && (this.department != 'All' ? content.office == this.department : true);
                         }
+                    });
+                }
+
+                if (this.report_type == 'Employee Names') {
+                    filtered = _.filter(this.plantilla_content, (content) => { 
+                        return content.name != 'VACANT'
+                            && (this.department != 'All' ? content.office == this.department : true);
                     });
                 }
                 
