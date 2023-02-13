@@ -9,16 +9,16 @@
                 <div class="card-header p-2">
                     <ul class="nav nav-pills">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#announcements" data-toggle="tab">Announcements</a>
+                            <a :class="this.$route.params.tab == 'announcements' || !this.$route.params.tab ? 'active' : ''" class="nav-link" href="#announcements" data-toggle="tab">Announcements</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#events" data-toggle="tab">Events</a>
+                            <a :class="this.$route.params.tab == 'events' ? 'active' : ''" class="nav-link" href="#events" data-toggle="tab">Events</a>
                         </li>
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="announcements">
+                        <div :class="this.$route.params.tab == 'announcements' || !this.$route.params.tab ? 'active' : ''"  class="tab-pane" id="announcements">
                             <div v-for="announcement in announcements?.data" class="post">
                                 <div class="user-block" style="margin-bottom:0;">
                                     <img class="img-circle" :src="getAvatar(announcement.user.avatar)" alt="user image">
@@ -48,7 +48,7 @@
                                 <span style="margin-left:10px;display:flex;place-content:center;">Showing {{ announcements?.from }} to {{ announcements?.to }} of {{ announcements?.total }} announcements | Page {{ announcements?.current_page }} of {{ announcements?.last_page }}</span>
                             </div>
                         </div>
-                        <div class="tab-pane" id="events">
+                        <div :class="this.$route.params.tab == 'events' ? 'active' : ''" class="tab-pane" id="events">
                             <div class="timeline">
                                 <template v-for="(events, date) in activities">
                                     <div class="time-label">

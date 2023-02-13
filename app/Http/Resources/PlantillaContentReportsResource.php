@@ -18,6 +18,7 @@ class PlantillaContentReportsResource extends ResourceCollection
             return [
                 'id' => $item->id,
                 'personal_information_id' => $item->personal_information_id,
+                'sex' => $item->personalinformation ? $item->personalinformation->sex : '',
                 'old_number' => $item->old_number,
                 'new_number' => $item->new_number,
                 'order_number' => $item->order_number,

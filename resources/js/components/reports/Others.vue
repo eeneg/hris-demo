@@ -62,6 +62,7 @@
                         <div class="row mb-2">
                             <div class="col-12">
                                 <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
+                                <h3 class="m-0"><b>Gender:</b> {{ employee_names_report.gender }}</h3>
                                 <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
                             </div>
                         </div>
@@ -79,7 +80,10 @@
                                         <tr v-for="(item, index) in print_data" :key="index">
                                             <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
                                             <td class="align-middle pt-1 pb-1">{{ item.name }}<small class="d-block">{{ item.office }}</small></td>
-                                            <td class="align-middle pt-1 pb-1">{{ item.position }} (SG {{ item.salaryproposed.grade }})</td>
+                                            <td class="align-middle pt-1 pb-1">
+                                                {{ item.position }} (SG {{ item.salaryproposed.grade }}-{{ item.salaryproposed.step }})
+                                                <small class="d-block m-0">{{ item.salaryproposed.amount | amount }} / month</small>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -151,6 +155,16 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold;margin: 0;">Gender</label>
+                                        <select v-model="employee_names_report.gender" class="form-control form-control-border border-width-2">
+                                            <option value="All">All</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -196,7 +210,8 @@
                     status_occupied: true
                 },
                 employee_names_report: {
-                    sort: 'Surname'
+                    sort: 'Surname',
+                    gender: 'All'
                 }
             }
         },
@@ -249,7 +264,8 @@
                 if (this.report_type == 'Employee Names') {
                     filtered = _.filter(this.plantilla_content, (content) => { 
                         return content.name != 'VACANT'
-                            && (this.department != 'All' ? content.office == this.department : true);
+                            && (this.department != 'All' ? content.office == this.department : true)
+                            && (this.employee_names_report.gender == 'All' ? true : (content.sex == this.employee_names_report.gender));
                     });
                     if (this.employee_names_report.sort == 'Surname') {
                         filtered = _.sortBy(filtered, [function(o) { return o.name; }]);

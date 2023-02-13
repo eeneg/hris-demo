@@ -102,7 +102,7 @@
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer clearfix">
-							<a href="/announcements" class="uppercase float-right">View All Announcement</a>
+							<router-link :to="{ name: 'activities', params: { tab: 'announcements'} }" class="uppercase float-right">View All Announcement</router-link>
 						</div>
 					</div>
 				</section>
@@ -135,7 +135,7 @@
 							</template>
 						</div>
 						<div class="card-footer clearfix">
-							<a href="/events" class="uppercase float-right">View All Events</a>
+							<router-link :to="{ name: 'activities', params: { tab: 'events'} }" class="uppercase float-right">View All Events</router-link>
 						</div>
 					</div>
 				</section>
@@ -217,7 +217,7 @@
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer clearfix">
-							<a href="javascript:void(0)" class="uppercase float-right">View All Activities</a>
+							<router-link to="/audits" class="uppercase float-right">View All Activities</router-link>
 						</div>
 						<!-- /.card-footer -->
 					</div>
