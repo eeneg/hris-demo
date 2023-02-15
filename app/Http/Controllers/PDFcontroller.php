@@ -103,13 +103,13 @@ class PDFcontroller extends Controller
                 ->where('plantilla_contents.plantilla_id', $plantilla->id)
                 ->select('plantilla_contents.*')
                 ->orderBy('plantilla_depts.order_number')->orderBy('plantilla_contents.order_number')->get();
-            
+
             $data = [
                 'plantillacontents' => $allplantillacontents,
                 // 'plantillacontents' => json_decode((new CSCResource($allplantillacontents))->toJson(), true),
             ];
 
-            
+
 
             $pdf = PDF::loadView('reports/plantilla_csc', $data)
                 ->setPaper([0, 0, 952, 1456], 'landscape')
@@ -278,8 +278,8 @@ class PDFcontroller extends Controller
 
         $pdf = PDF::loadView('reports/salary-sched', compact('salarysched', 'tranche'));
 
-        Storage::put('public/salary_sched_report/'.$tranche.'.pdf', $pdf->output());
+        Storage::put('public/salary_sched_report/'. \Str::kebab($tranche) .'.pdf', $pdf->output());
 
-        return ['title' => $tranche.'.pdf'];
+        return ['title' => \Str::kebab($tranche) .'.pdf'];
     }
 }
