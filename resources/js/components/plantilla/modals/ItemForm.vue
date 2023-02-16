@@ -117,6 +117,16 @@
                                     <input v-model="form.order_number" class="form-control form-control-border border-width-2" step="1" type="number" name="order_number" placeholder="Order number" required>
                                 </div>
                             </div>
+                            <div class="col-sm-3">
+                                <div class="form-group" style="margin-bottom: 0.3rem;">
+                                    <label style="font-weight: bold; margin: 0;">CSC Level</label>
+                                    <v-select class="form-control form-control-border border-width-2" v-model="form.csc_level" :options="csc_level" label="label" :reduce="level => level.value" placeholder="Select Level" req>
+                                        <template #search="{attributes, events}">
+                                            <input class="vs__search" :required="!form.csc_level" v-bind="attributes" v-on="events" />
+                                        </template>
+                                    </v-select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer modal-border" style="display: flow-root;padding: 6px 10px;">
@@ -138,6 +148,7 @@
                 loading: false,
                 level: ['Key Positions', 'Administrative Positions', 'Support to Key Positions', 'Technical Positions'],
                 appointment_status: ['Permanent', 'Elected', 'Temporary', 'Co-terminous', 'Presidential Appointee'],
+                csc_level: [ {label: 'First Level', value: 1}, {label: 'Second Level', value: 2} ],
                 selected_employee: {},
                 form: new Form( {
                     'id': '',
@@ -154,7 +165,8 @@
                     'last_promotion': '',
                     'appointment_status': '',
                     'order_number': '',
-                    'department_id': ''
+                    'department_id': '',
+                    'csc_level': ''
                 }),
             }
         },
@@ -197,6 +209,7 @@
                     this.form.order_number = planCont.order_number;
                     this.form.department_id = newData.department.id;
                     this.form.id = planCont.id;
+                    this.form.csc_level = planCont.csc_level;
                 } else {
                     this.form.order_number = newData.order_number + 1;
                 }

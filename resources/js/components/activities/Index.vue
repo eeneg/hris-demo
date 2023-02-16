@@ -4,7 +4,7 @@
             <not-authorized></not-authorized>
         </div>
 
-        <div v-else class="col-md-8 offset-md-2">
+        <div v-else class="col-md-12">
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills">
@@ -45,7 +45,7 @@
                                         <span slot="next-nav">Next &gt;</span>
                                     </pagination>
                                 </div>
-                                <span style="margin-left:10px;display:flex;place-content:center;">Showing {{ announcements?.from }} to {{ announcements?.to }} of {{ announcements?.total }} announcements | Page {{ announcements?.current_page }} of {{ announcements?.last_page }}</span>
+                                <span style="margin-left:10px;display:flex;place-content:center;">Showing {{ announcements.meta?.from }} to {{ announcements.meta?.to }} of {{ announcements.meta?.total }} announcements | Page {{ announcements.meta?.current_page }} of {{ announcements.meta?.last_page }}</span>
                             </div>
                         </div>
                         <div :class="this.$route.params.tab == 'events' ? 'active' : ''" class="tab-pane" id="events">
@@ -58,7 +58,7 @@
                                         <i class="fas fa-calendar-day bg-blue"></i>
                                         <div class="timeline-item">
                                             <span class="time">
-                                                Added <i class="fas fa-clock"></i> {{ moment(event.created_at).format('lll') }}
+                                                Date/Time: <i class="fas fa-clock"></i> {{ moment(event.time).format('lll') }}
                                             </span>
                                             <h3 class="timeline-header">
                                                 <a>{{ event.title }}</a> by {{ event.user.name }}
@@ -85,7 +85,7 @@
                                         <span slot="next-nav">Next &gt;</span>
                                     </pagination>
                                 </div>
-                                <span style="margin-left:10px;display:flex;place-content:center;">Showing {{ events?.from }} to {{ events?.to }} of {{ events?.total }} events | Page {{ events?.current_page }} of {{ events?.last_page }}</span>
+                                <span style="margin-left:10px;display:flex;place-content:center;">Showing {{ events.meta?.from }} to {{ events.meta?.to }} of {{ events.meta?.total }} events | Page {{ events.meta?.current_page }} of {{ events.meta?.last_page }}</span>
                             </div>
                         </div>
                     </div>

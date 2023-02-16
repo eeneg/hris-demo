@@ -8,6 +8,8 @@ use App\Http\Resources\EmployeeAppointmentListResource;
 use App\Http\Resources\ReappointmentResource;
 use App\PersonalInformation;
 use App\Reappointment;
+use App\Setting;
+use App\Plantilla;
 use Illuminate\Http\Request;
 
 class ReappointmentController extends Controller
@@ -19,6 +21,9 @@ class ReappointmentController extends Controller
      */
     public function index()
     {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
         $reappointment = Reappointment::select('reappointments.*')
                             ->join('personal_informations', 'reappointments.personal_information_id', 'personal_informations.id')
                             ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
@@ -35,6 +40,7 @@ class ReappointmentController extends Controller
                                 'assigned_to_table.title as dept_to',
                                 'reappointments.*'
                             )
+                            ->where('plantilla_contents.plantilla_id',$plantilla->id)
                             ->orderBy('reappointments.created_at', 'desc')
                             ->paginate(20);
 

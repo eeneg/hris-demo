@@ -228,26 +228,26 @@
 						</thead>
 						<tbody style="margin-bottom: 200px;">
                             @foreach ($plantillacontents as $content)
-                            {{-- <tr>
+                            <tr>
 								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content['item_no'] }} </p> </td>
 								<td style="text-align: left; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-left: 10px;">{{ $content['position'] }} </p> </td>
 								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content['salary_auth_grade'] }} </p> </td>
 								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-right: 10px;">{{ $content['salary_auth_amount'] }} </p> </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content['salary_prop_grade'] }} </p> </td>
-								<td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-right: 10px;">{{ $content['salary_prop_amount'] }} </p> </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content['salary_prop_step'] }} </p> </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>11 </p> </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> P</p>  </td>
-								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['level'] }} </p> </td>
-								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;"> {{ $content['surname'] }} </p></td>
-								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;"> {{ $content['firstname'] }} </p> </td>
-								<td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;"> {{ $content['middlename'] }}</p>  </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['birthdate'] }} </p> </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['original_appointment'] }} </p> </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['last_promotion'] }} </p> </td>
-								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none;"><p> {{ $content['appointment_status'] }} </p> </td>
-							</tr> --}}
-                            <tr>
+								{{-- <td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content['salary_prop_grade'] }} </p> </td> --}}
+								{{-- <td style="text-align: right; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-right: 10px;">{{ $content['salary_prop_amount'] }} </p> </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{{ $content['salary_prop_step'] }} </p> </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>11 </p> </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> P</p>  </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['level'] }} </p> </td> --}}
+								{{-- <td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;"> {{ $content['surname'] }} </p></td> --}}
+								{{-- <td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;"> {{ $content['firstname'] }} </p> </td> --}}
+								{{-- <td style="text-align: left; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p style="margin-left: 10px;"> {{ $content['middlename'] }}</p>  </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['birthdate'] }} </p> </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['original_appointment'] }} </p> </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content['last_promotion'] }} </p> </td> --}}
+								{{-- <td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none;"><p> {{ $content['appointment_status'] }} </p> </td> --}}
+							</tr>
+                            {{-- <tr>
 								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{!! $content->new_number ? $content->new_number : $content->old_number !!} </p> </td>
 								<td style="text-align: left; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p style="margin-left: 10px;">{{ $content->position->title }} </p> </td>
 								<td style="text-align: center; font-size: 20px; border: solid black 2px; border-top: none; border-right: none;"> <p>{!! $content->salaryauthorized ? $content->salaryauthorized->grade : '' !!} </p> </td>
@@ -267,7 +267,7 @@
 								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content->original_appointment }} </p> </td>
 								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none; border-right: none;"><p> {{ $content->last_promotion }} </p> </td>
 								<td style="text-align: center; font-size: 20px; font-weight: bold; border: solid black 2px; border-top: none;"><p> {!! substr($content->appointment_status,0,1) !!} </p> </td>
-							</tr>
+							</tr> --}}
                             @endforeach
 						</tbody>
 					</table>

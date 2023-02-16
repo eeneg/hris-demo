@@ -182,6 +182,7 @@ class PlantillaContentController extends Controller
             'last_promotion' => $request->last_promotion,
             'appointment_status' => $request->appointment_status,
             'order_number' => $request->order_number,
+            'csc_level' => $request->csc_level
         ]);
 
         return $new_plantilla_content;
@@ -313,6 +314,7 @@ class PlantillaContentController extends Controller
         $plantillacontent->last_promotion = $request->last_promotion;
         $plantillacontent->appointment_status = $request->appointment_status;
         $plantillacontent->order_number = $request->order_number;
+        $plantillacontent->csc_level = $request->csc_level;
 
         $plantillacontent->save();
 

@@ -94,7 +94,8 @@ class PDFcontroller extends Controller
 
             $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
             $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-            $allplantillacontents = PlantillaContent::leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            $allplantillacontents = PlantillaContent::with('personalinformation')
+                ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
                 ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
                 ->leftJoin('plantilla_depts', function ($join) {
                     $join->on('departments.id', '=', 'plantilla_depts.department_id');
@@ -105,8 +106,8 @@ class PDFcontroller extends Controller
                 ->orderBy('plantilla_depts.order_number')->orderBy('plantilla_contents.order_number')->get();
 
             $data = [
-                'plantillacontents' => $allplantillacontents,
-                // 'plantillacontents' => json_decode((new CSCResource($allplantillacontents))->toJson(), true),
+                // 'plantillacontents' => $allplantillacontents,
+                'plantillacontents' => json_decode((new CSCResource($allplantillacontents))->toJson(), true),
             ];
 
 

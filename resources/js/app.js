@@ -149,6 +149,10 @@ Vue.filter('addOneDay', function(value) {
     return moment(value).add(1, "days").format('LL');
 })
 
+Vue.filter('moment_filter', function(value, format) {
+    return moment(value).format(format);
+})
+
 Vue.filter('amount', function(value){
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 })

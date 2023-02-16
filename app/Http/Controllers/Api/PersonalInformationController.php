@@ -12,6 +12,7 @@ use App\Plantilla;
 use App\Reappointment;
 use App\Setting;
 use App\UserAssignment;
+use App\PlantillaContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -228,7 +229,12 @@ class PersonalInformationController extends Controller
 
     public function employees(Request $request)
     {
-        $employees = PersonalInformation::orderBy('surname', 'ASC')->get();
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        $employees = PersonalInformation::whereHas('plantillacontents', function ($query) use ($plantilla) {
+            $query->where('plantilla_id', $plantilla->id);
+        })->orderBy('surname')->get();
 
         return new EmployeeAppointmentListResource($employees);
     }

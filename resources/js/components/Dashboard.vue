@@ -18,8 +18,7 @@
 						<div class="icon">
 							<i class="ion ion-bag"></i>
 						</div>
-						<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i>
-						</a>
+						<router-link to="/plantilla" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -35,8 +34,8 @@
 						<div class="icon">
 							<i class="ion ion-stats-bars"></i>
 						</div>
-						<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i>
-						</a>
+						<router-link to="/plantilla" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i>
+						</router-link>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -50,8 +49,8 @@
 						<div class="icon">
 							<i class="ion ion-person-add"></i>
 						</div>
-						<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i>
-						</a>
+						<router-link to="/appointments" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i>
+						</router-link>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -59,14 +58,14 @@
 					<!-- small box -->
 					<div class="small-box bg-danger">
 						<div class="inner">
-							<h3>65</h3>
+							<h3>{{ data_set.retired_employees }}</h3>
 							<p>Retired Employees</p>
 						</div>
 						<div class="icon">
 							<i class="ion ion-pie-graph"></i>
 						</div>
-						<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i>
-						</a>
+						<router-link to="/employees" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i>
+						</router-link>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -122,12 +121,12 @@
 								<div class="widget-49">
 									<div class="widget-49-title-wrapper">
 										<div class="widget-49-date-primary">
-											<span class="widget-49-date-day">{{ moment(event.time).format('DD') }}</span>
-											<span class="widget-49-date-month">{{ moment(event.time).format('MMM') }}</span>
+											<span class="widget-49-date-day">{{ event.time | moment_filter('DD') }}</span>
+											<span class="widget-49-date-month">{{ event.time | moment_filter('MMM') }}</span>
 										</div>
 										<div class="widget-49-meeting-info">
 											<span class="widget-49-pro-title">{{ event.title }}</span>
-											<span class="widget-49-meeting-time text-monospace">{{ `${moment(event.time).format('LT')} — ${event.info.substring(0,30)}` }}</span>
+											<span class="widget-49-meeting-time text-monospace">{{ event.time | moment_filter('LT') }} - {{ event.info.substring(0,30) }}</span>
 										</div>
 									</div>
 								</div>
@@ -207,7 +206,7 @@
 												{{ audit.ip_address }}
 											</td>
 											<td class="text-monospace">
-												{{ moment(audit.created_at).format('llll') }}
+												{{ audit.created_at | moment_filter('llll') }}
 											</td>
 										</tr>
 									</tbody>
@@ -327,7 +326,6 @@
 	</section>
 </template>
 <script>
-	import moment from 'moment';
 
 	export default {
 		data() {
@@ -338,7 +336,8 @@
 					birthdays: [],
                     onLeaveEmployees: [],
                     newlyAppointedEmployees: [],
-                    newlyAppointedEmployeesCount: 0
+                    newlyAppointedEmployeesCount: 0,
+                    retired_employees: 0
 				}
 			}
 		},

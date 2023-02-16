@@ -14,6 +14,7 @@ use App\Setting;
 use App\Appointment;
 use App\Position;
 use App\Department;
+use App\PersonalInformation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,8 @@ class DashboardController extends Controller
         $plantilla_contents = PlantillaContent::where('plantilla_id', $plantilla->id)->get();
         $vacant_positions = $plantilla_contents->whereNull('personal_information_id');
         $active_employees = $plantilla_contents->whereNotNull('personal_information_id');
+        $retired_employees = PersonalInformation::where('status', 'Retired')->get();
+
         $birthdays = PlantillaContent::where('plantilla_id', $plantilla->id)->whereNotNull('personal_information_id')
             ->with('personalinformation')
             ->whereHas('personalinformation', function ($q) {
@@ -77,6 +80,7 @@ class DashboardController extends Controller
             'onLeaveEmployees' => $onLeaveEmployees,
             'vacant_positions' => count($vacant_positions),
             'active_employees' => count($active_employees),
+            'retired_employees' => count($retired_employees),
             'birthdays' => new BirthdaysResource($birthdays),
             'audits' => Audit::with(['user'])->latest('created_at')->take(15)->get(),
             'announcements' => Activity::whereType('announcement')->latest('created_at')->take(5)->get(),
