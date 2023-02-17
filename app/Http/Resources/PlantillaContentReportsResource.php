@@ -33,6 +33,7 @@ class PlantillaContentReportsResource extends ResourceCollection
                 'name' => $item->personalinformation ? $item->personalinformation->surname.', '.$item->personalinformation->firstname.' '.$item->personalinformation->nameextension.' '.$item->personalinformation->middlename : 'VACANT',
                 'salaryauthorized' => $item->salaryauthorized,
                 'salaryproposed' => $item->salaryproposed,
+                'csc_level' => $item->csc_level
             ];
         });
     }

@@ -60,10 +60,13 @@
                     </div>
                     <div v-if="report_type == 'Employee Names'">
                         <div class="row mb-2">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
                                 <h3 class="m-0"><b>Gender:</b> {{ employee_names_report.gender }}</h3>
                                 <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="m-0"><b>Eligibility:</b> {{ employee_names_report.csc_level }}</h3>
                             </div>
                         </div>
                         <div class="row">
@@ -166,6 +169,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold;margin: 0;">CSC Level</label>
+                                        <select v-model="employee_names_report.csc_level" class="form-control form-control-border border-width-2">
+                                            <option value="All">All</option>
+                                            <option value="1">First Level</option>
+                                            <option value="2">Second Level</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -211,7 +226,8 @@
                 },
                 employee_names_report: {
                     sort: 'Surname',
-                    gender: 'All'
+                    gender: 'All',
+                    csc_level: 'All'
                 }
             }
         },
@@ -265,7 +281,8 @@
                     filtered = _.filter(this.plantilla_content, (content) => { 
                         return content.name != 'VACANT'
                             && (this.department != 'All' ? content.office == this.department : true)
-                            && (this.employee_names_report.gender == 'All' ? true : (content.sex == this.employee_names_report.gender));
+                            && (this.employee_names_report.gender == 'All' ? true : (content.sex == this.employee_names_report.gender))
+                            && (this.employee_names_report.csc_level != 'All' ? content.csc_level == this.employee_names_report.csc_level : true);
                     });
                     if (this.employee_names_report.sort == 'Surname') {
                         filtered = _.sortBy(filtered, [function(o) { return o.name; }]);
