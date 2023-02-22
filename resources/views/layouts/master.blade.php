@@ -308,7 +308,7 @@
 									<li class="nav-item">
 										<router-link to="/audits" class="nav-link">
 											<i class="fas fa-file-signature nav-icon"></i>
-											<p>Audits</p>
+											<p>Activity Logs</p>
 										</router-link>
 									</li>
 								</ul>
