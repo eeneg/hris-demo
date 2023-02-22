@@ -238,46 +238,6 @@
                                     </div>
                                     <input type="email" name="email" class="form-control form-control-border border-width-2" id="email" v-model="form.email">
                                 </div>
-                                <div class="col-md-2">
-                                    <div>
-                                        <label for="regular" style="line-height: 10px;">Regular Employee</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="regular" value="1" id="regular" v-model="form.regular">
-                                        <label class="form-check-label" for="exampleRadios1">
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="regular" value="0" id="regular" v-model="form.regular">
-                                        <label class="form-check-label" for="exampleRadios2">
-                                            No
-                                        </label>
-                                    </div>
-                                    <span>
-                                        <strong class="text-danger" v-if="errors.has('regular')">Field Required</strong>
-                                    </span>
-                                </div>
-                                <div class="col-md-2">
-                                    <div>
-                                        <label for="active" style="line-height: 10px;">Active</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="active" value="1" id="active" v-model="form.active">
-                                        <label class="form-check-label" for="exampleRadios1">
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="active" value="0" id="active" v-model="form.active">
-                                        <label class="form-check-label" for="exampleRadios2">
-                                            No
-                                        </label>
-                                    </div>
-                                    <span>
-                                        <strong class="text-danger" v-if="errors.has('active')">Field Required</strong>
-                                    </span>
-                                </div>
                             </div>
                         </tab-content>
 
@@ -1582,8 +1542,6 @@ export default {
                     'zipcode2': '',
                     'telephone2': '',
                     'email': '',
-                    'regular': '',
-                    'active': '',
                     'cellphone': '',
                     'agencynumber': '',
                     'tin': '',

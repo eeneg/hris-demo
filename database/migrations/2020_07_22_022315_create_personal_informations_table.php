@@ -44,8 +44,6 @@ class CreatePersonalinformationsTable extends Migration
             $table->string('picture', 300)->nullable();
             $table->date('retirement_date')->nullable();
             $table->string('status', 100)->nullable();
-            $table->boolean('regular')->nullable();
-            $table->boolean('active')->nullable();
             $table->timestamps();
         });
     }
