@@ -81,30 +81,34 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        {{ `${activity?.ip_address} ${moment(activity?.time)?.format('ddd, ll @LTS')}` }}
+                        <div class="clearfix mb-3">
+                            {{ `${activity?.ip_address} ${moment(activity?.time)?.format('ddd, ll @LTS')}` }}
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-nowrap table-striped custom-table table-fixed">
+                                <thead>
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>New</th>
+                                        <th>Old</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(values, field) of activity ? JSON.parse(activity.modified) : []">
+                                        <th class="pl-4">
+                                            {{ field }}
+                                        </th>
+                                        <td>
+                                            {{ values.new ?? 'null' }}
+                                        </td>
+                                        <td class="text-truncate">
+                                            {{ values.old ?? 'null' }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <table class="table text-nowrap table-striped custom-table table-fixed">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>New</th>
-                                <th>Old</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(values, field) of activity ? JSON.parse(activity.modified) : []">
-                                <th class="pl-4">
-                                    {{ field }}
-                                </th>
-                                <td>
-                                    {{ values.new ?? 'null' }}
-                                </td>
-                                <td class="text-truncate">
-                                    {{ values.old ?? 'null' }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -159,6 +163,14 @@
                 this.activity = activity
 
                 $('#showActivity').modal('show')
+            },
+
+            undo(activity) {
+                console.log(activity.id)
+                axios.put('api/audits/' + activity.id)
+                    .catch(error => {
+                        console.error(error.response.data.message);
+                    });
             },
 
             moment: moment
