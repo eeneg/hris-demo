@@ -204,9 +204,9 @@
                                         <label for="permanentaddress" style="line-height: 10px;">Permanent Address</label>
                                     </div>
                                     <input type="text" name="permanentaddress" class="form-control form-control-border border-width-2" id="permanentaddress" v-model="form.permanentaddress">
-                                        <span>
-                                            <strong class="text-danger" v-if="errors.has('permanentaddress')">Field Required</strong>
-                                        </span>
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddress')">Field Required</strong>
+                                    </span>
                                 </div>
                                 <div class="col-md-4">
                                     <div>
@@ -238,24 +238,44 @@
                                     </div>
                                     <input type="email" name="email" class="form-control form-control-border border-width-2" id="email" v-model="form.email">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div>
                                         <label for="regular" style="line-height: 10px;">Regular Employee</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="exampleRadios" value="1" id="exampleRadios1" v-model="form.regular">
+                                        <input class="form-check-input" type="radio" name="regular" value="1" id="regular" v-model="form.regular">
                                         <label class="form-check-label" for="exampleRadios1">
                                             Yes
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="exampleRadios" value="0" id="exampleRadios2" v-model="form.regular">
+                                        <input class="form-check-input" type="radio" name="regular" value="0" id="regular" v-model="form.regular">
                                         <label class="form-check-label" for="exampleRadios2">
                                             No
                                         </label>
                                     </div>
                                     <span>
                                         <strong class="text-danger" v-if="errors.has('regular')">Field Required</strong>
+                                    </span>
+                                </div>
+                                <div class="col-md-2">
+                                    <div>
+                                        <label for="active" style="line-height: 10px;">Active</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="active" value="1" id="active" v-model="form.active">
+                                        <label class="form-check-label" for="exampleRadios1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="active" value="0" id="active" v-model="form.active">
+                                        <label class="form-check-label" for="exampleRadios2">
+                                            No
+                                        </label>
+                                    </div>
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('active')">Field Required</strong>
                                     </span>
                                 </div>
                             </div>
@@ -1563,6 +1583,7 @@ export default {
                     'telephone2': '',
                     'email': '',
                     'regular': '',
+                    'active': '',
                     'cellphone': '',
                     'agencynumber': '',
                     'tin': '',

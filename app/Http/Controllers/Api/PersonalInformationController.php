@@ -158,8 +158,9 @@ class PersonalInformationController extends Controller
             'firstname' => 'required|string',
             'birthdate' => 'required|string',
             'regular' => 'required|string',
-            // 'permanentaddress'      => 'required|string',
-            // 'cellphone'             => 'required|string',
+            'active' => 'required|string',
+            'permanentaddress'      => 'required|string',
+            'cellphone'             => 'required|string',
         ]);
 
         if ($request->picture != null) {
