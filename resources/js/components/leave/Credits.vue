@@ -356,9 +356,9 @@
                         </div>
                         <div class="col-md-12 mt-3">
                             <ul>
-                                <li>Period must be the month of December last year</li>
-                                <li>Earned must not be empty</li>
-                                <li>There must be no deductions</li>
+                                <li>Period must be the month of <b>December</b> last year</li>
+                                <li>Credits Earned must <b>not be empty</b></li>
+                                <li>There must be <b>no deductions</b></li>
                             </ul>
                         </div>
                     </div>
