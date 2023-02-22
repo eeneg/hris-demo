@@ -157,6 +157,7 @@ class PersonalInformationController extends Controller
             'surname' => 'required|string',
             'firstname' => 'required|string',
             'birthdate' => 'required|string',
+            'regular' => 'required|string',
             // 'permanentaddress'      => 'required|string',
             // 'cellphone'             => 'required|string',
         ]);

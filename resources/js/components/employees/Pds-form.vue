@@ -238,6 +238,26 @@
                                     </div>
                                     <input type="email" name="email" class="form-control form-control-border border-width-2" id="email" v-model="form.email">
                                 </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <label for="regular" style="line-height: 10px;">Regular Employee</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios" value="1" id="exampleRadios1" v-model="form.regular">
+                                        <label class="form-check-label" for="exampleRadios1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios" value="0" id="exampleRadios2" v-model="form.regular">
+                                        <label class="form-check-label" for="exampleRadios2">
+                                            No
+                                        </label>
+                                    </div>
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('regular')">Field Required</strong>
+                                    </span>
+                                </div>
                             </div>
                         </tab-content>
 
@@ -1405,17 +1425,14 @@
                                     <hr>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="card-body" style="display: flex;">
-                                        <div class="form-group col-md-4">
-                                            <label for="picture" class="col-form-label">Picture</label>
-                                                <div>
-                                                    <input type="file" @change="uploadPicture" @change.prevent="reset" name="picture" ref="picture" id="picture" accept="image/jpeg, image/png">
-                                                </div>
-                                            </div>
-                                        <div class="form-group col-md-8 text-center">
-                                            <div>
-                                                <img v-if="form.picture !== '' && form.picture !== null" class="result" style="behavior: url(PIE.htc); border-radius: 50%; width: 200px; height: 200px; background: grey; border: 3px solid black;" :src="getAvatar()" alt="">
-                                            </div>
+                                    <div class="form-group col-md-4">
+                                        <div>
+                                            <input type="file" @change="uploadPicture" @change.prevent="reset" name="picture" ref="picture" id="picture" accept="image/jpeg, image/png">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-8 text-center">
+                                        <div>
+                                            <img v-if="form.picture !== '' && form.picture !== null" class="result" style="behavior: url(PIE.htc); border-radius: 50%; width: 200px; height: 200px; background: grey; border: 3px solid black;" :src="getAvatar()" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -1545,6 +1562,7 @@ export default {
                     'zipcode2': '',
                     'telephone2': '',
                     'email': '',
+                    'regular': '',
                     'cellphone': '',
                     'agencynumber': '',
                     'tin': '',
@@ -1691,7 +1709,7 @@ export default {
 
                             Swal.fire(
                                 'Oops...',
-                                error.response.data.message,
+                                'Something went wrong',
                                 'error'
                             )
                         })
