@@ -447,272 +447,225 @@
         <p style="position:absolute;top:1120px;left:80px;white-space:nowrap" class="ft13">LEVEL</p>
         <p style="position:absolute;top:1115px;left:235px;white-space:nowrap" class="ft13">NAME OF SCHOOL</p>
         <p style="position:absolute;top:1130px;left:252px;white-space:nowrap" class="ft13">(Write in full)</p>
-        <div style="position:absolute;top:1154px;left:171px;height:35.5px;width:213.5px;display:table">
-           <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                <p class="inputs">
-                    {{ @$eb->elemSchoolName }}
-                </p>
-           </div>
-        </div>
-        <div style="position:absolute;top:1191px;left:171px;height:35.5px;width:213.5px;display:table">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                <p class="inputs">
-                    {{ @$eb->secSchoolName }}
-                </p>
-           </div>
-        </div>
-        <div style="position:absolute;top:1226px;left:171px;height:35.5px;width:213.5px;display:table">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                <p class="inputs">
-                    {{ @$eb->vocSchoolName }}
-                </p>
-           </div>
-        </div>
-        <div style="position:absolute;top:1263px;left:171px;height:35.5px;width:213.5px;display:table">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                <p class="inputs">
-                    {{ @$eb->collSchoolName1 }}
-                </p>
-           </div>
-        </div>
-        <div style="position:absolute;top:1297px;left:171px;height:35.5px;width:213.5px;display:table">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                <p class="inputs">
-                    {{ @$eb->gradSchoolName }}
-                </p>
-           </div>
-        </div>
+
+        {{-- HEADER --}}
         <p style="position:absolute;top:1115px;left:395px;white-space:nowrap" class="ft13">BASIC EDUCATION/DEGREE/COURSE </p>
         <p style="position:absolute;top:1130px;left:455px;white-space:nowrap" class="ft13">(Write in full)         </p>
-        <div style="position:absolute;top:1154px;left:388px;height:33px;width:193px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->elemDegree }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1191px;left:388px;height:33px;width:193px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->elemDegree }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1226px;left:388px;height:33px;width:193px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->vocDegree }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1263px;left:388px;height:33px;width:193px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->collDegree1 }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1297px;left:388px;height:33px;width:193px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->gradDegree }}
-                 </p>
-            </div>
-        </div>
         <p style="position:absolute;top:1117px;left:597px;white-space:nowrap" class="ft10">PERIOD OF ATTENDANCE</p>
         <p style="position:absolute;top:1140px;left:600px;white-space:nowrap" class="ft13">From</p>
-        <div style="position:absolute;top:1154px;left:583px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->elemFrom }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1191px;left:583px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->secFrom }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1226px;left:583px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->vocFrom }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1263px;left:583px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->collFrom1 }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1297px;left:583px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->gradFrom }}
-                 </p>
-            </div>
-        </div>
-        <p style="position:absolute;top:1141px;left:657px;white-space:nowrap" class="ft13">To</p>
-        <div style="position:absolute;top:1154px;left:636px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->elemTo }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1191px;left:636px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->secTo }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1226px;left:636px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->vocTo }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1263px;left:636px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->collTo1 }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1297px;left:636px;height:33px;width:52px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->gradTo }}
-                 </p>
-            </div>
-        </div>
         <p style="position:absolute;top:1110px;left:707px;white-space:nowrap" class="ft10">HIGHEST LEVEL/<br></p>
         <p style="position:absolute;top:1120px;left:709px;white-space:nowrap" class="ft10">UNITS EARNED</p>
         <p style="position:absolute;top:1130px;left:707px;white-space:nowrap" class="ft10">(if not graduated)</p>
-        <div style="position:absolute;top:1154px;left:690px;height:33px;width:79px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->elemHighestLevel }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1191px;left:690px;height:33px;width:79px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->secHighestLevel }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1226px;left:690px;height:33px;width:79px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->vocHighestLevel }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1263px;left:690px;height:33px;width:79px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->collHighestLevel1 }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1297px;left:690px;height:33px;width:79px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->gradHighestLevel }}
-                 </p>
-            </div>
-        </div>
-
         <p style="position:absolute;top:1115px;left:790px;white-space:nowrap" class="ft10">YEAR</p>
         <p style="position:absolute;top:1125px;left:780px;white-space:nowrap" class="ft10">GRADUATED</p>
-        <div style="position:absolute;top:1154px;left:771.5px;height:33px;width:61px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->elemYear }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1191px;left:771.5px;;height:33px;width:61px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->secYear }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1226px;left:771.5px;;height:33px;width:61px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->vocYear }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1263px;left:771.5px;;height:33px;width:61px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->collHighestLevel1 }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1297px;left:771.5px;;height:33px;width:61px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->gradYear }}
-                 </p>
-            </div>
-        </div>
-
         <p style="position:absolute;top:1105px;left:846px;white-space:nowrap" class="ft10">SCHOLARSHIP/</p>
         <p style="position:absolute;top:1115px;left:850px;white-space:nowrap" class="ft10">ACADEMIC</p>
         <p style="position:absolute;top:1125px;left:853px;white-space:nowrap" class="ft10">HONORS</p>
         <p style="position:absolute;top:1135px;left:851px;white-space:nowrap" class="ft10">RECEIVED</p>
-        <div style="position:absolute;top:1154px;left:833.5px;height:33px;width:65px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->elemSOA }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1191px;left:833.5px;height:33px;width:65px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->secSOA }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1226px;left:833.5px;height:33px;width:65px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->vocSOA }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1263px;left:833.5px;height:33px;width:65px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->collSOA1 }}
-                 </p>
-            </div>
-        </div>
-        <div style="position:absolute;top:1297px;left:833.5px;height:33px;width:65px;display:table;">
-            <div style="display:table-cell;vertical-align:middle;text-align:center;">
-                 <p class="inputs">
-                     {{ @$eb->gradSOA }}
-                 </p>
-            </div>
-        </div>
         <p style="position:absolute;top:1166px;left:41px;white-space:nowrap" class="ft13">ELEMENTARY</p>
         <p style="position:absolute;top:1203px;left:41px;white-space:nowrap" class="ft13">SECONDARY</p>
         <p style="position:absolute;top:1234px;left:41px;white-space:nowrap" class="ft13">VOCATIONAL /<br/>TRADE COURSE</p>
         <p style="position:absolute;top:1275px;left:41px;white-space:nowrap" class="ft13">COLLEGE</p>
         <p style="position:absolute;top:1309px;left:41px;white-space:nowrap" class="ft13">GRADUATE STUDIES </p>
+
+        <table style="width:734px;height:178px;position:absolute;top:1156px;left:168px;border-collapse:separate;border-spacing:0px;table-layout: fixed; text-align:center;">
+            <tr>
+                <th style="width: 32.5%;"></th>
+                <th style="width: 30.3%;"></th>
+                <th style="width: 8.3%;"></th>
+                <th style="width: 8.3%;"></th>
+                <th style="width: 11.8%;"></th>
+                <th style="width: 9.5%;"></th>
+                <th style="width: 10%;"></th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->elemSchoolName }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->elemDegree }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->elemFrom }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->elemTo }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->elemHighestLevel }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->elemYear }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->elemSOA }}
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->secSchoolName }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->secDegree }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->secFrom }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->secTo }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->secHighestLevel }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->secYear }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->secSOA }}
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->vocSchoolName }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collDegree1 }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->vocFrom }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->vocTo }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->vocHighestLevel }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->vocYear }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->vocSOA }}
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collSchoolName1 }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collDegree1 }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collFrom1 }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collTo1 }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collHighestLevel1 }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collYear1 }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->collSOA1 }}
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->gradSchoolName }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->gradDegree }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->gradFrom }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->gradTo }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->gradHighestLevel }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->gradYear }}
+                        </p>
+                    </td>
+                    <td style="border-collapse:collapse;height:32.5px;border-spacing:0;">
+                        <p class="inputs">
+                            {{ @$eb->gradSOA }}
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         {{-- FOOTER --}}
         <p style="position:absolute;top:1336px;left:378px;white-space:nowrap" class="ft15"><i><b>(Continue on separate sheet if necessary)</b></i></p>
