@@ -52,10 +52,6 @@ class User extends Authenticatable implements Auditable
         'userassignment',
     ];
 
-    protected $auditExlude = [
-        'remember_token',
-    ];
-
     protected $attributeModifiers = [
         'password' => LeftRedactor::class,
     ];
