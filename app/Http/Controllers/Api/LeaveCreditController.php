@@ -202,9 +202,30 @@ class LeaveCreditController extends Controller
                             }
                         });
 
+        $vl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Vacation Leave')->first()->id)->first()->id;
+        $sl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Sick Leave')->first()->id)->first()->id;
+
+        $credits_anticipated = LeaveSummary::where('personal_information_id', $id)
+            ->where(function ($query) {
+                $query->whereNotNull('vl_earned')
+                ->where('vl_earned', '>', 0.0)
+                ->whereNotNull('sl_earned')
+                ->where('sl_earned', '>', 0.0)
+                ->where('sl_withpay', '=', 0.0)
+                ->where('vl_withpay', '=', 0.0);
+            })
+            ->where(function($query){
+                $query->where('period->mode', 4)
+                ->where('period->data', Carbon::now()->subYear()->format('Y') . '-12');
+            })
+            ->first();
+
+        $vl = collect($leaveCredit->where('abbreviation', 'VL')->first())->put('anticipated', $credits_anticipated ? $credits_anticipated->vl_balance + 15 : null);
+        $sl = collect($leaveCredit->where('abbreviation', 'SL')->first())->put('anticipated', $credits_anticipated ? $credits_anticipated->sl_balance + 15 : null);
+
         return [
             'summary' => $leaveSummary,
-            'credit' => $leaveCredit,
+            'credit' => ['sl' => $sl, 'vl' => $vl],
             'custom_leave' => LeaveSummary::countCustomLeave($custom_leave),
             'tardy' => LeaveSummary::violationCounter($tardy),
             'position' => $personalinformations->position ?? '',

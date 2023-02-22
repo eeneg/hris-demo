@@ -65,12 +65,15 @@
                                     <tr>
                                     <th scope="col">Leave Title</th>
                                     <th scope="col">Credit Balance</th>
+                                    <th scope="col">Anticipated Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, index) in leave_credit" :key="data.id">
                                         <td>{{ data.title }}</td>
                                         <td>{{ data.balance }}</td>
+                                        <td v-if="data.anticipated != null">{{ data.anticipated }}</td>
+                                        <td v-if="data.anticipated == null"><a type="button" data-toggle="modal" data-target="#infomodal"><u>Click</u></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -330,6 +333,44 @@
                 </div>
             </div>
         </div>
+
+        <!-- info modal -->
+
+        <div class="modal fade" id="infomodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Error!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h3 class="text-danger">Unable to calculate Anticipated Credits</h3>
+                            <h6>Please input similar data below at the appropriate index</h6>
+                        </div>
+                        <div class="col-md-12">
+					        <img style="max-width: 100%; max-height: 100%;" :src="'/storage/leave_image/leave.png'" alt="Leave">
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <ul>
+                                <li>Period must be the month of December last year</li>
+                                <li>Earned must not be empty</li>
+                                <li>There must be no deductions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- !info modal -->
 
         <!-- Modal -->
         <div class="modal fade" id="periodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
