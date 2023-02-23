@@ -64,7 +64,7 @@
                         <span slot="prev-nav">&lt; Previous</span>
 	                    <span slot="next-nav">Next &gt;</span>
                     </pagination>
-                    <span style="margin-left: 10px;">Showing {{ audits?.from }} to {{ audits?.to }} of {{ audits?.total }} results | Page {{ audits?.current_page }} of {{ audits?.last_page }}</span>
+                    <span style="margin-left:10px;display:flex;place-content:center;">Showing {{ audits?.meta?.from }} to {{ audits?.meta?.to }} of {{ audits?.meta?.total }} activity logs | Page {{ audits?.meta?.current_page }} of {{ audits?.meta?.last_page }}</span>
                 </div>
             </div>
         </div>
@@ -95,7 +95,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(values, field) of activity ? JSON.parse(activity.modified) : []">
-                                        <th class="pl-4">
+                                        <th class="pl-4 border-right">
                                             {{ field }}
                                         </th>
                                         <td>
@@ -121,7 +121,7 @@
     export default {
         data() {
             return {
-                audits: null,
+                audits: {},
                 activity: null,
                 search: '',
             }
@@ -163,14 +163,6 @@
                 this.activity = activity
 
                 $('#showActivity').modal('show')
-            },
-
-            undo(activity) {
-                console.log(activity.id)
-                axios.put('api/audits/' + activity.id)
-                    .catch(error => {
-                        console.error(error.response.data.message);
-                    });
             },
 
             moment: moment
