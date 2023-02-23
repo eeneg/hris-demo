@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-12">
 
-        <form @submit.prevent="editMode == 1 ? storePersonalInformation() : editMode == 2 ? updatePersonalInformation() : editMode == 3 ? updateRequest() : ''" action="" id="pdsForm" @keydown="errors.clear($event.target.name)">
+        <form @submit.prevent="editMode == 1 ? storePersonalInformation() : editMode == 2 ? updatePersonalInformation() : editMode == 3 ? updateRequest() : ''" action="" id="pdsForm" @click="errors.clear($event.target.name)">
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h4>PDS FORM</h4>
@@ -64,7 +64,6 @@
                                         <label for="birthdate" style="line-height: 10px;">Birth Date</label>
                                     </div>
                                         <input type="date" name="birthdate" class="form-control form-control-border border-width-2" id="birthdate" v-model="form.birthdate">
-                                        <!-- <date-picker v-model="form.birthdate" name="birthdate" id="birthdate" :config="options" class="form-control form-control-border border-width-2" placeholder="yyyy-mm-dd"></date-picker> -->
                                     <span>
                                         <strong class="text-danger" v-if="errors.has('birthdate')">Field Required</strong>
                                     </span>
@@ -826,7 +825,7 @@
 
                                         <td hidden>
                                             <div class="form-group input-group-sm">
-                                                <input type="text" :name="'vw_orderNo'+index" :id="'vw_orderNo'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.orderNo = index">
+                                                <input type="text" :name="'vw_orderNo'+index" :id="'vw_orderNo'+index" class="form-control form-control-border border-width-2" v-model="voluntarywork.orderNo">
                                             </div>
                                         </td>
 
@@ -890,7 +889,7 @@
 
                                         <td hidden>
                                             <div class="form-group input-group-sm">
-                                                <input type="text" :name="'tp_orderNo'+index" :id="'tp_orderNo'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.orderNo = index">
+                                                <input type="text" :name="'tp_orderNo'+index" :id="'tp_orderNo'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.orderNo">
                                             </div>
                                         </td>
 

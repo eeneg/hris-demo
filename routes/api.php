@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         'status' => 'Api\StatusController',
         'leaveReport' => 'Api\LeaveReportController',
         'activity' => 'Api\ActivityController',
+        'joborder' => 'Api\JobOrderController'
     ]);
 
     Route::post('department_positions', 'Api\PositionController@get_department_positions');

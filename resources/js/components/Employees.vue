@@ -20,6 +20,7 @@
                         </div>
                         <div v-if="$gate.isAdministratorORAuthor()" class="col-md-9">
                             <router-link class="btn btn-primary float-right" to="/employees-pds">Create New Employee</router-link>
+                            <button class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#joModal">Job Order</button>
                         </div>
                     </div>
                 </div>
@@ -585,6 +586,55 @@
             </div>
         </div>
 
+         <!-- Job Order -->
+        <div class="modal fade" id="joModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Job Order Employee Count</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="asof">As of: {{ joborder.asof }}</label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="male">Male Count: <p class="ml-3" style="display: inline">{{ joborder.malecount }}</p></label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="female">Female Count: <p class="ml-3" style="display: inline">{{ joborder.femalecount }}</p></label>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="total">Total: <p class="text-success ml-3" style="display: inline">{{ joborder.total }}</p></label>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="malecount">Male count:</label>
+                                <input type="number" name="malecount" class="form-control form-control-border border-width-2" id="malecount" v-model="joform.malecount" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="femalecount">Female count:</label>
+                                <input type="number" name="femalecount" class="form-control form-control-border border-width-2" id="femalecount" v-model="joform.femalecount" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="asof">As of:</label>
+                                <input type="date" name="asof" class="form-control form-control-border border-width-2" id="asof" v-model="joform.asof" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="clearJO">Close</button>
+                        <button type="button" class="btn btn-primary" @click="submitJO">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- The Modal -->
         <div class="modal fade" id="scanModal">
             <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -727,6 +777,17 @@
                 personalinformation: {},
                 contact: {signature: null},
                 errors: new Errors(),
+                joborder: {
+                    'malecount': null,
+                    'femalecount': null,
+                    'total': null,
+                    'asof': null
+                },
+                joform: new Form({
+                    'malecount': null,
+                    'femalecount': null,
+                    'asof': null,
+                }),
                 form: new Form({
                     'id': '',
                     'surname': '',
@@ -770,6 +831,47 @@
             }
         },
         methods: {
+
+            clearJO: function()
+            {
+                this.joform = {
+                    'malecount': null,
+                    'femalecount': null,
+                    'total': null,
+                    'asof': null
+                }
+            },
+
+            submitJO: function()
+            {
+                this.$Progress.start()
+                axios.post('api/joborder', this.joform)
+                .then(e => {
+                    toast.fire({
+                        icon:'success',
+                        title: 'Saved'
+                    })
+                    this.joform.reset()
+                    this.$Progress.finish()
+
+                    axios.get('api/joborder')
+                    .then(({data}) => {
+                        this.joborder = data;
+                        console.log(data)
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+                })
+                .catch(e => {
+                    console.log(e)
+                    toast.fire({
+                        icon:'error',
+                        title: 'Failed to save JO count'
+                    })
+                })
+            },
+
             workexperiences() {
                 return _.orderBy(this.form.workexperiences, 'orderNo');
             },
@@ -914,12 +1016,21 @@
             },
             loadEmployees() {
                 axios.get('api/personalinformation')
-                    .then(({data}) => {
-                        this.employees = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
+                .then(({data}) => {
+                    this.employees = data;
+                })
+                .catch(error => {
+                    console.log(error.response.data.message);
+                });
+
+                axios.get('api/joborder')
+                .then(({data}) => {
+                    this.joborder = data;
+                    console.log(data)
+                })
+                .catch(error => {
+                    console.log(error.response.data.message);
+                });
             },
             generateBarcode(employee) {
                 this.$Progress.start();
