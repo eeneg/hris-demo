@@ -1,0 +1,52 @@
+@media print {
+    body * {
+      visibility: hidden !important;
+    }
+
+    body { 
+        -webkit-print-color-adjust: exact; 
+    }
+
+    .nosi_div *, .nosa_div *, .report_div * {
+      visibility: visible !important;
+    }
+
+    .nosi_div, .nosa_div, .report_div {
+      max-width: 100%;
+      flex: unset;
+      padding-top: 30px !important;
+    }
+
+    .nosi_div h4, .nosa_div h4, .report_div h4 {
+      font-size: 1.5rem;
+    }
+
+    .nosi_div h5, .nosa_div h5, .report_div h5 {
+      font-size: 1.275rem;
+    }
+
+    #nosi_div, #nosa_div, #report_div {
+      display: block !important;
+    }
+
+    .nosi_card, .nosa_card, .report_card {
+      display: none;
+    }
+
+    .others-report-fixed { 
+        position: fixed; top: -25px; right: 15px; 
+    }
+
+    .report_div th { 
+        font-size: 1.275rem 
+    }
+    
+    .report_div td { 
+        font-size: 1rem 
+    }
+    
+    .report_div h3 { 
+        font-size: 1rem
+    }
+}
+  

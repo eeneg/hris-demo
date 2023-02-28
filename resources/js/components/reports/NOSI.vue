@@ -243,18 +243,6 @@
     </div>
 </template>
 
-<style type="text/css">
-    @media print {
-        body * { visibility: hidden !important; }
-        .nosi_div * { visibility: visible !important; }
-        .nosi_div {  max-width: 100%; flex: unset; padding-top: 30px !important; }
-        .nosi_div h4 { font-size: 1.5rem }
-        .nosi_div h5 { font-size: 1.275rem }
-        #nosi_div { display: block !important; }
-        .nosi_card { display: none; }
-    }
-</style>
-
 <script>
     import moment from 'moment';
 

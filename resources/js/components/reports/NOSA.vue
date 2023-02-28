@@ -226,18 +226,6 @@
     </div>
 </template>
 
-<style type="text/css">
-    @media print {
-        body * { visibility: hidden !important; }
-        .nosa_div * { visibility: visible !important; }
-        .nosa_div {  max-width: 100%; flex: unset; padding-top: 30px !important; }
-        .nosa_div h4 { font-size: 1.5rem }
-        .nosa_div h5 { font-size: 1.275rem }
-        #nosa_div { display: block !important;  }
-        .nosa_card { display: none; }
-    }
-</style>
-
 <script>
     export default {
         data() {

@@ -38,6 +38,7 @@
                                         <tr>
                                             <th style="width: 10px">#</th>
                                             <th>Position</th>
+                                            <th>Item #</th>
                                             <th>SG</th>
                                             <th>Salary</th>
                                         </tr>
@@ -50,6 +51,7 @@
                                                 <small class="d-block">{{ item.office }}</small>
                                                 <small class="d-block font-weight-bold" :class="item.name == 'VACANT' ? 'text-success' : 'text-primary'">{{ item.name }}</small>
                                             </td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.new_number ? item.new_number : item.old_number }}</td>
                                             <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.grade }}</td>
                                             <td class="align-middle pt-1 pb-1">{{ item.salaryproposed.amount | amount }} / month</td>
                                         </tr>
@@ -63,7 +65,7 @@
                             <div class="col-6">
                                 <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
                                 <h3 class="m-0"><b>Gender:</b> {{ employee_names_report.gender }}</h3>
-                                <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+                                <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}, Male {{ employee_names_report.male }}, Female {{ employee_names_report.female }}</h3>
                             </div>
                             <div class="col-6">
                                 <h3 class="m-0"><b>Eligibility:</b> {{ employee_names_report.csc_level }}</h3>
@@ -76,13 +78,18 @@
                                         <tr>
                                             <th style="width: 10px">#</th>
                                             <th>Name</th>
+                                            <th>Item#</th>
                                             <th>Position</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(item, index) in print_data" :key="index">
                                             <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
-                                            <td class="align-middle pt-1 pb-1">{{ item.name }}<small class="d-block">{{ item.office }}</small></td>
+                                            <td class="align-middle pt-1 pb-1">
+                                                <span style="font-weight: bold;" :class="item.sex == 'Female' ? 'text-success' : 'text-primary'">{{ item.name }}</span>
+                                                <small class="d-block">{{ item.office }}</small>
+                                            </td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.new_number ? item.new_number : item.old_number }}</td>
                                             <td class="align-middle pt-1 pb-1">
                                                 {{ item.position }} (SG {{ item.salaryproposed.grade }}-{{ item.salaryproposed.step }})
                                                 <small class="d-block m-0">{{ item.salaryproposed.amount | amount }} / month</small>
@@ -191,23 +198,6 @@
     </div>
 </template>
 
-<style type="text/css">
-    @media print {
-        body * { visibility: hidden !important; }
-        body { -webkit-print-color-adjust: exact; }
-        .others-report-fixed { position: fixed; top: -25px; right: 15px; }
-        .report_div * { visibility: visible !important; }
-        .report_div {  max-width: 100%; flex: unset; padding-top: 30px !important; }
-        .report_div th { font-size: 1.275rem }
-        .report_div td { font-size: 1rem }
-        .report_div h3 { font-size: 1rem }
-        .report_div h4 { font-size: 1.5rem }
-        .report_div h5 { font-size: 1.275rem }
-        #report_div { display: block !important;  }
-        .report_card { display: none; }
-    }
-</style>
-
 <script>
     export default {
         data() {
@@ -227,7 +217,9 @@
                 employee_names_report: {
                     sort: 'Surname',
                     gender: 'All',
-                    csc_level: 'All'
+                    csc_level: 'All',
+                    male: 0,
+                    female: 0
                 }
             }
         },
@@ -278,11 +270,18 @@
                 }
 
                 if (this.report_type == 'Employee Names') {
+                    this.employee_names_report.male = 0
+                    this.employee_names_report.female = 0
                     filtered = _.filter(this.plantilla_content, (content) => { 
-                        return content.name != 'VACANT'
+                        let inc = content.name != 'VACANT'
                             && (this.department != 'All' ? content.office == this.department : true)
                             && (this.employee_names_report.gender == 'All' ? true : (content.sex == this.employee_names_report.gender))
-                            && (this.employee_names_report.csc_level != 'All' ? content.csc_level == this.employee_names_report.csc_level : true);
+                            && (this.employee_names_report.csc_level != 'All' ? content.csc_level == this.employee_names_report.csc_level : true)
+                        if (inc) {
+                            this.employee_names_report.male += content.sex == 'Male' ? 1 : 0
+                            this.employee_names_report.female += content.sex == 'Female' ? 1 : 0
+                        }
+                        return inc;
                     });
                     if (this.employee_names_report.sort == 'Surname') {
                         filtered = _.sortBy(filtered, [function(o) { return o.name; }]);
