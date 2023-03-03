@@ -101,6 +101,12 @@
 									<p>Dashboard</p>
 								</router-link>
 							</li>
+							<li class="nav-item">
+								<router-link to="/org" exact class="nav-link">
+									<i class="nav-icon fas fa-sitemap purple"></i>
+									<p>Organizational Chart</p>
+								</router-link>
+							</li>
 							@endcannot
 							@cannot('employee')
 							<li class="nav-item has-treeview">
