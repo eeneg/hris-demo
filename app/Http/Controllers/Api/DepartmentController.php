@@ -137,9 +137,15 @@ class DepartmentController extends Controller
     public function store_position(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');
-        $this->validate($request, [
-            'title' => 'required|unique:positions,title',
-        ]);
+
+        $unique = Position::where('department_id', $request->department_id)->where('title', $request->title)->first();
+
+        if($unique)
+        {
+            $this->validate($request, [
+                'title' => 'required|unique:positions,title',
+            ]);
+        }
 
         $position = Position::create($request->all());
     }
