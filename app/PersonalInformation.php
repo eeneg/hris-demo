@@ -120,6 +120,11 @@ class PersonalInformation extends Authenticatable
         return $this->hasMany('App\LeaveSummary', 'personal_information_id');
     }
 
+    public function servicerecord()
+    {
+        return $this->hasOne('App\ServiceRecord', 'personal_information_id');
+    }
+
     public function getFullNameAttribute()
     {
         return trim(

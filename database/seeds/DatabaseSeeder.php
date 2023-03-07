@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
        User::create([
         'name'=> "Admin",
-        'avatar'=> null,
         'landline'=> null,
         'email'=> "admin@local.com",
         'role'=> "Administrator",
