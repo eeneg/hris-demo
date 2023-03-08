@@ -62,3 +62,5 @@ Route::get('/initializeSystem', 'Helpers@initialize');
 Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
+
+

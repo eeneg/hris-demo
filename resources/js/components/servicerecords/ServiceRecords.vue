@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="card-body table-responsive border p-0" style="height: 400px;">
-                            <table class="table table-striped text-nowrap custom-table text-center">
+                            <table class="table table-striped text-nowrap custom-table text-center w-100">
                                 <thead>
                                     <tr>
                                         <th colspan="1" class="border"></th>
@@ -70,6 +70,7 @@
                                         <td>{{ record.cause }}</td>
                                         <td>
                                             <button class="btn btn-primary" @click="editModal(record)"><i class="fas fa-edit"></i></button>
+                                            <!-- <button class="btn btn-danger" @click="deleteEmployeeServiceRecord(record.id)"><i class="fas fa-trash"></i></button> -->
                                         </td>
                                     </tr>
                                 </tbody>
@@ -245,8 +246,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" v-if="edit = false" class="btn btn-primary" @click="submitEmployeeServiceRecord()">Save changes</button>
-                        <button type="button" v-if="edit = true" class="btn btn-primary" @click="submitEmployeeServiceRecordUpdates()">Save changes</button>
+                        <button type="button" v-if="edit == false" class="btn btn-primary" @click="submitEmployeeServiceRecord()">Save changes</button>
+                        <button type="button" v-if="edit == true" class="btn btn-primary" @click="submitEmployeeServiceRecordUpdates()">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -451,6 +452,17 @@
                         icon:'success',
                         title: 'Failed to edit record'
                     })
+                })
+            },
+
+            deleteEmployeeServiceRecord: function(id)
+            {
+                axios.delete('api/employeeservicerecord/'+id)
+                .then(e => {
+
+                })
+                .catch(e => {
+
                 })
             }
         },

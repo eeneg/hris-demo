@@ -70,7 +70,7 @@ class EmployeeServiceRecordController extends Controller
      */
     public function show($id)
     {
-    //    return EmployeeServiceRecord::where('service_record_id', $id)->orderBy('orderNo')->get();
+    //    return EmployeeServiceRecord::onlyTrashed()->where('service_record_id', $id)->orderBy('orderNo')->get();
     }
 
     /**
@@ -119,6 +119,6 @@ class EmployeeServiceRecordController extends Controller
      */
     public function destroy($id)
     {
-        //
+        EmployeeServiceRecord::find($id)->delete();
     }
 }
