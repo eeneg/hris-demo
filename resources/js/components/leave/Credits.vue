@@ -65,15 +65,15 @@
                                     <tr>
                                     <th scope="col">Leave Title</th>
                                     <th scope="col">Credit Balance</th>
-                                    <th scope="col">Anticipated Balance</th>
+                                    <!-- <th scope="col">Anticipated Balance</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, index) in leave_credit" :key="data.id">
                                         <td>{{ data.title }}</td>
                                         <td>{{ data.balance }}</td>
-                                        <td v-if="data.anticipated != null">{{ data.anticipated }}</td>
-                                        <td v-if="data.anticipated == null"><a type="button" data-toggle="modal" data-target="#infomodal"><u>Click</u></a></td>
+                                        <!-- <td v-if="data.anticipated != null">{{ data.anticipated }}</td>
+                                        <td v-if="data.anticipated == null"><a type="button" data-toggle="modal" data-target="#infomodal"><u>Click</u></a></td> -->
                                     </tr>
                                 </tbody>
                             </table>
