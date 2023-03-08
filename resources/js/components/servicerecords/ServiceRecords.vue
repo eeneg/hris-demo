@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="col-md-1">
-                            <button type="submit" class="btn btn-primary w-100" :disabled="form.personal_information_id == null" data-toggle="modal" data-target="#recordModal">Add <i class="fas fa-plus"></i></button>
+                            <button type="submit" class="btn btn-primary w-100" :disabled="form.personal_information_id == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -36,6 +36,7 @@
                                         <th colspan="2" class="border">Office Entity / Division</th>
                                         <th colspan="1" class="border">Leave of Absences</th>
                                         <th colspan="3" class="border">Separation</th>
+                                        <th colspan="1" class="border"></th>
                                     </tr>
                                     <tr>
                                         <th class="border">#</th>
@@ -50,13 +51,14 @@
                                         <th class="border">Remarks</th>
                                         <th class="border">Date</th>
                                         <th class="border">Cause</th>
+                                        <th class="border">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(record, index) in service_records">
                                         <td>{{index + 1}}</td>
-                                        <td>{{ record.from }}</td>
-                                        <td>{{ record.to }}</td>
+                                        <td>{{ formatDate(record.from) }}</td>
+                                        <td>{{ formatDate(record.to) }}</td>
                                         <td>{{ record.position_title }}</td>
                                         <td>{{ record.status }}</td>
                                         <td>{{ record.salary }}</td>
@@ -64,8 +66,11 @@
                                         <td>{{ record.branch }}</td>
                                         <td>{{ record.pay }}</td>
                                         <td>{{ record.remark }}</td>
-                                        <td>{{ record.date }}</td>
+                                        <td>{{ formatDate(record.date) }}</td>
                                         <td>{{ record.cause }}</td>
+                                        <td>
+                                            <button class="btn btn-primary" @click="editModal(record)"><i class="fas fa-edit"></i></button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -140,7 +145,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="station">Station/Place of Assignment</label>
-                                    <v-select class="form-control form-control-border border-width-2" @input="getPosition()" v-model.lazy="selected_station" placeholder="Select Station" :options="depts" label="title"></v-select>
+                                    <v-select class="form-control form-control-border border-width-2" @input="getPosition()" v-model.lazy="record_form.station" placeholder="Select Station" :options="depts" :reduce="depts => depts.id" label="title"></v-select>
                                     <span v-if="errors.station">
                                         <p class="text-danger">Field Required</p>
                                     </span>
@@ -240,7 +245,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="submitEmployeeServiceRecord()">Save changes</button>
+                        <button type="button" v-if="edit = false" class="btn btn-primary" @click="submitEmployeeServiceRecord()">Save changes</button>
+                        <button type="button" v-if="edit = true" class="btn btn-primary" @click="submitEmployeeServiceRecordUpdates()">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -253,6 +259,7 @@
     export default{
         data(){
             return{
+                edit: false,
                 form: new Form({
                     'personal_information_id': null,
                     'ORNo': null,
@@ -285,6 +292,30 @@
             }
         },
         methods:{
+
+            formatDate: function(date)
+            {
+                return moment(date).format('MM/DD/YYYY')
+            },
+
+            addModal: function()
+            {
+                $('#recordModal').modal('show')
+                this.edit = false
+            },
+
+            editModal: function(data)
+            {
+                this.$Progress.start()
+                this.record_form.reset()
+                Object.assign(this.record_form, data)
+                this.edit = true
+                this.getPosition()
+                this.record_form.position_id = data.position_id
+                this.$Progress.finish()
+                $('#recordModal').modal('show')
+            },
+
             getServiceRecord: function()
             {
                 axios.get('api/servicerecord')
@@ -331,8 +362,17 @@
             getPosition: function()
             {
                 this.record_form.position_id = null
-                this.record_form.station = this.selected_station.id
-                this.positions = this.selected_station.positions
+                axios.get('api/fetch_positions?id=' + this.record_form.station)
+                .then(({data}) => {
+                    this.positions = data
+                })
+                .catch(e => {
+                    console.log(e)
+                    toast.fire({
+                        icon:'error',
+                        title:'Failed to fetch positions'
+                    })
+                })
             },
 
             getRecord: function()
@@ -391,6 +431,26 @@
                 .catch(e => {
                     console.log(e)
                     this.errors = e.response.data.errors
+                })
+            },
+
+            submitEmployeeServiceRecordUpdates: function()
+            {
+                axios.patch('api/employeeservicerecord/'+this.record_form.id, this.record_form)
+                .then(e => {
+                    toast.fire({
+                        icon:'success',
+                        title: 'Success'
+                    })
+                    this.edit = false
+                    $('#recordModal').modal('hide')
+                    this.getEmployeeServiceRecords()
+                })
+                .catch(e => {
+                    toast.fire({
+                        icon:'success',
+                        title: 'Failed to edit record'
+                    })
                 })
             }
         },

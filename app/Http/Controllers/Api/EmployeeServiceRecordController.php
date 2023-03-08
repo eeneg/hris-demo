@@ -21,7 +21,7 @@ class EmployeeServiceRecordController extends Controller
         ->where('employee_service_records.service_record_id',  $request->id)
         ->leftJoin('positions', 'employee_service_records.position_id', '=', 'positions.id')
         ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
-        ->orderBy('created_at')
+        ->orderBy('created_at', 'DESC')
         ->get();
     }
 
@@ -93,7 +93,22 @@ class EmployeeServiceRecordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'service_record_id' => 'required',
+            'from' => 'required',
+            'to' => 'required',
+            'position_id' => 'required',
+            'status' => 'required',
+            'salary' => 'required',
+            'station' => 'required',
+            'branch' => 'required',
+            'pay' => 'required',
+            'remark' => 'required',
+            'date' => 'required',
+            'cause'  => 'required'
+        ]);
+
+        EmployeeServiceRecord::find($id)->update($request->all());
     }
 
     /**
