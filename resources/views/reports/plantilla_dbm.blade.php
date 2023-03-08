@@ -165,7 +165,7 @@
                                 <span style="float: right; font-weight: normal; font-size: 18pt;"></span>
                             </th>
                             <th colspan="7" style="text-align: left; font-weight: normal; font-size: 18pt;">
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ $department->title }}
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ @$department->title }}
                             </th>
                         </thead><thead>
                             <th colspan="2" style="text-align: left; font-size:  18pt; font-weight: normal;">
@@ -173,7 +173,7 @@
                                 <span style="float: right; font-weight: normal; font-size:  18pt;"></span>
                             </th>
                             <th colspan="7" style="text-align: left; font-weight: normal; font-size:  18pt;">
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ $department->function }}
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ @$department->function }}
                             </th>
                         </thead>
                         <thead>
@@ -182,7 +182,7 @@
                                 <span style="float: right; font-weight: normal; font-size: 18pt;"></span>
                             </th>
                             <th colspan="7" style="text-align: left; font-weight: normal; font-size:  18pt;">
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ $department->projectactivity }}
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ @$department->projectactivity }}
                             </th>
                         </thead>
                         <thead style="margin-bottom: 20px;">
@@ -191,7 +191,7 @@
                                 <span style="float: right; font-weight: normal; font-size: 16px;"></span>
                             </th>
                             <th colspan="7" style="text-align: left; font-weight: normal; font-size:  18pt; ">
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ $department->fund }}
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;{{ @$department->fund }}
                             </th>
                         </thead>
                         <thead>
@@ -209,8 +209,8 @@
 							<th colspan="2" class="th2" style="font-size: 14pt; font-weight: normal; text-align: left; border-top: none; border-bottom: none; border-right: none;"></th>
 							<th colspan="1" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-right: none; border-top: none; border-bottom: none;"> Title of Position</th>
                             <th colspan="1" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-top: none; border-bottom: none; border-right: none;"> Name of Incumbent</th>
-                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-right: none; border-top: none; line-height: 2.7rem;"> Per Annum {{ $previous_plantilla->year }}</th>
-                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-top: none;"> Rate/Annum {{ $plantilla->year }}</th>
+                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-right: none; border-top: none; line-height: 2.7rem;"> Per Annum {{ @$previous_plantilla->year }}</th>
+                            <th colspan="2" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-top: none;"> Rate/Annum {{ @$plantilla->year }}</th>
                             <th colspan="1" style="font-size: 14pt; font-weight: normal; border: solid black 2px;  border-left: none; border-top: none;"></th>
 						</thead>
 						<thead style="width: 100%;">
@@ -249,12 +249,12 @@
                             ?>
                             @foreach ($plantillacontents as $content)
                             <tr>
-								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{{ $content->old_number }}</p> </td>
-								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{{ $content->new_number }}</p></td>
-								<td class="tdHeight" style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none; padding-right: 10px;"><p class="pHeight" style="margin-left: 10px;">{{ $content->position->title }}</p></td>
+								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{{ @$content->old_number }}</p> </td>
+								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{{ @$content->new_number }}</p></td>
+								<td class="tdHeight" style="text-align: left;  font-size: 18pt; border: solid black 2px;  border-top: none; border-right: none; border-bottom: none; border-left: none; padding-right: 10px;"><p class="pHeight" style="margin-left: 10px;">{{ @$content->position->title }}</p></td>
 								<td class="tdHeight" style="text-align: left; font-style: italic; font-weight:bold; font-size: 18pt; border-top: none; border-right: none; border-bottom: none; border-left: none; padding-right: 10px;">
                                     <p class="pHeight" style="margin-left: 10px;">
-                                      {!! $content->personalinformation ? $content->personalinformation->firstname . ' ' . $content->personalinformation->middlename[0] . '. ' . $content->personalinformation->surname . ($content->personalinformation->nameextension ? ', '.$content->personalinformation->nameextension : '') : 'VACANT' !!}
+                                      {!! $content->personalinformation ? $content->personalinformation->firstname . ' ' . @$content->personalinformation->middlename[0] . '. ' . $content->personalinformation->surname . ($content->personalinformation->nameextension ? ', '.$content->personalinformation->nameextension : '') : 'VACANT' !!}
                                     </p>
                                 </td>
 								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{!! $content->salaryauthorized ? $content->salaryauthorized->grade.'/'.$content->salaryauthorized->step : '' !!}</p></td>
@@ -293,7 +293,6 @@
                                     ?>
                                 @endif
                                 @if ($loop->last)
-                                    {{-- TOTAL --}}
                                     <tr>
                                         <td class="tdHeight" colspan="2" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; border-right: none;"></td>
                                         <td class="tdHeight" colspan="3" style="text-align: left;  font-size: 18pt; border: solid black 2px; border-top: none; border-bottom: none; font-weight: normal; border-left: none; border-right: none;"></td>
