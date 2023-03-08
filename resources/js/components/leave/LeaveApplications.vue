@@ -111,7 +111,7 @@
                                          <a type="button" v-if=" leaveapplication.status != 'draft' && user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PGO-Executive' && leaveapplication.status != 'draft'" class="dropdown-item" @click.prevent="governor(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             For Governor's Approval
                                         </a>
-                                        <a class="dropdown-item" @click.prevent="deleteLeaveApplication(leaveapplication.id, index)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        <a class="dropdown-item" v-if="leaveapplication.status == 'draft'" @click.prevent="deleteLeaveApplication(leaveapplication.id, index)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             Delete
                                         </a>
                                     </div>
