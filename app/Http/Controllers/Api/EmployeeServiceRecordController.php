@@ -70,7 +70,14 @@ class EmployeeServiceRecordController extends Controller
      */
     public function show($id)
     {
-    //    return EmployeeServiceRecord::onlyTrashed()->where('service_record_id', $id)->orderBy('orderNo')->get();
+       $data = EmployeeServiceRecord::select('employee_service_records.*', 'positions.title as position_title', 'departments.description as dept_name')
+       ->where('employee_service_records.service_record_id',  $id)
+       ->leftJoin('positions', 'employee_service_records.position_id', '=', 'positions.id')
+       ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+       ->orderBy('created_at', 'DESC')
+       ->get();
+
+       return view('reports.service-record', compact('data'));
     }
 
     /**

@@ -10,7 +10,12 @@
                         <div class="col-md-6">
                             <h3>Employee Service Record</h3>
                         </div>
-                        <div class="col-md-5">
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <v-select class="form-control form-control-border border-width-2" @input="getRecord()" placeholder="Select Employee" v-model.lazy="record" :options="data" label="name"></v-select>
                                 <span v-if="errors.personal_information_id">
@@ -18,13 +23,11 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn btn-primary w-100" :disabled="form.personal_information_id == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success float-right mr-2" :disabled="form.personal_information_id == null" @click="printRecord()">Print <i class="fas fa-print"></i></button>
+                            <button type="submit" class="btn btn-primary float-right mr-2" :disabled="form.personal_information_id == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
                         </div>
                     </div>
-                </div>
-
-                <div class="card-body">
                     <div class="row">
                         <div class="card-body table-responsive border p-0" style="height: 400px;">
                             <table class="table table-striped text-nowrap custom-table text-center w-100">
@@ -253,6 +256,8 @@
             </div>
         </div>
 
+        <iframe id="i" frameborder="0" hidden></iframe>
+
     </div>
 </template>
 
@@ -286,10 +291,11 @@
                 depts: [],
                 selected_station: {},
                 positions: [],
-                record: {'id': null, 'name': null, 'service_record': {}},
+                record: null,
                 service_records: [],
                 errors: {},
-                service_record_id: null
+                service_record_id: null,
+                print: ''
             }
         },
         methods:{
@@ -445,6 +451,7 @@
                     })
                     this.edit = false
                     $('#recordModal').modal('hide')
+                    this.record_form.reset()
                     this.getEmployeeServiceRecords()
                 })
                 .catch(e => {
@@ -463,6 +470,21 @@
                 })
                 .catch(e => {
 
+                })
+            },
+
+            printRecord: function(){
+                axios.get('api/employeeservicerecord/'+this.service_record_id)
+                .then(e => {
+                    var f = document.getElementById('i')
+                    f.contentWindow.document.write(e.data)
+                    // setTimeout(function () {
+                        f.contentWindow.focus()
+                        f.contentWindow.print()
+                    // }, 500);
+                })
+                .catch(e => {
+                    console.log(e)
                 })
             }
         },
