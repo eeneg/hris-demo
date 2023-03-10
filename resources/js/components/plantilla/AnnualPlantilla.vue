@@ -4,6 +4,9 @@
             <not-authorized></not-authorized>
         </div>
         <div v-else class="col-md-12">
+
+            <csc-report></csc-report>
+
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <div class="d-inline-flex">
@@ -203,6 +206,7 @@
     import createplantillamodal from "./modals/CreatePlantillaModal"
     import itemForm from "./modals/ItemForm"
     import duplicateplantillamodal from "./modals/DuplicatePlantillaModal"
+    import cscReport from "./reports/CSC"
 
     export default {
         data() {
@@ -463,23 +467,27 @@
                     });
             },
             generatePlantilla(type){
-                this.$Progress.start();
-                axios.post('generatePlantilla', {type: type, dept_id: this.selectedDepartment.id})
-                    .then(response => {
-                        let options = {
-                            height: screen.height * 0.65 + 'px',
-                            page: '1'
-                        };
-                        $('#pdfModal').modal('show');
-                        PDFObject.embed(response.data.path, "#pdf-viewer", options);
-                        this.$Progress.finish();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-                    .finally(() => {
-                        
-                    });
+                if (type == 'CSC') {
+                    window.print()
+                } else {
+                    this.$Progress.start();
+                    axios.post('generatePlantilla', {type: type, dept_id: this.selectedDepartment.id})
+                        .then(response => {
+                            let options = {
+                                height: screen.height * 0.65 + 'px',
+                                page: '1'
+                            };
+                            $('#pdfModal').modal('show');
+                            PDFObject.embed(response.data.path, "#pdf-viewer", options);
+                            this.$Progress.finish();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            
+                        });
+                }
             },
             async plantillaReport() {
                 const { value: report } = await Swal.fire({
@@ -492,13 +500,14 @@
                     },
                     inputValidator: (value) => {
                         if (!value) {
-                        return 'You need to choose a format!'
+                            return 'You need to choose a format!'
                         }
                     }
                 })
 
                 if (report) {
                     this.generatePlantilla(report);
+                    
                     // wal.fire({ html: `You selected: ${report}` })
                 }
             },
@@ -595,7 +604,8 @@
         components: {
             'create-plantilla-modal': createplantillamodal,
             'item-form': itemForm,
-            'duplicate-plantilla-modal': duplicateplantillamodal
+            'duplicate-plantilla-modal': duplicateplantillamodal,
+            'csc-report': cscReport
         },
         created() {
             this.$Progress.start();

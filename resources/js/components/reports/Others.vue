@@ -119,6 +119,7 @@
                                     <option value="">Select Report</option>
                                     <option value="Salary Grades">Positions with specific salary grade/s</option>
                                     <option value="Employee Names">Names & Position</option>
+                                    <option value="Retirees of Specific Year">Retirees of Specific Year</option>
                                 </select>
                             </div>
                             <div class="form-group">
