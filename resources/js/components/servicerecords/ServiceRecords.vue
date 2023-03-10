@@ -478,10 +478,14 @@
                 .then(e => {
                     var f = document.getElementById('i')
                     f.contentWindow.document.write(e.data)
-                    // setTimeout(function () {
+                    setTimeout(function () {
                         f.contentWindow.focus()
                         f.contentWindow.print()
-                    // }, 500);
+
+                        f.contentWindow.document.open();
+                        f.contentWindow.document.write("");
+                        f.contentWindow.document.close();
+                    }, 500);
                 })
                 .catch(e => {
                     console.log(e)

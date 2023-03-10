@@ -9,30 +9,29 @@
 <script>
 </script>
 <body>
-    <table class="table table-striped text-nowrap custom-table text-center w-100">
+    <table class="table table-striped text-nowrap custom-table text-center w-100" style="border: solid 1px">
         <thead>
             <tr>
-                <th colspan="1" class="border"></th>
-                <th colspan="2" class="border">Service</th>
-                <th colspan="3" class="border">Record of Appointment</th>
-                <th colspan="2" class="border">Office Entity / Division</th>
-                <th colspan="1" class="border">Leave of Absences</th>
-                <th colspan="3" class="border">Separation</th>
-                <th colspan="1" class="border"></th>
+                <th colspan="1" style="border: solid 1px"></th>
+                <th colspan="2" style="border: solid 1px">Service</th>
+                <th colspan="3" style="border: solid 1px">Record of Appointment</th>
+                <th colspan="2" style="border: solid 1px">Office Entity / Division</th>
+                <th colspan="1" style="border: solid 1px">Leave of Absences</th>
+                <th colspan="3" style="border: solid 1px">Separation</th>
             </tr>
             <tr>
-                <th class="border">#</th>
-                <th class="border">From</th>
-                <th class="border">To</th>
-                <th class="border">Designation<br>(Positon)</th>
-                <th class="border">Status</th>
-                <th class="border">Salary</th>
-                <th class="border">Station/ <br>Place Assignment</th>
-                <th class="border">Branch</th>
-                <th class="border">Absences w/o<br>Pay</th>
-                <th class="border">Remarks</th>
-                <th class="border">Date</th>
-                <th class="border">Cause</th>
+                <th style="border: solid 1px">#</th>
+                <th style="border: solid 1px">From</th>
+                <th style="border: solid 1px">To</th>
+                <th style="border: solid 1px">Designation<br>(Positon)</th>
+                <th style="border: solid 1px">Status</th>
+                <th style="border: solid 1px">Salary</th>
+                <th style="border: solid 1px">Station/ <br>Place Assignment</th>
+                <th style="border: solid 1px">Branch</th>
+                <th style="border: solid 1px">Absences w/o<br>Pay</th>
+                <th style="border: solid 1px">Remarks</th>
+                <th style="border: solid 1px">Date</th>
+                <th style="border: solid 1px">Cause</th>
             </tr>
         </thead>
         <tbody>
@@ -43,19 +42,19 @@
                 }
             @endphp
             @foreach ($data as $key => $record)
-                <tr>
-                    <td>{{$key + 1}}</td>
-                    <td>{{ formatDate($record->from) }}</td>
-                    <td>{{ formatDate($record->to) }}</td>
-                    <td>{{ $record->position_title }}</td>
-                    <td>{{ $record->status }}</td>
-                    <td>{{ $record->salary }}</td>
-                    <td>{{ $record->dept_name }}</td>
-                    <td>{{ $record->branch }}</td>
-                    <td>{{ $record->pay }}</td>
-                    <td>{{ $record->remark }}</td>
-                    <td>{{ formatDate($record->date) }}</td>
-                    <td>{{ $record->cause }}</td>
+                <tr style="border: solid 1px">
+                    <td style="border: solid 1px">{{$key + 1}}</td>
+                    <td style="border: solid 1px">{{ formatDate($record->from) }}</td>
+                    <td style="border: solid 1px">{{ formatDate($record->to) }}</td>
+                    <td style="border: solid 1px">{{ $record->position_title }}</td>
+                    <td style="border: solid 1px">{{ $record->status }}</td>
+                    <td style="border: solid 1px">{{ $record->salary }}</td>
+                    <td style="border: solid 1px">{{ $record->dept_name }}</td>
+                    <td style="border: solid 1px">{{ $record->branch }}</td>
+                    <td style="border: solid 1px">{{ $record->pay }}</td>
+                    <td style="border: solid 1px">{{ $record->remark }}</td>
+                    <td style="border: solid 1px">{{ formatDate($record->date) }}</td>
+                    <td style="border: solid 1px">{{ $record->cause }}</td>
                 </tr>
             @endforeach
         </tbody>
