@@ -257,11 +257,19 @@
                                       {!! $content->personalinformation ? $content->personalinformation->firstname . ' ' . @$content->personalinformation->middlename[0] . '. ' . $content->personalinformation->surname . ($content->personalinformation->nameextension ? ', '.$content->personalinformation->nameextension : '') : 'VACANT' !!}
                                     </p>
                                 </td>
-								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{!! $content->salaryauthorized ? $content->salaryauthorized->grade.'/'.$content->salaryauthorized->step : '' !!}</p></td>
-								<td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">{!! $content->salaryauthorized ? number_format($content->salaryauthorized->amount * 12) : '' !!}</p></td>
+								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">
+                                    <p class="pHeight">
+                                        {!! $content->salaryauthorized ? $content->salaryauthorized->grade.'/'.$content->salaryauthorized->step : '' !!}
+                                    </p>
+                                </td>
+								<td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;">
+                                    <p class="pHeight" style="margin-right: 10px;">
+                                        {!! $content->salaryauthorized ? number_format($content->salaryauthorized->amount * 12) : '' !!}
+                                    </p>
+                                </td>
 								<td class="tdHeight" style="text-align: center; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight">{!! $content->salaryproposed ? $content->salaryproposed->grade.'/'.$content->salaryproposed->step : '' !!}</p></td>
 								<td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">{!! $content->salaryproposed ? number_format($content->salaryproposed->amount * 12) : '' !!}</p></td>
-                                <?php $diff = $content->salaryproposed ? (($content->salaryproposed->amount * 12) - ($content->salaryauthorized->amount * 12)) : 0; ?>
+                                <?php $diff = $content->salaryproposed ? (($content->salaryproposed->amount * 12) - ($content->salaryauthorized ? $content->salaryauthorized->amount * 12 : 0)) : 0; ?>
                                 @if ($diff == 0)
                                 <td class="tdHeight" style="text-align: right; font-size: 18pt; border: solid black 2px; border-top: none; border-right: none; border-bottom: none; border-left: none;"><p class="pHeight" style="margin-right: 10px;">-</p></td>
                                 @else
