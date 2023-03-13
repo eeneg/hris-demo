@@ -225,7 +225,7 @@
                                 <div class="form-group">
                                     <label for="remarks">Remarks</label>
                                     <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.remark" id="remarks" placeholder="Enter Remarks">
-                                    <span v-if="errors.remarks">
+                                    <span v-if="errors.remark">
                                         <p class="text-danger">Field Required</p>
                                     </span>
                                 </div>
@@ -243,7 +243,7 @@
                                 <div class="form-group">
                                     <label for="cause">Cause</label>
                                     <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.cause" id="cause" placeholder="Enter Cause">
-                                    <span v-if="errors.text">
+                                    <span v-if="errors.cause">
                                         <p class="text-danger">Field Required</p>
                                     </span>
                                 </div>
