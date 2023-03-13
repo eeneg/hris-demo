@@ -79,7 +79,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 text-center" v-if="record !== null && form.personal_information_id == null">
+                            <p class="text-danger p-0 m-0">Complete Information Below First</p>
+                        </div>
+                        <div class="col-md-12" :class="{'border border-danger p-2': record !== null && form.personal_information_id == null}">
                             <div class="row mt-2">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -307,6 +310,7 @@
 
             addModal: function()
             {
+                this.record_form.reset()
                 $('#recordModal').modal('show')
                 this.edit = false
             },
@@ -466,10 +470,16 @@
             {
                 axios.delete('api/employeeservicerecord/'+id)
                 .then(e => {
-
+                    toast.fire({
+                        icon:'success',
+                        title: 'Record Deleted'
+                    })
                 })
                 .catch(e => {
-
+                    toast.fire({
+                        icon:'errot',
+                        title: 'Failed to Delete'
+                    })
                 })
             },
 
