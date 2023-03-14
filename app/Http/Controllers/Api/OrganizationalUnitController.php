@@ -2,83 +2,56 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Department;
+use App\Drivers\MermaidJs;
 use App\Http\Controllers\Controller;
 use App\OrganizationalUnit;
+use App\PlantillaContent;
 use Illuminate\Http\Request;
 
 class OrganizationalUnitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return [
+            'organizations' => OrganizationalUnit::root()->with('plantilla', 'department')->paginate(),
+            'departments' => Department::all(),
+        ];
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'group' => 'nullable|string|max:255',
+            'department_id' => 'uuid|nullable|exists:departments,id',
+            'plantilla_contents_id' => 'uuid|exists:plantilla_contents,id',
+            'parent_id' => 'uuid|nullable|exists:organizational_units,id',
+        ]);
+
+        $org = OrganizationalUnit::make()->forceFill($validated);
+
+        $org->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\OrganizationalUnit  $organizationalUnit
-     * @return \Illuminate\Http\Response
-     */
-    public function show(OrganizationalUnit $organizationalUnit)
+    public function show(string $id)
     {
-        //
+        return [
+            'organization' => $org = OrganizationalUnit::find($id),
+            'organizational_units' => $org->descendantsAndSelf()->with('plantilla')->get(),
+            'plantilla' => PlantillaContent::whereHas('position.department', fn ($q) => $q->where('departments.id', $org->department_id))
+                ->orderBy('order_number')
+                ->get(),
+            'mermaid' => (new MermaidJs($org))->translate(),
+            'descendants' => $org->descendants()->get()
+        ];
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\OrganizationalUnit  $organizationalUnit
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(OrganizationalUnit $organizationalUnit)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OrganizationalUnit  $organizationalUnit
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, OrganizationalUnit $organizationalUnit)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\OrganizationalUnit  $organizationalUnit
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(OrganizationalUnit $organizationalUnit)
     {
         //

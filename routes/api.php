@@ -106,6 +106,8 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('foreignTravel', 'Api\LeaveReportController@generateForeignTravelReport');
 
+    Route::resource('organization', 'Api\OrganizationalUnitController')->except('edit');
+
     Route::resource('audits', 'Api\AuditController')->only('index', 'show');
 });
 

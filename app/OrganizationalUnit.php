@@ -2,11 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
+use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class OrganizationalUnit extends Auditable
 {
-    use HasFactory;
+    use HasFactory, HasRecursiveRelationships;
 
     public $incrementing = false;
 
@@ -14,48 +17,32 @@ class OrganizationalUnit extends Auditable
 
     protected $primaryKey = 'id';
 
+    protected $fillable = [
+        'name', 'group',
+    ];
+
     public static function boot()
     {
         parent::boot();
 
         self::creating(function ($model) {
-            $model->id = self::generateUuid();
+            $model->id = Uuid::generate()->string;
         });
-    }
-
-    public function parent()
-    {
-        return $this->belongsTo(self::class, 'parent_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany(self::class, 'parent_id')->latest();
-    }
-
-    public function ascendant()
-    {
-    return $this->parent()->with('ascendant');
-    }
-
-    public function descendants()
-    {
-        return $this->children()->with('descendants');
-    }
-
-    public function isRoot()
-    {
-        return is_null($this->parent_id);
-    }
-
-    public function isChild()
-    {
-        return ! $this->isRoot();
     }
 
     public function plantilla()
     {
-        return $this->belongsTo(Plantilla::class);
+        return $this->belongsTo(PlantillaContent::class, 'plantilla_contents_id')->with('personalinformation', 'position', 'position.department');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function scopeRoot(Builder $query)
+    {
+        $query->whereNull('parent_id')->orWhere('parent_id', '');
     }
 
 }

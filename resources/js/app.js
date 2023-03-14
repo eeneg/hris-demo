@@ -5,6 +5,8 @@
  */
 
 require('./bootstrap');
+// require('./jquery_plantuml');
+require('./rawdeflate');
 
 
 window.Vue = require('vue');
@@ -100,7 +102,8 @@ const routes = [
     { path: '/users', component: require('./components/management/Users.vue').default },
     { path: '/developer', component: require('./components/management/Developer.vue').default },
     { path: '/audits', component: require('./components/management/Audits.vue').default },
-    { path: '/org', component: require('./components/Organization.vue').default },
+    { path: '/org', component: require('./components/organizations/Index.vue').default },
+    { path: '/org-view', name: 'org-view', component: require('./components/organizations/Show.vue').default },
     { path: '/activities', name: 'activities', component: require('./components/activities/Index.vue').default },
     { path: '/activities-create', component: require('./components/activities/Create.vue').default },
     { path: '/activities-edit', component: require('./components/activities/Edit.vue').default },

@@ -18,7 +18,8 @@ class CreateOrganizationalUnitsTable extends Migration
             $table->string('name');
             $table->string('group');
             $table->foreignUuid('parent_id');
-            $table->foreignUuid('plantilla_id');
+            $table->foreignUuid('plantilla_contents_id')->nullable();
+            $table->foreignUuid('department_id')->nullable();
             $table->timestamps();
         });
     }
