@@ -18,6 +18,7 @@
                             <h4 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h4>
                             <h5 class="m-0">Matti, Digos City</h5>
                             <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
+                            <h4 class="m-0 font-weight-bold">Retirees of year {{ retirees_report.year }}</h4>
                         </div>
                     </div>
 
@@ -91,6 +92,43 @@
                                             </td>
                                             <td class="align-middle pt-1 pb-1">{{ item.new_number ? item.new_number : item.old_number }}</td>
                                             <td class="align-middle pt-1 pb-1">
+                                                {{ item.position }} (SG {{ item.salaryproposed.grade }}-{{ item.salaryproposed.step }})
+                                                <small class="d-block m-0">{{ item.salaryproposed.amount | amount }} / month</small>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="report_type == 'Retirees of Specific Year'">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
+                                <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>Name</th>
+                                            <th>Birthdate</th>
+                                            <th>Position</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in print_data" :key="index">
+                                            <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
+                                            <td class="align-middle pt-1 pb-1">
+                                                <span style="font-weight: bold;">{{ item.name }}</span>
+                                                <small class="d-block">{{ item.office }}</small>
+                                            </td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.birthdate | myDate }}</td>
+                                            <td class="align-middle pt-1 pb-1">
+                                                #{{ item.new_number ? item.new_number : item.old_number }} - 
                                                 {{ item.position }} (SG {{ item.salaryproposed.grade }}-{{ item.salaryproposed.step }})
                                                 <small class="d-block m-0">{{ item.salaryproposed.amount | amount }} / month</small>
                                             </td>
@@ -190,6 +228,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="report_type == 'Retirees of Specific Year'" class="col-md-6 pr-5">
+                            <h3>Options</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="m-0">Year</label>
+                                        <input v-model="retirees_report.year" type="number" class="form-control" placeholder="eg. 2025">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -221,6 +270,9 @@
                     csc_level: 'All',
                     male: 0,
                     female: 0
+                },
+                retirees_report: {
+                    year: ''
                 }
             }
         },
@@ -287,6 +339,14 @@
                     if (this.employee_names_report.sort == 'Surname') {
                         filtered = _.sortBy(filtered, [function(o) { return o.name; }]);
                     }
+                }
+
+                if (this.report_type == 'Retirees of Specific Year') {
+                    filtered = _.filter(this.plantilla_content, (content) => { 
+                        if (this.retirees_report.year - 65 == moment(content.birthdate).format('YYYY')) {
+                            return true;
+                        }
+                    });
                 }
                 
                 this.print_data = filtered
