@@ -343,9 +343,8 @@
 
                 if (this.report_type == 'Retirees of Specific Year') {
                     filtered = _.filter(this.plantilla_content, (content) => { 
-                        if (this.retirees_report.year - 65 == moment(content.birthdate).format('YYYY')) {
-                            return true;
-                        }
+                        return this.retirees_report.year - 65 == moment(content.birthdate).format('YYYY')
+                            && (this.department != 'All' ? content.office == this.department : true)
                     });
                 }
                 
