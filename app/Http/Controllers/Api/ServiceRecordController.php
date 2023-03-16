@@ -20,7 +20,7 @@ class ServiceRecordController extends Controller
             ->orderBy('surname')
             ->get()
             ->map(function($e){
-                return ['id' => $e->id, 'name' => $e->getFullNameAttribute(), 'service_record' => $e->servicerecord];
+                return ['id' => $e->id, 'name' => $e->getFullNameAttribute(), 'service_record' => $e->servicerecord, 'retirement_date' => $e->retirement_date];
             });
     }
 
@@ -65,6 +65,14 @@ class ServiceRecordController extends Controller
     public function show($id)
     {
         //
+    }
+
+    public function retirementDate(Request $request)
+    {
+
+        $request->validate(['retirement_date' => 'required']);
+
+        PersonalInformation::find($request->id)->update(['retirement_date' => $request->retirement_date]);
     }
 
     /**

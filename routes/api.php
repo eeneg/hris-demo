@@ -109,6 +109,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('foreignTravel', 'Api\LeaveReportController@generateForeignTravelReport');
 
     Route::resource('audits', 'Api\AuditController')->only('index', 'show');
+
+    Route::post('retirementDate', 'Api\ServiceRecordController@retirementDate');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function () {

@@ -23,7 +23,10 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4 pt-3">
+                            Date Retired: {{ record !== null ? record.retirement_date : '' }} <button v-if="record !== null" type="button" class="btn p-0" @click="retirementDateModal()"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="col-md-2">
                             <button type="submit" class="btn btn-success float-right mr-2" :disabled="form.personal_information_id == null" @click="printRecord()">Print <i class="fas fa-print"></i></button>
                             <button type="submit" class="btn btn-primary float-right mr-2" :disabled="form.personal_information_id == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
                         </div>
@@ -259,6 +262,35 @@
             </div>
         </div>
 
+          <!-- Modal -->
+        <div class="modal fade" id="retirementDate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Retirement Date</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 p-2">
+                            <input type="date"  v-model.lazy="retirement_date" class="form-control" id="retirement_date">
+                            <span v-if="errors.retirement_date">
+                                <p class="text-danger">Field Required</p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="submitRetirementDate()">Save changes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
         <iframe id="i" frameborder="0" hidden></iframe>
 
     </div>
@@ -298,7 +330,8 @@
                 service_records: [],
                 errors: {},
                 service_record_id: null,
-                print: ''
+                print: '',
+                retirement_date: null,
             }
         },
         methods:{
@@ -313,6 +346,35 @@
                 this.record_form.reset()
                 $('#recordModal').modal('show')
                 this.edit = false
+            },
+
+            retirementDateModal: function()
+            {
+                this.retirement_date = null
+                $('#retirementDate').modal('show')
+            },
+
+            submitRetirementDate: function()
+            {
+                this.$Progress.start()
+                console.log(this.record)
+                axios.post('api/retirementDate', {id: this.record.id, retirement_date: this.retirement_date})
+                .then(e => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Saved'
+                    })
+                    this.retirement_date = null
+                    $('#retirementDate').modal('hide')
+                    this.$Progress.finish()
+                })
+                .catch(e => {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Failed to save'
+                    })
+                    this.errors = e.response.data.errors
+                })
             },
 
             editModal: function(data)
