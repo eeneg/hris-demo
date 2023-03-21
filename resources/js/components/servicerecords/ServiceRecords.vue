@@ -164,7 +164,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="position">Designation (Position)</label>
-                                    <v-select class="form-control form-control-border border-width-2" v-bind:class="{ disabled: true }" v-model.lazy="record_form.position_id" placeholder="Select Designation" :options="positions" label="title" :reduce="positions => positions.id"></v-select>
+                                    <v-select class="form-control form-control-border border-width-2" :disabled="record_form.station == null" v-model.lazy="record_form.position_id" placeholder="Select Designation" :options="positions" label="title" :reduce="positions => positions.id"></v-select>
                                     <span v-if="errors.position_id">
                                         <p class="text-danger">Field Required</p>
                                     </span>
