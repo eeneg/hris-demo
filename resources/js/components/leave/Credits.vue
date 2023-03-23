@@ -884,6 +884,7 @@ import CreditsTable from './CreditsTable.vue'
                     {
                         this.period_validation = false
                     }else{
+                        this.dates = this.dates.filter(e => e.date !== null );
                         this.populate_period()
                         this.period_validation = true
                     }
@@ -902,7 +903,6 @@ import CreditsTable from './CreditsTable.vue'
 
             populate_period: function()
             {
-
                 let period = null
 
                 if(this.options == 1)
