@@ -91,7 +91,7 @@
                             <tr class="trow">
                                 <th class="tthead" style="border-right: none; border-top: none; border-left: none;">Employee</th>
                                 <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">Type of Leave</th>
-                                <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">{{ $d['current_year'] }}Days</th>
+                                <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">Days</th>
                                 <th class="tthead2" style="border-right: none; border-top: none; border-left: none;">Inclusive Dates</th>
                             </tr>
                         </thead>
