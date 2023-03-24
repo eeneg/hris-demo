@@ -163,7 +163,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="position">Designation (Position)</label>
+                                    <label for="position">Designation (Position) <span class="text-danger" v-if="record_form.station == null">(Select Station First)</span></label>
                                     <v-select class="form-control form-control-border border-width-2" :disabled="record_form.station == null" v-model.lazy="record_form.position_id" placeholder="Select Designation" :options="positions" label="title" :reduce="positions => positions.id"></v-select>
                                     <span v-if="errors.position_id">
                                         <p class="text-danger">Field Required</p>
