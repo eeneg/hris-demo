@@ -8,17 +8,17 @@
                 <div class="card-header">
 
                     <div class="row mt-1">
-                        <div class="col-md-9">
-                            <h2>Leave Reports</h2>
-                            <small style="margin-left: 2px;">Generate Leave Reports</small>
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-12">
+                            <h2 style="display: inline-block;">Leave Reports</h2>
                             <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#foreign_travel">
                                 <i class="fas fa-print"></i> Foreign Travel
                             </button>
                             <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#exampleModal">
                                 <i class="fas fa-print"></i> Summary
                             </button>
+                        </div>
+                        <div class="col-md-12">
+                            <span><small style="margin-left: 2px;">Generate Leave Reports</small></span>
                         </div>
                     </div>
 
