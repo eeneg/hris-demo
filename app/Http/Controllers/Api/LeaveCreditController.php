@@ -136,7 +136,7 @@ class LeaveCreditController extends Controller
 
         $tardy = LeaveSummary::where('personal_information_id', $id)
                         ->whereNotNull('particulars->leave_type')
-                        ->whereIn('particulars->leave_type', ['Undertime', 'Tardy', 'UA', 'AWOL'])
+                        ->whereIn('particulars->leave_type', ['Undertime', 'Tardy', 'UA', 'AWOL', 'SLWOP', 'VLWOP'])
                         ->get()
                         ->map(function ($data) {
                             $year = null;

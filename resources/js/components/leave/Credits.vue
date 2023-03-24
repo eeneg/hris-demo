@@ -98,11 +98,13 @@
                             <table class="table table-sm table-bordered" style="display:block; overflow-y: auto; max-height: 120px;">
                                 <thead>
                                     <tr>
-                                        <th scope="col" style="width: 40%;">Month</th>
+                                        <th scope="col" style="width: 30%;">Month</th>
                                         <th scope="col" style="width: 15%;">Tardy</th>
                                         <th scope="col" style="width: 15%;">Undertime</th>
                                         <th scope="col" style="width: 15%;">UA</th>
                                         <th scope="col" style="width: 15%;">AWOL</th>
+                                        <th scope="col" style="width: 15%;">VLWOP</th>
+                                        <th scope="col" style="width: 15%;">SLWOP</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -119,6 +121,12 @@
                                         </td>
                                          <td>
                                             {{ data.AWOL }}
+                                        </td>
+                                        <td>
+                                            {{ data.VLWOP }}
+                                        </td>
+                                        <td>
+                                            {{ data.SLWOP }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -496,7 +504,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-12" v-if="particulars.leave_type == 'Tardy' || particulars.leave_type == 'Undertime' || particulars.leave_type == 'AWOL' ||
-                        particulars.leave_type == 'UA'">
+                        particulars.leave_type == 'UA' || particulars.leave_type == 'VLWOP' || particulars.leave_type == 'SLWOP'">
                             <label for="days">Number of times</label>
                             <input type="number" v-model.lazy="particulars.count" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter">
                         </div>
