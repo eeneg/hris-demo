@@ -18,12 +18,12 @@
                             <h4 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h4>
                             <h5 class="m-0">Matti, Digos City</h5>
                             <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
-                            <h4 class="m-0 font-weight-bold">Retirees of year {{ retirees_report.year }}</h4>
+                            <h4 class="m-0 font-weight-bold" v-if="report_type == 'Retirees of Specific Year'">Retirees of year {{ retirees_report.year }}</h4>
                         </div>
                     </div>
 
                     <!-- Reports -->
-                    <div v-if="report_type == 'Salary Grades'">
+                    <div v-if="report_type == 'Positions with specific salary grade/s'">
                         <div class="row mb-2">
                             <div class="col-12">
                                 <h3 class="m-0"><b>Salary Grade:</b> {{ salary_grades_report.salary_grade }}</h3>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="report_type == 'Employee Names'">
+                    <div v-if="report_type == 'Names & Position'">
                         <div class="row mb-2">
                             <div class="col-6">
                                 <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
@@ -153,12 +153,17 @@
                         <div class="col-md-6 pr-5">
                             <div class="form-group">
                                 <label style="font-weight: bold;margin: 0;">Report</label>
-                                <select v-model="report_type" class="form-control form-control-border border-width-2">
+                                <v-select class="form-control form-control-border border-width-2" v-model="report_type" :options="reports_type" placeholder="Select Report" req>
+                                    <template #search="{attributes, events}">
+                                        <input class="vs__search" :required="!report_type" v-bind="attributes" v-on="events" />
+                                    </template>
+                                </v-select>
+                                <!-- <select v-model="report_type" class="form-control form-control-border border-width-2">
                                     <option value="">Select Report</option>
                                     <option value="Salary Grades">Positions with specific salary grade/s</option>
                                     <option value="Employee Names">Names & Position</option>
                                     <option value="Retirees of Specific Year">Retirees of Specific Year</option>
-                                </select>
+                                </select> -->
                             </div>
                             <div class="form-group">
                                 <label style="font-weight: bold; margin: 0;">Department</label>
@@ -168,7 +173,7 @@
                         </div>
 
                         <!-- Options Right -->
-                        <div v-if="report_type == 'Salary Grades'" class="col-md-6 pr-5">
+                        <div v-if="report_type == 'Positions with specific salary grade/s'" class="col-md-6 pr-5">
                             <h3>Options</h3>
                             <div class="row">
                                 <div class="col-6">
@@ -192,7 +197,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="report_type == 'Employee Names'" class="col-md-6 pr-5">
+                        <div v-if="report_type == 'Names & Position'" class="col-md-6 pr-5">
                             <h3>Options</h3>
                             <div class="row">
                                 <div class="col-6">
@@ -259,6 +264,7 @@
                 print_data: [],
                 button_enable: false,
                 report_type: '',
+                reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year'],
                 salary_grades_report: {
                     salary_grade: '',
                     status_vacant: true,
@@ -301,7 +307,7 @@
                 this.print_data = []
                 var filtered = []
 
-                if (this.report_type == 'Salary Grades') {
+                if (this.report_type == 'Positions with specific salary grade/s') {
                     filtered = _.filter(this.plantilla_content, (content) => { 
                         if (this.salary_grades_report.salary_grade.includes('-')) {
                             let grade_from = this.salary_grades_report.salary_grade.split('-')[0]
@@ -322,7 +328,7 @@
                     });
                 }
 
-                if (this.report_type == 'Employee Names') {
+                if (this.report_type == 'Names & Position') {
                     this.employee_names_report.male = 0
                     this.employee_names_report.female = 0
                     filtered = _.filter(this.plantilla_content, (content) => { 
