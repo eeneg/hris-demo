@@ -16,6 +16,7 @@ use App\PlantillaDept;
 use App\Position;
 use App\SalaryGrade;
 use App\Setting;
+use App\Separation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -300,6 +301,23 @@ class PlantillaContentController extends Controller
                 $tbd->last_promotion = null;
                 $tbd->save();
             }
+        }
+
+        // Separation
+        if ($request->mode) {
+            $separation = Separation::firstOrCreate(
+                [
+                    'mode' => $request->mode,
+                    'effectivity_date' => $request->effectivity_date,
+                    'personal_information_id' => $plantillacontent->personal_information_id,
+                    'appointment_status' => $plantillacontent->appointment_status,
+                    'salary_grade' => $plantillacontent->salaryproposed->grade,
+                    'position' => $plantillacontent->position->title
+                ]
+            );
+            $employee = $plantillacontent->personalinformation;
+            $employee->status = $request->particular;
+            $employee->save();
         }
 
         $plantillacontent->salary_grade_auth_id = isset($salaryauthorized) ? $salaryauthorized->id : null;

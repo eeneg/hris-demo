@@ -100,7 +100,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-2">
+                        <div class="row mb-4">
                             <div class="col-sm-3">
                                 <div class="form-group" style="margin-bottom: 0.3rem;">
                                     <label style="font-weight: bold; margin: 0;">Appointment Status</label>
@@ -128,6 +128,34 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- SEPARATION -->
+                        <div v-if="show_separation">
+                            <div class="row mb-2">
+                                <div class="col-sm-12">
+                                    <hr>
+                                    <h5 class="font-weight-bold">Separation?</h5>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <label style="font-weight: bold; margin: 0;">Particulars</label>
+                                    <v-select class="form-control form-control-border border-width-2" v-model="form.mode" :options="separation_particulars" placeholder="Select particulars" req>
+                                        <template #search="{attributes, events}">
+                                            <input class="vs__search" :required="!form.mode" v-bind="attributes" v-on="events" />
+                                        </template>
+                                    </v-select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Effectivity Date</label>
+                                        <input class="form-control form-control-border border-width-2" type="date" v-model="form.effectivity_date" name="original_appointment" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
                     </div>
                     <div class="modal-footer modal-border" style="display: flow-root;padding: 6px 10px;">
                         <div v-if="loading" class="spinner-border text-primary" role="status" style="float: right;">
@@ -149,6 +177,7 @@
                 level: ['Key Positions', 'Administrative Positions', 'Support to Key Positions', 'Technical Positions'],
                 appointment_status: ['Permanent', 'Elected', 'Temporary', 'Co-terminous', 'Presidential Appointee'],
                 csc_level: [ {label: 'First Level', value: 1}, {label: 'Second Level', value: 2} ],
+                separation_particulars: ['Retirement', 'Resignation', 'Died', 'End of Term', 'Disability/Retirement', 'Dropped from the Roll', 'Dismissal', 'Terminated', 'Transfer'],
                 selected_employee: {},
                 form: new Form( {
                     'id': '',
@@ -166,7 +195,10 @@
                     'appointment_status': '',
                     'order_number': '',
                     'department_id': '',
-                    'csc_level': ''
+                    'csc_level': '',
+
+                    'mode': null,
+                    'effectivity_date': null
                 }),
             }
         },
@@ -180,6 +212,11 @@
                 department: {},
                 plantillacontent: {},
                 order_number: 0
+            }
+        },
+        computed: {
+            show_separation() {
+                return (this.form.personal_information_id == null) && (this.create_data.plantillacontent ? this.create_data.plantillacontent.personal_information_id != null : false)
             }
         },
         watch: {

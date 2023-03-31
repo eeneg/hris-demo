@@ -857,7 +857,6 @@
                     axios.get('api/joborder')
                     .then(({data}) => {
                         this.joborder = data;
-                        console.log(data)
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
@@ -1026,7 +1025,6 @@
                 axios.get('api/joborder')
                 .then(({data}) => {
                     this.joborder = data;
-                    console.log(data)
                 })
                 .catch(error => {
                     console.log(error.response.data.message);

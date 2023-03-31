@@ -175,6 +175,12 @@
 											<p>Appointments</p>
 										</router-link>
 									</li>
+                                    <li class="nav-item">
+										<router-link to="/separations" class="nav-link">
+											<i class="fas fa-edit nav-icon"></i>
+											<p>Separation</p>
+										</router-link>
+									</li>
 								</ul>
                             </li>
                             @endcan
