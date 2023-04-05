@@ -877,7 +877,7 @@
 
                                         <td>
                                             <div class="form-group input-group-sm">
-                                                <input type="number" :name="'tp_hours'+index" :id="'tp_hours'+index" class="form-control form-control-border border-width-2" v-model="trainingprogram.hours">
+                                                <input type="number" :name="'tp_hours'+index" :id="'tp_hours'+index" step=".01" class="form-control form-control-border border-width-2" v-model="trainingprogram.hours" >
                                             </div>
                                         </td>
 
