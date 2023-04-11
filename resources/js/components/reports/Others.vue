@@ -19,6 +19,7 @@
                             <h5 class="m-0">Matti, Digos City</h5>
                             <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
                             <h4 class="m-0 font-weight-bold" v-if="report_type == 'Retirees of Specific Year'">Retirees of year {{ retirees_report.year }}</h4>
+                            <h4 class="m-0 font-weight-bold" v-if="report_type == 'Birthday Celebrants'">Birthday Celebrants</h4>
                         </div>
                     </div>
 
@@ -138,6 +139,36 @@
                             </div>
                         </div>
                     </div>
+                    <div v-if="report_type == 'Birthday Celebrants'">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <h3 class="m-0">From <b>{{ birthdays_report.from | myDate }}</b> to <b>{{ birthdays_report.to | myDate }}</b></h3>
+                                <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>Name</th>
+                                            <th>Office</th>
+                                            <th>Birthday</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in print_data" :key="index">
+                                            <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
+                                            <td class="align-middle pt-1 pb-1"><span style="font-weight: bold;">{{ item.name }}</span></td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.office }}</td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.birthdate | myDate }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -244,6 +275,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="report_type == 'Birthday Celebrants'" class="col-md-6 pr-5">
+                            <h3>Options</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="m-0">From</label>
+                                        <input v-model="birthdays_report.from" type="date" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="m-0">To</label>
+                                        <input v-model="birthdays_report.to" type="date" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -264,7 +312,7 @@
                 print_data: [],
                 button_enable: false,
                 report_type: '',
-                reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year'],
+                reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year', 'Birthday Celebrants'],
                 salary_grades_report: {
                     salary_grade: '',
                     status_vacant: true,
@@ -279,6 +327,10 @@
                 },
                 retirees_report: {
                     year: ''
+                },
+                birthdays_report: {
+                    from: null,
+                    to: null
                 }
             }
         },
@@ -351,6 +403,14 @@
                     filtered = _.filter(this.plantilla_content, (content) => { 
                         return this.retirees_report.year - 65 == moment(content.birthdate).format('YYYY')
                             && (this.department != 'All' ? content.office == this.department : true)
+                    });
+                }
+
+                if (this.report_type == 'Birthday Celebrants') {
+                    filtered = _.filter(this.plantilla_content, (content) => { 
+                        const dateFormat = '____-MM-DD'
+                        return moment(content.birthdate, dateFormat).isBetween(this.birthdays_report.from, this.birthdays_report.to, null, '[]')
+                            || moment(content.birthdate, dateFormat).add(1, 'y').isBetween(this.birthdays_report.from, this.birthdays_report.to, null, '[]')
                     });
                 }
                 
