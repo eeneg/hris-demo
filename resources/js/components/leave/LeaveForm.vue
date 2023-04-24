@@ -100,11 +100,11 @@
                             </div>
                             <div class="col-md-1  form-group">
                                 <label style="margin: 0;">Vacation</label>
-                                <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" disabled>
                             </div>
                             <div class="col-md-1 form-group">
                                 <label style="margin: 0;">Sick</label>
-                                <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
+                                <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" disabled>
                             </div>
                             <div class="col-md-1  form-group">
                                 <label style="margin: 0;">Total</label>
@@ -392,8 +392,7 @@
                 axios.post('api/forleave')
                     .then(({data}) => {
                         this.personalinformations = data;
-                        this.get_balance()
-                        this.calculate()
+                        this.form.personal_information_id == null ? '' :  this.get_balance()
                     })
                     .catch(error => {
                         console.log(error.response.data.message);

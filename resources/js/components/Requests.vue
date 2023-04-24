@@ -20,7 +20,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="min-height: 300px; max-height: 500px;">
                     <div class="row align-items-end">
                         <div class="col-md-12">
                             <table class="table table-striped">
@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <div class="col-md-12" v-if="!$gate.isOfficeUser()">
+        <div class="col-md-12" v-if="!$gate.isOfficeUser()" style="margin-top: 50px;">
             <div class="card card-success card-outline">
                 <div class="card-header">
                     <div class="row">
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="min-height: 300px; max-height: 500px;">
                     <div class="row align-items-end">
                         <div class="col-md-12">
                             <table class="table table-striped">

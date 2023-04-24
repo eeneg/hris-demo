@@ -23,10 +23,10 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-md-4 pt-3">
+                        <div class="col-md-2 pt-3">
                             Date Retired: {{ record !== null ? record.retirement_date : '' }} <button v-if="record !== null" type="button" class="btn p-0" @click="retirementDateModal()"><i class="fas fa-edit"></i></button>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <button type="submit" class="btn btn-success float-right mr-2" :disabled="form.personal_information_id == null" @click="printRecord()">Print <i class="fas fa-print"></i></button>
                             <button type="submit" class="btn btn-primary float-right mr-2" :disabled="form.personal_information_id == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
                         </div>
@@ -357,7 +357,6 @@
             submitRetirementDate: function()
             {
                 this.$Progress.start()
-                console.log(this.record)
                 axios.post('api/retirementDate', {id: this.record.id, retirement_date: this.retirement_date})
                 .then(e => {
                     toast.fire({

@@ -86,7 +86,7 @@ class PersonalInformationController extends Controller
 
         if($department_id == null || (Auth::user()->role == 'Office Head' && $title == 'PHRMO') || (Auth::user()->role == 'Office Head' && $title == 'PGO-Local Chief Executive') || Auth::user()->role == 'Author'){
 
-            $allEmployees = DB::select("SELECT personal_informations.`id` as `id`,
+            $allEmployees = DB::select("SELECT DISTINCT personal_informations.`id` as `id`,
                 CONCAT(personal_informations.`surname`, ', ', personal_informations.`firstname`, ' ', IFNULL(personal_informations.`nameextension`, ''), ' ', IFNULL(personal_informations.`middlename`, '')) AS `name`
                 FROM plantilla_contents
                 JOIN personal_informations ON plantilla_contents.`personal_information_id` =  personal_informations.`id`
