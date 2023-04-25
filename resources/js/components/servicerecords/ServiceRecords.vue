@@ -401,10 +401,28 @@
 
             getEmployeeServiceRecords: function()
             {
+
+                Swal.fire({
+                    title: '<strong>Generating PDS</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
                 this.$Progress.start()
                 axios.get('api/employeeservicerecord?id='+this.service_record_id ?? this.record.service_record.id)
                 .then(({data}) => {
                     this.service_records = data
+                    Swal.close()
                     this.$Progress.finish()
                 })
                 .catch(e => {
