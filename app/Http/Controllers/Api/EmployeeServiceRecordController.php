@@ -75,7 +75,8 @@ class EmployeeServiceRecordController extends Controller
        ->leftJoin('positions', 'employee_service_records.position_id', '=', 'positions.id')
        ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
        ->orderBy('created_at', 'DESC')
-       ->get();
+       ->get()
+       ->chunk(12);
 
        return view('reports.service-record', compact('data'));
     }
