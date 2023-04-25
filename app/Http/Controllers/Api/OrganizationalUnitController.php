@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Department;
-use App\Drivers\MermaidJs;
+use App\Drivers\PlantUml;
 use App\Http\Controllers\Controller;
 use App\OrganizationalUnit;
 use App\PlantillaContent;
@@ -22,11 +22,58 @@ class OrganizationalUnitController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'group' => 'nullable|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\s\-]+$/u',
+                function ($attribute, $value, $fail) use ($request) {
+                    if(
+                        OrganizationalUnit::find($request->parent_id)
+                            ?->bloodline()
+                            ->where('name', $value)
+                            ->orWhere('group', $value)
+                            ->exists()
+                    ) {
+                        $fail('Name or group already exists. Please choose another.');
+                    }
+                },
+            ],
+            'group' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\s\-]+$/u',
+                function ($attribute, $value, $fail) use ($request) {
+                    if(
+                        OrganizationalUnit::find($request->parent_id)
+                            ?->bloodline()
+                            ->where('name', $value)
+                            ->orWhere('group', $value)
+                            ->exists()
+                    ) {
+                        $fail('Name or group already exists. Please choose another.');
+                    }
+                },
+            ],
             'department_id' => 'uuid|nullable|exists:departments,id',
-            'plantilla_contents_id' => 'uuid|exists:plantilla_contents,id',
-            'parent_id' => 'uuid|nullable|exists:organizational_units,id',
+            'plantilla_contents_id' => [
+                'uuid',
+                'exists:plantilla_contents,id',
+                function ($attribute, $value, $fail) use ($request) {
+                    if(
+                        OrganizationalUnit::where('plantilla_contents_id', $value)
+                            ->exists()
+                    ) {
+                        $fail('Plantilla already selected.');
+                    };
+                }
+            ],
+            'parent_id' => [
+                'uuid',
+                'nullable',
+                'exists:organizational_units,id',
+            ],
         ]);
 
         $org = OrganizationalUnit::make()->forceFill($validated);
@@ -42,7 +89,7 @@ class OrganizationalUnitController extends Controller
             'plantilla' => PlantillaContent::whereHas('position.department', fn ($q) => $q->where('departments.id', $org->department_id))
                 ->orderBy('order_number')
                 ->get(),
-            'mermaid' => (new MermaidJs($org))->translate(),
+            'plantuml' => (new PlantUml($org))->translate(),
             'descendants' => $org->descendants()->get()
         ];
     }

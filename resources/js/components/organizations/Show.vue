@@ -14,14 +14,7 @@
                 </button>
             </div>
             <div>
-                <pre class="mermaid">
-                ```mermaid
-                    graph LR
-                        A --- B
-                        B-->C[fa:fa-ban forbidden]
-                        B-->D(fa:fa-spinner);
-                ```
-                </pre>
+                <img :src="chart" alt="">
             </div>
             <div class="modal" tabindex="-1" id="exampleModal" role="dialog">
                 <div class="modal-dialog" role="document">
@@ -90,6 +83,7 @@ td a {
     display: block;
 }
 </style>
+
 <script>
 export default {
     data() {
@@ -102,10 +96,10 @@ export default {
                 name: '',
                 group: '',
                 parent_id: '',
-            })
+            }),
+            chart: null,
         }
     },
-
 
     beforeRouteEnter(to, from, next) {
         next(vm => vm.fetch(to.query.id))
@@ -119,10 +113,8 @@ export default {
                     this.organization = data.organization
                     this.plantillas = data.plantilla
                     this.organizational_units = data.organizational_units
+                    this.chart = 'http://localhost:8080/png/' + data.plantuml
                 })
-
-                // zip_deflate(sadasda, asd)
-
         },
         create() {
             axios.post('api/organization', this.insert)
