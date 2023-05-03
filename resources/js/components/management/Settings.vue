@@ -1,6 +1,6 @@
 <template>
     <div class="row justify-content-center">
-        <div class="col-md-12 text-center" v-if="!$gate.isAdministrator()">
+        <div class="text-center col-md-12" v-if="!$gate.isAdministrator()">
             <not-authorized></not-authorized>
         </div>
         <div v-else class="col-md-12">
@@ -21,6 +21,19 @@
                                 <has-error :form="form" field="plantilla"></has-error>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="margin: 0 0 0 2px;">
+                                    Set DTR API Token
+                                    <i class="fas" :class="{
+                                        'fa-check-circle green' : api_set,
+                                        'fa-exclamation-circle orange' : ! api_set,
+                                    }"></i>
+                                </label>
+                                <p class="text-muted" style="margin: 0 0 0 2px;"><i class="fas fa-info-circle blue"></i> Used in authenticating the <br>DTR System</p>
+                                <input v-model="form.dtr_api_token" type="text" class="form-control">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -38,9 +51,11 @@
         data() {
             return {
                 plantillas: {},
+                api_set: null,
                 form: new Form({
                     'plantilla': {},
-                    'year': ''
+                    'year': '',
+                    'dtr_api_token': '',
                 })
             }
         },
@@ -58,10 +73,12 @@
                 axios.get('api/setting')
                     .then(({data}) => {
                         this.form.fill(data);
+                        this.form.dtr_api_token = null;
+                        this.api_set = data.dtr_api_token;
                         this.form.year = data != null ? data.year : '';
                     })
                     .catch(error => {
-                        console.log(error.response.data.message);
+                        console.log(error.error.data.message);
                     });
             },
             save_settings() {

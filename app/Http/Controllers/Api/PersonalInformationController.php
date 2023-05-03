@@ -76,6 +76,26 @@ class PersonalInformationController extends Controller
         return new EmployeesListResource($personalinformations);
     }
 
+    public function listCurrent()
+    {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        return PersonalInformation::whereHas('plantillacontents', fn ($q) => $q->where('plantilla_id', $plantilla->id))
+            ->withOnly([])
+            ->orderBy('surname')
+            ->orderBy('firstname')
+            ->orderBy('middlename')
+            ->get(['id', 'firstname', 'middlename', 'surname', 'nameextension'])
+            ->map(function ($employee) {
+                return [
+                    ...$employee->toArray(),
+                    'name' => $employee->fullName,
+                ];
+            });
+    }
+
     public function forleave(Request $request)
     {
         $department_id = Auth::user()->role == 'Office User' || Auth::user()->role == 'Office Head' ? UserAssignment::where('user_id', Auth::user()->id)->first()->department_id : '';

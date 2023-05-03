@@ -44,7 +44,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         'joborder' => 'Api\JobOrderController',
         'servicerecord' => 'Api\ServiceRecordController',
         'employeeservicerecord' => 'Api\EmployeeServiceRecordController',
-        'separation' => 'Api\SeparationController'
+        'separation' => 'Api\SeparationController',
     ]);
 
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
@@ -112,6 +112,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('audits', 'Api\AuditController')->only('index', 'show');
 
     Route::post('retirementDate', 'Api\ServiceRecordController@retirementDate');
+
+    Route::get('current-employees', 'Api\PersonalInformationController@listCurrent');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function () {

@@ -14,15 +14,17 @@ class SettingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $data = [
-            'plantilla' => $plantilla,
-        ];
-
-        return $data;
+        return match(filter_var($request->token, FILTER_VALIDATE_BOOL)) {
+            true => [
+                'token' => Setting::whereTitle('dtr_api_token')->first(['value'])->value,
+            ],
+            default => [
+                'plantilla' => Plantilla::where('year', Setting::whereTitle('Default Plantilla')->first(['value'])->value)->first(),
+                'dtr_api_token' => Setting::whereTitle('dtr_api_token')->first(['value'])->value ? true : null,
+            ],
+        };
     }
 
     /**
@@ -34,12 +36,20 @@ class SettingsController extends Controller
     public function store(Request $request)
     {
         $this->authorize('isAdministrator');
+
         $this->validate($request, [
             'plantilla' => 'required',
+            'dtr_api_token' => 'nullable|string'
         ]);
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $default_plantilla->value = $request->plantilla['year'];
-        $default_plantilla->save();
+
+        Setting::firstOrCreate(['title' => 'Default Plantilla'])
+            ->update(['value' => $request->plantilla['year']]);
+
+        $request->whenFilled('dtr_api_token', function ($request) {
+            Setting::firstOrCreate(['title' => 'dtr_api_token'], ['user_id' => $request->user()->id])
+                ->update(['value' => $request->dtr_api_token]);
+        });
+
     }
 
     /**
