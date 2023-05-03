@@ -85,7 +85,7 @@
                         <div class="col-md-12 text-center" v-if="record !== null && form.personal_information_id == null">
                             <p class="text-danger p-0 m-0">Complete Information Below First</p>
                         </div>
-                        <div class="col-md-12" :class="{'border border-danger p-2': record !== null && form.personal_information_id == null}">
+                        <div class="col-md-12" :class="{'border border-danger p-2': record !== null && form.personal_information_id == null}" v-if="record">
                             <div class="row mt-2">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -105,7 +105,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="ORNo">O.R. Number</label>
                                         <input type="text" class="form-control form-control-border border-width-2" v-model="form.ORNo" id="ORNo" placeholder="Enter O.R. Number">
@@ -114,7 +114,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="dateIssued">Date Issued</label>
                                         <input type="date" class="form-control form-control-border border-width-2" v-model="form.dateIssued" id="dateIssued" placeholder="Enter Date Issued">
@@ -123,11 +123,20 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="amount">Amount</label>
-                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.amount" id="amount" placeholder="amount">
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.amount" id="amount" placeholder="Amount">
                                         <span v-if="errors.amount">
+                                            <p class="text-danger">Field Required</p>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="amount">Note</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.note" id="note" placeholder="Note">
+                                        <span v-if="errors.note">
                                             <p class="text-danger">Field Required</p>
                                         </span>
                                     </div>
@@ -283,6 +292,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-danger float-left" @click="setRetirementDateToNull()">Remove Retirement Date</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" @click="submitRetirementDate()">Save changes</button>
                 </div>
@@ -297,6 +307,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
     export default{
         data(){
             return{
@@ -350,8 +362,31 @@
 
             retirementDateModal: function()
             {
-                this.retirement_date = null
+                this.retirement_date = this.record !== null ? this.record.retirement_date : null
                 $('#retirementDate').modal('show')
+            },
+
+            setRetirementDateToNull: function()
+            {
+                this.$Progress.start()
+                axios.post('api/retirementDate', {id: this.record.id, retirement_date: null})
+                .then(e => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Saved'
+                    })
+                    this.retirement_date = null
+                    this.record.retirement_date = null
+                    $('#retirementDate').modal('hide')
+                    this.$Progress.finish()
+                })
+                .catch(e => {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Failed to save'
+                    })
+                    this.errors = e.response.data.errors
+                })
             },
 
             submitRetirementDate: function()
@@ -363,7 +398,7 @@
                         icon: 'success',
                         title: 'Saved'
                     })
-                    this.retirement_date = null
+                    this.record.retirement_date = this.retirement_date
                     $('#retirementDate').modal('hide')
                     this.$Progress.finish()
                 })
@@ -403,7 +438,7 @@
             {
 
                 Swal.fire({
-                    title: '<strong>Generating PDS</strong>',
+                    title: '<strong>Loading data...</strong>',
                     html: 'Dont <u>reload</u> or <u>close</u> the application ...',
                     icon: 'info',
                     willOpen () {
@@ -474,7 +509,7 @@
                     this.form.reset()
                     this.service_records = []
                 }else{
-                    Object.assign(this.form, this.record.service_record)
+                    this.form.reset()
                     this.service_record_id = this.record.service_record.id
                     this.getEmployeeServiceRecords()
                 }
@@ -563,6 +598,23 @@
             },
 
             printRecord: function(){
+
+                Swal.fire({
+                    title: '<strong>Loading data...</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
                 axios.get('api/employeeservicerecord/'+this.service_record_id)
                 .then(e => {
                     var f = document.getElementById('i')
@@ -575,6 +627,8 @@
                         f.contentWindow.document.write("");
                         f.contentWindow.document.close();
                     }, 500);
+
+                    Swal.close()
                 })
                 .catch(e => {
                     console.log(e)

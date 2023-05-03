@@ -961,7 +961,7 @@ import CreditsTable from './CreditsTable.vue'
 
             },
 
-            check_input: function()
+            check_input: _.debounce(function()
             {
                 this.leave_summary.map((e) => {
 
@@ -981,7 +981,7 @@ import CreditsTable from './CreditsTable.vue'
                         title: 'Period Empty'
                     })
                 }
-            },
+            }, 100),
 
             submit_leave: function(delete_save)
             {

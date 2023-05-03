@@ -69,9 +69,6 @@ class ServiceRecordController extends Controller
 
     public function retirementDate(Request $request)
     {
-
-        $request->validate(['retirement_date' => 'required']);
-
         PersonalInformation::find($request->id)->update(['retirement_date' => $request->retirement_date]);
     }
 

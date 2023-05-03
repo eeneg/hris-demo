@@ -24,6 +24,7 @@ class CreateServiceRecordsTable extends Migration
             $table->string('ORNo');
             $table->date('dateIssued');
             $table->string('amount');
+            $table->string('note');
             $table->timestamps();
         });
     }

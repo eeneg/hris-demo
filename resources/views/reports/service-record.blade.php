@@ -20,9 +20,15 @@
             return Carbon\Carbon::parse($date)->format('m/d/y');
         }
     @endphp
+
+    @php
+        function format($date){
+            return Carbon\Carbon::parse($date)->format('F d, y');
+        }
+    @endphp
     <main style="">
         @foreach ($data as $item)
-        <table class="tableM" style=" margin-bottom: 200rem; width: 100%; border: solid red 1px;">
+        <table class="tableM" style=" margin-bottom: 200rem; width: 100%;">
             <thead>
                 <tr>
                     <th colspan="12">
@@ -38,13 +44,13 @@
                         <span style="float: right; font-weight: normal; font-size: 18pt;"></span>
                     </th>
                     <th colspan="2" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
-                        ABAWAG
+                        {{ $employee->surname }}
                     </th>
                     <th colspan="2" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
-                        LAVENIA
+                        {{ $employee->firstname }}
                     </th>
                     <th colspan="3" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
-                        ABAWAG
+                        {{ $employee->middlename }}
                     </th>
                     <th colspan="3" style="text-align: left; font-weight: normal; font-size: 7pt; font-style: italic;">
                         (If married woman, give also full maiden name)
@@ -75,10 +81,10 @@
                         <span style="float: right; font-weight: normal; font-size: 18pt;"></span>
                     </th>
                     <th colspan="2" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-align: center;">
-                        March 12, 1987
+                        {{ $employee->birthdate }}
                     </th>
                     <th colspan="5" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-align: center;">
-                        Digos City, Davao del Sur
+                        {{ $employee->birthplace }}
                     </th>
                     <th colspan="3" style="margin-bottom: 20px; text-align: left; font-weight: normal; font-size: 7pt; font-style: italic;">
                         (Data herein should be checked from birth or baptismal certificate or some other reliable documents)
@@ -134,427 +140,21 @@
 
             </thead>
             <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
-                </tr>
-                @endforeach
-            </tr>
-            <tr>
-                @foreach ($item as $record)
-                <tr style="border: solid 1px">
-                    <td style="border: dashed 2px;">{{ formatDate($record->from) }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->to) }}</td>
-                    <td style="border: dashed 2px; width: 50%;">{{ $record->position_title }}</td>
-                    <td style="border: dashed 2px;">{{ $record->status }}</td>
-                    <td style="border: dashed 2px;">{{ $record->salary }}</td>
-                    <td style="border: dashed 2px;">{{ $record->dept_name }}</td>
-                    <td style="border: dashed 2px;">{{ $record->branch }}</td>
-                    <td style="border: dashed 2px;">{{ $record->pay }}</td>
-                    <td style="border: dashed 2px;">{{ $record->remark }}</td>
-                    <td style="border: dashed 2px;">{{ formatDate($record->date) }}</td>
-                    <td style="border: dashed 2px;">{{ $record->cause }}</td>
+                @foreach ($item as $key => $record)
+                <tr style="border: solid 1px" class="text-center">
+                    <td style="border-left: 1px solid; border-right: 1px solid; text-align: center">{{ formatDate($record->from) }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ formatDate($record->to) }}</td>
+                    <td style="border-right: 1px solid; width: 50%; text-align: center">
+                        {{ $record->position_title }}
+                    </td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->status }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->salary }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->dept_name }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->branch }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->pay }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->remark }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ formatDate($record->date) }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->cause }}</td>
                 </tr>
                 @endforeach
             </tr>
@@ -572,30 +172,30 @@
                 <td style="border: dashed 2px;">XXXX</td>
             </tr>
             <tr >
-                <td style="border: dashed 2px; height: 20px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
+                <td style="border-left: 1px solid; height: 20px;"></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style=""></td>
+                <td style="border-right: 1px solid;"></td>
             </tr>
             <tr >
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px; text-align: center; font-weight: bold;">NOTE:</td>
-                <td style="border: dashed 2px; text-align: center; font-weight: bold;">STILL IN SERVICE.</td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px;"></td>
-                <td style="border: dashed 2px; "></td>
+                <td style="border-left: 1px solid; border-bottom: 1px solid"></td>
+                <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;">NOTE:</td>
+                <td colspan="1" style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $sr->note }}</td>
+                <td style="border-bottom: 1px solid"></td>
+                <td style="border-bottom: 1px solid"></td>
+                <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $employee->retirement_date ? 'Date Retired:' : ''}}</td>
+                <td style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $employee->retirement_date ? $employee->retirement_date : '' }}</td>
+                <td style="border-bottom: 1px solid"></td>
+                <td style="border-bottom: 1px solid"></td>
+                <td style="border-bottom: 1px solid"></td>
+                <td style="border-right: 1px solid; border-bottom: 1px solid"></td>
             </tr>
                 <tr>
                     <th colspan="11" style="height: 50px;">
@@ -617,12 +217,12 @@
                 </tr>
                 <tr>
                     <td colspan="3" style="font-size: 16pt; border-bottom: solid 1px; text-align: center;">
-                        November 9, 2021
+                      {{ format($sr->dateCertified) }}
                     </td>
                     <td colspan="2" style="font-size: 16pt;">
                     </td>
                     <td colspan="6" style="font-size: 16pt; font-weight: bold; text-align: center;">
-                        LOURDES H. BUAT
+                        {{ $certName }}
                     </td>
                 </tr>
                 <tr>
@@ -632,7 +232,7 @@
                     <td colspan="2" style="font-size: 16pt;">
                     </td>
                     <td colspan="6" style="font-size: 16pt; text-align: center;">
-                        Administrative Officer V
+                        {{ $certPos }}
                         <br>
                         (HRMO III)
                     </td>
@@ -642,7 +242,7 @@
                         O.R. NO.
                     </td>
                     <td colspan="2" style="font-size: 12pt;">
-                        : 9037812
+                        : {{ $sr->ORNo }}
                     </td>
                 </tr>
                 <tr>
@@ -650,7 +250,7 @@
                         Date Issued
                     </td>
                     <td colspan="2" style="font-size: 12pt;">
-                        : 11/09/2021
+                        : {{ $sr->dateIssued }}
                     </td>
                 </tr>
                 <tr>
@@ -658,7 +258,7 @@
                         Amount
                     </td>
                     <td colspan="2" style="font-size: 12pt;">
-                        : P50.00
+                        : {{ $sr->amount }}
                     </td>
                 </tr>
                 <tr>

@@ -28,6 +28,7 @@ class ServiceRecord extends Model
         'dateIssued',
         'certifier_id',
         'amount',
+        'note'
     ];
 
     protected $table = 'service_records';
