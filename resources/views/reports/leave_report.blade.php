@@ -154,7 +154,7 @@
                     <td style="border: 1px solid #000000;" colspan=3 align="center" valign=middle bgcolor="#DAFEE2"><font color="#000000">Frequency</font></td>
                     <td style="border: 1px solid #000000;" colspan=2 align="center" valign=middle bgcolor="#DAFEE2"><font color="#000000">Length of Time</font></td>
                     <td style="border: 1px solid #000000;" colspan=2 align="center" valign=middle bgcolor="#ABD5FF"><font color="#000000">Unauthorized Absence</font></td>
-                    <td style="border: 1px solid #000000;" colspan=3 align="center" valign=middle bgcolor="#ABD5FF"><font color="#000000">Absent Without Leave</font></td>
+                    <td style="border: 1px solid #000000;" colspan=3 align="center" valign=middle bgcolor="#ABD5FF"><font color="#000000">Absence Without Leave</font></td>
                 </tr>
                 @php
                     $i = 1;

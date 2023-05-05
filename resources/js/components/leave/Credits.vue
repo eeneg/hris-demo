@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-md-7">
                             <div class="float-right" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Scroll <i class="fas fa-arrow-down"></i></button>
+                                <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Bottom <i class="fas fa-arrow-down"></i></button>
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
                                 <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>

@@ -191,7 +191,7 @@
                 <td style="border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $employee->retirement_date ? 'Date Retired:' : ''}}</td>
-                <td style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $employee->retirement_date ? $employee->retirement_date : '' }}</td>
+                <td colspan="1" style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $employee->retirement_date ? $employee->retirement_date : '' }}</td>
                 <td style="border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid"></td>
