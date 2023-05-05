@@ -18,7 +18,8 @@ class SettingsController extends Controller
     {
         return match(filter_var($request->token, FILTER_VALIDATE_BOOL)) {
             true => [
-                'token' => Setting::whereTitle('dtr_api_token')->first(['value'])->value,
+                'dtr_token' => Setting::whereTitle('dtr_api_token')->first(['value'])->value,
+                'dtr_url' => env('DTR_QUERY_URL'),
             ],
             default => [
                 'plantilla' => Plantilla::where('year', Setting::whereTitle('Default Plantilla')->first(['value'])->value)->first(),

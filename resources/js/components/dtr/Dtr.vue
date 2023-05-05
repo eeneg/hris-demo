@@ -58,6 +58,7 @@ export default ({
             },
             employees: [],
             token: null,
+            url: null,
             src: null,
         }
     },
@@ -70,7 +71,7 @@ export default ({
 
             headers.append("Authorization", `Bearer ${this.token}`);
 
-            this.src = fetch('http://localhost:8000/print/search?' + queryString.stringify({
+            this.src = fetch(`${this.url}?` + queryString.stringify({
                     "name[first]": employee.firstname,
                     "name[middle]": employee.middlename,
                     "name[last]": employee.surname,
@@ -107,8 +108,11 @@ export default ({
                 .then(({data}) => data)
                 .catch(error => console.error(error.response.data.message));
 
-            this.token = await axios.get('api/setting?token=true')
-                .then(({data}) => data.token)
+            axios.get('api/setting?token=true')
+                .then(({ data }) => {
+                    this.token = data.dtr_token
+                    this.url = data.dtr_url
+                })
                 .catch(error => console.error(error.response.data.message));
         },
     },
