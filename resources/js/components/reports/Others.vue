@@ -71,6 +71,7 @@
                             </div>
                             <div class="col-6">
                                 <h3 class="m-0"><b>Eligibility:</b> {{ employee_names_report.csc_level }}</h3>
+                                <h3 class="m-0"><b>Age:</b> {{ employee_names_report.age_range != '' ? employee_names_report.age_range : 'All' }}</h3>
                             </div>
                         </div>
                         <div class="row">
@@ -262,6 +263,12 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold;margin: 0;">Age Range <small>(Separate with "-")</small></label>
+                                        <input v-model="employee_names_report.age_range" type="text" class="form-control" placeholder="eg. 30 or 18-40" onkeypress="return event.charCode != 32">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div v-if="report_type == 'Retirees of Specific Year'" class="col-md-6 pr-5">
@@ -322,6 +329,7 @@
                     sort: 'Surname',
                     gender: 'All',
                     csc_level: 'All',
+                    age_range: '',
                     male: 0,
                     female: 0
                 },
@@ -384,10 +392,23 @@
                     this.employee_names_report.male = 0
                     this.employee_names_report.female = 0
                     filtered = _.filter(this.plantilla_content, (content) => { 
+
+                        let age_input = this.employee_names_report.age_range
+                        let age_res = true
+                        let birthday = moment(content.birthdate)
+                        if (age_input != '' && age_input.includes('-')) {
+                            let age1 = age_input.split('-')[0]
+                            let age2 = age_input.split('-')[1]
+                            age_res = moment().diff(birthday, 'years') >= age1 && moment().diff(birthday, 'years') <= age2
+                        } else if (age_input != '') {
+                            age_res = moment().diff(birthday, 'years') == age_input
+                        }
+
                         let inc = content.name != 'VACANT'
                             && (this.department != 'All' ? content.office == this.department : true)
                             && (this.employee_names_report.gender == 'All' ? true : (content.sex == this.employee_names_report.gender))
                             && (this.employee_names_report.csc_level != 'All' ? content.csc_level == this.employee_names_report.csc_level : true)
+                            && age_res
                         if (inc) {
                             this.employee_names_report.male += content.sex == 'Male' ? 1 : 0
                             this.employee_names_report.female += content.sex == 'Female' ? 1 : 0
