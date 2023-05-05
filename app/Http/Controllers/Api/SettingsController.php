@@ -22,7 +22,7 @@ class SettingsController extends Controller
             ],
             default => [
                 'plantilla' => Plantilla::where('year', Setting::whereTitle('Default Plantilla')->first(['value'])->value)->first(),
-                'dtr_api_token' => Setting::whereTitle('dtr_api_token')->first(['value'])->value ? true : null,
+                'dtr_api_token' => Setting::whereTitle('dtr_api_token')->first(['value'])?->value ? true : null,
             ],
         };
     }
@@ -45,9 +45,9 @@ class SettingsController extends Controller
         Setting::firstOrCreate(['title' => 'Default Plantilla'])
             ->update(['value' => $request->plantilla['year']]);
 
-        $request->whenFilled('dtr_api_token', function ($request) {
-            Setting::firstOrCreate(['title' => 'dtr_api_token'], ['user_id' => $request->user()->id])
-                ->update(['value' => $request->dtr_api_token]);
+        $request->whenFilled('dtr_api_token', function ($token) {
+            Setting::firstOrCreate(['title' => 'dtr_api_token'], ['user_id' => auth()->user()->id])
+                ->update(['value' => $token]);
         });
 
     }
