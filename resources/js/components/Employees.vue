@@ -41,7 +41,7 @@
                                 <td style="width: calc(100%-150px);">
                                     <img style="width: 38px;height: 38px;" class="img-circle mr-2" :src="getAvatar(employee.picture)" alt="User Avatar">
                                     <div style="display: inline-block;vertical-align: middle;line-height: 1.2rem;height: 35px;">
-                                        <span style="font-size: 1rem;">{{ employee.surname + ', ' + employee.firstname + ' ' + (employee.nameextension || '') + ' ' + (employee.middlename || '') }}</span>
+                                        <span style="font-size: 1rem;">{{ employee | name }}</span>
                                         <br>
                                         <span style="font-size: 0.8rem;" class="text-muted"><i>{{ employee.status }}</i></span>
                                     </div>

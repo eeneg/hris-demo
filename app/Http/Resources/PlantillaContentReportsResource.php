@@ -31,7 +31,7 @@ class PlantillaContentReportsResource extends ResourceCollection
                 'birthdate' => $item->personalinformation ? $item->personalinformation->birthdate : '',
                 'position' => $item->position ? $item->position->title : '',
                 'position_id' => $item->position ? $item->position->id : '',
-                'name' => $item->personalinformation ? $item->personalinformation->surname.', '.$item->personalinformation->firstname.' '.$item->personalinformation->nameextension.' '.$item->personalinformation->middlename : 'VACANT',
+                'name' => $item->personalinformation ? $item->personalinformation->surname.($item->personalinformation->nameextension ? ' '.$item->personalinformation->nameextension : '').', '.$item->personalinformation->firstname.' '.$item->personalinformation->middlename : 'VACANT',
                 'salaryauthorized' => $item->salaryauthorized,
                 'salaryproposed' => $item->salaryproposed,
                 'csc_level' => $item->csc_level

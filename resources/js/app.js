@@ -168,6 +168,9 @@ Vue.filter('initial', function(value){
     }
 })
 
+Vue.filter('name', function(value){
+    return value.surname + (value.nameextension ? ' ' + value.nameextension : '') + ', ' + value.firstname + ' ' + (value.middlename || '')
+})
 
 window.Fire = new Vue();
 

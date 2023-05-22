@@ -68,7 +68,7 @@
                                 <td>
                                     <span style="font-weight: bold;">{{ record.position }}</span>
                                     <br>
-                                    <span v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + ' ' + record.middlename }}</span>
+                                    <span v-if="record.surname">{{ record | name }}</span>
                                     <span v-else class="green"><b>VACANT</b></span>
                                 </td>
                                 <!-- <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td> -->
