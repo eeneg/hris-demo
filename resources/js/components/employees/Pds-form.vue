@@ -174,54 +174,6 @@
                                         <option>Dual citizenship (By Naturalization)</option>
                                     </select>
                                 </div>
-                            </div>
-
-                            <div class="form-group" style="display: flex;">
-                                <div class="col-md-4">
-                                    <div>
-                                        <label for="residentialaddress" style="line-height: 10px;">Residential Address</label>
-                                    </div>
-                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddress">
-                                </div>
-                                <div class="col-md-4">
-                                    <div>
-                                        <label for="telephone1" style="line-height: 10px;">Telephone</label>
-                                    </div>
-                                    <input type="text" name="telephone1" class="form-control form-control-border border-width-2" id="telephone1" v-model="form.telephone1">
-                                </div>
-                                <div class="col-md-4">
-                                    <div>
-                                        <label for="zipcode1" style="line-height: 10px;">Zip Code</label>
-                                    </div>
-                                    <input type="text" name="zipcode1" class="form-control form-control-border border-width-2" id="zipcode1" v-model="form.zipcode1">
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="display: flex;">
-                                <div class="col-md-4">
-                                    <div>
-                                        <label for="permanentaddress" style="line-height: 10px;">Permanent Address</label>
-                                    </div>
-                                    <input type="text" name="permanentaddress" class="form-control form-control-border border-width-2" id="permanentaddress" v-model="form.permanentaddress">
-                                    <span>
-                                        <strong class="text-danger" v-if="errors.has('permanentaddress')">Field Required</strong>
-                                    </span>
-                                </div>
-                                <div class="col-md-4">
-                                    <div>
-                                        <label for="telephone2" style="line-height: 10px;">Telephone</label>
-                                    </div>
-                                    <input type="text" name="telephone2" class="form-control form-control-border border-width-2" id="telephone2" v-model="form.telephone2">
-                                </div>
-                                <div class="col-md-4">
-                                    <div>
-                                        <label for="zipcode2" style="line-height: 10px;">Zip Code</label>
-                                    </div>
-                                    <input type="text" name="zipcode2" class="form-control form-control-border border-width-2" id="zipcode2" v-model="form.zipcode2">
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="display: flex;">
                                 <div class="col-md-4">
                                     <div>
                                         <label for="cellphone" style="line-height: 10px;">Mobile Number</label>
@@ -236,6 +188,139 @@
                                         <label for="email" style="line-height: 10px;">Email</label>
                                     </div>
                                     <input type="email" name="email" class="form-control form-control-border border-width-2" id="email" v-model="form.email">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; margin-top: 50px;">
+                                <div class="col-md-12">
+                                    <label for="residentialaddress" style="line-height: 10px; color:blue">RESIDENTIAL ADDRESS</label>
+                                    <p>{{ form.residentialaddress }}</p>
+                                    <hr/>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex;">
+                                <div class="col-md-4">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">House/Block/Lot No.</label>
+                                    </div>
+                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddresstable.house_lotNo">
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Street</label>
+                                    </div>
+                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddresstable.street">
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Subdivision/Village</label>
+                                    </div>
+                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddresstable.subdv_village">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:flex">
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Barangay</label>
+                                    </div>
+                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddresstable.barangay">
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">City/Municipality</label>
+                                    </div>
+                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddresstable.city_municipality">
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Province</label>
+                                    </div>
+                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddresstable.province">
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">ZIP CODE</label>
+                                    </div>
+                                    <input type="text" name="residentialaddress" class="form-control form-control-border border-width-2" id="residentialaddress" v-model="form.residentialaddresstable.zipcode">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex; margin-top: 50px;">
+                                <div class="col-md-12">
+                                    <label for="" style="line-height: 10px; color:red">PERMANENT ADDRESS</label>
+                                    <p>{{ form.permanentaddress }}</p>
+                                    <hr/>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: flex;">
+                                <div class="col-md-4">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">House/Block/Lot No.</label>
+                                    </div>
+                                    <input type="text" name="permanentaddresstable.house_lotNo" class="form-control form-control-border border-width-2" id="permanentaddresstable.house_lotNo" v-model="form.permanentaddresstable.house_lotNo">
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddresstable.house_lotNo')">Field Required</strong>
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Street</label>
+                                    </div>
+                                    <input type="text" name="permanentaddresstable.street" class="form-control form-control-border border-width-2" id="permanentaddresstable.street" v-model="form.permanentaddresstable.street">
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddresstable.street')">Field Required</strong>
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Subdivision/Village</label>
+                                    </div>
+                                    <input type="text" name="permanentaddresstable.subdv_village" class="form-control form-control-border border-width-2" id="permanentaddresstable.subdv_village" v-model="form.permanentaddresstable.subdv_village">
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddresstable.subdv_village')">Field Required</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:flex">
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Barangay</label>
+                                    </div>
+                                    <input type="text" name="permanentaddresstable.barangay" class="form-control form-control-border border-width-2" id="permanentaddresstable.barangay" v-model="form.permanentaddresstable.barangay">
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddresstable.barangay')">Field Required</strong>
+                                    </span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">City/Municipality</label>
+                                    </div>
+                                    <input type="text" name="permanentaddresstable.city_municipality" class="form-control form-control-border border-width-2" id="permanentaddresstable.city_municipality" v-model="form.permanentaddresstable.city_municipality">
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddresstable.city_municipality')">Field Required</strong>
+                                    </span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">Province</label>
+                                    </div>
+                                    <input type="text" name="permanentaddresstable.province" class="form-control form-control-border border-width-2" id="permanentaddresstable.province" v-model="form.permanentaddresstable.province">
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddresstable.province')">Field Required</strong>
+                                    </span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="residentialaddress" style="line-height: 10px;">ZIP CODE</label>
+                                    </div>
+                                    <input type="text" name="permanentaddresstable.zipcode" class="form-control form-control-border border-width-2" id="permanentaddresstable.zipcode" v-model="form.permanentaddresstable.zipcode">
+                                    <span>
+                                        <strong class="text-danger" v-if="errors.has('permanentaddresstable.zipcode')">Field Required</strong>
+                                    </span>
                                 </div>
                             </div>
                         </tab-content>
@@ -1546,6 +1631,8 @@ export default {
                     'tin': '',
                     'picture': '',
                     'status': 'Still in service',
+                    'residentialaddresstable': {},
+                    'permanentaddresstable': {},
                     'educationalbackground': {},
                     'familybackground': {},
                     'children': [{}],
@@ -1961,6 +2048,16 @@ export default {
                 data.pdsquestion = {}
             }
 
+            if(!data.residentialaddresstable)
+            {
+                data.residentialaddresstable = {}
+            }
+
+            if(!data.permanentaddresstable)
+            {
+                data.permanentaddresstable = {}
+            }
+
             this.form = data
 
             if(this.form.children.length == 0)
@@ -2011,6 +2108,16 @@ export default {
             if(!data.familybackground)
             {
                 data.familybackground = {}
+            }
+
+            if(!data.residentialaddresstable)
+            {
+                data.residentialaddresstable = {}
+            }
+
+            if(!data.permanentaddresstable)
+            {
+                data.permanentaddresstable = {}
             }
 
             if(!data.educationalbackground)

@@ -251,21 +251,42 @@
         <p style="position:absolute;top:363px;left:390px;white-space:nowrap;font-size: 9px;" class="ft13">
             17. RESIDENTIAL ADDRESS
         </p>
+        <div class="ft13" style="position:absolute;top:358px;left:518px; height:18px; width: 381px;white-space:nowrap;">
+            <div style="float: left; width: 45%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$ra->house_lotNo }}</p>
+            </div>
+            <div style="float: right; width: 55%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$ra->street }}</p>
+            </div>
+        </div>
         <p style="position:absolute;top:378px;left:566px;white-space:nowrap" class="ft13">
             <i>House/Block/Lot No.</i>
         </p>
         <p style="position:absolute;top:378px;left:783px;white-space:nowrap" class="ft13">
             <i>Street</i>
         </p>
+        <div class="ft13" style="position:absolute;top:388px;left:518px; height:18px; width: 381px;white-space:nowrap;">
+            <div style="float: left; width: 45%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$ra->subdv_village }}</p>
+            </div>
+            <div style="float: right; width: 55%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$ra->barangay }}</p>
+            </div>
+        </div>
         <p style="position:absolute;top:407px;left:569px;white-space:nowrap" class="ft13">
             <i>Subdivision/Village</i>
-        </p>
-        <p style="position:absolute;top:393px;left:569px;white-space:nowrap" class="ft13">
-            {{ @$personalinfos->residentialaddress }}
         </p>
         <p style="position:absolute;top:407px;left:776px;white-space:nowrap" class="ft13">
             <i>Barangay</i>
         </p>
+        <div class="ft13" style="position:absolute;top:418px;left:518px; height:18px; width: 381px;white-space:nowrap;">
+            <div style="float: left; width: 45%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$ra->city_municipality }}</p>
+            </div>
+            <div style="float: right; width: 55%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$ra->province }}</p>
+            </div>
+        </div>
         <p style="position:absolute;top:438px;left:573px;white-space:nowrap" class="ft13">
             <i>City/Municipality</i>
         </p>
@@ -277,27 +298,48 @@
             ZIP CODE
         </p>
         <p style="position:absolute;top:458px;left:685px;white-space:nowrap" class="f-inputs">
-            {{ @$personalinfos->zipcode1 }}
+            {{ @$ra->zipcode }}
         </p>
 
         <p style="position:absolute;top:482px;left:390px;white-space:nowrap;font-size: 9px;" class="ft13">
             18. PERMANENT ADDRESS
         </p>
+        <div class="ft13" style="position:absolute;top:476px;left:518px; height:18px; width: 381px;white-space:nowrap;">
+            <div style="float: left; width: 45%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$pa->house_lotNo }}</p>
+            </div>
+            <div style="float: right; width: 55%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$pa->street }}</p>
+            </div>
+        </div>
         <p style="position:absolute;top:496px;left:566px;white-space:nowrap" class="ft13">
             <i>House/Block/Lot No.</i>
         </p>
         <p style="position:absolute;top:496px;left:783px;white-space:nowrap" class="ft13">
             <i>Street</i>
         </p>
+        <div class="ft13" style="position:absolute;top:506px;left:518px; height:18px; width: 381px;white-space:nowrap;">
+            <div style="float: left; width: 45%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$pa->subdv_village }}</p>
+            </div>
+            <div style="float: right; width: 55%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$pa->barangay }}</p>
+            </div>
+        </div>
         <p style="position:absolute;top:526px;left:569px;white-space:nowrap" class="ft13">
             <i>Subdivision/Village</i>
-        </p>
-        <p style="position:absolute;top:511px;left:569px;white-space:nowrap" class="ft13">
-            {{ @$personalinfos->permanentaddress }}
         </p>
         <p style="position:absolute;top:526px;left:776px;white-space:nowrap" class="ft13">
             <i>Barangay</i>
         </p>
+        <div class="ft13" style="position:absolute;top:537px;left:518px; height:18px; width: 381px;white-space:nowrap;">
+            <div style="float: left; width: 45%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$pa->city_municipality }}</p>
+            </div>
+            <div style="float: right; width: 55%; height:100%; text-align:center; border-collapse:collapse; line-height: 0.9; word-wrap:break-word;">
+                <p style="margin-top:7px">{{ @$pa->province }}</p>
+            </div>
+        </div>
         <p style="position:absolute;top:558px;left:573px;white-space:nowrap" class="ft13">
             <i>City/Municipality</i>
         </p>
@@ -309,7 +351,7 @@
             ZIP CODE
         </p>
         <p style="position:absolute;top:579px;left:685px;white-space:nowrap" class="f-inputs">
-            {{ @$personalinfos->zipcode2 }}
+            {{ @$pa->zipcode }}
         </p>
 
         <p style="position:absolute;top:610px;left:390px;white-space:nowrap" class="ft13">

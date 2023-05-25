@@ -50,6 +50,14 @@ class EditRequestApprovedListener
                     $employee->familybackground()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                 }
 
+                if ($record->model == 'permanentaddresstable') {
+                    $employee->permanentaddresstable()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                }
+
+                if ($record->model == 'residentialaddresstable') {
+                    $employee->residentialaddresstable()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
+                }
+
                 if ($record->model == 'educationalbackground') {
                     $employee->educationalbackground()->updateOrCreate(['personal_information_id' => $employee->id], [$record->field => $record->newValue]);
                 }

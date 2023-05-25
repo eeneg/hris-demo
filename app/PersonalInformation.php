@@ -24,7 +24,7 @@ class PersonalInformation extends Authenticatable
     protected $table = 'personal_informations';
 
     protected $with = [
-        'barcode', 'familybackground', 'children', 'educationalbackground', 'eligibilities',
+        'barcode', 'familybackground', 'residentialaddresstable', 'permanentaddresstable', 'children', 'educationalbackground', 'eligibilities',
         'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion',
     ];
 
@@ -123,6 +123,16 @@ class PersonalInformation extends Authenticatable
     public function servicerecord()
     {
         return $this->hasOne('App\ServiceRecord', 'personal_information_id');
+    }
+
+    public function residentialaddresstable()
+    {
+        return $this->hasOne('App\ResidentialAddress', 'personal_information_id');
+    }
+
+    public function permanentaddresstable()
+    {
+        return $this->hasOne('App\PermanentAddress', 'personal_information_id');
     }
 
     public function getFullNameAttribute()

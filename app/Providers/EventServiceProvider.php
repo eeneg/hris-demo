@@ -27,6 +27,8 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\CreatePersonalInfo\LearningAndDevelopmentCreateListener',
             'App\Listeners\CreatePersonalInfo\OtherInformationCreateListener',
             'App\Listeners\CreatePersonalInfo\PDSQuestionCreateListener',
+            'App\Listeners\CreatePersonalInfo\ResidentialAddressCreateListener',
+            'App\Listeners\CreatePersonalInfo\PermanentAddressCreateListener',
         ],
         'App\Events\PersonalInfoUpdated' => [
             'App\Listeners\UpdatePersonalInfo\FamilyBackgroundUpdateListener',
@@ -37,6 +39,8 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\UpdatePersonalInfo\LearningAndDevelopmentUpdateListener',
             'App\Listeners\UpdatePersonalInfo\OtherInformationUpdateListener',
             'App\Listeners\UpdatePersonalInfo\PDSQuestionUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\ResidentialAddressUpdateListener',
+            'App\Listeners\UpdatePersonalInfo\PermanentAddressUpdateListener',
         ],
         'App\Events\EditRequestApproved' => [
             'App\Listeners\EditRequestApprovedListener',

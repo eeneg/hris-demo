@@ -174,12 +174,30 @@ class PersonalInformationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'surname' => 'required|string',
-            'firstname' => 'required|string',
-            'birthdate' => 'required|string',
-            'permanentaddress'      => 'required|string',
-            'cellphone'             => 'required|string',
-        ]);
+                'surname' => 'required|string',
+                'firstname' => 'required|string',
+                'birthdate' => 'required|string',
+                'cellphone'  => 'required|string',
+                'permanentaddresstable.house_lotNo' => 'required',
+                'permanentaddresstable.street' => 'required',
+                'permanentaddresstable.subdv_village' => 'required',
+                'permanentaddresstable.barangay' => 'required',
+                'permanentaddresstable.city_municipality' => 'required',
+                'permanentaddresstable.province' => 'required',
+                'permanentaddresstable.zipcode' => 'required',
+            ],
+            [
+                'permanentaddresstable.house_lotNo.required' => 'File Required',
+                'permanentaddresstable.street.required' => 'File Required',
+                'permanentaddresstable.subdv_village.required' => 'File Required',
+                'permanentaddresstable.barangay.required' => 'File Required',
+                'permanentaddresstable.city_municipality.required' => 'File Required',
+                'permanentaddresstable.province.required' => 'File Required',
+                'permanentaddresstable.zipcode.required' => 'File Required',
+            ]
+        );
+
+
 
         if ($request->picture != null) {
             $name = time().'.'.explode('/', explode(':', substr($request->picture, 0, strpos($request->picture, ';')))[1])[1];
@@ -219,12 +237,28 @@ class PersonalInformationController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'surname' => 'required|string',
-            'firstname' => 'required|string',
-            'birthdate' => 'required|string',
-            'permanentaddress' => 'required|string',
-            'cellphone' => 'required|string',
-        ]);
+                'surname' => 'required|string',
+                'firstname' => 'required|string',
+                'birthdate' => 'required|string',
+                'cellphone'  => 'required|string',
+                'permanentaddresstable.house_lotNo' => 'required',
+                'permanentaddresstable.street' => 'required',
+                'permanentaddresstable.subdv_village' => 'required',
+                'permanentaddresstable.barangay' => 'required',
+                'permanentaddresstable.city_municipality' => 'required',
+                'permanentaddresstable.province' => 'required',
+                'permanentaddresstable.zipcode' => 'required',
+            ],
+            [
+                'permanentaddresstable.house_lotNo.required' => 'File Required',
+                'permanentaddresstable.street.required' => 'File Required',
+                'permanentaddresstable.subdv_village.required' => 'File Required',
+                'permanentaddresstable.barangay.required' => 'File Required',
+                'permanentaddresstable.city_municipality.required' => 'File Required',
+                'permanentaddresstable.province.required' => 'File Required',
+                'permanentaddresstable.zipcode.required' => 'File Required',
+            ]
+        );
 
         $pi = PersonalInformation::findOrFail($id);
 
