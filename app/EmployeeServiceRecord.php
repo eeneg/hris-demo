@@ -26,7 +26,7 @@ class EmployeeServiceRecord extends Model
         'service_record_id',
         'from',
         'to',
-        'position_id',
+        'position',
         'status',
         'salary',
         'station',

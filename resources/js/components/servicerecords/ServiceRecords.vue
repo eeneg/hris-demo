@@ -65,10 +65,10 @@
                                         <td>{{index + 1}}</td>
                                         <td>{{ formatDate(record.from) }}</td>
                                         <td>{{ formatDate(record.to) }}</td>
-                                        <td>{{ record.position_title }}</td>
+                                        <td>{{ record.position }}</td>
                                         <td>{{ record.status }}</td>
                                         <td>{{ record.salary }}</td>
-                                        <td>{{ record.dept_name }}</td>
+                                        <td>{{ record.station }}</td>
                                         <td>{{ record.branch }}</td>
                                         <td>{{ record.pay }}</td>
                                         <td>{{ record.remark }}</td>
@@ -164,7 +164,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="station">Station/Place of Assignment</label>
-                                    <v-select class="form-control form-control-border border-width-2" @input="getPosition()" v-model.lazy="record_form.station" placeholder="Select Station" :options="depts" :reduce="depts => depts.id" label="title"></v-select>
+                                    <v-select class="form-control form-control-border border-width-2" @input="getPosition()" v-model.lazy="record_form.station" placeholder="Select Station" :options="depts" :reduce="depts => depts" label="title"></v-select>
                                     <span v-if="errors.station">
                                         <p class="text-danger">Field Required</p>
                                     </span>
@@ -173,8 +173,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="position">Designation (Position) <span class="text-danger" v-if="record_form.station == null">(Select Station First)</span></label>
-                                    <v-select class="form-control form-control-border border-width-2" :disabled="record_form.station == null" v-model.lazy="record_form.position_id" placeholder="Select Designation" :options="positions" label="title" :reduce="positions => positions.id"></v-select>
-                                    <span v-if="errors.position_id">
+                                    <v-select class="form-control form-control-border border-width-2" :disabled="record_form.station == null" v-model.lazy="record_form.position" placeholder="Select Designation" :options="positions" label="title" :reduce="positions => positions.title"></v-select>
+                                    <span v-if="errors.position">
                                         <p class="text-danger">Field Required</p>
                                     </span>
                                 </div>
@@ -293,7 +293,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger float-left" @click="setRetirementDateToNull()">Remove Retirement Date</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" @click="submitRetirementDate()">Save changes</button>
                 </div>
                 </div>
@@ -324,7 +323,7 @@ import Swal from 'sweetalert2'
                 record_form: new Form({
                     'from': null,
                     'to': null,
-                    'position_id': null,
+                    'position': null,
                     'status': null,
                     'salary': null,
                     'station': null,
@@ -392,23 +391,31 @@ import Swal from 'sweetalert2'
             submitRetirementDate: function()
             {
                 this.$Progress.start()
-                axios.post('api/retirementDate', {id: this.record.id, retirement_date: this.retirement_date})
-                .then(e => {
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Saved'
+                if(this.retirement_date)
+                {
+                    axios.post('api/retirementDate', {id: this.record.id, retirement_date: this.retirement_date})
+                    .then(e => {
+                        toast.fire({
+                            icon: 'success',
+                            title: 'Saved'
+                        })
+                        this.record.retirement_date = this.retirement_date
+                        $('#retirementDate').modal('hide')
+                        this.$Progress.finish()
                     })
-                    this.record.retirement_date = this.retirement_date
-                    $('#retirementDate').modal('hide')
-                    this.$Progress.finish()
-                })
-                .catch(e => {
+                    .catch(e => {
+                        toast.fire({
+                            icon: 'error',
+                            title: 'Failed to save'
+                        })
+                        this.errors = e.response.data.errors
+                    })
+                }else{
                     toast.fire({
                         icon: 'error',
-                        title: 'Failed to save'
+                        title: 'Invalid Input!!'
                     })
-                    this.errors = e.response.data.errors
-                })
+                }
             },
 
             editModal: function(data)
@@ -416,9 +423,9 @@ import Swal from 'sweetalert2'
                 this.$Progress.start()
                 this.record_form.reset()
                 Object.assign(this.record_form, data)
+                this.record_form.station = _.find(this.depts, {'title':data.station})
                 this.edit = true
                 this.getPosition()
-                this.record_form.position_id = data.position_id
                 this.$Progress.finish()
                 $('#recordModal').modal('show')
             },
@@ -487,7 +494,7 @@ import Swal from 'sweetalert2'
             getPosition: function()
             {
                 this.record_form.position_id = null
-                axios.get('api/fetch_positions?id=' + this.record_form.station)
+                axios.get('api/fetch_positions?id=' + this.record_form.station.id)
                 .then(({data}) => {
                     this.positions = data
                 })
@@ -525,7 +532,6 @@ import Swal from 'sweetalert2'
                         title: 'Success'
                     })
                     this.service_record_id = e.data
-                    console.log(this.service_record_id)
                 })
                 .catch(e => {
                     console.log(e)
@@ -541,6 +547,7 @@ import Swal from 'sweetalert2'
                 }
 
                 this.record_form.service_record_id = this.service_record_id
+                this.record_form.station = this.record_form.station.title
 
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
@@ -561,6 +568,7 @@ import Swal from 'sweetalert2'
 
             submitEmployeeServiceRecordUpdates: function()
             {
+                this.record_form.station = this.record_form.station.title
                 axios.patch('api/employeeservicerecord/'+this.record_form.id, this.record_form)
                 .then(e => {
                     toast.fire({
@@ -574,7 +582,7 @@ import Swal from 'sweetalert2'
                 })
                 .catch(e => {
                     toast.fire({
-                        icon:'success',
+                        icon:'error',
                         title: 'Failed to edit record'
                     })
                 })
@@ -591,7 +599,7 @@ import Swal from 'sweetalert2'
                 })
                 .catch(e => {
                     toast.fire({
-                        icon:'errot',
+                        icon:'error',
                         title: 'Failed to Delete'
                     })
                 })

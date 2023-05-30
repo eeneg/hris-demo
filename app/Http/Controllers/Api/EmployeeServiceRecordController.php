@@ -22,12 +22,7 @@ class EmployeeServiceRecordController extends Controller
      */
     public function index(Request $request)
     {
-        return EmployeeServiceRecord::select('employee_service_records.*', 'positions.title as position_title', 'departments.description as dept_name')
-        ->where('employee_service_records.service_record_id',  $request->id)
-        ->leftJoin('positions', 'employee_service_records.position_id', '=', 'positions.id')
-        ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
-        ->orderBy('created_at', 'DESC')
-        ->get();
+        return EmployeeServiceRecord::where('service_record_id', $request->id)->orderBy('created_at', 'DESC')->get();
     }
 
     /**
@@ -52,7 +47,7 @@ class EmployeeServiceRecordController extends Controller
             'service_record_id' => 'required',
             'from' => 'required',
             'to' => 'required',
-            'position_id' => 'required',
+            'position' => 'required',
             'status' => 'required',
             'salary' => 'required',
             'station' => 'required',
@@ -81,13 +76,7 @@ class EmployeeServiceRecordController extends Controller
         $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
                                 UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
-       $data = EmployeeServiceRecord::select('employee_service_records.*', 'positions.title as position_title', 'departments.description as dept_name')
-       ->where('employee_service_records.service_record_id',  $id)
-       ->leftJoin('positions', 'employee_service_records.position_id', '=', 'positions.id')
-       ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
-       ->orderBy('created_at', 'DESC')
-       ->get()
-       ->chunk(18);
+       $data = EmployeeServiceRecord::where('service_record_id', $id)->orderBy('created_at', 'DESC')->get()->chunk(18);
 
        $sr = ServiceRecord::find($id);
 
@@ -124,7 +113,7 @@ class EmployeeServiceRecordController extends Controller
             'service_record_id' => 'required',
             'from' => 'required',
             'to' => 'required',
-            'position_id' => 'required',
+            'position' => 'required',
             'status' => 'required',
             'salary' => 'required',
             'station' => 'required',

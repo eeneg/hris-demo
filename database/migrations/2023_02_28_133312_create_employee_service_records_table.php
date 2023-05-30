@@ -21,10 +21,7 @@ class CreateEmployeeServiceRecordsTable extends Migration
                 ->on('service_records');
             $table->string('from');
             $table->string('to');
-            $table->uuid('position_id');
-            $table->foreign('position_id')
-                ->references('id')
-                ->on('positions');
+            $table->string('position');
             $table->string('status');
             $table->string('salary');
             $table->string('station');

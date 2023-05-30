@@ -145,11 +145,11 @@
                     <td style="border-left: 1px solid; border-right: 1px solid; text-align: center">{{ formatDate($record->from) }}</td>
                     <td style="border-right: 1px solid; text-align: center">{{ formatDate($record->to) }}</td>
                     <td style="border-right: 1px solid; width: 50%; text-align: center">
-                        {{ $record->position_title }}
+                        {{ $record->position }}
                     </td>
                     <td style="border-right: 1px solid; text-align: center">{{ $record->status }}</td>
                     <td style="border-right: 1px solid; text-align: center">{{ $record->salary }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->dept_name }}</td>
+                    <td style="border-right: 1px solid; text-align: center">{{ $record->station }}</td>
                     <td style="border-right: 1px solid; text-align: center">{{ $record->branch }}</td>
                     <td style="border-right: 1px solid; text-align: center">{{ $record->pay }}</td>
                     <td style="border-right: 1px solid; text-align: center">{{ $record->remark }}</td>
