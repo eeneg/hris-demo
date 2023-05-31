@@ -3,7 +3,7 @@
         <div class="text-center col-md-12" v-if="!$gate.isAdministrator()">
             <not-authorized></not-authorized>
         </div>
-        <div v-else class="col-md-6">
+        <div v-else class="col-md-12">
             <div class="card">
                 <div>
                     <div class="py-0 card-header">
