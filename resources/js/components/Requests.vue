@@ -467,6 +467,26 @@
                 'govid'             : 'Government ID',
                 'idnumber'          : 'ID Number',
                 'dateissued'        : 'Date Issued',
+            },
+
+            residentialaddresstable: {
+                'house_lotNo'           : 'Residential Address House/Block/Lot No.',
+                'street'                : 'Residential Address Street',
+                'subdv_village'         : 'Residential Address Subdivision/Village',
+                'barangay'              : 'Residential Address Barangay',
+                'city_municipality'     : 'Residential Address City/Municipality',
+                'province'              : 'Residential Address Province',
+                'zipcode'               : 'Residential Address ZIP CODE',
+            },
+
+            permanentaddresstable:{
+                'house_lotNo'           : 'Permanent Address House/Block/Lot No.',
+                'street'                : 'Permanent Address Street',
+                'subdv_village'         : 'Permanent Address Subdivision/Village',
+                'barangay'              : 'Permanent Address Barangay',
+                'city_municipality'     : 'Permanent Address City/Municipality',
+                'province'              : 'Permanent Address Province',
+                'zipcode'               : 'Permanent Address ZIP CODE',
             }
         }
     },
@@ -834,6 +854,32 @@
                     let s = e.field.replace(/([A-Z])/g, ' $1').trim()
 
                     e.field = s.charAt(0).toUpperCase() + s.slice(1)
+                }
+
+                if(e.model == "residentialaddresstable")
+                {
+                    e.model = "Residential Address"
+
+                    for(var data in this.residentialaddresstable)
+                    {
+                        if(data == e.field)
+                        {
+                            e.field = this.residentialaddresstable[data]
+                        }
+                    }
+                }
+
+                if(e.model == "permanentaddresstable")
+                {
+                    e.model = "Permanent Address"
+
+                    for(var data in this.permanentaddresstable)
+                    {
+                        if(data == e.field)
+                        {
+                            e.field = this.permanentaddresstable[data]
+                        }
+                    }
                 }
 
                 if(e.model == "children")
