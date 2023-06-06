@@ -50,22 +50,24 @@ class PlantillaController extends Controller
 
         $plantillacontents = PlantillaContent::where('plantilla_id', $request['id'])->get();
         foreach ($plantillacontents as $key => $content) {
-            PlantillaContent::create([
-                'plantilla_id' => $newplantilla->id,
-                'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
-                'salary_grade_prop_id' => $content->salaryproposed ? (SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id) : null,
-                'position_id' => $content->position->id,
-                'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
-                'old_number' => $content->old_number ? $content->old_number : $content->new_number,
-                'new_number' => null,
-                'working_time' => $content->working_time,
-                'appointment_status' => $content->appointment_status,
-                'order_number' => $content->order_number,
-                'level' => $content->level,
-                'original_appointment' => $content->original_appointment,
-                'last_promotion' => $content->last_promotion,
-                'appointment_status' => $content->appointment_status,
-            ]);
+            if ($content->salaryproposed != null) {
+                PlantillaContent::create([
+                    'plantilla_id' => $newplantilla->id,
+                    'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
+                    'salary_grade_prop_id' => $content->salaryproposed ? (SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id) : null,
+                    'position_id' => $content->position->id,
+                    'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
+                    'old_number' => $content->old_number ? $content->old_number : $content->new_number,
+                    'new_number' => null,
+                    'working_time' => $content->working_time,
+                    'appointment_status' => $content->appointment_status,
+                    'order_number' => $content->order_number,
+                    'level' => $content->level,
+                    'original_appointment' => $content->original_appointment,
+                    'last_promotion' => $content->last_promotion,
+                    'appointment_status' => $content->appointment_status,
+                ]);
+            }
         }
     }
 
