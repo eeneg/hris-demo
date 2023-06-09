@@ -33,6 +33,7 @@ class PlantillaContent extends Auditable
         'last_promotion',
         'appointment_status',
         'order_number',
+        'csc_level'
     ];
 
     public function plantilla()

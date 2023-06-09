@@ -9,6 +9,7 @@ use App\PlantillaDept;
 use App\SalaryGrade;
 use App\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PlantillaController extends Controller
 {
@@ -49,9 +50,10 @@ class PlantillaController extends Controller
         }
 
         $plantillacontents = PlantillaContent::where('plantilla_id', $request['id'])->get();
+        $objs_to_insert = [];
         foreach ($plantillacontents as $key => $content) {
             if ($content->salaryproposed != null) {
-                PlantillaContent::create([
+                $cont = [
                     'plantilla_id' => $newplantilla->id,
                     'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
                     'salary_grade_prop_id' => $content->salaryproposed ? (SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id) : null,
@@ -66,9 +68,29 @@ class PlantillaController extends Controller
                     'original_appointment' => $content->original_appointment,
                     'last_promotion' => $content->last_promotion,
                     'appointment_status' => $content->appointment_status,
-                ]);
+                    'csc_level' => $content->csc_level
+                ];
+                // PlantillaContent::create([
+                //     'plantilla_id' => $newplantilla->id,
+                //     'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
+                //     'salary_grade_prop_id' => $content->salaryproposed ? (SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id) : null,
+                //     'position_id' => $content->position->id,
+                //     'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
+                //     'old_number' => $content->old_number ? $content->old_number : $content->new_number,
+                //     'new_number' => null,
+                //     'working_time' => $content->working_time,
+                //     'appointment_status' => $content->appointment_status,
+                //     'order_number' => $content->order_number,
+                //     'level' => $content->level,
+                //     'original_appointment' => $content->original_appointment,
+                //     'last_promotion' => $content->last_promotion,
+                //     'appointment_status' => $content->appointment_status,
+                // ]);
+                array_push($objs_to_insert, $cont);
             }
         }
+        // return $objs_to_insert;
+        $newplantilla->plantilla_contents()->createMany($objs_to_insert);
     }
 
     /**
