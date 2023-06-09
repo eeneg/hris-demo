@@ -90,7 +90,10 @@ class PlantillaController extends Controller
             }
         }
         // return $objs_to_insert;
-        $newplantilla->plantilla_contents()->createMany($objs_to_insert);
+        collect($objs_to_insert)->chunk(250)->each(function ($insert) {
+            $newplantilla->plantilla_contents()->createMany($insert);
+        });
+        
     }
 
     /**
