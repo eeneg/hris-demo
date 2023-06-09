@@ -57,8 +57,6 @@ class PlantillaController extends Controller
                 );
             });
 
-        PlantillaContent::disableAuditing();
-
         PlantillaContent::where('plantilla_id', $request->id)
             ->whereHas('salaryproposed')
             ->with(['personalinformation' => fn ($q) => $q->setEagerLoads([])])
