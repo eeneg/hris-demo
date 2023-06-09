@@ -30,72 +30,68 @@ class PlantillaController extends Controller
 
     public function duplicateplantilla(Request $request)
     {
-        ini_set('max_execution_time', '300');
-        // ini_set('memory_limit', '-1');
         $this->authorize('isAdministratorORAuthor');
+
         $this->validate($request, [
             'year' => 'unique:plantillas',
         ]);
+
         $newplantilla = Plantilla::create([
             'year' => $request['year'],
             'salary_schedule_auth_id' => $request['salary_auth'],
             'salary_schedule_prop_id' => $request['salary_prop'],
         ]);
 
-        $plantilla_depts = PlantillaDept::where('plantilla_id', $request['id'])->get();
-        foreach ($plantilla_depts as $key => $department) {
-            PlantillaDept::create([
-                'plantilla_id' => $newplantilla->id,
-                'department_id' => $department->department->id,
-                'order_number' => $department->order_number,
-            ]);
-        }
+        PlantillaDept::setEagerLoads([])
+            ->where('plantilla_id', $request->id)
+            ->chunk(500, function ($departments) use($newplantilla) {
+                PlantillaDept::insert(
+                    $departments->map(fn ($department) => [
+                        'id' => \Str::uuid(),
+                        'plantilla_id' => $newplantilla->id,
+                        'department_id' => $department->department->id,
+                        'order_number' => $department->order_number,
+                    ])
+                    ->toArray()
+                );
+            });
 
-        $plantillacontents = PlantillaContent::where('plantilla_id', $request['id'])->get();
-        $objs_to_insert = [];
-        foreach ($plantillacontents as $key => $content) {
-            if ($content->salaryproposed != null) {
-                $cont = [
-                    'plantilla_id' => $newplantilla->id,
-                    'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
-                    'salary_grade_prop_id' => $content->salaryproposed ? (SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id) : null,
-                    'position_id' => $content->position->id,
-                    'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
-                    'old_number' => $content->old_number ? $content->old_number : $content->new_number,
-                    'new_number' => null,
-                    'working_time' => $content->working_time,
-                    'appointment_status' => $content->appointment_status,
-                    'order_number' => $content->order_number,
-                    'level' => $content->level,
-                    'original_appointment' => $content->original_appointment,
-                    'last_promotion' => $content->last_promotion,
-                    'appointment_status' => $content->appointment_status,
-                    'csc_level' => $content->csc_level
-                ];
-                // PlantillaContent::create([
-                //     'plantilla_id' => $newplantilla->id,
-                //     'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
-                //     'salary_grade_prop_id' => $content->salaryproposed ? (SalaryGrade::where('salary_sched_id', $request['salary_prop'])->where('grade', $content->salaryproposed->grade)->where('step', $content->salaryproposed->step)->first()->id) : null,
-                //     'position_id' => $content->position->id,
-                //     'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
-                //     'old_number' => $content->old_number ? $content->old_number : $content->new_number,
-                //     'new_number' => null,
-                //     'working_time' => $content->working_time,
-                //     'appointment_status' => $content->appointment_status,
-                //     'order_number' => $content->order_number,
-                //     'level' => $content->level,
-                //     'original_appointment' => $content->original_appointment,
-                //     'last_promotion' => $content->last_promotion,
-                //     'appointment_status' => $content->appointment_status,
-                // ]);
-                array_push($objs_to_insert, $cont);
-            }
-        }
-        // return $objs_to_insert;
-        collect($objs_to_insert)->chunk(250)->each(function ($insert) use ($newplantilla) {
-            $newplantilla->plantilla_contents()->createMany($insert);
-        });
-        
+        PlantillaContent::disableAuditing();
+
+        PlantillaContent::where('plantilla_id', $request->id)
+            ->whereHas('salaryproposed')
+            ->with(['personalinformation' => fn ($q) => $q->setEagerLoads([])])
+            ->chunk(500, function ($contents) use ($newplantilla, $request) {
+                $salaryproposed = $contents->map->salaryproposed;
+
+                $prop = SalaryGrade::where('salary_sched_id', $request->salary_prop)
+                    ->whereIn('grade', $salaryproposed?->map->grade->values()->unique()->toArray())
+                    ->whereIn('step', $salaryproposed?->map->grade->values()->unique()->toArray())
+                    ->select(['id', 'grade', 'step'])
+                    ->get();
+
+                $newplantilla->plantilla_contents()->insert(
+                    $contents->map(fn ($content) => [
+                        'id' => \Str::uuid(),
+                        'plantilla_id' => $newplantilla->id,
+                        'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
+                        'salary_grade_prop_id' => $content->salaryproposed ? $prop->first(fn ($e) => $e->grade == $content->salaryproposed->grade && $e->step == $content->salaryproposed->step)?->id : null,
+                        'position_id' => $content->position->id,
+                        'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
+                        'old_number' => $content->old_number ? $content->old_number : $content->new_number,
+                        'new_number' => null,
+                        'working_time' => $content->working_time,
+                        'appointment_status' => $content->appointment_status,
+                        'order_number' => $content->order_number,
+                        'level' => $content->level,
+                        'original_appointment' => $content->original_appointment,
+                        'last_promotion' => $content->last_promotion,
+                        'appointment_status' => $content->appointment_status,
+                        'csc_level' => $content->csc_level
+                    ])
+                    ->toArray()
+                );
+            });
     }
 
     /**
@@ -120,7 +116,7 @@ class PlantillaController extends Controller
         foreach ($departments as $key => $department) {
             PlantillaDept::create([
                 'plantilla_id' => $newplantilla->id,
-                'department_id' => $department['id'],
+                'department_id' => $department->id,
                 'order_number' => $key,
             ]);
         }
