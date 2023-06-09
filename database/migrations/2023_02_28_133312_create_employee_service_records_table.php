@@ -19,18 +19,18 @@ class CreateEmployeeServiceRecordsTable extends Migration
             $table->foreign('service_record_id')
                 ->references('id')
                 ->on('service_records');
-            $table->string('from');
-            $table->string('to');
-            $table->string('position');
-            $table->string('status');
-            $table->string('salary');
-            $table->string('station');
-            $table->string('branch');
-            $table->string('pay');
-            $table->string('remark');
-            $table->string('date');
-            $table->string('cause');
-            $table->integer('orderNo');
+            $table->string('from')->nullable();
+            $table->string('to')->nullable();
+            $table->string('position')->nullable();
+            $table->string('status')->nullable();
+            $table->string('salary')->nullable();
+            $table->string('station')->nullable();
+            $table->string('branch')->nullable();
+            $table->string('pay')->nullable();
+            $table->string('remark')->nullable();
+            $table->string('date')->nullable();
+            $table->string('cause')->nullable();
+            $table->integer('orderNo')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

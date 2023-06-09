@@ -7,10 +7,10 @@ use App\Http\Controllers\Controller;
 use App\PersonalInformation;
 use App\Plantilla;
 use App\PlantillaContent;
-use App\SalaryGrade;
 use App\ServiceRecord;
 use App\Setting;
 use App\UserAssignment;
+use Exception;
 use Illuminate\Http\Request;
 
 class EmployeeServiceRecordController extends Controller
@@ -22,7 +22,7 @@ class EmployeeServiceRecordController extends Controller
      */
     public function index(Request $request)
     {
-        return EmployeeServiceRecord::where('service_record_id', $request->id)->orderBy('created_at', 'DESC')->get();
+        return EmployeeServiceRecord::where('service_record_id', $request->id)->orderBy('orderNo', 'ASC')->get();
     }
 
     /**
@@ -45,21 +45,49 @@ class EmployeeServiceRecordController extends Controller
     {
         $request->validate([
             'service_record_id' => 'required',
-            'from' => 'required',
-            'to' => 'required',
-            'position' => 'required',
-            'status' => 'required',
-            'salary' => 'required',
-            'station' => 'required',
-            'branch' => 'required',
-            'pay' => 'required',
-            'remark' => 'required',
-            'date' => 'required',
-            'cause'  => 'required'
         ]);
 
         EmployeeServiceRecord::create($request->all());
 
+    }
+
+    public function overwiteServiceRecord(Request $request)
+    {
+        $service_record = ServiceRecord::find($request->service_record_id);
+
+        try{
+
+            $service_record->employeeservicerecord()->delete();
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+
+        }
+
+        $service_record->employeeservicerecord()->createMany($request->data);
+    }
+
+    public function addToExistingServiceRecord(Request $request)
+    {
+        $service_record = ServiceRecord::find($request->service_record_id);
+        $largestOrderNo = $service_record->employeeservicerecord()->max('orderNo') + 1;
+
+        $record = [];
+
+        foreach($request->data as $key => $data)
+        {
+            $data['orderNo'] = $largestOrderNo++;
+            array_push($record, $data);
+        }
+
+        $service_record->employeeservicerecord()->createMany($record);
+    }
+
+    public function addServiceRecord(Request $request)
+    {
+        $service_record = ServiceRecord::find($request->service_record_id);
+        $service_record->employeeservicerecord()->createMany($request->data);
     }
 
     /**

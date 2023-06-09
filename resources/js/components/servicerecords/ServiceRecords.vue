@@ -29,6 +29,7 @@
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-success float-right mr-2" :disabled="form.personal_information_id == null" @click="printRecord()">Print <i class="fas fa-print"></i></button>
                             <button type="submit" class="btn btn-primary float-right mr-2" :disabled="form.personal_information_id == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
+                            <button type="submit" class="btn btn-warning float-right mr-2" :disabled="form.personal_information_id == null && record.service_record == null" @click="copyData">Copy <i class="fas fa-file"></i></button>
                         </div>
                     </div>
                     <div class="row">
@@ -50,7 +51,7 @@
                                         <th class="border">To</th>
                                         <th class="border">Designation<br>(Positon)</th>
                                         <th class="border">Status</th>
-                                        <th class="border">Salary</th>
+                                        <th class="border">Salary (P.A.)</th>
                                         <th class="border">Station/ <br>Place Assignment</th>
                                         <th class="border">Branch</th>
                                         <th class="border">Absences w/o<br>Pay</th>
@@ -72,11 +73,11 @@
                                         <td>{{ record.branch }}</td>
                                         <td>{{ record.pay }}</td>
                                         <td>{{ record.remark }}</td>
-                                        <td>{{ formatDate(record.date) }}</td>
+                                        <td>{{ record.date }}</td>
                                         <td>{{ record.cause }}</td>
                                         <td>
                                             <button class="btn btn-primary" @click="editModal(record)"><i class="fas fa-edit"></i></button>
-                                            <!-- <button class="btn btn-danger" @click="deleteEmployeeServiceRecord(record.id)"><i class="fas fa-trash"></i></button> -->
+                                            <button class="btn btn-danger" @click="deleteEmployeeServiceRecord(record.id)"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -271,7 +272,7 @@
             </div>
         </div>
 
-          <!-- Modal -->
+        <!-- Modal -->
         <div class="modal fade" id="retirementDate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -299,6 +300,102 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="copyData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Copy from excel</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12" style="height: 10rem;">
+                                <textarea class="form-control" id="exampleFormControlTextarea1" v-model="parse" placeholder="Paste Here" rows="5"></textarea>
+                                <button type="button" class="btn btn-success float-left mt-2" style="width: 100%;" @click="parseToArray">Parse</button>
+                            </div>
+                            <div class="col-md-12 p-2" style="overflow: auto;">
+                                <table class="table table-striped text-nowrap custom-table text-center w-100">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="1" class="border"></th>
+                                            <th colspan="2" class="border">Service</th>
+                                            <th colspan="3" class="border">Record of Appointment</th>
+                                            <th colspan="2" class="border">Office Entity / Division</th>
+                                            <th colspan="1" class="border">Leave of Absences</th>
+                                            <th colspan="3" class="border">Separation</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="border">#</th>
+                                            <th class="border">From</th>
+                                            <th class="border">To</th>
+                                            <th class="border">Designation<br>(Positon)</th>
+                                            <th class="border">Status</th>
+                                            <th class="border">Salary</th>
+                                            <th class="border">Station/ <br>Place Assignment</th>
+                                            <th class="border">Branch</th>
+                                            <th class="border">Absences w/o<br>Pay</th>
+                                            <th class="border">Remarks</th>
+                                            <th class="border">Date</th>
+                                            <th class="border">Cause</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(data, index) in parsedArray" :id="index">
+                                            <td>{{ index + 1 }}</td>
+                                            <td>{{ data[0] }}</td>
+                                            <td>{{ data[1] }}</td>
+                                            <td>{{ data[2] }}</td>
+                                            <td>{{ data[3] }}</td>
+                                            <td>{{ data[4] }}</td>
+                                            <td>{{ data[5] }}</td>
+                                            <td>{{ data[6] }}</td>
+                                            <td>{{ data[7] }}</td>
+                                            <td>{{ data[8] }}</td>
+                                            <td>{{ data[9] }}</td>
+                                            <td>{{ data[10] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" @click="checkEmployeeHasServiceRecord()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="checkExistModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Records Exist</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="overflow-x: auto; overflow-y: auto;">
+                        <p>Employee has existing Service Records</p>
+                        <button class="btn btn-warning" @click="addToExistingServiceRecord()">Add to existing records <i class="fas fa-plus"></i></button>
+                        <hr>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1" v-model="overwrite">
+                            <label class="form-check-label" for="exampleCheck1">Overwrite existing records <p class="text-danger" style="display:inline">(this will replace all existing data)</p></label>
+                        </div>
+                        <button class="btn btn-danger mt-2" v-if="overwrite == true" @click="overwriteServiceRecord()">PRESS TO CONFIRM <i class="fas fa-exclamation-triangle"></i></button>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <iframe id="i" frameborder="0" hidden></iframe>
 
@@ -306,6 +403,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Swal from 'sweetalert2'
 
     export default{
@@ -331,18 +429,22 @@ import Swal from 'sweetalert2'
                     'pay': null,
                     'remark': null,
                     'date': null,
-                    'cause': null
+                    'cause': null,
+                    'orderNo': null
                 }),
                 data: [],
                 depts: [],
                 selected_station: {},
                 positions: [],
-                record: null,
+                record: {id: null, name: null, retirement_date: null, service_record: null},
                 service_records: [],
                 errors: {},
                 service_record_id: null,
                 print: '',
                 retirement_date: null,
+                parse: "",
+                parsedArray: [],
+                overwrite: false
             }
         },
         methods:{
@@ -357,6 +459,113 @@ import Swal from 'sweetalert2'
                 this.record_form.reset()
                 $('#recordModal').modal('show')
                 this.edit = false
+            },
+
+            parseToArray: function()
+            {
+                let text = this.$papa.parse(this.parse, {delimiter: "\t"})
+                this.parsedArray = text.data.filter(function(e){
+                    if(e.length > 1)
+                    {
+                        return e
+                    }
+                })
+            },
+
+            checkEmployeeHasServiceRecord: function()
+            {
+                if(this.service_records.length > 0){
+                    $('#checkExistModal').modal('show')
+                }else{
+                    this.addEmployeeServiceRecords(this.fixData())
+                }
+            },
+
+            fixData: function()
+            {
+                let data = []
+                this.parsedArray.forEach((e, i) => {
+                    let obj = {}
+                    obj.from        = e[0]
+                    obj.to          = e[1]
+                    obj.position    = e[2]
+                    obj.status      = e[3]
+                    obj.salary      = e[4]
+                    obj.station     = e[5]
+                    obj.branch      = e[6]
+                    obj.pay         = e[7]
+                    obj.remark      = e[8]
+                    obj.date        = e[9]
+                    obj.cause       = e[10]
+                    obj.orderNo     = data.length + 1
+                    data.push(obj)
+                })
+                return data
+            },
+
+            overwriteServiceRecord: function()
+            {
+                axios.post('api/overwriteEmployeeServiceRecords', {'service_record_id' : this.record.service_record.id, 'data' : this.fixData()})
+                .then(({data}) => {
+                    $('#copyData').modal('hide')
+                    $('#checkExistModal').modal('hide')
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Saved'
+                    })
+                })
+                .finally(e => {
+                    this.getEmployeeServiceRecords()
+                })
+                .catch(e => {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Failed to save records!!!'
+                    })
+                })
+            },
+
+            addToExistingServiceRecord: function()
+            {
+                axios.post('api/addToExistingServiceRecord', {'service_record_id' : this.record.service_record.id, 'data' : this.fixData()})
+                .then(e => {
+                    $('#copyData').modal('hide')
+                    $('#checkExistModal').modal('hide')
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Saved'
+                    })
+                })
+                .finally(e => {
+                    this.getEmployeeServiceRecords()
+                })
+                .catch(e => {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Failed to save records!!!'
+                    })
+                })
+            },
+
+            addEmployeeServiceRecords: function(data)
+            {
+                axios.post('api/addServiceRecord', {'service_record_id' : this.record.service_record.id, 'data' : data})
+                .then(e => {
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Saved'
+                    })
+                    $('#copyData').modal('hide')
+                })
+                .finally(e => {
+                    this.getEmployeeServiceRecords()
+                })
+                .catch(e => {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Failed to save records!!!'
+                    })
+                })
             },
 
             retirementDateModal: function()
@@ -425,7 +634,10 @@ import Swal from 'sweetalert2'
                 Object.assign(this.record_form, data)
                 this.record_form.station = _.find(this.depts, {'title':data.station})
                 this.edit = true
-                this.getPosition()
+                if(this.record_form.station)
+                {
+                    this.getPosition()
+                }
                 this.$Progress.finish()
                 $('#recordModal').modal('show')
             },
@@ -548,6 +760,7 @@ import Swal from 'sweetalert2'
 
                 this.record_form.service_record_id = this.service_record_id
                 this.record_form.station = this.record_form.station.title
+                this.record_form.orderNo = this.service_records.length + 1
 
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
@@ -590,18 +803,57 @@ import Swal from 'sweetalert2'
 
             deleteEmployeeServiceRecord: function(id)
             {
-                axios.delete('api/employeeservicerecord/'+id)
-                .then(e => {
-                    toast.fire({
-                        icon:'success',
-                        title: 'Record Deleted'
-                    })
-                })
-                .catch(e => {
-                    toast.fire({
-                        icon:'error',
-                        title: 'Failed to Delete'
-                    })
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'warning',
+                            title: 'Cancelled'
+                        });
+                    }else{
+
+                        Swal.fire({
+                            title: '<strong>LOADING...</strong>',
+                            html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                            icon: 'info',
+                            willOpen () {
+                                Swal.showLoading ()
+                            },
+                            didClose () {
+                                Swal.hideLoading()
+                            },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                showConfirmButton: false
+                        })
+
+                        this.$Progress.start()
+                        axios.delete('api/employeeservicerecord/'+id)
+                        .then(e => {
+                            toast.fire({
+                                icon:'success',
+                                title: 'Record Deleted'
+                            })
+                            this.getEmployeeServiceRecords()
+                        })
+                        .catch(e => {
+                            toast.fire({
+                                icon:'error',
+                                title: 'Failed to Delete'
+                            })
+                            Swal.close()
+                        })
+                    }
                 })
             },
 
@@ -641,6 +893,11 @@ import Swal from 'sweetalert2'
                 .catch(e => {
                     console.log(e)
                 })
+            },
+
+            copyData: function()
+            {
+                $('#copyData').modal('show')
             }
         },
         created(){

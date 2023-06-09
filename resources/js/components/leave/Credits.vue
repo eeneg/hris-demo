@@ -484,20 +484,17 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Particulars</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 p-2">
                             <label for="leave_type">Custom</label>
-                            <select :disabled="edit_mode == false" v-model.lazy="particulars.leave_type" class="form-control" id="leave_type">
+                            <select :disabled="edit_mode == false" @change="removeInputs(1)" v-model.lazy="particulars.leave_type" class="form-control" id="leave_type">
                                 <option v-for="data in leave_types" :key="data.id" :value="data.abbreviation">{{data.title}}</option>
                                 <option value="Undertime">Undertime</option>
                                 <option value="Tardy">Tardy</option>
@@ -507,6 +504,7 @@
                         particulars.leave_type == 'UA' || particulars.leave_type == 'VLWOP' || particulars.leave_type == 'SLWOP'">
                             <label for="days">Number of times</label>
                             <input type="number" v-model.lazy="particulars.count" class="form-control" id="days" aria-describedby="emailHelp" placeholder="Enter">
+                            <span><p class="text-danger" v-if="count_field_check">Field Required</p></span>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="days">Days</label>
@@ -523,7 +521,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" @click="removeInputs(2)">Close</button>
                     <button type="button" class="btn btn-primary" @click="populate_particulars">Save changes</button>
                 </div>
                 </div>
@@ -676,7 +674,16 @@ import CreditsTable from './CreditsTable.vue'
                 retirement_date: null,
                 status: null,
                 status_data: [],
-                year: moment().year()
+                year: moment().year(),
+                particulars_check: [
+                    'Tardy',
+                    'Undertime',
+                    'AWOL',
+                    'UA',
+                    'VLWOP',
+                    'SLWOP'
+                ],
+                count_field_check: false
             }
         },
         components: {
@@ -940,8 +947,31 @@ import CreditsTable from './CreditsTable.vue'
 
             populate_particulars: function()
             {
-                this.leave_summary[this.index].particulars = this.particulars
-                $("#exampleModal").modal('hide');
+                if(this.particulars_check.includes(this.particulars.leave_type) && (this.particulars.count == null || this.particulars.count == ''))
+                {
+                    this.count_field_check = true
+                }else{
+                    this.leave_summary[this.index].particulars = this.particulars
+                    this.count_field_check = false
+                    $("#exampleModal").modal('hide');
+                }
+            },
+
+            removeInputs: function(mode)
+            {
+                if(mode == 1){
+                    this.particulars.count = null
+                    this.particulars.days = null
+                    this.particulars.hours = null
+                    this.particulars.mins = null
+                }else if(mode == 2){
+                    this.particulars.leave_type = null
+                    this.particulars.count = null
+                    this.particulars.days = null
+                    this.particulars.hours = null
+                    this.particulars.mins = null
+                    $("#exampleModal").modal('hide');
+                }
             },
 
             get_leave_types: function(){

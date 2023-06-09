@@ -23,6 +23,8 @@ import draggable from 'vuedraggable';
 import Vue from "vue";
 import VueRx from "vue-rx";
 import VuejsClipper from "vuejs-clipper/dist/vuejs-clipper.umd";
+import VuePapaParse from 'vue-papa-parse'
+Vue.use(VuePapaParse)
 
 import vSelect from "vue-select";
 Vue.component("v-select", vSelect);

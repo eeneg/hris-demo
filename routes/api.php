@@ -114,6 +114,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('retirementDate', 'Api\ServiceRecordController@retirementDate');
 
     Route::get('current-employees', 'Api\PersonalInformationController@listCurrent');
+
+    Route::post('addToExistingServiceRecord', 'Api\EmployeeServiceRecordController@addToExistingServiceRecord');
+    Route::post('overwriteEmployeeServiceRecords', 'Api\EmployeeServiceRecordController@overwiteServiceRecord');
+    Route::post('addServiceRecord', 'Api\EmployeeServiceRecordController@addServiceRecord');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function () {

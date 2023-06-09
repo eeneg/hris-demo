@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@babel/regjsgen": "^0.8.0",
         "@fortawesome/fontawesome-free": "^5.15.3",
         "admin-lte": "^3.1.0",
         "laravel-vue-pagination": "^2.3.1",
@@ -36,6 +37,7 @@
         "vue-bootstrap-datetimepicker": "^5.0.1",
         "vue-form-wizard": "^0.8.4",
         "vue-month-picker": "^1.6.0",
+        "vue-papa-parse": "^3.1.0",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.5.1",
         "vue-rx": "^6.2.0",

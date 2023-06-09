@@ -34,7 +34,8 @@ class EmployeeServiceRecord extends Model
         'pay',
         'remark',
         'date',
-        'cause'
+        'cause',
+        'orderNo'
     ];
 
     public function servicerecord()
