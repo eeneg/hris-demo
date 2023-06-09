@@ -30,7 +30,8 @@ class PlantillaController extends Controller
 
     public function duplicateplantilla(Request $request)
     {
-        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', '300');
+        // ini_set('memory_limit', '-1');
         $this->authorize('isAdministratorORAuthor');
         $this->validate($request, [
             'year' => 'unique:plantillas',
