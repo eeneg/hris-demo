@@ -44,6 +44,7 @@ class PlantillaController extends Controller
 
         PlantillaDept::setEagerLoads([])
             ->where('plantilla_id', $request->id)
+            ->with(['department'])
             ->chunk(500, function ($departments) use($newplantilla) {
                 PlantillaDept::insert(
                     $departments->map(fn ($department) => [
