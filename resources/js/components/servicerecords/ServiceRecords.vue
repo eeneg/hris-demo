@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-success float-right mr-2" :disabled="form.personal_information_id == null" @click="printRecord()">Print <i class="fas fa-print"></i></button>
-                            <button type="submit" class="btn btn-primary float-right mr-2" :disabled="form.personal_information_id == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
+                            <button type="submit" class="btn btn-primary float-right mr-2" :disabled="form.personal_information_id == null && record.service_record == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
                             <button type="submit" class="btn btn-warning float-right mr-2" :disabled="form.personal_information_id == null && record.service_record == null" @click="copyData">Copy <i class="fas fa-file"></i></button>
                         </div>
                     </div>
@@ -897,6 +897,8 @@ import Swal from 'sweetalert2'
 
             copyData: function()
             {
+                this.parse = ""
+                this.parsedArray = []
                 $('#copyData').modal('show')
             }
         },
