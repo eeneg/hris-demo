@@ -15,7 +15,7 @@ class JobOrderController extends Controller
      */
     public function index()
     {
-        return JobOrder::first();
+        return JobOrder::orderBy('asof', 'desc')->paginate(5);
     }
 
     /**
@@ -42,16 +42,9 @@ class JobOrderController extends Controller
             'asof' => 'required|date',
         ]);
 
-        $jo = JobOrder::first();
-
         $data = array_merge($request->all(), ['total' => $request->femalecount + $request->malecount]);
 
-        if($jo)
-        {
-            $this->update($request, $jo->id);
-        }else{
-            JobOrder::create($data);
-        }
+        JobOrder::create($data);
     }
 
     /**
@@ -73,7 +66,7 @@ class JobOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -98,6 +91,7 @@ class JobOrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $jo = JobOrder::find($id);
+        $jo->delete();
     }
 }

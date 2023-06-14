@@ -20,7 +20,7 @@
                         </div>
                         <div v-if="$gate.isAdministratorORAuthor()" class="col-md-9">
                             <router-link class="btn btn-primary float-right" to="/employees-pds">Create New Employee</router-link>
-                            <button class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#joModal">Job Order</button>
+                            <button class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#joModal" @click="joborderCount">Job Order</button>
                         </div>
                     </div>
                 </div>
@@ -599,31 +599,54 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <label for="asof">As of: {{ joborder.asof }}</label>
+                                <table class="table table-striped text-nowrap custom-table text-center w-100">
+                                    <thead>
+                                        <tr>
+                                            <th class="border">Male</th>
+                                            <th class="border">Female</th>
+                                            <th class="border">Total</th>
+                                            <th class="border">As of</th>
+                                            <th class="border">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(data, index) in jobOrderData.data">
+                                            <td>{{data.malecount}}</td>
+                                            <td>{{data.femalecount}}</td>
+                                            <td>{{data.total}}</td>
+                                            <td>{{formatDate(data.asof)}}</td>
+                                            <td>
+                                                <button class="btn btn-danger" @click="deleteJobOrder(data.id)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-4">
-                                <label for="male">Male Count: <p class="ml-3" style="display: inline">{{ joborder.malecount }}</p></label>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="female">Female Count: <p class="ml-3" style="display: inline">{{ joborder.femalecount }}</p></label>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="total">Total: <p class="text-success ml-3" style="display: inline">{{ joborder.total }}</p></label>
+                            <div class="col-md-12">
+                                <pagination size="default" :data="jobOrderData" @pagination-change-page="joborderCount" :limit="5">
+                                    <span slot="prev-nav">&lt; Previous</span>
+                                    <span slot="next-nav">Next &gt;</span>
+                                </pagination>
+                                <span style="margin-left: 10px;">Showing {{ jobOrderData.meta && jobOrderData.meta.from | validateCount }} to {{ jobOrderData.meta && jobOrderData.meta.to | validateCount }} of {{ jobOrderData.meta && jobOrderData.meta.total }} records</span>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-md-4">
-                                <label for="malecount">Male count:</label>
-                                <input type="number" name="malecount" class="form-control form-control-border border-width-2" id="malecount" v-model="joform.malecount" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="femalecount">Female count:</label>
-                                <input type="number" name="femalecount" class="form-control form-control-border border-width-2" id="femalecount" v-model="joform.femalecount" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="asof">As of:</label>
-                                <input type="date" name="asof" class="form-control form-control-border border-width-2" id="asof" v-model="joform.asof" required>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="malecount">Male count:</label>
+                                        <input type="number" name="malecount" class="form-control form-control-border border-width-2" id="malecount" v-model="joform.malecount" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="femalecount">Female count:</label>
+                                        <input type="number" name="femalecount" class="form-control form-control-border border-width-2" id="femalecount" v-model="joform.femalecount" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="asof">As of:</label>
+                                        <input type="date" name="asof" class="form-control form-control-border border-width-2" id="asof" v-model="joform.asof" required>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -783,6 +806,7 @@
                     'total': null,
                     'asof': null
                 },
+                jobOrderData: {},
                 joform: new Form({
                     'malecount': null,
                     'femalecount': null,
@@ -832,6 +856,81 @@
         },
         methods: {
 
+            formatDate: function(date)
+            {
+                return moment(date).format('MM/DD/YYYY')
+            },
+
+            deleteJobOrder: function(id)
+            {
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if(result.isDismissed == true)
+                    {
+                        toast.fire({
+                            icon: 'warning',
+                            title: 'Cancelled'
+                        });
+                    }else{
+
+                        Swal.fire({
+                            title: '<strong>LOADING...</strong>',
+                            html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                            icon: 'info',
+                            willOpen () {
+                                Swal.showLoading ()
+                            },
+                            didClose () {
+                                Swal.hideLoading()
+                            },
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                showConfirmButton: false
+                        })
+
+                        this.$Progress.start()
+                        axios.delete('api/joborder/' + id)
+                        .then(response => {
+                            toast.fire({
+                                icon:'success',
+                                title: 'Deleted!'
+                            })
+                            this.$Progress.finish()
+                            this.joborderCount()
+                        })
+                        .catch(e => {
+                            toast.fire({
+                                icon:'error',
+                                title: 'Failed to delete data'
+                            })
+                        })
+                    }
+                })
+            },
+
+            joborderCount: function(page = 1)
+            {
+                axios.get('api/joborder?page='+page)
+                .then(({data}) => {
+                    this.jobOrderData = data
+                })
+                .catch(e => {
+                    toast.fire({
+                        icon:'error',
+                        title: 'Failed to retrieve data'
+                    })
+                })
+            },
+
             clearJO: function()
             {
                 this.joform = {
@@ -854,13 +953,7 @@
                     this.joform.reset()
                     this.$Progress.finish()
 
-                    axios.get('api/joborder')
-                    .then(({data}) => {
-                        this.joborder = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
+                    this.joborderCount()
                 })
                 .catch(e => {
                     console.log(e)
