@@ -30,7 +30,7 @@ jobs:
           node-version: '18.x'
 
       - name: Run npm install and build
-        run: npm install && npm run build
+        run: npm install && npm run prod
         
       - name: Compress artifact for deployment
         run: zip artifact.zip ./* -r
