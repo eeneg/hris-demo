@@ -1,2 +1,5 @@
 *
+!pdf_reports/
+!plantilla_reports/
+!project_files/
 !.gitignore
