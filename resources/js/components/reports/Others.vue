@@ -26,11 +26,14 @@
                     <!-- Reports -->
                     <div v-if="report_type == 'Positions with specific salary grade/s'">
                         <div class="row mb-2">
-                            <div class="col-12">
+                            <div class="col-6">
                                 <h3 class="m-0"><b>Salary Grade:</b> {{ salary_grades_report.salary_grade }}</h3>
                                 <h3 class="m-0"><b>Status:</b> <span class="badge bg-primary mr-2" v-if="salary_grades_report.status_occupied">OCCUPIED</span><span class="badge bg-success" v-if="salary_grades_report.status_vacant">VACANT</span></h3>
                                 <h3 class="m-0"><b>Office:</b> {{ department }}</h3>
                                 <h3 class="m-0"><b>Result count:</b> {{ print_data.length }}</h3>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="m-0"><b>Position Filter:</b> {{ salary_grades_report.position_filter }}</h3>
                             </div>
                         </div>
                         <div class="row">
@@ -228,6 +231,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="m-0">Position Filter</label>
+                                        <input v-model="salary_grades_report.position_filter" type="text" class="form-control" placeholder="eg. Medical Officer I">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div v-if="report_type == 'Names & Position'" class="col-md-6 pr-5">
                             <h3>Options</h3>
@@ -323,7 +334,8 @@
                 salary_grades_report: {
                     salary_grade: '',
                     status_vacant: true,
-                    status_occupied: true
+                    status_occupied: true,
+                    position_filter: ''
                 },
                 employee_names_report: {
                     sort: 'Surname',
@@ -372,18 +384,28 @@
                         if (this.salary_grades_report.salary_grade.includes('-')) {
                             let grade_from = this.salary_grades_report.salary_grade.split('-')[0]
                             let grade_to = this.salary_grades_report.salary_grade.split('-')[1]
-                            return content.salaryproposed 
-                                && content.salaryproposed.grade >= grade_from 
-                                && content.salaryproposed.grade <= grade_to
-                                && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
-                                && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
-                                && (this.department != 'All' ? content.office == this.department : true);
+                            let pos = this.salary_grades_report.position_filter
+                            if (content.salaryproposed) {
+                                return (pos != '' ? content.position.includes(pos) : true)
+                                    && content.salaryproposed.grade >= grade_from 
+                                    && content.salaryproposed.grade <= grade_to
+                                    && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
+                                    && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
+                                    && (this.department != 'All' ? content.office == this.department : true)
+                            } else {
+                                return false
+                            }
                         } else {
-                            return content.salaryproposed 
-                                && content.salaryproposed.grade == this.salary_grades_report.salary_grade
-                                && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
-                                && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
-                                && (this.department != 'All' ? content.office == this.department : true);
+                            let pos = this.salary_grades_report.position_filter
+                            if (content.salaryproposed) {
+                                return (pos != '' ? content.position.includes(pos) : true)
+                                    && content.salaryproposed.grade == this.salary_grades_report.salary_grade
+                                    && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
+                                    && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
+                                    && (this.department != 'All' ? content.office == this.department : true);
+                            } else {
+                                return false
+                            }
                         }
                     });
                 }

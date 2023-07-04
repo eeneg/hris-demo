@@ -68,7 +68,7 @@
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
                                                 <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Service Record</a>
+                                                <router-link v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" to="/employee-service-record">Service Record</router-link>
                                             </div>
                                         </button>
                                     </div>
