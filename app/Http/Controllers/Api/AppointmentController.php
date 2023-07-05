@@ -6,8 +6,11 @@ use App\Appointment;
 use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AppointmentResource;
+use App\Plantilla;
+use App\PlantillaDept;
 use App\SalaryGrade;
 use App\SalarySchedule;
+use App\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -76,7 +79,10 @@ class AppointmentController extends Controller
 
     public function fetchDepartments(Request $request)
     {
-        return Department::select(['departments.id', 'departments.title'])->with('positions')->get();
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        return PlantillaDept::where('plantilla_id', $plantilla->id)->with(['department' => fn($q) =>  $q->select(['departments.id', 'departments.title'])->with('positions')])->get()->pluck('department');
     }
 
     public function fetchSalarySched(Request $request)
