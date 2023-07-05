@@ -451,7 +451,7 @@ import Swal from 'sweetalert2'
 
             formatDate: function(date)
             {
-                return moment(date).format('MM/DD/YYYY')
+                return moment(date).format('MM/DD/YYYY') == "Invalid date" ? date : moment(date).format('MM/DD/YYYY')
             },
 
             addModal: function()
