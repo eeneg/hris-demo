@@ -17,13 +17,21 @@
     @php
         function formatDate($date)
         {
-            return Carbon\Carbon::parse($date)->format('m/d/y');
+            if(strtotime($date) !== false)
+            {
+                return Carbon\Carbon::parse($date)->format('m/d/y');
+            }
+            return $date;
         }
     @endphp
 
     @php
         function format($date){
-            return Carbon\Carbon::parse($date)->format('F d, y');
+            if(strtotime($date) !== false)
+            {
+                return Carbon\Carbon::parse($date)->format('F d, y');
+            }
+            return $date;
         }
     @endphp
     <main style="">

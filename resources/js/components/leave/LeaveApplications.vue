@@ -146,7 +146,7 @@
                                 <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
                                     <label style="margin: 0;">Recommendation Officer</label>
 
-                                    <v-select @input="filter_data()" class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" placeholder="Select Employee" :options="personalinformations" item-text="label" label="name"
+                                    <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" placeholder="Select Employee" :options="personalinformations" item-text="label" label="name"
                                     :reduce="personalinformations => personalinformations.id"></v-select>
 
                                     <has-error :form="form" field="personal_information_id"></has-error>
@@ -417,6 +417,23 @@ import axios from 'axios';
             }, 1000),
 
             filter_data() {
+
+                Swal.fire({
+                title: '<strong>Generating Appointment Records</strong>',
+                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                icon: 'info',
+                willOpen () {
+                    Swal.showLoading ()
+                },
+                didClose () {
+                    Swal.hideLoading()
+                },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false
+                })
+
                 this.$Progress.start()
                 axios.post('api/searchLeave', this.search)
                 .then(({data}) => {
@@ -426,6 +443,7 @@ import axios from 'axios';
                         icon: 'success',
                         title: 'Done'
                     })
+                    Swal.close()
                 })
                 .catch(e => {
                     console.log(e)
@@ -436,10 +454,27 @@ import axios from 'axios';
                 })
             },
             loadContent() {
+                Swal.fire({
+                title: '<strong>Generating Appointment Records</strong>',
+                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                icon: 'info',
+                willOpen () {
+                    Swal.showLoading ()
+                },
+                didClose () {
+                    Swal.hideLoading()
+                },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false
+                })
+
                 axios.get('api/leaveapplication')
                     .then( ({ data }) => {
                         this.leaveapplications = data;
                         this.leaveapplications.data = _.filter(data.data, {'status': this.search.status});
+                        Swal.close()
                     })
                     .catch(error => {
                         console.log(error.response.data.message);

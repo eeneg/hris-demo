@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('fetchDepartments', 'Api\AppointmentController@fetchDepartments');
     Route::get('fetchSalarySched', 'Api\AppointmentController@fetchSalarySched');
+    Route::post('printAppointmentRecords', 'Api\AppointmentController@printAppointmentRecords');
 
     Route::get('getleavetypes', 'Api\LeaveTypeController@getleavetypes');
     Route::post('editLeaveApplication/{id}', 'Api\LeaveApplicationController@edit');
@@ -118,6 +119,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('addToExistingServiceRecord', 'Api\EmployeeServiceRecordController@addToExistingServiceRecord');
     Route::post('overwriteEmployeeServiceRecords', 'Api\EmployeeServiceRecordController@overwiteServiceRecord');
     Route::post('addServiceRecord', 'Api\EmployeeServiceRecordController@addServiceRecord');
+
+    Route::post('printReappointments', 'Api\ReappointmentController@printReappointments');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function () {
