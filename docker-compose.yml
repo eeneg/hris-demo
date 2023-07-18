@@ -8,15 +8,13 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP:-1000}'
-        image: sail-8.1/app
+        image: joowdx/sail:8.2
         restart: unless-stopped
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
             - '.:/var/www/html'
         ports:
@@ -45,7 +43,7 @@ services:
             timeout: 10s
     mysql:
         container_name: hris.database
-        image: 'mysql/mysql-server:8.0'
+        image: 'mysql:8-debian'
         restart: unless-stopped
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -57,7 +55,7 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
-            - 'sail-mysql:/var/lib/mysql'
+            - 'mysql:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
@@ -69,5 +67,6 @@ networks:
     sail:
         driver: bridge
 volumes:
-    sail-mysql:
+    mysql:
+        name: hris-mysql
         driver: local

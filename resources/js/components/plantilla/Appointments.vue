@@ -34,14 +34,11 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group">
-                                <button v-if="salaryschedules.length > 0 && departments.length > 0" class="btn btn-primary float-left mb-3" type="button" @click="resetSearch()" data-toggle="modal">Reset <i class="fas fa-redo"></i></button>
-                            </div>
+                            <button v-if="salaryschedules.length > 0 && departments.length > 0" class="btn btn-danger float-left mr-2 mb-3" type="button" @click="resetSearch()" data-toggle="modal">Reset <i class="fas fa-redo"></i></button>
+                            <button v-if="salaryschedules.length > 0 && departments.length > 0" class="btn btn-success mr-2 mb-3" type="button" @click="print()" data-toggle="modal">Print <i class="fas fa-print"></i></button>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group">
-                                <button v-if="salaryschedules.length > 0 && departments.length > 0" class="btn btn-primary float-right mb-3" type="button" @click="createAppointments()" data-toggle="modal">Create <i class="fas fa-plus"></i></button>
-                            </div>
+                            <button v-if="salaryschedules.length > 0 && departments.length > 0" class="btn btn-primary float-right mb-3" type="button" @click="createAppointments()" data-toggle="modal">Create <i class="fas fa-plus"></i></button>
                         </div>
                         <div class="col-md-12">
                             <table class="table table-striped">
@@ -203,6 +200,8 @@
             </div>
         </div> <!-- modal -->
 
+        <iframe src="" frameborder="0" id="i" hidden></iframe>
+
     </div> <!-- row -->
 </template>
 <script>
@@ -248,12 +247,12 @@ export default {
     {
         return {
             editMode: false,
-            from: '',
-            to: '',
+            from: null,
+            to: null,
             employees: [{}],
-            search: '',
-            reckoning_date_from: '',
-            reckoning_date_to: '',
+            search: null,
+            reckoning_date_from: null,
+            reckoning_date_to: null,
             departments: [],
             positions: [],
             salaryschedules: [],
@@ -263,19 +262,19 @@ export default {
             selectedSalarySched: [],
             errors: new Errors(),
             form: new Form({
-                'personal_information_id': '',
-                'position_id': '',
-                'salary_sched_id': '',
-                'grade': '',
-                'step': '',
-                'status': '',
-                'agency': '',
-                'nature_of_appointment': '',
-                'previous_employee': '',
-                'previous_status': '',
+                'personal_information_id': null,
+                'position_id': null,
+                'salary_sched_id': null,
+                'grade': null,
+                'step': null,
+                'status': null,
+                'agency': null,
+                'nature_of_appointment': null,
+                'previous_employee': null,
+                'previous_status': null,
                 'itemno':'',
                 'page':'',
-                'reckoning_date': ''
+                'reckoning_date': null
             }),
             options: {
                 format: 'yyyy-MM-DD',
@@ -311,7 +310,51 @@ export default {
     methods: {
         searchAppointment: _.debounce(function(){
                 this.getSearchResults();
-        }, 400),
+        }, 600),
+
+        print: function()
+        {
+            if(this.reckoning_date_from == null || this.reckoning_date_to == null)
+            {
+                Swal.fire(
+                    'Oops...',
+                    'Please input reckoning dates',
+                    'error'
+                )
+            }else{
+
+                Swal.fire({
+                title: '<strong>Generating Appointment Records</strong>',
+                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                icon: 'info',
+                willOpen () {
+                    Swal.showLoading ()
+                },
+                didClose () {
+                    Swal.hideLoading()
+                },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false
+                })
+
+                axios.post('api/printAppointmentRecords', {data: this.appointments.data, from: this.reckoning_date_from, to: this.reckoning_date_to})
+                .then(({data}) => {
+                    var f = document.getElementById('i')
+                    f.contentWindow.document.write(data)
+                    setTimeout(function () {
+                        f.contentWindow.focus()
+                        f.contentWindow.print()
+
+                        f.contentWindow.document.open();
+                        f.contentWindow.document.write("");
+                        f.contentWindow.document.close();
+                    }, 500);
+                    Swal.close()
+                })
+            }
+        },
         getPositions: function()
         {
             let vm = this
@@ -337,15 +380,37 @@ export default {
 
             this.$Progress.start()
 
-            axios.get('api/appointment?page=' + page + '&search=' + this.search + '&from=' + this.reckoning_date_from + '&to=' + this.reckoning_date_to)
+            Swal.fire({
+                title: '<strong>Generating Appointment Records</strong>',
+                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                icon: 'info',
+                willOpen () {
+                    Swal.showLoading ()
+                },
+                didClose () {
+                    Swal.hideLoading()
+                },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false
+            })
+
+            let data = {
+                page: page,
+                search: this.search,
+                from: this.reckoning_date_from,
+                to: this.reckoning_date_to,
+            }
+
+            axios.get('api/appointment', {params: data})
             .then(({data}) => {
                 this.appointments = data;
                 this.$Progress.finish()
+                Swal.close()
             }).catch(error => {
                 console.log(error.reponse.data.message);
             });
-
-
         },
         getEmployees: function()
         {
@@ -534,9 +599,9 @@ export default {
         },
         resetSearch: function()
         {
-            this.search = ''
-            this.reckoning_date_from = ''
-            this.reckoning_date_to = ''
+            this.search = null
+            this.reckoning_date_from = null
+            this.reckoning_date_to = null
             this.getSearchResults()
         }
     },

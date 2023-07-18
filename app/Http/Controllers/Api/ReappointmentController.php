@@ -10,7 +10,9 @@ use App\PersonalInformation;
 use App\Reappointment;
 use App\Setting;
 use App\Plantilla;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReappointmentController extends Controller
 {
@@ -18,8 +20,10 @@ class ReappointmentController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     *
      */
-    public function index()
+
+    public function index(Request $request)
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
@@ -40,18 +44,49 @@ class ReappointmentController extends Controller
                                 'assigned_to_table.title as dept_to',
                                 'reappointments.*'
                             )
-                            ->where('plantilla_contents.plantilla_id',$plantilla->id)
-                            ->orderBy('reappointments.created_at', 'desc')
-                            ->paginate(20);
+                            ->where('plantilla_contents.plantilla_id',$plantilla->id);
 
-        return new ReappointmentResource($reappointment);
+
+        if (!$request->search && !$request->dateFrom && !$request->dateTo) {
+            return new ReappointmentResource($reappointment->orderBy('created_at', 'desc')->paginate(20));
+        } else if (!$request->search && $request->dateFrom && $request->dateTo) {
+            $reappointment->whereBetween('reappointments.date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')]);
+
+            return new ReappointmentResource($reappointment->paginate(20));
+        } else if ($request->search && !$request->dateFrom && !$request->dateTo) {
+            $reappointment->where(function ($query) use ($request) {
+                $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
+                ->orderBy('surname');
+            });
+
+            return new ReappointmentResource($reappointment->paginate(20));
+        } else {
+            $reappointment->whereBetween('reappointments.date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')])
+                ->where(function ($query) use ($request) {
+                    $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orderBy('surname');
+                });
+
+            return new ReappointmentResource($reappointment->paginate(20));
+        }
     }
 
-    public function employeeList()
+    public function printReappointments(Request $request)
     {
-        $employees = PersonalInformation::orderBy('surname')->get();
+        $data = $request->data;
+        $from = $request->from ?? Carbon::now()->format('Y-m-d');
+        $to = $request->to ?? Carbon::now()->format('Y-m-d');
 
-        return new EmployeeAppointmentListResource($employees);
+        $from = Carbon::parse($from)->format('F, d Y');
+        $to = Carbon::parse($to)->format('F, d Y');
+
+        return view('reports.reappointments', compact('data','from', 'to'));
     }
 
     /**

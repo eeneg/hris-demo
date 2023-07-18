@@ -47,13 +47,14 @@ class AppointmentController extends Controller
                 'appointment_records.*'
             );
 
-        if (! $request->search && ! $request->from && ! $request->to) {
+
+        if (!$request->search && !$request->from && !$request->to) {
             return new AppointmentResource($appointments->orderBy('created_at', 'desc')->paginate(20));
-        } elseif (! $request->search && $request->from && $request->to) {
-            $appointments->whereBetween('appointment_records.reckoning_date', [$request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')]);
+        } else if (!$request->search && $request->from && $request->to) {
+            $appointments->whereBetween('appointment_records.reckoning_date', [$request->from ? $request->from : Carbon::now()->format('Y-m-d'), $request->to ? $request->to : Carbon::now()->format('Y-m-d')]);
 
             return new AppointmentResource($appointments->paginate(20));
-        } elseif ($request->search && ! $request->from && ! $request->to) {
+        } else if ($request->search && !$request->from && !$request->to) {
             $appointments->where(function ($query) use ($request) {
                 $query->where('surname', 'LIKE', '%'.$request->search.'%')
                 ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
@@ -64,7 +65,7 @@ class AppointmentController extends Controller
 
             return new AppointmentResource($appointments->paginate(20));
         } else {
-            $appointments->whereBetween('appointment_records.reckoning_date', [$request->from, $request->to ? $request->to : Carbon::now()->format('Y-m-d')])
+            $appointments->whereBetween('appointment_records.reckoning_date', [$request->from ? $request->from : Carbon::now()->format('Y-m-d'), $request->to ? $request->to : Carbon::now()->format('Y-m-d')])
                 ->where(function ($query) use ($request) {
                     $query->where('surname', 'LIKE', '%'.$request->search.'%')
                     ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
@@ -162,6 +163,29 @@ class AppointmentController extends Controller
         ]);
 
         $appointment->update($request->all());
+    }
+
+    public function printAppointmentRecords(Request $request)
+    {
+        $data = collect($request->data)->map(function($e){
+            $f = $e['personal_information']['firstname'];
+            $s = $e['personal_information']['surname'];
+            return [
+                'name' => $f . ' ' . $s,
+                'nature' => $e['nature_of_appointment'],
+                'department' => $e['department']['title'],
+                'appointed_to' => $e['position']['title'],
+                'reckoning_date' => $e['reckoning_date']
+            ];
+        });
+
+        $from = $request->from ?? Carbon::now()->format('Y-m-d');
+        $to = $request->to ?? Carbon::now()->format('Y-m-d');
+
+        $from = Carbon::parse($from)->format('F, d Y');
+        $to = Carbon::parse($to)->format('F, d Y');
+
+        return view('reports.appointments', compact('data','from', 'to'));
     }
 
     /**

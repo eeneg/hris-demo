@@ -16,6 +16,10 @@ class PositionController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('isAdministratorORAuthor');
+        $positions = Position::without('department')->orderBy('title')->groupBy('title')->get();
+        return $positions;
+
     }
 
     public function get_department_positions(Request $request)

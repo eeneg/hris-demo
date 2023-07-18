@@ -12,16 +12,37 @@
                 <div class="card-body">
                     <div class="row justify-content-between">
                         <div class="col-md-4">
-                            <div class="form-group" style="position: relative;margin-bottom: 0.3rem;">
-                                <v-select @input="filter_reappointments()" class="form-control form-control-border border-width-2" v-model="search" :options="employees.data" label="name" placeholder="Search employee" :reduce="employees => employees.id"></v-select>
-                                <has-error :form="form" field="personal_information_id"></has-error>
+                            <div class="input-group mb-3">
+                                <input type="text" name="search" id="search" class="form-control" placeholder="Search" v-model="search" @keyup.prevent="searchReappointments()">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-search"></i></div>
+                                </div>
                             </div>
                         </div>
-                       <div class="col-md-8">
-                           <button type="button" class="btn btn-primary float-right" @click.prevent="reappointment_modal()">
-                                Reassign <i class="fas fa-plus"></i>
+                        <div class="col-md-6">
+                           <div class="form-inline">
+
+                                <label for="dateFrom">From: </label>
+                                <input class="form-control form-control-border border-width-2" @input="searchReappointments()" name="dateFrom" type="date" v-model="dateFrom" required>
+
+                                <label for="dateTo" class="ml-4">To: </label>
+                                <input class="form-control form-control-border border-width-2" @input="searchReappointments()" name="dateTo" type="date" v-model="dateTo" required>
+
+                                <button type="button" class="btn btn-danger float-left ml-4" @click="resetSearch()">
+                                    Reset <i class="fas fa-undo"></i>
+                                </button>
+
+                                <button type="button" class="btn btn-success ml-2" @click="print()">
+                                        Print <i class="fas fa-print"></i>
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary float-right mb-3" @click.prevent="reappointment_modal()">
+                                    Reassign <i class="fas fa-plus"></i>
                             </button>
-                       </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="card-body table-responsive p-0" style="height: 600px;">
@@ -93,6 +114,11 @@
                                         <v-select class="form-control form-control-border border-width-2" v-model="form.assigned_to" :options="departments.data" label="title" placeholder="Reassign to" :reduce="departments => departments.id"></v-select>
                                         <has-error :form="form" field="assigned_to"></has-error>
                                     </div>
+                                    <div class="form-group col-12 mt-5">
+                                        <label for="date">Effectivity Date</label>
+                                        <input class="form-control form-control-border border-width-2" type="date" v-model="form.date" name="original_appointment" required>
+                                        <has-error :form="form" field="assigned_to"></has-error>
+                                    </div>
                                 </div>
                         </div>
                     </div>
@@ -107,6 +133,8 @@
 
         <!-- modal end -->
 
+        <iframe src="" frameborder="0" id="print" hidden></iframe>
+
     </div> <!-- row -->
 </template>
 <script>
@@ -116,17 +144,19 @@ export default {
     {
         return {
             editMode: false,
-            search: '',
+            search: null,
             reappointments: {},
-            reappointment_id: '',
+            reappointment_id: null,
             employees: [{}],
             departments: [{}],
             filter: {},
+            dateFrom: null,
+            dateTo: null,
             form: new Form({
-                'personal_information_id': '',
-                'assigned_from': '',
-                'assigned_to': '',
-                'date': moment(new Date()).format("YYYY-MM-DD")
+                'personal_information_id': null,
+                'assigned_from': null,
+                'assigned_to': null,
+                'date': null
             })
         }
     },
@@ -135,15 +165,92 @@ export default {
         this.fetch_reappointments()
     },
     methods: {
-        filter_reappointments: function()
-        {
-            let data = this.filter
 
-            if (this.search != null && this.search != '') {
-                 data = _.filter(data, {'personal_information_id': this.personal_information_id});
+        searchReappointments:  _.debounce(function(){
+            this.getResults();
+        }, 600),
+
+        getResults: function()
+        {
+            Swal.fire({
+                title: '<strong>Loading data...</strong>',
+                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                icon: 'info',
+                willOpen () {
+                    Swal.showLoading ()
+                },
+                didClose () {
+                    Swal.hideLoading()
+                },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false
+            })
+
+            let data = {
+                search: this.search,
+                dateFrom: this.dateFrom,
+                dateTo: this.dateTo,
             }
 
-            this.reappointments.data = data
+            console.log(data)
+
+            axios.get('api/reappointments', {params: data})
+            .then(({data}) => {
+                this.reappointments = data;
+                this.$Progress.finish()
+                Swal.close()
+            }).catch(error => {
+                console.log(error.reponse.data.message);
+            });
+
+        },
+
+        print: function()
+        {
+
+            if(this.dateFrom == null || this.dateTo == null)
+            {
+                Swal.fire(
+                    'Oops...',
+                    'Please input effectivity dates',
+                    'error'
+                )
+            }else{
+
+                Swal.fire({
+                    title: '<strong>Loading data...</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
+                axios.post('api/printReappointments', {data: this.reappointments.data, from: this.dateFrom, to: this.dateTo})
+                .then(({data}) => {
+                    var f = document.getElementById('print')
+                    f.contentWindow.document.write(data)
+                    setTimeout(function () {
+                        f.contentWindow.focus()
+                        f.contentWindow.print()
+
+                        f.contentWindow.document.open();
+                        f.contentWindow.document.write("");
+                        f.contentWindow.document.close();
+                    }, 500);
+                    Swal.close()
+                })
+            }
+
         },
         fetch_reappointments: function()
         {
@@ -292,6 +399,13 @@ export default {
                     });
                 }
             })
+        },
+        resetSearch: function()
+        {
+            this.search = null
+            this.dateFrom = null
+            this.dateTo = null
+            this.getResults()
         }
     },
 }

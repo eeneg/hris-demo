@@ -19,12 +19,12 @@ class CreateServiceRecordsTable extends Migration
             $table->foreign('personal_information_id')
                 ->references('id')
                 ->on('personal_informations');
-            $table->string('dateCertified');
-            $table->string('certifier_id');
-            $table->string('ORNo');
-            $table->date('dateIssued');
-            $table->string('amount');
-            $table->string('note');
+            $table->string('dateCertified')->nullable();
+            $table->string('certifier_id')->nullable();
+            $table->string('ORNo')->nullable();
+            $table->date('dateIssued')->nullable();
+            $table->string('amount')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
