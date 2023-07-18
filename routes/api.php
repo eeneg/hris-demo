@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         'servicerecord' => 'Api\ServiceRecordController',
         'employeeservicerecord' => 'Api\EmployeeServiceRecordController',
         'separation' => 'Api\SeparationController',
+        'qs' => 'Api\QSController',
     ]);
 
     Route::post('department_positions', 'Api\PositionController@get_department_positions');

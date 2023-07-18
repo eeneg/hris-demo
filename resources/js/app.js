@@ -107,6 +107,7 @@ const routes = [
     { path: '/activities-create', component: require('./components/activities/Create.vue').default },
     { path: '/activities-edit', component: require('./components/activities/Edit.vue').default },
     { path: '/separations', component: require('./components/plantilla/Separation.vue').default },
+    { path: '/qualification-standards', component: require('./components/plantilla/QualStand.vue').default },
     { path: '/dtr', component: require('./components/dtr/Dtr.vue').default },
 ]
 

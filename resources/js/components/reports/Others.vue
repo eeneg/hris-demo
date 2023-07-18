@@ -386,7 +386,7 @@
                             let grade_to = this.salary_grades_report.salary_grade.split('-')[1]
                             let pos = this.salary_grades_report.position_filter
                             if (content.salaryproposed) {
-                                return (pos != '' ? content.position.includes(pos) : true)
+                                return (pos != '' ? content.position.toLowerCase().includes(pos.toLowerCase()) : true)
                                     && content.salaryproposed.grade >= grade_from 
                                     && content.salaryproposed.grade <= grade_to
                                     && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
@@ -398,7 +398,7 @@
                         } else {
                             let pos = this.salary_grades_report.position_filter
                             if (content.salaryproposed) {
-                                return (pos != '' ? content.position.includes(pos) : true)
+                                return (pos != '' ? content.position.toLowerCase().includes(pos.toLowerCase()) : true)
                                     && content.salaryproposed.grade == this.salary_grades_report.salary_grade
                                     && (!this.salary_grades_report.status_vacant ? content.personal_information_id != null : true)
                                     && (!this.salary_grades_report.status_occupied ? content.personal_information_id == null : true)
