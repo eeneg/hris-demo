@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class SeparationController extends Controller
         } else {
             $separations = Separation::orderBy('effectivity_date', 'desc')->paginate(20);
         }
-        
+
         return new SeparationResource($separations);
     }
 
