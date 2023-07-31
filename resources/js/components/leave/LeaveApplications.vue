@@ -419,7 +419,7 @@ import axios from 'axios';
             filter_data() {
 
                 Swal.fire({
-                title: '<strong>Generating Appointment Records</strong>',
+                title: '<strong>Loading...</strong>',
                 html: 'Dont <u>reload</u> or <u>close</u> the application ...',
                 icon: 'info',
                 willOpen () {
@@ -455,7 +455,7 @@ import axios from 'axios';
             },
             loadContent() {
                 Swal.fire({
-                title: '<strong>Generating Appointment Records</strong>',
+                title: '<strong>Loading...</strong>',
                 html: 'Dont <u>reload</u> or <u>close</u> the application ...',
                 icon: 'info',
                 willOpen () {
