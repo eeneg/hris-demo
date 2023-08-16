@@ -12,6 +12,10 @@ class SalaryGrade extends Auditable
 
     protected $fillable = ['grade', 'step', 'amount'];
 
+    protected $appends = [
+        'annual', 'monthly', 'daily'
+    ];
+
     public function position()
     {
         return $this->hasMany('App\Position');
@@ -34,7 +38,22 @@ class SalaryGrade extends Auditable
 
     public function salaryschedule()
     {
-        return $this->belongsTo('App\SalarySchedule');
+        return $this->belongsTo('App\SalarySchedule', 'salary_sched_id');
+    }
+
+    public function getAnnualAttribute()
+    {
+        return $this->amount * 12;
+    }
+
+    public function getMonthlyAttribute()
+    {
+        return $this->amount;
+    }
+
+    public function getDailyAttribute()
+    {
+        return $this->amount / 22;
     }
 
     public static function boot()

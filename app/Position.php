@@ -37,4 +37,9 @@ class Position extends Auditable
     {
         return Uuid::generate()->string;
     }
+
+    public function qs()
+    {
+        return $this->hasOne(QS::class);
+    }
 }

@@ -6,6 +6,7 @@ use App\Plantilla;
 use App\PlantillaContent;
 use App\Setting;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 

@@ -109,6 +109,7 @@ const routes = [
     { path: '/separations', component: require('./components/plantilla/Separation.vue').default },
     { path: '/qualification-standards', component: require('./components/plantilla/QualStand.vue').default },
     { path: '/dtr', component: require('./components/dtr/Dtr.vue').default },
+    { path: '/publications', component: require('./components/plantilla/Publications.vue').default },
 ]
 
 const router = new VueRouter({

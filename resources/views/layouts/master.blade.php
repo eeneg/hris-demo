@@ -191,6 +191,10 @@
 										<router-link to="/qualification-standards" class="nav-link">
 											<i class="fas fa-clipboard-list nav-icon"></i>
 											<p>Qualification Standards</p>
+									<li class="nav-item">
+										<router-link to="/publications" class="nav-link">
+											<i class="fas fa-newspaper nav-icon"></i>
+											<p>Publications</p>
 										</router-link>
 									</li>
 								</ul>

@@ -2,28 +2,25 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Department extends Auditable
+class PublicationContent extends Model
 {
+    use HasFactory;
+
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $primaryKey = 'id';
 
-    protected $with = [
-
-    ];
-
     protected $fillable = [
-        'title', 'description', 'address', 'function', 'projectactivity', 'fund', 'status'
+        'publication_id',
+        'plantilla_content_id',
     ];
-
-    public function positions()
-    {
-        return $this->hasMany('App\Position', 'department_id');
-    }
 
     public static function boot()
     {
@@ -38,8 +35,13 @@ class Department extends Auditable
         return Uuid::generate()->string;
     }
 
-    public function scopeActive($query)
+    public function publication()
     {
-        return $query->whereStatus('active');
+        return $this->belongsTo(Publication::class);
+    }
+
+    public function plantillaContent()
+    {
+        return $this->belongsTo(PlantillaContent::class);
     }
 }

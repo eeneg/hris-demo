@@ -187,4 +187,9 @@ class PlantillaController extends Controller
     {
         //
     }
+
+    public function plantillapublication()
+    {
+        return '';
+    }
 }

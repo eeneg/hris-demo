@@ -35,7 +35,11 @@ class PlantillaContentResource extends ResourceCollection
                 'birthdate' => $item->personalinformation ? $item->personalinformation->birthdate : '',
                 'salaryauthorized' => $item->salaryauthorized,
                 'salaryproposed' => $item->salaryproposed,
-                'csc_level' => $item->csc_level
+                'csc_level' => $item->csc_level,
+                'department' => $item->position?->department?->title,
+                'annual' => $item->salaryproposed?->annual,
+                'monthly' => $item->salaryproposed?->monthly,
+                'daily' => $item->salaryproposed?->daily,
             ];
         });
     }

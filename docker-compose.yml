@@ -2,13 +2,13 @@
 version: '3'
 services:
     hris:
-        container_name: hris.app
+        container_name: hris-app
         build:
             context: ./docker
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP:-1000}'
-        image: joowdx/sail:8.2
+        image: zailmer30/payroll
         restart: unless-stopped
         extra_hosts:
             - 'host.docker.internal:host-gateway'
@@ -24,7 +24,7 @@ services:
         depends_on:
             - mysql
     nginx:
-        container_name: hris.webserver
+        container_name: hris-webserver
         image: 'nginx:alpine'
         restart: unless-stopped
         ports:
@@ -42,7 +42,7 @@ services:
             test: ["CMD", "wget -O /dev/null http://localhost || exit 1"]
             timeout: 10s
     mysql:
-        container_name: hris.database
+        container_name: hris-database
         image: 'mysql:8-debian'
         restart: unless-stopped
         ports:
@@ -65,6 +65,7 @@ services:
             timeout: 5s
 networks:
     sail:
+        name: hris
         driver: bridge
 volumes:
     mysql:
