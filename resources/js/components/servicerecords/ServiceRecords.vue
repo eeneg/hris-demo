@@ -316,7 +316,7 @@
                                 <textarea class="form-control" id="exampleFormControlTextarea1" v-model="parse" placeholder="Paste Here" rows="5"></textarea>
                                 <button type="button" class="btn btn-success float-left mt-2" style="width: 100%;" @click="parseToArray">Parse</button>
                             </div>
-                            <div class="col-md-12 p-2" style="overflow: auto;">
+                            <div class="col-md-12 p-2 mt-4" style="overflow: auto;">
                                 <table class="table table-striped text-nowrap custom-table text-center w-100">
                                     <thead>
                                         <tr>
