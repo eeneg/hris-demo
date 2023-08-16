@@ -809,9 +809,26 @@ import CreditsTable from './CreditsTable.vue'
 
             get_employees: function(){
 
+                Swal.fire({
+                title: '<strong>Loading...</strong>',
+                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
                 axios.get('api/leavecredits')
                 .then(({data}) => {
                     this.employees = data.data
+                    Swal.close()
                 }).catch(e => {
                     console.log(e)
                 })
