@@ -22,6 +22,14 @@ class PositionController extends Controller
 
     }
 
+    public function get_available_positions_for_QS(Request $request)
+    {
+        $this->authorize('isAdministratorORAuthor');
+        $positions = Position::without('department')->doesntHave('qs')->orderBy('title')->groupBy('title')->get();
+        return $positions;
+
+    }
+
     public function get_department_positions(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');

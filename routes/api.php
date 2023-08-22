@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     ]);
 
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
+    Route::get('vailable_positions_for_QS', 'Api\PositionController@get_available_positions_for_QS');
 
     Route::get('profile', 'Api\UserController@profile');
     Route::put('profile', 'Api\UserController@updateProfile');
