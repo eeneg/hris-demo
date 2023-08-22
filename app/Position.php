@@ -25,6 +25,11 @@ class Position extends Auditable
         return $this->belongsTo('App\Department', 'department_id');
     }
 
+    public function qs()
+    {
+        return $this->hasMany('App\QS', 'position_id');
+    }
+
     public static function boot()
     {
         parent::boot();

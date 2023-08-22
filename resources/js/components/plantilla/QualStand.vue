@@ -255,7 +255,7 @@ export default {
                 });
         },
         fetch_positions() {
-            axios.get('api/position')
+            axios.get('api/vailable_positions_for_QS')
                 .then(({data}) => {
                     this.positions = data;
                     this.$Progress.finish()
