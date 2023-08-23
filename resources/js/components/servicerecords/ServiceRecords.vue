@@ -549,7 +549,7 @@ import Swal from 'sweetalert2'
 
             addEmployeeServiceRecords: function(data)
             {
-                axios.post('api/addServiceRecord', {'service_record_id' : this.record.service_record.id, 'data' : data})
+                axios.post('api/addServiceRecord', {'service_record_id' : this.service_record_id, 'data' : data})
                 .then(e => {
                     toast.fire({
                         icon: 'success',
