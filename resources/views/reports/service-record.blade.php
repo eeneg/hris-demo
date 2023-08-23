@@ -15,17 +15,6 @@
 </style>
 <body>
     @php
-        function formatDate($date)
-        {
-            if(strtotime($date) !== false)
-            {
-                return Carbon\Carbon::parse($date)->format('m/d/y');
-            }
-            return $date;
-        }
-    @endphp
-
-    @php
         function format($date){
             if(strtotime($date) !== false)
             {
@@ -150,19 +139,19 @@
             <tr>
                 @foreach ($item as $key => $record)
                 <tr style="border: solid 1px" class="text-center">
-                    <td style="border-left: 1px solid; border-right: 1px solid; text-align: center">{{ formatDate($record->from) }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ formatDate($record->to) }}</td>
+                    <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->from }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->to }}</td>
                     <td style="border-right: 1px solid; width: 50%; text-align: center">
                         {{ $record->position }}
                     </td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->status }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->salary }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->station }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->branch }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->pay }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->remark }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ formatDate($record->date) }}</td>
-                    <td style="border-right: 1px solid; text-align: center">{{ $record->cause }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->status }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->salary }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->station }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->branch }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->pay }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->remark }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->date }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->cause }}</td>
                 </tr>
                 @endforeach
             </tr>
