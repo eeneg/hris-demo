@@ -127,7 +127,7 @@
                     <th style="border: dashed 2px; width: 20px;">To</th>
                     <th style="border: dashed 2px; width: 70px;">Designation<br>(Positon)</th>
                     <th style="border: dashed 2px; width: 20px;">Status</th>
-                    <th style="border: dashed 2px; width: 20px;">Salary</th>
+                    <th style="border: dashed 2px; width: 20px;">Salary(P.A.)</th>
                     <th style="border: dashed 2px; width: 20px; ">Station/ <br>Place Assignment</th>
                     <th style="border: dashed 2px; width: 20px;">Branch</th>
                     <th style="border: dashed 2px; width: 20px; border-top: none;">Absences w/o<br>Pay</th>
