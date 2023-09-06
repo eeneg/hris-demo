@@ -198,16 +198,30 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="status">To Date</label>
+                                    <input type="radio" class="form-control form-control-border border-width-2" v-model="record_form.to" id="to1" value="to date">
+                                    <span v-if="errors.to">
+                                        <p class="text-danger">Field Required</p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="status">Status</label>
-                                    <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.status" id="status" placeholder="Enter Status">
+                                    <select name="status" id="status" class="form-control form-control-border border-width-2" v-model="record_form.status">
+                                        <option value="Perm.">Permanent</option>
+                                        <option value="Casual">Casual</option>
+                                        <option value="Temp.">Temporary</option>
+                                        <option value="CT">Co Terminus</option>
+                                    </select>
                                     <span v-if="errors.status">
                                         <p class="text-danger">Field Required</p>
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="salary">Salary</label>
                                     <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.salary" id="salary" placeholder="Enter">
@@ -216,16 +230,20 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="branch">Branch</label>
-                                    <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.branch" id="branch" placeholder="Enter Branch">
+                                    <select name="branch" id="branch" class="form-control form-control-border border-width-2" v-model="record_form.branch">
+                                        <option value="Prov'l" selected>Provincial</option>
+                                        <option value="Nat'l">National</option>
+                                        <option value="Muni">Municipal</option>
+                                    </select>
                                     <span v-if="errors.branch">
                                         <p class="text-danger">Field Required</p>
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="pay">Leave of Absences w/o Pay</label>
                                     <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.pay" id="pay" placeholder="Enter Leave of Absences w/o Pay">
@@ -260,7 +278,7 @@
                                         <p class="text-danger">Field Required</p>
                                     </span>
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -381,7 +399,7 @@
                     </div>
                     <div class="modal-body" style="overflow-x: auto; overflow-y: auto;">
                         <p>Employee has existing Service Records</p>
-                        <button class="btn btn-warning" @click="addToExistingServiceRecord()">Add to existing records <i class="fas fa-plus"></i></button>
+                        <button class="btn btn-warning" @click="addToExistingServiceRecord()" :disabled="overwrite == true">Add to existing records <i class="fas fa-plus"></i></button>
                         <hr>
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="exampleCheck1" v-model="overwrite">
@@ -422,10 +440,10 @@ import Swal from 'sweetalert2'
                     'from': null,
                     'to': null,
                     'position': null,
-                    'status': null,
+                    'status': "Perm.",
                     'salary': null,
                     'station': null,
-                    'branch': null,
+                    'branch': "Prov'l",
                     'pay': null,
                     'remark': null,
                     'date': null,
@@ -447,7 +465,17 @@ import Swal from 'sweetalert2'
                 overwrite: false
             }
         },
+        watch:{
+            "record_form.station": function(val, oldValue){
+                if(val == null){this.emptyPositionArray()}
+            }
+        },
         methods:{
+
+            emptyPositionArray: function(){
+                this.positions = []
+                this.record_form.position = null
+            },
 
             formatDate: function(date)
             {
@@ -644,12 +672,35 @@ import Swal from 'sweetalert2'
 
             getServiceRecord: function()
             {
+                Swal.fire({
+                    title: '<strong>Loading data...</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
                 axios.get('api/servicerecord')
                 .then(({data}) => {
                     this.data = data
+                    Swal.close()
                 })
                 .catch(e => {
                     console.log(e)
+                    Swal.close()
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!',
+                    })
+
                 })
             },
 
@@ -706,17 +757,19 @@ import Swal from 'sweetalert2'
             getPosition: function()
             {
                 this.record_form.position_id = null
-                axios.get('api/fetch_positions?id=' + this.record_form.station.id)
-                .then(({data}) => {
-                    this.positions = data
-                })
-                .catch(e => {
-                    console.log(e)
-                    toast.fire({
-                        icon:'error',
-                        title:'Failed to fetch positions'
+                if(this.record_form.station){
+                    axios.get('api/fetch_positions?id=' + this.record_form.station.id)
+                    .then(({data}) => {
+                        this.positions = data
                     })
-                })
+                    .catch(e => {
+                        console.log(e)
+                        toast.fire({
+                            icon:'error',
+                            title:'Failed to fetch positions'
+                        })
+                    })
+                }
             },
 
             getRecord: function()
@@ -730,6 +783,7 @@ import Swal from 'sweetalert2'
                 }else{
                     this.form.reset()
                     this.service_record_id = this.record.service_record.id
+                    Object.assign(this.form, this.record.service_record)
                     this.getEmployeeServiceRecords()
                 }
             },
@@ -892,6 +946,11 @@ import Swal from 'sweetalert2'
                 })
                 .catch(e => {
                     console.log(e)
+                    Swal.close()
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Something went wrong!'
+                    })
                 })
             },
 

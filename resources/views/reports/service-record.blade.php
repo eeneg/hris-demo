@@ -18,7 +18,15 @@
         function format($date){
             if(strtotime($date) !== false)
             {
-                return Carbon\Carbon::parse($date)->format('F d, y');
+                return Carbon\Carbon::parse($date)->format('F d, Y');
+            }
+            return $date;
+        }
+
+        function formatbirthDate($date){
+            if(strtotime($date) !== false)
+            {
+                return Carbon\Carbon::parse($date)->format('F d, Y');
             }
             return $date;
         }
@@ -78,7 +86,7 @@
                         <span style="float: right; font-weight: normal; font-size: 18pt;"></span>
                     </th>
                     <th colspan="2" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-align: center;">
-                        {{ $employee->birthdate }}
+                        {{ formatbirthDate($employee->birthdate) }}
                     </th>
                     <th colspan="5" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-align: center;">
                         {{ $employee->birthplace }}
@@ -127,7 +135,7 @@
                     <th style="border: dashed 2px; width: 20px;">To</th>
                     <th style="border: dashed 2px; width: 70px;">Designation<br>(Positon)</th>
                     <th style="border: dashed 2px; width: 20px;">Status</th>
-                    <th style="border: dashed 2px; width: 20px;">Salary</th>
+                    <th style="border: dashed 2px; width: 20px;">Salary(P.A.)</th>
                     <th style="border: dashed 2px; width: 20px; ">Station/ <br>Place Assignment</th>
                     <th style="border: dashed 2px; width: 20px;">Branch</th>
                     <th style="border: dashed 2px; width: 20px; border-top: none;">Absences w/o<br>Pay</th>
@@ -141,17 +149,17 @@
                 <tr style="border: solid 1px" class="text-center">
                     <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->from }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->to }}</td>
-                    <td style="border-right: 1px solid; width: 50%; text-align: center">
+                    <td style="border-right: 1px solid; text-align: center;">
                         {{ $record->position }}
                     </td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->status }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->salary }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->station }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->branch }}</td>
+                    <td style="border-right: 1px solid; text-align: center;">{{ $record->branch }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->pay }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->remark }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->date }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->cause }}</td>
+                    <td style="border-right: 1px solid; text-align: center;">{{ $record->remark }}</td>
+                    <td style="border-right: 1px solid; text-align: center;">{{ $record->date }}</td>
+                    <td style="border-right: 1px solid; text-align: center;">{{ $record->cause }}</td>
                 </tr>
                 @endforeach
             </tr>
@@ -231,11 +239,11 @@
                     <td colspan="6" style="font-size: 16pt; text-align: center;">
                         {{ $certPos }}
                         <br>
-                        (HRMO III)
+
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="1" style="font-size: 12pt; ">
+                    <td colspan="2" style="font-size: 12pt;">
                         O.R. NO.
                     </td>
                     <td colspan="2" style="font-size: 12pt;">
@@ -243,7 +251,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="1" style="font-size: 12pt; ">
+                    <td colspan="2" style="font-size: 12pt; ">
                         Date Issued
                     </td>
                     <td colspan="2" style="font-size: 12pt;">
@@ -251,7 +259,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="1" style="font-size: 12pt; t">
+                    <td colspan="2" style="font-size: 12pt; t">
                         Amount
                     </td>
                     <td colspan="2" style="font-size: 12pt;">
