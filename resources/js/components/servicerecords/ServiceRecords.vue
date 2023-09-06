@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <v-select class="form-control form-control-border border-width-2" @input="getRecord()" placeholder="Select Employee" v-model.lazy="record" :options="data" label="name"></v-select>
+                                <v-select class="form-control form-control-border border-width-2" @input="getRecord()" placeholder="Select Employee" v-model.lazy="record" :options="data" label="fullName"></v-select>
                                 <span v-if="errors.personal_information_id">
                                     <p class="text-danger">Please select and employee</p>
                                 </span>
@@ -223,7 +223,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="salary">Salary</label>
+                                    <label for="salary">Salary (P.A.)</label>
                                     <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.salary" id="salary" placeholder="Enter">
                                     <span v-if="errors.salary">
                                         <p class="text-danger">Field Required</p>
@@ -351,7 +351,7 @@
                                             <th class="border">To</th>
                                             <th class="border">Designation<br>(Positon)</th>
                                             <th class="border">Status</th>
-                                            <th class="border">Salary</th>
+                                            <th class="border">Salary (P.A.)</th>
                                             <th class="border">Station/ <br>Place Assignment</th>
                                             <th class="border">Branch</th>
                                             <th class="border">Absences w/o<br>Pay</th>
@@ -690,6 +690,7 @@ import Swal from 'sweetalert2'
                 axios.get('api/servicerecord')
                 .then(({data}) => {
                     this.data = data
+                    console.log(data)
                     Swal.close()
                 })
                 .catch(e => {
