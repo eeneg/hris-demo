@@ -17,7 +17,15 @@ class ServiceRecordController extends Controller
     public function index()
     {
         return PersonalInformation::orderBy('surname')->withOnly('servicerecord')
-            ->get(['id', 'retirement_date', 'surname', 'firstname', 'middlename', 'nameextension',]);
+            ->get(['id', 'retirement_date', 'surname', 'firstname', 'middlename', 'nameextension'])
+            ->map(function($e){
+                return [
+                    'id' => $e->id,
+                    'retirement_date' => $e->retirement_date,
+                    'name' => $e->fullname,
+                    'service_record' => $e->servicerecord
+                ];
+            });
     }
 
     /**
