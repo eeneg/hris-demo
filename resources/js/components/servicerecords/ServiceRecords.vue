@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <v-select class="form-control form-control-border border-width-2" @input="getRecord()" placeholder="Select Employee" v-model.lazy="record" :options="data" label="fullName"></v-select>
+                                <v-select class="form-control form-control-border border-width-2" @input="getRecord()" placeholder="Select Employee" v-model.lazy="record" :options="data" label="name"></v-select>
                                 <span v-if="errors.personal_information_id">
                                     <p class="text-danger">Please select and employee</p>
                                 </span>
@@ -690,7 +690,6 @@ import Swal from 'sweetalert2'
                 axios.get('api/servicerecord')
                 .then(({data}) => {
                     this.data = data
-                    console.log(data)
                     Swal.close()
                 })
                 .catch(e => {
