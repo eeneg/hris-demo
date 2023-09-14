@@ -167,14 +167,14 @@
                 <td style="border: dashed 2px;">XXXX</td>
                 <td style="border: dashed 2px;">XXXX</td>
                 <td style="border: dashed 2px;">XXXXXXXXXXXXXXXX</td>
-                <td style="border: dashed 2px;">XXXXXXX</td>
+                <td style="border: dashed 2px;">XXX</td>
                 <td style="border: dashed 2px;">XXXXXXX</td>
                 <td style="border: dashed 2px;">XXXXXXXXXXXXXXXX</td>
-                <td style="border: dashed 2px;">XXXXXXX</td>
                 <td style="border: dashed 2px;">XXXX</td>
                 <td style="border: dashed 2px;">XXXX</td>
                 <td style="border: dashed 2px;">XXXX</td>
-                <td style="border: dashed 2px;">XXXX</td>
+                <td style="border: dashed 2px;">XXX</td>
+                <td style="border: dashed 2px;">XXX</td>
             </tr>
             <tr >
                 <td style="border-left: 1px solid; height: 20px;"></td>

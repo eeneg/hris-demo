@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\EmployeeServiceRecord;
+use App\Events\EmployeeServiceRecordCreated;
 use App\Http\Controllers\Controller;
 use App\PersonalInformation;
 use App\Plantilla;
@@ -46,6 +47,16 @@ class EmployeeServiceRecordController extends Controller
         $request->validate([
             'service_record_id' => 'required',
         ]);
+
+        try{
+
+            $service_record = EmployeeServiceRecord::where('service_record_id', $request->service_record_id)->where('orderNo', '>=', $request->orderNo)->increment('orderNo', 1);
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+
+        }
 
         EmployeeServiceRecord::create($request->all());
 
@@ -139,18 +150,26 @@ class EmployeeServiceRecordController extends Controller
     {
         $request->validate([
             'service_record_id' => 'required',
-            'from' => 'required',
-            'to' => 'required',
-            'position' => 'required',
-            'status' => 'required',
-            'salary' => 'required',
-            'station' => 'required',
-            'branch' => 'required',
-            'pay' => 'required',
-            'remark' => 'required',
-            'date' => 'required',
-            'cause'  => 'required'
         ]);
+
+        try{
+
+            $service_record = EmployeeServiceRecord::where('service_record_id', $request->service_record_id)->where('orderNo', '>=', $request->orderNo)->get()
+            ->except(['id', $request->id]);
+
+            $o = $request->orderNo + 1;
+
+            foreach($service_record->toArray() as $e){
+                EmployeeServiceRecord::find($e['id'])->update(['orderNo' => $o]);
+                $o++;
+            }
+
+
+        }catch(Exception $e){
+
+            return $e->getMessage();
+
+        }
 
         EmployeeServiceRecord::find($id)->update($request->all());
     }
@@ -163,6 +182,10 @@ class EmployeeServiceRecordController extends Controller
      */
     public function destroy($id)
     {
-        EmployeeServiceRecord::find($id)->delete();
+        $record = EmployeeServiceRecord::find($id);
+
+        $records = EmployeeServiceRecord::where('service_record_id', $record->service_record_id)->where('orderNo', '>', $record->orderNo)->decrement('orderNo', 1);
+
+        $record->delete();
     }
 }
