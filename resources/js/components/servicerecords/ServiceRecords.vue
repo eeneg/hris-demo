@@ -63,7 +63,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(record, index) in service_records">
-                                        <td>{{index + 1}}</td>
+                                        <td>{{record.orderNo}}</td>
                                         <td>{{ formatDate(record.from) }}</td>
                                         <td>{{ formatDate(record.to) }}</td>
                                         <td>{{ record.position }}</td>
@@ -282,9 +282,16 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" v-if="edit == false" class="btn btn-primary" @click="submitEmployeeServiceRecord()">Save changes</button>
-                        <button type="button" v-if="edit == true" class="btn btn-primary" @click="submitEmployeeServiceRecordUpdates()">Save changes</button>
+                        <div class="form-inline p-0 mr-0 justify-content-end">
+                            <label for="orderNo" class="mr-2">Order:</label>
+                            <input type="number" id="orderNo" min="0" step="1" name="orderNo" class="form-control w-50" v-model="record_form.orderNo" placeholder="Order" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                        </div>
+                        <div class="">
+                            <button type="button" class="btn btn-warning" @click="addBreakRecord()">BREAK</button>
+                            <button type="button" v-if="edit == false" class="btn btn-primary" @click="submitEmployeeServiceRecord()">Save changes</button>
+                            <button type="button" v-if="edit == true" class="btn btn-primary" @click="submitEmployeeServiceRecordUpdates()">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -442,13 +449,13 @@ import Swal from 'sweetalert2'
                     'position': null,
                     'status': "Perm.",
                     'salary': null,
-                    'station': null,
+                    'station': {'id': null, 'positions': [], 'title': null},
                     'branch': "Prov'l",
                     'pay': null,
                     'remark': null,
                     'date': null,
                     'cause': null,
-                    'orderNo': null
+                    'orderNo': 1
                 }),
                 data: [],
                 depts: [],
@@ -471,6 +478,13 @@ import Swal from 'sweetalert2'
             }
         },
         methods:{
+
+            addBreakRecord: function(){
+                this.record_form.branch = null
+                this.record_form.status = null
+                this.record_form.position = 'B R E A K'
+                this.submitEmployeeServiceRecord()
+            },
 
             emptyPositionArray: function(){
                 this.positions = []
@@ -756,7 +770,6 @@ import Swal from 'sweetalert2'
 
             getPosition: function()
             {
-                this.record_form.position_id = null
                 if(this.record_form.station){
                     axios.get('api/fetch_positions?id=' + this.record_form.station.id)
                     .then(({data}) => {
@@ -814,8 +827,6 @@ import Swal from 'sweetalert2'
 
                 this.record_form.service_record_id = this.service_record_id
                 this.record_form.station = this.record_form.station.title
-                this.record_form.orderNo = this.service_records.length + 1
-
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
                     toast.fire({
