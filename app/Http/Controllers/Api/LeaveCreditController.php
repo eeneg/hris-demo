@@ -165,7 +165,7 @@ class LeaveCreditController extends Controller
                                 'month' => $data->month,
                                 'year' => $data->year,
                                 'type' => $data->particulars->leave_type,
-                                'count' => $data->particulars->count,
+                                'count' => $data->particulars->count ?? $data->particulars->days,
                             ];
                         });
 
