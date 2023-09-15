@@ -32,9 +32,10 @@ class LeaveApprovedListener
         $data = $event->application;
 
         $sl = LeaveType::where('title', 'Sick Leave')->first();
+        $slwop = LeaveType::where('title', 'Sick Leave Without Pay')->first();
         $vl = LeaveType::where('title', 'Vacation Leave')->first();
 
-        $is_sl = $sl->id == $data->leave_type_id;
+        $is_sl = ($sl->id == $data->leave_type_id) || ($slwop->id == $data->leave_type_id);
 
         $leave_type = LeaveType::find($data->leave_type_id);
 

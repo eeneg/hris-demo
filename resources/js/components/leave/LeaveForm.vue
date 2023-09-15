@@ -179,7 +179,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <button type="submit" class="btn btn-primary" @click="form.status = 'final'">Finalize</button>
+                    <button type="submit" class="btn btn-primary" @click="form.status = 'final'" :disabled="form.vacation_balance == null && form.sick_balance == null">Finalize</button>
                     <button type="submit" class="btn btn-secondary" @click="form.status = 'draft'">Save as draft</button>
                 </div>
                 </form>
