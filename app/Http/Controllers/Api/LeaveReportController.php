@@ -114,7 +114,7 @@ class LeaveReportController extends Controller
 
                     return[
                         'employee' => $employee->firstname.' '.$employee->surname,
-                        'month' => Carbon::parse($date)->format('m'),
+                        'month' => Carbon::parse($date)->format('F'),
                         'type' => $e->particulars->leave_type,
                         'mins' => $mins,
                         'count' => $e->particulars->count,
@@ -168,10 +168,10 @@ class LeaveReportController extends Controller
                         }
                         break;
                     case 2:
-                        $startMonth = Carbon::parse($leave->period->start)->format('F');
-                        $endMonth = Carbon::parse($leave->period->end)->format('F');
-                        $startYear = Carbon::parse($leave->period->start)->format('Y');
-                        $endYear = Carbon::parse($leave->period->end)->format('Y');
+                        $startMonth = Carbon::parse($leave->period->data->start)->format('F');
+                        $endMonth = Carbon::parse($leave->period->data->end)->format('F');
+                        $startYear = Carbon::parse($leave->period->data->start)->format('Y');
+                        $endYear = Carbon::parse($leave->period->data->end)->format('Y');
                         if ($startMonth == $request->month && $startYear == $request->year || $endMonth == $request->month && $endYear == $request->year) {
                             return $leave;
                         }
@@ -199,7 +199,7 @@ class LeaveReportController extends Controller
                         $leave_info = $leave->particulars->days;
                         break;
                     case 2:
-                        $date = Carbon::parse($leave->period->start)->format('F d, Y').' to '.Carbon::parse($leave->period->end)->format('F d, Y');
+                        $date = Carbon::parse($leave->period->data->start)->format('F d, Y').' to '.Carbon::parse($leave->period->data->end)->format('F d, Y');
                         $leave_info = $leave->particulars->days ?? $leave->particulars->count;
                         break;
                     case 3:
@@ -234,9 +234,104 @@ class LeaveReportController extends Controller
                 ]);
             });
 
-        $d = collect(['data' => $data, 'prepared_by' =>  $request->preparedBy, 'noted_by' =>  $request->notedBy, 'current_year' => $request->year, 'current_month' => $request->month]);
+        if(count($data) > 0){
+            $d = collect(['data' => $data, 'prepared_by' =>  $request->preparedBy, 'noted_by' =>  $request->notedBy, 'current_year' => $request->year, 'current_month' => $request->month]);
 
-        $pdf = PDF::loadView('reports/foreign_travel_report', compact('d'))
+            $pdf = PDF::loadView('reports/foreign_travel_report', compact('d'))
+            ->setPaper([0, 0, 952, 1456], 'port')
+                    ->setOptions([
+                        'defaultMediaType' => 'screen',
+                        'dpi' => 112,
+            ]);
+
+            $id = LeaveReport::generateUuid();
+
+            $i = LeaveReport::create([
+                'id' => $id,
+                'title' => $request->title,
+                'file_name' => $id.'.pdf',
+                'path' => '/storage/leave_reports/'.$id.'.pdf',
+            ]);
+
+            Storage::put('public/leave_reports/'.$id.'.pdf', $pdf->output());
+
+            return ['title' => $id.'.pdf'];
+        }else {
+            return abort(401, 'Empty Record');
+        }
+    }
+
+    public function generateWithoutPayReport(Request $request){
+        $this->validate($request,
+        [
+            'title' => 'required',
+            'year' => 'required',
+            'month' => 'required',
+        ],
+        [
+            'title.required' => 'Title Required',
+            'year.required' => 'Year Required',
+            'month.required' => 'Month Required',
+        ]);
+
+        $i = LeaveSummary::where('particulars->leave_type', $request->type)
+        ->get()
+        ->filter(function ($e) use ($request) {
+            switch($e->period->mode) {
+                case 1:
+                case 4:
+                    return  Carbon::parse($e->period->data)->format('Y') == $request->year &&
+                            Carbon::parse($e->period->data)->format('m') == $request->month;
+                    break;
+                case 2:
+                    return  Carbon::parse($e->period->data->start)->format('Y') == $request->year &&
+                            Carbon::parse($e->period->data->start)->format('m') == $request->month;
+                    break;
+                case 3:
+                    return  Carbon::parse($e->period->data[0]->date)->format('Y') == $request->year &&
+                            Carbon::parse($e->period->data[0]->date)->format('m') == $request->month;
+                    break;
+            }
+        })
+        ->map(function ($e) {
+            $employee = PersonalInformation::find($e->personal_information_id);
+            $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+            $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+            $plantillacontents = PlantillaContent::where('plantilla_contents.plantilla_id', $plantilla->id)
+                ->where('personal_information_id', $e->personal_information_id)
+                ->first();
+
+            switch($e->period->mode) {
+                case 1:
+                case 4:
+                    $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
+                    $date = $e->period->data;
+                    break;
+                case 2:
+                    $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
+                    $date = $e->period->data->start;
+                    break;
+                case 3:
+                    $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
+                    $date = $e->period->data[0]->date;
+                    break;
+            }
+
+            return[
+                'name' => $employee->firstname.' '.$employee->surname,
+                'month' => Carbon::parse($date)->format('F'),
+                'type' => $e->particulars->leave_type,
+                'mins' => $mins,
+                'count' => $e->particulars->count ?? $e->particulars->days,
+                'office' => $plantillacontents->position->department->title ?? '',
+            ];
+        });
+
+        if(count($i) > 0){
+
+        $d = collect(['data' => $i, 'type' => $request->type, 'prepared_by' =>  $request->preparedBy, 'noted_by' =>  $request->notedBy, 'current_year' => $request->year, 'current_month' => Carbon::create()->month($request->month)->format('F')]);
+
+        $pdf = PDF::loadView('reports/withoutPayReport', compact('d'))
         ->setPaper([0, 0, 952, 1456], 'port')
                 ->setOptions([
                     'defaultMediaType' => 'screen',
@@ -255,6 +350,11 @@ class LeaveReportController extends Controller
         Storage::put('public/leave_reports/'.$id.'.pdf', $pdf->output());
 
         return ['title' => $id.'.pdf'];
+
+        }else{
+            return abort(401, 'Empty Record');
+        }
+
     }
 
     /**

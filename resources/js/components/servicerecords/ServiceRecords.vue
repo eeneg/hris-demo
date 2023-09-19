@@ -214,6 +214,7 @@
                                         <option value="Perm.">Permanent</option>
                                         <option value="Casual">Casual</option>
                                         <option value="Temp.">Temporary</option>
+                                        <option value="Elect.">Elected</option>
                                         <option value="CT">Co Terminus</option>
                                     </select>
                                     <span v-if="errors.status">
@@ -493,7 +494,7 @@ import Swal from 'sweetalert2'
 
             formatDate: function(date)
             {
-                return moment(date).format('MM/DD/YYYY') == "Invalid date" ? date : moment(date).format('MM/DD/YYYY')
+                return moment(date, 'MM/DD/YY').format('MM/DD/YYYY') == "Invalid date" ? date : moment(date, 'MM/DD/YY').format('MM/DD/YYYY')
             },
 
             addModal: function()
@@ -673,6 +674,8 @@ import Swal from 'sweetalert2'
             {
                 this.$Progress.start()
                 this.record_form.reset()
+                data.from = moment(data.from, 'MM/DD/YY').format('YYYY-MM-DD')
+                data.to = moment(data.to, 'MM/DD/YY').format('YYYY-MM-DD')
                 Object.assign(this.record_form, data)
                 this.record_form.station = _.find(this.depts, {'title':data.station})
                 this.edit = true
@@ -827,6 +830,8 @@ import Swal from 'sweetalert2'
 
                 this.record_form.service_record_id = this.service_record_id
                 this.record_form.station = this.record_form.station.title
+                this.record_form.from = moment(this.record_form.from).format('MM/DD/YY')
+                this.record_form.to = moment(this.record_form.to).format('MM/DD/YY')
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
                     toast.fire({
@@ -847,6 +852,8 @@ import Swal from 'sweetalert2'
             submitEmployeeServiceRecordUpdates: function()
             {
                 this.record_form.station = this.record_form.station.title
+                this.record_form.from = moment(this.record_form.from).format('MM/DD/YY')
+                this.record_form.to = moment(this.record_form.to).format('MM/DD/YY')
                 axios.patch('api/employeeservicerecord/'+this.record_form.id, this.record_form)
                 .then(e => {
                     toast.fire({

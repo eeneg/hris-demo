@@ -131,17 +131,17 @@
                 </thead>
             <thead style="font-size: 12px;">
 
-                    <th style="border: dashed 2px; width: 20px;">From</th>
-                    <th style="border: dashed 2px; width: 20px;">To</th>
-                    <th style="border: dashed 2px; width: 70px;">Designation<br>(Positon)</th>
-                    <th style="border: dashed 2px; width: 20px;">Status</th>
-                    <th style="border: dashed 2px; width: 20px;">Salary(P.A.)</th>
-                    <th style="border: dashed 2px; width: 20px; ">Station/ <br>Place Assignment</th>
-                    <th style="border: dashed 2px; width: 20px;">Branch</th>
-                    <th style="border: dashed 2px; width: 20px; border-top: none;">Absences w/o<br>Pay</th>
-                    <th style="border: dashed 2px; width: 20px;">Remarks</th>
-                    <th style="border: dashed 2px; width: 20px; ">Date</th>
-                    <th style="border: dashed 2px; width: 20px; ">Cause</th>
+                    <th style="border-left: dashed 2px; border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">From</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">To</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 70px;">Designation<br>(Positon)</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Status</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Salary(P.A.)</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 70px; ">Station/ <br>Place Assignment</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Branch</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px; border-top: none;">Absences w/o<br>Pay</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Remarks</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px; ">Date</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px; ">Cause</th>
 
             </thead>
             <tr>
@@ -149,12 +149,12 @@
                 <tr style="border: solid 1px" class="text-center">
                     <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->from }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->to }}</td>
-                    <td style="border-right: 1px solid; text-align: center;">
+                    <td style="border-right: 1px solid; text-align: center; padding: 0;">
                         {{ $record->position }}
                     </td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->status }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->salary }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->station }}</td>
+                    <td style="border-right: 1px solid; text-align: center;">{{ $record->station }}</td>
                     <td style="border-right: 1px solid; text-align: center;">{{ $record->branch }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->pay }}</td>
                     <td style="border-right: 1px solid; text-align: center;">{{ $record->remark }}</td>
@@ -164,12 +164,12 @@
                 @endforeach
             </tr>
             <tr >
-                <td style="border: dashed 2px;">XXXX</td>
-                <td style="border: dashed 2px;">XXXX</td>
-                <td style="border: dashed 2px;">XXXXXXXXXXXXXXXX</td>
+                <td style="border: dashed 2px;">XXXXX</td>
+                <td style="border: dashed 2px;">XXXXX</td>
+                <td style="border: dashed 2px;">XXXXXXXXXXX</td>
                 <td style="border: dashed 2px;">XXX</td>
                 <td style="border: dashed 2px;">XXXXXXX</td>
-                <td style="border: dashed 2px;">XXXXXXXXXXXXXXXX</td>
+                <td style="border: dashed 2px;">XXXXXXXXXXX</td>
                 <td style="border: dashed 2px;">XXXX</td>
                 <td style="border: dashed 2px;">XXXX</td>
                 <td style="border: dashed 2px;">XXXX</td>
