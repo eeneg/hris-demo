@@ -37,12 +37,14 @@ class LeaveCreditController extends Controller
         if($department_id && $role == 'Office User' || $role == 'Office Head')
         {
             $employee = PlantillaContent::where('plantilla_id', $plantilla->id)->has('personalinformation')->with('personalinformation')->get()->where('position.department_id', $department_id)
-                ->map(fn($employee) => $employee->personalinformation)->sortBy('surname');
+            ->pluck('personalinformation')->sortBy('surname');
         }else{
-            $employee = PlantillaContent::where('plantilla_id', $plantilla->id)->has('personalinformation')->with('personalinformation')->get()->map(fn($employee) => $employee->personalinformation)->sortBy('surname');
+            $employee = PlantillaContent::where('plantilla_id', $plantilla->id)->has('personalinformation')->with('personalinformation')
+            ->get()->pluck('personalinformation')->sortBy('surname');
         }
 
         return new LeaveCreditResource($employee);
+
     }
 
     /**
