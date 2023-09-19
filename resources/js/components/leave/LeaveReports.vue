@@ -10,7 +10,13 @@
                     <div class="row mt-1">
                         <div class="col-md-12">
                             <h2 style="display: inline-block;">Leave Reports</h2>
-                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#foreign_travel">
+                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#withoutPay" @click="withoutPayFormType('VLWOP')">
+                                <i class="fas fa-print"></i> VLWOP
+                            </button>
+                            <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#withoutPay" @click="withoutPayFormType('SLWOP')">
+                                <i class="fas fa-print"></i> SLWOP
+                            </button>
+                            <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#foreign_travel">
                                 <i class="fas fa-print"></i> Foreign Travel
                             </button>
                             <button type="button" class="btn btn-primary float-right mr-2" data-toggle="modal" data-target="#exampleModal">
@@ -237,6 +243,98 @@
             </div>
         </div>
 
+        <!-- VLOP && SLWOP -->
+
+        <div class="modal fade" id="withoutPay" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Input Year & Dates</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="title">Report Title</label>
+                            <input type="title" class="form-control" v-model="withoutPayForm.title" name="title" id="title" placeholder="Input Title">
+                            <p class="text-danger" v-for="title in errors.title" :key="title.id">
+                                {{ title }}
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group mt-2">
+                                <label for="year">Year</label>
+                                <input type="number" class="form-control" v-model="withoutPayForm.year" name="year" id="year" placeholder="Input Year">
+                                <p class="text-danger" v-for="year in errors.year" :key="year.id">
+                                    {{ year }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="month">Month</label>
+                                <select class="form-control" style="width: 100%;" id="month" v-model="withoutPayForm.month">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <p class="text-danger" v-for="month in errors.month" :key="month.id">
+                                {{ month }}
+                            </p>
+                        </div>
+                        <div class="col-md-12" v-for="(preparedBy, index) in withoutPayForm.preparedBy" :key="preparedBy.id">
+                            <label for="author">Prepared By:</label>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" v-model="preparedBy.name" name="author" id="author" placeholder="Name">
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" v-model="preparedBy.position" name="position" id="position"  placeholder="Position">
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger" @click="destroyPreparedBy(index, 1)"><i class="fas fa-minus"></i></button>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-success" @click="addPreparedBy(index, 1)"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="noted">Noted By:</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="withoutPayForm.notedBy.name" name="noted" id="noted" placeholder="Name">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="withoutPayForm.notedBy.position" name="positionN" id="positionN" placeholder="Position">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="getWithoutPayReport()">Generate report</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
         <!-- The Modal -->
         <div class="modal" id="pdfModal">
             <div class="modal-dialog modal-xl">
@@ -288,6 +386,14 @@ import moment from 'moment'
                     'preparedBy': [{ name: null, position: null }],
                     'notedBy': { name: null, position: null }
                 }),
+                withoutPayForm: new Form({
+                    'type': null,
+                    'title': null,
+                    'year': null,
+                    'month': null,
+                    'preparedBy': [{ name: null, position: null }],
+                    'notedBy': { name: null, position: null }
+                }),
                 errors: {year: null, months: null}
             }
         },
@@ -296,6 +402,32 @@ import moment from 'moment'
 
         },
         methods: {
+
+            withoutPayFormType: function(type){
+                this.withoutPayForm.type = type
+            },
+
+            getWithoutPayReport: function(){
+                axios.post('api/withoutPay', this.withoutPayForm)
+                .then(e => {
+                    $('#withoutPay').modal('hide')
+                    let options = {
+                        height: screen.height * 0.65 + 'px',
+                        page: '1'
+                    };
+                    this.getReports()
+                    $('#pdfModal').modal('show');
+                    PDFObject.embed("/storage/leave_reports/" + e.data.title, "#pdf-viewer", options);
+                })
+                .catch( e => {
+                    Swal.fire(
+                        'Failed!!',
+                        e.response.data.message,
+                        'warning'
+                    )
+                    this.errors = e.response.data.errors
+                })
+            },
 
             destroyPreparedBy: function(index, mode)
             {
@@ -454,10 +586,11 @@ import moment from 'moment'
                 .catch(e => {
                     console.log(e)
                     Swal.fire(
-                        'Error!',
-                        'Something went wrong!!',
-                        'error'
+                        'Failed!!',
+                        e.response.data.message,
+                        'warning'
                     )
+                    this.errors = e.response.data.errors
                 })
             },
         },
