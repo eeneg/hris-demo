@@ -303,23 +303,35 @@ class LeaveReportController extends Controller
 
             switch($e->period->mode) {
                 case 1:
-                case 4:
                     $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
-                    $date = $e->period->data;
+                    $date = Carbon::parse($e->period->data)->format('F d, Y');
                     break;
                 case 2:
                     $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
-                    $date = $e->period->data->start;
+                    $date = Carbon::parse($e->period->data->start)->format('F d, Y') . ' to ' . Carbon::parse($e->period->data->end)->format('F d, Y');
                     break;
                 case 3:
                     $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
-                    $date = $e->period->data[0]->date;
+                    $dates = collect($e->period->data)
+                    ->map(fn ($date) => (array) $date)
+                    ->values()
+                    ->sort()
+                    ->map(fn ($date) => ['month'=> Carbon::parse($date['date'])->setTimeZone('Asia/Manila')->format('Y-m'), 'date' => Carbon::parse($date['date'])->setTimeZone('Asia/Manila')->format('d')])
+                    ->groupBy('month')
+                    ->map(function ($entry) {
+                        return Carbon::parse($entry[0]['month'])->format('M') . ' ' . collect($entry)->map(fn ($e) => $e['date'])->join(', ') . ' ' . Carbon::parse($entry[0]['month'])->format('Y');
+                    });
+                    $date = collect($dates)->join(' — ');
+                    break;
+                case 4:
+                    $mins = ($e->particulars->hours * 60) + $e->particulars->mins;
+                    $date = Carbon::parse($e->period->data)->format('F Y');
                     break;
             }
 
             return[
                 'name' => $employee->firstname.' '.$employee->surname,
-                'month' => Carbon::parse($date)->format('F'),
+                'month' => $date,
                 'type' => $e->particulars->leave_type,
                 'mins' => $mins,
                 'count' => $e->particulars->count ?? $e->particulars->days,
