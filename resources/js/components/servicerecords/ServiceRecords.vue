@@ -830,8 +830,8 @@ import Swal from 'sweetalert2'
 
                 this.record_form.service_record_id = this.service_record_id
                 this.record_form.station = this.record_form.station.title
-                this.record_form.from = moment(this.record_form.from).format('MM/DD/YY')
-                this.record_form.to = moment(this.record_form.to).format('MM/DD/YY')
+                this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YY') : this.record_form.from
+                this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YY') : this.record_form.to
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
                     toast.fire({
