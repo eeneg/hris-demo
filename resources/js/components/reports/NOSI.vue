@@ -31,18 +31,18 @@
                     <div class="row mt-4">
                         <div class="col-12 text-justify">
                             <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | addOneDay }}</u>.
+                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | myDate }}</u>.
                             </h5>
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-8">
                             <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | myDate }}</u></h5>
+                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | minusOneDay }}</u></h5>
                             <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
                             <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
                             <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | addOneDay }}</u></h5>
+                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | myDate }}</u></h5>
                         </div>
                         <div class="col-3 text-right">
                             <h5 class="m-0" style="color: white;">.</h5>
@@ -183,18 +183,18 @@
                             <div class="row mt-4">
                                 <div class="col-12 text-justify">
                                     <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | addOneDay }}</u>.
+                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | myDate }}</u>.
                                     </h5>
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-8">
                                     <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | myDate }}</u></h5>
+                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | minusOneDay }}</u></h5>
                                     <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
                                     <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
                                     <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | addOneDay }}</u></h5>
+                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | myDate }}</u></h5>
                                 </div>
                                 <div class="col-3 text-right">
                                     <h5 class="m-0" style="color: white;">.</h5>
