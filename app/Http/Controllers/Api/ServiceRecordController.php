@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\PersonalInformation;
+use App\Plantilla;
 use App\ServiceRecord;
+use App\Setting;
 use Illuminate\Http\Request;
 
 class ServiceRecordController extends Controller
@@ -26,6 +28,27 @@ class ServiceRecordController extends Controller
                     'service_record' => $e->servicerecord
                 ];
             });
+    }
+
+    public function certifierEmployee(){
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        $employees = PersonalInformation::whereHas('plantillacontents', function ($query) use ($plantilla) {
+            $query->where('plantilla_id', $plantilla->id);
+        })->orderBy('surname')
+        ->withOnly('servicerecord')
+        ->get(['id', 'retirement_date', 'surname', 'firstname', 'middlename', 'nameextension'])
+        ->map(function($e){
+            return [
+                'id' => $e->id,
+                'retirement_date' => $e->retirement_date,
+                'name' => $e->fullname,
+                'service_record' => $e->servicerecord
+            ];
+        });
+
+        return $employees;
     }
 
     /**

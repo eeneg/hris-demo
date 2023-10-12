@@ -131,15 +131,15 @@
                 </thead>
             <thead style="font-size: 12px;">
 
-                    <th style="border-left: dashed 2px; border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">From</th>
-                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">To</th>
+                    <th style="border-left: dashed 2px; border-right: dashed 2px; border-bottom: dashed 2px; width: 15px;">From</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 15px;">To</th>
                     <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 70px;">Designation<br>(Positon)</th>
-                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Status</th>
-                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Salary(P.A.)</th>
-                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 70px; ">Station/ <br>Place Assignment</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 15px;">Status</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 10px;">Salary<br>(P.A.)</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 50px; ">Station/ <br>Place<br>Assignment</th>
                     <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Branch</th>
                     <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px; border-top: none;">Absences w/o<br>Pay</th>
-                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Remarks</th>
+                    <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 10px;">Re-<br>marks</th>
                     <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px; ">Date</th>
                     <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px; ">Cause</th>
 
@@ -147,68 +147,63 @@
             <tr>
                 @foreach ($item as $key => $record)
                 <tr style="border: solid 1px" class="text-center">
-                    <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->from }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->to }}</td>
-                    <td style="border-right: 1px solid; text-align: center; padding: 0;">
-                        {{ $record->position }}
+                    <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: bottom;">{{ $record->from }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->to }}</td>
+                    <td style="border-right: 1px solid; text-align: center; padding: 0;font-size: 11px;vertical-align: bottom;">
+                        @if($key != 0)
+                            @if((trim($item[$key - 1]->position) != trim($record->position)) || str_replace(' ', '', $record->position) == "BREAK")
+                                {{ $record->position }}
+                            @else
+                             -do-
+                            @endif
+                        @else
+                            {{ $record->position }}
+                        @endif
                     </td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->status }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->salary }}</td>
-                    <td style="border-right: 1px solid; text-align: center;">{{ $record->station }}</td>
-                    <td style="border-right: 1px solid; text-align: center;">{{ $record->branch }}</td>
-                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;">{{ $record->pay }}</td>
-                    <td style="border-right: 1px solid; text-align: center;">{{ $record->remark }}</td>
-                    <td style="border-right: 1px solid; text-align: center;">{{ $record->date }}</td>
-                    <td style="border-right: 1px solid; text-align: center;">{{ $record->cause }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->status }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->salary }}</td>
+                    <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->station }}</td>
+                    <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->branch }}</td>
+                    <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->pay }}</td>
+                    <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->remark }}</td>
+                    <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->date }}</td>
+                    <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->cause }}</td>
                 </tr>
                 @endforeach
             </tr>
             <tr >
-                <td style="border: dashed 2px;">XXXXX</td>
-                <td style="border: dashed 2px;">XXXXX</td>
-                <td style="border: dashed 2px;">XXXXXXXXXXX</td>
-                <td style="border: dashed 2px;">XXX</td>
-                <td style="border: dashed 2px;">XXXXXXX</td>
-                <td style="border: dashed 2px;">XXXXXXXXXXX</td>
-                <td style="border: dashed 2px;">XXXX</td>
-                <td style="border: dashed 2px;">XXXX</td>
-                <td style="border: dashed 2px;">XXXX</td>
-                <td style="border: dashed 2px;">XXX</td>
-                <td style="border: dashed 2px;">XXX</td>
-            </tr>
-            <tr >
-                <td style="border-left: 1px solid; height: 20px;"></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style=""></td>
-                <td style="border-right: 1px solid;"></td>
+                <td style="border: dashed 2px;text-align: center;">XXX</td>
+                <td style="border: dashed 2px;text-align: center;">XXX</td>
+                <td style="border: dashed 2px;text-align: center;">XXXXXXXXXX</td>
+                <td style="border: dashed 2px;text-align: center;">XXX</td>
+                <td style="border: dashed 2px;text-align: center;">XXXX</td>
+                <td style="border: dashed 2px;text-align: center;">XXXXX</td>
+                <td style="border: dashed 2px;text-align: center;">XX</td>
+                <td style="border: dashed 2px;text-align: center;">XX</td>
+                <td style="border: dashed 2px;text-align: center;">XX</td>
+                <td style="border: dashed 2px;text-align: center;">XXX</td>
+                <td style="border: dashed 2px;text-align: center;">XXX</td>
             </tr>
             <tr >
                 <td style="border-left: 1px solid; border-bottom: 1px solid"></td>
-                <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;">NOTE:</td>
-                <td colspan="1" style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $sr->note }}</td>
+                <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">NOTE:</td>
+                <td colspan="2" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">{{ $sr->note }}</td>
                 <td style="border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid"></td>
-                <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $employee->retirement_date ? 'Date Retired:' : ''}}</td>
-                <td colspan="1" style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;">{{ $employee->retirement_date ? $employee->retirement_date : '' }}</td>
-                <td style="border-bottom: 1px solid"></td>
-                <td style="border-bottom: 1px solid"></td>
-                <td style="border-bottom: 1px solid"></td>
-                <td style="border-right: 1px solid; border-bottom: 1px solid"></td>
+                <td colspan="2" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">{{ $employee->retirement_date ? 'Date Retired:' : ''}}</td>
+                <td colspan="2" style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">{{ $employee->retirement_date ? $employee->retirement_date : '' }}</td>
+                <td style="border-bottom: 1px solid;border-right: 1px solid;"></td>
+                {{-- <td style="border-bottom: 1px solid"></td> --}}
+                {{-- <td style="border-bottom: 1px solid"></td> --}}
+                {{-- <td style="border-right: 1px solid; border-bottom: 1px solid"></td> --}}
             </tr>
                 <tr>
-                    <th colspan="11" style="height: 50px;">
+                    <th colspan="11" style="height: 10px;">
 
                     </th>
                 </tr>
                 <tr>
-                    <td colspan="5" style="font-size: 16pt; height: 50px;">
+                    <td colspan="5" style="font-size: 16pt; height: 20px;">
 
                     </td>
                     <th colspan="6" style="font-size: 16pt;">
@@ -216,7 +211,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <td colspan="11" style="font-size: 16pt; height: 50px;">
+                    <td colspan="11" style="font-size: 16pt; height: 20px;">
 
                     </td>
                 </tr>

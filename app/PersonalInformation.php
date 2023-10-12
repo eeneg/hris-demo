@@ -146,6 +146,15 @@ class PersonalInformation extends Authenticatable
         );
     }
 
+    public function getFullNameAttributeProperFormat()
+    {
+        return trim(
+            preg_replace('/\s+/', ' ',
+                "$this->firstname" . " " . ($this->middleinitial ? " $this->middleinitial." : '') . " " . "$this->surname" . ($this->nameextension ? ", $this->nameextension" : '')
+            )
+        );
+    }
+
     public function getMiddleinitialAttribute()
     {
         return $this->middlename ? $this->middlename[0] : '';

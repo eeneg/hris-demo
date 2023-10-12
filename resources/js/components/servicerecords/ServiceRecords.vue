@@ -27,7 +27,7 @@
                             Date Retired: {{ record !== null ? record.retirement_date : '' }} <button v-if="record !== null" type="button" class="btn p-0" @click="retirementDateModal()"><i class="fas fa-edit"></i></button>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn btn-success float-right mr-2" :disabled="form.personal_information_id == null" @click="printRecord()">Print <i class="fas fa-print"></i></button>
+                            <button type="submit" class="btn btn-success float-right mr-2" :disabled="form.personal_information_id == null || service_records.length == 0" @click="printRecord()">Print <i class="fas fa-print"></i></button>
                             <button type="submit" class="btn btn-primary float-right mr-2" :disabled="form.personal_information_id == null && record.service_record == null" @click="addModal()">Add <i class="fas fa-plus"></i></button>
                             <button type="submit" class="btn btn-warning float-right mr-2" :disabled="form.personal_information_id == null && record.service_record == null" @click="copyData">Copy <i class="fas fa-file"></i></button>
                         </div>
@@ -91,7 +91,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="">Certified Correct By:</label>
-                                        <v-select class="form-control form-control-border border-width-2" v-model.lazy="form.certifier_id" placeholder="Select Employee" :options="data" label="name" :reduce="data => data.id"></v-select>
+                                        <v-select class="form-control form-control-border border-width-2" v-model.lazy="form.certifier_id" placeholder="Select Employee" :options="certifierEmployee" label="name" :reduce="certifierEmployee => certifierEmployee.id"></v-select>
                                         <span v-if="errors.certifier_id">
                                             <p class="text-danger">Please select and employee</p>
                                         </span>
@@ -458,6 +458,7 @@ import Swal from 'sweetalert2'
                     'cause': null,
                     'orderNo': 1
                 }),
+                certifierEmployee: [],
                 data: [],
                 depts: [],
                 selected_station: {},
@@ -707,6 +708,22 @@ import Swal from 'sweetalert2'
                 axios.get('api/servicerecord')
                 .then(({data}) => {
                     this.data = data
+                    Swal.close()
+                })
+                .catch(e => {
+                    console.log(e)
+                    Swal.close()
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!',
+                    })
+
+                })
+
+                axios.get('api/certifierEmployee')
+                .then(({data}) => {
+                    this.certifierEmployee = data
                     Swal.close()
                 })
                 .catch(e => {
