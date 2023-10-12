@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('audits', 'Api\AuditController')->only('index', 'show');
 
     Route::post('retirementDate', 'Api\ServiceRecordController@retirementDate');
+    Route::get('certifierEmployee', 'Api\ServiceRecordController@certifierEmployee');
 
     Route::get('current-employees', 'Api\PersonalInformationController@listCurrent');
 

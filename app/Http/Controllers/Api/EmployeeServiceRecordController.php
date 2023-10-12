@@ -115,13 +115,16 @@ class EmployeeServiceRecordController extends Controller
         $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
                                 UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
-       $data = EmployeeServiceRecord::where('service_record_id', $id)->orderBy('orderNo', 'ASC')->get()->chunk(25);
+       $data = EmployeeServiceRecord::where('service_record_id', $id)->orderBy('orderNo', 'ASC')
+            ->get()
+            ->chunk(30)
+            ->map(fn ($data) => $data->values());
 
        $sr = ServiceRecord::find($id);
 
        $employee = PersonalInformation::find($sr->personal_information_id)->withoutRelations();
 
-       $certName = PersonalInformation::find($sr->certifier_id)->getFullNameAttribute();
+       $certName = PersonalInformation::find($sr->certifier_id)->getFullNameAttributeProperFormat();
 
        $certPos = PlantillaContent::where('personal_information_id', $sr->certifier_id)->where('plantilla_id', $plantilla->id)->withOnly('position',)->first()->position->title;
 
