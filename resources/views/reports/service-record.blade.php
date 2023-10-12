@@ -150,15 +150,7 @@
                     <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: bottom;">{{ $record->from }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->to }}</td>
                     <td style="border-right: 1px solid; text-align: center; padding: 0;font-size: 11px;vertical-align: bottom;">
-                        @if($key != 0)
-                            @if((trim($item[$key - 1]->position) != trim($record->position)) || str_replace(' ', '', $record->position) == "BREAK")
-                                {{ $record->position }}
-                            @else
-                             -do-
-                            @endif
-                        @else
-                            {{ $record->position }}
-                        @endif
+                        {{ $record->position }}
                     </td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->status }}</td>
                     <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->salary }}</td>
@@ -206,7 +198,7 @@
                     <td colspan="5" style="font-size: 16pt; height: 20px;">
 
                     </td>
-                    <th colspan="6" style="font-size: 16pt;">
+                    <th colspan="6" style="font-size: 10pt;">
                         Certified Correct:
                     </th>
                 </tr>
@@ -216,53 +208,53 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="font-size: 16pt; border-bottom: solid 1px; text-align: center;">
+                    <td colspan="3" style="font-size: 10pt; border-bottom: solid 1px; text-align: center;">
                       {{ format($sr->dateCertified) }}
                     </td>
-                    <td colspan="2" style="font-size: 16pt;">
+                    <td colspan="2" style="font-size: 10pt;">
                     </td>
-                    <td colspan="6" style="font-size: 16pt; font-weight: bold; text-align: center;">
+                    <td colspan="6" style="font-size: 10pt; font-weight: bold; text-align: center;">
                         {{ $certName }}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="font-size: 16pt; text-align: center;">
+                    <td colspan="3" style="font-size: 10pt; text-align: center;">
                         Date
                     </td>
-                    <td colspan="2" style="font-size: 16pt;">
+                    <td colspan="2" style="font-size: 10pt;">
                     </td>
-                    <td colspan="6" style="font-size: 16pt; text-align: center;">
+                    <td colspan="6" style="font-size: 10pt; text-align: center;">
                         {{ $certPos }}
                         <br>
 
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="font-size: 12pt;">
+                    <td colspan="2" style="font-size: 10pt;">
                         O.R. NO.
                     </td>
-                    <td colspan="2" style="font-size: 12pt;">
+                    <td colspan="2" style="font-size: 10pt;">
                         : {{ $sr->ORNo }}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="font-size: 12pt; ">
+                    <td colspan="2" style="font-size: 10pt; ">
                         Date Issued
                     </td>
-                    <td colspan="2" style="font-size: 12pt;">
+                    <td colspan="2" style="font-size: 10pt;">
                         : {{ $sr->dateIssued }}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="font-size: 12pt; t">
+                    <td colspan="2" style="font-size: 10pt; t">
                         Amount
                     </td>
-                    <td colspan="2" style="font-size: 12pt;">
+                    <td colspan="2" style="font-size: 10pt;">
                         : {{ $sr->amount }}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="9" style="font-size: 16pt; height: 50px;">
+                    <td colspan="9" style="font-size: 10pt; height: 50px;">
 
                     </td>
                 </tr>
