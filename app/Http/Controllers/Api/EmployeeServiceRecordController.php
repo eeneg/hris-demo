@@ -117,7 +117,7 @@ class EmployeeServiceRecordController extends Controller
 
        $data = EmployeeServiceRecord::where('service_record_id', $id)->orderBy('orderNo', 'ASC')
             ->get()
-            ->chunk(30)
+            ->chunk(20)
             ->map(fn ($data) => $data->values());
 
        $sr = ServiceRecord::find($id);
