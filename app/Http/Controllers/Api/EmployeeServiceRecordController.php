@@ -117,7 +117,7 @@ class EmployeeServiceRecordController extends Controller
 
        $data = EmployeeServiceRecord::where('service_record_id', $id)->orderBy('orderNo', 'ASC')
             ->get()
-            ->chunk(20)
+            ->chunk(30)
             ->map(fn ($data) => $data->values());
 
        $sr = ServiceRecord::find($id);
@@ -126,9 +126,19 @@ class EmployeeServiceRecordController extends Controller
 
        $certName = PersonalInformation::find($sr->certifier_id)->getFullNameAttributeProperFormat();
 
+       $ar = [];
+
+       foreach($data as $i){
+            foreach($i as $item){
+                array_push($ar, strlen($item['position']));
+            }
+       };
+
+       $avg = array_sum($ar) / count($ar);
+
        $certPos = PlantillaContent::where('personal_information_id', $sr->certifier_id)->where('plantilla_id', $plantilla->id)->withOnly('position',)->first()->position->title;
 
-       return view('reports.service-record', compact('data','sr', 'employee', 'certName', 'certPos'));
+       return view('reports.service-record', compact('data','sr', 'employee', 'certName', 'certPos', 'avg'));
     }
 
     /**

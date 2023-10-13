@@ -12,6 +12,10 @@
                 margin-bottom: 200px; !important
 
             }
+
+    @media print {
+        footer {page-break-after: always;}
+    }
 </style>
 <body>
     @php
@@ -30,9 +34,35 @@
             }
             return $date;
         }
+
+        function spacer($avg){
+            switch ($avg) {
+                case $avg > 0 && $avg < 10:
+                    return "XXXXXXXXXX";
+                    break;
+                case $avg > 10 && $avg < 20:
+                    return "XXXXXXXXXX";
+                    break;
+                case $avg > 20 && $avg < 30:
+                    return "XXXXXXXXXXXXX";
+                    break;
+                case $avg > 30 && $avg < 40:
+                    return "XXXXXXXXXXXXXXXX";
+                    break;
+                case $avg > 40 && $avg < 50:
+                    return "XXXXXXXXXXXXXXXXXXX";
+                    break;
+                case $avg > 60 && $avg < 70:
+                    return "XXXXXXXXXXXXXXXXXXXXXXXXX";
+                    break;
+            }
+        }
     @endphp
     <main class="page-break" style="">
-        @foreach ($data as $item)
+        @foreach ($data as $key => $item)
+        <div style="width: 100%; padding:0; height:0%;text-align:end;">
+            {{ $key + 1 }}
+        </div>
         <table class="tableM" style=" margin-bottom: 200rem; width: 100%;">
             <thead>
                 <tr>
@@ -134,7 +164,7 @@
                         <th style="border-left: dashed 2px; border-right: dashed 2px; border-bottom: dashed 2px; width: 15px;">From</th>
                         <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 15px;">To</th>
                         <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 70px;">Designation<br>(Positon)</th>
-                        <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 15px;">Status</th>
+                        <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 0px;">Status</th>
                         <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 10px;">Salary<br>(P.A.)</th>
                         <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 50px; ">Station/ <br>Place<br>Assignment</th>
                         <th style="border-right: dashed 2px; border-bottom: dashed 2px; width: 20px;">Branch</th>
@@ -147,10 +177,10 @@
                 <tr>
                     @foreach ($item as $key => $record)
                     <tr style="border: solid 1px" class="text-center">
-                        <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: bottom;">{{ $record->from }}</td>
+                        <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: bottom;padding:0%">{{ $record->from }}</td>
                         <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->to }}</td>
                         <td style="border-right: 1px solid; text-align: center; padding: 0;font-size: 11px;vertical-align: bottom;">
-                            {{ $record->position }}
+                            {{$record->position}}
                         </td>
                         <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->status }}</td>
                         <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->salary }}</td>
@@ -166,8 +196,8 @@
                 <tr >
                     <td style="border: dashed 2px;text-align: center;">XXX</td>
                     <td style="border: dashed 2px;text-align: center;">XXX</td>
-                    <td style="border: dashed 2px;text-align: center;">XXXXXXXXXX</td>
-                    <td style="border: dashed 2px;text-align: center;">XXX</td>
+                    <td style="border: dashed 2px;text-align: center;">{{ spacer($avg) }}</td>
+                    <td style="border: dashed 2px;text-align: center;">XX</td>
                     <td style="border: dashed 2px;text-align: center;">XXXX</td>
                     <td style="border: dashed 2px;text-align: center;">XXXXX</td>
                     <td style="border: dashed 2px;text-align: center;">XX</td>
@@ -248,11 +278,6 @@
                         </td>
                         <td colspan="2" style="font-size: 10pt;">
                             : {{ $sr->amount }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="9" style="font-size: 10pt; height: 50px;">
-
                         </td>
                     </tr>
             </tbody>
