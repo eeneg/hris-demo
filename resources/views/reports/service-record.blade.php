@@ -32,7 +32,10 @@
         }
     @endphp
     <main class="page-break" style="">
-        @foreach ($data as $item)
+        @foreach ($data as $key => $item)
+        <div style="width: 100%; padding:0; height:0%;text-align:end;">
+            {{ $key + 1 }}
+        </div>
         <table class="tableM" style=" margin-bottom: 200rem; width: 100%;">
             <thead>
                 <tr>
@@ -251,7 +254,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="9" style="font-size: 10pt; height: 50px;">
+                        <td colspan="10" style="font-size: 10pt; height: 50px;">
 
                         </td>
                     </tr>
