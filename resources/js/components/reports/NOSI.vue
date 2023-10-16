@@ -6,6 +6,51 @@
         <div v-else class="col-md-12">
             <!-- Report -->
             <div class="row" id="nosi_div" style="display: none;margin-top: -1.4rem !important;">
+                <div class="col-md-12 nosi_div" style="page-break-after: always;" v-if="print_data.length > 1">
+                    <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo">
+                    <div class="row mt-3 mb-2">
+                        <div class="col-12 text-center">
+                            <h5 class="m-0">Republic of the Philippines</h5>
+                            <h4 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h4>
+                            <h5 class="m-0 mb-5">Matti, Digos City</h5>
+                            <h4 class="m-0 mb-5 font-weight-bold">PROVINCIAL HUMAN RESOURCE MANAGEMENT OFFICE</h4>
+                            <h5 class="m-0 font-weight-bold">TRANSMITTAL</h5>
+                            <h5 class="m-0">Notice of Step Increment for CY {{ nosi_year }}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-9 mt-3">
+                            <h5 class="m-0">Office: <b>{{ department.title }}</b></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-bordered transmittal-table">
+                                <thead>
+                                    <tr>
+                                        <td><b>NAME</b></td>
+                                        <td><b>POSITION</b></td>
+                                        <td><b>DATE HIRED/PROMOTION</b></td>
+                                        <td><b>DATE OF STEP INCREMENT</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="data in print_data" :key="data.id">
+                                        <td>{{ data.name2 }}</td>
+                                        <td>{{ data.position }}</td>
+                                        <td>{{ data.appointment_date }}</td>
+                                        <td>{{ data.appointment_date | myDateWithYear(nosi_year) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-5 mb-3">
+                        <div class="col-12">
+                            <h5 class="m-0">Total: {{ print_data.length }} employees</h5>
+                        </div>
+                    </div>
+                </div>
                 <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosi_div" :style="index + 1 == print_data.length ? '' : 'page-break-after: always;'">
                     <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo">
                     <div class="row mt-3 mb-2">
@@ -31,18 +76,18 @@
                     <div class="row mt-4">
                         <div class="col-12 text-justify">
                             <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | myDate }}</u>.
+                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.appointment_date | myDateWithYear(nosi_year) }}</u>.
                             </h5>
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-8">
                             <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | minusOneDay }}</u></h5>
+                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.appointment_date | minusOneDayWithYear(nosi_year) }}</u></h5>
                             <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
                             <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
                             <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | myDate }}</u></h5>
+                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.appointment_date | myDateWithYear(nosi_year) }}</u></h5>
                         </div>
                         <div class="col-3 text-right">
                             <h5 class="m-0" style="color: white;">.</h5>
@@ -121,9 +166,16 @@
                             </div>
                             <button @click="print_report()" class="btn btn-primary btn-block" :disabled="!button_enable"><i class="fas fa-print"></i> Print Report</button>
                             <hr class="mt-4 mb-3">
+                            <h4>NOSI Lookup</h4>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label style="font-weight: bold; margin: 0;">NOSI Lookup</label>
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Department</label>
+                                        <v-select class="form-control form-control-border border-width-2" v-model="department" :options="departments" :getOptionLabel="department => department.address"></v-select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label style="font-weight: bold; margin: 0;">Year</label>
                                     <form class="form-inline" @submit.prevent="lookup()">
                                         <input class="form-control form-control-border border-width-2 mr-2" type="number" v-model="nosi_year">
                                         <button type="submit" class="btn btn-success" :disabled="!button_enable">View</button>
@@ -140,9 +192,8 @@
                                                 <tr v-for="data in lookup_data" :key="data.id">
                                                     <td>
                                                         <b>{{ data.name }}</b> (SG {{ data.salaryproposed.grade + '-' + data.salaryproposed.step }})
-                                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Date of last promotion / original appointment: <b class="text-primary">{{ data.last_promotion ? data.last_promotion : data.original_appointment }}</b></span>
                                                         <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">{{ data.position }}</span>
-                                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">{{ data.office }}</span>
+                                                        <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Date of last promotion / original appointment: <b class="text-primary">{{ data.appointment_date }}</b></span>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -257,7 +308,9 @@
                 nosi_year: moment(new Date()).format('YYYY'),
                 lookup_data: [],
                 print_data: [],
-                button_enable: false
+                button_enable: false,
+                departments: [],
+                department: {}
             }
         },
         watch: {
@@ -284,9 +337,14 @@
                 this.$Progress.start()
                 axios.get('api/plantillaForNosi')
                     .then(({data}) => {
-                        this.plantilla_content = data.data;
-                        var first_employee = data.data[0];
+                        this.plantilla_content = data.plantillacontents;
+                        var first_employee = data.plantillacontents[0];
                         this.employee = first_employee;
+
+                        this.departments = data.departments;
+                        var first_department = data.departments[0];
+                        this.department = first_department;
+
                         this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
                         this.print_data.push(first_employee)
                     })
@@ -305,7 +363,9 @@
                         if (this.nosi_year > moment(content.appointment_date).format('YYYY')) {
                             var divisible = (this.nosi_year - moment(content.appointment_date).format('YYYY')) % 3 == 0;
                             var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.appointment_date).format('YYYY')) / 3);
-                            if (included && divisible) {
+                            var office = content.office == this.department.address
+
+                            if (included && divisible && office) {
                                 this.lookup_data.push(content)
                             }
                         }

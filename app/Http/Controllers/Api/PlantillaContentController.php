@@ -45,9 +45,15 @@ class PlantillaContentController extends Controller
             })
             ->select('*')
             ->whereNotNull('personal_information_id')
+            ->orderByRaw('CONVERT(new_number, SIGNED) desc')
             ->get();
+        $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
+        $data = [
+            'plantillacontents' => new PlantillaEmployeesNOSIResource($plantillacontents),
+            'departments' => $departments
+        ];
 
-        return new PlantillaEmployeesNOSIResource($plantillacontents);
+        return $data;
     }
 
     public function plantillaForNosa(Request $request)

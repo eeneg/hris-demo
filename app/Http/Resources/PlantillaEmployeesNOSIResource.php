@@ -21,6 +21,7 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
                 'office' => $item->position->department->address,
                 'position' => $item->position ? $item->position->title : '',
                 'name' => $item->personalinformation->firstname.' '.$item->personalinformation->middlename.' '.$item->personalinformation->surname.' '.$item->personalinformation->nameextentsion,
+                'name2' => $item->personalinformation->surname.', '.$item->personalinformation->firstname.' '.$item->personalinformation->nameextentsion.' '.$item->personalinformation->middlename,
                 'salaryproposed' => $item->salaryproposed,
                 'nextStepAmount' => $item->amount,
             ];
