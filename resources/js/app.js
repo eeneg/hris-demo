@@ -147,12 +147,20 @@ Vue.filter('validateCount', function(value){
     // return value.charAt(0).toUpperCase() + value.slice(1)
 })
 
+Vue.filter('myDateWithYear', function(value, year){
+    return moment(value).format('LL').split(',')[0] + ', ' + year;
+})
+
 Vue.filter('myDate', function(value){
     return moment(value).format('LL');
 })
 
 Vue.filter('addOneDay', function(value) {
     return moment(value).add(1, "days").format('LL');
+})
+
+Vue.filter('minusOneDayWithYear', function(value, year) {
+    return moment(value).subtract(1, "days").format('LL').split(',')[0] + ', ' + year;
 })
 
 Vue.filter('minusOneDay', function(value) {
