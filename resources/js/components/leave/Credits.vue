@@ -468,7 +468,7 @@
                         </div>
                         <div class="col-md-12 p-2" v-if="options == 4">
                             <label for="leave_type">Month</label>
-                            <input type="month" v-model.lazy="period_month" class="form-control">
+                            <input type="month" v-model.lazy="period_month" class="form-control" onkeydown="return false">
                         </div>
                         <div class="col-md-12">
                             <p v-if="period_validation == false" v-bind:class="{'text-danger': period_validation == false}">Input Required</p>
