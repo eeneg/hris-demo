@@ -73,11 +73,13 @@ class LeaveCreditController extends Controller
         $forUpdate = $collection->filter(fn ($summary) => $summary->has('id'));
         $forCreate = $collection->reject(fn ($summary) => $summary->has('id'))->map(fn ($summary) => $summary->put('id', Str::orderedUuid()->toString()));
 
-        $vl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $vl_id], ['balance' => collect($request->data)->last()['vl_balance']]);
-        $sl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $sl_id], ['balance' => collect($request->data)->last()['sl_balance']]);
+        DB::transaction(function () use ($request, $forCreate, $forUpdate, $vl_id, $sl_id) {
+            $vl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $vl_id], ['balance' => collect($request->data)->last()['vl_balance']]);
+            $sl_balance = LeaveCredit::updateOrCreate(['personal_information_id' => $request['id'], 'leave_type_id' => $sl_id], ['balance' => collect($request->data)->last()['sl_balance']]);
 
-        $create = LeaveSummary::insert($forCreate->toArray());
-        $update = LeaveSummary::upsert($forUpdate->toArray(), 'id');
+            $create = LeaveSummary::insert($forCreate->toArray());
+            $update = LeaveSummary::upsert($forUpdate->toArray(), 'id');
+        });
     }
 
     /**
@@ -136,7 +138,7 @@ class LeaveCreditController extends Controller
                             return $data->particulars;
                         });
 
-        $tardy = LeaveSummary::where('personal_information_id', $id)
+        $violations = LeaveSummary::where('personal_information_id', $id)
                         ->whereNotNull('particulars->leave_type')
                         ->whereIn('particulars->leave_type', ['Undertime', 'Tardy', 'UA', 'AWOL', 'SLWOP', 'VLWOP'])
                         ->get()
@@ -171,39 +173,6 @@ class LeaveCreditController extends Controller
                             ];
                         });
 
-        $awol = LeaveSummary::where('personal_information_id', $id)->whereIn('particulars->leave_type', ['AWOL', 'UA'])
-                        ->where('period->mode', 4)
-                        ->get()
-                        ->map(function ($data, $index) {
-                            switch($data->period->mode) {
-                                case 1:
-                                case 4:
-                                    $year = Carbon::parse($data->period->data)->format('Y');
-
-                                    if ($year == Carbon::now()->format('Y')) {
-                                        return $data;
-                                    }
-
-                                    break;
-                                case 2:
-                                    $year = Carbon::parse($data->period->data->start)->format('Y');
-
-                                    if ($year == Carbon::now()->format('Y')) {
-                                        return $data;
-                                    }
-
-                                    break;
-                                case 3:
-                                    $year = Carbon::parse($data->period->data[0]->date)->format('Y');
-
-                                    if ($year == Carbon::now()->format('Y')) {
-                                        return $data;
-                                    }
-
-                                    break;
-                            }
-                        });
-
         $vl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Vacation Leave')->first()->id)->first()->id;
         $sl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Sick Leave')->first()->id)->first()->id;
 
@@ -218,7 +187,7 @@ class LeaveCreditController extends Controller
             })
             ->where(function($query){
                 $query->where('period->mode', 4)
-                ->where('period->data', Carbon::now()->subYear()->format('Y') . '-12');
+                ->where('period->data', Carbon::now()->format('Y'));
             })
             ->first();
 
@@ -229,10 +198,10 @@ class LeaveCreditController extends Controller
             'summary' => $leaveSummary,
             'credit' => ['sl' => $sl, 'vl' => $vl],
             'custom_leave' => LeaveSummary::countCustomLeave($custom_leave),
-            'tardy' => LeaveSummary::violationCounter($tardy),
+            'violations' => LeaveSummary::violationCounter($violations),
             'position' => $personalinformations->position ?? '',
             'salary' => $personalinformations->salary ?? '',
-            'awol' => LeaveSummary::violationCounter($awol),
+            'anticipated' => $credits_anticipated
         ];
     }
 
