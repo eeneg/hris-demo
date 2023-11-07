@@ -72,8 +72,8 @@
                                     <tr v-for="(data, index) in leave_credit" :key="data.id">
                                         <td>{{ data.title }}</td>
                                         <td>{{ data.balance }}</td>
-                                        <!-- <td v-if="data.anticipated != null">{{ data.anticipated }}</td>
-                                        <td v-if="data.anticipated == null"><a type="button" data-toggle="modal" data-target="#infomodal"><u>Click</u></a></td> -->
+                                        <!-- <td v-if="data.anticipated != null">{{ data.anticipated }}</td> -->
+                                        <!-- <td v-if="data.anticipated == null"><a type="button" data-toggle="modal" data-target="#infomodal"><u>Click</u></a></td> -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -108,7 +108,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, index) in tardy[year]" :key="data.id">
+                                    <tr v-for="(data, index) in violations[year]" :key="data.id">
                                         <td>{{ index }}</td>
                                         <td>
                                             {{ data.Tardy }}
@@ -407,7 +407,7 @@
 
                         <div class="col-md-12 p-2" v-if="options == 1">
                             <label for="leave_type">Single Date</label>
-                            <input type="date" v-model.lazy="period_date" class="form-control">
+                            <input type="date" v-model.lazy="period_date" max="9999-12-31" min="1900-01-01" class="form-control">
                         </div>
                         <div class="col-md-12 p-2" v-if="options == 2">
                             <label for="leave_type">Date Range</label>
@@ -650,7 +650,7 @@ import CreditsTable from './CreditsTable.vue'
                 validation: true,
                 period_validation: true,
                 custom_leave: [],
-                tardy: [],
+                violations: [],
                 position: {},
                 dept: {},
                 salary: {},
@@ -865,7 +865,7 @@ import CreditsTable from './CreditsTable.vue'
 
                         this.custom_leave = data.custom_leave
 
-                        this.tardy = data.tardy
+                        this.violations = data.violations
 
                         this.position = data.position ?? {}
 
