@@ -20,6 +20,7 @@
                             <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
                             <h4 class="m-0 font-weight-bold" v-if="report_type == 'Retirees of Specific Year'">Retirees of year {{ retirees_report.year }}</h4>
                             <h4 class="m-0 font-weight-bold" v-if="report_type == 'Birthday Celebrants'">Birthday Celebrants</h4>
+                            <h4 class="m-0 font-weight-bold" v-if="report_type == 'Personnel Complement'">Personnel Complement</h4>
                         </div>
                     </div>
 
@@ -170,6 +171,82 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="report_type == 'Personnel Complement'">
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered m-0 perscom-table">
+                                    <thead>
+                                        <tr style="text-align: center;font-weight: bold !important;">
+                                            <th rowspan="2">OFFICE</th>
+                                            <th colspan="3">CT</th>
+                                            <th colspan="3">Elected</th>
+                                            <th colspan="3">Second</th>
+                                            <th colspan="3">First</th>
+                                            <th colspan="3">Total</th>
+                                            <th rowspan="2">TOTAL</th>
+                                        </tr>
+                                        <tr style="text-align: center;font-weight: bold !important;">
+                                            <th>M</th>
+                                            <th>F</th>
+                                            <th>V</th>
+                                            <th>M</th>
+                                            <th>F</th>
+                                            <th>V</th>
+                                            <th>M</th>
+                                            <th>F</th>
+                                            <th>V</th>
+                                            <th>M</th>
+                                            <th>F</th>
+                                            <th>V</th>
+                                            <th>M</th>
+                                            <th>F</th>
+                                            <th>V</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(rec, index) in personnel_complement" :key="index" :style="index != Object.keys(personnel_complement).length - 1 ? '' : 'font-weight: bold !important;'">
+                                            <td style="text-align: left;">{{ rec.office }}</td>
+                                            <td style="background-color: rgb(199, 199, 255) !important;">{{ rec.ct[0] == 0 ? '' : rec.ct[0] }}</td>
+                                            <td style="background-color: rgb(199, 199, 255) !important;">{{ rec.ct[1] == 0 ? '' : rec.ct[1] }}</td>
+                                            <td style="background-color: rgb(199, 199, 255) !important;">{{ rec.ct[2] == 0 ? '' : rec.ct[2] }}</td>
+                                            <td style="background-color: rgb(199, 255, 202) !important;">{{ rec.elected[0] == 0 ? '' : rec.elected[0] }}</td>
+                                            <td style="background-color: rgb(199, 255, 202) !important;">{{ rec.elected[1] == 0 ? '' : rec.elected[1] }}</td>
+                                            <td style="background-color: rgb(199, 255, 202) !important;">{{ rec.elected[2] == 0 ? '' : rec.elected[2] }}</td>
+                                            <td style="background-color: rgb(255, 199, 240) !important;">{{ rec.second[0] == 0 ? '' : rec.second[0] }}</td>
+                                            <td style="background-color: rgb(255, 199, 240) !important;">{{ rec.second[1] == 0 ? '' : rec.second[1] }}</td>
+                                            <td style="background-color: rgb(255, 199, 240) !important;">{{ rec.second[2] == 0 ? '' : rec.second[2] }}</td>
+                                            <td style="background-color: rgb(255, 248, 199) !important;">{{ rec.first[0] == 0 ? '' : rec.first[0] }}</td>
+                                            <td style="background-color: rgb(255, 248, 199) !important;">{{ rec.first[1] == 0 ? '' : rec.first[1] }}</td>
+                                            <td style="background-color: rgb(255, 248, 199) !important;">{{ rec.first[2] == 0 ? '' : rec.first[2] }}</td>
+                                            <td>{{ rec.total[0] == 0 ? '' : rec.total[0] }}</td>
+                                            <td>{{ rec.total[1] == 0 ? '' : rec.total[1] }}</td>
+                                            <td>{{ rec.total[2] == 0 ? '' : rec.total[2] }}</td>
+                                            <td style="font-weight: bold;">{{ rec.grand_total == 0 ? '' : rec.grand_total }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <br>
+                                <p style="font-size: 1.1rem;margin: 0;">Prepared by:</p>
+                                <br>
+                                <p style="line-height: 1.4rem;font-size: 1.3rem;margin: 10px 0 0 0;"><strong style="text-decoration: underline;">BENZ ANDRIEVON M. BAJAO</strong></p>
+                                <p style="line-height: 1.2rem;font-size: 1.1rem;margin: 0;">Administrative Assistant II</p>
+                                <p style="line-height: 1.2rem;font-size: 1.1rem;margin: 0;">(HRMA)</p>
+                            </div>
+                            <div class="col-6">
+                                <br>
+                                <p style="font-size: 1.1rem;margin: 0;">Noted by:</p>
+                                <br>
+                                <p style="line-height: 1.4rem;font-size: 1.3rem;margin: 10px 0 0 0;"><strong style="text-decoration: underline;">RAUL D. RAUT, ENP, JD</strong></p>
+                                <p style="line-height: 1.2rem;font-size: 1.1rem;margin: 0;">PGDH - Provincial Human Resource</p>
+                                <p style="line-height: 1.2rem;font-size: 1.1rem;margin: 0;">Management Officer</p>
                             </div>
                         </div>
                     </div>
@@ -330,7 +407,8 @@
                 print_data: [],
                 button_enable: false,
                 report_type: '',
-                reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year', 'Birthday Celebrants'],
+                personnel_complement: [],
+                reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year', 'Birthday Celebrants', 'Personnel Complement'],
                 salary_grades_report: {
                     salary_grade: '',
                     status_vacant: true,
@@ -455,6 +533,109 @@
                         return moment(content.birthdate, dateFormat).isBetween(this.birthdays_report.from, this.birthdays_report.to, null, '[]')
                             || moment(content.birthdate, dateFormat).add(1, 'y').isBetween(this.birthdays_report.from, this.birthdays_report.to, null, '[]')
                     });
+                }
+
+                if (this.report_type == 'Personnel Complement') {
+                    let perscom = []
+
+
+                    let r_ct = [0, 0, 0]
+                    let r_elected = [0, 0, 0]
+                    let r_second = [0, 0, 0]
+                    let r_first = [0, 0, 0]
+                    let r_total = [0, 0, 0]
+                    let r_grand_total = 0
+
+
+
+                    this.departments.forEach(dept => {
+                        if (dept.address == "All") return
+                        let ct = [0, 0, 0]
+                        let elected = [0, 0, 0]
+                        let second = [0, 0, 0]
+                        let first = [0, 0, 0]
+                        let total = [0, 0, 0]
+                        let grand_total = 0
+
+                        let dept_content = _.filter(this.plantilla_content, (content) => { 
+                            return content.office == dept.address
+                        });
+                        dept_content.forEach(e => {
+                            switch (e.appointment_status) {
+                                case "Co-terminous":
+                                    if (e.personal_information_id != null) {
+                                        if (e.sex == "Male") ct[0]++
+                                        if (e.sex == "Female") ct[1]++
+                                    } else {
+                                        ct[2]++
+                                    }
+                                    break;
+                                case "Elected":
+                                    if (e.personal_information_id != null) {
+                                        if (e.sex == "Male") elected[0]++
+                                        if (e.sex == "Female") elected[1]++
+                                    } else {
+                                        elected[2]++
+                                    }
+                                    break;
+                                case "Permanent":
+                                    if (e.csc_level == 1) {
+                                        if (e.personal_information_id != null) {
+                                            if (e.sex == "Male") first[0]++
+                                            if (e.sex == "Female") first[1]++
+                                        } else {
+                                            first[2]++
+                                        }
+                                    } else {
+                                        if (e.personal_information_id != null) {
+                                            if (e.sex == "Male") second[0]++
+                                            if (e.sex == "Female") second[1]++
+                                        } else {
+                                            second[2]++
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
+
+                        for (let index = 0; index < 3; index++) {
+                            total[index] = ct[index] + elected[index] + second[index] + first[index]
+
+                            r_ct[index] += ct[index]
+                            r_elected[index] += elected[index]
+                            r_second[index] += second[index]
+                            r_first[index] += first[index]
+                            r_total[index] += total[index]
+                        }
+
+                        grand_total = total[0] + total[1] + total[2]
+                        r_grand_total += grand_total
+
+                        perscom.push({
+                            office: dept.title,
+                            ct: ct,
+                            elected: elected,
+                            second: second,
+                            first: first,
+                            total: total,
+                            grand_total: grand_total
+                        })
+                    });
+                    
+                    // Row Total
+                    perscom.push({
+                        office: 'TOTAL',
+                        ct: r_ct,
+                        elected:r_elected,
+                        second: r_second,
+                        first: r_first,
+                        total: r_total,
+                        grand_total: r_grand_total
+                    })
+
+                    this.personnel_complement = perscom
                 }
                 
                 this.print_data = filtered
