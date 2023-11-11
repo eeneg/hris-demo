@@ -70,6 +70,8 @@
                                     <br>
                                     <span v-if="record.surname">{{ record | name }}</span>
                                     <span v-else class="green"><b>VACANT</b></span>
+                                    <br>
+                                    <span v-if="incomplete(record)" class="badge bg-danger">Incomplete Data</span>
                                 </td>
                                 <!-- <td>{{ record.position }} <span v-if="!record.new_number" class="red"><br>ABOLISHED</span></td> -->
                                 <!-- <td v-if="record.surname">{{ record.surname + ', ' + record.firstname + ' ' + (record.nameextension || '') + ' ' + record.middlename }}</td>
@@ -280,6 +282,19 @@
                     .catch(error => {
                         this.$Progress.fail();
                     });
+            },
+            incomplete(record) {
+                if (record.personal_information_id != null) {
+                    let app_stat = record.appointment_status != "" && record.appointment_status != null
+                    let csc = record.csc_level != null
+                    let level = record.level != "" && record.level != null
+                    let orig_appoint = record.original_appointment != "" && record.original_appointment != null
+                    return !(app_stat && csc && level && orig_appoint)
+                } else {
+                    let csc = record.csc_level != null
+                    let level = record.level != "" && record.level != null
+                    return !(csc && level)
+                }
             },
             showEditPlantillaModal() {
                 $('#edit-plantilla-modal').modal('show');

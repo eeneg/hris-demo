@@ -317,7 +317,7 @@ class PlantillaContentController extends Controller
                     'effectivity_date' => $request->effectivity_date,
                     'personal_information_id' => $plantillacontent->personal_information_id,
                     'appointment_status' => $plantillacontent->appointment_status,
-                    'salary_grade' => $plantillacontent->salaryproposed->grade,
+                    'salary_grade' => $plantillacontent->salaryproposed->grade . '-' . $plantillacontent->salaryproposed->step,
                     'position' => $plantillacontent->position->title
                 ]
             );
