@@ -36,24 +36,25 @@
         }
 
         function spacer($avg){
+            // return $avg;
             switch ($avg) {
                 case $avg > 0 && $avg < 10:
-                    return "XXXXXXXXXX";
+                    return "XXXX";
                     break;
                 case $avg > 10 && $avg < 20:
-                    return "XXXXXXXXXX";
+                    return "XXXXXX";
                     break;
                 case $avg > 20 && $avg < 30:
-                    return "XXXXXXXXXXXXX";
+                    return "XXXXXXXX";
                     break;
                 case $avg > 30 && $avg < 40:
-                    return "XXXXXXXXXXXXXXXX";
+                    return "XXXXXXXXX";
                     break;
                 case $avg > 40 && $avg < 50:
-                    return "XXXXXXXXXXXXXXXXXXX";
+                    return "XXXXXXXXXXXXX";
                     break;
                 case $avg > 60 && $avg < 70:
-                    return "XXXXXXXXXXXXXXXXXXXXXXXXX";
+                    return "XXXXXXXXXXXXXXXXXX";
                     break;
             }
         }
