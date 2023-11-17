@@ -72,17 +72,17 @@
                     </th>
                 </tr>
                 <tr style="">
-                    <th colspan="1" style="text-align: left; font-size: 12pt; font-weight: normal;">
+                    <th colspan="1" style="text-align: left; font-size: 10pt; font-weight: normal;">
                         NAME :
                         <span style="float: right; font-weight: normal; font-size: 15pt;"></span>
                     </th>
-                    <th colspan="2" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
+                    <th colspan="2" style="text-align: left; font-weight: bold; font-size: 10pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
                         {{ $employee->surname }}
                     </th>
-                    <th colspan="2" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
+                    <th colspan="2" style="text-align: left; font-weight: bold; font-size: 10pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
                         {{ $employee->firstname }}
                     </th>
-                    <th colspan="3" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
+                    <th colspan="3" style="text-align: left; font-weight: bold; font-size: 10pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
                         {{ $employee->middlename }}
                     </th>
                     <th colspan="3" style="text-align: left; font-weight: normal; font-size: 7pt; font-style: italic;">
@@ -90,7 +90,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th colspan="1" style="text-align: left; font-size: 12pt; font-weight: normal;">
+                    <th colspan="1" style="text-align: left; font-size: 10pt; font-weight: normal;">
 
                         <span style="float: right; font-weight: normal; font-size: 15pt;"></span>
                     </th>
@@ -109,14 +109,14 @@
                 <tr style="">
                 </tr>
                 <tr style="">
-                    <th colspan="1" style="text-align: left; font-size: 12pt; font-weight: normal;">
+                    <th colspan="1" style="text-align: left; font-size: 10pt; font-weight: normal;">
                         BIRTH :
                         <span style="float: right; font-weight: normal; font-size: 15pt;"></span>
                     </th>
-                    <th colspan="2" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-align: center;">
+                    <th colspan="2" style="text-align: left; font-weight: bold; font-size: 10pt; border-bottom: solid 1px; text-align: center;">
                         {{ formatbirthDate($employee->birthdate) }}
                     </th>
-                    <th colspan="5" style="text-align: left; font-weight: bold; font-size: 12pt; border-bottom: solid 1px; text-align: center;">
+                    <th colspan="5" style="text-align: left; font-weight: bold; font-size: 10pt; border-bottom: solid 1px; text-align: center;">
                         {{ $employee->birthplace }}
                     </th>
                     <th colspan="3" style=" text-align: left; font-weight: normal; font-size: 7pt; font-style: italic;">
@@ -124,7 +124,7 @@
                     </th>
                 </tr>
                 <tr style="">
-                    <th colspan="1" style="text-align: left; font-size: 12pt; font-weight: normal;">
+                    <th colspan="1" style="text-align: left; font-size: 10pt; font-weight: normal;">
 
                         <span style="float: right; font-weight: normal; font-size: 15pt;"></span>
                     </th>
