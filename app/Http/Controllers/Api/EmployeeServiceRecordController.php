@@ -116,9 +116,7 @@ class EmployeeServiceRecordController extends Controller
                                 UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
        $data = EmployeeServiceRecord::where('service_record_id', $id)->orderBy('orderNo', 'ASC')
-            ->get()
-            ->chunk(20)
-            ->map(fn ($data) => $data->values());
+            ->get()->values();
 
        $sr = ServiceRecord::find($id);
 
@@ -129,9 +127,7 @@ class EmployeeServiceRecordController extends Controller
        $ar = [];
 
        foreach($data as $i){
-            foreach($i as $item){
-                array_push($ar, strlen($item['position']));
-            }
+            array_push($ar, strlen($i->position));
        };
 
        $avg = array_sum($ar) / count($ar);
