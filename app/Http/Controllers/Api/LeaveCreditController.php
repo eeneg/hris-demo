@@ -43,8 +43,16 @@ class LeaveCreditController extends Controller
             ->get()->pluck('personalinformation')->sortBy('surname');
         }
 
-        return new LeaveCreditResource($employee);
-
+        return $employee->values()->map(function($e){
+            return [
+                'id' => $e->id,
+                'name' => $e->fullName,
+                'civilstatus' => $e->civilstatus,
+                'birthdate' => $e->birthdate,
+                'retirement_date' => $e->retirement_date,
+                'status' => $e->status,
+            ];
+        });
     }
 
     /**
