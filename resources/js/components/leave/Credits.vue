@@ -20,8 +20,7 @@
                 <div class="card-body">
                     <div class="row mt-1">
                         <div class="col-md-5">
-                            <v-select @input="get_leave_info(false)" class="form-control form-control-border border-width-2" v-model.lazy="selected_employee" placeholder="Select Employee" :options="employees" label="name"
-                            :reduce="employees => employees"></v-select>
+                            <v-select @input="get_leave_info(false)" class="form-control form-control-border border-width-2" v-model.lazy="selected_employee" placeholder="Select Employee" :options="employees" label="name"></v-select>
                         </div>
                         <div class="col-md-7">
                             <div class="float-right" role="group" aria-label="Basic example">
@@ -827,7 +826,7 @@ import CreditsTable from './CreditsTable.vue'
 
                 axios.get('api/leavecredits')
                 .then(({data}) => {
-                    this.employees = data.data
+                    this.employees = data
                     Swal.close()
                 }).catch(e => {
                     console.log(e)
