@@ -27,32 +27,66 @@ class LeaveCreditController extends Controller
     public function index(Request $request)
     {
 
-        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
-        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
+        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
         $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
-                                UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
+                                UserAssignment::without('department')->where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
         $role = auth('api')->user()->role;
 
         if($department_id && $role == 'Office User' || $role == 'Office Head')
         {
-            $employee = PlantillaContent::where('plantilla_id', $plantilla->id)->has('personalinformation')->with('personalinformation')->get()->where('position.department_id', $department_id)
-            ->pluck('personalinformation')->sortBy('surname');
+            $employee = PlantillaContent::without(
+                'plantilla',
+                'salaryauthorized',
+                'salaryproposed',
+                'position'
+            )
+            ->select(
+                'plantilla_contents.id',
+                'plantilla_contents.plantilla_id',
+                'plantilla_contents.personal_information_id',
+                'plantilla_contents.position_id',
+                'personal_informations.firstname',
+                'personal_informations.middlename',
+                'personal_informations.surname',
+                'personal_informations.nameextension',
+                'personal_informations.civilstatus',
+                'personal_informations.birthdate',
+                'personal_informations.retirement_date',
+                'personal_informations.status',
+                'positions.department_id'
+            )
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
+            ->where('personal_information_id', '!=', null)
+            ->where('plantilla_id', $plantilla->id)
+            ->where('department_id', $department_id)
+            ->orderBy('surname')
+            ->get();
         }else{
-            $employee = PlantillaContent::where('plantilla_id', $plantilla->id)->has('personalinformation')->with('personalinformation')
-            ->get()->pluck('personalinformation')->sortBy('surname');
+            $employee = PlantillaContent::without('plantilla', 'salaryauthorized', 'salaryproposed', 'position')
+            ->select(
+                'plantilla_contents.id',
+                'plantilla_contents.plantilla_id',
+                'plantilla_contents.personal_information_id',
+                'personal_informations.firstname',
+                'personal_informations.middlename',
+                'personal_informations.surname',
+                'personal_informations.nameextension',
+                'personal_informations.civilstatus',
+                'personal_informations.birthdate',
+                'personal_informations.retirement_date',
+                'personal_informations.status',
+            )
+            ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
+            ->where('personal_information_id', '!=', null)
+            ->where('plantilla_id', $plantilla->id)
+            ->orderBy('surname')
+            ->get();
         }
 
-        return $employee->values()->map(function($e){
-            return [
-                'id' => $e->id,
-                'name' => $e->fullName,
-                'civilstatus' => $e->civilstatus,
-                'birthdate' => $e->birthdate,
-                'retirement_date' => $e->retirement_date,
-                'status' => $e->status,
-            ];
-        });
+        return new LeaveCreditResource($employee);
     }
 
     /**
@@ -98,7 +132,24 @@ class LeaveCreditController extends Controller
      */
     public function show($id)
     {
-        $personalinformations = PersonalInformation::find($id)->plantillacontents->map(fn ($e) => (object) ['position' => $e->position,  'salary' => $e->salaryauthorized])->first();
+        $personalinformations = PersonalInformation::without(
+                'barcode',
+                'familybackground',
+                'residentialaddresstable',
+                'permanentaddresstable',
+                'children',
+                'educationalbackground',
+                'eligibilities',
+                'otherinfos',
+                'workexperiences',
+                'voluntaryworks',
+                'trainingprograms',
+                'pdsquestion'
+            )
+            ->find($id)
+            ->plantillacontents
+            ->map(fn ($e) => (object) ['position' => $e->position,  'salary' => $e->salaryauthorized])
+            ->first();
 
         $leaveSummary = LeaveSummary::where('personal_information_id', $id)->orderBy('sort', 'ASC')->get();
 
