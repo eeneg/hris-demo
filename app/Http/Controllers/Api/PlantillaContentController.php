@@ -268,22 +268,40 @@ class PlantillaContentController extends Controller
             $position_id = $request->position['id'];
         }
 
-        $contents = PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
-            $query->where('department_id', $department_id);
-        })->orderBy('order_number', 'desc')->get();
 
-        // Order Number
-        $originalOrderNumber = $plantillacontent->order_number;
-        $updateOrderNumber = $request->order_number;
-        if ($originalOrderNumber > $updateOrderNumber) {
+        // Order Number if same office
+        if ($department_id == $request->department_new || $request->department_new == '') {
+            $originalOrderNumber = $plantillacontent->order_number;
+            $updateOrderNumber = $request->order_number;
+            if ($originalOrderNumber > $updateOrderNumber) {
+                PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
+                    $query->where('department_id', $department_id);
+                })->where('order_number', '>=', $updateOrderNumber)->where('order_number', '<', $originalOrderNumber)->update(['order_number' => DB::raw('order_number+1')]);
+            } elseif ($originalOrderNumber < $updateOrderNumber) {
+                PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
+                    $query->where('department_id', $department_id);
+                })->where('order_number', '<=', $updateOrderNumber)->where('order_number', '>', $originalOrderNumber)->update(['order_number' => DB::raw('order_number-1')]);
+            }
+        } else {
+            $new_position = Position::firstOrCreate([
+                'department_id' => $request->department_new,
+                'title' => isset($request->position['title']) ? $request->position['title'] : $request->position,
+            ]);
+            $position_id = $new_position->id;
+
+            $originalOrderNumber = $plantillacontent->order_number;
+            $updateOrderNumber = $request->order_number;
+            // Adjust old department order numbers
             PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
                 $query->where('department_id', $department_id);
-            })->where('order_number', '>=', $updateOrderNumber)->where('order_number', '<', $originalOrderNumber)->update(['order_number' => DB::raw('order_number+1')]);
-        } elseif ($originalOrderNumber < $updateOrderNumber) {
-            PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($department_id) {
-                $query->where('department_id', $department_id);
-            })->where('order_number', '<=', $updateOrderNumber)->where('order_number', '>', $originalOrderNumber)->update(['order_number' => DB::raw('order_number-1')]);
+            })->where('order_number', '>', $originalOrderNumber)->update(['order_number' => DB::raw('order_number-1')]);
+            // Insert item to new department
+            $new_dept_id = $request->department_new;
+            PlantillaContent::where('plantilla_id', $plantilla->id)->with('position')->whereHas('position', function ($query) use ($new_dept_id) {
+                $query->where('department_id', $new_dept_id);
+            })->where('order_number', '>=', $updateOrderNumber)->update(['order_number' => DB::raw('order_number+1')]);
         }
+        
 
         if ($request->salary_grade_auth != '') {
             $salaryauthorized = SalaryGrade::where('salary_sched_id', $plantilla->salaryauthorizedschedule->id)

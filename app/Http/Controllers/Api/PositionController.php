@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Position;
+use App\Setting;
+use App\Plantilla;
+use App\PlantillaDept;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,14 +36,16 @@ class PositionController extends Controller
     public function get_department_positions(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');
-        // $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        // $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
 
         $positions = Position::without('department')->where('department_id', $request->department_id)->orderBy('title')->get();
         $allEmployees = DB::select("SELECT id, CONCAT(COALESCE(`surname`,''), ', ', COALESCE(`firstname`,''), ' ', COALESCE(`nameextension`,''), ' ', COALESCE(`middlename`,'')) AS `name` FROM personal_informations ORDER BY personal_informations.`surname`");
         $data = [
             'positions' => $positions,
             'allEmployees' => $allEmployees,
+            'departments' => $departments
         ];
 
         return $data;
