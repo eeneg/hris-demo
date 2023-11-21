@@ -387,7 +387,7 @@
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper">
 				<!-- Main content -->
-				<div class="content mt-4">
+				<div class="content pt-4">
 					<div class="container-fluid">
 						<router-view></router-view>
 						<vue-progress-bar></vue-progress-bar>
