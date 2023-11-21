@@ -11,8 +11,14 @@
                 <form autocomplete="off" @submit.prevent="createItem()">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-sm-12">
-                                <p style="margin-bottom: 5px;"><b>Department: </b>{{ create_data.department ? create_data.department.address : '' }}</p>
+                            <div v-if="!disp_depts" class="col-sm-12">
+                                <p style="margin-bottom: 5px;"><b>Department: </b>{{ create_data.department ? create_data.department.address : '' }}<span style="margin: 0 20px;" v-if="form.id != ''">|</span><a href="" @click.prevent="change_office()" type="button" v-if="form.id != ''">Transfer Office</a></p>
+                            </div>
+                            <div v-else class="col-md-7 mb-2">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label style="font-weight: bold; margin: 0;">Departments</label>
+                                    <v-select ref="depts" class="form-control form-control-border border-width-2" v-model="form.department_new" :getOptionLabel="dept => dept.address" :reduce="dept => dept.id" :clearable="false" :options="create_data.departments" placeholder="Select Department"></v-select>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -179,6 +185,7 @@
                 csc_level: [ {label: 'First Level', value: 1}, {label: 'Second Level', value: 2} ],
                 separation_particulars: ['Retirement', 'Resignation', 'Died', 'End of Term', 'Disability/Retirement', 'Dropped from the Roll', 'Dismissal', 'Terminated', 'Transfer'],
                 selected_employee: {},
+                disp_depts: false,
                 form: new Form( {
                     'id': '',
                     'personal_information_id': null,
@@ -195,8 +202,8 @@
                     'appointment_status': '',
                     'order_number': '',
                     'department_id': '',
+                    'department_new': '',
                     'csc_level': '',
-
                     'mode': null,
                     'effectivity_date': null
                 }),
@@ -210,6 +217,7 @@
                 positions: [],
                 allEmployees: [],
                 department: {},
+                departments: [],
                 plantillacontent: {},
                 order_number: 0
             }
@@ -291,6 +299,10 @@
                             this.$Progress.fail();
                         });
                 }
+            },
+            change_office() {
+                this.form.department_new = this.create_data.department.id
+                this.disp_depts = true
             },
             selectEmployee(value) {
                 axios.get('api/plantillacontent/' + value)

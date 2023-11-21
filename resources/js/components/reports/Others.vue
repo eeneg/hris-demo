@@ -578,7 +578,7 @@
                                         elected[2]++
                                     }
                                     break;
-                                case "Permanent":
+                                case "Permanent" || "Temporary":
                                     if (e.csc_level == 1) {
                                         if (e.personal_information_id != null) {
                                             if (e.sex == "Male") first[0]++
