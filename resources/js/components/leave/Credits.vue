@@ -826,7 +826,7 @@ import CreditsTable from './CreditsTable.vue'
 
                 axios.get('api/leavecredits')
                 .then(({data}) => {
-                    this.employees = data
+                    this.employees = data.data
                     Swal.close()
                 }).catch(e => {
                     console.log(e)
