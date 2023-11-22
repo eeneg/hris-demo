@@ -59,17 +59,6 @@ class LeaveApplicationResource extends ResourceCollection
                 'recommendation_status' => $item->recommendation_status,
                 'recommendation_remark_approved' => $item->recommendation_remark_approved,
                 'recommendation_remark_disapproved' => $item->recommendation_remark_disapproved,
-                // 'leavetype' => $item->leavetype,
-                // 'order_number' => $item->order_number,
-                // 'working_time' => $item->working_time,
-                // 'position' => $item->position ? $item->position->title : '',
-                // 'position_id' =>$item->position ? $item->position->id : '',
-                // 'firstname' => $item->personalinformation ? $item->personalinformation->firstname : '',
-                // 'middlename' => $item->personalinformation ? $item->personalinformation->middlename : '',
-                // 'surname' => $item->personalinformation ? $item->personalinformation->surname : '',
-                // 'nameextension' => $item->personalinformation ? $item->personalinformation->nameextension : '',
-                // 'salaryauthorized' => $item->salaryauthorized,
-                // 'salaryproposed' => $item->salaryproposed,
             ];
         });
     }

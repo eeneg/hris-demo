@@ -111,7 +111,7 @@
                                          <a type="button" v-if=" leaveapplication.status != 'draft' && user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PGO-Executive' && leaveapplication.status != 'draft'" class="dropdown-item" @click.prevent="governor(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             For Governor's Approval
                                         </a>
-                                        <a class="dropdown-item" v-if="leaveapplication.status == 'draft'" @click.prevent="deleteLeaveApplication(leaveapplication.id, index)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
+                                        <a class="dropdown-item" @click.prevent="deleteModal(leaveapplication.id)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
                                             Delete
                                         </a>
                                     </div>
@@ -241,19 +241,19 @@
                                             <td>Previous Balance</td>
                                             <td>{{ leave_details.vacation_balance }}</td>
                                             <td>{{ leave_details.sick_balance }}</td>
-                                            <td>{{ prev_balance_total }}</td>
+                                            <td>{{ parseFloat(prev_balance_total).toFixed(2) }}</td>
                                         </tr>
                                         <tr>
                                             <td>Less this Leave</td>
                                             <td>{{ leave_details.vacation_less }}</td>
                                             <td>{{ leave_details.sick_less }}</td>
-                                            <td>{{ less_total }}</td>
+                                            <td>{{ parseFloat(less_total).toFixed(2) }}</td>
                                         </tr>
                                         <tr>
                                             <td>Leave Balance</td>
                                             <td>{{ curr_vacation_balance }}</td>
                                             <td>{{ curr_sick_balance }}</td>
-                                            <td>{{ balance_total }}</td>
+                                            <td>{{ parseFloat(balance_total).toFixed(2) }}</td>
                                         </tr>
                                     </table>
 
@@ -305,6 +305,35 @@
         </div>
         <!-- modal -->
 
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Password to Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 p-2">
+                            <label for="password">Password</label>
+                            <input type="password"  v-model="passwordForm.password" class="form-control" id="password">
+                            <span v-if="errors.password">
+                                <p class="text-danger">Wrong Password</p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger float-left" @click="deleteLeaveApplication()">Delete</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </template>
 
@@ -316,7 +345,6 @@ import axios from 'axios';
                 modal: false,
                 submit_mode: '',
                 search: '',
-                selectedleavetype: '',
                 leavetypes: [],
                 leaveapplications: {},
                 leaveapplicationsdata: {},
@@ -325,7 +353,6 @@ import axios from 'axios';
                 leave_application_id: '',
                 leave_details: {},
                 user: {id: '', role: '', dept:[]},
-                selected_stage_status: '',
                 gov_approval: null,
                 stage_status: [
                     'Pending Recommendation',
@@ -369,8 +396,12 @@ import axios from 'axios';
                 options: {
                     format: 'yyyy-MM-DD',
                     useCurrent: false,
-                }
-
+                },
+                passwordForm: new Form({
+                    password: null,
+                    id: null
+                }),
+                errors: {}
             }
         },
         components: {
@@ -414,7 +445,7 @@ import axios from 'axios';
                 },
                 this.loadContent()
 
-            }, 1000),
+            }, 100),
 
             filter_data() {
 
@@ -516,65 +547,54 @@ import axios from 'axios';
                     )
                 }
             },
-            deleteLeaveApplication: function(id, index)
+            deleteModal: function(id){
+                this.passwordForm.password = null
+                this.passwordForm.id = id
+                $('#deleteModal').modal('show')
+            },
+            deleteLeaveApplication: function()
             {
+
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if(result.isDismissed == true)
-                    {
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Cancelled'
-                        });
-                    }else{
-
-                        Swal.fire({
-                            title: '<strong>LOADING...</strong>',
-                            html: 'Dont <u>reload</u> or <u>close</u> the application ...',
-                            icon: 'info',
-                            willOpen () {
-                                Swal.showLoading ()
-                            },
-                            didClose () {
-                                Swal.hideLoading()
-                            },
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                allowEnterKey: false,
-                                showConfirmButton: false
-                        })
-
-                        this.$Progress.start()
-                        axios.delete('api/leaveapplication/'+ id)
-                        .then(response => {
-                            Swal.close()
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Deleted successfully'
-                            });
-
-                            this.loadContent()
-                            this.$Progress.finish()
-                        })
-                        .catch(error => {
-                            Swal.close()
-                            console.log(error)
-                            Swal.fire(
-                                'Oops...',
-                                'Something went wrong',
-                                'error'
-                            )
-                        })
-                    }
+                    title: '<strong>LOADING...</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
                 })
 
+                this.$Progress.start()
+                axios.delete('api/leaveapplication/'+this.passwordForm.id+'?password='+this.passwordForm.password)
+                .then(response => {
+                    Swal.close()
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Deleted successfully'
+                    });
+
+                    this.loadContent()
+                    this.$Progress.finish()
+                    $('#deleteModal').modal('hide')
+                })
+                .catch(error => {
+                    Swal.close()
+                    this.errors = error.response.data.errors
+                    console.log(error)
+                    this.$Progress.finish()
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong',
+                        'error'
+                    )
+                })
             },
             load_user: function()
             {

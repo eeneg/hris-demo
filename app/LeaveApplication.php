@@ -46,11 +46,7 @@ class LeaveApplication extends Auditable
     ];
 
     protected $with = [
-        'personalinformation',
-        'leavetype',
-        'personalinformation_7b',
-        'personalinformation_7c',
-        'personalinformation_7d',
+
     ];
 
     public static function leaveapplications($plantilla, $department_id, $data)

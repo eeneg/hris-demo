@@ -23,14 +23,14 @@ class LeaveApplicationController extends Controller
      */
     public function index()
     {
-        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
-        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
+        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
         $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
-                                UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
+                                UserAssignment::without('department')->where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
         $data = [
             'role' => auth('api')->user()->role,
-            'dept' => Department::find(UserAssignment::where('user_id', auth('api')->user()->id)->value('department_id'))
+            'dept' => Department::find(UserAssignment::without('department')->where('user_id', auth('api')->user()->id)->value('department_id'))
         ];
 
         return new LeaveApplicationResource(LeaveApplication::leaveapplications($plantilla, $department_id, $data));
@@ -38,10 +38,10 @@ class LeaveApplicationController extends Controller
 
     public function getAllLeave()
     {
-        $default_plantilla  =   Setting::where('title', 'Default Plantilla')->first();
-        $plantilla          =   Plantilla::where('year', $default_plantilla->value)->first();
-        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head' ?
-                                UserAssignment::where('user_id', auth('api')->user()->id)->first()->department_id : '';
+        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
+        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
+                                UserAssignment::without('department')->where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
         return new LeaveApplicationResource(LeaveApplication::getAllLeave($plantilla, $department_id));
     }
@@ -148,8 +148,12 @@ class LeaveApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
+        $request->validate([
+            'password' => ['required', 'current-password'],
+        ]);
+
         return LeaveApplication::find($id)->delete();
     }
 }

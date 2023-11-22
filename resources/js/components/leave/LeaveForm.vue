@@ -92,7 +92,7 @@
                         </div>
                     </div>
                     <h5 class="green mt-3">Details of action on Application</h5>
-                    <h3 class="text-danger" v-if="form.personal_information_id != null && form.vacation_balance == null && form.sick_balance == null">Employee has no Leave Credits</h3>
+                    <h3 class="text-danger" style="text-decoration: underline;" v-if="form.personal_information_id != null && form.vacation_balance == null && form.sick_balance == null">Employee has no Leave Credits</h3>
                     <div class="row">
                         <div class="col-md-12 form-group" style="display: contents;">
                             <div class="col-md-2">
@@ -179,6 +179,7 @@
                     </div>
                 </div>
                 <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
+                    <span v-if="form.vacation_balance == null && form.sick_balance == null" class="text-danger">Please Input Leave Credit Data in the Leave Credit Tab</span>
                     <button type="submit" class="btn btn-primary" @click="form.status = 'final'" :disabled="form.vacation_balance == null && form.sick_balance == null">Finalize</button>
                     <button type="submit" class="btn btn-secondary" @click="form.status = 'draft'">Save as draft</button>
                 </div>
@@ -190,6 +191,11 @@
 </template>
 
 <script>
+
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
     export default {
         data() {
             return {

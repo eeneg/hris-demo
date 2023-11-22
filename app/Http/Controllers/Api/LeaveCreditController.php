@@ -132,6 +132,12 @@ class LeaveCreditController extends Controller
      */
     public function show($id)
     {
+
+        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
+        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
+                                UserAssignment::without('department')->where('user_id', auth('api')->user()->id)->first()->department_id : '';
+
         $personalinformations = PersonalInformation::without(
                 'barcode',
                 'familybackground',
@@ -148,6 +154,7 @@ class LeaveCreditController extends Controller
             )
             ->find($id)
             ->plantillacontents
+            ->filter(fn($e) => $e->plantilla_id == $plantilla->id)
             ->map(fn ($e) => (object) ['position' => $e->position,  'salary' => $e->salaryauthorized])
             ->first();
 
