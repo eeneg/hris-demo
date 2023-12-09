@@ -80,17 +80,17 @@ class PlantillaContentController extends Controller
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
-        $plantillacontents = PlantillaContent::with('personalinformation')
+        $plantillacontents = PlantillaContent::leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
             ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
             ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
-                ->leftJoin('plantilla_depts', function ($join) {
-                    $join->on('departments.id', '=', 'plantilla_depts.department_id');
-                    $join->on('plantilla_contents.plantilla_id', '=', 'plantilla_depts.plantilla_id');
-                })
+            ->leftJoin('plantilla_depts', function ($join) {
+                $join->on('departments.id', '=', 'plantilla_depts.department_id');
+                $join->on('plantilla_contents.plantilla_id', '=', 'plantilla_depts.plantilla_id');
+            })
             ->where('departments.address', $request->office)
             ->whereNotNull('plantilla_contents.personal_information_id')
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
-            ->orderBy('plantilla_depts.order_number')->orderBy('plantilla_contents.order_number')->get();
+            ->orderBy('plantilla_depts.order_number')->orderBy('personal_informations.surname')->get();
 
             $plantillacontent_resource = $plantillacontents->map(function ($item) {
                 return [
