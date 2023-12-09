@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('plantillaForNosi', 'Api\PlantillaContentController@plantillaForNosi');
     Route::get('plantillaForNosa', 'Api\PlantillaContentController@plantillaForNosa');
     Route::get('plantillaForOtherReports', 'Api\PlantillaContentController@plantillaForOtherReports');
+    Route::get('plantillaTicketsReports', 'Api\PlantillaContentController@plantillaTicketsReports');
 
     Route::post('previousplantilla', 'Api\PlantillaController@previousplantilla');
     Route::post('duplicateplantilla', 'Api\PlantillaController@duplicateplantilla');

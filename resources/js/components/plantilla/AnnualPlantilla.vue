@@ -14,18 +14,37 @@
                         <a href="" @click.prevent="showEditPlantillaModal()" class="blue ml-2"><i class="far fa-edit"></i></a>
                     </div>
                     <p style="margin: 0;">Date Approved: <span>{{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.date_approved }}</span> </p>
-                    <div class="row mt-2">
+                    <div class="row">
+                        <div class="col-md-5 mt-1">
+                            <label style="margin: 0;font-weight: normal;">Select Department</label>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-5">
                             <div class="form-group" style="margin-bottom:0;">
-                                <label style="margin: 0;font-weight: normal;line-height:25px;">Select Department</label>
                                 <v-select @input="loadContents($event)" class="form-control form-control-border border-width-2" v-model="selectedDepartment" :getOptionLabel="dept => dept.address" :clearable="false" :options="departments" placeholder="Search Department"></v-select>
                             </div>
                         </div>
                         <div class="col-md-7">
-                            <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="plantillaReport()"><i class="fas fa-print"></i></a>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info">Actions</button>
+                                <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu" style="">
+                                    <a class="dropdown-item" href="#" @click="createItemModal()">Create New Item</a>
+                                    <a class="dropdown-item" href="#" @click="createPlantillaModal()">Create New Plantilla</a>
+                                    <a class="dropdown-item" href="#" @click="duplicatePlantillaModal()">Duplicate Plantilla</a>
+                                    <a class="dropdown-item" href="#" @click="createPlantillaModal()">Add Department</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" @click.prevent="plantillaReport()">Print Report</a>
+                                </div>
+                            </div>
+
+                            <!-- <a class="ml-2" style="float: right;margin-top: 26px;font-size: 2.3rem;line-height: 2.3rem;" href="" @click.prevent="plantillaReport()"><i class="fas fa-print"></i></a>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-primary ml-2" @click="duplicatePlantillaModal()">Duplicate Plantilla</button>
                             <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success ml-2" @click="createPlantillaModal()">Create New Plantilla</button>
-                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="createItemModal()">Create New Item</button>
+                            <button style="float: right;margin-top: 25px;" type="button" class="btn btn-success" @click="createItemModal()">Create New Item</button> -->
                         </div>
                     </div>
                 </div>

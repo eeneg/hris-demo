@@ -116,7 +116,7 @@
                     </div>
                     <div class="row mt-5">
                         <div class="col-6"></div>
-                        <div class="col-6 text-center mt-5">
+                        <div class="col-6 mt-5">
                             <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
                             <h5 class="m-0">Provincial Governor</h5>
                         </div>
@@ -274,7 +274,7 @@
                             </div>
                             <div class="row mt-5">
                                 <div class="col-6"></div>
-                                <div class="col-6 text-center mt-5">
+                                <div class="col-6 mt-5">
                                     <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
                                     <h5 class="m-0">Provincial Governor</h5>
                                 </div>

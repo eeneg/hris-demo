@@ -28,6 +28,7 @@ class PlantillaContentReportsResource extends ResourceCollection
                 'last_promotion' => $item->last_promotion,
                 'appointment_status' => $item->appointment_status,
                 'office' => $item->position ? $item->position->department->address : '',
+                'office_title' => $item->position ? $item->position->department->title : '',
                 'birthdate' => $item->personalinformation ? $item->personalinformation->birthdate : '',
                 'position' => $item->position ? $item->position->title : '',
                 'position_id' => $item->position ? $item->position->id : '',
