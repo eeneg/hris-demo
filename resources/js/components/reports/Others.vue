@@ -8,19 +8,22 @@
             <!-- Reports -->
             <div class="row" id="report_div" style="display: none;margin-top: -1.4rem !important;">
                 <div class="col-md-12 report_div">
-                    <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" style="top: 20px;">
-                    <div class="row others-report-fixed">
-                        <p class="m-0"><small>THIS IS A SYSTEM GENERATED REPORT</small></p>
-                    </div>
-                    <div class="row mt-3 mb-5">
-                        <div class="col-12 text-center">
-                            <h4 class="m-0">Republic of the Philippines</h4>
-                            <h4 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h4>
-                            <h5 class="m-0">Matti, Digos City</h5>
-                            <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
-                            <h4 class="m-0 font-weight-bold" v-if="report_type == 'Retirees of Specific Year'">Retirees of year {{ retirees_report.year }}</h4>
-                            <h4 class="m-0 font-weight-bold" v-if="report_type == 'Birthday Celebrants'">Birthday Celebrants</h4>
-                            <h4 class="m-0 font-weight-bold" v-if="report_type == 'Personnel Complement'">Personnel Complement</h4>
+                    <div v-if="report_type != 'Raffle Ticket'">
+                        <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo" style="top: 20px;">
+                        <div class="row others-report-fixed">
+                            <p class="m-0"><small>THIS IS A SYSTEM GENERATED REPORT</small></p>
+                        </div>
+                        <div class="row mt-3 mb-5">
+                            <div class="col-12 text-center">
+                                <h4 class="m-0">Republic of the Philippines</h4>
+                                <h4 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h4>
+                                <h5 class="m-0">Matti, Digos City</h5>
+                                <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
+                                <h4 class="m-0 font-weight-bold" v-if="report_type == 'Retirees of Specific Year'">Retirees of year {{ retirees_report.year }}</h4>
+                                <h4 class="m-0 font-weight-bold" v-if="report_type == 'Birthday Celebrants'">Birthday Celebrants</h4>
+                                <h4 class="m-0 font-weight-bold" v-if="report_type == 'Personnel Complement'">Personnel Complement</h4>
+                                <h4 class="m-0 font-weight-bold" v-if="report_type == 'Attendance Sheet'">{{ attendance_report.event }}</h4>
+                            </div>
                         </div>
                     </div>
 
@@ -250,6 +253,59 @@
                             </div>
                         </div>
                     </div>
+                    <div v-if="report_type == 'Raffle Ticket'">
+                        <div class="row">
+                            <div class="col-6 ticket" v-for="(item, index) in print_data" :key="index">
+                                <img src="storage/project_files/Raffle.jpg" alt="Raffle Ticket" class="img-fluid" style="margin: 0 !important; padding: 0 !important;border: 1px solid black;visibility: hidden !important;">
+                                <div style="position: absolute !important; top: 87px !important; left: 40px !important;width: 260px;">
+                                    <p style="font-size: 0.7rem;margin: 0;">{{ item.old_number }}</p>
+                                    <p style="font-size: 0.8rem;margin: 8px 0 3px 15px;">{{ item.name }}</p>
+                                    <div style="width: 100%;height: 1.4rem;display: table;margin: 0 0 0 15px;">
+                                        <p style="font-size: 0.7rem;line-height: 0.7rem;display: table-cell;vertical-align: bottom;">{{ item.office_title }}</p>
+                                    </div>
+                                </div>
+                                <div style="position: absolute !important; top: 87px !important; left: 355px !important;width: 150px;">
+                                    <p style="font-size: 0.6rem;margin: 0;">{{ item.old_number }}</p>
+                                    <p style="font-size: 0.5rem;margin: 12px 0 3px 15px;">{{ item.name }}</p>
+                                    <div style="width: 100%;height: 1.4rem;display: table;margin: 0 0 0 15px;">
+                                        <p style="font-size: 0.5rem;line-height: 0.7rem;display: table-cell;vertical-align: bottom;">{{ item.office_title }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="report_type == 'Attendance Sheet'">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <h4 class="m-0"><b>Office:</b> {{ department }}</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>Name</th>
+                                            <th>Item#</th>
+                                            <th style="text-align: center;">Signature</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in print_data" :key="index">
+                                            <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
+                                            <td class="align-middle pt-1 pb-1 text-nowrap">
+                                                <span style="font-weight: bold;font-size: 1.2rem;" :class="item.sex == 'Female' ? 'text-success' : 'text-primary'">{{ item.name }}</span>
+                                                <small class="d-block">{{ item.position }}</small>
+                                            </td>
+                                            <td class="align-middle pt-1 pb-1">{{ item.new_number ? item.new_number : item.old_number }}</td>
+                                            <td class="align-middle pt-1 pb-1 w-100"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -387,12 +443,33 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="report_type == 'Attendance Sheet'" class="col-md-6 pr-5">
+                            <h3>Options</h3>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold;margin: 0;">Sort by</label>
+                                        <select v-model="attendance_report.sort" class="form-control form-control-border border-width-2">
+                                            <option value="Surname">Surname</option>
+                                            <option value="Item No.">Item No.</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold;margin: 0;">Name of Event</label>
+                                        <input v-model="attendance_report.event" type="text" class="form-control" placeholder="eg. Christmas Party">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
                 </div>
             </div>
         </div>
+        <iframe id="ticket_report" style="width: 0; height: 0; border: 0; border: none; position: absolute;"></iframe>
     </div>
 </template>
 
@@ -408,7 +485,7 @@
                 button_enable: false,
                 report_type: '',
                 personnel_complement: [],
-                reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year', 'Birthday Celebrants', 'Personnel Complement'],
+                reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year', 'Birthday Celebrants', 'Personnel Complement', 'Raffle Ticket', 'Attendance Sheet'],
                 salary_grades_report: {
                     salary_grade: '',
                     status_vacant: true,
@@ -429,6 +506,10 @@
                 birthdays_report: {
                     from: null,
                     to: null
+                },
+                attendance_report: {
+                    event: '',
+                    sort: 'Surname'
                 }
             }
         },
@@ -636,6 +717,44 @@
                     })
 
                     this.personnel_complement = perscom
+                }
+
+                if (this.report_type == 'Raffle Ticket') {
+                    axios.get('api/plantillaTicketsReports', {
+                        params: {
+                            office: this.department
+                        }
+                    }).then(({data}) => {
+                        var doc = document.getElementById('ticket_report').contentWindow.document
+                        doc.open()
+                        doc.write(data)
+                        doc.close()
+
+                        var frame = document.getElementById('ticket_report')
+                        frame.onload = function() {
+                            frame.contentWindow.print()
+                        }
+                    }).catch(error => {
+                        console.log(error.response.data.message);
+                    }).finally(() => {
+                        // this.$Progress.finish()
+                    });
+
+
+                    // filtered = _.filter(this.plantilla_content, (content) => { 
+                    //     return content.name != 'VACANT' && (this.department != 'All' ? content.office == this.department : true)
+                    // });
+                    return
+                }
+
+                if (this.report_type == 'Attendance Sheet') {
+                    filtered = _.filter(this.plantilla_content, (content) => { 
+                        let inc = content.name != 'VACANT' && (this.department != 'All' ? content.office == this.department : true)
+                        return inc;
+                    });
+                    if (this.employee_names_report.sort == 'Surname') {
+                        filtered = _.sortBy(filtered, [function(o) { return o.name; }]);
+                    }
                 }
                 
                 this.print_data = filtered

@@ -19,7 +19,7 @@ class PlantillaEmployeesNOSAResource extends ResourceCollection
             return [
                 'office' => $item->position->department->address,
                 'position' => $item->position->title,
-                'name' => $item->personalinformation->firstname.' '.$item->personalinformation->middlename.' '.$item->personalinformation->surname.' '.$item->personalinformation->nameextentsion,
+                'name' => $item->personalinformation->firstname.' '.$item->personalinformation->middlename.' '.$item->personalinformation->surname.' '.$item->personalinformation->nameextension,
                 'salaryproposed' => $item->salaryproposed,
                 'salaryauthorized' => $item->salaryauthorized,
                 'item_no' => $item->new_number ? $item->new_number : $item->old_number,

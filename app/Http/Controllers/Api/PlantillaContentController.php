@@ -75,6 +75,55 @@ class PlantillaContentController extends Controller
 
         return $data;
     }
+    
+    public function plantillaTicketsReports(Request $request)
+    {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontents = PlantillaContent::with('personalinformation')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+                ->leftJoin('plantilla_depts', function ($join) {
+                    $join->on('departments.id', '=', 'plantilla_depts.department_id');
+                    $join->on('plantilla_contents.plantilla_id', '=', 'plantilla_depts.plantilla_id');
+                })
+            ->where('departments.address', $request->office)
+            ->whereNotNull('plantilla_contents.personal_information_id')
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->orderBy('plantilla_depts.order_number')->orderBy('plantilla_contents.order_number')->get();
+
+            $plantillacontent_resource = $plantillacontents->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'personal_information_id' => $item->personal_information_id,
+                    'sex' => $item->personalinformation ? $item->personalinformation->sex : '',
+                    'old_number' => $item->old_number,
+                    'new_number' => $item->new_number,
+                    'order_number' => $item->order_number,
+                    'working_time' => $item->working_time,
+                    'level' => $item->level,
+                    'original_appointment' => $item->original_appointment,
+                    'last_promotion' => $item->last_promotion,
+                    'appointment_status' => $item->appointment_status,
+                    'office' => $item->position ? $item->position->department->address : '',
+                    'office_title' => $item->position ? $item->position->department->title : '',
+                    'birthdate' => $item->personalinformation ? $item->personalinformation->birthdate : '',
+                    'position' => $item->position ? $item->position->title : '',
+                    'position_id' => $item->position ? $item->position->id : '',
+                    'name' => $item->personalinformation ? $item->personalinformation->surname.($item->personalinformation->nameextension ? ' '.$item->personalinformation->nameextension : '').', '.$item->personalinformation->firstname.' '.$item->personalinformation->middlename : 'VACANT',
+                    'salaryauthorized' => $item->salaryauthorized,
+                    'salaryproposed' => $item->salaryproposed,
+                    'csc_level' => $item->csc_level
+                ];
+            });
+        // $plantillacontent_resource = new PlantillaContentReportsResource($plantillacontents);
+        
+        // return $plantillacontent_resource;
+        $data = [
+            'plantillacontents' => $plantillacontent_resource
+        ];
+        return view('/reports/ticket', $data);
+    }
 
     public function plantillaForOtherReports(Request $request)
     {
