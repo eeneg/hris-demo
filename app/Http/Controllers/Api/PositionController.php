@@ -7,6 +7,7 @@ use App\Position;
 use App\Setting;
 use App\Plantilla;
 use App\PlantillaDept;
+use App\Http\Resources\PositionQSResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,9 +29,23 @@ class PositionController extends Controller
     public function get_available_positions_for_QS(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');
-        $positions = Position::without('department')->doesntHave('qs')->orderBy('title')->groupBy('title')->get();
-        return $positions;
 
+        if ($search = \Request::get('query')) {
+            $positions = Position::without('department')
+                ->where('title', 'LIKE', '%'.$search.'%')
+                ->orderBy('positions.title')
+                ->orderBy('positions.department_id')
+                ->groupBy('positions.title')
+                ->paginate(20);
+        } else {
+            $positions = Position::without('department')
+                ->orderBy('positions.title')
+                ->orderBy('positions.department_id')
+                ->groupBy('positions.title')
+                ->paginate(20);
+        }
+
+        return new PositionQSResource($positions);
     }
 
     public function get_department_positions(Request $request)

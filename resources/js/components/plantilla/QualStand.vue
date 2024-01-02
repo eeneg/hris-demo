@@ -82,11 +82,11 @@
                         </div>
                         <div class="col-md-9">
                             <div class="row">
-                                <div class="col-12">
+                                <!-- <div class="col-12">
                                     <a class="btn btn-primary float-right" href="" @click.prevent="add_qs()">
                                         <i class="fas fa-plus mr-2"></i>Add
                                     </a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <!-- <div class="col-md-9">
@@ -134,13 +134,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in qss.data" :key="item.id">
-                                <td>{{ item.position.title }}</td>
-                                <td>{{ item.sg }}</td>
-                                <td>{{ item.education }}</td>
-                                <td>{{ item.experience }}</td>
-                                <td>{{ item.training }}</td>
-                                <td>{{ item.eligibility }}</td>
+                            <tr v-for="item in positions.data" :key="item.id">
+                                <td>{{ item.title }}</td>
+                                <td>{{ item.qs_sg }}</td>
+                                <td>{{ item.qs_education }}</td>
+                                <td>{{ item.qs_experience }}</td>
+                                <td>{{ item.qs_training }}</td>
+                                <td>{{ item.qs_eligibility }}</td>
                                 <td style="text-align: center;"><a href="#" @click.prevent="updateRecord(item)"><i class="fas fa-edit"></i></a></td>
                                 <!-- <td style="width: calc(100%-150px);">
                                     <img style="width: 45px;height: 45px;" class="img-circle mr-2" :src="getAvatar(item.picture)" alt="User Avatar">
@@ -165,17 +165,17 @@
                 </div>
 
                 <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <pagination size="default" :data="qss" @pagination-change-page="getResults" :limit="5">
+                    <pagination size="default" :data="positions" @pagination-change-page="getResults" :limit="5">
                         <span slot="prev-nav">&lt; Previous</span>
                         <span slot="next-nav">Next &gt;</span>
                     </pagination>
-                    <span style="margin-left: 10px;">Page {{ qss.meta && qss.meta.current_page }} of {{ qss.meta && qss.meta.last_page }}</span>
+                    <span style="margin-left: 10px;">Page {{ positions.meta && positions.meta.current_page }} of {{ positions.meta && positions.meta.last_page }}</span>
                 </div>
             </div>
         </div>
 
         
-        <qs-form-modal :key="create_modal_key" @exit="createModalExit" :positions="positions" :foredit="foredit"></qs-form-modal>
+        <qs-form-modal :key="create_modal_key" @exit="createModalExit" :positions="positions.data" :foredit="foredit"></qs-form-modal>
     </div> <!-- row -->
     
 </template>
@@ -197,7 +197,7 @@ export default {
                 format: 'yyyy-MM-DD',
                 useCurrent: false,
             },
-            positions: [],
+            positions: {},
             create_modal_key: 0,
             foredit: {}
         }
@@ -213,7 +213,7 @@ export default {
     created: function() {
 
         this.$Progress.start()
-        this.fetch_data()
+        // this.fetch_data()
         this.fetch_positions()
         
     },
@@ -222,9 +222,9 @@ export default {
             this.getResults();
         }, 400),
         getResults(page = 1) {
-            axios.get('api/qs?page=' + page + '&query=' + this.search)
+            axios.get('api/vailable_positions_for_QS?page=' + page + '&query=' + this.search)
                 .then(({data}) => {
-                    this.qss = data;
+                    this.positions = data;
                 }).catch(error => {
                     console.log(error.reponse.data.message);
                 });
@@ -243,17 +243,17 @@ export default {
                 window.print()
             })
         },
-        fetch_data() {
-            axios.get('api/qs')
-                .then(({data}) => {
-                    this.qss = data;
-                    this.$Progress.finish()
-                })
-                .catch(error => {
-                    this.$Progress.fail()
-                    console.log(error.response.data.message);
-                });
-        },
+        // fetch_data() {
+        //     axios.get('api/qs')
+        //         .then(({data}) => {
+        //             this.qss = data;
+        //             this.$Progress.finish()
+        //         })
+        //         .catch(error => {
+        //             this.$Progress.fail()
+        //             console.log(error.response.data.message);
+        //         });
+        // },
         fetch_positions() {
             axios.get('api/vailable_positions_for_QS')
                 .then(({data}) => {
@@ -276,7 +276,7 @@ export default {
         createModalExit(value) {
             this.create_modal_key += 1;
             if (value == 'sync') {
-                this.fetch_data();
+                this.fetch_positions();
             }
         }
     },

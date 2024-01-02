@@ -19,13 +19,12 @@ class QSController extends Controller
         if ($search = \Request::get('query')) {
             $qs = QS::whereHas('position', function ($query) use ($search) {
                     $query->where('title', 'LIKE', '%'.$search.'%');
-                })->leftJoin('positions', 'positions.id', '=', 'q_s.position_id')->orderBy('positions.title')->paginate(20);
+                })->leftJoin('positions', 'positions.id', '=', 'q_s.position_id')->orderByRaw('CONVERT(sg, SIGNED)')->paginate(20);
         } else {
             $qs = QS::leftJoin('positions', 'positions.id', '=', 'q_s.position_id')
-            ->orderBy('positions.title')->paginate(20);
+            ->orderByRaw('CONVERT(sg, SIGNED)')->paginate(20);
         }
 
-        // $qs = QS::paginate(20);
         return new QSResource($qs);
     }
 

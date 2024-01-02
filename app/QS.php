@@ -17,7 +17,7 @@ class QS extends Auditable
     protected $fillable = ['position_id', 'sg', 'education', 'experience', 'training', 'eligibility'];
 
     protected $with = [
-        'position'
+        // 'position'
     ];
 
     public function position()
