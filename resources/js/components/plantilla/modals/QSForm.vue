@@ -11,20 +11,14 @@
                 <form autocomplete="off" @submit.prevent="createRecord()">
                     <div class="modal-body">
                         <div class="row mb-2">
-                            <div class="col-sm-9">
+                            <div class="col-sm-12">
                                 <div class="form-group" style="margin-bottom: 0.3rem;">
-                                    <label for="add_position" style="font-weight: bold; margin: 0;">Position</label>
-                                    <v-select taggable class="form-control form-control-border border-width-2" v-model="form.position_id" :reduce="position => position.id" :options="positions" label="title" placeholder="Select Position">
+                                    <label for="add_position" style="margin: 0;font-weight: normal;">Position: <b>{{ foredit.title }}</b></label>
+                                    <!-- <v-select taggable class="form-control form-control-border border-width-2" v-model="form.position_id" :reduce="position => position.id" :options="positions" label="title" placeholder="Select Position">
                                         <template #search="{attributes, events}">
                                             <input class="vs__search" :required="!form.position_id" v-bind="attributes" v-on="events" />
                                         </template>
-                                    </v-select>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group" style="margin-bottom: 0.3rem;">
-                                    <label style="font-weight: bold; margin: 0;">Salary Grade</label>
-                                    <input v-model="form.sg" class="form-control form-control-border border-width-2" min="1" max="30" type="number" name="salary_grade_auth" required>
+                                    </v-select> -->
                                 </div>
                             </div>
                         </div>
@@ -53,6 +47,14 @@
                                 <div class="form-group" style="margin-bottom: 0.3rem;">
                                     <label style="font-weight: bold; margin: 0;">Eligibility Requirements</label>
                                     <textarea v-model="form.eligibility" class="form-control form-control-border border-width-2" rows="2" placeholder="Enter requirements..." required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group" style="margin-bottom: 0.3rem;">
+                                    <label style="font-weight: bold; margin: 0;">Salary Grade</label>
+                                    <input v-model="form.sg" class="form-control form-control-border border-width-2" min="1" max="30" type="number" name="salary_grade_auth" required>
                                 </div>
                             </div>
                         </div>
@@ -99,18 +101,18 @@
         },
         watch: {
             foredit: function(newData) {
-                if (newData.id) {
-                    this.form.id = newData.id
-                    this.form.position_id = newData.position.id
-                    this.form.sg = newData.sg
-                    this.form.education = newData.education
-                    this.form.experience = newData.experience
-                    this.form.training = newData.training
-                    this.form.eligibility = newData.eligibility
+                if (newData.qs_id) {
+                    this.form.id = newData.qs_id
+                    this.form.position_id = newData.id
+                    this.form.sg = newData.qs_sg
+                    this.form.education = newData.qs_education
+                    this.form.experience = newData.qs_experience
+                    this.form.training = newData.qs_training
+                    this.form.eligibility = newData.qs_eligibility
                 } else {
                     this.form = new Form( {
                         'id': '',
-                        'position_id': '',
+                        'position_id': newData.id,
                         'sg': '',
                         'education': '',
                         'experience': '',

@@ -17,7 +17,7 @@ class Position extends Auditable
     protected $fillable = ['department_id', 'title'];
 
     protected $with = [
-        'department',
+        'department', 'qs'
     ];
 
     public function department()
@@ -27,7 +27,7 @@ class Position extends Auditable
 
     public function qs()
     {
-        return $this->hasMany('App\QS', 'position_id');
+        return $this->hasOne('App\QS', 'position_id');
     }
 
     public static function boot()
