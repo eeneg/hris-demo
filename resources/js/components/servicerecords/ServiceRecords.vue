@@ -675,10 +675,13 @@ import Swal from 'sweetalert2'
             {
                 this.$Progress.start()
                 this.record_form.reset()
-                data.from = moment(data.from, 'MM/DD/YY').format('YYYY-MM-DD')
-                data.to = moment(data.to, 'MM/DD/YY').format('YYYY-MM-DD')
-                Object.assign(this.record_form, data)
-                this.record_form.station = _.find(this.depts, {'title':data.station})
+                var tempData = {}
+                Object.assign(tempData, data)
+                tempData.station = tempData.station.split(",")[0]
+                tempData.from = moment(data.from).format('YYYY-MM-DD')
+                tempData.to = moment(data.to).format('MM/DD/YYYY') == "Invalid date" ? "to date" : moment(data.to, 'MM/DD/YY').format('YYYY-MM-DD')
+                Object.assign(this.record_form, tempData)
+                this.record_form.station = _.find(this.depts, {'title':tempData.station})
                 this.edit = true
                 if(this.record_form.station)
                 {
@@ -847,8 +850,9 @@ import Swal from 'sweetalert2'
 
                 this.record_form.service_record_id = this.service_record_id
                 this.record_form.station = this.record_form.station.title
-                this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YY') : this.record_form.from
-                this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YY') : this.record_form.to
+                this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YYYY') : this.record_form.from
+                this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YYYY') : this.record_form.to
+                this.record_form.station = this.record_form.station + ", DS"
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
                     toast.fire({
@@ -868,9 +872,11 @@ import Swal from 'sweetalert2'
 
             submitEmployeeServiceRecordUpdates: function()
             {
-                this.record_form.station = this.record_form.station.title
-                this.record_form.from = moment(this.record_form.from).format('MM/DD/YY')
-                this.record_form.to = moment(this.record_form.to).format('MM/DD/YY')
+                if(this.record_form.station != null){
+                    this.record_form.station = this.record_form.station.title + ", DS"
+                }
+                this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YY') : this.record_form.from
+                this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YY') : this.record_form.to
                 axios.patch('api/employeeservicerecord/'+this.record_form.id, this.record_form)
                 .then(e => {
                     toast.fire({
@@ -976,7 +982,6 @@ import Swal from 'sweetalert2'
                         f.contentWindow.document.write("");
                         f.contentWindow.document.close();
                     }, 500);
-
                     Swal.close()
                 })
                 .catch(e => {
