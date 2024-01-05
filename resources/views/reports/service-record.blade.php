@@ -17,6 +17,15 @@
             return $date;
         }
 
+        function format_date($date){
+            if(strtotime($date) !== false)
+            {
+                return Carbon\Carbon::parse($date)->format('m-d-y');
+            }else{
+                return $date;
+            }
+        }
+
         function formatbirthDate($date){
             if(strtotime($date) !== false)
             {
@@ -159,8 +168,8 @@
             <tr>
                 @foreach ($data as $key => $record)
                     <tr style="border: solid 1px" class="text-center">
-                        <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: bottom;padding:0%">{{ $record->from }}</td>
-                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->to }}</td>
+                        <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: bottom;padding:0%">{{ format_date($record->from) }}</td>
+                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ format_date($record->to) }}</td>
                         <td style="border-right: 1px solid; text-align: center; padding: 0;font-size: 11px;vertical-align: bottom;">
                             {{$record->position}}
                         </td>

@@ -495,7 +495,7 @@ import Swal from 'sweetalert2'
 
             formatDate: function(date)
             {
-                return moment(date, 'MM/DD/YY').format('MM/DD/YYYY') == "Invalid date" ? date : moment(date, 'MM/DD/YY').format('MM/DD/YYYY')
+                return moment(date).format('MM/DD/YYYY') == "Invalid date" ? date : moment(date).format('MM/DD/YYYY')
             },
 
             addModal: function()
@@ -875,8 +875,8 @@ import Swal from 'sweetalert2'
                 if(this.record_form.station != null){
                     this.record_form.station = this.record_form.station.title + ", DS"
                 }
-                this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YY') : this.record_form.from
-                this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YY') : this.record_form.to
+                this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YYYY') : this.record_form.from
+                this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YYYY') : this.record_form.to
                 axios.patch('api/employeeservicerecord/'+this.record_form.id, this.record_form)
                 .then(e => {
                     toast.fire({
