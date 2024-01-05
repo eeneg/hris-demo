@@ -73,7 +73,7 @@
                                         <td>{{ record.branch }}</td>
                                         <td>{{ record.pay }}</td>
                                         <td>{{ record.remark }}</td>
-                                        <td>{{ record.date }}</td>
+                                        <td>{{ formatDate(record.date) }}</td>
                                         <td>{{ record.cause }}</td>
                                         <td>
                                             <button class="btn btn-primary" @click="editModal(record)"><i class="fas fa-edit"></i></button>
@@ -679,7 +679,7 @@ import Swal from 'sweetalert2'
                 Object.assign(tempData, data)
                 tempData.station = tempData.station.split(",")[0]
                 tempData.from = moment(data.from).format('YYYY-MM-DD')
-                tempData.to = moment(data.to).format('MM/DD/YYYY') == "Invalid date" ? "to date" : moment(data.to, 'MM/DD/YY').format('YYYY-MM-DD')
+                tempData.to = moment(data.to).format('MM/DD/YYYY') == "Invalid date" ? "to date" : moment(data.to).format('YYYY-MM-DD')
                 Object.assign(this.record_form, tempData)
                 this.record_form.station = _.find(this.depts, {'title':tempData.station})
                 this.edit = true
