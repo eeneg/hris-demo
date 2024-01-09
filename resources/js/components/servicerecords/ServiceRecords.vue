@@ -173,6 +173,15 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label for="station">Province</label>
+                                    <v-select class="form-control form-control-border border-width-2" v-model.lazy="record_form.province" placeholder="Select Province" :options="provinces"></v-select>
+                                    <span v-if="errors.province">
+                                        <p class="text-danger">Field Required</p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label for="position">Designation (Position) <span class="text-danger" v-if="record_form.station == null">(Select Station First)</span></label>
                                     <v-select class="form-control form-control-border border-width-2" :disabled="record_form.station == null" v-model.lazy="record_form.position" placeholder="Select Designation" :options="positions" label="title" :reduce="positions => positions.title"></v-select>
                                     <span v-if="errors.position">
@@ -451,6 +460,7 @@ import Swal from 'sweetalert2'
                     'status': "Perm.",
                     'salary': null,
                     'station': {'id': null, 'positions': [], 'title': null},
+                    'province': 'Davao del Sur',
                     'branch': "Prov'l",
                     'pay': null,
                     'remark': null,
@@ -471,7 +481,91 @@ import Swal from 'sweetalert2'
                 retirement_date: null,
                 parse: "",
                 parsedArray: [],
-                overwrite: false
+                overwrite: false,
+                provinces: [
+                    'Abra',
+                    'Agusan del Norte',
+                    'Agusan del Sur',
+                    'Aklan',
+                    'Albay',
+                    'Antique',
+                    'Apayao',
+                    'Aurora',
+                    'Basilan',
+                    'Bataan',
+                    'Batanes',
+                    'Batangas',
+                    'Benguet',
+                    'Biliran',
+                    'Bohol',
+                    'Bukidnon',
+                    'Bulacan',
+                    'Cagayan',
+                    'Camarines Norte',
+                    'Camarines Sur',
+                    'Camiguin',
+                    'Capiz',
+                    'Catanduanes',
+                    'Cavite',
+                    'Cebu',
+                    'Cotabato',
+                    'Davao de Oro (Compostela Valley)',
+                    'Davao del Norte',
+                    'Davao del Sur',
+                    'Davao Occidental',
+                    'Davao Oriental',
+                    'Dinagat Islands',
+                    'Eastern Samar',
+                    'Guimaras',
+                    'Ifugao',
+                    'Ilocos Norte',
+                    'Ilocos Sur',
+                    'Iloilo',
+                    'Isabela',
+                    'Kalinga',
+                    'La Union',
+                    'Laguna',
+                    'Lanao del Norte',
+                    'Lanao del Sur',
+                    'Leyte',
+                    'Maguindanao del Norte',
+                    'Maguindanao del Sur',
+                    'Marinduque',
+                    'Masbate',
+                    'Misamis Occidental',
+                    'Misamis Oriental',
+                    'Mountain Province',
+                    'Negros Occidental',
+                    'Negros Oriental',
+                    'Northern Samar',
+                    'Nueva Ecija',
+                    'Nueva Vizcaya',
+                    'Occidental Mindoro',
+                    'Oriental Mindoro',
+                    'Palawan',
+                    'Pampanga',
+                    'Pangasinan',
+                    'Quezon',
+                    'Quirino',
+                    'Rizal',
+                    'Romblon',
+                    'Samar',
+                    'Sarangani',
+                    'Siquijor',
+                    'Sorsogon',
+                    'South Cotabato',
+                    'Southern Leyte',
+                    'Sultan Kudarat',
+                    'Sulu',
+                    'Surigao del Norte',
+                    'Surigao del Sur',
+                    'Tarlac',
+                    'Tawi-Tawi',
+                    'Zambales',
+                    'Zamboanga del Norte',
+                    'Zamboanga del Sur',
+                    'Zamboanga Sibugay'
+                ]
             }
         },
         watch:{
@@ -677,9 +771,11 @@ import Swal from 'sweetalert2'
                 this.record_form.reset()
                 var tempData = {}
                 Object.assign(tempData, data)
-                tempData.station = tempData.station.split(",")[0]
-                tempData.from = moment(data.from).format('YYYY-MM-DD')
-                tempData.to = moment(data.to).format('MM/DD/YYYY') == "Invalid date" ? "to date" : moment(data.to).format('YYYY-MM-DD')
+                tempData.station = tempData.station == null ? '' : tempData.station.split(",")[0]
+                if(data.from != null && data.to != null){
+                    tempData.from = moment(data.from).format('YYYY-MM-DD')
+                    tempData.to = moment(data.to).format('MM/DD/YYYY') == "Invalid date" ? "to date" : moment(data.to).format('YYYY-MM-DD')
+                }
                 Object.assign(this.record_form, tempData)
                 this.record_form.station = _.find(this.depts, {'title':tempData.station})
                 this.edit = true
@@ -852,7 +948,7 @@ import Swal from 'sweetalert2'
                 this.record_form.station = this.record_form.station.title
                 this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YYYY') : this.record_form.from
                 this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YYYY') : this.record_form.to
-                this.record_form.station = this.record_form.station + ", DS"
+                this.record_form.station = this.record_form.station == null ? '' : this.record_form.station + ', ' +this.record_form.province
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
                     toast.fire({
@@ -873,7 +969,7 @@ import Swal from 'sweetalert2'
             submitEmployeeServiceRecordUpdates: function()
             {
                 if(this.record_form.station != null){
-                    this.record_form.station = this.record_form.station.title + ", DS"
+                    this.record_form.station =  this.record_form.station.title + ', ' +this.record_form.province
                 }
                 this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YYYY') : this.record_form.from
                 this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YYYY') : this.record_form.to
