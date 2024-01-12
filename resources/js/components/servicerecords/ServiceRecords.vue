@@ -152,7 +152,7 @@
 
         <!-- Modal -->
         <div class="modal fade" id="recordModal" tabindex="-1" role="dialog" aria-labelledby="recordModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="recordModalLabel">Add Service Record</h5>
@@ -890,6 +890,7 @@ import Swal from 'sweetalert2'
             getPosition: function()
             {
                 if(this.record_form.station){
+                    this.record_form.position = null
                     axios.get('api/fetch_positions?id=' + this.record_form.station.id)
                     .then(({data}) => {
                         this.positions = data
