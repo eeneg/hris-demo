@@ -762,7 +762,8 @@
                                             </td>
                                             <td>
                                                 <div class="form-group input-group-sm" style="text-align: center; line-height: 16px;">
-                                                    <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('eligibility' ,index)"><i class="fas fa-trash"></i></a>
+                                                    <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('eligibility' ,index)"><i class="fas fa-trash"></i></a> <br>
+                                                    <a type="button" v-if="index + 1 == form.eligibilities.length" class="btn btn-primary btn-sm mt-2" name="add" id="add-btn" @click.prevent="addFields('eligibility')"><i class="fas fa-plus"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -783,8 +784,8 @@
                                             <th scope="col" class="text-center" style="width: 10%">Monthly Salary</th>
                                             <th scope="col" class="text-center" style="width: 10%">Salary Grade & Step</th>
                                             <th scope="col" class="text-center" style="width: 10%">Status Appointment</th>
-                                            <th scope="col" class="text-center" style="width: 10%">Gov't Service (YES/NO)</th>
-                                            <th scope="col" class="text-center" style="width: 5%;">
+                                            <th scope="col" class="text-center" style="width: 5%">Gov't Service (YES/NO)</th>
+                                            <th scope="col" class="text-center" style="width: 10%;">
                                                 <a type="button" class="btn btn-primary btn-sm" id="add-workex" @click.prevent="addFields('workexperience')"><i class="fas fa-plus"></i></a>
                                             </th>
                                         </tr>
@@ -850,8 +851,9 @@
                                             </td>
 
                                             <td>
-                                                <div class="form-group input-group-sm" style="text-align: center;">
-                                                    <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('workexperience', index)"><i class="fas fa-trash"></i></a>
+                                                <div class="form-group input-group-sm" style="text-align: center; line-height: 16px;">
+                                                    <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('workexperience', index)"><i class="fas fa-trash"></i></a> <br>
+                                                    <a type="button" v-if="index + 1 == form.workexperiences.length" class="btn btn-primary btn-sm mt-2" id="add-btn" @click.prevent="addFields('workexperience')"><i class="fas fa-plus"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -917,6 +919,7 @@
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center; display: grid;">
                                                 <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('voluntaryworks', index)"><i class="fas fa-trash"></i></a>
+                                                <a type="button" v-if="index + 1 == form.voluntaryworks.length" class="btn btn-primary btn-sm mt-2" id="add-btn" @click.prevent="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -980,7 +983,8 @@
 
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center;">
-                                                <button type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('trainingprograms', index)"><i class="fas fa-trash"></i></button>
+                                                <button type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('trainingprograms', index)"><i class="fas fa-trash"></i></button> <br>
+                                                <a type="button" v-if="index + 1 == form.trainingprograms.length" class="btn btn-primary btn-sm mt-2" id="add-workex" @click.prevent="addFields('trainingprograms')"><i class="fas fa-plus"></i></a>
                                             </div>
                                         </td>
                                     </tr>
