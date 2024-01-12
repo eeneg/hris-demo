@@ -919,6 +919,7 @@
                                         <td>
                                             <div class="form-group input-group-sm" style="text-align: center; display: grid;">
                                                 <a type="button" class="btn btn-danger remove-tr btn-sm" @click.prevent="deleteFields('voluntaryworks', index)"><i class="fas fa-trash"></i></a>
+                                                <a type="button" v-if="index + 1 == form.voluntaryworks.length" class="btn btn-primary btn-sm mt-2" id="add-btn" @click.prevent="addFields('voluntaryworks')"><i class="fas fa-plus"></i></a>
                                             </div>
                                         </td>
                                     </tr>
