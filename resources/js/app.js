@@ -30,8 +30,9 @@ import vSelect from "vue-select";
 Vue.component("v-select", vSelect);
 
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
-// Register components in your 'main.js'
+import VCalendar from 'v-calendar/lib/components/calendar.umd'
 Vue.component('v-date-picker', DatePicker)
+Vue.component('v-calendar', VCalendar)
 
 import VueFormWizard from 'vue-form-wizard'
 import {FormWizard, TabContent} from 'vue-form-wizard';
