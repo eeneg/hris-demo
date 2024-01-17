@@ -430,39 +430,7 @@
                         <div class="col-md-12 p-2" v-if="options == 3">
                             <label for="">Multiple Non-consecutive Dates</label>
                             <div class="bg-white p-2 w-full border rounded">
-                                <v-date-picker v-model.lazy="selected.date">
-                                    <template #default="{ inputValue, togglePopover, hidePopover }">
-                                        <div class="flex flex-wrap">
-                                        <button
-                                            v-if="date.date != null"
-                                            v-for="(date, i) in dates"
-                                            :key="i"
-                                            class="flex btn btn-info items-center bg-indigo-100 hover:bg-indigo-200 text-sm text-indigo-600 font-semibold h-8 px-2 m-1 rounded-lg border-2 border-transparent focus:border-indigo-600 focus:outline-none"
-                                            style=""
-                                            @click.stop="dateSelected($event, date, togglePopover)"
-                                            ref="button"
-                                        >
-                                            {{ format_date(date?.date) }}
-                                            <svg
-                                                class="w-4 h-4 text-gray-600 hover:text-indigo-600 ml-1 -mr-1"
-                                                style="height: 20px; width: 20px;"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                stroke-width="2"
-                                                @click.stop="removeDate(date, hidePopover)"
-                                            >
-                                            <path d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                        </button>
-                                        </div>
-                                    </template>
-                                </v-date-picker>
-                                <button
-                                    class="btn btn-primary"
-                                    @click.stop="addDate"
-                                    >
-                                    + Add Date
-                                </button>
+                                <v-calendar :attributes="attributes" @dayclick="onDayClick" />
                             </div>
                         </div>
                         <div class="col-md-12 p-2" v-if="options == 4">
@@ -667,7 +635,7 @@ import CreditsTable from './CreditsTable.vue'
                     start: null,
                     end: null,
                 },
-                dates:[],
+                days: [],
                 selected: {},
                 options: null,
                 retirement_date: null,
@@ -710,6 +678,15 @@ import CreditsTable from './CreditsTable.vue'
             {
                 return this.summary.length
             },
+            mdates() {
+                return this.days.map(day => day.date);
+            },
+            attributes() {
+                return this.mdates.map(date => ({
+                    highlight: true,
+                    dates: date,
+                }));
+            },
         },
         watch: {
             leave_summary: {
@@ -720,9 +697,26 @@ import CreditsTable from './CreditsTable.vue'
                     }
                 },
                 deep: true
+            },
+            days: {
+                handler: function(){
+                    console.log(this.days)
+                }
             }
         },
         methods: {
+
+            onDayClick(day) {
+                const idx = this.days.findIndex(d => d.id === day.id);
+                if (idx >= 0) {
+                    this.days.splice(idx, 1);
+                } else {
+                    this.days.push({
+                        id: day.id,
+                        date: day.date,
+                    });
+                }
+            },
 
             calculate_retirement_date: function(data)
             {
@@ -751,11 +745,11 @@ import CreditsTable from './CreditsTable.vue'
                         start: null,
                         end: null,
                     }
-                    this.dates = []
+                    this.days = []
                 }else if(this.options == 2)
                 {
                     this.period_date = null
-                    this.dates = []
+                    this.days = []
                     this.selected = []
                 }else if(this.options == 3){
                     this.period_date = null
@@ -764,23 +758,6 @@ import CreditsTable from './CreditsTable.vue'
                         end: null,
                     }
                 }
-            },
-
-            addDate() {
-                let date = moment().format("YYYY/MM/DD")
-
-                this.dates.push({
-                    date: date,
-                });
-                this.$nextTick(() => {
-                    const btn = this.$refs.button[this.$refs.button.length - 1];
-                    btn.click();
-                });
-            },
-
-            removeDate(date, hide) {
-                this.dates = this.dates.filter((d) => d !== date);
-                hide();
             },
 
             dateSelected(e, date, toggle) {
@@ -911,11 +888,10 @@ import CreditsTable from './CreditsTable.vue'
 
                 }else if(this.options == 3){
 
-                    if(this.dates.length == 0)
+                    if(this.days.length == 0)
                     {
                         this.period_validation = false
                     }else{
-                        this.dates = this.dates.filter(e => e.date !== null );
                         this.populate_period()
                         this.period_validation = true
                     }
@@ -942,7 +918,7 @@ import CreditsTable from './CreditsTable.vue'
                 }else if(this.options == 2){
                     period = this.range
                 }else if(this.options == 3){
-                    period = this.dates
+                    period = this.days
                 }else if(this.options == 4){
                     period = this.period_month
                 }
@@ -1212,7 +1188,7 @@ import CreditsTable from './CreditsTable.vue'
                             start: null,
                             end: null,
                         }
-                    this.dates = []
+                    this.days = []
                 }else if(data != null && data.mode == 1){
                     this.options = 1
                     this.period_date = data.data
@@ -1221,7 +1197,7 @@ import CreditsTable from './CreditsTable.vue'
                     this.range = data.data
                 }else if(data != null && data.mode == 3){
                     this.options = 3
-                    this.dates = data.data
+                    this.days = data.data
                 }else if(data != null && data.mode == 4){
                     this.options = 4
                     this.period_month = data.data
