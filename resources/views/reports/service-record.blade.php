@@ -18,11 +18,12 @@
         }
 
         function format_date($date){
-            if(strtotime($date) !== false)
-            {
-                return Carbon\Carbon::parse($date)->format('m-d-y');
-            }else{
+            if($date == "to date" || $date == ""){
                 return $date;
+            }else if(str_contains($date, '/')){
+                return Carbon\Carbon::parse($date)->format("m-d-y");
+            }else{
+                return Carbon\Carbon::createFromFormat("m-d-y", $date)->format("m-d-y");
             }
         }
 

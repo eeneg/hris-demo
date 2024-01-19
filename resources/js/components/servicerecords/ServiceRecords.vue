@@ -162,7 +162,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="form-group">
                                     <label for="station">Station/Place of Assignment</label>
                                     <v-select class="form-control form-control-border border-width-2" @input="getPosition()" v-model.lazy="record_form.station" placeholder="Select Station" :options="depts" :reduce="depts => depts" label="title"></v-select>
@@ -171,7 +171,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="form-group">
                                     <label for="station">Province</label>
                                     <v-select class="form-control form-control-border border-width-2" v-model.lazy="record_form.province" placeholder="Select Province" :options="provinces"></v-select>
