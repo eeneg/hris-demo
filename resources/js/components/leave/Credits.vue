@@ -430,7 +430,32 @@
                         <div class="col-md-12 p-2" v-if="options == 3">
                             <label for="">Multiple Non-consecutive Dates</label>
                             <div class="bg-white p-2 w-full border rounded">
-                                <v-calendar :attributes="attributes" @dayclick="onDayClick" />
+                                <!-- <v-calendar :attributes="attributes" @dayclick="onDayClick" ref="calendar"/> -->
+                                <div class="row mt-2">
+                                    <div class="col-sm-7">
+                                        <v-calendar :attributes="attributes" @dayclick="onDayClick" ref="calendar"/>
+                                        <button class="btn btn-primary mt-2" @click="vcalendar_move">Go to date</button>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="row overflow-auto">
+                                            <div class="col-sm-12">
+                                                <label for="month">Navigate</label>
+                                                <input type="month" id="month" v-model="vcalendar_date" class="form-control">
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <button class="btn btn-primary mt-2" @click="navigateVCalendar">Confirm</button>
+                                            </div>
+                                            <div class="col-sm-12" style="max-height: 200px;">
+                                                <div class="overflow-auto">
+                                                    <p class="mt-2">Selected Dates</p>
+                                                    <ul style="list-style-type: none;">
+                                                        <li v-for="(day, index) in days">{{ (index + 1) + ". " + format_vcalendar_date_list(day.date) }}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 p-2" v-if="options == 4">
@@ -650,7 +675,8 @@ import CreditsTable from './CreditsTable.vue'
                     'VLWOP',
                     'SLWOP'
                 ],
-                count_field_check: false
+                count_field_check: false,
+                vcalendar_date: null,
             }
         },
         components: {
@@ -1198,14 +1224,34 @@ import CreditsTable from './CreditsTable.vue'
                 }else if(data != null && data.mode == 3){
                     this.options = 3
                     this.days = data.data
+                    this.days = this.days.map(e => {
+                        return {id: moment(e.date).format("YYYY-MM-DD"), date: e.date}
+                    })
+                    this.days = this.days.sort(function(a,b){
+                        return new Date(b.date) - new Date(a.date);
+                    });
                 }else if(data != null && data.mode == 4){
                     this.options = 4
                     this.period_month = data.data
                 }
 
                 this.validation = true
+                var asd = $("#periodModal").modal('show');
+            },
 
-                $("#periodModal").modal('show');
+            format_vcalendar_date_list: function(date){
+                return moment(date).format("MM/DD/YYYY")
+            },
+
+            navigateVCalendar: function(){
+                const c = this.$refs.calendar
+                c.move(moment(this.vcalendar_date).format("MM/DD/YYYY"))
+            },
+
+            vcalendar_move: function(){
+                var l = this.days[this.days.length - 1].date
+                const c = this.$refs.calendar
+                c.move(moment(l).format("MM/DD/YYYY"))
             },
 
             particulars_input: function(index)
