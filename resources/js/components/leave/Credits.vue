@@ -1230,6 +1230,7 @@ import CreditsTable from './CreditsTable.vue'
                     this.days = this.days.sort(function(a,b){
                         return new Date(b.date) - new Date(a.date);
                     });
+                    this.vcalendar_date = null
                 }else if(data != null && data.mode == 4){
                     this.options = 4
                     this.period_month = data.data
