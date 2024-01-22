@@ -414,6 +414,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="m-0">Salary Grade</label>
+                                        <input v-model="employee_names_report.salary_grade" type="text" class="form-control" placeholder="eg. 15 or 12-15" onkeypress="return event.charCode != 32">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="m-0">Appointment Status</label>
+                                        <select v-model="employee_names_report.appointment_status" class="form-control form-control-border border-width-2">
+                                            <option value="All">All</option>
+                                            <option :value="item" v-for="(item, index) in appointment_status" :key="index">{{ item }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div v-if="report_type == 'Retirees of Specific Year'" class="col-md-6 pr-5">
                             <h3>Options</h3>
@@ -486,6 +503,7 @@
                 report_type: '',
                 personnel_complement: [],
                 reports_type: ['Positions with specific salary grade/s', 'Names & Position', 'Retirees of Specific Year', 'Birthday Celebrants', 'Personnel Complement', 'Raffle Ticket', 'Attendance Sheet'],
+                appointment_status: ['Permanent', 'Elected', 'Temporary', 'Co-terminous', 'Presidential Appointee'],
                 salary_grades_report: {
                     salary_grade: '',
                     status_vacant: true,
@@ -497,6 +515,8 @@
                     gender: 'All',
                     csc_level: 'All',
                     age_range: '',
+                    salary_grade: '',
+                    appointment_status: 'All',
                     male: 0,
                     female: 0
                 },
@@ -572,7 +592,25 @@
                 if (this.report_type == 'Names & Position') {
                     this.employee_names_report.male = 0
                     this.employee_names_report.female = 0
+
                     filtered = _.filter(this.plantilla_content, (content) => { 
+                        
+                        // Salary Grade Filter
+                        let grade = content.salaryproposed ? content.salaryproposed.grade : content.salaryauthorized.grade
+                        if (this.employee_names_report.salary_grade.includes('-')) {
+                            let grade_from = this.employee_names_report.salary_grade.split('-')[0]
+                            let grade_to = this.employee_names_report.salary_grade.split('-')[1]
+                            var is_eqv_salgrade = grade >= grade_from && grade <= grade_to
+                        } else {
+                            var is_eqv_salgrade = grade == this.employee_names_report.salary_grade
+                        }
+
+                        // Appointment Status Filter
+                        if (this.employee_names_report.appointment_status != 'All') {
+                            var is_eqv_appstat = this.employee_names_report.appointment_status == content.appointment_status
+                        } else {
+                            var is_eqv_appstat = true
+                        }
 
                         let age_input = this.employee_names_report.age_range
                         let age_res = true
@@ -586,10 +624,12 @@
                         }
 
                         let inc = content.name != 'VACANT'
+                            && is_eqv_salgrade && is_eqv_appstat
                             && (this.department != 'All' ? content.office == this.department : true)
                             && (this.employee_names_report.gender == 'All' ? true : (content.sex == this.employee_names_report.gender))
                             && (this.employee_names_report.csc_level != 'All' ? content.csc_level == this.employee_names_report.csc_level : true)
                             && age_res
+
                         if (inc) {
                             this.employee_names_report.male += content.sex == 'Male' ? 1 : 0
                             this.employee_names_report.female += content.sex == 'Female' ? 1 : 0
