@@ -204,43 +204,48 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <strong><i class="fas fa-user-friends mr-1"></i> Spouse</strong>
-                                <p v-if="form.familybackground.spouseSurname" class="text-muted">
-                                    <span v-if="form.familybackground.spouseSurname">
-                                        Name: {{ form.familybackground.spouseFirstname + ' ' + form.familybackground.spouseMiddlename + ' ' + form.familybackground.spouseSurname }}
-                                    </span>
-                                    <span v-if="form.familybackground.spouseOccupation">
-                                        <br>
-                                        Occupation: {{ form.familybackground.spouseOccupation }}
-                                    </span>
-                                    <span v-if="form.familybackground.spouseBussiness">
-                                        <br>
-                                        Employer/Business Name: {{ form.familybackground.spouseBussiness }}
-                                    </span>
-                                    <span v-if="form.familybackground.spouseBussinessAddress">
-                                        <br>
-                                        Employer/Business Address: {{ form.familybackground.spouseBussinessAddress }}
-                                    </span>
-                                    <span v-if="form.familybackground.spouseTelephone">
-                                        <br>
-                                        Telephone No.: {{ form.familybackground.spouseTelephone }}
-                                    </span>
-                                </p>
-                                <p class="text-muted" v-if="form.familybackground.spouseSurname == ''">No data</p>
-                                <hr>
+                                <div v-if="form.familybackground">
+                                    <p v-if="form.familybackground.spouseSurname" class="text-muted">
+                                        <span v-if="form.familybackground.spouseSurname">
+                                            Name: {{ form.familybackground.spouseFirstname + ' ' + form.familybackground.spouseMiddlename + ' ' + form.familybackground.spouseSurname }}
+                                        </span>
+                                        <span v-if="form.familybackground.spouseOccupation">
+                                            <br>
+                                            Occupation: {{ form.familybackground.spouseOccupation }}
+                                        </span>
+                                        <span v-if="form.familybackground.spouseBussiness">
+                                            <br>
+                                            Employer/Business Name: {{ form.familybackground.spouseBussiness }}
+                                        </span>
+                                        <span v-if="form.familybackground.spouseBussinessAddress">
+                                            <br>
+                                            Employer/Business Address: {{ form.familybackground.spouseBussinessAddress }}
+                                        </span>
+                                        <span v-if="form.familybackground.spouseTelephone">
+                                            <br>
+                                            Telephone No.: {{ form.familybackground.spouseTelephone }}
+                                        </span>
+                                    </p>
+                                    
+                                    <hr>
 
-                                <strong><i class="fas fa-male mr-1"></i> Father</strong>
-                                <p class="text-muted">
-                                    {{ form.familybackground.fatherFirstname + ' ' + form.familybackground.fatherMiddlename + ' ' + form.familybackground.fatherSurname }}
-                                </p>
-                                <hr>
+                                    <strong><i class="fas fa-male mr-1"></i> Father</strong>
+                                    <p class="text-muted">
+                                        {{ form.familybackground.fatherFirstname + ' ' + form.familybackground.fatherMiddlename + ' ' + form.familybackground.fatherSurname }}
+                                    </p>
+                                    <hr>
 
-                                <strong><i class="fas fa-female mr-1"></i> Mother</strong>
-                                <p class="text-muted">
-                                    <span v-if="form.familybackground.motherMaidenName">Maiden Name: {{ form.familybackground.motherMaidenName }}</span>
-                                    <br v-if="form.familybackground.motherMaidenName">
-                                    {{ form.familybackground.motherFirstname + ' ' + form.familybackground.motherMiddlename + ' ' + form.familybackground.motherSurname }}
-                                </p>
-                                <hr>
+                                    <strong><i class="fas fa-female mr-1"></i> Mother</strong>
+                                    <p class="text-muted">
+                                        <span v-if="form.familybackground.motherMaidenName">Maiden Name: {{ form.familybackground.motherMaidenName }}</span>
+                                        <br v-if="form.familybackground.motherMaidenName">
+                                        {{ form.familybackground.motherFirstname + ' ' + form.familybackground.motherMiddlename + ' ' + form.familybackground.motherSurname }}
+                                    </p>
+                                    <hr>
+                                </div>
+                                <div v-else>
+                                    <p class="text-muted">No data</p>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <strong><i class="fas fa-child mr-1"></i> Children</strong>
