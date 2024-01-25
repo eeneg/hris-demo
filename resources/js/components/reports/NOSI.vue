@@ -169,17 +169,37 @@
                             <h4>NOSI Lookup</h4>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group" style="margin-bottom: 0.3rem;">
-                                        <label style="font-weight: bold; margin: 0;">Department</label>
-                                        <v-select class="form-control form-control-border border-width-2" v-model="department" :options="departments" :getOptionLabel="department => department.address"></v-select>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group" style="margin-bottom: 0.3rem;">
+                                                <label style="font-weight: bold; margin: 0;">Department</label>
+                                                <v-select class="form-control form-control-border border-width-2" v-model="department" :options="departments" :getOptionLabel="department => department.address"></v-select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <label style="font-weight: bold; margin: 0;">Year</label>
-                                    <form class="form-inline" @submit.prevent="lookup()">
-                                        <input class="form-control form-control-border border-width-2 mr-2" type="number" v-model="nosi_year">
-                                        <button type="submit" class="btn btn-success" :disabled="!button_enable">View</button>
-                                        <button type="button" class="btn btn-primary ml-2" :disabled="lookup_data.length == 0" @click="print_report_lookup()"><i class="fas fa-print"></i> Print All</button>
+                                    <form @submit.prevent="lookup()">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label style="font-weight: bold; margin: 0;">Year</label>
+                                                    <input class="form-control form-control-border border-width-2 mr-2" type="number" v-model="nosi_year">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label style="font-weight: bold; margin: 0;">Month</label>
+                                                    <v-select class="form-control form-control-border border-width-2 mr-2" v-model="nosi_month" :options="months"></v-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-success" :disabled="!button_enable">View</button>
+                                                <button type="button" class="btn btn-primary ml-2" :disabled="lookup_data.length == 0" @click="print_report_lookup()"><i class="fas fa-print"></i> Print All</button>
+                                            </div>
+                                        </div>
                                     </form>
                                     <span class="text-primary d-block" style="font-size: 0.8rem;font-weight: bold;">Lookup results: {{ lookup_data.length }} records</span>
                                 </div>
@@ -301,11 +321,13 @@
         data() {
             return {
                 date_printed: moment(new Date()).format('YYYY-MM-DD'),
+                months: ["All", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 // date_of_appointment: moment(new Date()).format('YYYY-MM-DD'),
                 // date_of_effectivity: moment(this.date_of_appointment).add(1, "days"),
                 employee: {},
                 plantilla_content: [],
                 nosi_year: moment(new Date()).format('YYYY'),
+                nosi_month: "All",
                 lookup_data: [],
                 print_data: [],
                 button_enable: false,
@@ -365,7 +387,13 @@
                             var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.appointment_date).format('YYYY')) / 3);
                             var office = content.office == this.department.address
 
-                            if (included && divisible && office) {
+                            if (this.nosi_month != "All") {
+                                var month_inc = moment(content.appointment_date).format('MMMM') == this.nosi_month
+                            } else {
+                                var month_inc = true
+                            }
+
+                            if (included && divisible && office && month_inc) {
                                 this.lookup_data.push(content)
                             }
                         }
