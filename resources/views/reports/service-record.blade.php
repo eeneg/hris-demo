@@ -18,7 +18,7 @@
         }
 
         function format_date($date){
-            if($date == "to date" || $date == ""){
+            if($date == "to date" || $date == "" || strtotime($date) == false){
                 return $date;
             }else if(str_contains($date, '/')){
                 return Carbon\Carbon::parse($date)->format("m-d-y");
@@ -81,7 +81,7 @@
                     {{ $employee->surname }}
                 </th>
                 <th colspan="2" style="text-align: left; font-weight: bold; font-size: 10pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
-                    {{ $employee->firstname }}
+                    {{ $employee->firstname }} {{ $employee->nameextension }}
                 </th>
                 <th colspan="3" style="text-align: left; font-weight: bold; font-size: 10pt; border-bottom: solid 1px; text-transform:uppercase; text-align: center;">
                     {{ $employee->middlename }}
