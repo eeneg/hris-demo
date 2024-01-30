@@ -364,6 +364,7 @@
                         this.employee = first_employee;
 
                         this.departments = data.departments;
+                        this.departments.unshift({'address': 'All'})
                         var first_department = data.departments[0];
                         this.department = first_department;
 
@@ -385,7 +386,7 @@
                         if (this.nosi_year > moment(content.appointment_date).format('YYYY')) {
                             var divisible = (this.nosi_year - moment(content.appointment_date).format('YYYY')) % 3 == 0;
                             var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.appointment_date).format('YYYY')) / 3);
-                            var office = content.office == this.department.address
+                            var office = this.department.address == 'All' ? true : content.office == this.department.address
 
                             if (this.nosi_month != "All") {
                                 var month_inc = moment(content.appointment_date).format('MMMM') == this.nosi_month
