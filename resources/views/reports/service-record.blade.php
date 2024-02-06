@@ -265,6 +265,11 @@
                 <td colspan="2" style="font-size: 10pt;">
                     : {{ $sr->dateIssued }}
                 </td>
+                <td colspan="1" style="font-size: 10pt;">
+                </td>
+                <td colspan="6" style="font-size: 10pt; font-weight: bold;text-align: center;border-bottom: 1px solid;">
+                    {{ auth()->user()->name }}
+                </td>
             </tr>
             <tr>
                 <td colspan="2" style="font-size: 10pt; t">
@@ -272,6 +277,16 @@
                 </td>
                 <td colspan="2" style="font-size: 10pt;">
                     : {{ $sr->amount }}
+                </td>
+                <td colspan="1" style="font-size: 10pt;">
+                </td>
+                <td colspan="6" style="font-size: 10pt;text-align: center;">
+                    Prepared By
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12" style="font-size: 8pt;color:grey;padding-top:20px;">
+                    This is a System Generated Report
                 </td>
             </tr>
         </tfoot>
