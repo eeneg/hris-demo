@@ -1012,12 +1012,12 @@ import CreditsTable from './CreditsTable.vue'
             check_input: _.debounce(function()
             {
                 this.leave_summary.map((e) => {
-
                     if(e.period == null || e.period.mode == null || e.period.mode == '')
                     {
                         this.validation = false
+                    }else{
+                        this.validation = true
                     }
-
                 })
 
                 if(this.validation)

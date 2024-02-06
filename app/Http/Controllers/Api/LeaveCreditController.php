@@ -176,6 +176,7 @@ class LeaveCreditController extends Controller
                             ->orWhere('particulars->leave_type', 'SPL')
                             ->orWhere('particulars->leave_type', 'SP')
                             ->orWhere('particulars->leave_type', 'SOLO')
+                            ->orWhere('particulars->leave_type', 'UFL')
                             ->orWhere('particulars->leave_type', 'PL');
                         })
                         ->get()
