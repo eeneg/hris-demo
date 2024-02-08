@@ -589,7 +589,7 @@ import Swal from 'sweetalert2'
 
             formatDate: function(date)
             {
-                return moment(date).format('MM/DD/YYYY') == "Invalid date" ? date : moment(date).format('MM/DD/YYYY')
+                return moment(date, ['MM/DD/YYYY', 'MM-DD-YY']).format('MM/DD/YYYY') == "Invalid date" ? date : moment(date, ['MM/DD/YYYY', 'MM-DD-YY']).format('MM/DD/YYYY')
             },
 
             addModal: function()
@@ -605,6 +605,8 @@ import Swal from 'sweetalert2'
                 this.parsedArray = text.data.filter(function(e){
                     if(e.length > 1)
                     {
+                        e[0] = moment(e[0], ['MM/DD/YYYY', 'MM-DD-YY']).format('MM/DD/YYYY') == "Invalid date" ? e[0] : moment(e[0], ['MM/DD/YYYY', 'MM-DD-YY']).format('MM/DD/YYYY')
+                        e[1] = moment(e[1], ['MM/DD/YYYY', 'MM-DD-YY']).format('MM/DD/YYYY') == "Invalid date" ? e[1] : moment(e[1], ['MM/DD/YYYY', 'MM-DD-YY']).format('MM/DD/YYYY')
                         return e
                     }
                 })

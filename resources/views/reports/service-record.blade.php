@@ -18,10 +18,13 @@
         }
 
         function format_date($date){
-            if($date == "to date" || $date == "" || strtotime($date) == false){
+            if(str_contains($date, 'to') || $date == "" || strtotime($date) == false){
                 return $date;
             }else if(str_contains($date, '/')){
                 return Carbon\Carbon::parse($date)->format("m-d-y");
+            }else if(str_contains($date, 'O')){
+                $date = str_replace('O', '0', $date);
+                return Carbon\Carbon::createFromFormat("m-d-y", $date)->format("m-d-y");
             }else{
                 return Carbon\Carbon::createFromFormat("m-d-y", $date)->format("m-d-y");
             }
@@ -169,19 +172,19 @@
             <tr>
                 @foreach ($data as $key => $record)
                     <tr style="border: solid 1px" class="text-center">
-                        <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: bottom;padding:0%">{{ format_date($record->from) }}</td>
-                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ format_date($record->to) }}</td>
-                        <td style="border-right: 1px solid; text-align: center; padding: 0;font-size: 11px;vertical-align: bottom;">
+                        <td style="border-left: 1px solid; border-right: 1px solid; text-align: center; white-space: nowrap; font-size: 11px; vertical-align: middle;padding:0%">{{ format_date($record->from) }}</td>
+                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: middle;">{{ format_date($record->to) }}</td>
+                        <td style="border-right: 1px solid; text-align: center; padding: 0;font-size: 11px;vertical-align: middle;">
                             {{$record->position}}
                         </td>
-                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->status }}</td>
-                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->salary }}</td>
-                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->station }}</td>
-                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->branch }}</td>
-                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: bottom;">{{ $record->pay }}</td>
-                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->remark }}</td>
-                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->date }}</td>
-                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: bottom;">{{ $record->cause }}</td>
+                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: middle;">{{ $record->status }}</td>
+                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: middle;">{{ $record->salary }}</td>
+                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;">{{ $record->station }}</td>
+                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;">{{ $record->branch }}</td>
+                        <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: middle;">{{ $record->pay }}</td>
+                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;white-space: nowrap;">{{ $record->remark }}</td>
+                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;white-space: nowrap;">{{ $record->date }}</td>
+                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;white-space: nowrap;">{{ $record->cause }}</td>
                     </tr>
                 @endforeach
             </tr>
@@ -196,14 +199,14 @@
                 <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XXXXX</td>
                 <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XX</td>
                 <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XX</td>
-                <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XX</td>
-                <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XXX</td>
+                <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XXXX</td>
+                <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XXXX</td>
                 <td style="border-top: dashed 2px;border-right: dashed 2px; border-bottom: dashed 2px;text-align: center;">XXX</td>
             </tr>
             <tr >
                 <td style="border-left: 1px solid; border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">NOTE:</td>
-                <td colspan="2" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">{{ $sr->note }}</td>
+                <td colspan="2" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 10pt;">{{ $sr->note }}</td>
                 <td style="border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid"></td>
                 <td colspan="2" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">{{ $employee->retirement_date ? 'Date Retired:' : ''}}</td>
@@ -267,7 +270,7 @@
                 </td>
                 <td colspan="1" style="font-size: 10pt;">
                 </td>
-                <td colspan="6" style="font-size: 10pt; font-weight: bold;text-align: center;border-bottom: 1px solid;">
+                <td colspan="6" style="font-size: 8pt; font-weight: bold;text-align: center;">
                     {{ auth()->user()->name }}
                 </td>
             </tr>
@@ -280,7 +283,7 @@
                 </td>
                 <td colspan="1" style="font-size: 10pt;">
                 </td>
-                <td colspan="6" style="font-size: 10pt;text-align: center;">
+                <td colspan="6" style="font-size: 8pt;text-align: center;">
                     Prepared By
                 </td>
             </tr>
