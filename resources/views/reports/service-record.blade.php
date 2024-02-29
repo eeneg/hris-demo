@@ -206,8 +206,7 @@
             <tr >
                 <td style="border-left: 1px solid; border-bottom: 1px solid"></td>
                 <td style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">NOTE:</td>
-                <td colspan="2" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 10pt;">{{ $sr->note }}</td>
-                <td style="border-bottom: 1px solid"></td>
+                <td colspan="3" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 10pt;">{{ $sr->note }}</td>
                 <td style="border-bottom: 1px solid"></td>
                 <td colspan="2" style="border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">{{ $employee->retirement_date ? 'Date Retired:' : ''}}</td>
                 <td colspan="2" style="word-wrap: break-word;border-bottom: 1px solid; text-align: center; font-weight: bold;font-size: 13px;">{{ $employee->retirement_date ? $employee->retirement_date : '' }}</td>
@@ -268,10 +267,10 @@
                 <td colspan="2" style="font-size: 10pt;">
                     : {{ $sr->dateIssued }}
                 </td>
-                <td colspan="1" style="font-size: 10pt;">
+                <td colspan="2" style="font-size: 10pt;">
                 </td>
-                <td colspan="6" style="font-size: 8pt; font-weight: bold;text-align: center;">
-                    {{ auth()->user()->name }}
+                <td colspan="5" style="font-size: 8pt; font-weight: bold;">
+                    Prepared By:
                 </td>
             </tr>
             <tr>
@@ -283,8 +282,8 @@
                 </td>
                 <td colspan="1" style="font-size: 10pt;">
                 </td>
-                <td colspan="6" style="font-size: 8pt;text-align: center;">
-                    Prepared By
+                <td colspan="6" style="font-size: 8pt; font-weight: bold;text-align: center;">
+                    {{ auth()->user()->name }}
                 </td>
             </tr>
             <tr>
