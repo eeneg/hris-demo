@@ -178,6 +178,7 @@ class PersonalInformationController extends Controller
                 'firstname' => 'required|string',
                 'birthdate' => 'required|string',
                 'cellphone'  => 'required|string',
+                'civilstatus_others' => 'required_if_:civilstatus,Other/s',
                 'permanentaddresstable.house_lotNo' => 'required',
                 'permanentaddresstable.street' => 'required',
                 'permanentaddresstable.subdv_village' => 'required',
@@ -197,6 +198,10 @@ class PersonalInformationController extends Controller
             ]
         );
 
+        if($request->civilstatus == "Other/s"){
+            $request->merge(['civilstatus' => $request->civilstatus . '(-)' . $request->civilstatus_others]);
+        }
+
 
 
         if ($request->picture != null) {
@@ -205,6 +210,8 @@ class PersonalInformationController extends Controller
 
             $request->merge(['picture' => $name]);
         }
+
+        // dd($request->civilstatus);
 
         $pi = PersonalInformation::create($request->all());
 
@@ -219,12 +226,30 @@ class PersonalInformationController extends Controller
      */
     public function show($id)
     {
-        return PersonalInformation::with('plantillacontents')->findOrFail($id);
+        $pi = PersonalInformation::with('plantillacontents')->findOrFail($id);
+
+        $cs = explode('(-)', $pi->civilstatus);
+
+        if($cs[0] == "Other/s" && count($cs) > 1){
+            $pi->civilstatus = "Other/s";
+            $pi->civilstatus_others = $cs[1];
+        }
+
+        return $pi;
     }
 
     public function edit(Request $request)
     {
-        return PersonalInformation::findOrFail($request->id);
+        $pi = PersonalInformation::findOrFail($request->id);
+
+        $cs = explode('(-)', $pi->civilstatus);
+
+        if($cs[0] == "Other/s" && count($cs) > 1){
+            $pi->civilstatus = "Other/s";
+            $pi->civilstatus_others = $cs[1];
+        }
+
+        return $pi;
     }
 
     /**
@@ -241,6 +266,7 @@ class PersonalInformationController extends Controller
                 'firstname' => 'required|string',
                 'birthdate' => 'required|string',
                 'cellphone'  => 'required|string',
+                'civilstatus_others' => 'required_if_:civilstatus,Other/s',
                 'permanentaddresstable.house_lotNo' => 'required',
                 'permanentaddresstable.street' => 'required',
                 'permanentaddresstable.subdv_village' => 'required',
@@ -274,6 +300,10 @@ class PersonalInformationController extends Controller
             if (file_exists($userPhoto)) {
                 @unlink($userPhoto);
             }
+        }
+
+        if($request->civilstatus == "Other/s"){
+            $request->merge(['civilstatus' => $request->civilstatus . '(-)' . $request->civilstatus_others]);
         }
 
         $pi->update($request->all());

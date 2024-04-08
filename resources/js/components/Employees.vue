@@ -122,13 +122,13 @@
 
                                 <strong><i class="fas fa-info-circle mr-1"></i> Sex / Civil Status / Citizenship</strong>
                                 <p class="text-muted">
-                                    {{ form.sex + ' / ' + form.civilstatus + ' / ' + form.citizenship }}
+                                    {{ form.sex || 'None' }} / {{ form.civilstatus || 'None' }} {{ form.civilstatus_others }} / {{ form.citizenship || 'None' }}
                                 </p>
                                 <hr>
 
                                 <strong><i class="fas fa-balance-scale mr-1"></i> Height(m) / Weight(kg) / Bloodtype</strong>
                                 <p class="text-muted">
-                                    {{ form.height + ' / ' + form.weight + ' / ' + form.bloodtype }}
+                                    {{ form.height || 'None' }} / {{ form.weight || 'None' }} / {{ form.bloodtype || 'None' }}
                                 </p>
                                 <hr>
 
@@ -226,12 +226,12 @@
                                             Telephone No.: {{ form.familybackground.spouseTelephone }}
                                         </span>
                                     </p>
-                                    
+
                                     <hr>
 
                                     <strong><i class="fas fa-male mr-1"></i> Father</strong>
                                     <p class="text-muted">
-                                        {{ form.familybackground.fatherFirstname + ' ' + form.familybackground.fatherMiddlename + ' ' + form.familybackground.fatherSurname }}
+                                        {{ form.familybackground.fatherFirstname }} {{ form.familybackground.fatherMiddlename }} {{ form.familybackground.fatherSurname }}
                                     </p>
                                     <hr>
 
@@ -239,7 +239,7 @@
                                     <p class="text-muted">
                                         <span v-if="form.familybackground.motherMaidenName">Maiden Name: {{ form.familybackground.motherMaidenName }}</span>
                                         <br v-if="form.familybackground.motherMaidenName">
-                                        {{ form.familybackground.motherFirstname + ' ' + form.familybackground.motherMiddlename + ' ' + form.familybackground.motherSurname }}
+                                        {{ form.familybackground.motherFirstname }} {{ form.familybackground.motherMiddlename }} {{ form.familybackground.motherSurname }}
                                     </p>
                                     <hr>
                                 </div>
@@ -827,6 +827,7 @@
                     'birthplace': '',
                     'sex': '',
                     'civilstatus': '',
+                    'civilstatus_others': '',
                     'citizenship': '',
                     'height': '',
                     'weight': '',
@@ -1068,11 +1069,68 @@
 
                 // this.focusBarcode();
                 axios.get('api/personalinformation/' + id)
-                    .then(response => {
-                        if (response.data != '') {
+                    .then(({data}) => {
+                        if (data.data != '') {
+                            this.form.reset()
                             this.form.id = id;
                             this.mode = true;
-                            this.form.fill(response.data);
+                            if(!data.familybackground)
+                            {
+                                data.familybackground = {}
+                            }
+
+                            if(!data.educationalbackground)
+                            {
+                                data.educationalbackground = {}
+                            }
+
+                            if(!data.pdsquestion)
+                            {
+                                data.pdsquestion = {}
+                            }
+
+                            if(!data.residentialaddresstable)
+                            {
+                                data.residentialaddresstable = {}
+                            }
+
+                            if(!data.permanentaddresstable)
+                            {
+                                data.permanentaddresstable = {}
+                            }
+
+                            Object.assign(this.form, data)
+                            // this.form.fill(data)
+
+                            if(this.form.children.length == 0)
+                            {
+                                this.form.children = [{}]
+                            }
+
+                            if(this.form.eligibilities.length == 0)
+                            {
+                                this.form.eligibilities = [{}]
+                            }
+
+                            if(this.form.workexperiences.length == 0)
+                            {
+                                this.form.workexperiences = [{}]
+                            }
+
+                            if(this.form.voluntaryworks.length == 0)
+                            {
+                                this.form.voluntaryworks = [{}]
+                            }
+
+                            if(this.form.trainingprograms.length == 0)
+                            {
+                                this.form.trainingprograms = [{}]
+                            }
+
+                            if(this.form.otherinfos.length == 0)
+                            {
+                                this.form.otherinfos = [{}]
+                            }
                             $('#viewProfileModal').modal('show');
                         }
                     }).catch(error => {
