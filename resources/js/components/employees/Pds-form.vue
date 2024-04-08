@@ -98,6 +98,15 @@
                                         <option>Other/s</option>
                                     </select>
                                 </div>
+                                <div class="col-md-4" v-if="form.civilstatus == 'Other/s'">
+                                    <div>
+                                        <label for="birthplace" style="line-height: 10px;">Please Specify:</label>
+                                    </div>
+                                        <input type="text" name="civilstatus_others" class="form-control form-control-border border-width-2" id="civilstatus_others" v-model="form.civilstatus_others">
+                                        <span>
+                                            <strong class="text-danger" v-if="errors.has('civilstatus_others')">Field Required</strong>
+                                        </span>
+                                </div>
                             </div>
 
                             <div class="form-group" style="display: flex;">
@@ -1615,6 +1624,7 @@ export default {
                     'birthplace': '',
                     'sex': '',
                     'civilstatus': '',
+                    'civilstatus_others': '',
                     'citizenship': '',
                     'height': '',
                     'weight': '',
@@ -2168,6 +2178,10 @@ export default {
 
             this.oldData = JSON.parse(JSON.stringify(data))
         },
+
+        civilstatus_change() {
+            this.form.civilstatus_others = ''
+        }
 
     },
     created()
