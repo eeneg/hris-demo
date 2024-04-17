@@ -7,7 +7,48 @@
 
         <title>Laravel</title>
 
-        <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
+       <style>
+            .container-fluid {
+                margin-left:auto;
+                margin-right:auto;
+                width:100%
+            }
+
+            .table{
+                color:#111827;
+                margin-bottom:1rem;
+                width:100%;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                padding: 0;
+            }
+            .table td,.table th{
+                border-top:1px solid #e5e7eb;
+                padding:.75rem;
+                vertical-align:top
+            }
+            .table thead th{
+                border-bottom:2px solid #e5e7eb;
+                vertical-align:bottom
+            }
+            .table tbody+tbody{
+                border-top:2px solid #e5e7eb
+            }
+            .table-bordered,.table-bordered td,.table-bordered th{
+                border:1px solid #e5e7eb
+            }
+            .table-bordered thead td,.table-bordered thead th{
+                border-bottom-width:2px
+            }
+            .table-borderless tbody+tbody,.table-borderless td,.table-borderless th,.table-borderless thead th{
+                border:0
+            }
+            .table-striped tbody tr:nth-of-type(odd){
+                background-color:rgba(0,0,0,.05)
+            }
+            .text-center{
+                text-align:center!important
+            }
+       </style>
 
     </head>
     <body style="background-color: white">
