@@ -15,7 +15,7 @@ class PlantillaContent extends Auditable
     protected $table = 'plantilla_contents';
 
     protected $with = [
-        'plantilla', 'salaryauthorized', 'salaryproposed', 'position',
+        'plantilla', 'salaryauthorized', 'salaryproposed', 'position'
     ];
 
     protected $fillable = [

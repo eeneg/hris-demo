@@ -49,6 +49,13 @@ class DepartmentController extends Controller
         return new DepartmentsAndPositionsResource($departments);
     }
 
+    public function fetch_plantilla_depts(Request $request)
+    {
+        $departments = PlantillaDept::where('plantilla_id', $request->selectedPlantilla)->orderBy('order_number')->get();
+        
+        return new SortedDepartmentsResource($departments);
+    }
+
     public function fetch_positions(Request $request)
     {
         $positions = Position::where('department_id', $request->id)->orderBy('title')->get();

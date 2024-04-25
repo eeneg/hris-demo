@@ -25,7 +25,7 @@ class PersonalInformation extends Authenticatable
 
     protected $with = [
         'barcode', 'familybackground', 'residentialaddresstable', 'permanentaddresstable', 'children', 'educationalbackground', 'eligibilities',
-        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion',
+        'otherinfos', 'workexperiences', 'voluntaryworks', 'trainingprograms', 'pdsquestion'
     ];
 
     /**
@@ -48,6 +48,11 @@ class PersonalInformation extends Authenticatable
     public function barcode()
     {
         return $this->hasOne('App\Barcode', 'personal_information_id');
+    }
+
+    public function benefitschedule()
+    {
+        return $this->hasOne('App\BenefitSchedule', 'personal_information_id');
     }
 
     public function workexperiences()
@@ -133,6 +138,11 @@ class PersonalInformation extends Authenticatable
     public function permanentaddresstable()
     {
         return $this->hasOne('App\PermanentAddress', 'personal_information_id');
+    }
+
+    public function getlatestplantillacontent()
+    {
+        return $this->plantillacontents()->latest()->first();
     }
 
     public function getFullNameAttribute()

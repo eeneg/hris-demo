@@ -134,6 +134,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <div class="form-group" style="margin-bottom: 0.3rem;">
+                                    <label style="font-weight: bold; margin: 0;">NOSI Schedule</label>
+                                    <input class="form-control form-control-border border-width-2" type="date" v-model="form.nosi_schedule" name="nosi_schedule">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group" style="margin-bottom: 0.3rem;">
+                                    <label style="font-weight: bold; margin: 0;">Loyalty Schedule</label>
+                                    <input class="form-control form-control-border border-width-2" type="date" v-model="form.loyalty_schedule" name="loyalty_schedule">
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- SEPARATION -->
                         <div v-if="show_separation">
@@ -199,13 +213,16 @@
                     'level': 'Key Positions',
                     'original_appointment': '',
                     'last_promotion': '',
+                    'nosi_schedule': '',
+                    'loyalty_schedule': '',
                     'appointment_status': '',
                     'order_number': '',
                     'department_id': '',
                     'department_new': '',
                     'csc_level': '',
                     'mode': null,
-                    'effectivity_date': null
+                    'effectivity_date': null,
+                    'selectedPlantilla': null
                 }),
             }
         },
@@ -219,7 +236,8 @@
                 department: {},
                 departments: [],
                 plantillacontent: {},
-                order_number: 0
+                order_number: 0,
+                selectedPlantilla: {}
             }
         },
         computed: {
@@ -250,6 +268,8 @@
                     this.form.level = planCont.level;
                     this.form.original_appointment = planCont.original_appointment;
                     this.form.last_promotion = planCont.last_promotion;
+                    this.form.nosi_schedule = planCont.nosi_schedule;
+                    this.form.loyalty_schedule = planCont.loyalty_schedule;
                     this.form.appointment_status = planCont.appointment_status;
                     this.form.order_number = planCont.order_number;
                     this.form.department_id = newData.department.id;
@@ -257,6 +277,7 @@
                     this.form.csc_level = planCont.csc_level;
                 } else {
                     this.form.order_number = newData.order_number + 1;
+                    this.form.selectedPlantilla = newData.selectedPlantilla;
                 }
             }
         },
@@ -266,7 +287,7 @@
                 this.loading = true;
                 this.form.department_id = this.create_data.department.id;
                 if (this.form.id == '') {
-                    this.form.post('api/plantillacontent')
+                    this.form.post('api/plantillacontent', {selectedPlantilla: this.selectedPlantilla})
                         .then(() => {
                             Swal.fire({
                                 icon: 'success',
