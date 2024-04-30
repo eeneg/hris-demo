@@ -10,10 +10,10 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <div class="d-inline-flex">
-                        <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Annual Plantilla {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</h2>
-                        <a href="" @click.prevent="showEditPlantillaModal()" class="blue ml-2"><i class="far fa-edit"></i></a>
+                        <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Annual Plantilla {{ plantilla_title != '' ? plantilla_title : (this.$parent.settings.plantilla && this.$parent.settings.plantilla.year) }}</h2>
+                        <!-- <a href="" @click.prevent="showEditPlantillaModal()" class="blue ml-2"><i class="far fa-edit"></i></a> -->
                     </div>
-                    <p style="margin: 0;">Date Approved: <span>{{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.date_approved }}</span> </p>
+                    <p style="margin: 0;">Date Approved: <span>{{ plantilla_title != '' ? selectedPlantilla.date_approved : this.$parent.settings.plantilla && this.$parent.settings.plantilla.date_approved }}</span> </p>
                     <div class="row">
                         <div class="col-md-5 mt-1">
                             <label style="margin: 0;font-weight: normal;">Select Department</label>
@@ -34,8 +34,11 @@
                                 <div class="dropdown-menu" role="menu" style="">
                                     <a class="dropdown-item" href="#" @click="createItemModal()">Create New Item</a>
                                     <a class="dropdown-item" href="#" @click="createPlantillaModal()">Create New Plantilla</a>
+                                    <a class="dropdown-item" href="#" @click="showEditPlantillaModal()">Edit Plantilla Information</a>
                                     <a class="dropdown-item" href="#" @click="duplicatePlantillaModal()">Duplicate Plantilla</a>
                                     <a class="dropdown-item" href="#" @click="createPlantillaModal()">Add Department</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" @click.prevent="selectPlantilla()">Select Plantilla</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" @click.prevent="plantillaReport()">Print Report</a>
                                 </div>
@@ -63,12 +66,14 @@
                                 <th rowspan="3">Date of Birth</th>
                                 <th rowspan="3">Date of<br>Original<br>Appointment</th>
                                 <th rowspan="3">Date of Last<br>Promotion/<br>Appointment</th>
+                                <th rowspan="3">NOSI Schedule</th>
+                                <th rowspan="3">Loyalty Schedule</th>
                                 <th rowspan="3">Status</th>
                                 <th rowspan="3"></th>
                             </tr>
                             <tr>
                                 <th colspan="2" style="font-weight: normal;">Rate/Annum {{ this.previousPlantilla }}</th>
-                                <th colspan="2" style="font-weight: normal;">Rate/Annum {{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }}</th>
+                                <th colspan="2" style="font-weight: normal;">Rate/Annum {{ plantilla_title != '' ? plantilla_title : (this.$parent.settings.plantilla && this.$parent.settings.plantilla.year) }}</th>
                             </tr>
                             <tr>
                                 <th style="font-weight: normal;">Old</th>
@@ -103,9 +108,11 @@
                                 <td>{{ record.birthdate }}</td>
                                 <td>{{ record.original_appointment }}</td>
                                 <td>{{ record.last_promotion }}</td>
+                                <td>{{ record.nosi_schedule }}</td>
+                                <td>{{ record.loyalty_schedule }}</td>
                                 <td>{{ record.appointment_status }}</td>
                                 <td style="text-align: center;"><a href="#" @click.prevent="updateItemModal(record)"><i class="fas fa-edit"></i></a></td>
-                                <!-- <td style="text-align: center;"><a href="#" @click.prevent="record.new_number ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.new_number ?'fas fa-edit' : 'fas fa-history'"></i></a></td> -->
+                                <!-- <td style="text-align: center;"><a href="#" @click.prevent="record.salaryproposed ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.salaryproposed ?'fas fa-edit' : 'fas fa-history'"></i></a></td> -->
                             </tr>
                         </tbody>
                     </table>
@@ -278,6 +285,9 @@
                 create_plantilla_modal_key: 0,
                 create_item_modal_key: 1000,
                 duplicate_plantilla_modal_key: 2000,
+                all_plantilla: [],
+                selectedPlantilla: {},
+                plantilla_title: '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
             }
         },
         methods: {
@@ -373,6 +383,7 @@
                         this.create_data = _.assign({department: this.selectedDepartment}, data);
                         this.create_data = _.assign({plantillacontent: null}, this.create_data);
                         this.create_data = _.assign({order_number: this.records.length}, this.create_data);
+                        this.create_data = _.assign({selectedPlantilla: this.selectedPlantilla}, this.create_data);
                         $('#item-form-modal').modal('show');
                     })
                     .catch(error => {
@@ -398,7 +409,7 @@
                     .then(({data}) => {
                         Swal.fire({
                             title: 'Revert abolished item?',
-                            text: record.position + ' (Item No. ' + data.data.new_number + ')',
+                            text: record.position,
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -454,34 +465,34 @@
                     }
                 });
             },
-            abolishItem() {
-                $('#plantilla-content-modal').modal('hide');
-                Swal.fire({
-                    title: 'Are you sure you want to abolish this item?',
-                    text: this.form.original_position + ' (Item No. ' + this.form.original_item_number + ')',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.$Progress.start();
-                        this.form.put('api/plantillacontentabolish')
-                            .then(() => {
-                                this.loadContents();
-                                toast.fire({
-                                    icon: 'success',
-                                    title: 'Record updated successfully'
-                                });
-                                this.$Progress.finish();
-                            })
-                            .catch(() => {
-                                this.$Progress.fail();
-                            });
-                    }
-                });
-            },
+            // abolishItem() {
+            //     $('#plantilla-content-modal').modal('hide');
+            //     Swal.fire({
+            //         title: 'Are you sure you want to abolish this item?',
+            //         text: this.form.original_position + ' (Item No. ' + this.form.original_item_number + ')',
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Proceed'
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             this.$Progress.start();
+            //             this.form.put('api/plantillacontentabolish')
+            //                 .then(() => {
+            //                     this.loadContents();
+            //                     toast.fire({
+            //                         icon: 'success',
+            //                         title: 'Record updated successfully'
+            //                     });
+            //                     this.$Progress.finish();
+            //                 })
+            //                 .catch(() => {
+            //                     this.$Progress.fail();
+            //                 });
+            //         }
+            //     });
+            // },
             getDifference(record) {
                 let difference = ((record.salaryproposed !== null ? record.salaryproposed.amount * 12 : 0) - (record.salaryauthorized !== null ? record.salaryauthorized.amount * 12 : 0));
                 if (record.working_time == 'Part-time') {
@@ -489,8 +500,8 @@
                 }
                 return difference < 0 ? '(' + (difference * -1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')' : difference.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             },
-            getPreviousPlantilla() {
-                axios.post('api/previousplantilla', {current: this.$parent.settings.plantilla.year})
+            getPreviousPlantilla(current) {
+                axios.post('api/previousplantilla', {current: current ? current : this.$parent.settings.plantilla.year})
                     .then(({data}) => {
                         this.previousPlantilla = data.year;
                         this.prevSalaryauthorized = data.salaryauthorizedschedule;
@@ -523,6 +534,33 @@
                         });
                 }
             },
+            async selectPlantilla() {
+                let options = {};
+                this.all_plantilla.forEach((plantilla) => {
+                    options[plantilla.id] = plantilla.year;
+                });
+                const { value: plantilla } = await Swal.fire({
+                    title: 'Select Plantilla',
+                    input: 'select',
+                    inputOptions: {
+                        "Annual Plantilla": options
+                    },
+                    inputPlaceholder: "Select a specific plantilla",
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'You need to choose a plantilla!'
+                        }
+                    }
+                })
+
+                if (plantilla) {
+                    this.plantilla_title = this.all_plantilla.find(p => p.id == plantilla).year;
+                    this.selectedPlantilla = this.all_plantilla.find(p => p.id == plantilla);
+                    this.getDepartmentsFromSelectedPlantilla(plantilla);
+                    this.getPreviousPlantilla(this.plantilla_title);
+                }
+            },
             async plantillaReport() {
                 const { value: report } = await Swal.fire({
                     title: 'Select report',
@@ -544,6 +582,26 @@
                     
                     // wal.fire({ html: `You selected: ${report}` })
                 }
+            },
+            loadAllPlantilla() {
+                axios.get('api/plantilla')
+                    .then(({data}) => {
+                        this.all_plantilla = data;
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
+            },
+            getDepartmentsFromSelectedPlantilla(plantilla_id) {
+                axios.get('api/fetch_plantilla_depts?selectedPlantilla=' + plantilla_id)
+                    .then(({data}) => {
+                        this.departments = data.data;
+                        this.selectedDepartment = data.data[0];
+                        this.loadContents();
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.message);
+                    });
             },
             loadDepartments() {
                 axios.get('api/department')
@@ -590,7 +648,7 @@
             },
             loadContents(e) {
                 this.$Progress.start();
-                axios.post('api/plantilladepartmentcontent', {department: this.selectedDepartment})
+                axios.post('api/plantilladepartmentcontent', {department: this.selectedDepartment, selectedPlantilla: this.selectedPlantilla.id})
                     .then(({data}) => {
                         this.records = data.data;
                         if (data.data.length > 0) {
@@ -645,10 +703,10 @@
             this.$Progress.start();
             this.loadDepartments();
             this.loadSchedules();
+            this.loadAllPlantilla();
             this.$Progress.finish();
         },
         mounted() {
-            
             // console.log('Component mounted.')
         }
     }

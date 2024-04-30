@@ -134,6 +134,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mb-4" v-if="form.personal_information_id != null">
+                            <div class="col-sm-3">
+                                <div class="form-group" style="margin-bottom: 0.3rem;">
+                                    <label style="font-weight: bold; margin: 0;">NOSI Schedule</label>
+                                    <input class="form-control form-control-border border-width-2" type="date" v-model="form.nosi_schedule" name="nosi_schedule">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group" style="margin-bottom: 0.3rem;">
+                                    <label style="font-weight: bold; margin: 0;">Loyalty Schedule</label>
+                                    <input class="form-control form-control-border border-width-2" type="date" v-model="form.loyalty_schedule" name="loyalty_schedule">
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- SEPARATION -->
                         <div v-if="show_separation">
@@ -168,6 +182,7 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                         <button type="submit" class="btn btn-primary" style="float: left;" :disabled="loading">Save Item</button>
+                        <button @click="abolishItem()" type="button" v-if="form.id != '' && form.personal_information_id == null" class="btn btn-danger" style="float: left;" :disabled="loading">Abolish Item</button>
                     </div>
                 </form>
             </div>
@@ -199,13 +214,16 @@
                     'level': 'Key Positions',
                     'original_appointment': '',
                     'last_promotion': '',
+                    'nosi_schedule': '',
+                    'loyalty_schedule': '',
                     'appointment_status': '',
                     'order_number': '',
                     'department_id': '',
                     'department_new': '',
                     'csc_level': '',
                     'mode': null,
-                    'effectivity_date': null
+                    'effectivity_date': null,
+                    'selectedPlantilla': null
                 }),
             }
         },
@@ -219,7 +237,8 @@
                 department: {},
                 departments: [],
                 plantillacontent: {},
-                order_number: 0
+                order_number: 0,
+                selectedPlantilla: {}
             }
         },
         computed: {
@@ -250,6 +269,8 @@
                     this.form.level = planCont.level;
                     this.form.original_appointment = planCont.original_appointment;
                     this.form.last_promotion = planCont.last_promotion;
+                    this.form.nosi_schedule = planCont.nosi_schedule;
+                    this.form.loyalty_schedule = planCont.loyalty_schedule;
                     this.form.appointment_status = planCont.appointment_status;
                     this.form.order_number = planCont.order_number;
                     this.form.department_id = newData.department.id;
@@ -257,6 +278,7 @@
                     this.form.csc_level = planCont.csc_level;
                 } else {
                     this.form.order_number = newData.order_number + 1;
+                    this.form.selectedPlantilla = newData.selectedPlantilla;
                 }
             }
         },
@@ -266,7 +288,7 @@
                 this.loading = true;
                 this.form.department_id = this.create_data.department.id;
                 if (this.form.id == '') {
-                    this.form.post('api/plantillacontent')
+                    this.form.post('api/plantillacontent', {selectedPlantilla: this.selectedPlantilla})
                         .then(() => {
                             Swal.fire({
                                 icon: 'success',
@@ -312,6 +334,34 @@
                     .catch(error => {
                         console.log(error.response.data.message);
                     });
+            },
+            abolishItem() {
+                $('#item-form-modal').modal('hide');
+                Swal.fire({
+                    title: 'Are you sure you want to abolish this item?',
+                    text: this.form.position.title + ' (Item No. ' + (this.form.new_number ? this.form.new_number : this.form.old_number) + ')',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#17a2b8',
+                    cancelButtonColor: '#979797',
+                    confirmButtonText: 'Proceed'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$Progress.start();
+                        this.form.put('api/plantillacontentabolish')
+                            .then(() => {
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Record updated successfully'
+                                });
+                                this.$emit('exit', 'sync');
+                                this.$Progress.finish();
+                            })
+                            .catch(() => {
+                                this.$Progress.fail();
+                            });
+                    }
+                });
             },
             selectPos(e) {
                 

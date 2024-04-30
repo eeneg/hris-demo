@@ -140,14 +140,14 @@
                                    @endcan
 								</ul>
                             </li>
-							<li class="nav-item">
+                            @endcannot
+							@can('isAdministratorORAuthor')
+                            <li class="nav-item">
 								<router-link to="/dtr" exact class="nav-link">
 									<i class="nav-icon fas fa-fingerprint purple"></i>
 									<p>DTR</p>
 								</router-link>
 							</li>
-                            @endcannot
-							@can('isAdministratorORAuthor')
 							<li class="nav-item has-treeview">
 								<a href="" class="nav-link">
 									<i class="nav-icon fas fa-book orange"></i>

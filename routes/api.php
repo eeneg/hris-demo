@@ -104,6 +104,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('complete_depts', 'Api\DepartmentController@complete_depts');
     Route::get('fetch_depts', 'Api\DepartmentController@fetch_depts');
+    Route::get('fetch_plantilla_depts', 'Api\DepartmentController@fetch_plantilla_depts');
     Route::get('fetch_positions', 'Api\DepartmentController@fetch_positions');
     Route::post('store_position', 'Api\DepartmentController@store_position');
     Route::patch('update_position/{id}', 'Api\DepartmentController@update_position');

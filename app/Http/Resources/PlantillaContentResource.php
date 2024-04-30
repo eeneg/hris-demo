@@ -35,7 +35,9 @@ class PlantillaContentResource extends ResourceCollection
                 'birthdate' => $item->personalinformation ? $item->personalinformation->birthdate : '',
                 'salaryauthorized' => $item->salaryauthorized,
                 'salaryproposed' => $item->salaryproposed,
-                'csc_level' => $item->csc_level
+                'csc_level' => $item->csc_level,
+                'nosi_schedule' => $item->personalinformation ? ($item->personalinformation->benefitschedule ? $item->personalinformation->benefitschedule->nosi : '') : '',
+                'loyalty_schedule' => $item->personalinformation ? ($item->personalinformation->benefitschedule ? $item->personalinformation->benefitschedule->loyalty : '') : '',
             ];
         });
     }
