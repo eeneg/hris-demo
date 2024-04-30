@@ -134,7 +134,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-4">
+                        <div class="row mb-4" v-if="form.personal_information_id != null">
                             <div class="col-sm-3">
                                 <div class="form-group" style="margin-bottom: 0.3rem;">
                                     <label style="font-weight: bold; margin: 0;">NOSI Schedule</label>
@@ -182,6 +182,7 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                         <button type="submit" class="btn btn-primary" style="float: left;" :disabled="loading">Save Item</button>
+                        <button @click="abolishItem()" type="button" v-if="form.id != '' && form.personal_information_id == null" class="btn btn-danger" style="float: left;" :disabled="loading">Abolish Item</button>
                     </div>
                 </form>
             </div>
@@ -333,6 +334,34 @@
                     .catch(error => {
                         console.log(error.response.data.message);
                     });
+            },
+            abolishItem() {
+                $('#item-form-modal').modal('hide');
+                Swal.fire({
+                    title: 'Are you sure you want to abolish this item?',
+                    text: this.form.position.title + ' (Item No. ' + (this.form.new_number ? this.form.new_number : this.form.old_number) + ')',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#17a2b8',
+                    cancelButtonColor: '#979797',
+                    confirmButtonText: 'Proceed'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$Progress.start();
+                        this.form.put('api/plantillacontentabolish')
+                            .then(() => {
+                                toast.fire({
+                                    icon: 'success',
+                                    title: 'Record updated successfully'
+                                });
+                                this.$emit('exit', 'sync');
+                                this.$Progress.finish();
+                            })
+                            .catch(() => {
+                                this.$Progress.fail();
+                            });
+                    }
+                });
             },
             selectPos(e) {
                 

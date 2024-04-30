@@ -285,8 +285,6 @@ class PlantillaContentController extends Controller
     public function plantillacontentabolish(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');
-        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
         $plantillacontent = PlantillaContent::findOrFail($request->id);
 
@@ -301,7 +299,7 @@ class PlantillaContentController extends Controller
         $plantillacontent->salary_grade_prop_id = null;
         $plantillacontent->save();
 
-        $toUpdate = PlantillaContent::where('plantilla_id', $plantilla->id)->where('order_number', '>', $plantillacontent->order_number)->get();
+        $toUpdate = PlantillaContent::where('plantilla_id', $plantillacontent->plantilla->id)->where('order_number', '>', $plantillacontent->order_number)->get();
         foreach ($toUpdate as $key => $value) {
             $value->new_number = $value->new_number != '' ? (intval($value->new_number) - 1) : $value->new_number;
             $value->save();

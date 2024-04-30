@@ -112,7 +112,7 @@
                                 <td>{{ record.loyalty_schedule }}</td>
                                 <td>{{ record.appointment_status }}</td>
                                 <td style="text-align: center;"><a href="#" @click.prevent="updateItemModal(record)"><i class="fas fa-edit"></i></a></td>
-                                <!-- <td style="text-align: center;"><a href="#" @click.prevent="record.new_number ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.new_number ?'fas fa-edit' : 'fas fa-history'"></i></a></td> -->
+                                <!-- <td style="text-align: center;"><a href="#" @click.prevent="record.salaryproposed ? showEditModal(record) : showRevertConfirmation(record)"><i :class="record.salaryproposed ?'fas fa-edit' : 'fas fa-history'"></i></a></td> -->
                             </tr>
                         </tbody>
                     </table>
@@ -409,7 +409,7 @@
                     .then(({data}) => {
                         Swal.fire({
                             title: 'Revert abolished item?',
-                            text: record.position + ' (Item No. ' + data.data.new_number + ')',
+                            text: record.position,
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -465,34 +465,34 @@
                     }
                 });
             },
-            abolishItem() {
-                $('#plantilla-content-modal').modal('hide');
-                Swal.fire({
-                    title: 'Are you sure you want to abolish this item?',
-                    text: this.form.original_position + ' (Item No. ' + this.form.original_item_number + ')',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.$Progress.start();
-                        this.form.put('api/plantillacontentabolish')
-                            .then(() => {
-                                this.loadContents();
-                                toast.fire({
-                                    icon: 'success',
-                                    title: 'Record updated successfully'
-                                });
-                                this.$Progress.finish();
-                            })
-                            .catch(() => {
-                                this.$Progress.fail();
-                            });
-                    }
-                });
-            },
+            // abolishItem() {
+            //     $('#plantilla-content-modal').modal('hide');
+            //     Swal.fire({
+            //         title: 'Are you sure you want to abolish this item?',
+            //         text: this.form.original_position + ' (Item No. ' + this.form.original_item_number + ')',
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Proceed'
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             this.$Progress.start();
+            //             this.form.put('api/plantillacontentabolish')
+            //                 .then(() => {
+            //                     this.loadContents();
+            //                     toast.fire({
+            //                         icon: 'success',
+            //                         title: 'Record updated successfully'
+            //                     });
+            //                     this.$Progress.finish();
+            //                 })
+            //                 .catch(() => {
+            //                     this.$Progress.fail();
+            //                 });
+            //         }
+            //     });
+            // },
             getDifference(record) {
                 let difference = ((record.salaryproposed !== null ? record.salaryproposed.amount * 12 : 0) - (record.salaryauthorized !== null ? record.salaryauthorized.amount * 12 : 0));
                 if (record.working_time == 'Part-time') {

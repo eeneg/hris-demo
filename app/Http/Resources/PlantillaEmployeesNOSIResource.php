@@ -24,6 +24,7 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
                 'name2' => $item->personalinformation->surname.', '.$item->personalinformation->firstname.' '.$item->personalinformation->nameextension.' '.$item->personalinformation->middlename,
                 'salaryproposed' => $item->salaryproposed,
                 'nextStepAmount' => $item->amount,
+                'nosi_schedule' => $item->personalinformation->benefitschedule->nosi,
             ];
         });
     }
