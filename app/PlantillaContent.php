@@ -61,6 +61,20 @@ class PlantillaContent extends Auditable
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
+    public function getPreviousStep() {
+        return \App\SalaryGrade::where('salary_sched_id', $this->plantilla->salary_schedule_prop_id)
+            ->where('grade', $this->salaryproposed->grade)
+            ->where('step', $this->salaryproposed->step - 1)
+            ->first();
+    }
+
+    public function getNextStep() {
+        return \App\SalaryGrade::where('salary_sched_id', $this->plantilla->salary_schedule_prop_id)
+            ->where('grade', $this->salaryproposed->grade)
+            ->where('step', $this->salaryproposed->step + 1)
+            ->first();
+    }
+
     public static function boot()
     {
         parent::boot();

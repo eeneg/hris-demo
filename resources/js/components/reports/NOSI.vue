@@ -76,7 +76,7 @@
                     <div class="row mt-4">
                         <div class="col-12 text-justify">
                             <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u>.
+                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.forReport.step }}</u> is hereby adjusted effective <u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u>.
                             </h5>
                         </div>
                     </div>
@@ -92,12 +92,12 @@
                         <div class="col-3 text-right">
                             <h5 class="m-0" style="color: white;">.</h5>
                             <h5 class="m-0">
-                                <u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u>
+                                <u v-if="employee.salaryproposed">₱{{ employee.forReport.current_amount | amount }}</u>
                             </h5>
                             <h5 class="m-0" style="color: white;">.</h5>
                             <h5 class="m-0" style="color: white;">.</h5>
-                            <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
-                            <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ employee.nextStepAmount | amount }}</u></h5>
+                            <h5 class="m-0"><u>₱{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></h5>
+                            <h5 class="m-0"><u>₱{{ employee.forReport.next_amount | amount }}</u></h5>
                         </div>
                         <div class="col-1"></div>
                     </div>
@@ -142,11 +142,21 @@
                 <div class="card-body">
                     <div class="row pr-3">
                         <div class="col-md-6 pr-5">
-                            <div class="form-group" style="margin-bottom: 0.3rem;">
-                                <label style="font-weight: bold; margin: 0;">Select Employee</label>
-                                <v-select class="form-control form-control-border border-width-2" v-model="employee" :options="plantilla_content" :getOptionLabel="employee => employee.name"></v-select>
+                            <div class="row mt-2 mb-1">
+                                <div class="col-md-9">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Select Employee</label>
+                                        <v-select class="form-control form-control-border border-width-2" @input="generateNOSI()" v-model="employee"  :options="plantilla_content" :getOptionLabel="employee => employee.name"></v-select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold; margin: 0;">Year</label>
+                                        <input class="form-control form-control-border border-width-2 mr-2" type="number" v-model="ind_nosi_year">
+                                    </div>
+                                </div>
                             </div>
-                            <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Date of last promotion / original appointment: <b class="text-primary">{{ employee.last_promotion ? employee.last_promotion : employee.original_appointment }}</b></span>
+                            <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Date of last promotion / original appointment: <b class="text-primary">{{ employee.nosi_schedule }}</b></span>
                             <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">{{ employee.office }}</span>
                             <div class="row mt-2 mb-1">
                                 <div class="col-md-6">
@@ -196,7 +206,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <button type="submit" class="btn btn-success" :disabled="!button_enable">View</button>
+                                                <button type="submit" class="btn btn-success">View</button>
                                                 <button type="button" class="btn btn-primary ml-2" :disabled="lookup_data.length == 0" @click="print_report_lookup()"><i class="fas fa-print"></i> Print All</button>
                                             </div>
                                         </div>
@@ -225,85 +235,87 @@
 
                         <!-- Report Preview -->
                         <div class="col-md-6 p-5 nosi_nosa_preview" style="border: 1px solid #dfdfdf;background-color: #fffae8;">
-                            <div class="ribbon-wrapper ribbon-lg">
-                                <div class="ribbon bg-primary">
-                                    PREVIEW
+                            <div v-if="included">
+                                <div class="ribbon-wrapper ribbon-lg">
+                                    <div class="ribbon bg-primary">
+                                        PREVIEW
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3 mb-2">
-                                <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid" width="100" style="position: absolute;top: 55px;left: 80px;">
-                                <div class="col-12 text-center">
-                                    <h5 class="m-0">PROVINCE OF DAVAO DEL SUR</h5>
-                                    <h5 class="m-0">Matti, Digos City</h5>
-                                    <h5 class="m-0">OFFICE OF THE GOVERNOR</h5>
-                                    <h5 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h5>
+                                <div class="row mt-3 mb-2">
+                                    <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid" width="100" style="position: absolute;top: 55px;left: 80px;">
+                                    <div class="col-12 text-center">
+                                        <h5 class="m-0">PROVINCE OF DAVAO DEL SUR</h5>
+                                        <h5 class="m-0">Matti, Digos City</h5>
+                                        <h5 class="m-0">OFFICE OF THE GOVERNOR</h5>
+                                        <h5 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-5">
-                                <div class="col-9 mt-3">
-                                    <h5 class="m-0">{{ employee.name }}</h5>
-                                    <h5 class="m-0">{{ employee.position }}</h5>
-                                    <h5 class="m-0">{{ employee.office }}</h5>
-                                    <h5 class="m-0">Province of Davao del Sur</h5>
-                                    <h5 class="mt-4">Sir/Madam:</h5>
+                                <div class="row mt-5">
+                                    <div class="col-9 mt-3">
+                                        <h5 class="m-0">{{ employee.name }}</h5>
+                                        <h5 class="m-0">{{ employee.position }}</h5>
+                                        <h5 class="m-0">{{ employee.office }}</h5>
+                                        <h5 class="m-0">Province of Davao del Sur</h5>
+                                        <h5 class="mt-4">Sir/Madam:</h5>
+                                    </div>
+                                    <div class="col-3 text-right">
+                                        <h5><u>{{ date_printed | myDate }}</u></h5>
+                                    </div>
                                 </div>
-                                <div class="col-3 text-right">
-                                    <h5><u>{{ date_printed | myDate }}</u></h5>
+                                <div class="row mt-4">
+                                    <div class="col-12 text-justify">
+                                        <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                            Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.forReport.step }}</u> is hereby adjusted effective <u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u>.
+                                        </h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="col-12 text-justify">
-                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.salaryproposed && employee.salaryproposed.step }}</u> is hereby adjusted effective <u>{{ employee.nosi_schedule | myDate }}</u>.
-                                    </h5>
+                                <div class="row mt-4">
+                                    <div class="col-8">
+                                        <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
+                                        <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.nosi_schedule | minusOneDay }}</u></h5>
+                                        <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
+                                        <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
+                                        <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
+                                        <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.nosi_schedule | myDate }}</u></h5>
+                                    </div>
+                                    <div class="col-3 text-right">
+                                        <h5 class="m-0" style="color: white;">.</h5>
+                                        <h5 class="m-0">
+                                            <u v-if="employee.salaryproposed">₱{{ employee.forReport.current_amount | amount }}</u>
+                                        </h5>
+                                        <h5 class="m-0" style="color: white;">.</h5>
+                                        <h5 class="m-0" style="color: white;">.</h5>
+                                        <h5 class="m-0"><u>₱{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></h5>
+                                        <h5 class="m-0"><u>₱{{ employee.forReport.next_amount | amount }}</u></h5>
+                                    </div>
+                                    <div class="col-1"></div>
                                 </div>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="col-8">
-                                    <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.nosi_schedule | minusOneDay }}</u></h5>
-                                    <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
-                                    <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                                    <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.nosi_schedule | myDate }}</u></h5>
+                                <div class="row mt-4 mb-5">
+                                    <div class="col-12 text-justify">
+                                        <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
+                                            The step increment/s is/are subject to review and Post Audit by the Department of Budget and Management and Subject to re-adjustment and refund if found not in order.
+                                        </h5>
+                                    </div>
                                 </div>
-                                <div class="col-3 text-right">
-                                    <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0">
-                                        <u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u>
-                                    </h5>
-                                    <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0" style="color: white;">.</h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ (employee.nextStepAmount - employee.salaryproposed.amount) | amount }}.00</u></h5>
-                                    <h5 class="m-0" v-if="employee.nextStepAmount"><u>₱{{ employee.nextStepAmount | amount }}</u></h5>
+                                <div class="row mt-5 mb-5">
+                                    <div class="col-6"></div>
+                                    <div class="col-6 mt-5">
+                                        <h5 class="m-0">Very truly yours,</h5>
+                                    </div>
                                 </div>
-                                <div class="col-1"></div>
-                            </div>
-                            <div class="row mt-4 mb-5">
-                                <div class="col-12 text-justify">
-                                    <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        The step increment/s is/are subject to review and Post Audit by the Department of Budget and Management and Subject to re-adjustment and refund if found not in order.
-                                    </h5>
+                                <div class="row mt-5">
+                                    <div class="col-6"></div>
+                                    <div class="col-6 mt-5">
+                                        <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
+                                        <h5 class="m-0">Provincial Governor</h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-5 mb-5">
-                                <div class="col-6"></div>
-                                <div class="col-6 mt-5">
-                                    <h5 class="m-0">Very truly yours,</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-5">
-                                <div class="col-6"></div>
-                                <div class="col-6 mt-5">
-                                    <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
-                                    <h5 class="m-0">Provincial Governor</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-5 mb-3">
-                                <div class="col-12">
-                                    <h5 class="m-0">Copy Furnished</h5>
-                                    <h5 class="m-0">- GSIS</h5>
-                                    <h5 class="m-0">- Office Concerned</h5>
+                                <div class="row mt-5 mb-3">
+                                    <div class="col-12">
+                                        <h5 class="m-0">Copy Furnished</h5>
+                                        <h5 class="m-0">- GSIS</h5>
+                                        <h5 class="m-0">- Office Concerned</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -332,7 +344,15 @@
                 print_data: [],
                 button_enable: false,
                 departments: [],
-                department: {}
+                department: {},
+                ind_nosi_year: moment(new Date()).format('YYYY'),
+                included: false,
+
+                forReport: {
+                    step: 0,
+                    current_amount: 0,
+                    next_amount: 0,
+                }
             }
         },
         watch: {
@@ -355,6 +375,38 @@
                     window.print()
                 })
             },
+            generateForReport(employee, nosi_sched) {
+                let current_step = (parseInt(this.ind_nosi_year) - nosi_sched) / 3
+                let forReport = {
+                    step: current_step,
+                    current_amount: current_step == employee.salaryproposed.step ? employee.salaryproposed.amount : employee.previousStepAmount,
+                    next_amount: current_step == employee.salaryproposed.step ? employee.nextStepAmount : employee.salaryproposed.amount
+                }
+
+                return _.assign({forReport: forReport}, employee)
+            },
+            generateNOSI() {
+                if (!this.employee) {
+                    this.included = false
+                    this.button_enable = false
+                    return
+                }
+
+                var nosi_years = []
+                let nosi_sched = parseInt(moment(this.employee.nosi_schedule).format('YYYY'))
+                for (let index = 1; index <= 7; index++) {
+                    nosi_years.push(nosi_sched + (3 * index))
+                }
+                if(nosi_years.includes(parseInt(this.ind_nosi_year))) {
+                    this.employee = this.generateForReport(this.employee, nosi_sched)
+
+                    this.included = true
+                    this.button_enable = true
+                } else {
+                    this.included = false
+                    this.button_enable = false
+                }
+            },
             fetch_employees() {
                 this.$Progress.start()
                 axios.get('api/plantillaForNosi')
@@ -368,14 +420,14 @@
                         var first_department = data.departments[0];
                         this.department = first_department;
 
-                        this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
-                        this.print_data.push(first_employee)
+                            // this.date_of_appointment = first_employee.last_promotion ? moment(first_employee.last_promotion).year(moment().format('YYYY')).format('YYYY-MM-DD') : moment(first_employee.original_appointment).year(moment().format('YYYY')).format('YYYY-MM-DD')
+                            // this.print_data.push(first_employee)
                     })
                     .catch(error => {
                         console.log(error.response.data.message);
                     })
                     .finally(() => {
-                        this.button_enable = true
+                        // this.button_enable = true
                         this.$Progress.finish()
                     });
             },
@@ -384,9 +436,13 @@
                 this.plantilla_content.forEach(content => {
                     if (content.nosi_schedule && content.salaryproposed) {
                         if (this.nosi_year > moment(content.nosi_schedule).format('YYYY')) {
-                            var divisible = (this.nosi_year - moment(content.nosi_schedule).format('YYYY')) % 3 == 0;
-                            // var included = (8 - content.salaryproposed.step) >= ((this.nosi_year - moment(content.nosi_schedule).format('YYYY')) / 3);
-                            var included = ((this.nosi_year - moment(content.nosi_schedule).format('YYYY')) / 3) <= 7;
+                            var nosi_years = []
+                            var nosi_sched = parseInt(moment(content.nosi_schedule).format('YYYY'))
+                            for (let index = 1; index <= 7; index++) {
+                                nosi_years.push(nosi_sched + (3 * index))
+                            }
+
+                            var included = nosi_years.includes(parseInt(this.nosi_year));
                             var office = this.department.address == 'All' ? true : content.office == this.department.address
 
                             if (this.nosi_month != "All") {
@@ -395,7 +451,8 @@
                                 var month_inc = true
                             }
 
-                            if (included && divisible && office && month_inc) {
+                            if (included && office && month_inc) {
+                                content = this.generateForReport(content, nosi_sched)
                                 this.lookup_data.push(content)
                             }
                         }

@@ -38,16 +38,23 @@ class PlantillaContentController extends Controller
         $plantillacontents = PlantillaContent::with('personalinformation')
             ->where('plantilla_contents.plantilla_id', $plantilla->id)
             ->leftJoin('salary_grades as salaryproposed', 'plantilla_contents.salary_grade_prop_id', '=', 'salaryproposed.id')
-            ->leftJoin('salary_grades as nextStep', function ($join) {
-                $join->on('salaryproposed.salary_sched_id', '=', 'nextStep.salary_sched_id');
-                $join->on('salaryproposed.grade', '=', 'nextStep.grade');
-                $join->on(DB::raw('salaryproposed.step + 1'), '=', 'nextStep.step');
-            })
+            // ->leftJoin('salary_grades as nextStep', function ($join) {
+            //     $join->on('salaryproposed.salary_sched_id', '=', 'nextStep.salary_sched_id');
+            //     $join->on('salaryproposed.grade', '=', 'nextStep.grade');
+            //     $join->on(DB::raw('salaryproposed.step + 1'), '=', 'nextStep.step');
+            // })
+            // ->leftJoin('salary_grades as previousStep', function ($join) {
+            //     $join->on('salaryproposed.salary_sched_id', '=', 'previousStep.salary_sched_id');
+            //     $join->on('salaryproposed.grade', '=', 'previousStep.grade');
+            //     $join->on(DB::raw('salaryproposed.step - 1'), '=', 'previousStep.step');
+            // })
             ->select('*')
             ->whereNotNull('personal_information_id')
             ->orderByRaw('CONVERT(new_number, SIGNED) desc')
             ->get();
+
         $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
+
         $data = [
             'plantillacontents' => new PlantillaEmployeesNOSIResource($plantillacontents),
             'departments' => $departments

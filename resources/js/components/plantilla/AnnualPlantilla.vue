@@ -36,7 +36,7 @@
                                     <a class="dropdown-item" href="#" @click="createPlantillaModal()">Create New Plantilla</a>
                                     <a class="dropdown-item" href="#" @click="showEditPlantillaModal()">Edit Plantilla Information</a>
                                     <a class="dropdown-item" href="#" @click="duplicatePlantillaModal()">Duplicate Plantilla</a>
-                                    <a class="dropdown-item" href="#" @click="createPlantillaModal()">Add Department</a>
+                                    <a class="dropdown-item" href="#" @click="addDepartmentModal()">Add Department</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" @click.prevent="selectPlantilla()">Select Plantilla</a>
                                     <div class="dropdown-divider"></div>
@@ -203,7 +203,8 @@
             </div>
         </div>
 
-        <create-plantilla-modal :key="create_plantilla_modal_key" @exit="createPlantillaModalExit"></create-plantilla-modal>
+        <create-plantilla-modal :key="create_plantilla_modal_key" @exit="createPlantillaModalExit" :schedules="schedules" :departments="departments"></create-plantilla-modal>
+        <add-department-modal :plantilla="plantilla" @exit="reload_plantilla" :departments="departments"></add-department-modal>
         <item-form :key="create_item_modal_key" @exit="createItemModalExit" :create_data="create_data"></item-form>
         <duplicate-plantilla-modal :key="duplicate_plantilla_modal_key" @exit="duplicatePlantillaModalExit" :plantilla="plantilla" :schedules="schedules"></duplicate-plantilla-modal>
 
@@ -232,6 +233,7 @@
 
 <script>
     import createplantillamodal from "./modals/CreatePlantillaModal"
+    import adddepartmentmodal from "./modals/AddDepartmentModal"
     import itemForm from "./modals/ItemForm"
     import duplicateplantillamodal from "./modals/DuplicatePlantillaModal"
     import cscReport from "./reports/CSC"
@@ -357,6 +359,9 @@
                         $('#editButton').removeAttr('disabled');
                     });
             },
+            addDepartmentModal() {
+                $('#add-department-modal').modal('show');
+            },
             createPlantillaModal() {
                 $('#create-plantilla-modal').modal('show');
             },
@@ -395,6 +400,9 @@
                 if (value == 'sync') {
                     this.loadContents();
                 }
+            },
+            reload_plantilla() {
+                this.getDepartmentsFromSelectedPlantilla(this.plantilla.id);
             },
             duplicatePlantillaModal() {
                 $('#duplicate-plantilla-modal').modal('show');
@@ -557,6 +565,7 @@
                 if (plantilla) {
                     this.plantilla_title = this.all_plantilla.find(p => p.id == plantilla).year;
                     this.selectedPlantilla = this.all_plantilla.find(p => p.id == plantilla);
+                    this.plantilla = this.selectedPlantilla;
                     this.getDepartmentsFromSelectedPlantilla(plantilla);
                     this.getPreviousPlantilla(this.plantilla_title);
                 }
@@ -607,7 +616,7 @@
                 axios.get('api/department')
                     .then(({data}) => {
                         this.departments = data.data;
-
+                        this.plantilla = this.$parent.settings.plantilla;
                         // Pre select Departments if from Employees component
                         if (this.$route.params.dept != null) {
                             this.selectedDepartment = this.$route.params.dept;
@@ -697,7 +706,8 @@
             'create-plantilla-modal': createplantillamodal,
             'item-form': itemForm,
             'duplicate-plantilla-modal': duplicateplantillamodal,
-            'csc-report': cscReport
+            'csc-report': cscReport,
+            'add-department-modal': adddepartmentmodal
         },
         created() {
             this.$Progress.start();
