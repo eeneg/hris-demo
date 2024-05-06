@@ -16,14 +16,16 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
     {
         // return $this->collection->map->toArray($request)->all();
         return $this->collection->map(function ($item) {
+            $nextStep = $item->getNextStep();
+            $previousStep = $item->getPreviousStep();
             return [
-                'appointment_date' =>  $item->last_promotion ?  $item->last_promotion : $item->original_appointment,
                 'office' => $item->position->department->address,
                 'position' => $item->position ? $item->position->title : '',
                 'name' => $item->personalinformation->firstname.' '.$item->personalinformation->middlename.' '.$item->personalinformation->surname.' '.$item->personalinformation->nameextension,
                 'name2' => $item->personalinformation->surname.', '.$item->personalinformation->firstname.' '.$item->personalinformation->nameextension.' '.$item->personalinformation->middlename,
                 'salaryproposed' => $item->salaryproposed,
-                'nextStepAmount' => $item->amount,
+                'nextStepAmount' => $nextStep ? $nextStep->amount : 0,
+                'previousStepAmount' => $previousStep ? $previousStep->amount : 0,
                 'nosi_schedule' => $item->personalinformation->benefitschedule->nosi,
             ];
         });

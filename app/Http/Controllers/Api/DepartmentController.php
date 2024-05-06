@@ -35,6 +35,30 @@ class DepartmentController extends Controller
         return new SortedDepartmentsResource($departments);
     }
 
+    public function add_departments(Request $request)
+    {
+        $this->authorize('isAdministratorORAuthor');
+
+        $plantilla = Plantilla::findOrFail($request->id);
+        $departments = $request->plantilla_depts;
+
+        foreach ($departments as $key => $data) {
+            $department = PlantillaDept::where('plantilla_id', $plantilla->id)->where('department_id', $data['id'])->first();
+
+            if(!$department)
+            {
+                $department = new PlantillaDept;
+                $department->plantilla_id = $plantilla->id;
+                $department->department_id = $data['id'];
+                $department->order_number = $key + 1;
+                $department->save();
+            } else {
+                $department->order_number = $key + 1;
+                $department->save();
+            }
+        }
+    }
+
     public function complete_depts()
     {
         $departments = Department::where('status', 'active')->orderBy('order_number')->get();

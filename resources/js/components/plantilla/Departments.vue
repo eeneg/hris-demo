@@ -29,6 +29,7 @@
                                     <tr>
                                         <th style="width:5px">#</th>
                                         <th>Department</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -43,6 +44,10 @@
                                                 <br>
                                                 <span style="font-size: 0.8rem;" class="text-muted"><i>{{ department.description }}</i></span>
                                             </div>
+                                        </td>
+                                        <td>
+                                            <span v-if="department.status == 'active'" class="badge badge-success">Active</span>
+                                            <span v-else class="badge badge-danger">Inactive</span>
                                         </td>
                                         <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
                                             <div class="btn-group">

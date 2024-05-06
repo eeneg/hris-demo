@@ -26,6 +26,7 @@ class DepartmentsAndPositionsResource extends ResourceCollection
                 'positions' => $item->positions->map(function ($item, $key) {
                     return $item->only(['id', 'department_id', 'title']);
                 }),
+                'status' => $item->status,
             ];
         });
     }

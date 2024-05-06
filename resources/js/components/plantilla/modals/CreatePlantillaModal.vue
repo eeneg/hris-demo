@@ -84,8 +84,8 @@
                     'date_approved': '',
                     'plantilla_depts': [],
                 }),
-                schedules: [],
-                departments: [],
+                // schedules: [],
+                // departments: [],
                 loading: false,
             }
         },
@@ -93,6 +93,8 @@
             draggable
         },
         props: {
+            schedules: Array,
+            departments: Array,
             // key: Number,
         },
         methods: {
@@ -143,7 +145,7 @@
             }
         },
         mounted() {
-            this.init_contents()
+            // this.init_contents()
         },
         created() {
             
