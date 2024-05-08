@@ -15,11 +15,17 @@ use App\Http\Resources\CSCResource;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 // use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class PDFcontroller extends Controller
 {
+    public function plantillaExcel(Request $request)
+    {
+        return Excel::download(new \App\Exports\PlantillaExport($request->plantilla_id), 'Plantilla.xlsx');
+    }
+    
     public function pds(Request $request)
     {
         $id = $request['id'];

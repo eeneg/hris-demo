@@ -40,6 +40,8 @@ Route::post('/generateleavecard', 'PDFcontroller@generateleavecard');
 
 Route::post('/generatePlantilla', 'PDFcontroller@plantilla');
 
+Route::get('/generatePlantillaExcel', 'PDFcontroller@plantillaExcel');
+
 Route::post('/generateNOSI', 'PDFcontroller@nosi');
 
 Route::post('/generateNOSA', 'PDFcontroller@nosa');
