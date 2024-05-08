@@ -522,6 +522,28 @@
             generatePlantilla(type){
                 if (type == 'CSC') {
                     window.print()
+                } else if (type == 'Excel') {
+                    this.$Progress.start();
+                    axios.get('generatePlantillaExcel?plantilla_id=' + this.plantilla.id, {responseType: 'blob'})
+                        .then(response => {
+                            const href = URL.createObjectURL(response.data)
+                            const link = document.createElement('a')
+                            link.href = href
+                            link.setAttribute('download', 'Plantilla ' + this.plantilla.year + '.xlsx')
+                            document.body.appendChild(link)
+                            link.click()
+
+                            document.body.removeChild(link)
+                            URL.revokeObjectURL(href)
+
+                            this.$Progress.finish();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            
+                        });
                 } else {
                     this.$Progress.start();
                     axios.post('generatePlantilla', {type: type, dept_id: this.selectedDepartment.id})
@@ -572,12 +594,13 @@
             },
             async plantillaReport() {
                 const { value: report } = await Swal.fire({
-                    title: 'Select report',
-                    input: 'radio',
+                    title: 'Select Report',
+                    input: 'select',
                     inputOptions: {
                         'DBM': 'DBM',
                         'CSC': 'CSC',
-                        'Summary': 'Summary'
+                        'Summary': 'Summary',
+                        'Excel': 'Excel'
                     },
                     inputValidator: (value) => {
                         if (!value) {
