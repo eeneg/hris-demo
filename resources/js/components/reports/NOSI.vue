@@ -55,77 +55,82 @@
                     <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo">
                     <div class="row mt-3 mb-2">
                         <div class="col-12 text-center">
-                            <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
-                            <h5 class="m-0">Matti, Digos City</h5>
-                            <h4 class="m-0">OFFICE OF THE GOVERNOR</h4>
-                            <h4 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h4>
+                            <h5 class="m-0">Republic of the Philippines</h5>
+                            <h4 class="m-0 font-weight-bold">PROVINCIAL GOVERNMENT OF DAVAO DEL SUR</h4>
+                            <h5 class="m-0">Brgy. Matti, Digos City</h5>
                         </div>
                     </div>
                     <div class="row mt-5">
-                        <div class="col-9 mt-3">
-                            <h5 class="m-0">{{ employee.name }}</h5>
+                        <div class="col-12 text-right">
+                            <h5 class="m-0 font-weight-bold">Annex "B"</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12 text-center">
+                            <h4 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT DUE TO LENGTH OF SERVICE</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-9 mt-5">
+                            <h5 class="m-0 font-weight-bold" style="text-transform: uppercase;">{{ employee.title }} {{ employee.name }}</h5>
                             <h5 class="m-0">{{ employee.position }}</h5>
                             <h5 class="m-0">{{ employee.office }}</h5>
-                            <h5 class="m-0">Province of Davao del Sur</h5>
-                            <h5 class="mt-4">Sir/Madam:</h5>
+                            <h5 class="mt-5">Dear {{ employee.title }} {{ employee.surname }}:</h5>
                         </div>
                         <div class="col-3 text-right">
-                            <h5><u>{{ date_printed | myDate }}</u></h5>
+                            <h5>Date: {{ date_printed | myDate }}</h5>
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-12 text-justify">
-                            <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.forReport.step }}</u> is hereby adjusted effective <u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u>.
+                            <h5 class="m-0" style="text-indent: 65px;justify-content: center;">
+                                Pursuant to the Civil Service Commission and Department of Budget and Management Joint Circular No. 1 dated September 3, 2012, implementing item (4)(d) of the Senate and House of Representatives Joint Resolution No. 4, s. 2009, approved on June 17, 2009, your salary as <u><b>{{ employee.position }}</b></u> is hereby adjusted effective <u><b>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</b></u>, as follows:
                             </h5>
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-8">
-                            <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                            <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.nosi_schedule | minusOneDayWithYear(nosi_year) }}</u></h5>
-                            <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
-                            <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
-                            <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                            <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u></h5>
+                    <div class="row mt-5">
+                        <div class="col-9">
+                            <h5 class="m-0">1.<span style="padding-left: 50px;">Actual monthly basic salary as of <b><u>{{ employee.nosi_schedule | minusOneDayWithYear(nosi_year) }}</u></b></span></h5>
+                            <h5 class="m-0"><span style="padding-left: 65px;">(SG-<b><u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u></b>, Step <b><u>{{ employee.forReport.step }}</u></b>)</span></h5>
+                            <h5 class="m-0 mt-3">2.<span style="padding-left: 50px;">Add: one (1) Step Increment</span></h5>
+                            <h5 class="m-0"><span style="padding-left: 65px;">Due to Length of Service</span></h5>
+                            <h5 class="m-0 mt-3">3.<span style="padding-left: 50px;">Adjusted monthly basic salary effective <b><u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u></b></span></h5>
                         </div>
                         <div class="col-3 text-right">
-                            <h5 class="m-0" style="color: white;">.</h5>
                             <h5 class="m-0">
-                                <u v-if="employee.salaryproposed">₱{{ employee.forReport.current_amount | amount }}</u>
+                                ₱<b><u v-if="employee.salaryproposed">{{ employee.forReport.current_amount | amount }}</u></b>
                             </h5>
                             <h5 class="m-0" style="color: white;">.</h5>
+                            <h5 class="m-0 mt-3">₱<b><u>{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></b></h5>
                             <h5 class="m-0" style="color: white;">.</h5>
-                            <h5 class="m-0"><u>₱{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></h5>
-                            <h5 class="m-0"><u>₱{{ employee.forReport.next_amount | amount }}</u></h5>
+                            <h5 class="m-0 mt-3">₱<b><u>{{ employee.forReport.next_amount | amount }}</u></b></h5>
                         </div>
-                        <div class="col-1"></div>
                     </div>
                     <div class="row mt-4 mb-5">
                         <div class="col-12 text-justify">
-                            <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                The step increment/s is/are subject to review and Post Audit by the Department of Budget and Management and Subject to re-adjustment and refund if found not in order.
+                            <h5 class="m-0" style="text-indent: 65px;justify-content: center;">
+                                This salary adjustment is subject to review and post-audit, and to appropriate re-adjustment and refund if found not in order.
                             </h5>
                         </div>
                     </div>
                     <div class="row mt-5 mb-5">
-                        <div class="col-6"></div>
-                        <div class="col-6 mt-5">
-                            <h5 class="m-0">Very truly yours,</h5>
+                        <div class="col-8"></div>
+                        <div class="col-4 mt-5">
+                            <h5 class="ml-5">Very truly yours,</h5>
                         </div>
                     </div>
                     <div class="row mt-5">
-                        <div class="col-6"></div>
-                        <div class="col-6 mt-5">
-                            <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
+                        <div class="col-8"></div>
+                        <div class="col-4 mt-5 text-center">
+                            <h5 class="m-0"><b>YVONNE ROÑA CAGAS</b></h5>
                             <h5 class="m-0">Provincial Governor</h5>
                         </div>
                     </div>
                     <div class="row mt-5 mb-3">
                         <div class="col-12">
-                            <h5 class="m-0">Copy Furnished</h5>
-                            <h5 class="m-0">- GSIS</h5>
-                            <h5 class="m-0">- Office Concerned</h5>
+                            <h5 class="m-0">Item No. <b><u>{{ employee.item_no }}</u></b></h5>
+                            <h5 class="m-0">FY <b><u>{{ nosi_year }}</u></b> Plantilla of Personnel</h5>
+                            <h5 class="m-0 mt-5">CF: GSIS</h5>
                         </div>
                     </div>
                 </div>
@@ -244,77 +249,64 @@
                                 <div class="row mt-3 mb-2">
                                     <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid" width="100" style="position: absolute;top: 55px;left: 80px;">
                                     <div class="col-12 text-center">
-                                        <h5 class="m-0">PROVINCE OF DAVAO DEL SUR</h5>
-                                        <h5 class="m-0">Matti, Digos City</h5>
-                                        <h5 class="m-0">OFFICE OF THE GOVERNOR</h5>
-                                        <h5 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT</h5>
+                                        <h5 class="m-0">Republic of the Philippines</h5>
+                                        <h4 class="m-0 font-weight-bold">PROVINCIAL GOVERNMENT OF DAVAO DEL SUR</h4>
+                                        <h5 class="m-0">Brgy. Matti, Digos City</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-5">
-                                    <div class="col-9 mt-3">
-                                        <h5 class="m-0">{{ employee.name }}</h5>
+                                    <div class="col-12 text-center">
+                                        <h4 class="m-0 font-weight-bold">NOTICE OF STEP INCREMENT DUE TO LENGTH OF SERVICE</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-9 mt-5">
+                                        <h5 class="m-0 font-weight-bold" style="text-transform: uppercase;">{{ employee.title }} {{ employee.name }}</h5>
                                         <h5 class="m-0">{{ employee.position }}</h5>
                                         <h5 class="m-0">{{ employee.office }}</h5>
-                                        <h5 class="m-0">Province of Davao del Sur</h5>
-                                        <h5 class="mt-4">Sir/Madam:</h5>
+                                        <h5 class="mt-5">Dear {{ employee.title }} {{ employee.surname }}:</h5>
                                     </div>
                                     <div class="col-3 text-right">
-                                        <h5><u>{{ date_printed | myDate }}</u></h5>
+                                        <h5>Date: {{ date_printed | myDate }}</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-12 text-justify">
-                                        <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                            Pursuant to Joint Civil Service Commission (CSC) and Department of Budget and Management (DBM) Circular No. 1, s. 1990 implementing Section 13 &copy; of RA No. 6765, your salary as <u>{{ employee.position }} SG {{ employee.salaryproposed && employee.salaryproposed.grade }}-{{ employee.forReport.step }}</u> is hereby adjusted effective <u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u>.
+                                        <h5 class="m-0" style="text-indent: 65px;justify-content: center;">
+                                            Pursuant to the Civil Service Commission and Department of Budget and Management Joint Circular No. 1 dated September 3, 2012, implementing item (4)(d) of the Senate and House of Representatives Joint Resolution No. 4, s. 2009, approved on June 17, 2009, your salary as <u><b>{{ employee.position }}</b></u> is hereby adjusted effective <u><b>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</b></u>, as follows:
                                         </h5>
                                     </div>
                                 </div>
-                                <div class="row mt-4">
-                                    <div class="col-8">
-                                        <h5 class="m-0" style="text-indent: 50px;">Basic Monthly Salary</h5>
-                                        <h5 class="m-0" style="text-indent: 75px;">As of <u>{{ employee.nosi_schedule | minusOneDay }}</u></h5>
-                                        <h5 class="m-0" style="text-indent: 50px;">Salary Adjustment</h5>
-                                        <h5 class="m-0" style="text-indent: 75px;">a. Merit (<u>0</u> step/s)</h5>
-                                        <h5 class="m-0" style="text-indent: 75px;">b. Length of Service <u>1</u> step/s</h5>
-                                        <h5 class="m-0" style="text-indent: 50px;">Adjusted Salary Effective <u>{{ employee.nosi_schedule | myDate }}</u></h5>
+                                <div class="row mt-5">
+                                    <div class="col-9">
+                                        <h5 class="m-0">1.<span style="padding-left: 50px;">Actual monthly basic salary as of <b><u>{{ employee.nosi_schedule | minusOneDayWithYear(nosi_year) }}</u></b></span></h5>
+                                        <h5 class="m-0"><span style="padding-left: 65px;">(SG-<b><u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u></b>, Step <b><u>{{ employee.forReport.step }}</u></b>)</span></h5>
+                                        <h5 class="m-0 mt-3">2.<span style="padding-left: 50px;">Add: one (1) Step Increment</span></h5>
+                                        <h5 class="m-0"><span style="padding-left: 65px;">Due to Length of Service</span></h5>
+                                        <h5 class="m-0 mt-3">3.<span style="padding-left: 50px;">Adjusted monthly basic salary effective <b><u>{{ employee.nosi_schedule | myDateWithYear(nosi_year) }}</u></b></span></h5>
                                     </div>
                                     <div class="col-3 text-right">
-                                        <h5 class="m-0" style="color: white;">.</h5>
                                         <h5 class="m-0">
-                                            <u v-if="employee.salaryproposed">₱{{ employee.forReport.current_amount | amount }}</u>
+                                            ₱<b><u v-if="employee.salaryproposed">{{ employee.forReport.current_amount | amount }}</u></b>
                                         </h5>
                                         <h5 class="m-0" style="color: white;">.</h5>
+                                        <h5 class="m-0 mt-3">₱<b><u>{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></b></h5>
                                         <h5 class="m-0" style="color: white;">.</h5>
-                                        <h5 class="m-0"><u>₱{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></h5>
-                                        <h5 class="m-0"><u>₱{{ employee.forReport.next_amount | amount }}</u></h5>
+                                        <h5 class="m-0 mt-3">₱<b><u>{{ employee.forReport.next_amount | amount }}</u></b></h5>
                                     </div>
-                                    <div class="col-1"></div>
                                 </div>
                                 <div class="row mt-4 mb-5">
                                     <div class="col-12 text-justify">
-                                        <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                            The step increment/s is/are subject to review and Post Audit by the Department of Budget and Management and Subject to re-adjustment and refund if found not in order.
+                                        <h5 class="m-0" style="text-indent: 65px;justify-content: center;">
+                                            This salary adjustment is subject to review and post-audit, and to appropriate re-adjustment and refund if found not in order.
                                         </h5>
-                                    </div>
-                                </div>
-                                <div class="row mt-5 mb-5">
-                                    <div class="col-6"></div>
-                                    <div class="col-6 mt-5">
-                                        <h5 class="m-0">Very truly yours,</h5>
-                                    </div>
-                                </div>
-                                <div class="row mt-5">
-                                    <div class="col-6"></div>
-                                    <div class="col-6 mt-5">
-                                        <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
-                                        <h5 class="m-0">Provincial Governor</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-5 mb-3">
                                     <div class="col-12">
-                                        <h5 class="m-0">Copy Furnished</h5>
-                                        <h5 class="m-0">- GSIS</h5>
-                                        <h5 class="m-0">- Office Concerned</h5>
+                                        <h5 class="m-0">Item No. <b><u>{{ employee.item_no }}</u></b></h5>
+                                        <h5 class="m-0">FY <b><u>{{ nosi_year }}</u></b> Plantilla of Personnel</h5>
+                                        <h5 class="m-0 mt-5">CF: GSIS</h5>
                                     </div>
                                 </div>
                             </div>
