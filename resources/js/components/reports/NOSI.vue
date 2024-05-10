@@ -367,6 +367,16 @@
                     window.print()
                 })
             },
+            generateForReportLookup(employee, nosi_sched) {
+                let current_step = (parseInt(this.nosi_year) - nosi_sched) / 3
+                let forReport = {
+                    step: current_step,
+                    current_amount: current_step == employee.salaryproposed.step ? employee.salaryproposed.amount : employee.previousStepAmount,
+                    next_amount: current_step == employee.salaryproposed.step ? employee.nextStepAmount : employee.salaryproposed.amount
+                }
+
+                return _.assign({forReport: forReport}, employee)
+            },
             generateForReport(employee, nosi_sched) {
                 let current_step = (parseInt(this.ind_nosi_year) - nosi_sched) / 3
                 let forReport = {
@@ -444,7 +454,7 @@
                             }
 
                             if (included && office && month_inc) {
-                                content = this.generateForReport(content, nosi_sched)
+                                content = this.generateForReportLookup(content, nosi_sched)
                                 this.lookup_data.push(content)
                             }
                         }
