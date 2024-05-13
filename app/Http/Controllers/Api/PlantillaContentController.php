@@ -10,6 +10,7 @@ use App\Http\Resources\PlantillaContentReportsResource;
 use App\Http\Resources\PlantillaEmployeesNOSAResource;
 use App\Http\Resources\PlantillaEmployeesNOSIResource;
 use App\Http\Resources\PlantillaContentEmployeeResource;
+use App\Http\Resources\PlantillaEmployeesLoyaltyResource;
 use App\Plantilla;
 use App\PlantillaContent;
 use App\PlantillaDept;
@@ -74,6 +75,26 @@ class PlantillaContentController extends Controller
         $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
 
         $nosa_resource = new PlantillaEmployeesNOSAResource($plantillacontents);
+        $department_resource = new DepartmentsResource($departments);
+        $data = [
+            'plantillacontents' => $nosa_resource,
+            'departments' => $department_resource,
+        ];
+
+        return $data;
+    }
+
+    public function plantillaForLoyalty(Request $request)
+    {
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontents = PlantillaContent::with('personalinformation')
+            ->where('plantilla_id', $plantilla->id)
+            ->whereNotNull('personal_information_id')
+            ->get();
+        $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get()->pluck('department');
+
+        $nosa_resource = new PlantillaEmployeesLoyaltyResource($plantillacontents);
         $department_resource = new DepartmentsResource($departments);
         $data = [
             'plantillacontents' => $nosa_resource,
