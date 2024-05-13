@@ -367,18 +367,8 @@
                     window.print()
                 })
             },
-            generateForReportLookup(employee, nosi_sched) {
-                let current_step = (parseInt(this.nosi_year) - nosi_sched) / 3
-                let forReport = {
-                    step: current_step,
-                    current_amount: current_step == employee.salaryproposed.step ? employee.salaryproposed.amount : employee.previousStepAmount,
-                    next_amount: current_step == employee.salaryproposed.step ? employee.nextStepAmount : employee.salaryproposed.amount
-                }
-
-                return _.assign({forReport: forReport}, employee)
-            },
-            generateForReport(employee, nosi_sched) {
-                let current_step = (parseInt(this.ind_nosi_year) - nosi_sched) / 3
+            generateForReport(employee, nosi_sched, year) {
+                let current_step = (parseInt(year) - nosi_sched) / 3
                 let forReport = {
                     step: current_step,
                     current_amount: current_step == employee.salaryproposed.step ? employee.salaryproposed.amount : employee.previousStepAmount,
@@ -400,7 +390,7 @@
                     nosi_years.push(nosi_sched + (3 * index))
                 }
                 if(nosi_years.includes(parseInt(this.ind_nosi_year))) {
-                    this.employee = this.generateForReport(this.employee, nosi_sched)
+                    this.employee = this.generateForReport(this.employee, nosi_sched, this.ind_nosi_year)
 
                     this.included = true
                     this.button_enable = true
@@ -454,7 +444,7 @@
                             }
 
                             if (included && office && month_inc) {
-                                content = this.generateForReportLookup(content, nosi_sched)
+                                content = this.generateForReport(content, nosi_sched, this.nosi_year)
                                 this.lookup_data.push(content)
                             }
                         }

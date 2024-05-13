@@ -255,6 +255,12 @@
 											<p>NOSA</p>
 										</router-link>
 									</li>
+									<li class="nav-item">
+										<router-link to="/loyalty" class="nav-link">
+											<i class="fas fa-file-word nav-icon"></i>
+											<p>Loyalty Benefits</p>
+										</router-link>
+									</li>
                                     <li class="nav-item">
 										<router-link to="/employee-service-record" class="nav-link">
 											<i class="fas fa-file-word nav-icon"></i>
