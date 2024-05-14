@@ -28,25 +28,38 @@ class BarcodeController extends Controller
     public function store(Request $request)
     {
         $this->authorize('isAdministratorORAuthor');
-        if (! Barcode::where('personal_information_id', $request['id'])->exists()) {
-            $employee = PersonalInformation::findOrFail($request['id']);
+        $employee = PersonalInformation::findOrFail($request['id']);
+        $plantilla_content = $employee->plantillacontents->first();
+        $barcode = Barcode::where('personal_information_id', $employee->id)->first();
 
-            $code = $this->generateCode();
-            while (Barcode::where('value', $code)->exists()) {
-                $code = $this->generateCode();
-            }
+        $date = $plantilla_content->last_promotion ? $plantilla_content->last_promotion : $plantilla_content->original_appointment;
+        $code = str_replace('-', '', $date) . '-' . ($plantilla_content->new_number ? $plantilla_content->new_number : $plantilla_content->old_number);
+        // while (Barcode::where('value', $code)->exists()) {
+        //     $code = $this->generateCode();
+        // }
 
-            return Barcode::create([
+        if ($barcode && $barcode->value != $code) {
+            $barcode->update([
+                'value' => $code
+            ]);
+            return [
+                'barcode' => $code,
+                'status' => 'updated',
+            ];
+        } else if ($barcode && $barcode->value == $code) {
+            return [
+                'barcode' => $code,
+                'status' => 'exists',
+            ];
+        } else {
+            Barcode::create([
                 'personal_information_id' => $employee->id,
                 'value' => $code,
             ]);
-        } else {
-            $data = [
-                'barcode' => Barcode::where('personal_information_id', $request['id'])->first(),
-                'status' => 'existing',
+            return [
+                'barcode' => $code,
+                'status' => 'created',
             ];
-
-            return $data;
         }
     }
 

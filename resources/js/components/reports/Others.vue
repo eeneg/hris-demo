@@ -645,6 +645,8 @@
                     filtered = _.filter(this.plantilla_content, (content) => { 
                         return this.retirees_report.year - 65 == moment(content.birthdate).format('YYYY')
                             && (this.department != 'All' ? content.office == this.department : true)
+                            && content.appointment_status != 'Elected'
+                            && content.appointment_status != 'Co-terminous'
                     });
                 }
 

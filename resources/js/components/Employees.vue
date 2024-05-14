@@ -65,7 +65,7 @@
                                                 <a class="dropdown-item" @click="editInformationModal(employee.id)" href="#">Edit Information</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click="goToPlantilla(employee)" href="#">Go to Plantilla</a>
                                                 <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
-                                                <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">Generate Barcode</a>
+                                                <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">{{ employee.barcode ? 'Update Barcode' : 'Generate Barcode' }}</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
                                                 <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
                                                 <router-link v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" to="/employee-service-record">Service Record</router-link>
@@ -1190,10 +1190,16 @@
                 this.$Progress.start();
                 axios.post('api/barcode', { id: employee.id })
                     .then(response => {
-                        if (response.data.status == 'existing') {
+                        if (response.data.status == 'updated') {
                             Swal.fire(
-                                'Ooops!',
-                                'Barcode for this employee was already generated.<br>Barcode: ' + response.data.barcode.value,
+                                'Success',
+                                'Barcode is successfully updated to ' + response.data.barcode,
+                                'success'
+                            )
+                        } else if (response.data.status == 'exists') {
+                            Swal.fire(
+                                'Info',
+                                'Barcode is already generated for this employee.',
                                 'info'
                             )
                         } else {
@@ -1206,6 +1212,11 @@
                         this.$Progress.finish();
                     })
                     .catch(error => {
+                        Swal.fire(
+                            'Error',
+                            'Employee is inactive or does not have a plantilla.',
+                            'error'
+                        )
                         this.$Progress.fail();
                     });
             },

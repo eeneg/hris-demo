@@ -22,6 +22,8 @@ class CreateSeparationsTable extends Migration
                     ->onDelete('cascade');
             $table->string('mode', 100);
             $table->string('position', 500);
+            $table->string('office', 999);
+            $table->string('item_no', 100);
             $table->string('appointment_status', 300);
             $table->string('salary_grade', 10);
             $table->string('description', 999)->nullable();

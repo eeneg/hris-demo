@@ -44,7 +44,7 @@
                                     <tr v-for="(item, index) in report.data" :key="index">
                                         <td class="align-middle pt-1 pb-1">{{ index + 1 }}.</td>
                                         <td class="align-middle pt-1 pb-1">
-                                            <div style="display: inline-block;vertical-align: middle;line-height: 1.2rem;height: 35px;">
+                                            <div style="display: inline-block;line-height: 1.2rem;height: 35px;">
                                                 <span style="font-size: 1rem;">{{ item.surname + ', ' + item.firstname + ' ' + (item.nameextension || '') + ' ' + (item.middlename || '') }}</span>
                                                 <br>
                                                 <span style="font-size: 0.8rem;" class="text-muted">Birthdate: <i>{{ item.birthdate | myDate }}</i></span>
@@ -53,7 +53,11 @@
                                         <td class="align-middle pt-1 pb-1">
                                             <span style="text-transform: uppercase;">{{ item.mode }}</span>
                                             <div style="line-height: 1rem;">
-                                                <span style="font-size: 0.8rem;" class="text-muted">Last Position: <i>{{ item.position }}, {{ item.appointment_status }}, SG-{{ item.salary_grade }}</i></span>
+                                                <span style="font-size: 0.8rem;" class="text-muted">
+                                                    Last Position: <i>{{ item.position }}, {{ item.appointment_status }}, SG-{{ item.salary_grade }}, Item No. {{ item.item_no }}</i>
+                                                    <br>
+                                                    Last Office: <i>{{ item.office }}</i>
+                                                </span>
                                             </div>
                                         </td>
                                         <td>
@@ -133,7 +137,11 @@
                                 <td>
                                     <span style="text-transform: uppercase;">{{ item.mode }}</span>
                                     <div style="line-height: 1rem;">
-                                        <span style="font-size: 0.8rem;" class="text-muted">Last Position: <i>{{ item.position }}, {{ item.appointment_status }}, SG-{{ item.salary_grade }}</i></span>
+                                        <span style="font-size: 0.8rem;" class="text-muted">
+                                            Last Position: <i>{{ item.position }}, {{ item.appointment_status }}, SG-{{ item.salary_grade }}, Item No. {{ item.item_no }}</i>
+                                            <br>
+                                            Last Office: <i>{{ item.office }}</i>
+                                        </span>
                                     </div>
                                 </td>
                                 <td>

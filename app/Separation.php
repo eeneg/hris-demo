@@ -13,7 +13,7 @@ class Separation extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id', 'personal_information_id', 'mode', 'position', 'appointment_status', 'salary_grade', 'description', 'effectivity_date'];
+    protected $fillable = ['id', 'personal_information_id', 'mode', 'position', 'office', 'item_no', 'appointment_status', 'salary_grade', 'description', 'effectivity_date'];
 
     public function personalinformation()
     {

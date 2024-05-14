@@ -30,6 +30,8 @@ class SeparationResource extends ResourceCollection
                 'salary_grade' => $item->salary_grade,
                 'description' => $item->description,
                 'effectivity_date' => $item->effectivity_date,
+                'office' => $item->office,
+                'item_no' => $item->item_no,
             ];
         });
     }
