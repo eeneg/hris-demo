@@ -98,6 +98,7 @@ const routes = [
     { path: '/reports', component: require('./components/reports/Others.vue').default },
     { path: '/nosi', component: require('./components/reports/NOSI.vue').default },
     { path: '/nosa', component: require('./components/reports/NOSA.vue').default },
+    { path: '/loyalty', component: require('./components/reports/LoyaltySchedule.vue').default },
     { path: '/service-record', component: require('./components/reports/ServiceRecord.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/settings', component: require('./components/management/Settings.vue').default },
