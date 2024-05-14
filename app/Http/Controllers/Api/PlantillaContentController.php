@@ -435,7 +435,9 @@ class PlantillaContentController extends Controller
                     'personal_information_id' => $plantillacontent->personal_information_id,
                     'appointment_status' => $plantillacontent->appointment_status,
                     'salary_grade' => $plantillacontent->salaryproposed->grade . '-' . $plantillacontent->salaryproposed->step,
-                    'position' => $plantillacontent->position->title
+                    'position' => $plantillacontent->position->title,
+                    'office' => $plantillacontent->position->department->address,
+                    'item_no' => $plantillacontent->new_number ? $plantillacontent->new_number : $plantillacontent->old_number,
                 ]
             );
             $employee = $plantillacontent->personalinformation;
