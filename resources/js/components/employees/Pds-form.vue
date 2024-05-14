@@ -1825,7 +1825,7 @@ export default {
                 case data = 'children':
                     if(this.form.children.length < 12)
                     {
-                        this.form.children.push({})
+                        this.form.children.unshift({})
                     }else{
                         Swal.fire(
                             'Failed',
@@ -1837,7 +1837,7 @@ export default {
                 case data = 'eligibility':
                     if(this.form.eligibilities.length < 7)
                     {
-                        this.form.eligibilities.push({})
+                        this.form.eligibilities.unshift({})
                     }else{
                         Swal.fire(
                             'Failed',
@@ -1847,12 +1847,12 @@ export default {
                     }
                 break;
                 case data = 'workexperience':
-                    this.form.workexperiences.push({})
+                    this.form.workexperiences.unshift({})
                 break;
                 case data = 'voluntaryworks':
                     if(this.form.voluntaryworks.length < 7)
                     {
-                        this.form.voluntaryworks.push({})
+                        this.form.voluntaryworks.unshift({})
                     }else{
                         Swal.fire(
                             'Failed',
@@ -1862,12 +1862,12 @@ export default {
                     }
                 break;
                 case data = 'trainingprograms':
-                    this.form.trainingprograms.push({})
+                    this.form.trainingprograms.unshift({})
                 break;
                 case data = 'otherinfos':
                     if(this.form.otherinfos.length < 7)
                     {
-                        this.form.otherinfos.push({})
+                        this.form.otherinfos.unshift({})
                     }else{
                         Swal.fire(
                             'Failed',
