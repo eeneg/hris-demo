@@ -64,6 +64,7 @@
                                                 <!-- <a class="dropdown-item" href="#">Basic Information</a> -->
                                                 <a class="dropdown-item" @click="editInformationModal(employee.id)" href="#">Edit Information</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click="goToPlantilla(employee)" href="#">Go to Plantilla</a>
+                                                <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click="goToSALN(employee.id)" href="#">SALN</a>
                                                 <div v-if="$gate.isAdministratorORAuthor()" class="dropdown-divider"></div>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" @click.prevent="generateBarcode(employee)" href="#">{{ employee.barcode ? 'Update Barcode' : 'Generate Barcode' }}</a>
                                                 <a v-if="$gate.isAdministratorORAuthor()" class="dropdown-item" href="#" @click.prevent="generateIDModal(employee)" data-toggle="modal" data-target="#exampleModal">Generate ID</a>
@@ -861,6 +862,10 @@
             }
         },
         methods: {
+
+            goToSALN: function(id){
+                this.$router.push({path: '/employee-SALN', query: {id: id}})
+            },
 
             formatDate: function(date)
             {

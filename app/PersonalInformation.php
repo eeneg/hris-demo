@@ -140,6 +140,10 @@ class PersonalInformation extends Authenticatable
         return $this->hasOne('App\PermanentAddress', 'personal_information_id');
     }
 
+    public function saln(){
+        return $this->hasOne('App\SALN');
+    }
+
     public function getlatestplantillacontent()
     {
         return $this->plantillacontents()->latest()->first();
