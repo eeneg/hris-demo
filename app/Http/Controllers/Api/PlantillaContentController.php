@@ -18,6 +18,7 @@ use App\Position;
 use App\SalaryGrade;
 use App\Setting;
 use App\Separation;
+use App\BenefitSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -415,15 +416,17 @@ class PlantillaContentController extends Controller
                 $tbd->original_appointment = null;
                 $tbd->last_promotion = null;
                 $tbd->save();
-            } else {
-                // Benefit Schedule
-                if ($request->personal_information_id != null) {
-                    $tbd->personalinformation->benefitschedule->updateorcreate(
-                        [ 'personal_information_id' => $tbd->personal_information_id ],
-                        [ 'nosi' => $request->nosi_schedule, 'loyalty' => $request->loyalty_schedule ]
-                    );
-                }
+
+
             }
+            // Benefit Schedule
+            if ($request->personal_information_id != null) {
+                $benefit = BenefitSchedule::updateorcreate(
+                    [ 'personal_information_id' => $request->personal_information_id ],
+                    [ 'nosi' => $request->nosi_schedule, 'loyalty' => $request->loyalty_schedule ]
+                );
+            }
+            
         }
 
         // Separation
