@@ -223,7 +223,7 @@
                     'csc_level': '',
                     'mode': null,
                     'effectivity_date': null,
-                    'selectedPlantilla': null
+                    'selectedPlantilla': null,
                 }),
             }
         },
@@ -250,6 +250,8 @@
             selected_employee: function(newData, oldData) {
                 if (newData.data) {
                     this.form.original_appointment = newData.data.original_appointment
+                    this.form.loyalty_schedule = newData.data.loyalty_schedule
+                    this.form.nosi_schedule = newData.data.nosi_schedule
                 } else {
                     this.form.original_appointment = ''
                 }
