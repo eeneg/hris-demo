@@ -415,14 +415,14 @@ class PlantillaContentController extends Controller
                 $tbd->original_appointment = null;
                 $tbd->last_promotion = null;
                 $tbd->save();
-            }
-
-            // Benefit Schedule
-            if ($request->personal_information_id != null) {
-                $tbd->personalinformation->benefitschedule->updateorcreate(
-                    [ 'personal_information_id' => $tbd->personal_information_id ],
-                    [ 'nosi' => $request->nosi_schedule, 'loyalty' => $request->loyalty_schedule ]
-                );
+            } else {
+                // Benefit Schedule
+                if ($request->personal_information_id != null) {
+                    $tbd->personalinformation->benefitschedule->updateorcreate(
+                        [ 'personal_information_id' => $tbd->personal_information_id ],
+                        [ 'nosi' => $request->nosi_schedule, 'loyalty' => $request->loyalty_schedule ]
+                    );
+                }
             }
         }
 
