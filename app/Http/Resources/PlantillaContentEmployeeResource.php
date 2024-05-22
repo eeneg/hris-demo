@@ -17,7 +17,9 @@ class PlantillaContentEmployeeResource extends JsonResource
         return [
             'position' => $this->position->title,
             'office' => $this->position->department->title,
-            'original_appointment' => $this->original_appointment
+            'original_appointment' => $this->original_appointment,
+            'nosi_schedule' => $this->personalinformation ? ($this->personalinformation->benefitschedule ? $this->personalinformation->benefitschedule->nosi : '') : '',
+            'loyalty_schedule' => $this->personalinformation ? ($this->personalinformation->benefitschedule ? $this->personalinformation->benefitschedule->loyalty : '') : '',
         ];
     }
 }

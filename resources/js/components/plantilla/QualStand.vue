@@ -120,7 +120,7 @@
                     </div>
                 </div>
 
-                <div class="card-body table-responsive p-0" style="height: 650px;">
+                <div class="card-body table-responsive p-0" style="height: 800px;">
                     <table class="table table-striped text-nowrap custom-table">
                         <thead>
                             <tr>
