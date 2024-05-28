@@ -15,12 +15,16 @@ class CreateSALNSTable extends Migration
     {
         Schema::create('s_a_l_n_s', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('declarant');
+            $table->string('declarant_fn');
+            $table->string('declarant_ln');
+            $table->string('declarant_mi');
             $table->string('declarant_address');
             $table->string('declarant_position');
             $table->string('declarant_agency');
             $table->string('declarant_office_address');
-            $table->string('spouse');
+            $table->string('spouse_fn');
+            $table->string('spouse_ln');
+            $table->string('spouse_mi');
             $table->string('spouse_position');
             $table->string('spouse_agency');
             $table->string('spouse_agency_address');

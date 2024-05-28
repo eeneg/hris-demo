@@ -10,6 +10,13 @@ class SALN_Business extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'address',
+        'nature',
+        'date',
+    ];
+
     public function saln(){
         return $this->belongsTo('App\SALN');
     }

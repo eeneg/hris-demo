@@ -10,6 +10,12 @@ class SALN_AssetPersonalProperties extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'description',
+        'year',
+        'cost',
+    ];
+
     public function saln(){
         return $this->belongsTo('App\SALN');
     }

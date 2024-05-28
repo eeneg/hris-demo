@@ -10,6 +10,12 @@ class SALN_Liabilities extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'nature',
+        'creditor_name',
+        'balance'
+    ];
+
     public function saln(){
         return $this->belongsTo('App\SALN');
     }

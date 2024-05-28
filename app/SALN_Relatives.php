@@ -10,6 +10,13 @@ class SALN_Relatives extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'relationship',
+        'postion',
+        'agency_name_and_address',
+    ];
+
     public function saln(){
         return $this->belongsTo('App\SALN');
     }
