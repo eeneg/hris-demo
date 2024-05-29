@@ -10,6 +10,14 @@ class SALN_Children extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string',
+    ];
+
     protected $fillable = [
         'name',
         'dob',

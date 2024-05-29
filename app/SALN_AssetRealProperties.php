@@ -10,6 +10,14 @@ class SALN_AssetRealProperties extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string',
+    ];
+
     protected $fillable = [
         'description',
         'kind',

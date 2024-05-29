@@ -10,6 +10,14 @@ class SALN_Relatives extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string',
+    ];
+
     protected $fillable = [
         'name',
         'relationship',

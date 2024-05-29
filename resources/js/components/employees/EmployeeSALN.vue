@@ -19,7 +19,7 @@
                 <div class="card-body">
 
                     <div class="row">
-                        <form autocomplete="off" @submit.prevent="submit()">
+                        <form autocomplete="off" @submit.prevent="editMode ? update() : submit()">
                             <div class="col-md-12">
                                 <h5 for="" class="text-primary">Declarant</h5>
                             </div>
@@ -129,16 +129,26 @@
                                             <div class="col-md-6"><label for="">Name</label></div>
                                             <div class="col-md-3"><label for="">Date of Birth</label></div>
                                             <div class="col-md-2"><label for="">Age</label></div>
+                                            <div class="col-md-2"><label for=""></label></div>
                                         </div>
                                         <div class="form-row" v-for="(c, i) in form.children">
-                                            <div class="form-group col-md-6">
-                                                <input type="text" class="form-control" name="Name" id="Name" v-model="c.name" placeholder="Name">
+                                            <div class="col-md-11">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <input type="text" class="form-control" name="Name" id="Name" v-model="c.name" placeholder="Name">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <input type="date" class="form-control" name="dob" id="dob" v-model="c.dob">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <input type="text" class="form-control" name="Age" id="Age" v-model="c.age" placeholder="Age">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="date" class="form-control" name="dob" id="dob" v-model="c.dob">
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="Age" id="Age" v-model="c.age" placeholder="Age">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -195,7 +205,7 @@
                                         <div class="col-md-12">
                                             <hr>
                                         </div>
-                                        <div class="form-row" v-for="(rp, i) in form.real_properties">
+                                        <div class="form-row" v-for="(rp, i) in form.real_property">
                                             <div class="col-md-12">
                                                 <h5>
                                                     {{ i + 1 }}
@@ -274,15 +284,24 @@
                                                 <label for="">Acquisition Cost/Ammount</label>
                                             </div>
                                         </div>
-                                        <div class="form-row" v-for="(pp, i) in form.personal_properties">
-                                            <div class="form-group col-md-4">
-                                                <input type="text" class="form-control" name="description" id="description" v-model="pp.description" placeholder="Description">
+                                        <div class="form-row" v-for="(pp, i) in form.personal_property">
+                                            <div class="col-md-11">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <input type="text" class="form-control" name="description" id="description" v-model="pp.description" placeholder="Description">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <input type="text" class="form-control" name="year" id="year" v-model="pp.year" placeholder="Year Acquired">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <input type="number" class="form-control" name="cost" id="cost" @input="totalPersonalProperties" v-model="pp.cost" placeholder="Acquisition Cost/Ammount">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <input type="text" class="form-control" name="year" id="year" v-model="pp.year" placeholder="Year Acquired">
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <input type="number" class="form-control" name="cost" id="cost" @input="totalPersonalProperties" v-model="pp.cost" placeholder="Acquisition Cost/Ammount">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -316,15 +335,24 @@
                                             <div class="col-md-4"><label for="Creditors">Name of Creditors</label></div>
                                             <div class="col-md-4"><label for="Balance">Oustanding Balance</label></div>
                                         </div>
-                                        <div class="form-row" v-for="(l, i) in form.liabilities">
-                                            <div class="form-group col-md-4">
-                                                <input type="text" class="form-control" name="Nature" id="Nature" v-model="l.nature" placeholder="Nature">
+                                        <div class="form-row" v-for="(l, i) in form.liability">
+                                            <div class="col-md-11">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                    <input type="text" class="form-control" name="Nature" id="Nature" v-model="l.nature" placeholder="Nature">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <input type="text" class="form-control" name="Creditors" id="Creditors" v-model="l.creditor_name" placeholder="Name of Creditors">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <input type="number" class="form-control" name="Balance" id="Balance" v-model="l.balance" @input="totalLiabilities()" placeholder="Oustanding Balance">
+                                                </div>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <input type="text" class="form-control" name="Creditors" id="Creditors" v-model="l.creditor_name" placeholder="Name of Creditors">
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <input type="number" class="form-control" name="Balance" id="Balance" v-model="l.balance" @input="totalLiabilities()" placeholder="Oustanding Balance">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -394,17 +422,26 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-row" v-for="(b, i) in form.business" v-if="business_check == false">
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="name" id="name" v-model="b.name" placeholder="Name of Entity">
+                                            <div class="col-md-11">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-3">
+                                                        <input type="text" class="form-control" name="name" id="name" v-model="b.name" placeholder="Name of Entity">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <input type="text" class="form-control" name="address" id="address" v-model="b.address" placeholder="Business Address">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <input type="text" class="form-control" name="nature" id="nature" v-model="b.nature" placeholder="Nature of Business">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <input type="text" class="form-control" name="date" id="date" v-model="b.date" placeholder="Date of Acquisition">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="address" id="address" v-model="b.address" placeholder="Business Address">
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="nature" id="nature" v-model="b.nature" placeholder="Nature of Business">
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="date" id="date" v-model="b.date" placeholder="Date of Acquisition">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -452,18 +489,27 @@
                                             <div class="col-md-3"><label for="" class="">Position</label></div>
                                             <div class="col-md-3"><label for="">Name of Agency/Office and Address</label></div>
                                         </div>
-                                        <div class="form-row" v-for="(r, i) in form.relatives" v-if="relatives_check == false">
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="name" id="name" v-model="r.name" placeholder="Name">
+                                        <div class="form-row" v-for="(r, i) in form.relative" v-if="relatives_check == false">
+                                            <div class="col-md-11">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-3">
+                                                    <input type="text" class="form-control" name="name" id="name" v-model="r.name" placeholder="Name">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="text" class="form-control" name="relationship" id="relationship" v-model="r.relationship" placeholder="Relationship">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="text" class="form-control" name="postion" id="postion" v-model="r.postion" placeholder="Position">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="text" class="form-control" name="agency_name_and_address" id="agency_name_and_address" v-model="r.agency_name_and_address" placeholder="Name of Agency/Office and Address">
+                                                </div>
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="relationship" id="relationship" v-model="r.relationship" placeholder="Relationship">
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="postion" id="postion" v-model="r.postion" placeholder="Position">
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <input type="text" class="form-control" name="agency_name_and_address" id="agency_name_and_address" v-model="r.agency_name_and_address" placeholder="Name of Agency/Office and Address">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -511,13 +557,18 @@
 </template>
 
 <script>
+import axios from 'axios'
+
     export default {
         data(){
 
             return {
+                editMode: false,
                 business_check: false,
                 relatives_check: false,
+                saln_id: null,
                 form: new Form({
+                    'personal_information_id': 'null',
                     'declarant_fn': null,
                     'declarant_ln': null,
                     'declarant_mi': null,
@@ -549,7 +600,7 @@
                             age: null,
                         }
                     ],
-                    'real_properties': [
+                    'real_property': [
                         {
                             description: null,
                             kind: null,
@@ -561,14 +612,14 @@
                             acquisition_cost: null,
                         }
                     ],
-                    'personal_properties': [
+                    'personal_property': [
                         {
                             description: null,
                             year: null,
                             cost: null,
                         }
                     ],
-                    'liabilities': [
+                    'liability': [
                         {
                             nature: null,
                             creditor_name: null,
@@ -583,7 +634,7 @@
                             date: null,
                         }
                     ],
-                    'relatives': [
+                    'relative': [
                         {
                             name: null,
                             relationship: null,
@@ -596,7 +647,26 @@
 
         },
 
+        beforeRouteEnter (to, from, next) {
+            axios.get('api/saln?id='+to.query.id)
+            .then(({data}) => {
+                next(vm => vm.fetchData(data, to.query.id))
+            })
+            .catch(e => {
+
+            })
+        },
+
         methods: {
+            fetchData: function(data, id){
+                this.form.personal_information_id = id
+                console.log(data)
+                if(data != ''){
+                    this.editMode = true
+                    this.saln_id = data.id
+                    Object.assign(this.form, data)
+                }
+            },
             addChildren: function(){
                 this.form.children.push({
                     name: null,
@@ -605,7 +675,7 @@
                 })
             },
             addRealProperties:  function(){
-                this.form.real_properties.push({
+                this.form.real_property.push({
                     description: null,
                     kind: null,
                     location: null,
@@ -617,14 +687,14 @@
                 })
             },
             addPersonalProperties: function(){
-                this.form.personal_properties.push({
+                this.form.personal_property.push({
                     description: null,
                     year: null,
                     cost: null,
                 })
             },
             addLiabilities: function(){
-                this.form.liabilities.push({
+                this.form.liability.push({
                     nature: null,
                     creditor_name: null,
                     balance: null,
@@ -639,7 +709,7 @@
                 })
             },
             addRelatives: function(){
-                this.form.relatives.push({
+                this.form.relative.push({
                     name: null,
                     relationship: null,
                     postion: null,
@@ -647,23 +717,23 @@
                 })
             },
             resetBusiness: function(){
-                // this.form.business = [{name: null,
-                //     address: null,
-                //     nature: null,
-                //     date: null,
-                // }]
+                this.form.business = [{name: null,
+                    address: null,
+                    nature: null,
+                    date: null,
+                }]
             },
             resetRelatives: function(){
-                // this.form.relatives = [{
-                //     name: null,
-                //     relationship: null,
-                //     postion: null,
-                //     agency_name_and_address: null,
-                // }]
+                this.form.relative = [{
+                    name: null,
+                    relationship: null,
+                    postion: null,
+                    agency_name_and_address: null,
+                }]
             },
             totaAddlRealProperties: function(){
                 let total = parseInt(0)
-                this.form.real_properties.forEach(function(e){
+                this.form.real_property.forEach(function(e){
                     total+=parseFloat(e.acquisition_cost ?? 0)
                 })
                 this.form.real_property_subtotal = total
@@ -672,7 +742,7 @@
             },
             totalPersonalProperties: function(){
                 let total = parseInt(0)
-                this.form.personal_properties.forEach(function(e){
+                this.form.personal_property.forEach(function(e){
                     total+=parseFloat(e.cost ?? 0)
                 })
                 this.form.personal_property_subtotal = total
@@ -681,7 +751,7 @@
             },
             totalLiabilities: function(){
                 let total = parseInt(0)
-                this.form.liabilities.forEach(function(e){
+                this.form.liability.forEach(function(e){
                     total+=parseFloat(e.balance ?? 0)
                 })
                 this.form.total_liability = total
@@ -694,6 +764,17 @@
                     this.$Progress.finish();
                 })
                 .catch(error => {
+                    this.$Progress.fail();
+                    console.log(error.response.data.message)
+                })
+            },
+            update: function(){
+                this.$Progress.start()
+                this.form.patch('api/saln/'+this.saln_id)
+                .then(e => {
+                    this.$Progress.finish();
+                })
+                .catch(e => {
                     this.$Progress.fail();
                     console.log(error.response.data.message)
                 })

@@ -18,7 +18,17 @@ class SALN extends Model
         'id' => 'string',
     ];
 
+    protected $with = [
+        'children',
+        'realProperty',
+        'personalProperty',
+        'liability',
+        'business',
+        'relative'
+    ];
+
     protected $fillable =[
+        'personal_information_id',
         'declarant_fn',
         'declarant_ln',
         'declarant_mi',

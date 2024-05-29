@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Webpatser\Uuid\Uuid;
 use App\SALN;
+use App\SALN_Children;
 
 class EmployeeSALNController extends Controller
 {
@@ -13,9 +15,10 @@ class EmployeeSALNController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $saln = Saln::where('personal_information_id', $request->id)->first();
+        return $saln;
     }
 
     /**
@@ -72,11 +75,11 @@ class EmployeeSALNController extends Controller
         $record = Saln::find($saln->id);
 
         $children           = $record->children()->createMany($request->children);
-        $realProperty       = $record->realProperty()->createMany($request->real_properties);
-        $personalProperty   = $record->personalProperty()->createMany($request->personal_properties);
-        $liability          = $record->liability()->createMany($request->liabilities);
+        $realProperty       = $record->realProperty()->createMany($request->real_property);
+        $personalProperty   = $record->personalProperty()->createMany($request->personal_property);
+        $liability          = $record->liability()->createMany($request->liability);
         $business           = $record->business()->createMany($request->business);
-        $relative           = $record->relative()->createMany($request->relatives);
+        $relative           = $record->relative()->createMany($request->relative);
 
     }
 
@@ -100,7 +103,29 @@ class EmployeeSALNController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $saln = Saln::find($id);
+
+        $saln->update($request->all());
+
+        $c = collect($request->all())->map(function ($e) use ($saln) {
+            if(is_array($e)){
+                return collect($e)->map(function($i) use ($saln){
+                    $i['id'] = $i['id'] ?? Uuid::generate()->string;
+                    $i['saln_id'] = $saln->id;
+                    unset($i['created_at'], $i['updated_at']);
+                    return $i;
+                })->toArray();
+            }
+        })->toArray();
+
+        $children           = $saln->children()->upsert($c['children'], ['id']);
+        $realProperty       = $saln->realProperty()->upsert($c['real_property'], ['id']);
+        $personalProperty   = $saln->personalProperty()->upsert($c['personal_property'], ['id']);
+        $liability          = $saln->liability()->upsert($c['liability'], ['id']);
+        $business           = $saln->business()->upsert($c['business'], ['id']);
+        $relative           = $saln->relative()->upsert($c['relative'], ['id']);
+
+        // $saln->children()->whereNotIn('id', collect($c['children'])->pluck('id')->toArray())->delete();
     }
 
     /**

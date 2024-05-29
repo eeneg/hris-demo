@@ -15,6 +15,11 @@ class CreateSALNSTable extends Migration
     {
         Schema::create('s_a_l_n_s', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
+            $table->uuid('personal_information_id');
+            $table->foreign('personal_information_id')
+                ->references('id')
+                ->on('personal_informations')
+                ->onDelete('cascade');
             $table->string('declarant_fn');
             $table->string('declarant_ln');
             $table->string('declarant_mi');
