@@ -20,9 +20,9 @@ class CreateSALNChildrensTable extends Migration
                 ->references('id')
                 ->on('s_a_l_n_s')
                 ->onDelete('cascade');
-            $table->string('name');
-            $table->string('dob');
-            $table->string('age');
+            $table->string('name')->nullable();
+            $table->string('dob')->nullable();
+            $table->string('age')->nullable();
             $table->timestamps();
         });
     }

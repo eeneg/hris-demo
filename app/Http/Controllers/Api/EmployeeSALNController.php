@@ -37,24 +37,10 @@ class EmployeeSALNController extends Controller
                 'declarant_position' => 'required',
                 'declarant_agency' => 'required',
                 'declarant_office_address' => 'required',
-                'spouse_ln' => 'required',
-                'spouse_fn' => 'required',
-                'spouse_mi' => 'required',
-                'spouse_position' => 'required',
-                'spouse_agency' => 'required',
-                'spouse_agency_address' => 'required',
-                'real_property_subtotal' => 'required',
-                'personal_property_subtotal' => 'required',
-                'total_asset' => 'required',
-                'total_liability' => 'required',
-                'net_worth' => 'required',
                 'date' => 'required',
                 'gov_id1' => 'required',
                 'idNo_id1' => 'required',
                 'idDate_id1' => 'required',
-                'gov_id2' => 'required',
-                'idNo_id2' => 'required',
-                'idDate_id2' => 'required',
             ],
             [
                 'declarant_fn.required' => 'Field required',
@@ -64,6 +50,7 @@ class EmployeeSALNController extends Controller
                 'declarant_position.required' => 'Field required',
                 'declarant_agency.required' => 'Field required',
                 'declarant_office_address.required' => 'Field required',
+                'date.required' => 'Field required',
                 'gov_id1.required' => 'Field required',
                 'idNo_id1.required' => 'Field required',
                 'idDate_id1.required' => 'Field required',
@@ -103,9 +90,37 @@ class EmployeeSALNController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $saln = Saln::find($id);
+        $this->validate($request, [
+                'declarant_fn' => 'required',
+                'declarant_ln' => 'required',
+                'declarant_mi' => 'required',
+                'declarant_address' => 'required',
+                'declarant_position' => 'required',
+                'declarant_agency' => 'required',
+                'declarant_office_address' => 'required',
+                'date' => 'required',
+                'gov_id1' => 'required',
+                'idNo_id1' => 'required',
+                'idDate_id1' => 'required',
+            ],
+            [
+                'declarant_fn.required' => 'Field required',
+                'declarant_ln.required' => 'Field required',
+                'declarant_mi.required' => 'Field required',
+                'declarant_address.required' => 'Field required',
+                'declarant_position.required' => 'Field required',
+                'declarant_agency.required' => 'Field required',
+                'declarant_office_address.required' => 'Field required',
+                'date.required' => 'Field required',
+                'gov_id1.required' => 'Field required',
+                'idNo_id1.required' => 'Field required',
+                'idDate_id1.required' => 'Field required',
+            ]
+        );
 
-        $saln->update($request->all());
+        $saln = Saln::find($id)->delete();
+
+        $saln = Saln::create($request->all());
 
         $c = collect($request->all())->map(function ($e) use ($saln) {
             if(is_array($e)){
@@ -125,7 +140,8 @@ class EmployeeSALNController extends Controller
         $business           = $saln->business()->upsert($c['business'], ['id']);
         $relative           = $saln->relative()->upsert($c['relative'], ['id']);
 
-        // $saln->children()->whereNotIn('id', collect($c['children'])->pluck('id')->toArray())->delete();
+        return $saln->id;
+
     }
 
     /**

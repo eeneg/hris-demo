@@ -20,10 +20,10 @@ class CreateSALNBusinessesTable extends Migration
                 ->references('id')
                 ->on('s_a_l_n_s')
                 ->onDelete('cascade');
-            $table->string('name');
-            $table->string('address');
-            $table->string('nature');
-            $table->string('date');
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
+            $table->string('nature')->nullable();
+            $table->string('date')->nullable();
             $table->timestamps();
         });
     }

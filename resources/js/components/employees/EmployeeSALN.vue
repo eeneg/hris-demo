@@ -9,9 +9,7 @@
                             <h3>SWORN STATEMENT OF ASSETS, LIABILITIES AND NET WORTH (SALN)</h3>
                         </div>
                         <div class="col-md-6">
-                            <h3>
-                               (Under Development)
-                            </h3>
+                            <button type="button" class="btn btn-success float-right">Print <i class="fas fa-print"></i></button>
                         </div>
                     </div>
                 </div>
@@ -147,7 +145,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-group">
-                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                    <button type="button" class="btn btn-danger" @click="removeChildren(i)">Remove <i class="fas fa-minus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -207,9 +205,18 @@
                                         </div>
                                         <div class="form-row" v-for="(rp, i) in form.real_property">
                                             <div class="col-md-12">
-                                                <h5>
-                                                    {{ i + 1 }}
-                                                </h5>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h5>
+                                                            {{ i + 1 }}
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <button type="button" class="btn btn-danger float-right" @click="removeRealProperties(i)">Remove <i class="fas fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="">Description (e.g. lot, house and lot, condominium and improvements)</label>
@@ -300,7 +307,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-group">
-                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                    <button type="button" class="btn btn-danger" @click="removePersonalProperties(i)">Remove <i class="fas fa-minus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -351,7 +358,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-group">
-                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                    <button type="button" class="btn btn-danger" @click="removeLiabilities(i)">Remove <i class="fas fa-minus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -440,7 +447,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-group">
-                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                    <button type="button" class="btn btn-danger" @click="removeBusiness(i)">Remove <i class="fas fa-minus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -508,7 +515,7 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="form-group">
-                                                    <button type="button" class="btn btn-danger">Remove <i class="fas fa-minus"></i></button>
+                                                    <button type="button" class="btn btn-danger" @click="removeRelatives(i)">Remove <i class="fas fa-minus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -568,7 +575,7 @@ import axios from 'axios'
                 relatives_check: false,
                 saln_id: null,
                 form: new Form({
-                    'personal_information_id': 'null',
+                    'personal_information_id': null,
                     'declarant_fn': null,
                     'declarant_ln': null,
                     'declarant_mi': null,
@@ -660,7 +667,6 @@ import axios from 'axios'
         methods: {
             fetchData: function(data, id){
                 this.form.personal_information_id = id
-                console.log(data)
                 if(data != ''){
                     this.editMode = true
                     this.saln_id = data.id
@@ -674,6 +680,9 @@ import axios from 'axios'
                     age: null,
                 })
             },
+            removeChildren: function(index){
+                this.form.children.splice(index, 1)
+            },
             addRealProperties:  function(){
                 this.form.real_property.push({
                     description: null,
@@ -686,6 +695,9 @@ import axios from 'axios'
                     acquisition_cost: null,
                 })
             },
+            removeRealProperties: function(index){
+                this.form.real_property.splice(index, 1)
+            },
             addPersonalProperties: function(){
                 this.form.personal_property.push({
                     description: null,
@@ -693,12 +705,18 @@ import axios from 'axios'
                     cost: null,
                 })
             },
+            removePersonalProperties: function(index){
+                this.form.personal_property.splice(index, 1)
+            },
             addLiabilities: function(){
                 this.form.liability.push({
                     nature: null,
                     creditor_name: null,
                     balance: null,
                 })
+            },
+            removeLiabilities: function(index){
+                this.form.liability.splice(index, 1)
             },
             addBusiness: function (){
                 this.form.business.push({
@@ -708,6 +726,9 @@ import axios from 'axios'
                     date: null,
                 })
             },
+            removeBusiness: function(index){
+                this.form.business.splice(index, 1)
+            },
             addRelatives: function(){
                 this.form.relative.push({
                     name: null,
@@ -715,6 +736,9 @@ import axios from 'axios'
                     postion: null,
                     agency_name_and_address: null,
                 })
+            },
+            removeRelatives: function(index){
+                this.form.relative.splice(index, 1)
             },
             resetBusiness: function(){
                 this.form.business = [{name: null,
@@ -762,21 +786,39 @@ import axios from 'axios'
                 this.form.post('api/saln')
                 .then(e => {
                     this.$Progress.finish();
+                    this.editMode = true
+                    toast.fire({
+                        icon: 'success',
+                        title: 'SALN saved successfully'
+                    });
                 })
                 .catch(error => {
                     this.$Progress.fail();
                     console.log(error.response.data.message)
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Something went wrong'
+                    });
                 })
             },
             update: function(){
                 this.$Progress.start()
                 this.form.patch('api/saln/'+this.saln_id)
-                .then(e => {
+                .then(({data}) => {
+                    this.saln_id = data
                     this.$Progress.finish();
+                    toast.fire({
+                        icon: 'success',
+                        title: 'SALN saved successfully'
+                    });
                 })
                 .catch(e => {
                     this.$Progress.fail();
                     console.log(error.response.data.message)
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Something went wrong'
+                    });
                 })
             }
 
