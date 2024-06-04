@@ -20,10 +20,10 @@ class CreateSALNRelativesTable extends Migration
                 ->references('id')
                 ->on('s_a_l_n_s')
                 ->onDelete('cascade');
-            $table->string('name');
-            $table->string('relationship');
-            $table->string('postion');
-            $table->string('agency_name_and_address');
+            $table->string('name')->nullable();
+            $table->string('relationship')->nullable();
+            $table->string('postion')->nullable();
+            $table->string('agency_name_and_address')->nullable();
             $table->timestamps();
         });
     }
