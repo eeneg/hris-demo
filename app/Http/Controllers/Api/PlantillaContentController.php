@@ -212,7 +212,9 @@ class PlantillaContentController extends Controller
         $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
         if (!is_null($request->selectedPlantilla)) {
-            $plantilla = Plantilla::findOrFail($request->selectedPlantilla['id']);
+            if (isset($request->selectedPlantilla['id'])) {
+                $plantilla = Plantilla::findOrFail($request->selectedPlantilla['id']);
+            }
         }
 
         $department_id = $request->department_id;
