@@ -46,7 +46,6 @@ Route::group(['middleware' => ['auth:api']], function () {
         'employeeservicerecord' => 'Api\EmployeeServiceRecordController',
         'separation' => 'Api\SeparationController',
         'qs' => 'Api\QSController',
-        'saln' => 'Api\EmployeeSALNController'
     ]);
 
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
@@ -130,6 +129,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('addServiceRecord', 'Api\EmployeeServiceRecordController@addServiceRecord');
 
     Route::post('printReappointments', 'Api\ReappointmentController@printReappointments');
+});
+
+Route::group(['middleware' => ['auth:employee-api,api']], function () {
+    Route::apiResources([
+        'saln' => 'Api\EmployeeSALNController'
+    ]);
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function () {

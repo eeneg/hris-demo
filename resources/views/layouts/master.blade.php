@@ -367,8 +367,14 @@
                             </li>
                             <li class="nav-item">
 								<router-link to="/employee-leave-applications" class="nav-link">
-									<i class="nav-icon fas fa-file grey"></i>
+									<i class="nav-icon fas fa-file purple"></i>
 									<p>Leave Application</p>
+								</router-link>
+                            </li>
+                            <li class="nav-item">
+								<router-link :to="{ path: '/employees-saln', query: {id: '{{auth()->user()->id}}'} }" class="nav-link">
+									<i class="nav-icon fas fa-file orange"></i>
+									<p>SALN</p>
 								</router-link>
                             </li>
                             @endcan

@@ -374,7 +374,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <h4>Total Net Worth:</h4>
+                                            <h4 class="text-success">Total Net Worth:</h4>
                                         </div>
                                         <div class="col-md-10">
                                             <h4>
