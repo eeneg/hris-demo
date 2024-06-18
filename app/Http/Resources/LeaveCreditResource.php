@@ -16,7 +16,7 @@ class LeaveCreditResource extends ResourceCollection
     {
         return $this->collection->map(function ($item, $key) {
             return [
-                'id' => $item->personal_information_id,
+                'id' => $item->id,
                 'name' => trim(
                     preg_replace('/\s+/', ' ',
                         "$item->surname, $item->firstname".
