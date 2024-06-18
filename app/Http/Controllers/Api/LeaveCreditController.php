@@ -100,9 +100,7 @@ class LeaveCreditController extends Controller
                 'pdsquestion'
             )
             ->select(
-                'plantilla_contents.id',
-                'plantilla_contents.plantilla_id',
-                'plantilla_contents.personal_information_id',
+                'personal_informations.id',
                 'personal_informations.firstname',
                 'personal_informations.middlename',
                 'personal_informations.surname',
@@ -112,10 +110,8 @@ class LeaveCreditController extends Controller
                 'personal_informations.retirement_date',
                 'personal_informations.status',
             )
-            ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
             ->orderBy('surname')
-            ->get()
-            ->unique('personal_information_id');
+            ->get();
         }
 
         return new LeaveCreditResource($employee);
