@@ -65,7 +65,40 @@ class LeaveCreditController extends Controller
             ->orderBy('surname')
             ->get();
         }else{
-            $employee = PlantillaContent::without('plantilla', 'salaryauthorized', 'salaryproposed', 'position')
+            // $employee = PlantillaContent::without('plantilla', 'salaryauthorized', 'salaryproposed', 'position')
+            // ->select(
+            //     'plantilla_contents.id',
+            //     'plantilla_contents.plantilla_id',
+            //     'plantilla_contents.personal_information_id',
+            //     'personal_informations.firstname',
+            //     'personal_informations.middlename',
+            //     'personal_informations.surname',
+            //     'personal_informations.nameextension',
+            //     'personal_informations.civilstatus',
+            //     'personal_informations.birthdate',
+            //     'personal_informations.retirement_date',
+            //     'personal_informations.status',
+            // )
+            // ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
+            // ->where('personal_information_id', '!=', null)
+            // // ->where('plantilla_id', $plantilla->id)
+            // ->orderBy('surname')
+            // ->get();
+
+            $employee = PersonalInformation::without(
+                'barcode',
+                'familybackground',
+                'residentialaddresstable',
+                'permanentaddresstable',
+                'children',
+                'educationalbackground',
+                'eligibilities',
+                'otherinfos',
+                'workexperiences',
+                'voluntaryworks',
+                'trainingprograms',
+                'pdsquestion'
+            )
             ->select(
                 'plantilla_contents.id',
                 'plantilla_contents.plantilla_id',
@@ -79,11 +112,10 @@ class LeaveCreditController extends Controller
                 'personal_informations.retirement_date',
                 'personal_informations.status',
             )
-            ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
-            ->where('personal_information_id', '!=', null)
-            ->where('plantilla_id', $plantilla->id)
+            ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
             ->orderBy('surname')
-            ->get();
+            ->get()
+            ->unique('personal_information_id');
         }
 
         return new LeaveCreditResource($employee);
