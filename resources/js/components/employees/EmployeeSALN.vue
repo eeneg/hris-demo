@@ -232,15 +232,15 @@
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label for="">Assessed Value</label>
-                                                <input type="number" class="form-control" name="Assessed_Value" id="Assessed_Value" v-model="rp.assessed_value" placeholder="Assessed Value">
+                                                <input type="numbers" step="0.001" class="form-control" name="Assessed_Value" id="Assessed_Value" v-model="rp.assessed_value" placeholder="Assessed Value">
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label for="">Current Fair Market Value</label>
-                                                <input type="number" class="form-control" name="Market_Value" id="Market_Value" v-model="rp.market_value" placeholder="Current Fair Market Value">
+                                                <input type="number" step="0.001" class="form-control" name="Market_Value" id="Market_Value" v-model="rp.market_value" placeholder="Current Fair Market Value">
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label for="">Acquisition Year</label>
-                                                <input type="number" class="form-control" name="Acquisition_Year" id="Acquisition_Year" v-model="rp.acquisition_year" placeholder="Acquisition Year">
+                                                <input type="number" step="0.001" class="form-control" name="Acquisition_Year" id="Acquisition_Year" v-model="rp.acquisition_year" placeholder="Acquisition Year">
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label for="">Acquisition Mode</label>
@@ -248,7 +248,7 @@
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="">Acquisition Cost</label>
-                                                <input type="number" class="form-control" name="Acquisition_Cost" @input="totaAddlRealProperties()" id="Acquisition_Cost" v-model="rp.acquisition_cost" placeholder="Acquisition Cost">
+                                                <input type="number" step="0.001" class="form-control" name="Acquisition_Cost" @input="totaAddlRealProperties()" id="Acquisition_Cost" v-model="rp.acquisition_cost" placeholder="Acquisition Cost">
                                             </div>
                                             <div class="col-md-12">
                                                 <hr>
@@ -301,7 +301,7 @@
                                                         <input type="text" class="form-control" name="year" id="year" v-model="pp.year" placeholder="Year Acquired">
                                                     </div>
                                                     <div class="form-group col-md-4">
-                                                        <input type="number" class="form-control" name="cost" id="cost" @input="totalPersonalProperties" v-model="pp.cost" placeholder="Acquisition Cost/Ammount">
+                                                        <input type="number" step="0.001" class="form-control" name="cost" id="cost" @input="totalPersonalProperties" v-model="pp.cost" placeholder="Acquisition Cost/Ammount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -352,7 +352,7 @@
                                                     <input type="text" class="form-control" name="Creditors" id="Creditors" v-model="l.creditor_name" placeholder="Name of Creditors">
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <input type="number" class="form-control" name="Balance" id="Balance" v-model="l.balance" @input="totalLiabilities()" placeholder="Oustanding Balance">
+                                                    <input type="number" step="0.001" class="form-control" name="Balance" id="Balance" v-model="l.balance" @input="totalLiabilities()" placeholder="Oustanding Balance">
                                                 </div>
                                                 </div>
                                             </div>
