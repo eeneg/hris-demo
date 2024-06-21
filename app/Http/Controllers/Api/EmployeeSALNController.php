@@ -133,12 +133,12 @@ class EmployeeSALNController extends Controller
             }
         })->toArray();
 
-        $children           = $saln->children()->upsert($c['children'], ['id']);
-        $realProperty       = $saln->realProperty()->upsert($c['real_property'], ['id']);
-        $personalProperty   = $saln->personalProperty()->upsert($c['personal_property'], ['id']);
-        $liability          = $saln->liability()->upsert($c['liability'], ['id']);
-        $business           = $saln->business()->upsert($c['business'], ['id']);
-        $relative           = $saln->relative()->upsert($c['relative'], ['id']);
+        $children           = $saln->children()->createMany($c['children']);
+        $realProperty       = $saln->realProperty()->createMany($c['real_property']);
+        $personalProperty   = $saln->personalProperty()->createMany($c['personal_property']);
+        $liability          = $saln->liability()->createMany($c['liability']);
+        $business           = $saln->business()->createMany($c['business']);
+        $relative           = $saln->relative()->createMany($c['relative']);
 
         return $saln->id;
 
@@ -153,5 +153,28 @@ class EmployeeSALNController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function printSaln($id){
+
+        $saln = Saln::find($id);
+
+        $saln_children          = $saln->children;
+        $saln_realProperty      = $saln->realProperty;
+        $saln_personalProperty  = $saln->personalProperty;
+        $saln_liability         = $saln->liability;
+        $saln_business          = $saln->business;
+        $saln_relative          = $saln->relative;
+        $saln                   = $saln->without('children','realProperty','personalProperty','liability','business','relative')->first();
+
+        return view('reports.employee-saln', compact(
+            'saln',
+            'saln_children',
+            'saln_realProperty',
+            'saln_personalProperty',
+            'saln_liability',
+            'saln_business',
+            'saln_relative',
+        ));
     }
 }

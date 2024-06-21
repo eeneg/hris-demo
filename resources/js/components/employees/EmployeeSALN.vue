@@ -9,7 +9,7 @@
                             <h3>SWORN STATEMENT OF ASSETS, LIABILITIES AND NET WORTH (SALN)</h3>
                         </div>
                         <div class="col-md-6">
-                            <button type="button" class="btn btn-success float-right">Print <i class="fas fa-print"></i></button>
+                            <button type="button" class="btn btn-success float-right" @click="printSaln()">Print <i class="fas fa-print"></i></button>
                         </div>
                     </div>
                 </div>
@@ -559,6 +559,34 @@
                 </div>
             </div>
         </div>
+
+        <iframe id="i" frameborder="0" hidden></iframe>
+
+         <!-- The Modal -->
+        <div class="modal" id="pdfModal">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Print Report</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body" id="pdf-viewer">
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
     </div> <!-- row -->
 
 </template>
@@ -820,6 +848,43 @@ import axios from 'axios'
                         title: 'Something went wrong'
                     });
                 })
+            },
+
+            printSaln:function(){
+                Swal.fire({
+                    title: '<strong>Generating PDS</strong>',
+                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                    icon: 'info',
+                    willOpen () {
+                        Swal.showLoading ()
+                    },
+                    didClose () {
+                        Swal.hideLoading()
+                    },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        showConfirmButton: false
+                })
+
+                axios.get('api/printSaln/'+this.saln_id)
+                .then(e => {
+                    var f = document.getElementById('i')
+                    f.contentWindow.document.write(e.data)
+                    setTimeout(function () {
+                        f.contentWindow.focus()
+                        f.contentWindow.print()
+
+                        f.contentWindow.document.open();
+                        f.contentWindow.document.write("");
+                        f.contentWindow.document.close();
+                    }, 500);
+                    Swal.close()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+
             }
 
         }

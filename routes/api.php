@@ -135,6 +135,8 @@ Route::group(['middleware' => ['auth:employee-api,api']], function () {
     Route::apiResources([
         'saln' => 'Api\EmployeeSALNController'
     ]);
+
+    Route::get('printSaln/{id}', 'Api\EmployeeSALNController@printSaln');
 });
 
 Route::group(['middleware' => ['auth:employee-api']], function () {
