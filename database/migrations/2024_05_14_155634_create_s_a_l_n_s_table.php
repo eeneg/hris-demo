@@ -23,6 +23,7 @@ class CreateSALNSTable extends Migration
             $table->string('declarant_fn');
             $table->string('declarant_ln');
             $table->string('declarant_mi');
+            $table->string('declarant_name_extension')->nullable();
             $table->string('declarant_address');
             $table->string('declarant_position');
             $table->string('declarant_agency');

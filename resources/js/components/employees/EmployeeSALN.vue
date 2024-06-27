@@ -29,10 +29,26 @@
                                         <input type="text" class="form-control" name="" id="" v-model="form.declarant_ln" placeholder="Family Name" :class="{'is-invalid':form.errors.has('declarant_ln')}">
                                         <has-error :form="form" field="declarant_ln"></has-error>
                                     </div>
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group col-md-2">
                                         <label for="">First Name*</label>
                                         <input type="text" class="form-control" name="" id="" v-model="form.declarant_fn" placeholder="First Name" :class="{'is-invalid':form.errors.has('declarant_fn')}">
                                         <has-error :form="form" field="declarant_fn"></has-error>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label for="">Name Extention</label>
+                                        <select name="nameextension" id="nameextension" class="form-control" v-model="form.declarant_name_extension" placeholder="Jr., Sr.">
+                                            <option></option>
+                                            <option>Jr.</option>
+                                            <option>Sr.</option>
+                                            <option>I</option>
+                                            <option>II</option>
+                                            <option>III</option>
+                                            <option>IV</option>
+                                            <option>V</option>
+                                            <option>VI</option>
+                                            <option>VII</option>
+                                        </select>
+                                        <has-error :form="form" field="declarant_mi"></has-error>
                                     </div>
                                     <div class="form-group col-md-1">
                                         <label for="">M.I.*</label>
@@ -607,6 +623,7 @@ import axios from 'axios'
                     'declarant_fn': null,
                     'declarant_ln': null,
                     'declarant_mi': null,
+                    'declarant_name_extension': null,
                     'declarant_address': null,
                     'declarant_position': null,
                     'declarant_agency': null,
@@ -883,6 +900,11 @@ import axios from 'axios'
                 })
                 .catch(error => {
                     console.log(error);
+                    Swal.close()
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Cannot Print'
+                    });
                 });
 
             }

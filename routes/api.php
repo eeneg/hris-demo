@@ -144,6 +144,7 @@ Route::group(['middleware' => ['auth:employee-api']], function () {
         'employeepersonalinformation' => 'Api\EmployeeController',
     ]);
     Route::get('getLeaveApplications', 'Api\EmployeeController@getApplications');
+    Route::get('getLeaveCredits', 'Api\EmployeeController@getLeaveCredits');
     Route::get('getLeaveTypesForEmployee', 'Api\EmployeeController@getLeaveTypesForEmployee');
     Route::post('submitLeaveApplication', 'Api\EmployeeController@submitLeaveApplication');
     Route::delete('deleteLeaveApplication/{id}', 'Api\EmployeeController@deleteLeaveApplication');

@@ -109,24 +109,23 @@
                 <div style="width: 15%; font-weight:bold; font-size: 13px;">
                     Declarant:
                 </div>
-                <div style="width: 35%; margin-left: 10px; border-bottom: 1px solid; font-size: 13px;">
-                    Gene Philip L Rellanos
+                <div style="width: 35%; margin-left: 10px; border-bottom: 1px solid; font-size: 13px; display:flex; justify-content:space-around;">
+                    <div>{{$saln->declarant_fn}}</div>
+                    <div>{{$saln->declarant_ln}} {{$saln->declarant_name_extension}}</div>
+                    <div>{{$saln->declarant_mi}}</div>
                 </div>
                 <div style="width: 15%; font-weight:bold; margin-left: 30px; font-size: 13px;">
                     Position:
                 </div>
-                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px;">
-                    asd
+                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                    {{ $saln->declarant_position }}
                 </div>
             </div>
             <div style="margin: 10px 0 0 0; display: inline-flex; width: 100%; margin-top: 0;">
                 <div style="width: 15%; font-weight:bold;">
 
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; width: 35%; margin-left: 10px; font-size: 10px; margin-top: 0;">
-                    <div>
-
-                    </div>
+                <div style="display: flex; justify-content: space-around; align-items: center; width: 35%; margin-left: 10px; font-size: 10px; margin-top: 0;">
                     <div>
                         (Family Name)
                     </div>
@@ -136,29 +135,26 @@
                     <div>
                         (Middle Initial)
                     </div>
-                    <div>
-
-                    </div>
                 </div>
                 <div style="width: 15%; font-weight:bold; margin-left: 30px; font-size: 13px;">
                     Agency/Office:
                 </div>
-                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px;">
-                    asd
+                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                    {{$saln->declarant_agency}}
                 </div>
             </div>
             <div style="margin: 10px 0 0 0; display: inline-flex; width: 100%; margin-top: 0; font-size: 13px;">
                 <div style="width: 15%; font-weight:bold;">
                     Address
                 </div>
-                <div style="width: 35%; margin-left: 10px; border-bottom: 1px solid; font-size: 13px;">
+                <div style="width: 35%; margin-left: 10px; border-bottom: 1px solid; font-size: 13px; text-align: center;">
                     Gene Philip L Rellanos
                 </div>
                 <div style="width: 15%; font-weight:bold; margin-left: 30px; font-size: 13px;">
                     Office Address:
                 </div>
-                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px;">
-                    asd
+                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                    {{$saln->declarant_office_address}}
                 </div>
             </div>
             <div style="margin: 10px 0 0 0; display: inline-flex; width: 100%; margin-top: 0;">
@@ -179,24 +175,23 @@
                 <div style="width: 15%; font-weight:bold; font-size: 13px;">
                     Spouse:
                 </div>
-                <div style="width: 35%; margin-left: 10px; border-bottom: 1px solid; font-size: 13px;">
-                    Gene Philip L Rellanos
+                <div style="width: 35%; margin-left: 10px; border-bottom: 1px solid; font-size: 13px; display:flex; justify-content:space-around;">
+                    <div>{{$saln->spouse_fn}}</div>
+                    <div>{{$saln->spouse_ln}}</div>
+                    <div>{{$saln->spouse_mi}}</div>
                 </div>
                 <div style="width: 15%; font-weight:bold; margin-left: 30px; font-size: 13px;">
                     Position:
                 </div>
-                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px;">
-                    asd
+                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                    {{$saln->spouse_position}}
                 </div>
             </div>
             <div style="margin: 10px 0 0 0; display: inline-flex; width: 100%; margin-top: 0;">
                 <div style="width: 15%; font-weight:bold;">
 
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; width: 35%; margin-left: 10px; font-size: 10px; margin-top: 0;">
-                    <div>
-
-                    </div>
+                <div style="display: flex; justify-content: space-around; align-items: center; width: 35%; margin-left: 10px; font-size: 10px; margin-top: 0;">
                     <div>
                         (Family Name)
                     </div>
@@ -206,15 +201,12 @@
                     <div>
                         (Middle Initial)
                     </div>
-                    <div>
-
-                    </div>
                 </div>
                 <div style="width: 15%; font-weight:bold; margin-left: 30px; font-size: 13px;">
                     Agency/Office:
                 </div>
-                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px;">
-                    asd
+                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                    {{$saln->spouse_agency}}
                 </div>
             </div>
             <div style="margin: 10px 0 0 0; display: inline-flex; width: 100%; margin-top: 0;">
@@ -227,8 +219,22 @@
                 <div style="width: 15%; font-weight:bold; margin-left: 30px; font-size: 13px;">
                     Office Address:
                 </div>
-                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px;">
-                    asd
+                <div style="width: 30%; border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                    {{$saln->spouse_agency_address}}
+                </div>
+            </div>
+            <div style="margin: 10px 0 0 0; display: inline-flex; width: 100%; margin-top: 0;">
+                <div style="width: 15%; font-weight:bold;">
+
+                </div>
+                <div style="width: 35%; margin-left: 10px;">
+
+                </div>
+                <div style="width: 15%; font-weight:bold; margin-left: 30px;">
+
+                </div>
+                <div style="width: 30%; border-bottom: 1px solid;">
+
                 </div>
             </div>
             <div style="display: block; border: 1px solid; margin-top: 15px; padding: 0"></div>
@@ -492,13 +498,11 @@
             </div>
             <div style="display: inline-flex; width: 100%; margin-top: 20px;">
                 <div style="width: 40%; border-bottom: 1px solid; text-align:center;">
-                    asd
                 </div>
                 <div style="width: 20%;">
 
                 </div>
                 <div style="width: 40%; border-bottom: 1px solid; text-align:center;">
-                    asd
                 </div>
             </div>
             <div style="display: inline-flex; width: 100%;">
@@ -519,23 +523,23 @@
                             Government Issued ID:
                         </div>
                         <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px;">
-                            asd
+                            {{ $saln->gov_id1 }}
                         </div>
                     </div>
                     <div style="width: 100%; display: inline-flex">
                         <div style="width: 40%; font-size: 13px;">
                             ID No.:
                         </div>
-                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px;">
-                            asd
+                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                            {{ $saln->idNo_id1  }}
                         </div>
                     </div>
                     <div style="width: 100%; display: inline-flex">
                         <div style="width: 40%; font-size: 13px;">
                             Date Issued:
                         </div>
-                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px;">
-                            asd
+                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                            {{ $saln->idDate_id1  }}
                         </div>
                     </div>
                 </div>
@@ -544,27 +548,27 @@
                 </div>
                 <div style="width: 40%;">
                     <div style="width: 100%; display: inline-flex">
-                        <div style="width: 40%; font-size: 13px;">
+                        <div style="width: 40%; font-size: 13px; text-align:center;">
                             Government Issued ID:
                         </div>
                         <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px;">
-                            asd
+                            {{ $saln->gov_id2 }}
                         </div>
                     </div>
                     <div style="width: 100%; display: inline-flex">
                         <div style="width: 40%; font-size: 13px;">
                             ID No.:
                         </div>
-                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px;">
-                            asd
+                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                            {{ $saln->idNo_id2 }}
                         </div>
                     </div>
                     <div style="width: 100%; display: inline-flex">
                         <div style="width: 40%; font-size: 13px;">
                             Date Issued:
                         </div>
-                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px;">
-                            asd
+                        <div style="width: 60%; text-align:center;border-bottom: 1px solid; font-size: 13px; text-align:center;">
+                            {{ $saln->idDate_id2 }}
                         </div>
                     </div>
                 </div>
@@ -577,7 +581,7 @@
 
                 </div>
                 <div style="width: 30%; border-bottom: 1px solid; text-align:center;">
-                    asd
+
                 </div>
                 <div style="width: 20%;">
 

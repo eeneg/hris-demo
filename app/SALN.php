@@ -32,6 +32,7 @@ class SALN extends Model
         'declarant_fn',
         'declarant_ln',
         'declarant_mi',
+        'declarant_name_extension',
         'declarant_address',
         'declarant_position',
         'declarant_agency',
