@@ -39,6 +39,7 @@
                                         <label for="citizenship" style="line-height: 10px;">Name Extention</label>
                                     </div>
                                     <select name="nameextension" id="nameextension" class="form-control form-control-border border-width-2" v-model="form.nameextension" placeholder="Jr., Sr.">
+                                        <option value=""></option>
                                         <option>Jr.</option>
                                         <option>Sr.</option>
                                         <option>I</option>

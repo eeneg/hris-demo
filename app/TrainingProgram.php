@@ -13,7 +13,7 @@ class TrainingProgram extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id', 'personal_information_id', 'title', 'inclusiveDateFrom', 'inclusiveDateTo', 'hours', 'conductor'];
+    protected $fillable = ['id', 'personal_information_id', 'title', 'inclusiveDateFrom', 'inclusiveDateTo', 'hours', 'conductor', 'orderNo'];
 
     public function personalinformation()
     {

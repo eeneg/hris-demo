@@ -13,7 +13,7 @@ class VoluntaryWork extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id', 'personal_information_id', 'inclusiveDateFrom', 'inclusiveDateTo', 'nameAndAddress', 'inclusiveDates', 'hours', 'position'];
+    protected $fillable = ['id', 'personal_information_id', 'inclusiveDateFrom', 'inclusiveDateTo', 'nameAndAddress', 'inclusiveDates', 'hours', 'position', 'orderNo'];
 
     public function personalinformation()
     {

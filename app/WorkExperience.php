@@ -24,6 +24,7 @@ class WorkExperience extends Model
         'salaryGrade',
         'statusOfAppointment',
         'govService',
+        'orderNo'
     ];
 
     public function personalinformation()
