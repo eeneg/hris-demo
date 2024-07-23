@@ -148,7 +148,7 @@
                     Address
                 </div>
                 <div style="width: 35%; margin-left: 10px; border-bottom: 1px solid; font-size: 13px; text-align: center;">
-                    Gene Philip L Rellanos
+                    {{$saln->declarant_address}}
                 </div>
                 <div style="width: 15%; font-weight:bold; margin-left: 30px; font-size: 13px;">
                     Office Address:
