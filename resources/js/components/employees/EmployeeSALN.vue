@@ -832,6 +832,7 @@ import axios from 'axios'
                 .then(e => {
                     this.$Progress.finish();
                     this.editMode = true
+                    this.saln_id = e.data
                     toast.fire({
                         icon: 'success',
                         title: 'SALN saved successfully'

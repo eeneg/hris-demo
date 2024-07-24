@@ -68,6 +68,8 @@ class EmployeeSALNController extends Controller
         $business           = $record->business()->createMany($request->business);
         $relative           = $record->relative()->createMany($request->relative);
 
+        return $saln->id;
+
     }
 
     /**
