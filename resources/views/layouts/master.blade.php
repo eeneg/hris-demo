@@ -366,6 +366,12 @@
 								</router-link>
                             </li>
                             <li class="nav-item">
+								<router-link to="/employee-view-service-record" class="nav-link">
+									<i class="nav-icon fas fa-clipboard-list blue"></i>
+									<p>Service Record</p>
+								</router-link>
+                            </li>
+                            <li class="nav-item">
 								<router-link to="/employee-leave-applications" class="nav-link">
 									<i class="nav-icon fas fa-file purple"></i>
 									<p>Leave Application</p>

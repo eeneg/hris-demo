@@ -153,6 +153,7 @@ Route::group(['middleware' => ['auth:employee-api']], function () {
     Route::get('editemployee', 'Api\EmployeeController@edit');
     Route::get('getpdsEdits', 'Api\EmployeeController@getpdsEdits');
     Route::post('cancelEdits', 'Api\EmployeeController@cancelEdits');
+    Route::get('getEmployeeServiceRecord', 'Api\EmployeeController@getEmployeeServiceRecord');
 });
 
 Route::get('asd1', 'Api\RequestController@reviewedRequest');
