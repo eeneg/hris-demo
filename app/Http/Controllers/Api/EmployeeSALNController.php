@@ -167,7 +167,7 @@ class EmployeeSALNController extends Controller
         $saln_liability         = $saln->liability;
         $saln_business          = $saln->business;
         $saln_relative          = $saln->relative;
-        $saln                   = $saln->without('children','realProperty','personalProperty','liability','business','relative')->first();
+        $saln                   = $saln->withoutRelations();
 
         return view('reports.employee-saln', compact(
             'saln',
