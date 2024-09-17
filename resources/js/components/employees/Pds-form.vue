@@ -1006,7 +1006,7 @@
                             <table class="table table-responsive table-borderless table-sm no-datatable" id="otherinfo-tbl">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="text-center" style="width: 25%">Specail Skill and Hobby</th>
+                                        <th scope="col" class="text-center" style="width: 25%">Special Skill and Hobby</th>
                                         <th scope="col" class="text-center" style="width: 50%">Non-Academic Distinctions / Recognition</th>
                                         <th scope="col" class="text-center" style="width: 25%">Membership in Association / Organization</th>
                                         <th scope="col" class="text-center" style="width: 5%">
