@@ -62,17 +62,23 @@ class PlantillaContent extends Auditable
     }
 
     public function getPreviousStep() {
-        return \App\SalaryGrade::where('salary_sched_id', $this->plantilla->salary_schedule_prop_id)
-            ->where('grade', $this->salaryproposed->grade)
-            ->where('step', $this->salaryproposed->step - 1)
-            ->first();
+        if ($this->salaryproposed) {
+            return \App\SalaryGrade::where('salary_sched_id', $this->plantilla->salary_schedule_prop_id)
+                ->where('grade', $this->salaryproposed->grade)
+                ->where('step', $this->salaryproposed->step - 1)
+                ->first();
+        }
+        return null;
     }
 
     public function getNextStep() {
-        return \App\SalaryGrade::where('salary_sched_id', $this->plantilla->salary_schedule_prop_id)
-            ->where('grade', $this->salaryproposed->grade)
-            ->where('step', $this->salaryproposed->step + 1)
-            ->first();
+        if ($this->salaryproposed) {
+            return \App\SalaryGrade::where('salary_sched_id', $this->plantilla->salary_schedule_prop_id)
+                ->where('grade', $this->salaryproposed->grade)
+                ->where('step', $this->salaryproposed->step + 1)
+                ->first();
+        }
+        return null;
     }
 
     public static function boot()
