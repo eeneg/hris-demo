@@ -31,7 +31,7 @@
                     <div class="row mt-4">
                         <div class="col-12 text-justify">
                             <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                Pursuant to Local Budget Circular No. <u>{{ lbcn }}</u> dated <u>{{ lbcn_dated | myDate }}</u>, implementing Republic Act No. 11466 dated January 8, 2020 your salary is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u> as follows.
+                                Pursuant to Local Budget Circular No. <u>{{ lbcn }}</u> dated <u>{{ lbcn_dated | myDate }}</u>, implementing Executive Order No. 64 dated August 2, 2024, your salary is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>, as follows.
                             </h5>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                             <h5 class="m-0 mb-3" style="text-indent: 20px;">Under the New Salary Schedule: SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u>.</h5>
                             <h5 class="m-0">2. Actual monthly basic salary as of <u>{{ date_of_effectivity | yesterday | myDate }}</u></h5>
                             <h5 class="m-0 mb-3" style="text-indent: 20px;">SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u>.</h5>
-                            <h5 class="m-0">3. Monthly salary adjustment effective <u>{{ date_of_effectivity | myDate }}</u> (1-2).</h5>
+                            <h5 class="m-0">3. Monthly salary adjustment effective <u>{{ date_of_effectivity | myDate }}</u>.</h5>
                         </div>
                         <div class="col-3 text-right">
                             <h5 class="m-0"><u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u></h5>
@@ -168,7 +168,7 @@
                             <div class="row mt-4">
                                 <div class="col-12 text-justify">
                                     <h5 class="m-0" style="text-indent: 50px;justify-content: center;">
-                                        Pursuant to Local Budget Circular No. <u>{{ lbcn }}</u> dated <u>{{ lbcn_dated | myDate }}</u>, implementing Republic Act No. 11466 dated January 8, 2020 your salary is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u> as follows.
+                                        Pursuant to Local Budget Circular No. <u>{{ lbcn }}</u> dated <u>{{ lbcn_dated | myDate }}</u>, implementing Executive Order No. 64 dated August 2, 2024, your salary is hereby adjusted effective <u>{{ date_of_effectivity | myDate }}</u>, as follows.
                                     </h5>
                                 </div>
                             </div>
@@ -178,7 +178,7 @@
                                     <h5 class="m-0 mb-3" style="text-indent: 20px;">Under the New Salary Schedule: SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u>.</h5>
                                     <h5 class="m-0">2. Actual monthly basic salary as of <u>{{ date_of_effectivity | yesterday | myDate }}</u>.</h5>
                                     <h5 class="m-0 mb-3" style="text-indent: 20px;">SG <u>{{ employee.salaryproposed && employee.salaryproposed.grade }}</u> Step <u>{{ employee.salaryproposed && employee.salaryproposed.step }}</u></h5>
-                                    <h5 class="m-0">3. Monthly salary adjustment effective <u>{{ date_of_effectivity | myDate }}</u> (1-2).</h5>
+                                    <h5 class="m-0">3. Monthly salary adjustment effective <u>{{ date_of_effectivity | myDate }}</u>.</h5>
                                 </div>
                                 <div class="col-3 text-right">
                                     <h5 class="m-0"><u v-if="employee.salaryproposed">₱{{ employee.salaryproposed.amount | amount }}</u></h5>
@@ -265,7 +265,7 @@
                 var filtered = _.filter(this.plantilla_content, (content) => { 
                     return content.office == this.department.address
                 });
-                this.print_data = filtered
+                this.print_data = _.orderBy(filtered, item => parseInt(item.item_no, 10))
                 this.$nextTick(function () {
                     window.print()
                 })
