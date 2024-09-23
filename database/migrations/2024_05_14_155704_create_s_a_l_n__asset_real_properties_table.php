@@ -20,14 +20,14 @@ class CreateSALNAssetRealPropertiesTable extends Migration
                 ->references('id')
                 ->on('s_a_l_n_s')
                 ->onDelete('cascade');
-            $table->string('description');
-            $table->string('kind');
-            $table->string('location');
-            $table->string('assessed_value');
-            $table->string('market_value');
-            $table->string('acquisition_year');
-            $table->string('acquisition_mode');
-            $table->string('acquisition_cost');
+            $table->string('description')->nullable();
+            $table->string('kind')->nullable();
+            $table->string('location')->nullable();
+            $table->string('assessed_value')->nullable();
+            $table->string('market_value')->nullable();
+            $table->string('acquisition_year')->nullable();
+            $table->string('acquisition_mode')->nullable();
+            $table->string('acquisition_cost')->nullable();
             $table->timestamps();
         });
     }

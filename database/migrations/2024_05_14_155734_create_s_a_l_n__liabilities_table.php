@@ -20,9 +20,9 @@ class CreateSALNLiabilitiesTable extends Migration
                 ->references('id')
                 ->on('s_a_l_n_s')
                 ->onDelete('cascade');
-            $table->string('nature');
-            $table->string('creditor_name');
-            $table->string('balance');
+            $table->string('nature')->nullable();
+            $table->string('creditor_name')->nullable();
+            $table->string('balance')->nullable();
             $table->timestamps();
         });
     }

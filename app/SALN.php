@@ -10,32 +10,79 @@ class SALN extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string',
+    ];
+
+    protected $with = [
+        'children',
+        'realProperty',
+        'personalProperty',
+        'liability',
+        'business',
+        'relative'
+    ];
+
+    protected $fillable =[
+        'personal_information_id',
+        'declarant_fn',
+        'declarant_ln',
+        'declarant_mi',
+        'declarant_name_extension',
+        'declarant_address',
+        'declarant_position',
+        'declarant_agency',
+        'declarant_office_address',
+        'spouse_fn',
+        'spouse_ln',
+        'spouse_mi',
+        'spouse_position',
+        'spouse_agency',
+        'spouse_agency_address',
+        'real_property_subtotal',
+        'personal_property_subtotal',
+        'total_asset',
+        'total_liability',
+        'net_worth',
+        'date',
+        'gov_id1',
+        'idNo_id1',
+        'idDate_id1',
+        'gov_id2',
+        'idNo_id2',
+        'idDate_id2'
+    ];
+
     public function personalInformation(){
         return $this->belognsTo('App\PersonalInformation');
     }
 
     public function children(){
-        return $this->hasMany('App\SALN_Children');
+        return $this->hasMany('App\SALN_Children', 'saln_id');
     }
 
     public function realProperty(){
-        return $this->hasMany('App\SALN_AssetRealProperties');
+        return $this->hasMany('App\SALN_AssetRealProperties', 'saln_id');
     }
 
     public function personalProperty(){
-        return $this->hasMany('App\SALN_AssetPersonalProperties');
+        return $this->hasMany('App\SALN_AssetPersonalProperties', 'saln_id');
     }
 
     public function liability(){
-        return $this->hasMany('App\SALN_Liabilities');
+        return $this->hasMany('App\SALN_Liabilities', 'saln_id');
     }
 
     public function business(){
-        return $this->hasMany('App\SALN_Business');
+        return $this->hasMany('App\SALN_Business', 'saln_id');
     }
 
     public function relative(){
-        return $this->hasMany('App\SALN_Relatives');
+        return $this->hasMany('App\SALN_Relatives', 'saln_id');
     }
 
     public static function boot()

@@ -131,11 +131,20 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('printReappointments', 'Api\ReappointmentController@printReappointments');
 });
 
+Route::group(['middleware' => ['auth:employee-api,api']], function () {
+    Route::apiResources([
+        'saln' => 'Api\EmployeeSALNController'
+    ]);
+
+    Route::get('printSaln/{id}', 'Api\EmployeeSALNController@printSaln');
+});
+
 Route::group(['middleware' => ['auth:employee-api']], function () {
     Route::apiResources([
         'employeepersonalinformation' => 'Api\EmployeeController',
     ]);
     Route::get('getLeaveApplications', 'Api\EmployeeController@getApplications');
+    Route::get('getLeaveCredits', 'Api\EmployeeController@getLeaveCredits');
     Route::get('getLeaveTypesForEmployee', 'Api\EmployeeController@getLeaveTypesForEmployee');
     Route::post('submitLeaveApplication', 'Api\EmployeeController@submitLeaveApplication');
     Route::delete('deleteLeaveApplication/{id}', 'Api\EmployeeController@deleteLeaveApplication');
@@ -144,6 +153,7 @@ Route::group(['middleware' => ['auth:employee-api']], function () {
     Route::get('editemployee', 'Api\EmployeeController@edit');
     Route::get('getpdsEdits', 'Api\EmployeeController@getpdsEdits');
     Route::post('cancelEdits', 'Api\EmployeeController@cancelEdits');
+    Route::get('getEmployeeServiceRecord', 'Api\EmployeeController@getEmployeeServiceRecord');
 });
 
 Route::get('asd1', 'Api\RequestController@reviewedRequest');

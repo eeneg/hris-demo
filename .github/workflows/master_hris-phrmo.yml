@@ -1,0 +1,87 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy PHP app to Azure Web App - hris-phrmo
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Run composer install
+        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: Run npm install and build
+        run: npm install && npm run prod
+
+      - name: Compress artifact for deployment
+        run: zip artifact.zip ./* -r
+      - name: Delete Old Artifacts
+        uses: actions/github-script@v6
+        id: artifact
+        with:
+          script: |
+            const res = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+
+            res.data.artifacts
+              .forEach(({ id }) => {
+                github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: id,
+                })
+              })
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: artifact.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: app
+
+      - name: Uncompress artifact for deployment
+        run: |
+          unzip artifact.zip
+          rm artifact.zip
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: 'hris-phrmo'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E4B6C1C3FD9846CEBDFF662E8425D8EB }}
+          package: .

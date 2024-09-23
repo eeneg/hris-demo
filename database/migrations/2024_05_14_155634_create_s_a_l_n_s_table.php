@@ -15,27 +15,37 @@ class CreateSALNSTable extends Migration
     {
         Schema::create('s_a_l_n_s', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('declarant');
+            $table->uuid('personal_information_id');
+            $table->foreign('personal_information_id')
+                ->references('id')
+                ->on('personal_informations')
+                ->onDelete('cascade');
+            $table->string('declarant_fn');
+            $table->string('declarant_ln');
+            $table->string('declarant_mi');
+            $table->string('declarant_name_extension')->nullable();
             $table->string('declarant_address');
             $table->string('declarant_position');
             $table->string('declarant_agency');
             $table->string('declarant_office_address');
-            $table->string('spouse');
-            $table->string('spouse_position');
-            $table->string('spouse_agency');
-            $table->string('spouse_agency_address');
-            $table->string('real_property_subtotal');
-            $table->string('personal_property_subtotal');
-            $table->string('total_asset');
-            $table->string('total_liability');
-            $table->string('net_worth');
+            $table->string('spouse_fn')->nullable();
+            $table->string('spouse_ln')->nullable();
+            $table->string('spouse_mi')->nullable();
+            $table->string('spouse_position')->nullable();
+            $table->string('spouse_agency')->nullable();
+            $table->string('spouse_agency_address')->nullable();
+            $table->string('real_property_subtotal')->nullable();
+            $table->string('personal_property_subtotal')->nullable();
+            $table->string('total_asset')->nullable();
+            $table->string('total_liability')->nullable();
+            $table->string('net_worth')->nullable();
             $table->string('date');
             $table->string('gov_id1');
             $table->string('idNo_id1');
             $table->string('idDate_id1');
-            $table->string('gov_id2');
-            $table->string('idNo_id2');
-            $table->string('idDate_id2');
+            $table->string('gov_id2')->nullable();
+            $table->string('idNo_id2')->nullable();
+            $table->string('idDate_id2')->nullable();
             $table->timestamps();
         });
     }

@@ -864,7 +864,7 @@
         methods: {
 
             goToSALN: function(id){
-                this.$router.push({path: '/employee-SALN', query: {id: id}})
+                this.$router.push({path:'/employees-saln', query:{id:id}})
             },
 
             formatDate: function(date)

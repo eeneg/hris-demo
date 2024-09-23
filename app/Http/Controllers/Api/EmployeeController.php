@@ -6,8 +6,11 @@ use App\EmployeePDSEdit;
 use App\EmployeePDSEditRequest;
 use App\Http\Controllers\Controller;
 use App\LeaveApplication;
+use App\LeaveCredit;
 use App\LeaveType;
 use App\PersonalInformation;
+use App\ServiceRecord;
+use App\EmployeeServiceRecord;
 use Illuminate\Console\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,8 +47,11 @@ class EmployeeController extends Controller
 
     public function getApplications(){
 
-        $data = LeaveApplication::where('personal_information_id',  Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
-
+        $data = LeaveApplication::where('personal_information_id',  Auth::user()->id)->orderBy('created_at', 'DESC')
+            ->select('leave_applications.*', 'personal_informations.surname','personal_informations.firstname','personal_informations.nameextension','leave_types.title as title')
+            ->leftJoin('personal_informations', 'leave_applications.personal_information_id', '=', 'personal_informations.id')
+            ->leftJoin('leave_types', 'leave_applications.leave_type_id', '=', 'leave_types.id')
+            ->paginate(10);
         return $data;
 
     }
@@ -56,6 +62,16 @@ class EmployeeController extends Controller
 
         return $data;
 
+    }
+
+    public function getLeaveCredits(){
+        $data = LeaveCredit::where('personal_information_id', Auth::user()->id)
+        ->select('leave_credits.*', 'leave_types.title')
+        ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
+        ->get()
+        ->map(fn($e) => ['title' => $e->title, 'balance' => $e->balance]);
+
+        return $data;
     }
 
     public function getLeaveTypesForEmployee()
@@ -167,6 +183,18 @@ class EmployeeController extends Controller
                 $editRequest->delete();
             }
         }
+    }
+
+    public function getEmployeeServiceRecord(){
+        $serviceRecord = ServiceRecord::where('personal_information_id', Auth::user()->id)->first();
+
+        if(!$serviceRecord){
+            return [];
+        }
+
+        $data = EmployeeServiceRecord::where('service_record_id', $serviceRecord->id)->orderBy('orderNo')->get();
+
+        return $data;
     }
 
     /**

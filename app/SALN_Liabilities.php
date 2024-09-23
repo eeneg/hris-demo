@@ -10,6 +10,20 @@ class SALN_Liabilities extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string',
+    ];
+
+    protected $fillable = [
+        'nature',
+        'creditor_name',
+        'balance'
+    ];
+
     public function saln(){
         return $this->belongsTo('App\SALN');
     }

@@ -10,6 +10,25 @@ class SALN_AssetRealProperties extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string',
+    ];
+
+    protected $fillable = [
+        'description',
+        'kind',
+        'location',
+        'assessed_value',
+        'market_value',
+        'acquisition_year',
+        'acquisition_mode',
+        'acquisition_cost',
+    ];
+
     public function saln(){
         return $this->belongsTo('App\SALN');
     }

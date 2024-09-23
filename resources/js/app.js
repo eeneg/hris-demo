@@ -88,13 +88,14 @@ const routes = [
     { path: '/employees', component: require('./components/Employees.vue').default },
     { path: '/employees-pds', component: require('./components/employees/Pds-form.vue').default },
     { path: '/employees-pds-view', component: require('./components/employees/EmployeePDS.vue').default },
+    { path: '/employees-saln', name: 'saln', component: require('./components/employees/EmployeeSALN.vue').default },
     { path: '/employee-pds-edit-requests', component: require('./components/employees/EmployeeEditRequests.vue').default },
     { path: '/employee-reappointments', component: require('./components/employees/Reappointments.vue').default },
     { path: '/employee-status', component: require('./components/employees/EmployeeStatus.vue').default },
-    { path: '/employee-SALN', component: require('./components/employees/EmployeeSALN.vue').default },
     { path: '/employee-leave-applications', component: require('./components/employees/EmployeeLeaveApplications.vue').default },
     { path: '/employee-leave-form', component: require('./components/employees/EmployeeLeaveForm.vue').default },
     { path: '/employee-service-record', component: require('./components/servicerecords/ServiceRecords.vue').default },
+    { path: '/employee-view-service-record', component: require('./components/employees/EmployeeServiceRecord.vue').default },
     { path: '/requests', component: require('./components/Requests.vue').default },
     { path: '/reports', component: require('./components/reports/Others.vue').default },
     { path: '/nosi', component: require('./components/reports/NOSI.vue').default },
@@ -115,8 +116,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
+    routes, // short for `routes: routes`
     mode: 'history',
-    routes // short for `routes: routes`
 })
 
 const toast = Swal.mixin({

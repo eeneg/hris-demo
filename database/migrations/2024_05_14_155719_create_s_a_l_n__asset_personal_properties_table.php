@@ -20,9 +20,9 @@ class CreateSALNAssetPersonalPropertiesTable extends Migration
                 ->references('id')
                 ->on('s_a_l_n_s')
                 ->onDelete('cascade');
-            $table->string('description');
-            $table->string('year');
-            $table->string('cost');
+            $table->string('description')->nullable();
+            $table->string('year')->nullable();
+            $table->string('cost')->nullable();
             $table->timestamps();
         });
     }

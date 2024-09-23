@@ -156,7 +156,7 @@
                                     <td>{{ $leave_card->vl_withoutpay }}</td>
                                     <td>{{ $leave_card->vl_balance }}</td>
                                     <td>{{ $leave_card->sl_earned }}</td>
-                                    <td>{{ $leave_card->vl_withpay }}</td>
+                                    <td>{{ $leave_card->sl_withpay }}</td>
                                     <td>{{ $leave_card->sl_withoutpay }}</td>
                                     <td>{{ $leave_card->sl_balance }}</td>
                                     <td>{{ $leave_card->remarks }}</td>
