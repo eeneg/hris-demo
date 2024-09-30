@@ -367,7 +367,7 @@
                         });
                     }else{
                         this.$Progress.start()
-                        axios.delete('api/salaryschedule/'+_.find(this.salaryschedules, ['tranche', this.selected]).id)
+                        axios.delete('api/salaryschedule/'+this.selected)
                         .then(response => {
                             this.getSalarySchedule()
                             this.$Progress.finish()

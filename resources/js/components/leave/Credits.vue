@@ -77,7 +77,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-4 mt-2 p-0 border" style="display:block; overflow-y: auto; max-height: 120px;">
+                        <div class="col-md-4 mt-2 p-0" style="display:block; overflow-y: auto; max-height: 120px;">
                             <table class="table table-sm table-bordered p-0">
                                 <thead>
                                     <tr>
@@ -832,6 +832,7 @@ import CreditsTable from './CreditsTable.vue'
                     this.employees = data.data
                     Swal.close()
                 }).catch(e => {
+                    Swal.close()
                     console.log(e)
                 })
 
