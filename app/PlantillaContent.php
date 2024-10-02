@@ -61,6 +61,11 @@ class PlantillaContent extends Auditable
         return $this->belongsTo('App\PersonalInformation', 'personal_information_id');
     }
 
+    public function jobdescription()
+    {
+        return $this->hasOne('App\JobDescription', 'plantilla_content_id');
+    }
+
     public function getPreviousStep() {
         if ($this->salaryproposed) {
             return \App\SalaryGrade::where('salary_sched_id', $this->plantilla->salary_schedule_prop_id)

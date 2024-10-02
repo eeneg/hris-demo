@@ -193,6 +193,12 @@
 											<p>Qualification Standards</p>
 										</router-link>
 									</li>
+									<li class="nav-item">
+										<router-link to="/job-descriptions" class="nav-link">
+											<i class="fas fa-user-nurse nav-icon"></i>
+											<p>Job Descriptions</p>
+										</router-link>
+									</li>
 								</ul>
                             </li>
                             @endcan

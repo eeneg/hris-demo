@@ -112,6 +112,7 @@ const routes = [
     { path: '/activities-edit', component: require('./components/activities/Edit.vue').default },
     { path: '/separations', component: require('./components/plantilla/Separation.vue').default },
     { path: '/qualification-standards', component: require('./components/plantilla/QualStand.vue').default },
+    { path: '/job-descriptions', component: require('./components/plantilla/JobDescriptions.vue').default },
     { path: '/dtr', component: require('./components/dtr/Dtr.vue').default },
 ]
 

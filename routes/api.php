@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         'employeeservicerecord' => 'Api\EmployeeServiceRecordController',
         'separation' => 'Api\SeparationController',
         'qs' => 'Api\QSController',
+        'jobdescription' => 'Api\JobDescriptionController',
     ]);
 
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('plantillaForLoyalty', 'Api\PlantillaContentController@plantillaForLoyalty');
     Route::get('plantillaForOtherReports', 'Api\PlantillaContentController@plantillaForOtherReports');
     Route::get('plantillaTicketsReports', 'Api\PlantillaContentController@plantillaTicketsReports');
+    Route::get('plantillaContentSearch', 'Api\PlantillaContentController@search');
 
     Route::post('previousplantilla', 'Api\PlantillaController@previousplantilla');
     Route::post('duplicateplantilla', 'Api\PlantillaController@duplicateplantilla');
@@ -129,6 +131,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('addServiceRecord', 'Api\EmployeeServiceRecordController@addServiceRecord');
 
     Route::post('printReappointments', 'Api\ReappointmentController@printReappointments');
+
+    Route::get('job_description', 'Api\JobDescriptionController@job_description');
 });
 
 Route::group(['middleware' => ['auth:employee-api,api']], function () {

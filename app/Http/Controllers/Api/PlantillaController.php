@@ -8,6 +8,7 @@ use App\PlantillaContent;
 use App\PlantillaDept;
 use App\SalaryGrade;
 use App\Setting;
+use App\JobDescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -69,9 +70,9 @@ class PlantillaController extends Controller
                     ->select(['id', 'grade', 'step'])
                     ->get();
 
-                $newplantilla->plantilla_contents()->insert(
-                    $contents->map(fn ($content) => [
-                        'id' => \Str::uuid(),
+                $contents->map(function ($content) use ($newplantilla, $prop) {
+                    $new_content = $newplantilla->plantilla_contents()->create([
+                        'id' =>  \Str::uuid(),
                         'plantilla_id' => $newplantilla->id,
                         'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
                         'salary_grade_prop_id' => $content->salaryproposed ? $prop->first(fn ($e) => $e->grade == $content->salaryproposed->grade && $e->step == $content->salaryproposed->step)?->id : null,
@@ -87,9 +88,41 @@ class PlantillaController extends Controller
                         'last_promotion' => $content->last_promotion,
                         'appointment_status' => $content->appointment_status,
                         'csc_level' => $content->csc_level
-                    ])
-                    ->toArray()
-                );
+                    ]);
+
+                    // insert job descriptions for each plantilla content from reference plantilla
+                    if ($content->jobdescription !== null) {
+                        JobDescription::create([
+                            'id' => \Str::uuid(),
+                            'plantilla_content_id' => $new_content->id,
+                            'description' => $content->jobdescription->description,
+                        ]);
+                    }
+
+                });
+
+                // $newplantilla->plantilla_contents()->insert(
+                //     $contents->map(fn ($content) => [
+                //         'id' => \Str::uuid(),
+                //         'plantilla_id' => $newplantilla->id,
+                //         'salary_grade_auth_id' => $content->salaryproposed ? $content->salaryproposed->id : null,
+                //         'salary_grade_prop_id' => $content->salaryproposed ? $prop->first(fn ($e) => $e->grade == $content->salaryproposed->grade && $e->step == $content->salaryproposed->step)?->id : null,
+                //         'position_id' => $content->position->id,
+                //         'personal_information_id' => $content->personalinformation ? $content->personalinformation->id : null,
+                //         'old_number' => $content->old_number ? $content->old_number : $content->new_number,
+                //         'new_number' => null,
+                //         'working_time' => $content->working_time,
+                //         'appointment_status' => $content->appointment_status,
+                //         'order_number' => $content->order_number,
+                //         'level' => $content->level,
+                //         'original_appointment' => $content->original_appointment,
+                //         'last_promotion' => $content->last_promotion,
+                //         'appointment_status' => $content->appointment_status,
+                //         'csc_level' => $content->csc_level
+                //     ])->toArray()
+                // );
+
+                
             });
     }
 

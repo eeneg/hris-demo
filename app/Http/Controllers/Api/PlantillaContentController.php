@@ -179,6 +179,28 @@ class PlantillaContentController extends Controller
         return $data;
     }
 
+    public function search(Request $request)
+    {
+        if ($request->selectedPlantilla) {
+            $plantilla = Plantilla::findOrFail($request->selectedPlantilla);
+        } else {
+            $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+            $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        }
+
+        // Search contents by position title keyword
+        $plantillacontents = PlantillaContent::select('plantilla_contents.*')
+            ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->join('departments', 'positions.department_id', '=', 'departments.id')
+            ->where('departments.id', $request->department)
+            ->where('positions.title', 'like', '%'.$request->keyword.'%')
+            ->where('plantilla_contents.plantilla_id', $plantilla->id)
+            ->orderBy('order_number')
+            ->get();
+
+        return new PlantillaContentResource($plantillacontents);
+    }
+
     public function plantilladepartmentcontent(Request $request)
     {
         if ($request->selectedPlantilla) {
