@@ -175,7 +175,7 @@
                                     <br v-if="form.permanentaddresstable">
                                     <span v-if="form.permanentaddresstable">{{ form.telephone2 }}</span>
                                 </p>
-                                <hr v-if="Object.keys(form.permanentaddress).length > 0">
+                                <hr v-if="Object.keys(form.permanentaddresstable).length > 0">
 
                                 <strong><i class="fas fa-mobile-alt mr-1"></i> Mobile No.</strong>
                                 <p class="text-muted">
