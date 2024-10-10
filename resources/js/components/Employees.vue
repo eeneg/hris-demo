@@ -157,25 +157,25 @@
                             </div>
 
                             <div class="col-md-6">
-                                <strong v-if="form.residentialaddress"><i class="fas fa-map-marker-alt mr-1"></i> Residential Address</strong>
-                                <p class="text-muted" v-if="form.residentialaddress">
-                                    {{ form.residentialaddress }}
-                                    <br v-if="form.residentialaddress">
-                                    <span v-if="form.residentialaddress">{{ form.zipcode1 }}</span>
-                                    <br v-if="form.residentialaddress">
-                                    <span v-if="form.residentialaddress">{{ form.telephone1 }}</span>
+                                <strong v-if="Object.keys(form.residentialaddresstable).length > 0"><i class="fas fa-map-marker-alt mr-1"></i> Residential Address</strong>
+                                <p class="text-muted" v-if="Object.keys(form.residentialaddresstable).length > 0">
+                                    {{ form.residentialaddresstable.house_lotNo }}, {{ form.residentialaddresstable.street }}, {{ form.residentialaddresstable.subdv_village }}<br>
+                                    {{ form.residentialaddresstable.barangay }}, {{ form.residentialaddresstable.city_municipality }}<br>
+                                    {{ form.residentialaddresstable.province }}, {{ form.residentialaddresstable.zipcode }}
+                                    <br v-if="form.residentialaddresstable">
+                                    <span v-if="form.residentialaddresstable">{{ form.telephone1 }}</span>
                                 </p>
-                                <hr v-if="form.residentialaddress">
+                                <hr v-if="Object.keys(form.residentialaddresstable).length > 0">
 
-                                <strong v-if="form.permanentaddress"><i class="fas fa-map-marker-alt mr-1"></i> Permanent Address</strong>
-                                <p class="text-muted" v-if="form.permanentaddress">
-                                    {{ form.permanentaddress }}
-                                    <br v-if="form.permanentaddress">
-                                    <span v-if="form.permanentaddress">{{ form.zipcode2 }}</span>
-                                    <br v-if="form.permanentaddress">
-                                    <span v-if="form.permanentaddress">{{ form.telephone2 }}</span>
+                                <strong v-if="Object.keys(form.permanentaddresstable).length > 0"><i class="fas fa-map-marker-alt mr-1"></i> Permanent Address</strong>
+                                <p class="text-muted" v-if="Object.keys(form.permanentaddresstable).length > 0">
+                                    {{ form.permanentaddresstable.house_lotNo }}, {{ form.permanentaddresstable.street }}, {{ form.permanentaddresstable.subdv_village }}<br>
+                                    {{ form.permanentaddresstable.barangay }}, {{ form.permanentaddresstable.city_municipality }}<br>
+                                    {{ form.permanentaddresstable.province }}, {{ form.permanentaddresstable.zipcode }}
+                                    <br v-if="form.permanentaddresstable">
+                                    <span v-if="form.permanentaddresstable">{{ form.telephone2 }}</span>
                                 </p>
-                                <hr v-if="form.permanentaddress">
+                                <hr v-if="Object.keys(form.permanentaddress).length > 0">
 
                                 <strong><i class="fas fa-mobile-alt mr-1"></i> Mobile No.</strong>
                                 <p class="text-muted">
@@ -857,7 +857,9 @@
                     'workexperiences': {},
                     'voluntaryworks': {},
                     'trainingprograms': {},
-                    'plantillacontents': {}
+                    'plantillacontents': {},
+                    'residentialaddresstable': {},
+                    'permanentaddresstable': {},
                 })
             }
         },
