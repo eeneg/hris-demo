@@ -68,8 +68,8 @@
                     <div class="row mt-5">
                         <div class="col-6"></div>
                         <div class="col-6 text-center mt-5">
-                            <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
-                            <h5 class="m-0">Provincial Governor</h5>
+                            <h5 class="m-0"><b>{{ signatory }}</b></h5>
+                            <h5 class="m-0">{{ position }}</h5>
                         </div>
                     </div>
                     <div class="row mt-5 mb-3">
@@ -114,7 +114,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mt-2 mb-1">
+                            <div class="row mt-2">
                                 <div class="col-md-6">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label style="font-weight: bold; margin: 0;">Local Budget Circular No.</label>
@@ -125,6 +125,20 @@
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label style="font-weight: bold; margin: 0;">Dated</label>
                                         <input class="form-control form-control-border border-width-2" type="date" v-model="lbcn_dated">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row mt-2 mb-1">
+                                <div class="col-md-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Signatory</label>
+                                        <input v-model="signatory" class="form-control form-control-border border-width-2" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Position</label>
+                                        <input v-model="position" class="form-control form-control-border border-width-2" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -205,8 +219,8 @@
                             <div class="row mt-5">
                                 <div class="col-6"></div>
                                 <div class="col-6 text-center mt-5">
-                                    <h5 class="m-0"><b>YVONNE R. CAGAS</b></h5>
-                                    <h5 class="m-0">Provincial Governor</h5>
+                                    <h5 class="m-0"><b>{{ signatory }}</b></h5>
+                                    <h5 class="m-0">{{ position }}</h5>
                                 </div>
                             </div>
                             <div class="row mt-5 mb-3">
@@ -239,7 +253,9 @@
                 departments: [],
                 department: {},
                 print_data: [],
-                button_enable: false
+                button_enable: false,
+                signatory: 'YVONNE R. CAGAS',
+                position: 'Provincial Governor'
             }
         },
         filters: {
