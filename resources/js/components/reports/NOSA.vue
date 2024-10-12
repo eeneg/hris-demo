@@ -6,6 +6,53 @@
         <div v-else class="col-md-12">
             <!-- Report -->
             <div class="row" id="nosa_div" style="display: none;margin-top: -1.4rem !important;">
+                <div class="col-md-12 nosi_div" style="page-break-after: always;" v-if="print_data.length > 1">
+                    <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo">
+                    <div class="row mt-3 mb-2">
+                        <div class="col-12 text-center">
+                            <h5 class="m-0">Republic of the Philippines</h5>
+                            <h5 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h5>
+                            <h5 class="m-0 mb-3">Matti, Digos City</h5>
+                            <h5 class="m-0 mb-3 font-weight-bold">PROVINCIAL HUMAN RESOURCE MANAGEMENT OFFICE</h5>
+                            <h5 class="m-0 font-weight-bold">TRANSMITTAL</h5>
+                            <h5 class="m-0">Notice of Salary Adjustment</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-9 mt-3">
+                            <h5 class="m-0">Office: <b>{{ department.title }}</b></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-bordered transmittal-table">
+                                <thead>
+                                    <tr>
+                                        <td>#</td>
+                                        <td><b>NAME</b></td>
+                                        <td><b>POSITION</b></td>
+                                        <!-- <td><b>DATE HIRED/PROMOTION</b></td>
+                                        <td><b>DATE OF STEP INCREMENT</b></td> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(data, index) in print_data" :key="data.id">
+                                        <td>{{ index + 1 }}</td>
+                                        <td>{{ data.name }}</td>
+                                        <td>{{ data.position }}</td>
+                                        <!-- <td>{{ data.nosi_schedule }}</td>
+                                        <td>{{ data.nosi_schedule | myDateWithYear(nosi_year) }}</td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-5 mb-3">
+                        <div class="col-12">
+                            <h5 class="m-0">Total: {{ print_data.length }} employees</h5>
+                        </div>
+                    </div>
+                </div>
                 <div v-for="(employee, index) in print_data" :key="employee.id" class="col-md-12 nosa_div" :style="index + 1 == print_data.length ? '' : 'page-break-after: always;'">
                     <img src="storage/project_files/davsur.png" alt="Agency Logo" class="img-fluid nosi-logo">
                     <div class="row mt-3 mb-2">
