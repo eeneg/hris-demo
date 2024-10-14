@@ -177,7 +177,7 @@ Vue.filter('moment_filter', function(value, format) {
 })
 
 Vue.filter('amount', function(value){
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return Number(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 })
 
 Vue.filter('initial', function(value){

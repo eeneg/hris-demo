@@ -24,6 +24,7 @@ class PlantillaEmployeesNOSAResource extends ResourceCollection
                 'salaryauthorized' => $item->salaryauthorized,
                 'item_no' => $item->new_number ? $item->new_number : $item->old_number,
                 'plantilla' => $item->plantilla->year,
+                'working_time' => $item->working_time,
             ];
         });
     }
