@@ -122,8 +122,8 @@
                     <div class="row mt-5">
                         <div class="col-8"></div>
                         <div class="col-4 mt-5 text-center">
-                            <h5 class="m-0"><b>YVONNE ROÑA CAGAS</b></h5>
-                            <h5 class="m-0">Provincial Governor</h5>
+                            <h5 class="m-0"><b>{{ signatory }}</b></h5>
+                            <h5 class="m-0">{{ position }}</h5>
                         </div>
                     </div>
                     <div class="row mt-5 mb-3">
@@ -176,6 +176,20 @@
                                         <label class="m-0" style="font-weight: normal;"><b>Date </b>(Last day of current step)</label>
                                         <span class="d-block" style="font-size: 0.8rem;line-height: 0.8rem;">Based on NOSI Schedule</span>
                                         <input class="form-control form-control-border border-width-2" type="date" v-model="employee.nosi_schedule">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row mt-2 mb-1">
+                                <div class="col-md-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Signatory</label>
+                                        <input v-model="signatory" class="form-control form-control-border border-width-2" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="margin-bottom: 0.3rem;">
+                                        <label style="font-weight: bold; margin: 0;">Position</label>
+                                        <input v-model="position" class="form-control form-control-border border-width-2" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -339,7 +353,8 @@
                 department: {},
                 ind_nosi_year: moment(new Date()).format('YYYY'),
                 included: false,
-
+                signatory: 'YVONNE R. CAGAS',
+                position: 'Provincial Governor',
                 forReport: {
                     step: 0,
                     current_amount: 0,
