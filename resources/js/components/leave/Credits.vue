@@ -209,6 +209,7 @@
                                                 type="number"
                                                 :disabled="edit_mode == false"
                                                 class="form-control p-0"
+                                                :class="{'text-primary' : leave_summary[index]['vl_earned'] != 0 && leave_summary[index]['vl_earned'] != null}"
                                                 v-on:keyup.enter="press_enter(index, 'vl_earned', 'vl', $event)"
                                                 v-on:blur="calculate_balance(index, 'vl_earned', 'vl')"
                                                 v-on:focus="save_old_value(index, 'vl_earned')"
@@ -255,6 +256,7 @@
                                                 type="number"
                                                 :disabled="edit_mode == false"
                                                 class="form-control p-0"
+                                                :class="{'text-primary' : leave_summary[index]['sl_earned'] != 0 && leave_summary[index]['sl_earned'] != null}"
                                                 v-on:keyup.enter="press_enter(index, 'sl_earned', 'sl',$event)"
                                                 v-on:blur="calculate_balance(index, 'sl_earned', 'sl')"
                                                 v-on:focus="save_old_value(index, 'sl_earned')"
@@ -512,9 +514,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @click="removeInputs(2)">Close</button>
-                    <button type="button" class="btn btn-primary" @click="populate_particulars">Save changes</button>
+                <div class="p-3 border-top">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-danger" @click="removeInputs(2)">Clear</button>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary mr-2" @click="closeParticularsModal()">Close</button>
+                            <button type="button" class="btn btn-primary" @click="populate_particulars">Save changes</button>
+                        </div>
+                    </div>
                 </div>
                 </div>
             </div>
@@ -832,8 +841,8 @@ import CreditsTable from './CreditsTable.vue'
                     this.employees = data.data
                     Swal.close()
                 }).catch(e => {
-                    Swal.close()
                     console.log(e)
+                    Swal.close()
                 })
 
             },
@@ -886,6 +895,7 @@ import CreditsTable from './CreditsTable.vue'
                         Swal.close()
                     })
                     .catch(e => {
+                        Swal.close()
                         console.log(e)
                     })
                 }
@@ -989,8 +999,11 @@ import CreditsTable from './CreditsTable.vue'
                     this.particulars.days = null
                     this.particulars.hours = null
                     this.particulars.mins = null
-                    $("#exampleModal").modal('hide');
                 }
+            },
+
+            closeParticularsModal: function(){
+                $("#exampleModal").modal('hide');
             },
 
             get_leave_types: function(){
@@ -1075,6 +1088,11 @@ import CreditsTable from './CreditsTable.vue'
                         })
                     })
                     .catch(e => {
+                        Swal.close()
+                        toast.fire({
+                            icon:'error',
+                            title: 'Something went wrong...'
+                        })
                         console.log(e)
                     })
                 }else{
@@ -1134,10 +1152,12 @@ import CreditsTable from './CreditsTable.vue'
                         PDFObject.embed("/storage/employee_leave_card/" + response.data.title, "#pdf-viewer", options);
                     })
                     .catch(error => {
+                        let e = error.response
+                        let message = e.status == 501 ? ', ' + e.data.message : ''
                         Swal.close()
                         Swal.fire(
                             'Failed',
-                            'Something went wrong',
+                            'Something went wrong' + message,
                             'warning'
                         )
                         console.log(error);
@@ -1281,7 +1301,7 @@ import CreditsTable from './CreditsTable.vue'
                         for (let index = x; index < data.length; index++) {
 
                             this.leave_summary[index][leave_type + '_balance'] = 0
-                            this.leave_summary[index][leave_type + '_balance'] = data[index][leave_type + '_earned'] - data[index][leave_type + '_withpay'] + (this.leave_summary[index][leave_type + '_balance'] + this.leave_summary[index != 0 ? index-1 : index][leave_type + '_balance'])
+                            this.leave_summary[index][leave_type + '_balance'] = Math.round(parseFloat(data[index][leave_type + '_earned'] - data[index][leave_type + '_withpay'] + (this.leave_summary[index][leave_type + '_balance'] + this.leave_summary[index != 0 ? index-1 : index][leave_type + '_balance'])) * 1000) / 1000
 
                         }
 
@@ -1328,6 +1348,7 @@ import CreditsTable from './CreditsTable.vue'
                     'sl_withoutpay': '',
                     'remarks': '',
                     'sort': index+1,
+                    'foreign_travel': 0,
                     'newly_added': true
                 })
 
