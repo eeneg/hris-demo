@@ -101,7 +101,7 @@
                                 ₱<b><u v-if="employee.salaryproposed">{{ employee.forReport.current_amount | amount }}</u></b>
                             </h5>
                             <h5 class="m-0" style="color: white;">.</h5>
-                            <h5 class="m-0 mt-3">₱<b><u>{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></b></h5>
+                            <h5 class="m-0 mt-3">₱<b><u>{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}</u></b></h5>
                             <h5 class="m-0" style="color: white;">.</h5>
                             <h5 class="m-0 mt-3">₱<b><u>{{ employee.forReport.next_amount | amount }}</u></b></h5>
                         </div>
@@ -304,7 +304,7 @@
                                             ₱<b><u v-if="employee.salaryproposed">{{ employee.forReport.current_amount | amount }}</u></b>
                                         </h5>
                                         <h5 class="m-0" style="color: white;">.</h5>
-                                        <h5 class="m-0 mt-3">₱<b><u>{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}.00</u></b></h5>
+                                        <h5 class="m-0 mt-3">₱<b><u>{{ (employee.forReport.next_amount - employee.forReport.current_amount) | amount }}</u></b></h5>
                                         <h5 class="m-0" style="color: white;">.</h5>
                                         <h5 class="m-0 mt-3">₱<b><u>{{ employee.forReport.next_amount | amount }}</u></b></h5>
                                     </div>

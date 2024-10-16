@@ -95,7 +95,7 @@
                             <h5 class="m-0 mb-3" style="color: white;">.</h5>
                             <h5 class="m-0"><u v-if="employee.salaryauthorized">₱{{ (employee.working_time == 'Full-time' ? employee.salaryauthorized.amount : (employee.salaryauthorized.amount / 2)) | amount }}</u></h5>
                             <h5 class="m-0 mb-3" style="color: white;">.</h5>
-                            <h5 class="m-0" v-if="employee.salaryproposed && employee.salaryauthorized"><u>₱{{ (employee.working_time == 'Full-time' ? (employee.salaryproposed.amount - employee.salaryauthorized.amount) : ((employee.salaryproposed.amount - employee.salaryauthorized.amount) / 2)) | amount }}.00</u></h5>
+                            <h5 class="m-0" v-if="employee.salaryproposed && employee.salaryauthorized"><u>₱{{ (employee.working_time == 'Full-time' ? (employee.salaryproposed.amount - employee.salaryauthorized.amount) : ((employee.salaryproposed.amount - employee.salaryauthorized.amount) / 2)) | amount }}</u></h5>
                         </div>
                         <div class="col-1"></div>
                     </div>
@@ -246,7 +246,7 @@
                                     <h5 class="m-0 mb-3" style="color: white;">.</h5>
                                     <h5 class="m-0"><u v-if="employee.salaryauthorized">₱{{ employee.salaryauthorized.amount | amount }}</u></h5>
                                     <h5 class="m-0 mb-3" style="color: white;">.</h5>
-                                    <h5 class="m-0" v-if="employee.salaryproposed && employee.salaryauthorized"><u>₱{{ (employee.salaryproposed.amount - employee.salaryauthorized.amount) | amount }}.00</u></h5>
+                                    <h5 class="m-0" v-if="employee.salaryproposed && employee.salaryauthorized"><u>₱{{ (employee.salaryproposed.amount - employee.salaryauthorized.amount) | amount }}</u></h5>
                                 </div>
                                 <div class="col-1"></div>
                             </div>
