@@ -101,10 +101,12 @@ class ReappointmentController extends Controller
             [
                 'personal_information_id' => 'required',
                 'assigned_to' => 'required',
+                "date" => 'required'
             ],
             [
                 'personal_information_id.required' => 'Employee required.',
                 'assigned_to.required' => 'Department required',
+                'date.required' => 'Effectivity Date required',
             ]);
 
         $employee = PersonalInformation::find($request->personal_information_id)->plantillacontents;
@@ -140,10 +142,12 @@ class ReappointmentController extends Controller
             [
                 'personal_information_id' => 'required',
                 'assigned_to' => 'required',
+                "date" => 'required'
             ],
             [
                 'personal_information_id.required' => 'Employee required.',
                 'assigned_to.required' => 'Department required',
+                'date.required' => 'Effectivity Date required',
             ]);
 
         return $data->update($request->all());
