@@ -22,7 +22,7 @@ class CreateReappointmentsTable extends Migration
                     ->onDelete('cascade');
             $table->uuid('assigned_from');
             $table->uuid('assigned_to');
-            $table->uuid('date');
+            $table->string('date');
             $table->timestamps();
         });
     }
