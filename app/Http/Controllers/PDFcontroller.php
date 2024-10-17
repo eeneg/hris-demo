@@ -25,7 +25,7 @@ class PDFcontroller extends Controller
     {
         return Excel::download(new \App\Exports\PlantillaExport($request->plantilla_id), 'Plantilla.xlsx');
     }
-    
+
     public function pds(Request $request)
     {
         $id = $request['id'];
@@ -254,21 +254,45 @@ class PDFcontroller extends Controller
 
     public function generateleavecard(Request $request)
     {
-        $employee = PersonalInformation::find($request->id);
+        $employee = PersonalInformation::without(
+            'barcode',
+            'familybackground',
+            'residentialaddresstable',
+            'permanentaddresstable',
+            'children',
+            'educationalbackground',
+            'eligibilities',
+            'otherinfos',
+            'workexperiences',
+            'voluntaryworks',
+            'trainingprograms',
+            'pdsquestion'
+        )->find($request->id);
 
-        $employee_name = $employee->surname.', '.$employee->firstname.' '.$employee->middlename[0].'. '.$employee->nameextension;
+        $employee_name = $employee->getFullNameAttributeProperFormat();
 
-        $id = PersonalInformation::findOrFail($employee->id)->plantillacontents->first();
-        $position = Position::findOrFail($id->position_id);
-        $dept = Department::findOrFail($position->department_id);
+        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
+
+        if($default_plantilla){
+            $plantilla  =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
+            $id = $employee->plantillacontents->where('plantilla_id', $plantilla->id)->first();
+            if($id){
+                $position = Position::find($id->position_id);
+                $dept = Department::find($position->department_id);
+            }else{
+                return abort(501, 'employee has no position');
+            }
+        }else{
+            return abort(501, 'no Plantilla created');
+        }
 
         $data = LeaveSummary::where('personal_information_id', $request->id)->orderBy('sort')->get();
 
         $pdf = PDF::loadView('reports/employee-leavecard', compact('data', 'employee_name', 'position', 'dept', 'employee', 'id'))->setPaper('legal', 'landscape');
 
-        Storage::put('public/employee_leave_card/'.$employee->surname.'.pdf', $pdf->output());
+        Storage::put('public/employee_leave_card/'.$employee->id.'.pdf', $pdf->output());
 
-        return ['title' => $employee->surname.'.pdf'];
+        return ['title' => $employee->id.'.pdf'];
     }
 
     public function generatesalarysched(Request $request)
