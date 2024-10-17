@@ -26,7 +26,7 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['status' => 'required'], ['status.required' => 'Field cannot be empty!!']);
+        $request->validate(['status' => 'required|unique:statuses'], ['status.required' => 'Field cannot be empty!!']);
 
         return Status::create($request->all());
     }
@@ -51,7 +51,7 @@ class StatusController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate(['status' => 'required'], ['status.required' => 'Field cannot be empty!!']);
+        $request->validate(['status' => 'required|unique:statuses'], ['status.required' => 'Field cannot be empty!!']);
 
         return Status::find($id)->update($request->all());
     }

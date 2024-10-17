@@ -70,14 +70,14 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 p-2">
-                                <input type="text" @input="clear_error" v-model="status_data" class="form-control" id="retirement_date" placeholder="Enter Status">
+                                <input type="text" @input="clear_error" v-model="status_data" class="form-control form-control-border border-width-2" id="retirement_date" placeholder="Enter Status">
                                 <p class="text-danger" v-for="data in error" :key="data.id">{{data[0]}}</p>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary float-right" data-toggle="modal" @click="edit_mode == false ? submit_status() : submit_edit_status()">Save <i class="fas fa-save"></i></button>
+                        <button type="submit" class="btn btn-primary float-right" :disabled="loading" data-toggle="modal" @click="edit_mode == false ? submit_status() : submit_edit_status()">Save <i class="fas fa-save"></i></button>
                     </div>
                 </div>
             </div>
@@ -98,6 +98,7 @@ export default {
         return {
             status_id: null,
             edit_mode: false,
+            loading: false,
             status: [],
             status_data: null,
             error: []
@@ -124,6 +125,7 @@ export default {
         status_modal: function(mode, data, edit, id)
         {
             $('#status_modal').modal('show')
+            this.error = []
             this.edit_mode = edit
             this.status_id = id
             this.status_data = mode == 1 ? null : data
@@ -131,16 +133,16 @@ export default {
 
         submit_status: function()
         {
+            this.loading = true
             axios.post('api/status', {'status': this.status_data})
             .then(response => {
-
-                this.get_status()
                 $('#status_modal').modal('hide')
+                this.get_status()
                 toast.fire({
                     icon: 'success',
                     title: 'Success'
                 })
-
+                this.loading = false
             })
             .catch(e => {
                 Swal.fire(
@@ -149,21 +151,22 @@ export default {
                     'error'
                 )
                 this.error = e.response.data.errors
+                this.loading = false
             })
         },
 
         submit_edit_status: function()
         {
+            this.loading = true
             axios.patch('api/status/'+this.status_id, {'status': this.status_data})
             .then(response => {
-
-                this.get_status()
                 $('#status_modal').modal('hide')
+                this.get_status()
                 toast.fire({
                     icon: 'success',
                     title: 'Success'
                 })
-
+                this.loading = false
             })
             .catch(e => {
                 Swal.fire(
@@ -172,6 +175,7 @@ export default {
                     'error'
                 )
                 this.error = e.response.data.errors
+                this.loading = false
             })
         },
 
