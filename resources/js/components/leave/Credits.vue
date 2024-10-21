@@ -1152,12 +1152,10 @@ import CreditsTable from './CreditsTable.vue'
                         PDFObject.embed("/storage/employee_leave_card/" + response.data.title, "#pdf-viewer", options);
                     })
                     .catch(error => {
-                        let e = error.response
-                        let message = e.status == 501 ? ', ' + e.data.message : ''
                         Swal.close()
                         Swal.fire(
                             'Failed',
-                            'Something went wrong' + message,
+                            'Something went wrong',
                             'warning'
                         )
                         console.log(error);

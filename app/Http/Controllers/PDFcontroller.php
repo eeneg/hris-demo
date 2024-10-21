@@ -273,14 +273,15 @@ class PDFcontroller extends Controller
 
         $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
 
+        $position = null;
+        $dept = null;
+
         if($default_plantilla){
             $plantilla  =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
             $id = $employee->plantillacontents->where('plantilla_id', $plantilla->id)->first();
             if($id){
                 $position = Position::find($id->position_id);
                 $dept = Department::find($position->department_id);
-            }else{
-                return abort(501, 'employee has no position');
             }
         }else{
             return abort(501, 'no Plantilla created');
