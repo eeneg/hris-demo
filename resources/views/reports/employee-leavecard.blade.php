@@ -64,9 +64,9 @@
                                     Civil Status: {{ $employee->civilstatus }} <br>
                                 </td>
                                 <td>
-                                    Position: {{ $position->title }}<br>
-                                    Office: {{ $dept->address }}<br>
-                                    Salary Grade: {{ $id->salaryauthorized->grade }}<br>
+                                    Position: {{ @$position->title }}<br>
+                                    Office: {{ @$dept->address }}<br>
+                                    Salary Grade: {{ @$id->salaryauthorized->grade }}<br>
                                 </td>
                                 <td>
                                     Date Hired: <br>
