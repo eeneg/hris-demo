@@ -76,7 +76,7 @@
                                         <td>{{ formatDate(record.date) }}</td>
                                         <td>{{ record.cause }}</td>
                                         <td>
-                                            <button class="btn btn-primary" @click="editModal(record)"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-primary" v-if="record.position != 'B R E A K'" @click="editModal(record)"><i class="fas fa-edit"></i></button>
                                             <button class="btn btn-danger" @click="deleteEmployeeServiceRecord(record.id)"><i class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
@@ -143,7 +143,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100" @click="submitServiceRecord()">Submit <i class="fas fa-save"></i></button>
+                            <button type="submit" class="btn btn-primary w-100" :disabled="loading" @click="submitServiceRecord()">Submit <i class="fas fa-save"></i></button>
                         </div>
                     </div>
                 </div>
@@ -274,7 +274,18 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="date1">Date</label>
-                                    <input type="date" class="form-control form-control-border border-width-2" v-model="record_form.date" id="date1" placeholder="Enter Date">
+                                    <input type="text" class="form-control form-control-border border-width-2" v-model="record_form.date" id="date1" placeholder="Enter Date (yyyy-mm-dd)"
+                                        onkeypress="return event.charCode > 47 && event.charCode < 58;"
+                                        onkeydown="var date = this.value;
+                                            if (window.event.keyCode == 8) {
+                                                this.value = date;
+                                            } else if (date.match(/^\d{4}$/) !== null) {
+                                                this.value = date + '-';
+                                            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                                                this.value = date + '-';
+                                            }"
+                                        maxlength="10"
+                                    >
                                     <span v-if="errors.date">
                                         <p class="text-danger">Field Required</p>
                                     </span>
@@ -297,9 +308,9 @@
                             <input type="number" id="orderNo" min="0" step="1" name="orderNo" class="form-control w-50" v-model="record_form.orderNo" placeholder="Order" onkeydown="if(event.key==='.'){event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
                         </div>
                         <div class="">
-                            <button type="button" class="btn btn-warning" @click="addBreakRecord()">BREAK</button>
-                            <button type="button" v-if="edit == false" class="btn btn-primary" @click="submitEmployeeServiceRecord()">Save changes</button>
-                            <button type="button" v-if="edit == true" class="btn btn-primary" @click="submitEmployeeServiceRecordUpdates()">Save changes</button>
+                            <button type="button" v-if="edit == false" class="btn btn-warning" :disabled="loading" @click="addBreakRecord()">BREAK</button>
+                            <button type="button" v-if="edit == false" class="btn btn-primary" :disabled="loading" @click="submitEmployeeServiceRecord()">Save changes</button>
+                            <button type="button" v-if="edit == true" class="btn btn-primary" :disabled="loading" @click="submitEmployeeServiceRecordUpdates()">Save changes</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -445,6 +456,7 @@ import Swal from 'sweetalert2'
         data(){
             return{
                 edit: false,
+                loading: false,
                 form: new Form({
                     'personal_information_id': null,
                     'ORNo': null,
@@ -512,6 +524,7 @@ import Swal from 'sweetalert2'
                     'Davao de Oro (Compostela Valley)',
                     'Davao del Norte',
                     'Davao del Sur',
+                    'Digos City D/S',
                     'Davao Occidental',
                     'Davao Oriental',
                     'Dinagat Islands',
@@ -576,6 +589,7 @@ import Swal from 'sweetalert2'
         methods:{
 
             addBreakRecord: function(){
+                this.record_form.reset()
                 this.record_form.branch = null
                 this.record_form.status = null
                 this.record_form.position = 'B R E A K'
@@ -784,6 +798,7 @@ import Swal from 'sweetalert2'
                 if(this.record_form.station)
                 {
                     this.getPosition()
+                    this.record_form.position = tempData.position
                 }
                 this.$Progress.finish()
                 $('#recordModal').modal('show')
@@ -925,6 +940,7 @@ import Swal from 'sweetalert2'
 
             submitServiceRecord: function()
             {
+                this.loading = true
                 this.form.personal_information_id = this.record.id
                 axios.post('api/servicerecord', this.form)
                 .then(e => {
@@ -933,10 +949,12 @@ import Swal from 'sweetalert2'
                         title: 'Success'
                     })
                     this.service_record_id = e.data
+                    this.loading = false
                 })
                 .catch(e => {
                     console.log(e)
                     this.errors = e.response.data.errors
+                    this.loading = false
                 })
             },
 
@@ -952,20 +970,23 @@ import Swal from 'sweetalert2'
                 this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YYYY') : this.record_form.from
                 this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YYYY') : this.record_form.to
                 this.record_form.station = this.record_form.station == null ? '' : this.record_form.station + ', ' +this.record_form.province
+                this.loading = true
                 axios.post('api/employeeservicerecord', this.record_form)
                 .then(e => {
+                    $('#recordModal').modal('hide')
                     toast.fire({
                         icon:'success',
                         title:'Success'
                     })
                     this.record_form.reset()
                     this.selected_station = null
-                    $('#recordModal').modal('hide')
                     this.getEmployeeServiceRecords()
+                    this.loading = false
                 })
                 .catch(e => {
                     console.log(e)
                     this.errors = e.response.data.errors
+                    this.loading = false
                 })
             },
 
@@ -976,22 +997,25 @@ import Swal from 'sweetalert2'
                 }
                 this.record_form.from = moment(this.record_form.from).isValid() ? moment(this.record_form.from).format('MM/DD/YYYY') : this.record_form.from
                 this.record_form.to = moment(this.record_form.to).isValid() ? moment(this.record_form.to).format('MM/DD/YYYY') : this.record_form.to
+                this.loading = true
                 axios.patch('api/employeeservicerecord/'+this.record_form.id, this.record_form)
                 .then(e => {
+                    $('#recordModal').modal('hide')
                     toast.fire({
                         icon:'success',
                         title: 'Success'
                     })
                     this.edit = false
-                    $('#recordModal').modal('hide')
                     this.record_form.reset()
                     this.getEmployeeServiceRecords()
+                    this.loading = false
                 })
                 .catch(e => {
                     toast.fire({
                         icon:'error',
                         title: 'Failed to edit record'
                     })
+                    this.loading = false
                 })
             },
 
