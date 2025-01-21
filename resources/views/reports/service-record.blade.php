@@ -182,7 +182,7 @@
                         <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;">{{ $record->station }}</td>
                         <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;">{{ $record->branch }}</td>
                         <td style="border-right: 1px solid; text-align: center; white-space: nowrap;font-size: 11px;vertical-align: middle;">{{ $record->pay }}</td>
-                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;white-space: nowrap;">{{ $record->remark }}</td>
+                        <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;">{{ $record->remark }}</td>
                         <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;white-space: nowrap;">{{ $record->date }}</td>
                         <td style="border-right: 1px solid; text-align: center;font-size: 11px;vertical-align: middle;white-space: nowrap;">{{ $record->cause }}</td>
                     </tr>
