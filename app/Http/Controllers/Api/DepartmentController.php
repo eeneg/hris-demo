@@ -24,15 +24,19 @@ class DepartmentController extends Controller
     public function index()
     {
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantilla = $default_plantilla ? Plantilla::where('year', $default_plantilla->value)->first() : null;
         // $plantillacontents = PlantillaContent::where('plantilla_id', $plantilla->id)
         //     ->join('positions', 'plantilla_contents.position_id', '=', 'positions.id')
         //     ->groupBy('positions.department_id')
         //     ->orderBy('order_number')
         //     ->get();
-        $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
-
-        return new SortedDepartmentsResource($departments);
+        if($plantilla){
+            $departments = PlantillaDept::where('plantilla_id', $plantilla->id)->orderBy('order_number')->get();
+            return new SortedDepartmentsResource($departments);
+        } else {
+            $departments = Department::where('status', 'active')->orderBy('order_number')->get();
+            return new DepartmentsResource($departments);
+        }
     }
 
     public function add_departments(Request $request)
@@ -76,7 +80,7 @@ class DepartmentController extends Controller
     public function fetch_plantilla_depts(Request $request)
     {
         $departments = PlantillaDept::where('plantilla_id', $request->selectedPlantilla)->orderBy('order_number')->get();
-        
+
         return new SortedDepartmentsResource($departments);
     }
 
@@ -84,10 +88,12 @@ class DepartmentController extends Controller
     {
         $positions = Position::where('department_id', $request->id)->orderBy('title')->get();
         $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
-        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
-        foreach ($positions as $key => $data) {
-            $positions[$key]['count'] = PlantillaContent::where('plantilla_id', $plantilla->id)->where('position_id', $data->id)->count();
+        if($default_plantilla){
+            $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+            foreach ($positions as $key => $data) {
+                $positions[$key]['count'] = PlantillaContent::where('plantilla_id', $plantilla->id)->where('position_id', $data->id)->count();
+            }
         }
 
         return $positions;
@@ -104,7 +110,7 @@ class DepartmentController extends Controller
         $this->authorize('isAdministratorORAuthor');
 
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:departments',
             'description' => 'required',
             'address' => 'required',
             'function' => 'required',
@@ -174,7 +180,7 @@ class DepartmentController extends Controller
         if($unique)
         {
             $this->validate($request, [
-                'title' => 'required|unique:positions,title',
+                'title' => 'required|unique:positions',
             ]);
         }
 

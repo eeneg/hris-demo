@@ -10,6 +10,8 @@ use App\PersonalInformation;
 use App\Reappointment;
 use App\Setting;
 use App\Plantilla;
+use App\PlantillaContent;
+use App\Position;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,13 +46,14 @@ class ReappointmentController extends Controller
                                 'assigned_to_table.title as dept_to',
                                 'reappointments.*'
                             )
-                            ->where('plantilla_contents.plantilla_id',$plantilla->id);
+                            ->where('plantilla_contents.plantilla_id',$plantilla->id)
+                            ->orderBy('reappointments.termination_date', 'asc');
 
 
         if (!$request->search && !$request->dateFrom && !$request->dateTo) {
             return new ReappointmentResource($reappointment->orderBy('created_at', 'desc')->paginate(20));
         } else if (!$request->search && $request->dateFrom && $request->dateTo) {
-            $reappointment->whereBetween('reappointments.date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')]);
+            $reappointment->whereBetween('reappointments.termination_date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')]);
 
             return new ReappointmentResource($reappointment->paginate(20));
         } else if ($request->search && !$request->dateFrom && !$request->dateTo) {
@@ -64,7 +67,7 @@ class ReappointmentController extends Controller
 
             return new ReappointmentResource($reappointment->paginate(20));
         } else {
-            $reappointment->whereBetween('reappointments.date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')])
+            $reappointment->whereBetween('reappointments.termination_date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')])
                 ->where(function ($query) use ($request) {
                     $query->where('surname', 'LIKE', '%'.$request->search.'%')
                     ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
@@ -95,19 +98,41 @@ class ReappointmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function getEmployeePosition($id)
+    {
+
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+        $plantillacontent = PlantillaContent::where('plantilla_id', $plantilla->id)->where('personal_information_id', $id)->first();
+
+
+        $position = Position::find($plantillacontent->position_id);
+        return response()->json($position->title);
+    }
+
     public function store(Request $request)
     {
+
         $this->validate($request,
             [
                 'personal_information_id' => 'required',
                 'assigned_to' => 'required',
-                "date" => 'required'
+                'position' => 'required',
+                'effectivity_date' => 'required',
+                'termination_date' => 'required',
+                'type' => 'required',
+                'duties' => 'required',
             ],
             [
                 'personal_information_id.required' => 'Employee required.',
-                'assigned_to.required' => 'Department required',
-                'date.required' => 'Effectivity Date required',
-            ]);
+                'assigned_to.required' => 'Department Field Required',
+                'position.required' => 'Position Field Required',
+                'effectivity_date.required' => 'Effectivity Date Field Required',
+                'termination_date.required' => 'Termination Date Field Required',
+                'type.required' => 'Reassignment Type Field Required',
+                'duties.required' => 'Duties Field Required',
+            ]
+        );
 
         $employee = PersonalInformation::find($request->personal_information_id)->plantillacontents;
 
@@ -142,13 +167,22 @@ class ReappointmentController extends Controller
             [
                 'personal_information_id' => 'required',
                 'assigned_to' => 'required',
-                "date" => 'required'
+                'position' => 'required',
+                'effectivity_date' => 'required',
+                'termination_date' => 'required',
+                'type' => 'required',
+                'duties' => 'required',
             ],
             [
                 'personal_information_id.required' => 'Employee required.',
-                'assigned_to.required' => 'Department required',
-                'date.required' => 'Effectivity Date required',
-            ]);
+                'assigned_to.required' => 'Department Field Required',
+                'position.required' => 'Position Field Required',
+                'effectivity_date.required' => 'Effectivity Date Field Required',
+                'termination_date.required' => 'Termination Date Field Required',
+                'type.required' => 'Reassignment Type Field Required',
+                'duties.required' => 'Duties Field Required',
+            ]
+        );
 
         return $data->update($request->all());
     }

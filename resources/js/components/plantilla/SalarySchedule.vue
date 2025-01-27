@@ -116,7 +116,7 @@
                     </div>
                     <div class="modal-footer modal-border">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="submit" class="btn btn-primary" :disabled="loading">Save <i class="fas fa-save"></i></button>
                     </div>
                 </form>
                 </div>
@@ -156,7 +156,7 @@
                     </div>
                     <div class="modal-footer modal-border pt-0">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="errors.deleteV()">Close</button>
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="submit" class="btn btn-primary" :disabled="loading">Save <i class="fas fa-save"></i></button>
                     </div>
                 </form>
                 </div>
@@ -240,6 +240,7 @@
                 salarygrades: {},
                 selected: '',
                 salarySchedForm: {},
+                loading:false,
                 salaryGradeForm: {amount: []},
                 display: {},
                 add: false,
@@ -294,18 +295,23 @@
             },
             createSalarySchedule: function()
             {
+                this.loading = true
                 this.$Progress.start()
                 axios.post('api/salaryschedule', this.salarySchedForm)
                 .then(response => {
+                    $('#salarySchedModal').modal('hide')
                     this.$Progress.finish()
                     toast.fire({
                         icon: 'success',
                         title: 'Created successfully'
                     });
                     this.getSalarySchedule()
-                    $('#salarySchedModal').modal('hide')
+                    this.loading = false
                 })
-                .catch(error => this.errors.record(error.response.data.errors))
+                .catch(error => {
+                    this.errors.record(error.response.data.errors)
+                    this.loading = false
+                })
             },
             createSalaryScheduleModal: function()
             {
@@ -329,18 +335,23 @@
             },
             updateSalarySchedule: function()
             {
+                this.loading = true
                 this.$Progress.start()
                 axios.patch('api/salaryschedule/'+this.salarySchedForm.id, this.salarySchedForm)
                 .then(response => {
+                    $('#salarySchedModal').modal('hide')
                     this.$Progress.finish()
                     toast.fire({
                         icon: 'success',
                         title: 'Updated successfully'
                     });
                     this.getSalarySchedule()
-                    $('#salarySchedModal').modal('hide')
+                    this.loading = false
                 })
-                .catch(error => this.errors.record(error.response.data.errors))
+                .catch(error => {
+                    this.errors.record(error.response.data.errors)
+                    this.loading = false
+                })
 
             },
             deleteSalarySchedule: function()
@@ -446,15 +457,17 @@
                 }else{
                     this.$Progress.start()
                     var ar = _.merge(this.salaryGradeForm, _.find(this.salaryschedules, ['id', this.selected]))
+                    this.loading = true
                     axios.post('api/salarygrade', ar)
                     .then(response => {
+                        $('#salaryGradeModal').modal('hide')
                         this.$Progress.finish()
                         toast.fire({
                             icon: 'success',
                             title: 'Created successfully'
                         });
                         this.getSalaryGrade()
-                        $('#salaryGradeModal').modal('hide')
+                        this.loading = false
                     })
                     .catch(error => {
                         this.errors.record(error.response.data.errors)
@@ -463,6 +476,7 @@
                             error.response.data.message,
                             'error'
                         )
+                        this.loading = false
                     })
                 }
             },
@@ -478,6 +492,7 @@
                         'error'
                     )
                 }else{
+                    this.loading = true
                     this.$Progress.start()
                     axios.patch('api/salarygrade/', {id: this.salaryGradeForm.id, grade: this.salaryGradeForm.grade, amount: this.salaryGradeForm.amount, tranche: this.selected})
                     .then(response => {
@@ -497,6 +512,7 @@
                             this.getSalaryGrade()
                             $('#salaryGradeModal').modal('hide')
                         }
+                        this.loading = false
                     })
                     .catch(error => {
                         this.errors.record(error.response.data.errors)
@@ -505,6 +521,7 @@
                             error.response.data.message,
                             'error'
                         )
+                        this.loading = false
                     })
                 }
             },

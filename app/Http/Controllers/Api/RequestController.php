@@ -70,7 +70,7 @@ class RequestController extends Controller
                                 'employee_p_d_s_edit_requests.*',
                             )
                             ->where('employee_p_d_s_edit_requests.status', '!=', 'PENDING')
-                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'ASC')
+                            ->orderBy('employee_p_d_s_edit_requests.updated_at', 'DESC')
                             ->paginate(10);
 
             return $editRequest;

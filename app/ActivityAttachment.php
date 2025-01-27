@@ -3,9 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Activity extends Auditable
+class ActivityAttachment extends Model
 {
     use HasFactory;
 
@@ -16,18 +17,13 @@ class Activity extends Auditable
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'info',
-        'time',
-        'title',
+        'file_name',
+        'path',
     ];
 
-    protected $casts = [
-        'time' => 'date:Y-m-d H:i',
-    ];
-
-    public function attachments()
+    public function activity()
     {
-        return $this->hasMany(ActivityAttachment::class);
+        return $this->belongsTo(Activity::class);
     }
 
     public static function boot()

@@ -20,6 +20,7 @@ class ActivityResource extends ResourceCollection
             'time' => $activity->time,
             'title' => $activity->title,
             'type' => $activity->type,
+            'attachments' => $activity->attachments,
             'user' => [
                 'name' => $activity->user?->name,
                 'avatar' => $activity->user?->avatar,

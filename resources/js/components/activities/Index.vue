@@ -32,6 +32,18 @@
                                         <div class="ql-editor ql-blank" v-html="announcement.info" style="min-height:fit-content;"> </div>
                                     </div>
                                 </div>
+                                <div class="pl-3 pb-3 pr-3" style="height: 100px; overflow: auto;" v-if="announcement.attachments.length > 0">
+                                    <Label>Attachments: {{ announcement.attachments.length }}</Label>
+                                    <div class="ml-2">
+                                        <ul>
+                                            <li v-for="file in announcement.attachments" >
+                                                <a :href="file.path + file.id + '.pdf'" class="" target="_blank" style="max-width: 200px;">
+                                                    {{ file.file_name }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div class="timeline-footer clearfix">
                                     <button class="btn btn-danger btn-sm float-right ml-2" @click="deleteActivity(announcement.id)">Delete</button>
                                     <a :href="'/activities-edit?id=' + announcement.id" class="btn btn-primary btn-sm float-right">Edit</a>
@@ -65,6 +77,18 @@
                                             </h3>
                                             <div class="timeline-body">
                                                 {{ event.info }}
+                                            </div>
+                                            <div class="pl-3 pb-3 pr-3" style="height: 100px; overflow: auto;" v-if="event.attachments.length > 0">
+                                                <Label>Attachments: {{ event.attachments.length }}</Label>
+                                                <div class="ml-2">
+                                                    <ul>
+                                                        <li v-for="file in event.attachments" >
+                                                            <a :href="file.path + file.id + '.pdf'" class="" target="_blank" style="max-width: 200px;">
+                                                                {{ file.file_name }}
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                             <div class="timeline-footer clearfix">
                                                 <button class="btn btn-danger btn-sm float-right ml-2" @click="deleteActivity(event.id)">Delete</button>

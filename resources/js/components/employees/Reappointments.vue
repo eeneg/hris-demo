@@ -50,18 +50,32 @@
                               <thead>
                                   <tr>
                                       <th>Name</th>
-                                      <th>Assigned from</th>
                                       <th>Reassigned to</th>
-                                      <th>Date</th>
+                                      <th>Effectivity Date</th>
+                                      <th>Termination Date</th>
                                       <th>Action</th>
                                   </tr>
                               </thead>
                               <tbody>
                                   <tr v-for="(reappointment, index) in reappointments.data" :key="reappointment.id">
-                                      <td>{{ reappointment.name }}</td>
-                                      <td>{{ reappointment.dept_from }}</td>
+                                      <td>
+                                        <div class="row p-0">
+                                            <div class="col-md-12">
+                                                {{ reappointment.name }}
+                                            </div>
+                                            <div class="col-md-12 text-gray">
+                                                {{ reappointment.position }}
+                                            </div>
+                                            <div class="col-md-12 text-gray">
+                                                <small><i>{{ reappointment.dept_from }}</i></small>
+                                            </div>
+                                        </div>
+                                      </td>
                                       <td>{{ reappointment.dept_to }}</td>
-                                      <td>{{ reappointment.date }}</td>
+                                      <td>{{ reappointment.effectivity_date }}</td>
+                                      <td :class="{'text-danger' : checkDate(reappointment.termination_date)}">
+                                        {{ reappointment.termination_date }}
+                                      </td>
                                       <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
                                           <div class="btn-group">
                                               <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,7 +108,7 @@
       <!-- modal -->
 
       <div class="modal fade" id="reappointment_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
+          <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
               <div class="modal-header">
                   <h5 class="modal-title" id="exampleModalLabel">Reassign</h5>
@@ -107,17 +121,48 @@
                       <div class="col-md-12">
                               <div class="row">
                                   <div class="form-group col-12" style="position: relative;margin-bottom: 0.3rem;">
-                                      <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('personal_information_id') }" v-model="form.personal_information_id" :options="employees.data" label="name" placeholder="Reassign employee" :reduce="employees => employees.id"></v-select>
+                                      <label for="date">Employee</label>
+                                      <v-select class="form-control form-control-border border-width-2" @input="getEmployeePosition" :class="{ 'is-invalid': form.errors.has('personal_information_id') }" v-model="form.personal_information_id" :options="employees.data" label="name" placeholder="Reassign employee" :reduce="employees => employees.id"></v-select>
                                       <has-error :form="form" field="personal_information_id"></has-error>
                                   </div>
-                                  <div class="form-group col-12 mt-5">
+                                  <div class="form-group col-12">
+                                    <label for="position">
+                                        Position
+                                        <div class="spinner-border spinner-border-sm ml-1" role="status" v-if="loading_position">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </label>
+                                      <input class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('position') }" :disabled="loading_position" type="text" v-model="form.position" name="position">
+                                      <has-error :form="form" field="position"></has-error>
+                                  </div>
+                                  <div class="form-group col-12">
+                                      <label for="assigned_to">Reassign To</label>
                                       <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('assigned_to') }" v-model="form.assigned_to" :options="departments.data" label="title" placeholder="Reassign to" :reduce="departments => departments.id"></v-select>
                                       <has-error :form="form" field="assigned_to"></has-error>
                                   </div>
-                                  <div class="form-group col-12 mt-5">
-                                      <label for="date">Effectivity Date</label>
-                                      <input class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('date') }" type="date" v-model="form.date" name="original_appointment">
-                                      <has-error :form="form" field="date"></has-error>
+                                  <div class="form-group col-6">
+                                      <label for="effectivity_date">Effectivity Date</label>
+                                      <input class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('effectivity_date') }" type="date" v-model="form.effectivity_date" name="effectivity_date">
+                                      <has-error :form="form" field="effectivity_date"></has-error>
+                                  </div>
+                                  <div class="form-group col-6">
+                                      <label for="termination_date">Termination Date</label>
+                                      <input class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('termination_date') }" type="date" v-model="form.termination_date" name="termination_date">
+                                      <has-error :form="form" field="termination_date"></has-error>
+                                  </div>
+                                  <div class="form-group col-12">
+                                      <label for="type">Type</label>
+                                      <select name="type" id="type" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('type') }" v-model="form.type">
+                                        <option value="Reassigned">Reassigned</option>
+                                        <option value="Designated">Designated</option>
+                                        <option value="Detail">Detail</option>
+                                      </select>
+                                      <has-error :form="form" field="type"></has-error>
+                                  </div>
+                                  <div class="form-group col-12">
+                                      <label for="duties">Duties</label>
+                                      <textarea class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('duties') }" v-model="form.duties" name="original_appointment"></textarea>
+                                      <has-error :form="form" field="duties"></has-error>
                                   </div>
                               </div>
                       </div>
@@ -139,6 +184,7 @@
 </template>
 <script>
 import Swal from 'sweetalert2';
+import moment from 'moment';
 
 
 export default {
@@ -155,11 +201,16 @@ export default {
           dateFrom: null,
           dateTo: null,
           loading: false,
+          loading_position: false,
           form: new Form({
               'personal_information_id': null,
               'assigned_from': null,
               'assigned_to': null,
-              'date': null
+              'position': null,
+              'effectivity_date': null,
+              'termination_date': null,
+              'type': null,
+              'duties': null,
           })
       }
   },
@@ -172,6 +223,16 @@ export default {
       searchReappointments:  _.debounce(function(){
           this.getResults();
       }, 600),
+
+      checkDate: function(date)
+      {
+          if(date == null)
+          {
+              return false
+          }else{
+            return moment().diff(date, 'days') > - 30
+          }
+      },
 
       getResults: function()
       {
@@ -264,6 +325,19 @@ export default {
           }
 
       },
+      getEmployeePosition: function(id)
+      {
+            this.loading_position = true
+            axios.get('api/getEmployeePosition/'+id)
+            .then(({data}) => {
+                this.loading_position = false
+                this.form.position = data
+            })
+            .catch(error => {
+                this.loading_position = false
+                console.log(error)
+            })
+      },
       fetch_reappointments: function()
       {
 
@@ -327,6 +401,7 @@ export default {
       {
             this.$Progress.start()
             this.loading = true
+            console.log(this.form)
             this.form.post('api/reappointments', this.form)
             .then(({data}) => {
                 $('#reappointment_modal').modal('hide')

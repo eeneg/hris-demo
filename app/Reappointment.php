@@ -19,7 +19,7 @@ class Reappointment extends Auditable
     ];
 
     protected $fillable = [
-        'id', 'personal_information_id', 'assigned_from', 'assigned_to', 'date',
+        'id', 'personal_information_id', 'assigned_from', 'assigned_to', 'type', 'position', 'duties', 'effectivity_date', 'termination_date'
     ];
 
     public static function boot()

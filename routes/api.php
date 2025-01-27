@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth:api']], function () {
         'jobdescription' => 'Api\JobDescriptionController',
     ]);
 
+    Route::post('uploadNewFilesOnEdit', 'Api\ActivityController@uploadNewFilesOnEdit');
+
     Route::post('department_positions', 'Api\PositionController@get_department_positions');
     Route::get('vailable_positions_for_QS', 'Api\PositionController@get_available_positions_for_QS');
 
@@ -131,8 +133,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('addServiceRecord', 'Api\EmployeeServiceRecordController@addServiceRecord');
 
     Route::post('printReappointments', 'Api\ReappointmentController@printReappointments');
+    Route::get('getEmployeePosition/{id}', 'Api\ReappointmentController@getEmployeePosition');
 
     Route::get('job_description', 'Api\JobDescriptionController@job_description');
+
+    Route::get('get_employees/{id}', 'Api\SettingsController@get_employees');
+    Route::post('save_leave_settings', 'Api\SettingsController@storeLeaveSettings');
 });
 
 Route::group(['middleware' => ['auth:employee-api,api']], function () {

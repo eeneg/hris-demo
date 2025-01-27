@@ -23,7 +23,11 @@ class ReappointmentResource extends ResourceCollection
                 'dept_to' => $item->dept_to,
                 'assigned_from' => $item->assigned_from,
                 'assigned_to' => $item->assigned_to,
-                'date' => $item->date,
+                'type' => $item->type,
+                'position' => $item->position,
+                'duties' => $item->duties,
+                'effectivity_date' => $item->effectivity_date,
+                'termination_date' => $item->termination_date,
             ];
         });
     }
