@@ -6,6 +6,10 @@
 
         <title>Laravel</title>
 
+        <style>
+
+        </style>
+
         <link rel="stylesheet" href="{{asset('css/app.css')}}">
     </head>
     <body>
@@ -41,6 +45,7 @@
                                     <th>Assigned From</th>
                                     <th>Reassigned To</th>
                                     <th>Effectivity Date</th>
+                                    <th>Termination Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +54,7 @@
                                         <td class="align-middle pt-1 pb-1">{{ $key + 1}}.</td>
                                         <td class="align-middle pt-1 pb-1">
                                             <span style="text-transform: uppercase;">{{ $value['name'] }}</span>
+                                            <span>{{$value['type']}}</span>
                                         </td>
                                         <td class="align-middle pt-1 pb-1">
                                             <span style="text-transform: uppercase;">{{ $value['dept_from'] }}</span>
@@ -57,7 +63,10 @@
                                             <span style="text-transform: uppercase;">{{ $value['dept_to'] }}</span>
                                         </td>
                                         <td>
-                                            {{$value['date']}}
+                                            {{$value['effectivity_date']}}
+                                        </td>
+                                        <td>
+                                            {{$value['termination_date']}}
                                         </td>
                                     </tr>
                                 @endforeach

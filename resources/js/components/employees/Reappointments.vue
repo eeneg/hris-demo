@@ -10,35 +10,20 @@
               </div>
 
               <div class="card-body">
-                  <div class="row justify-content-between">
+                  <div class="row">
                       <div class="col-md-4">
                           <div class="input-group mb-3">
-                              <input type="text" name="search" id="search" class="form-control" placeholder="Search" v-model="search" @keyup.prevent="searchReappointments()">
+                              <input type="text" name="search" id="search" class="form-control" placeholder="Search" v-model="searchForm.search" @keyup.prevent="searchReappointments()">
                               <div class="input-group-append">
                                   <div class="input-group-text"><i class="fas fa-search"></i></div>
                               </div>
                           </div>
                       </div>
-                      <div class="col-md-6">
-                         <div class="form-inline">
-
-                              <label for="dateFrom">From: </label>
-                              <input class="form-control form-control-border border-width-2" @input="searchReappointments()" name="dateFrom" type="date" v-model="dateFrom" required>
-
-                              <label for="dateTo" class="ml-4">To: </label>
-                              <input class="form-control form-control-border border-width-2" @input="searchReappointments()" name="dateTo" type="date" v-model="dateTo" required>
-
-                              <button type="button" class="btn btn-danger float-left ml-4" @click="resetSearch()">
-                                  Reset <i class="fas fa-undo"></i>
-                              </button>
-
-                              <button type="button" class="btn btn-success ml-2" @click="print()">
-                                      Print <i class="fas fa-print"></i>
-                              </button>
-
-                          </div>
+                      <div class="col-md-3">
+                        <button class="btn d-inline btn-success" @click="openAdvancedSearchModal">Advanced Search <i class="fas fa-search"></i></button>
+                        <button class="btn d-inline btn-warning" @click="print">Print <i class="fas fa-print"></i></button>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-5">
                           <button type="button" class="btn btn-primary float-right mb-3" @click.prevent="reappointment_modal()">
                                   Reassign <i class="fas fa-plus"></i>
                           </button>
@@ -50,9 +35,9 @@
                               <thead>
                                   <tr>
                                       <th>Name</th>
-                                      <th>Reassigned to</th>
-                                      <th>Effectivity Date</th>
-                                      <th>Termination Date</th>
+                                      <th class="text-center">Reassigned to</th>
+                                      <th class="text-center">Effectivity Date</th>
+                                      <th class="text-center">Termination Date</th>
                                       <th>Action</th>
                                   </tr>
                               </thead>
@@ -71,9 +56,18 @@
                                             </div>
                                         </div>
                                       </td>
-                                      <td>{{ reappointment.dept_to }}</td>
-                                      <td>{{ reappointment.effectivity_date }}</td>
-                                      <td :class="{'text-danger' : checkDate(reappointment.termination_date)}">
+                                      <td>
+                                        <div class="row p-0 text-center">
+                                            <div class="col-md-12">
+                                                {{ reappointment.dept_to }}
+                                            </div>
+                                            <div class="col-md-12 text-gray">
+                                                {{ reappointment.type }}
+                                            </div>
+                                        </div>
+                                      </td>
+                                      <td class="text-center">{{ reappointment.effectivity_date }}</td>
+                                      <td class="text-center" :class="{'text-danger' : checkDate(reappointment.termination_date)}">
                                         {{ reappointment.termination_date }}
                                       </td>
                                       <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
@@ -95,7 +89,7 @@
               </div>
 
               <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                  <pagination size="default" :data="reappointments" @pagination-change-page="get_search_esults" :limit="5">
+                  <pagination size="default" :data="reappointments" @pagination-change-page="get_search_results" :limit="5">
                       <span slot="prev-nav">&lt; Previous</span>
                       <span slot="next-nav">Next &gt;</span>
                   </pagination>
@@ -178,6 +172,71 @@
 
       <!-- modal end -->
 
+      <!-- modal -->
+
+      <div class="modal fade" id="advancedSearchModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="advancedSearchModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="advancedSearchModalLabel">Advanced Search</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <form @submit.prevent="getResults" action="">
+                  <div class="modal-body">
+                      <div class="col-md-12">
+                              <div class="row">
+                                  <div class="form-group col-12">
+                                      <label for="assigned_to">Reassign From</label>
+                                      <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('assigned_to') }" v-model="searchForm.assigned_from" :options="departments.data" label="title" placeholder="Reassign to" :reduce="departments => departments.id"></v-select>
+                                      <has-error :form="searchForm" field="assigned_to"></has-error>
+                                  </div>
+                                  <div class="form-group col-12">
+                                      <label for="assigned_to">Reassign To</label>
+                                      <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('assigned_to') }" v-model="searchForm.assigned_to" :options="departments.data" label="title" placeholder="Reassign to" :reduce="departments => departments.id"></v-select>
+                                      <has-error :form="searchForm" field="assigned_to"></has-error>
+                                  </div>
+                                  <div class="form-group col-6">
+                                      <label for="effectivity_date">Effectivity Date</label>
+                                      <input class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('effectivity_date') }" type="date" v-model="searchForm.effectivity_date" name="effectivity_date">
+                                      <has-error :form="searchForm" field="effectivity_date"></has-error>
+                                  </div>
+                                  <div class="form-group col-6">
+                                      <label for="termination_date">Termination Date</label>
+                                      <input class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('termination_date') }" type="date" v-model="searchForm.termination_date" name="termination_date">
+                                      <has-error :form="searchForm" field="termination_date"></has-error>
+                                  </div>
+                                  <div class="form-group col-6">
+                                      <label for="type">Type</label>
+                                      <select name="type" id="type" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('type') }" v-model="searchForm.type">
+                                        <option value="Reassigned">Reassigned</option>
+                                        <option value="Designated">Designated</option>
+                                        <option value="Detail">Detail</option>
+                                      </select>
+                                      <has-error :form="searchForm" field="type"></has-error>
+                                  </div>
+                                  <div class="form.group col-6">
+                                    <label for="sort">Sort By</label>
+                                    <select name="type" id="type" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('sort') }" v-model="searchForm.sort">
+                                        <option value="termination_date" selected>Termination date</option>
+                                        <option value="effectivity_date">Effectivity Date</option>
+                                      </select>
+                                  </div>
+                              </div>
+                      </div>
+                    </div>
+                  <div class="modal-footer">
+                      <button type="button" class="float-left btn btn-danger" @click="clearSearchForm">Clear <i class="fas fa-eraser"></i></button>
+                      <button type="submit" class="btn btn-primary float-right" :disabled="loading" data-toggle="modal">Search <i class="fas fa-search"></i></button>
+                  </div>
+              </form>
+              </div>
+          </div>
+      </div>
+
+      <!-- modal end -->
+
       <iframe src="" frameborder="0" id="print" hidden></iframe>
 
   </div> <!-- row -->
@@ -192,14 +251,11 @@ export default {
   {
       return {
           editMode: false,
-          search: null,
           reappointments: {},
           reappointment_id: null,
           employees: [{}],
           departments: [{}],
           filter: {},
-          dateFrom: null,
-          dateTo: null,
           loading: false,
           loading_position: false,
           form: new Form({
@@ -211,6 +267,15 @@ export default {
               'termination_date': null,
               'type': null,
               'duties': null,
+          }),
+          searchForm: new Form({
+              'search': '',
+              'assigned_to': '',
+              'assigned_from': '',
+              'effectivity_date': '',
+              'termination_date': '',
+              'type': '',
+              'sort': ''
           })
       }
   },
@@ -224,14 +289,17 @@ export default {
           this.getResults();
       }, 600),
 
-      checkDate: function(date)
-      {
-          if(date == null)
-          {
-              return false
-          }else{
-            return moment().diff(date, 'days') > - 30
-          }
+    checkDate: function(date) {
+        return moment().isBefore(moment(date)) && moment().diff(date, 'days') < 30;
+    },
+
+      openAdvancedSearchModal() {
+        $('#advancedSearchModal').modal('show')
+      },
+
+      clearSearchForm() {
+        this.searchForm.reset()
+        this.getResults()
       },
 
       getResults: function()
@@ -252,18 +320,11 @@ export default {
                   showConfirmButton: false
           })
 
-          let data = {
-              search: this.search,
-              dateFrom: this.dateFrom,
-              dateTo: this.dateTo,
-          }
-
-          console.log(data)
-
-          axios.get('api/reappointments', {params: data})
+          axios.post('api/searchReappointments', this.searchForm)
           .then(({data}) => {
               this.reappointments = data;
               this.$Progress.finish()
+              $('#advancedSearchModal').modal('hide')
               Swal.close()
           }).catch(error => {
               Swal.close()
@@ -271,6 +332,7 @@ export default {
                 icon: 'error',
                 title: 'Search unsuccessful.'
               });
+              $('#advancedSearchModal').modal('hide')
               this.$Progress.fail()
               console.log(error.reponse.data.message);
           });
@@ -280,49 +342,39 @@ export default {
       print: function()
       {
 
-          if(this.dateFrom == null || this.dateTo == null)
-          {
-              Swal.fire(
-                  'Oops...',
-                  'Please input effectivity dates',
-                  'error'
-              )
-          }else{
+        Swal.fire({
+            title: '<strong>Loading data...</strong>',
+            html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+            icon: 'info',
+            willOpen () {
+                Swal.showLoading ()
+            },
+            didClose () {
+                Swal.hideLoading()
+            },
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false
+        })
 
-              Swal.fire({
-                  title: '<strong>Loading data...</strong>',
-                  html: 'Dont <u>reload</u> or <u>close</u> the application ...',
-                  icon: 'info',
-                  willOpen () {
-                      Swal.showLoading ()
-                  },
-                  didClose () {
-                      Swal.hideLoading()
-                  },
-                      allowOutsideClick: false,
-                      allowEscapeKey: false,
-                      allowEnterKey: false,
-                      showConfirmButton: false
-              })
+        axios.post('api/printReappointments', this.searchForm)
+        .then(({data}) => {
+            var f = document.getElementById('print')
+            f.contentWindow.document.write(data)
+            setTimeout(function () {
+                f.contentWindow.focus()
+                f.contentWindow.print()
 
-              axios.post('api/printReappointments', {data: this.reappointments.data, from: this.dateFrom, to: this.dateTo})
-              .then(({data}) => {
-                  var f = document.getElementById('print')
-                  f.contentWindow.document.write(data)
-                  setTimeout(function () {
-                      f.contentWindow.focus()
-                      f.contentWindow.print()
-
-                      f.contentWindow.document.open();
-                      f.contentWindow.document.write("");
-                      f.contentWindow.document.close();
-                  }, 500);
-                  Swal.close()
-              })
-              .catch(e => {
-                    Swal.close()
-              })
-          }
+                f.contentWindow.document.open();
+                f.contentWindow.document.write("");
+                f.contentWindow.document.close();
+                Swal.close()
+            }, 500);
+        })
+        .catch(e => {
+            Swal.close()
+        })
 
       },
       getEmployeePosition: function(id)
@@ -367,9 +419,9 @@ export default {
           })
 
       },
-      get_search_esults: function(page = 1)
+      get_search_results: function(page = 1)
       {
-          axios.get('api/reappointments?page=' + page + '&search=' + this.search)
+          axios.post('api/searchReappointments?page=' + page, this.searchForm)
           .then(({data}) => {
               this.reappointments = data;
           }).catch(error => {
@@ -484,13 +536,6 @@ export default {
               }
           })
       },
-      resetSearch: function()
-      {
-          this.search = null
-          this.dateFrom = null
-          this.dateTo = null
-          this.getResults()
-      }
   },
 }
 </script>

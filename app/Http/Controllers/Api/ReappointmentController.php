@@ -47,47 +47,129 @@ class ReappointmentController extends Controller
                                 'reappointments.*'
                             )
                             ->where('plantilla_contents.plantilla_id',$plantilla->id)
-                            ->orderBy('reappointments.termination_date', 'asc');
+                            ->orderBy('reappointments.created_at', 'desc');
 
-
-        if (!$request->search && !$request->dateFrom && !$request->dateTo) {
-            return new ReappointmentResource($reappointment->orderBy('created_at', 'desc')->paginate(20));
-        } else if (!$request->search && $request->dateFrom && $request->dateTo) {
-            $reappointment->whereBetween('reappointments.termination_date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')]);
 
             return new ReappointmentResource($reappointment->paginate(20));
-        } else if ($request->search && !$request->dateFrom && !$request->dateTo) {
+    }
+
+    public function searchReappointments(Request $request){
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        $reappointment = Reappointment::select('reappointments.*')
+            ->join('personal_informations', 'reappointments.personal_information_id', 'personal_informations.id')
+            ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments as assigned_from_table', 'positions.department_id', '=', 'assigned_from_table.id')
+            ->leftJoin('departments as assigned_to_table', 'reappointments.assigned_to', '=', 'assigned_to_table.id')
+            ->select(
+                'personal_informations.id as personal_information_id',
+                'personal_informations.surname as surname',
+                'personal_informations.firstname as firstname',
+                'personal_informations.middlename as middlename',
+                'personal_informations.nameextension as nameextension',
+                'assigned_from_table.title as dept_from',
+                'assigned_to_table.title as dept_to',
+                'reappointments.*'
+            )
+            ->where('plantilla_contents.plantilla_id',$plantilla->id);
+
+        if($request->search){
             $reappointment->where(function ($query) use ($request) {
                 $query->where('surname', 'LIKE', '%'.$request->search.'%')
-                ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
-                ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
-                ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
-                ->orderBy('surname');
-            });
-
-            return new ReappointmentResource($reappointment->paginate(20));
-        } else {
-            $reappointment->whereBetween('reappointments.termination_date', [$request->dateFrom ? $request->dateFrom : Carbon::now()->format('Y-m-d'), $request->dateTo ? $request->dateTo : Carbon::now()->format('Y-m-d')])
-                ->where(function ($query) use ($request) {
-                    $query->where('surname', 'LIKE', '%'.$request->search.'%')
                     ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
                     ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
                     ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
                     ->orderBy('surname');
-                });
-
-            return new ReappointmentResource($reappointment->paginate(20));
+            });
         }
+
+        if($request->effectivity_date || $request->termination_date){
+            $reappointment->whereBetween('reappointments.termination_date', [$request->effectivity_date ? $request->effectivity_date : Carbon::now()->format('Y-m-d'), $request->termination_date ? $request->termination_date : Carbon::now()->format('Y-m-d')]);
+        }
+
+        if($request->assigned_to){
+            $reappointment->where('reappointments.assigned_to', $request->assigned_to);
+        }
+
+        if($request->assigned_from){
+            $reappointment->where('positions.department_id', $request->assigned_from);
+        }
+
+        if($request->type){
+            $reappointment->where('reappointments.type', $request->type);
+        }
+
+        if($request->sort){
+            $reappointment->orderBy('reappointments.'.$request->sort, 'desc');
+        }else{
+            $reappointment->orderBy('reappointments.created_at', 'desc');
+        }
+
+        return new ReappointmentResource($reappointment->paginate(20));
+
     }
 
     public function printReappointments(Request $request)
     {
-        $data = $request->data;
-        $from = $request->from ?? Carbon::now()->format('Y-m-d');
-        $to = $request->to ?? Carbon::now()->format('Y-m-d');
+        $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
 
-        $from = Carbon::parse($from)->format('F, d Y');
-        $to = Carbon::parse($to)->format('F, d Y');
+        $reappointment = Reappointment::select('reappointments.*')
+            ->join('personal_informations', 'reappointments.personal_information_id', 'personal_informations.id')
+            ->leftJoin('plantilla_contents', 'personal_informations.id', '=', 'plantilla_contents.personal_information_id')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments as assigned_from_table', 'positions.department_id', '=', 'assigned_from_table.id')
+            ->leftJoin('departments as assigned_to_table', 'reappointments.assigned_to', '=', 'assigned_to_table.id')
+            ->select(
+                'personal_informations.id as personal_information_id',
+                'personal_informations.surname as surname',
+                'personal_informations.firstname as firstname',
+                'personal_informations.middlename as middlename',
+                'personal_informations.nameextension as nameextension',
+                'assigned_from_table.title as dept_from',
+                'assigned_to_table.title as dept_to',
+                'reappointments.*'
+            )
+            ->where('plantilla_contents.plantilla_id',$plantilla->id);
+
+        if($request->search){
+            $reappointment->where(function ($query) use ($request) {
+                $query->where('surname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere('firstname', 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`firstname`, ' ', `surname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orWhere(DB::raw("CONCAT(`surname`, ' ', `firstname`)"), 'LIKE', '%'.$request->search.'%')
+                    ->orderBy('surname');
+            });
+        }
+
+        if($request->effectivity_date || $request->termination_date){
+            $reappointment->whereBetween('reappointments.termination_date', [$request->effectivity_date ? $request->effectivity_date : Carbon::now()->format('Y-m-d'), $request->termination_date ? $request->termination_date : Carbon::now()->format('Y-m-d')]);
+        }
+
+        if($request->assigned_to){
+            $reappointment->where('reappointments.assigned_to', $request->assigned_to);
+        }
+
+        if($request->assigned_from){
+            $reappointment->where('positions.department_id', $request->assigned_from);
+        }
+
+        if($request->type){
+            $reappointment->where('reappointments.type', $request->type);
+        }
+
+        if($request->sort){
+            $reappointment->orderBy('reappointments.'.$request->sort, 'desc');
+        }else{
+            $reappointment->orderBy('reappointments.created_at', 'desc');
+        }
+
+        $data = $reappointment->get();
+        $from = $request->effectivity_date;
+        $to = $request->termination_date;
+
 
         return view('reports.reappointments', compact('data','from', 'to'));
     }

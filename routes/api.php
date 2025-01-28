@@ -133,6 +133,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('addServiceRecord', 'Api\EmployeeServiceRecordController@addServiceRecord');
 
     Route::post('printReappointments', 'Api\ReappointmentController@printReappointments');
+    Route::post('searchReappointments', 'Api\ReappointmentController@searchReappointments');
     Route::get('getEmployeePosition/{id}', 'Api\ReappointmentController@getEmployeePosition');
 
     Route::get('job_description', 'Api\JobDescriptionController@job_description');
