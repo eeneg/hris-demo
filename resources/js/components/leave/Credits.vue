@@ -1537,7 +1537,7 @@ import CreditsTable from './CreditsTable.vue'
                             return moment(_.head(dates).month).format('MMM') + ' ' + dates.map(e => e.date).join(',') + ' ' + moment(_.head(dates).month).format('YYYY')
                         })
 
-                        return formatted.join(' — ')
+                        return formatted.join(' , ')
                     }else if(data.mode == 4){
                         return moment(data.data).format('MMMM YYYY')
                     }

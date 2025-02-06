@@ -128,7 +128,7 @@
                                                             return $carbon->parse($entry[0]['month'])->format('M') . ' ' . collect($entry)->map(fn ($e) => $e['date'])->join(', ') . ' ' .$carbon->parse($entry[0]['month'])->format('Y');
                                                         });
                                                 @endphp
-                                                {{ collect($date)->join(' — ') }}
+                                                {{ collect($date)->join(' , ') }}
                                                 @break
                                             @case(2)
                                                 {{
