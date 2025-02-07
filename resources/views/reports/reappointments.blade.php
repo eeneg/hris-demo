@@ -40,7 +40,7 @@
                         <table class="table table-bordered m-0">
                             <thead>
                                 <tr>
-                                    <th style="width: 10px">#</th>
+                                    <th>#</th>
                                     <th>Employee</th>
                                     <th>Assigned From</th>
                                     <th>Reassigned To</th>
@@ -53,8 +53,10 @@
                                     <tr>
                                         <td class="align-middle pt-1 pb-1">{{ $key + 1}}.</td>
                                         <td class="align-middle pt-1 pb-1">
-                                            <span style="text-transform: uppercase;">{{ $value['name'] }}</span>
-                                            <span>{{$value['type']}}</span>
+                                            {{-- {{$value}} --}}
+                                            <span style="text-transform: uppercase;">{{ $value['firstname'] }} {{ $value['middlename'][0] != null ? $value['middlename'][0] . '.' : null }} {{ $value['surname'] }} {{ $value['nameextension']  }}</span>
+                                            <br>
+                                            <span style="font-style:italic">{{$value['type']}}</span>
                                         </td>
                                         <td class="align-middle pt-1 pb-1">
                                             <span style="text-transform: uppercase;">{{ $value['dept_from'] }}</span>
