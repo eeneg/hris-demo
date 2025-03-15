@@ -38,6 +38,7 @@ class PlantillaContentResource extends ResourceCollection
                 'csc_level' => $item->csc_level,
                 'nosi_schedule' => $item->personalinformation ? ($item->personalinformation->benefitschedule ? $item->personalinformation->benefitschedule->nosi : '') : '',
                 'loyalty_schedule' => $item->personalinformation ? ($item->personalinformation->benefitschedule ? $item->personalinformation->benefitschedule->loyalty : '') : '',
+                'has_job_description' => $item->jobdescription ? true : false,
             ];
         });
     }

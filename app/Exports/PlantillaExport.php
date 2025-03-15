@@ -12,6 +12,9 @@ class PlantillaExport implements FromCollection, WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
+
+    protected $plantilla_id;
+
     public function __construct($plantilla_id)
     {
         $this->plantilla_id = $plantilla_id;
@@ -47,6 +50,7 @@ class PlantillaExport implements FromCollection, WithHeadings
                     'appointment_status' => $item->appointment_status,
                     'working_time' => $item->working_time,
                     'csc_level' => $item->csc_level,
+                    'civilstatus' => $item->personalinformation ? $item->personalinformation->civilstatus : '',
                 ];
             });
             // ->sortBy('order_number')
@@ -73,6 +77,7 @@ class PlantillaExport implements FromCollection, WithHeadings
             'Appointment Status',
             'Working Time',
             'CSC Level',
+            'Civil Status',
         ];
 
         $row2 = [
@@ -85,6 +90,7 @@ class PlantillaExport implements FromCollection, WithHeadings
             'Amount',
             'Grade/Step',
             'Amount',
+            '',
             '',
             '',
             '',

@@ -31,6 +31,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Position <span style="font-weight: 100;">({{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})</span></th>
+                                <th>Salary / month <span style="font-weight: 100;">({{ this.$parent.settings.plantilla && this.$parent.settings.plantilla.year }})</span></th>
                                 <th>Barcode</th>
                                 <th></th>
                             </tr>
@@ -48,8 +49,11 @@
 
                                 </td>
                                 <td>
-                                    <p style="margin: 0;line-height: 1.2rem;" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).designation + (getPlantillaDetails(employee).sg ? ' (SG-' + getPlantillaDetails(employee).sg + ')' : '')  }}</p>
+                                    <p style="margin: 0;line-height: 1.2rem;" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).designation + (getPlantillaDetails(employee).sg ? ' (SG-' + getPlantillaDetails(employee).sg + '/' + getPlantillaDetails(employee).step + ')' : '')  }}</p>
                                     <p style="margin: 0;line-height: 1.2rem;" class="text-muted" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).department }}</p>
+                                </td>
+                                <td>
+                                    <span style="font-size: 1rem;">₱{{ getPlantillaDetails(employee).salary | amount }}</span>
                                 </td>
                                 <td>
                                     <span style="font-size: 1rem;">{{ employee.barcode }}</span>
@@ -1168,6 +1172,9 @@
                             details.designation = value.position && value.position.title;
                             details.department = value.position && value.position.department.description;
                             details.sg = value.salaryproposed && value.salaryproposed.grade;
+                            details.step = value.salaryproposed && value.salaryproposed.step;
+                            details.salary = value.salaryproposed && value.salaryproposed.amount;
+                            details.item_no = value.new_number ? value.new_number : value.old_number;
                         }
                     });
                     return details;

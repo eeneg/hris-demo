@@ -112,7 +112,7 @@
                                     ₱{{ (item.salaryproposed !== null ? ((item.working_time == 'Full-time' ? item.salaryproposed.amount * 12 : (item.salaryproposed.amount / 2) * 12)) : '') | amount}}.00 / annum <br>
                                     ₱{{ (item.salaryproposed !== null ? ((item.working_time == 'Full-time' ? item.salaryproposed.amount : item.salaryproposed.amount / 2)) : '') | amount}}.00 / month
                                 </td>
-                                <td style="text-align: center;"><a href="#" @click.prevent="updateRecord(item)"><i class="fas fa-eye"></i> View</a></td>
+                                <td style="text-align: center;"><a :class="item.has_job_description ? 'text-primary' : 'text-danger'" href="#" @click.prevent="updateRecord(item)"><i class="fas fa-eye"></i> View</a></td>
                             </tr>
                         </tbody>
                     </table>
