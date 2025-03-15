@@ -53,7 +53,8 @@
                                     <p style="margin: 0;line-height: 1.2rem;" class="text-muted" v-if="getPlantillaDetails(employee)">{{ getPlantillaDetails(employee).department }}</p>
                                 </td>
                                 <td>
-                                    <span style="font-size: 1rem;">₱{{ getPlantillaDetails(employee).salary | amount }}</span>
+                                    <span v-if="getPlantillaDetails(employee).salary" style="font-size: 1rem;">₱{{ getPlantillaDetails(employee).salary | amount }}</span>
+                                    <span v-else style="font-size: 1rem;"></span>
                                 </td>
                                 <td>
                                     <span style="font-size: 1rem;">{{ employee.barcode }}</span>
