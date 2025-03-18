@@ -629,14 +629,21 @@
                         <div class="col-md-12 p-2" style="overflow: auto;">
                             <label for="employees">Employees</label>
                             <ul class="p-0">
-                                <li v-for="employee in employees_by_dept" :key="employee.id" class="list-group-item">
-                                    {{ employee.surname }}, {{ employee.firstname }} {{ employee.middlename }} {{ employee.nameextension }}
+                                <li v-for="employee in employees_by_dept.data" :key="employee.id" class="list-group-item">
+                                   {{ employee.surname }}, {{ employee.firstname }} {{ employee.middlename }} {{ employee.nameextension }}
                                 </li>
                             </ul>
                         </div>
                     </div>
+                    <div class="mt-3">
+                        <span style="margin-left: 10px;">Showing {{ employees_by_dept && employees_by_dept.from | validateCount }} to {{ employees_by_dept && employees_by_dept.to | validateCount }} of {{ employees_by_dept && employees_by_dept.total }} records</span>
+                    </div>
                 </div>
                 <div class="modal-footer">
+                    <pagination size="default" :data="employees_by_dept" @pagination-change-page="getEmployeesByDepartments" :limit="2" :keepLength="true">
+                        <span slot="prev-nav">&lt; Previous</span>
+                        <span slot="next-nav">Next &gt;</span>
+                    </pagination>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" @click="submitForPrint()">Print</button>
                 </div>
@@ -725,7 +732,7 @@ import CreditsTable from './CreditsTable.vue'
                 vcalendar_date: null,
                 departments: [],
                 selected_dept: {},
-                employees_by_dept: []
+                employees_by_dept: {}
             }
         },
         components: {
@@ -792,11 +799,11 @@ import CreditsTable from './CreditsTable.vue'
                 })
             },
 
-            getEmployeesByDepartments: function(){
+            getEmployeesByDepartments: function(page=1){
 
-               axios.get('api/getEmployeesByDepartment/'+this.selected_dept)
+               axios.get('api/getEmployeesByDepartment/'+this.selected_dept+'?page='+page)
                .then(response => {
-                   this.employees_by_dept = response.data
+                    this.employees_by_dept = response.data
                })
                .catch(e => {
                    console.log(e)
@@ -828,7 +835,7 @@ import CreditsTable from './CreditsTable.vue'
                             showConfirmButton: false
                     })
 
-                    axios.post('generateleavecardByDept', this.employees_by_dept)
+                    axios.post('generateleavecardByDept', this.employees_by_dept.data)
                     .then(response => {
                         let options = {
                             height: screen.height * 0.65 + 'px',
@@ -1136,8 +1143,6 @@ import CreditsTable from './CreditsTable.vue'
 
             calculate_balance_on_save: function(index, field, leave_type)
             {
-
-                console.log(index, field, leave_type)
 
                 let data = this.leave_summary
 
