@@ -26,6 +26,7 @@
                             <div class="float-right" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-info" :disabled="selected_employee == null" @click="scroll_bottom">Bottom <i class="fas fa-arrow-down"></i></button>
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
+                                <button type="button" class="btn btn-info" @click="printByDept()">Print by Deparment <i class="fas fa-print"></i></button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
                                 <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>
                             </div>
@@ -607,6 +608,42 @@
             </div>
         </div>
 
+         <!-- Modal -->
+         <div class="modal fade" id="deptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Print By Department</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="max-height: 24rem; overflow: auto;">
+                        <div class="col-md-12 p-2">
+                            <label for="leave_type">Departments</label>
+                            <select v-model.lazy="selected_dept" @change="getEmployeesByDepartments()" class="form-control" id="leave_type">
+                                <option v-for="dept in departments.data" :key="dept.id" :value="dept.id">{{dept.address}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 p-2" style="overflow: auto;">
+                            <label for="employees">Employees</label>
+                            <ul class="p-0">
+                                <li v-for="employee in employees_by_dept" :key="employee.id" class="list-group-item">
+                                    {{ employee.surname }}, {{ employee.firstname }} {{ employee.middlename }} {{ employee.nameextension }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="submitForPrint()">Print</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -686,6 +723,9 @@ import CreditsTable from './CreditsTable.vue'
                 ],
                 count_field_check: false,
                 vcalendar_date: null,
+                departments: [],
+                selected_dept: {},
+                employees_by_dept: []
             }
         },
         components: {
@@ -740,6 +780,77 @@ import CreditsTable from './CreditsTable.vue'
             }
         },
         methods: {
+
+            // fetch departments
+            getDepartments: function(){
+                axios.get('api/department')
+                .then(response => {
+                    this.departments = response.data
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            },
+
+            getEmployeesByDepartments: function(){
+
+               axios.get('api/getEmployeesByDepartment/'+this.selected_dept)
+               .then(response => {
+                   this.employees_by_dept = response.data
+               })
+               .catch(e => {
+                   console.log(e)
+               })
+
+            },
+
+            submitForPrint: function(){
+                if(this.edited && this.leave_summary.length == 0)
+                {
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Save Changes First'
+                    })
+                }else{
+                    Swal.fire({
+                        title: '<strong>Generating Leave Card</strong>',
+                        html: 'Dont <u>reload</u> or <u>close</u> the application ...',
+                        icon: 'info',
+                        willOpen () {
+                            Swal.showLoading ()
+                        },
+                        didClose () {
+                            Swal.hideLoading()
+                        },
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                            showConfirmButton: false
+                    })
+
+                    axios.post('generateleavecardByDept', this.employees_by_dept)
+                    .then(response => {
+                        let options = {
+                            height: screen.height * 0.65 + 'px',
+                            page: '1'
+                        };
+                        Swal.close()
+                        $('#deptModal').modal('hide');
+                        $('#pdfModal').modal('show');
+                        console.log(response.data)
+                        PDFObject.embed("/storage/employee_leave_card/" + response.data, "#pdf-viewer", options);
+                    })
+                    .catch(error => {
+                        Swal.close()
+                        Swal.fire(
+                            'Failed',
+                            'Something went wrong',
+                            'warning'
+                        )
+                        console.log(error);
+                    });
+                }
+            },
 
             onDayClick(day) {
                 const idx = this.days.findIndex(d => d.id === day.id);
@@ -1023,7 +1134,40 @@ import CreditsTable from './CreditsTable.vue'
 
             },
 
+            calculate_balance_on_save: function(index, field, leave_type)
+            {
+
+                console.log(index, field, leave_type)
+
+                let data = this.leave_summary
+
+                let x = index
+
+
+                for (let index = x; index < data.length; index++) {
+
+                    this.leave_summary[index][leave_type + '_balance'] = 0
+                    this.leave_summary[index][leave_type + '_balance'] = Math.round(parseFloat(data[index][leave_type + '_earned'] - data[index][leave_type + '_withpay'] + (this.leave_summary[index][leave_type + '_balance'] + this.leave_summary[index != 0 ? index-1 : index][leave_type + '_balance'])) * 1000) / 1000
+                }
+
+
+            },
+
+            correct_leave_balance: async function(){
+                return new Promise((resolve) => {
+                    this.calculate_balance_on_save(0, 'vl_earned', 'vl')
+                    this.calculate_balance_on_save(0, 'sl_earned', 'sl')
+                    resolve()
+                });
+            },
+
+
             check_input: _.debounce(function()
+            {
+                this.handleCheckInput()
+            }, 100),
+
+            handleCheckInput: async function()
             {
                 this.leave_summary.map((e) => {
                     if(e.period == null || e.period.mode == null || e.period.mode == '')
@@ -1036,6 +1180,7 @@ import CreditsTable from './CreditsTable.vue'
 
                 if(this.validation)
                 {
+                    await this.correct_leave_balance()
                     this.submit_leave(false)
                 }else{
                     toast.fire({
@@ -1043,7 +1188,7 @@ import CreditsTable from './CreditsTable.vue'
                         title: 'Period Empty'
                     })
                 }
-            }, 100),
+            },
 
             submit_leave: function(delete_save)
             {
@@ -1162,6 +1307,10 @@ import CreditsTable from './CreditsTable.vue'
                     });
                 }
 
+            },
+
+            printByDept: function(){
+                $('#deptModal').modal('show')
             },
 
             retirement_date_modal: function()
@@ -1560,6 +1709,7 @@ import CreditsTable from './CreditsTable.vue'
             this.get_employees()
             this.get_leave_types()
             this.get_status()
+            this.getDepartments()
         }
     }
 </script>

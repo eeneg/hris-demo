@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LeaveCreditResource;
 use App\LeaveCredit;
@@ -10,6 +11,7 @@ use App\LeaveType;
 use App\PersonalInformation;
 use App\Plantilla;
 use App\PlantillaContent;
+use App\Position;
 use App\Setting;
 use App\UserAssignment;
 use Carbon\Carbon;
@@ -47,6 +49,7 @@ class LeaveCreditController extends Controller
                 'plantilla_contents.plantilla_id',
                 'plantilla_contents.personal_information_id',
                 'plantilla_contents.position_id',
+                'personal_informations.id',
                 'personal_informations.firstname',
                 'personal_informations.middlename',
                 'personal_informations.surname',
@@ -59,9 +62,13 @@ class LeaveCreditController extends Controller
             )
             ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
             ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
-            ->where('personal_information_id', '!=', null)
+            ->leftJoin('reappointments', 'plantilla_contents.personal_information_id', '=', 'reappointments.personal_information_id')
+            ->where('personal_informations.id', '!=', null)
             ->where('plantilla_id', $plantilla->id)
-            ->where('department_id', $department_id)
+            ->where(function ($query) use ($department_id) {
+                $query->where('reappointments.assigned_to', $department_id)
+                ->orWhere('department_id', $department_id);
+            })
             ->orderBy('surname')
             ->get();
         }else{
@@ -81,7 +88,7 @@ class LeaveCreditController extends Controller
             // )
             // ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
             // ->where('personal_information_id', '!=', null)
-            // // ->where('plantilla_id', $plantilla->id)
+            // ->where('plantilla_id', $plantilla->id)
             // ->orderBy('surname')
             // ->get();
 
@@ -268,8 +275,8 @@ class LeaveCreditController extends Controller
                             ];
                         });
 
-        $vl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Vacation Leave')->first()->id)->first()->id;
-        $sl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Sick Leave')->first()->id)->first()->id;
+        // $vl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Vacation Leave')->first()->id)->first()->id;
+        // $sl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Sick Leave')->first()->id)->first()->id;
 
         $credits_anticipated = LeaveSummary::where('personal_information_id', $id)
             ->where(function ($query) {
@@ -298,6 +305,49 @@ class LeaveCreditController extends Controller
             'salary' => $personalinformations->salary ?? '',
             'anticipated' => $credits_anticipated
         ];
+    }
+
+    public function getEmployeesByDepartment($id){
+
+        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
+        $plantilla          =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
+
+        $positions = Position::where('department_id', $id)->get();
+        $department = Department::find($id)->title;
+
+        $employee = PlantillaContent::without(
+            'plantilla',
+            'salaryproposed',
+            'position'
+        )->select(
+            'plantilla_contents.id',
+            'plantilla_contents.plantilla_id',
+            'plantilla_contents.personal_information_id',
+            'personal_informations.firstname',
+            'personal_informations.middlename',
+            'personal_informations.surname',
+            'personal_informations.nameextension',
+            'personal_informations.civilstatus',
+            'personal_informations.birthdate',
+            'personal_informations.retirement_date',
+            'personal_informations.status',
+            'plantilla_contents.position_id',
+            'positions.title as position_title',
+            'departments.address as department_title',
+            'salary_grades.grade as salary_grade',
+        )
+        ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
+        ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+        ->leftJoin('departments', 'positions.department_id', '=', 'departments.id')
+        ->leftJoin('salary_grades', 'plantilla_contents.salary_grade_auth_id', '=', 'salary_grades.id')
+        ->where('personal_information_id', '!=', null)
+        ->where('plantilla_id', $plantilla->id)
+        ->whereIn('position_id', $positions->pluck('id'))
+        ->orderBy('surname')
+        ->get();
+
+        return $employee;
+
     }
 
     /**
@@ -337,4 +387,78 @@ class LeaveCreditController extends Controller
 
         $summary->delete();
     }
+
+    public function asd(){
+
+        $employees = PersonalInformation::without(
+            'barcode',
+            'familybackground',
+            'residentialaddresstable',
+            'permanentaddresstable',
+            'children',
+            'educationalbackground',
+            'eligibilities',
+            'otherinfos',
+            'workexperiences',
+            'voluntaryworks',
+            'trainingprograms',
+            'pdsquestion'
+        )
+        ->select(
+            'personal_informations.id',
+            'personal_informations.firstname',
+            'personal_informations.middlename',
+            'personal_informations.surname',
+        )
+        ->with(['leavesummary' => function($query){
+            $query->orderBy('sort');
+        }])
+        ->orderBy('surname')
+        ->get();
+
+        $correctionsCount = [];
+        $noCorrections = 0;
+
+        foreach($employees as $employee){
+            $prevVLBalance = 0;
+            $prevSLBalance = 0;
+            $corrections = 0;
+
+           if($employee->leavesummary){
+                foreach($employee->leavesummary->sortBy('sort') as $leave){
+
+                    $newVLBalance = round($prevVLBalance + $leave->vl_earned - $leave->vl_withpay, 3); // Correct balance calculation
+                    $newSLBalance = round($prevSLBalance + $leave->sl_earned - $leave->sl_withpay, 3); // Correct balance calculation
+
+                    // Check if correction is needed
+                    if ($leave->vl_balance !== $newVLBalance || $leave->sl_balance !== $newSLBalance) {
+                        $corrections++;
+
+                        LeaveSummary::find($leave->id)->update(['vl_balance' => $newVLBalance, 'sl_balance' => $newSLBalance]);
+                    }
+
+                    $prevVLBalance = $newVLBalance; // Carry over balance
+                    $prevSLBalance = $newSLBalance; // Carry over balance
+
+                }
+
+                $sl = LeaveType::where('abbreviation', 'SL')->first()->id;
+                $vl = LeaveType::where('abbreviation', 'VL')->first()->id;
+
+                $employee_vl = LeaveCredit::where('personal_information_id', $employee->id)->where('leave_type_id', $vl)->update(['balance' => $prevVLBalance]);
+                $employee_sl = LeaveCredit::where('personal_information_id', $employee->id)->where('leave_type_id', $sl)->update(['balance' => $prevSLBalance]);
+
+                if($corrections > 0){
+                    $correctionsCount[$employee->fullName] = $corrections;
+                }else{
+                    $noCorrections++;
+                }
+           }
+
+        }
+
+        return [$correctionsCount, $noCorrections];
+
+    }
 }
+

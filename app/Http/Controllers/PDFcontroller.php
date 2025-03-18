@@ -13,6 +13,7 @@ use App\SalarySchedule;
 use App\Setting;
 use App\Http\Resources\CSCResource;
 use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -294,6 +295,36 @@ class PDFcontroller extends Controller
         Storage::put('public/employee_leave_card/'.$employee->id.'.pdf', $pdf->output());
 
         return ['title' => $employee->id.'.pdf'];
+    }
+
+    public function generateleavecardByDept(Request $request){
+
+        $leaveSummary = collect($request->all())->map(function($e){
+            return [
+                "id" => $e['id'],
+                "plantilla_id" => $e['plantilla_id'],
+                "personal_information_id" => $e['personal_information_id'],
+                "name" => PersonalInformation::find($e['personal_information_id'])->getFullNameAttributeProperFormat(),
+                "civilstatus" => $e['civilstatus'],
+                "birthdate" => $e['birthdate'],
+                "retirement_date" => $e['retirement_date'],
+                "status" => $e['status'],
+                "position_id" => $e['position_id'],
+                "position_title" => $e['position_title'],
+                'salary_grade' => $e['salary_grade'],
+                'department_title' => $e['department_title'],
+                "data" => LeaveSummary::where('personal_information_id', $e['personal_information_id'])->orderBy('sort')->get()
+            ];
+        });
+
+        $pdf = PDF::loadView('reports/employee-leavecard-department', compact('leaveSummary'))->setPaper('legal', 'landscape');
+
+        $title = Carbon::now()->timestamp . '_deptPrintLeaveCard.pdf';
+
+        Storage::put('public/employee_leave_card/'.$title, $pdf->output());
+
+        return $title;
+
     }
 
     public function generatesalarysched(Request $request)

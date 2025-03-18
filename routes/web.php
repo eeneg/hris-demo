@@ -38,6 +38,8 @@ Route::post('/generatePDS', 'PDFcontroller@pds');
 
 Route::post('/generateleavecard', 'PDFcontroller@generateleavecard');
 
+Route::post('/generateleavecardByDept', 'PDFcontroller@generateleavecardByDept');
+
 Route::post('/generatePlantilla', 'PDFcontroller@plantilla');
 
 Route::get('/generatePlantillaExcel', 'PDFcontroller@plantillaExcel');
@@ -66,3 +68,6 @@ Route::get('/asd/generateleavecard', 'PDFcontroller@generateleavecard');
 Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
 
 
+Route::get('/displayLeaveApplication/{id}', 'Api\LeaveApplicationController@show');
+
+Route::get('/asd/asd', 'Api\LeaveCreditController@asd');
