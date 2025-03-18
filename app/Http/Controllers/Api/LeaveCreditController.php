@@ -344,7 +344,7 @@ class LeaveCreditController extends Controller
         ->where('plantilla_id', $plantilla->id)
         ->whereIn('position_id', $positions->pluck('id'))
         ->orderBy('surname')
-        ->get();
+        ->paginate(10);
 
         return $employee;
 
