@@ -299,12 +299,34 @@ class PDFcontroller extends Controller
 
     public function generateleavecardByDept(Request $request){
 
-        $leaveSummary = collect($request->all())->map(function($e){
+        $leaveSummaries = LeaveSummary::whereIn('personal_information_id', collect($request->all())->pluck('personal_information_id'))->orderBy('sort')->get();
+
+        $fullNames = PersonalInformation::without(
+                'barcode',
+                'familybackground',
+                'residentialaddresstable',
+                'permanentaddresstable',
+                'children',
+                'educationalbackground',
+                'eligibilities',
+                'otherinfos',
+                'workexperiences',
+                'voluntaryworks',
+                'trainingprograms',
+                'pdsquestion'
+            )
+            ->whereIn('id', collect($request->all())->pluck('personal_information_id'))
+            ->get();
+
+
+
+        $leaveSummary = collect($request->all())->map(function ($e) use ($fullNames, $leaveSummaries) {
+            $personalInfoItem = $fullNames->first(fn ($info) => $info->id === $e['personal_information_id']);
             return [
                 "id" => $e['id'],
                 "plantilla_id" => $e['plantilla_id'],
                 "personal_information_id" => $e['personal_information_id'],
-                "name" => PersonalInformation::find($e['personal_information_id'])->getFullNameAttributeProperFormat(),
+                "name" => $personalInfoItem ? $personalInfoItem->getFullNameAttributeProperFormat() : null,
                 "civilstatus" => $e['civilstatus'],
                 "birthdate" => $e['birthdate'],
                 "retirement_date" => $e['retirement_date'],
@@ -313,7 +335,7 @@ class PDFcontroller extends Controller
                 "position_title" => $e['position_title'],
                 'salary_grade' => $e['salary_grade'],
                 'department_title' => $e['department_title'],
-                "data" => LeaveSummary::where('personal_information_id', $e['personal_information_id'])->orderBy('sort')->get()
+                "data" => $leaveSummaries->filter(fn ($summary) => $summary->personal_information_id === $e['personal_information_id']) // Default to empty collection if no data found
             ];
         });
 
