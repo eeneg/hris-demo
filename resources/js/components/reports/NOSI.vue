@@ -386,8 +386,8 @@
                 let current_step = (parseInt(year) - nosi_sched) / 3
                 let forReport = {
                     step: current_step,
-                    current_amount: current_step == employee.salaryproposed.step ? employee.salaryproposed.amount : employee.previousStepAmount,
-                    next_amount: current_step == employee.salaryproposed.step ? employee.nextStepAmount : employee.salaryproposed.amount
+                    current_amount: current_step == employee.salaryproposed.step ? (employee.working_time == "Full-time" ? employee.salaryproposed.amount : employee.salaryproposed.amount / 2) : employee.previousStepAmount,
+                    next_amount: current_step == employee.salaryproposed.step ? employee.nextStepAmount : (employee.working_time == "Full-time" ? employee.salaryproposed.amount : employee.salaryproposed.amount / 2)
                 }
 
                 return _.assign({forReport: forReport}, employee)
