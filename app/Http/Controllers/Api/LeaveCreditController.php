@@ -388,7 +388,7 @@ class LeaveCreditController extends Controller
         $summary->delete();
     }
 
-    public function asd(){
+    public function leaveCC(){
 
         $employees = PersonalInformation::without(
             'barcode',
@@ -433,20 +433,12 @@ class LeaveCreditController extends Controller
                     // Check if correction is needed
                     if ($leave->vl_balance !== $newVLBalance || $leave->sl_balance !== $newSLBalance) {
                         $corrections++;
-
-                        LeaveSummary::find($leave->id)->update(['vl_balance' => $newVLBalance, 'sl_balance' => $newSLBalance]);
                     }
 
                     $prevVLBalance = $newVLBalance; // Carry over balance
                     $prevSLBalance = $newSLBalance; // Carry over balance
 
                 }
-
-                $sl = LeaveType::where('abbreviation', 'SL')->first()->id;
-                $vl = LeaveType::where('abbreviation', 'VL')->first()->id;
-
-                $employee_vl = LeaveCredit::where('personal_information_id', $employee->id)->where('leave_type_id', $vl)->update(['balance' => $prevVLBalance]);
-                $employee_sl = LeaveCredit::where('personal_information_id', $employee->id)->where('leave_type_id', $sl)->update(['balance' => $prevSLBalance]);
 
                 if($corrections > 0){
                     $correctionsCount[$employee->fullName] = $corrections;
