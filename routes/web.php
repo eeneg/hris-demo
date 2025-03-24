@@ -70,4 +70,4 @@ Route::get('/dsa/{id}', 'API\SalaryGradeController@index');
 
 Route::get('/displayLeaveApplication/{id}', 'Api\LeaveApplicationController@show');
 
-Route::get('/asd/asd', 'Api\LeaveCreditController@asd');
+Route::get('/leave/CC', 'Api\LeaveCreditController@leaveCC');
