@@ -27,8 +27,8 @@ class PlantillaEmployeesNOSIResource extends ResourceCollection
                 'surname' => $item->personalinformation->surname,
                 'title' => $item->personalinformation->sex == 'Male' ? 'Mr.' : 'Ms.',
                 'salaryproposed' => $item->salaryproposed,
-                'nextStepAmount' => $item->working_time == 'Full-Time' ? ($nextStep ? $nextStep->amount : 0) : ($nextStep ? $nextStep->amount / 2 : 0),
-                'previousStepAmount' => $item->working_time == 'Full-Time' ? ($previousStep ? $previousStep->amount : 0) : ($previousStep ? $previousStep->amount / 2 : 0),
+                'nextStepAmount' => $item->working_time == 'Full-time' ? ($nextStep ? $nextStep->amount : 0) : ($nextStep ? $nextStep->amount / 2 : 0),
+                'previousStepAmount' => $item->working_time == 'Full-time' ? ($previousStep ? $previousStep->amount : 0) : ($previousStep ? $previousStep->amount / 2 : 0),
                 'nosi_schedule' => $item->personalinformation->benefitschedule->nosi,
                 'working_time' => $item->working_time,
             ];

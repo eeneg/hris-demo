@@ -28,18 +28,26 @@
                             <table class="table table-bordered transmittal-table">
                                 <thead>
                                     <tr>
-                                        <td><b>NAME</b></td>
-                                        <td><b>POSITION</b></td>
+                                        <td><b>EMPLOYEE</b></td>
                                         <td><b>DATE HIRED/PROMOTION</b></td>
                                         <td><b>DATE OF STEP INCREMENT</b></td>
+                                        <td><b>AMOUNT</b></td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="data in print_data" :key="data.id">
-                                        <td>{{ data.name2 }}</td>
-                                        <td>{{ data.position }}</td>
+                                        <td><b>{{ data.name2 }}</b><p style="margin: 0 !important"><small>{{ data.position }}</small></p></td>
                                         <td>{{ data.nosi_schedule }}</td>
                                         <td>{{ data.nosi_schedule | myDateWithYear(nosi_year) }}</td>
+                                        <td>
+                                            <p style="margin: 0 !important"><small>Actual: <b>₱{{ data.forReport.current_amount | amount }}</b></small></p>
+                                            <p style="margin: 0 !important"><small>Adjusted: <b>₱{{ data.forReport.next_amount | amount }}</b></small></p>
+                                            <p style="margin: 0 !important"><small>Difference: <b>₱{{ (data.forReport.next_amount - data.forReport.current_amount) | amount }}</b></small></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-right"><b>Total Difference:</b></td>
+                                        <td><b>₱{{ print_data.reduce((acc, curr) => acc + (curr.forReport.next_amount - curr.forReport.current_amount), 0) | amount }}</b></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -386,10 +394,9 @@
                 let current_step = (parseInt(year) - nosi_sched) / 3
                 let forReport = {
                     step: current_step,
-                    current_amount: current_step == employee.salaryproposed.step ? (employee.working_time == "Full-time" ? employee.salaryproposed.amount : employee.salaryproposed.amount / 2) : employee.previousStepAmount,
-                    next_amount: current_step == employee.salaryproposed.step ? employee.nextStepAmount : (employee.working_time == "Full-time" ? employee.salaryproposed.amount : employee.salaryproposed.amount / 2)
+                    current_amount: current_step == employee.salaryproposed.step ? (employee.working_time == "Full-time" ? employee.salaryproposed.amount : (employee.salaryproposed.amount / 2)) : employee.previousStepAmount,
+                    next_amount: current_step == employee.salaryproposed.step ? employee.nextStepAmount : (employee.working_time == "Full-time" ? employee.salaryproposed.amount : (employee.salaryproposed.amount / 2))
                 }
-
                 return _.assign({forReport: forReport}, employee)
             },
             generateNOSI() {
@@ -461,7 +468,7 @@
                             if (included && office && month_inc) {
                                 content = this.generateForReport(content, nosi_sched, this.nosi_year)
                                 this.lookup_data.push(content)
-                            }
+                            }                            
                         }
                     }
                 });
