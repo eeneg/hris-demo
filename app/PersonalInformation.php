@@ -36,7 +36,7 @@ class PersonalInformation extends Authenticatable
     protected $fillable = [
         'surname', 'firstname', 'middlename', 'nameextension', 'birthdate', 'birthplace', 'sex', 'civilstatus', 'citizenship', 'height',
         'weight', 'bloodtype', 'gsis', 'pagibig', 'philhealth', 'sss', 'residentialaddress', 'zipcode1', 'telephone1', 'permanentaddress',
-        'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status', 'retirement_date'
+        'zipcode2', 'telephone2', 'email', 'cellphone', 'agencynumber', 'tin', 'picture', 'status', 'retirement_date', 'religion', 'other_religion'
     ];
 
     protected $appends = [
@@ -113,6 +113,10 @@ class PersonalInformation extends Authenticatable
     public function employeeEditRequests()
     {
         return $this->hasMany('App\EmployeePDSEditRequest');
+    }
+
+    public function leaveApplication(){
+        return $this->hasMany('App\LeaveApplication', 'personal_information_id');
     }
 
     public function leavecredit()
