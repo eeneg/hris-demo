@@ -18,7 +18,7 @@
                                         <div>
                                             <label class="text-center" for="surname" style="line-height: 10px;">Surname</label>
                                         </div>
-                                            <input type="text" name="surname" class="form-control form-control-border border-width-2" id="surname" v-model="form.surname">
+                                            <input type="text" name="surname" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('surname') }" id="surname" v-model="form.surname">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('surname')">Field Required</strong>
                                         </span>
@@ -28,7 +28,7 @@
                                         <div>
                                             <label for="firstname" style="line-height: 10px;">Firstname</label>
                                         </div>
-                                            <input type="text" name="firstname" class="form-control form-control-border border-width-2" id="firstname" v-model="form.firstname">
+                                            <input type="text" name="firstname" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('firstname') }" id="firstname" v-model="form.firstname">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('firstname')">Field Required</strong>
                                         </span>
@@ -64,7 +64,7 @@
                                         <div>
                                             <label for="birthdate" style="line-height: 10px;">Birth Date</label>
                                         </div>
-                                            <input type="date" name="birthdate" class="form-control form-control-border border-width-2" id="birthdate" v-model="form.birthdate">
+                                            <input type="date" name="birthdate" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('birthdate') }" id="birthdate" v-model="form.birthdate">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('birthdate')">Field Required</strong>
                                         </span>
@@ -103,7 +103,7 @@
                                         <div>
                                             <label for="birthplace" style="line-height: 10px;">Please Specify:</label>
                                         </div>
-                                            <input type="text" name="civilstatus_others" class="form-control form-control-border border-width-2" id="civilstatus_others" v-model="form.civilstatus_others">
+                                            <input type="text" name="civilstatus_others" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('civilstatus_others') }" id="civilstatus_others" v-model="form.civilstatus_others">
                                             <span>
                                                 <strong class="text-danger" v-if="errors.has('civilstatus_others')">Field Required</strong>
                                             </span>
@@ -188,7 +188,7 @@
                                         <div>
                                             <label for="cellphone" style="line-height: 10px;">Mobile Number</label>
                                         </div>
-                                        <input type="text" name="cellphone" class="form-control form-control-border border-width-2" id="cellphone" v-model="form.cellphone">
+                                        <input type="text" name="cellphone" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('cellphone') }" id="cellphone" v-model="form.cellphone">
                                             <span>
                                                 <strong class="text-danger" v-if="errors.has('cellphone')">Field Required</strong>
                                             </span>
@@ -270,7 +270,7 @@
                                         <div>
                                             <label for="residentialaddress" style="line-height: 10px;">House/Block/Lot No.</label>
                                         </div>
-                                        <input type="text" name="permanentaddresstable.house_lotNo" class="form-control form-control-border border-width-2" id="permanentaddresstable.house_lotNo" v-model="form.permanentaddresstable.house_lotNo">
+                                        <input type="text" name="permanentaddresstable.house_lotNo" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('permanentaddresstable.house_lotNo') }" id="permanentaddresstable.house_lotNo" v-model="form.permanentaddresstable.house_lotNo">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('permanentaddresstable.house_lotNo')">Field Required</strong>
                                         </span>
@@ -279,7 +279,7 @@
                                         <div>
                                             <label for="residentialaddress" style="line-height: 10px;">Street</label>
                                         </div>
-                                        <input type="text" name="permanentaddresstable.street" class="form-control form-control-border border-width-2" id="permanentaddresstable.street" v-model="form.permanentaddresstable.street">
+                                        <input type="text" name="permanentaddresstable.street" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('permanentaddresstable.street') }" id="permanentaddresstable.street" v-model="form.permanentaddresstable.street">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('permanentaddresstable.street')">Field Required</strong>
                                         </span>
@@ -288,7 +288,7 @@
                                         <div>
                                             <label for="residentialaddress" style="line-height: 10px;">Subdivision/Village</label>
                                         </div>
-                                        <input type="text" name="permanentaddresstable.subdv_village" class="form-control form-control-border border-width-2" id="permanentaddresstable.subdv_village" v-model="form.permanentaddresstable.subdv_village">
+                                        <input type="text" name="permanentaddresstable.subdv_village" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('permanentaddresstable.subdv_village') }" id="permanentaddresstable.subdv_village" v-model="form.permanentaddresstable.subdv_village">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('permanentaddresstable.subdv_village')">Field Required</strong>
                                         </span>
@@ -300,7 +300,7 @@
                                         <div>
                                             <label for="residentialaddress" style="line-height: 10px;">Barangay</label>
                                         </div>
-                                        <input type="text" name="permanentaddresstable.barangay" class="form-control form-control-border border-width-2" id="permanentaddresstable.barangay" v-model="form.permanentaddresstable.barangay">
+                                        <input type="text" name="permanentaddresstable.barangay" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('permanentaddresstable.barangay') }" id="permanentaddresstable.barangay" v-model="form.permanentaddresstable.barangay">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('permanentaddresstable.barangay')">Field Required</strong>
                                         </span>
@@ -309,7 +309,7 @@
                                         <div>
                                             <label for="residentialaddress" style="line-height: 10px;">City/Municipality</label>
                                         </div>
-                                        <input type="text" name="permanentaddresstable.city_municipality" class="form-control form-control-border border-width-2" id="permanentaddresstable.city_municipality" v-model="form.permanentaddresstable.city_municipality">
+                                        <input type="text" name="permanentaddresstable.city_municipality" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('permanentaddresstable.city_municipality') }" id="permanentaddresstable.city_municipality" v-model="form.permanentaddresstable.city_municipality">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('permanentaddresstable.city_municipality')">Field Required</strong>
                                         </span>
@@ -318,7 +318,7 @@
                                         <div>
                                             <label for="residentialaddress" style="line-height: 10px;">Province</label>
                                         </div>
-                                        <input type="text" name="permanentaddresstable.province" class="form-control form-control-border border-width-2" id="permanentaddresstable.province" v-model="form.permanentaddresstable.province">
+                                        <input type="text" name="permanentaddresstable.province" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('permanentaddresstable.province') }" id="permanentaddresstable.province" v-model="form.permanentaddresstable.province">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('permanentaddresstable.province')">Field Required</strong>
                                         </span>
@@ -327,7 +327,7 @@
                                         <div>
                                             <label for="residentialaddress" style="line-height: 10px;">ZIP CODE</label>
                                         </div>
-                                        <input type="text" name="permanentaddresstable.zipcode" class="form-control form-control-border border-width-2" id="permanentaddresstable.zipcode" v-model="form.permanentaddresstable.zipcode">
+                                        <input type="text" name="permanentaddresstable.zipcode" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('permanentaddresstable.zipcode') }" id="permanentaddresstable.zipcode" v-model="form.permanentaddresstable.zipcode">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('permanentaddresstable.zipcode')">Field Required</strong>
                                         </span>
@@ -346,7 +346,7 @@
                                         <div>
                                             <label for="religion">Religion</label>
                                         </div>
-                                        <select name="religion" id="religion" class="form-control form-control-border border-width-2" v-model="form.religion" placeholder="Religion">
+                                        <select name="religion" id="religion" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('religion') }" v-model="form.religion" placeholder="Religion">
                                             <option value="None">None</option>
                                             <option value="Roman Catholic">Roman Catholic</option>
                                             <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
@@ -380,9 +380,148 @@
                                         <div>
                                             <label for="others_religion">Please Specify</label>
                                         </div>
-                                        <input type="text" name="others_religion" class="form-control form-control-border border-width-2" id="others_religion" v-model="form.other_religion">
+                                        <input type="text" name="others_religion" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('other_religion') }" id="others_religion" v-model="form.other_religion">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('other_religion')">Field Required</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="display: flex; margin-top: 50px;">
+                                    <div class="col-md-12">
+                                        <label for="" class="text-info" style="line-height: 10px;">INFORMATION</label>
+                                        <hr/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="display:flex">
+                                    <div class="col-md-3">
+                                        <div>
+                                            <label for="indigenous_tribe">Indigenouse People</label>
+                                        </div>
+                                        <select class="form-control form-control-border border-width-2" v-model="form.indigenous_people" name="indigenous_tribe" id="indigenous_tribe">
+                                            <!-- Luzon Tribes -->
+                                            <option value="No">None</option>
+                                            <option value="Agta">Agta</option>
+                                            <option value="Dumagat">Dumagat</option>
+                                            <option value="Ilongot">Ilongot</option>
+                                            <option value="Ivatan">Ivatan</option>
+                                            <option value="Bontoc">Bontoc</option>
+                                            <option value="Ibaloi">Ibaloi</option>
+                                            <option value="Ifugao">Ifugao</option>
+                                            <option value="Kalinga">Kalinga</option>
+                                            <option value="Kankanaey">Kankanaey</option>
+                                            <option value="Isneg (Apayao)">Isneg (Apayao)</option>
+                                            <option value="Tingguian (Itneg)">Tingguian (Itneg)</option>
+
+                                            <!-- Visayas Tribes -->
+                                            <option value="Ati">Ati</option>
+                                            <option value="Bukidnon (Visayan)">Bukidnon (Visayan)</option>
+                                            <option value="Eskaya">Eskaya</option>
+
+                                            <!-- Mindanao Tribes -->
+                                            <option value="Manobo">Manobo</option>
+                                            <option value="T'boli">T'boli</option>
+                                            <option value="B'laan">B'laan</option>
+                                            <option value="Mandaya">Mandaya</option>
+                                            <option value="Bagobo">Bagobo</option>
+                                            <option value="Subanen">Subanen</option>
+                                            <option value="Higaonon">Higaonon</option>
+                                            <option value="Tiruray">Tiruray</option>
+                                            <option value="Mamanwa">Mamanwa</option>
+                                            <option value="Talaandig">Talaandig</option>
+                                            <option value="Banwaon">Banwaon</option>
+                                            <option value="Dibabawon">Dibabawon</option>
+                                            <option value="Badjao">Badjao</option>
+                                            <option value="Kalagan">Kalagan</option>
+
+                                            <!-- Muslim Indigenous Tribes (Moro Groups) -->
+                                            <option value="Maranao">Maranao</option>
+                                            <option value="Maguindanao">Maguindanao</option>
+                                            <option value="Tausug">Tausug</option>
+                                            <option value="Yakan">Yakan</option>
+                                            <option value="Sama-Bajau">Sama-Bajau</option>
+                                            <option value="Iranun">Iranun</option>
+
+                                            <!-- Other / Not Listed -->
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <span>
+                                            <strong class="text-danger" v-if="errors.has('indigenous_people')">Field Required</strong>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3" v-if="form.indigenous_people == 'Others'">
+                                        <div>
+                                            <label for="other_indigenous_people">Pleace Specify</label>
+                                        </div>
+                                        <input type="text" name="other_indigenous_people" class="form-control form-control-border border-width-2" id="other_indigenous_people" v-model="form.other_indigenous_people">
+                                        <span>
+                                            <strong class="text-danger" v-if="errors.has('other_indigenous_people')">Field Required</strong>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div>
+                                            <label for="disability">Person with disability</label>
+                                        </div>
+                                        <select name="disability" id="disability" class="form-control form-control-border border-width-2" v-model="form.disability">
+                                            <!-- Physical Disabilities -->
+                                            <option value="No">None</option>
+                                            <option value="Blindness">Blindness</option>
+                                            <option value="Low Vision">Low Vision</option>
+                                            <option value="Deaf">Deaf</option>
+                                            <option value="Hard of Hearing">Hard of Hearing</option>
+                                            <option value="Speech Impairment">Speech Impairment</option>
+                                            <option value="Orthopedic Disability">Orthopedic Disability</option>
+                                            <option value="Amputation">Amputation</option>
+                                            <option value="Paralysis">Paralysis</option>
+                                            <option value="Cerebral Palsy">Cerebral Palsy</option>
+
+                                            <!-- Intellectual & Developmental Disabilities -->
+                                            <option value="Autism Spectrum Disorder">Autism Spectrum Disorder</option>
+                                            <option value="Down Syndrome">Down Syndrome</option>
+                                            <option value="Intellectual Disability">Intellectual Disability</option>
+                                            <option value="Learning Disability">Learning Disability</option>
+
+                                            <!-- Mental Health Disabilities -->
+                                            <option value="Psychosocial Disability">Psychosocial Disability</option>
+                                            <option value="Bipolar Disorder">Bipolar Disorder</option>
+                                            <option value="Schizophrenia">Schizophrenia</option>
+                                            <option value="Depression">Depression</option>
+                                            <option value="Anxiety Disorder">Anxiety Disorder</option>
+
+                                            <!-- Neurological & Other Conditions -->
+                                            <option value="Epilepsy">Epilepsy</option>
+                                            <option value="Multiple Sclerosis">Multiple Sclerosis</option>
+                                            <option value="Parkinson's Disease">Parkinson's Disease</option>
+                                            <option value="Muscular Dystrophy">Muscular Dystrophy</option>
+                                            <option value="Spina Bifida">Spina Bifida</option>
+                                            <option value="Rare Disease">Rare Disease</option>
+
+                                            <!-- Other / Not Listed -->
+                                            <option value="Others">Others</option>
+                                        </select>
+                                        <span>
+                                            <strong class="text-danger" v-if="errors.has('disability')">Field Required</strong>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3" v-if="form.disability == 'Others'">
+                                        <div>
+                                            <label for="other_disability">Pleace Specify</label>
+                                        </div>
+                                        <input type="text" name="other_disability" class="form-control form-control-border border-width-2" id="other_disability" v-model="form.other_disability">
+                                        <span>
+                                            <strong class="text-danger" v-if="errors.has('other_disability')">Field Required</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <div>
+                                            <label for="solo_parent_number">Solo Parent Number</label>
+                                        </div>
+                                        <input type="text" name="solo_parent_number" class="form-control form-control-border border-width-2" id="solo_parent_number" v-model="form.solo_parent_number">
+                                        <span>
+                                            <strong class="text-danger" v-if="errors.has('solo_parent_number')">Field Required</strong>
                                         </span>
                                     </div>
                                 </div>
@@ -1700,6 +1839,11 @@
                         'picture': '',
                         'religion': '',
                         'other_religion': '',
+                        'indigenous_people': 'No',
+                        'other_indigenous_people': '',
+                        'disability': 'No',
+                        'other_disability': '',
+                        'solo_parent_number': '',
                         'status': 'Still in service',
                         'residentialaddresstable': {},
                         'permanentaddresstable': {},
@@ -2025,6 +2169,8 @@
                 this.form['originalData'] ? delete this.form['originalData'] : ''
 
                 this.difference(this.form, this.oldData)
+
+
 
                 if(this.edits.length > 0)
                 {

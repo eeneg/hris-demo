@@ -43,6 +43,10 @@ class CreatePersonalinformationsTable extends Migration
             $table->string('tin', 100)->nullable();
             $table->string('religion')->nullable();
             $table->string('other_religion')->nullable();
+            $table->string('indigenous_people')->nullable();
+            $table->string('other_indigenous_people')->nullable();
+            $table->string('disability')->nullable();
+            $table->string('other_disability')->nullable();
             $table->string('picture', 300)->nullable();
             $table->date('retirement_date')->nullable();
             $table->string('status', 100)->nullable();
