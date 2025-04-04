@@ -395,57 +395,15 @@
                                 </div>
 
                                 <div class="form-group" style="display:flex">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 form-group">
                                         <div>
                                             <label for="indigenous_tribe">Indigenouse People</label>
                                         </div>
-                                        <select class="form-control form-control-border border-width-2" v-model="form.indigenous_people" name="indigenous_tribe" id="indigenous_tribe">
-                                            <!-- Luzon Tribes -->
-                                            <option value="No">None</option>
-                                            <option value="Agta">Agta</option>
-                                            <option value="Dumagat">Dumagat</option>
-                                            <option value="Ilongot">Ilongot</option>
-                                            <option value="Ivatan">Ivatan</option>
-                                            <option value="Bontoc">Bontoc</option>
-                                            <option value="Ibaloi">Ibaloi</option>
-                                            <option value="Ifugao">Ifugao</option>
-                                            <option value="Kalinga">Kalinga</option>
-                                            <option value="Kankanaey">Kankanaey</option>
-                                            <option value="Isneg (Apayao)">Isneg (Apayao)</option>
-                                            <option value="Tingguian (Itneg)">Tingguian (Itneg)</option>
-
-                                            <!-- Visayas Tribes -->
-                                            <option value="Ati">Ati</option>
-                                            <option value="Bukidnon (Visayan)">Bukidnon (Visayan)</option>
-                                            <option value="Eskaya">Eskaya</option>
-
-                                            <!-- Mindanao Tribes -->
-                                            <option value="Manobo">Manobo</option>
-                                            <option value="T'boli">T'boli</option>
-                                            <option value="B'laan">B'laan</option>
-                                            <option value="Mandaya">Mandaya</option>
-                                            <option value="Bagobo">Bagobo</option>
-                                            <option value="Subanen">Subanen</option>
-                                            <option value="Higaonon">Higaonon</option>
-                                            <option value="Tiruray">Tiruray</option>
-                                            <option value="Mamanwa">Mamanwa</option>
-                                            <option value="Talaandig">Talaandig</option>
-                                            <option value="Banwaon">Banwaon</option>
-                                            <option value="Dibabawon">Dibabawon</option>
-                                            <option value="Badjao">Badjao</option>
-                                            <option value="Kalagan">Kalagan</option>
-
-                                            <!-- Muslim Indigenous Tribes (Moro Groups) -->
-                                            <option value="Maranao">Maranao</option>
-                                            <option value="Maguindanao">Maguindanao</option>
-                                            <option value="Tausug">Tausug</option>
-                                            <option value="Yakan">Yakan</option>
-                                            <option value="Sama-Bajau">Sama-Bajau</option>
-                                            <option value="Iranun">Iranun</option>
-
-                                            <!-- Other / Not Listed -->
-                                            <option value="Others">Others</option>
-                                        </select>
+                                        <v-select
+                                            class="form-control form-control-border border-width-2"
+                                            v-model="form.indigenous_people"
+                                            :options="indigenousTribes"
+                                        ></v-select>
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('indigenous_people')">Field Required</strong>
                                         </span>
@@ -454,52 +412,20 @@
                                         <div>
                                             <label for="other_indigenous_people">Pleace Specify</label>
                                         </div>
-                                        <input type="text" name="other_indigenous_people" class="form-control form-control-border border-width-2" id="other_indigenous_people" v-model="form.other_indigenous_people">
+                                        <input type="text" name="other_indigenous_people" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('other_indigenous_people') }" id="other_indigenous_people" v-model="form.other_indigenous_people">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('other_indigenous_people')">Field Required</strong>
                                         </span>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 form-group">
                                         <div>
                                             <label for="disability">Person with disability</label>
                                         </div>
-                                        <select name="disability" id="disability" class="form-control form-control-border border-width-2" v-model="form.disability">
-                                            <!-- Physical Disabilities -->
-                                            <option value="No">None</option>
-                                            <option value="Blindness">Blindness</option>
-                                            <option value="Low Vision">Low Vision</option>
-                                            <option value="Deaf">Deaf</option>
-                                            <option value="Hard of Hearing">Hard of Hearing</option>
-                                            <option value="Speech Impairment">Speech Impairment</option>
-                                            <option value="Orthopedic Disability">Orthopedic Disability</option>
-                                            <option value="Amputation">Amputation</option>
-                                            <option value="Paralysis">Paralysis</option>
-                                            <option value="Cerebral Palsy">Cerebral Palsy</option>
-
-                                            <!-- Intellectual & Developmental Disabilities -->
-                                            <option value="Autism Spectrum Disorder">Autism Spectrum Disorder</option>
-                                            <option value="Down Syndrome">Down Syndrome</option>
-                                            <option value="Intellectual Disability">Intellectual Disability</option>
-                                            <option value="Learning Disability">Learning Disability</option>
-
-                                            <!-- Mental Health Disabilities -->
-                                            <option value="Psychosocial Disability">Psychosocial Disability</option>
-                                            <option value="Bipolar Disorder">Bipolar Disorder</option>
-                                            <option value="Schizophrenia">Schizophrenia</option>
-                                            <option value="Depression">Depression</option>
-                                            <option value="Anxiety Disorder">Anxiety Disorder</option>
-
-                                            <!-- Neurological & Other Conditions -->
-                                            <option value="Epilepsy">Epilepsy</option>
-                                            <option value="Multiple Sclerosis">Multiple Sclerosis</option>
-                                            <option value="Parkinson's Disease">Parkinson's Disease</option>
-                                            <option value="Muscular Dystrophy">Muscular Dystrophy</option>
-                                            <option value="Spina Bifida">Spina Bifida</option>
-                                            <option value="Rare Disease">Rare Disease</option>
-
-                                            <!-- Other / Not Listed -->
-                                            <option value="Others">Others</option>
-                                        </select>
+                                        <v-select
+                                            class="form-control form-control-border border-width-2"
+                                            v-model="form.disability"
+                                            :options="disabilities"
+                                        ></v-select>
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('disability')">Field Required</strong>
                                         </span>
@@ -508,7 +434,7 @@
                                         <div>
                                             <label for="other_disability">Pleace Specify</label>
                                         </div>
-                                        <input type="text" name="other_disability" class="form-control form-control-border border-width-2" id="other_disability" v-model="form.other_disability">
+                                        <input type="text" name="other_disability" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('other_disability') }" id="other_disability" v-model="form.other_disability">
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('other_disability')">Field Required</strong>
                                         </span>
@@ -1807,6 +1733,65 @@
                 oldData: {},
                 edits: [],
                 errors: new Errors(),
+                indigenousTribes: [
+                    //No
+                    "No",
+                    // Luzon Tribes
+                    "Aeta", "Agta", "Dumagat", "Ilongot", "Ivatan",
+                    "Bontoc", "Ibaloi", "Ifugao", "Kalinga", "Kankanaey",
+                    "Isneg (Apayao)", "Tingguian (Itneg)",
+
+                    // Visayas Tribes
+                    "Ati", "Bukidnon (Visayan)", "Eskaya",
+
+                    // Mindanao Tribes
+                    "Manobo", "T'boli", "B'laan", "Mandaya", "Bagobo",
+                    "Subanen", "Higaonon", "Tiruray", "Mamanwa", "Talaandig",
+                    "Banwaon", "Dibabawon", "Badjao", "Kalagan",
+
+                    // Muslim Indigenous Tribes (Moro Groups)
+                    "Maranao", "Maguindanao", "Tausug", "Yakan",
+                    "Sama-Bajau", "Iranun",
+
+                    // Other / Not Listed
+                    "Others"
+                ],
+                disabilities: [
+                    "No", // No disability
+                    "Low Vision", // Partial visual impairment, but not total blindness
+                    "Blindness", // Complete loss of sight in both eyes
+                    "Deaf", // Severe or complete hearing loss
+                    "Hard of Hearing", // Partial hearing loss, may require hearing aids
+                    "Speech Impairment", // Difficulty in speaking or producing speech sounds
+                    "Orthopedic Disability", // Mobility impairment affecting movement, joints, or limbs
+                    "Paralysis", // Loss of muscle function due to injury or disease
+                    "Amputation", // Loss of a limb or body part due to injury, disease, or congenital reasons
+                    "Cerebral Palsy", // A neurological condition affecting movement, posture, and coordination
+
+                    // Intellectual & Developmental Disabilities
+                    "Intellectual Disability", // Limitations in intellectual functioning and adaptive behavior
+                    "Learning Disability", // Difficulty in reading, writing, or processing information
+                    "Autism Spectrum Disorder", // Developmental disorder affecting communication and social interaction
+                    "Down Syndrome", // Genetic disorder causing developmental delays and physical characteristics
+
+                    // Mental Health Disabilities
+                    "Depression", // Persistent sadness, loss of interest, and emotional distress
+                    "Anxiety Disorder", // Excessive worry, fear, and nervousness that interferes with daily life
+                    "Psychosocial Disability", // Long-term mental health conditions affecting social functioning
+                    "Bipolar Disorder", // Extreme mood swings, including episodes of mania and depression
+                    "Schizophrenia", // A mental disorder characterized by hallucinations, delusions, and impaired thinking
+
+                    // Neurological & Other Conditions
+                    "Epilepsy", // A neurological disorder causing seizures
+                    "Multiple Sclerosis", // A disease affecting the central nervous system, leading to mobility issues
+                    "Parkinson's Disease", // A progressive disorder affecting movement and causing tremors
+                    "Muscular Dystrophy", // A group of diseases causing muscle weakness and degeneration
+                    "Spina Bifida", // A birth defect affecting spinal cord development
+                    "Rare Disease", // Less common genetic or medical conditions causing disabilities
+
+                    // Others
+                    "Others" // Any disability not listed above
+                ],
                 form: new Form({
                         'id': '',
                         'surname': '',
