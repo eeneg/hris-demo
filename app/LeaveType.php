@@ -14,6 +14,11 @@ class LeaveType extends Auditable
 
     protected $fillable = ['title', 'description', 'abbreviation', 'max_duration', 'status'];
 
+    public function leaveapplications()
+    {
+        return $this->hasMany('App\LeaveApplication', 'leave_type_id');
+    }
+
     public static function boot()
     {
         parent::boot();

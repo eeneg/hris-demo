@@ -5,440 +5,682 @@
 
                 <div class="card-header">
                     <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Form <router-link to="/leave-applications" style="float: right;"><i class="fas fa-arrow-left"></i></router-link></h2>
-                    <small style="margin-left: 2px;">Leave Application Form</small>
+                    <small style="margin-left: 2px;">Apply or Edit Leave Applications</small>
                 </div>
 
-                <form autocomplete="off" @submit.prevent="mode == null ? submitForm() : mode == 1 ? submitEdits() : '' ">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
-                            <label style="margin: 0;">Applicant</label>
-                            <v-select @input="get_balance()" class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="personalinformations" label="name"
-                            :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
-                            <has-error :form="form" field="personal_information_id"></has-error>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="date_of_filing" style="margin: 0;">Date of filing <span style="font-weight: normal;">(yyyy-mm-dd)</span></label>
-                            <date-picker v-model="form.date_of_filing" id="date_of_filing" :config="options" class="form-control form-control-border border-width-2"></date-picker>
-                        </div>
-                    </div>
-                    <h5 class="green mt-3">Details of Application</h5>
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <label style="margin: 0;">Type of leave</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.leave_type_id" :options="leavetypes" label="title"
-                            :reduce="leavetypes => leavetypes.id" :class="{ 'is-invalid': form.errors.has('leave_type_id') }"></v-select>
-                            <has-error :form="form" field="leave_type_id"></has-error>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="working_days" style="margin: 0;">Number of working days applied</label>
-                            <input v-model="form.working_days" id="working_days" class="form-control form-control-border border-width-2" type="text"
-                            name="working_days" placeholder="Number of working days" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.spent" value="Within the Philippines" class="custom-control-input" type="radio" id="within_the_ph" name="spent">
-                                <label for="within_the_ph" class="custom-control-label">Within the Philippines <br> <span class="font-weight-normal">(in case of vacation leave)</span></label>
+                    <form action="">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <!-- <div class="col-md-12">
+                                    <h3 class="text-primary">Application State</h3>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="final" id="final" :class="{ 'is-invalid': form.errors.has('final') }" v-model="form.final" :value="true" checked>
+                                        <label class="form-check-label" for="final">
+                                            Final
+                                        </label>
+                                        <has-error :form="form" field="final"></has-error>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="draft" id="draft" :class="{ 'is-invalid': form.errors.has('final') }" v-model="form.final" :value="false">
+                                        <label class="form-check-label" for="draft">
+                                            Draft
+                                        </label>
+                                        <has-error :form="form" field="final"></has-error>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-12 mt-3">
+                                    <h3 class="text-primary">Employee Information</h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="personal_information_id">Employee</label>
+                                        <v-select @input="getEmployeeDetails()" class="form-control form-control-border border-width-2" v-model="form.personal_information_id" :options="employees"
+                                        :reduce="employees => employees.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }" label="fullName" :getOptionLabel="employees => employees.fullName"></v-select>
+                                        <has-error :form="form" field="personal_information_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="date_of_filing">Date of filing</label>
+                                        <input type="date" class="form-control form-control-border border-width-2" v-model="form.date_of_filing" :class="{ 'is-invalid': form.errors.has('date_of_filing') }">
+                                        <has-error :form="form" field="date_of_filing"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="department">Department</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.department" :class="{ 'is-invalid': form.errors.has('department') }">
+                                        <has-error :form="form" field="department"></has-error>
+                                        <span v-if="fetching_dept_data" class="text-secondary">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="position">Position</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.position" :class="{ 'is-invalid': form.errors.has('position') }">
+                                        <has-error :form="form" field="position"></has-error>
+                                        <span v-if="fetching_dept_data" class="text-secondary">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="salary">Salary</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.salary" :class="{ 'is-invalid': form.errors.has('salary') }">
+                                        <has-error :form="form" field="salary"></has-error>
+                                        <span v-if="fetching_salary_data" class="text-secondary">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h5 class="text-primary">Details of Application</h5>
+                                </div>
+                                <div class="col-md-12">
+                                    <h5 class="text-success">Type of Leave to be availed of</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="leave_type_id">Leave Type</label>
+                                        <v-select class="form-control form-control-border border-width-2" v-model="form.leave_type_id" :options="leave_types"
+                                        :reduce="leave_types => leave_types.id" :class="{ 'is-invalid': form.errors.has('leave_type_id') }" label="title"></v-select>
+                                        <has-error :form="form" field="leave_type_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="leave_type_others">Others</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.leave_type_others" :class="{ 'is-invalid': form.errors.has('leave_type_others') }">
+                                        <has-error :form="form" field="leave_type_others"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h5 class="text-success">Details of Leave</h5>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <label for="spent">Spent</label>
+                                    <select class="form-control form-control-border border-width-2" v-model="form.spent" :class="{ 'is-invalid': form.errors.has('spent') }">
+                                        <option class="bg-dark" value="" disabled>In case of Vacation/Special Previlage Leave:</option>
+                                        <option value="within_the_philippines">Within the Philippines</option>
+                                        <option value="abroad">Abroad</option>
+                                        <option class="bg-dark" value="" disabled>In case of Sick Leave:</option>
+                                        <option value="in_hospital">In Hospital</option>
+                                        <option value="out_patient">Out Patient</option>
+                                        <option class="bg-dark" value="" disabled>In case of Study Leave:</option>
+                                        <option value="completion_of_masters_degree">Completion of Masters Degree</option>
+                                        <option value="board_examination_review">BAR/Board Examination Review</option>
+                                        <option class="bg-dark" value="" disabled>Other purpose:</option>
+                                        <option value="monetization">Monetization of Leave Credits</option>
+                                        <option value="terminal_leave">Terminal Leave</option>
+                                    </select>
+                                    <has-error :form="form" field="spent"></has-error>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <div class="form-group">
+                                        <label for="working_days">Working Days</label>
+                                        <input type="text" v-model="form.working_days" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('working_days') }">
+                                        <has-error :form="form" field="working_days"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-3" v-if="form.spent == 'abroad' || form.spent == 'within_the_philippines' || form.spent == 'in_hospital' || form.spent == 'out_patient'">
+                                    <div class="form-group">
+                                        <label for="spent_specified">Specify</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.spent_specified" :class="{ 'is-invalid': form.errors.has('spent_specified') }">
+                                        <has-error :form="form" field="spent_specified"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <h5 class="text-success">Inclusive Dates</h5>
+                                    <div class="form-group">
+                                        <input type="radio" name="consecutive_dates" :class="{ 'inclusive_dates': form.errors.has('inclusive_dates') }" v-model="consecutive_dates" id="consecutive_dates" :value="true">
+                                        <label for=""><h5 class="text-bold">Consecutive Dates</h5></label>
+                                        <input type="radio" class="ml-3" name="non_consecutive_dates" v-model="consecutive_dates" id="non_consecutive_dates" :value="false">
+                                        <label for=""><h5 class="text-bold">Non-Consecutive Dates</h5></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <v-date-picker v-model.lazy="range" is-range v-if="consecutive_dates">
+                                        <template v-slot="{ inputValue, inputEvents }">
+                                            <div class="flex justify-center items-center">
+                                                <input
+                                                    :value="inputValue.start"
+                                                    v-on="inputEvents.start"
+                                                    class="border px-2 py-1 w-32 rounded focus:outline-none focus:border-indigo-300"
+                                                />
+                                                <input
+                                                    :value="inputValue.end"
+                                                    v-on="inputEvents.end"
+                                                    class="border px-2 py-1 w-32 rounded focus:outline-none focus:border-indigo-300"
+                                                />
+                                            </div>
+                                        </template>
+                                    </v-date-picker>
+                                    <v-calendar :attributes="attributes" @dayclick="onDayClick" v-if="consecutive_dates == false" ref="calendar"/>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mt-2">
+                                        <span class="text-red" v-if="form.inclusive_dates.data == null"> Please input inclusive dates </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h5 class="text-success">Commutation</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control form-control-border border-width-2" v-model="form.commutation" :class="{ 'is-invalid': form.errors.has('commutation') }">
+                                        <option value="requested">Requested</option>
+                                        <option value="not_requested">Not Requested</option>
+                                    </select>
+                                    <has-error :form="form" field="commutation"></has-error>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h5 class="text-success">Certification of Leave Credits</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="credit_as_of">Credit as of</label>
+                                        <input type="date" class="form-control form-control-border border-width-2" v-model="form.credit_as_of" :class="{ 'is-invalid': form.errors.has('credit_as_of') }">
+                                        <has-error :form="form" field="credit_as_of"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-3">
+                                    <table style="margin: auto;">
+                                            <tr>
+                                                <th></th>
+                                                <th>Vacation Leave</th>
+                                                <th>Sick Leave</th>
+                                            </tr>
+                                        <tbody class="">
+                                                <tr>
+                                                    <td>
+                                                        Total Earned
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.vacation_balance" name="" id="" disabled>
+                                                        <span
+                                                            class="text-danger"
+                                                            v-if="form.vacation_balance == null || form.vacation_balance == 0"
+                                                        >
+                                                            No Vacation Leave Credits
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.sick_balance" name="" id="" disabled>
+                                                        <span
+                                                            class="text-danger"
+                                                            v-if="form.sick_balance == null || form.sick_balance == 0"
+                                                        >
+                                                            No Sick Leave Credits
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Less this application
+                                                    </td>
+                                                    <td>
+                                                        <!-- disable if sick_balance is null or zero -->
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-border border-width-2"
+                                                            :class="{
+                                                                'is-invalid': form.errors.has('vacation_less')
+                                                            }"
+                                                            v-model="form.vacation_less"
+                                                            :disabled="form.vacation_balance == null || form.vacation_balance == 0"
+                                                            name=""
+                                                            id=""
+                                                        >
+                                                        <has-error :form="form" field="vacation_less"></has-error>
+                                                    </td>
+                                                    <td>
+                                                        <!-- disable if sick_balance is null or zero -->
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-border border-width-2"
+                                                            :class="{
+                                                                'is-invalid': form.errors.has('sick_less')
+                                                            }"
+                                                            v-model="form.sick_less"
+                                                            :disabled="form.sick_balance == null || form.sick_balance == 0"
+                                                            name=""
+                                                            id=""
+                                                        >
+                                                        <has-error :form="form" field="sick_less"></has-error>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Balance
+                                                    </td>
+                                                    <td><input type="text" class="form-control form-control-border border-width-2" :value="Number(form.vacation_balance - form.vacation_less).toFixed(2)" name="" id="" disabled></td>
+                                                    <td><input type="text" class="form-control form-control-border border-width-2" :value="Number(form.sick_balance - form.sick_less).toFixed(2)" name="" id="" disabled></td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <div class="form-group">
+                                        <label for="credit_officer_name">Authorized Officer</label>
+                                        <v-select
+                                            class="form-control form-control-border border-width-2"
+                                            v-model="credit_officer"
+                                            :options="employees"
+                                            :reduce="employees => employees"
+                                            :class="{ 'is-invalid': form.errors.has('credit_officer.name') }"
+                                            label="fullName"
+                                            :getOptionLabel="employees => employees.fullName"
+                                        >
+                                        </v-select>
+                                        <has-error :form="form" field="credit_officer.name"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <div class="form-group">
+                                        <label for="credit_officer_position">Position</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.credit_officer.position" :class="{ 'is-invalid': form.errors.has('credit_officer.position') }">
+                                        <has-error :form="form" field="credit_officer.position"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h5 class="text-success">Recommendation</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="">For Approval/Disapproval</label>
+                                    <select class="form-control form-control-border border-width-2" v-model="form.recommendation_approved" :class="{ 'is-invalid': form.errors.has('recommendation_approved') }">
+                                        <option :value="null">None</option>
+                                        <option value="1">Approved</option>
+                                        <option value="0">Disapproved due to</option>
+                                    </select>
+                                    <has-error :form="form" field="recommendation_approved"></has-error>
+                                </div>
+                                <div class="col-md-6" v-if="form.recommendation_approved == false && form.final == true">
+                                    <div class="form-group">
+                                        <label for="recommendation_disapproved_due_to">Remark</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.recommendation_disapproved_due_to" :class="{ 'is-invalid': form.errors.has('recommendation_disapproved_due_to') }">
+                                        <has-error :form="form" field="recommendation_disapproved_due_to"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="recommendation_officer">Recommendation Officer</label>
+                                        <v-select class="form-control form-control-border border-width-2" v-model="recommendation_officer" :options="employees"
+                                        :reduce="employees => employees" :class="{ 'is-invalid': form.errors.has('recommendation_officer.name') }" label="fullName" :getOptionLabel="employees => employees.fullName"></v-select>
+                                        <has-error :form="form" field="recommendation_officer.name"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="recommendation_officer_position">Position</label>
+                                        <input type="text" class="form-control form-control-border border-width-2" v-model="form.recommendation_officer.position" :class="{ 'is-invalid': form.errors.has('recommendation_officer.position') }">
+                                        <has-error :form="form" field="recommendation_officer.position"></has-error>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h5 class="text-success">Approved For</h5>
+                                </div>
+                                <div class="col-md-12 mt-3">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="days_with_pay">Days with Pay</label>
+                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.days_with_pay" :class="{ 'is-invalid': form.errors.has('days_with_pay') }" name="days_with_pay" id="days_with_pay">
+                                                <has-error :form="form" field="days_with_pay"></has-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="days_without_pay">Days without Pay</label>
+                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.days_without_pay" :class="{ 'is-invalid': form.errors.has('days_without_pay') }" name="days_without_pay" id="days_without_pay">
+                                                <has-error :form="form" field="days_without_pay"></has-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="approved_for_others">Others(Specify)</label>
+                                                <input type="text" class="form-control form-control-border border-width-2" v-model="form.approved_for_others" :class="{ 'is-invalid': form.errors.has('approved_for_others') }" name="approved_for_others" id="approved_for_others">
+                                                <has-error :form="form" field="approved_for_others"></has-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.spent" class="custom-control-input" value="Abroad" type="radio" id="abroad" name="spent">
-                                <label for="abroad" class="custom-control-label">Abroad <br> <span class="font-weight-normal">(in case of vacation leave)</span></label>
-                            </div>
+                        <div class="col-md-12">
+                            <hr>
+                            <button type="button" class="btn btn-primary w-100" @click="editMode ? updateForm() : submitForm()" :disabled="loading">Submit <i class="fas fa-save"></i></button>
                         </div>
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.spent" class="custom-control-input" value="In Hospital" type="radio" id="in_hospital" name="spent">
-                                <label for="in_hospital" class="custom-control-label">In Hospital <br> <span class="font-weight-normal">(in case of sick leave)</span></label>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.spent" class="custom-control-input" value="Out Patient" type="radio" id="out_patient" name="spent">
-                                <label for="out_patient" class="custom-control-label">Out Patient <br> <span class="font-weight-normal">(in case of sick leave)</span></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <input v-model="form.spent_spec" id="spent_spec" class="form-control form-control-border border-width-2" type="text" name="spent_spec" placeholder="Specify" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-md-8" style="margin: 0;">Inclusive Dates</label>
-                        <label class="col-md-4" style="margin: 0;">Commutation</label>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <label for="from" style="margin: 0;"><span style="font-weight: normal;">From (yyyy-mm-dd)</span></label>
-                            <date-picker v-model="form.from" id="from" :config="options" class="form-control form-control-border border-width-2"></date-picker>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="to" style="margin: 0;"><span style="font-weight: normal;">To (yyyy-mm-dd)</span></label>
-                            <date-picker v-model="form.to" id="to" :config="options" class="form-control form-control-border border-width-2"></date-picker>
-                        </div>
-                        <div class="form-group col-md-4" style="margin-top: 5px;">
-                            <div class="custom-control custom-radio d-inline">
-                                <input v-model="form.commutation" value="Requested" class="custom-control-input" type="radio" id="requested" name="commutation" checked>
-                                <label for="requested" class="custom-control-label"><span class="font-weight-normal">Requested</span></label>
-                            </div>
-                            <div class="custom-control custom-radio d-inline ml-3">
-                                <input v-model="form.commutation" value="Not Requested" class="custom-control-input" type="radio" id="not_requested" name="commutation">
-                                <label for="not_requested" class="custom-control-label"><span class="font-weight-normal">Not Requested</span></label>
-                            </div>
-                        </div>
-                    </div>
-                    <h5 class="green mt-3">Details of action on Application</h5>
-                    <h3 class="text-danger" style="text-decoration: underline;" v-if="form.personal_information_id != null && form.vacation_balance == null && form.sick_balance == null">Employee has no Leave Credits</h3>
-                    <div class="row">
-                        <div class="col-md-12 form-group" style="display: contents;">
-                            <div class="col-md-2">
-                                <label class="d-block" style="margin: 0; color: #495057;"><i>Previous Balance</i> </label>
-                            </div>
-                            <div class="col-md-1  form-group">
-                                <label style="margin: 0;">Vacation</label>
-                                <input v-model="form.vacation_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" disabled>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label style="margin: 0;">Sick</label>
-                                <input v-model="form.sick_balance" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()" disabled>
-                            </div>
-                            <div class="col-md-1  form-group">
-                                <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ prev_balance_total.toFixed(3) }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group" style="display: contents;">
-                            <div class="col-md-2">
-                                <label class="d-block" style="margin: 0; color: #495057;"><i>Less this Leave</i> </label>
-                            </div>
-                            <div class="col-md-1  form-group">
-                                <label style="margin: 0;">Vacation</label>
-                                <input v-model="form.vacation_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label style="margin: 0;">Sick</label>
-                                <input v-model="form.sick_less" type="text" @keypress="isNumberKey($event)" @keyup="calculate()" class="form-control form-control-border border-width-2" onclick="this.select()">
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label style="margin: 0;">Total</label>
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding: 10px 13px;height: 37px;">{{ less_total.toFixed(3) }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 form-group" style="display: contents;">
-                            <div class="col-md-2">
-                                <label class="d-block" style="margin: 0; color: #495057;"><i>Leave Balance</i> </label>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_vacation_balance }}</label>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ curr_sick_balance }}</label>
-                            </div>
-                            <div class="col-md-1 form-group">
-                                <label class="d-block form-control form-control-border border-width-2" style="margin: 0;padding-top: 10px;height: 37px;">{{ balance_total.toFixed(3) }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <label for="credit_as_of" class="d-block" style="margin: 0; color: #495057;">Certification of Leave Credits <span style="font-weight: normal; color: black;">As of</span></label>
-                            <date-picker v-model="form.credit_as_of" id="credit_as_of" :config="options" class="form-control form-control-border border-width-2"></date-picker>
-                        </div>
-                    </div>
+                    </form>
+                </div>
 
-                    <h5 class="green mt-3">Recommendation</h5>
-                    <div class="row">
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.recommendation_status" value="APPROVED" class="custom-control-input" type="radio" id="recommendation_status_approved" name="recommendation_status">
-                                <label for="recommendation_status_approved" class="custom-control-label">Approved</label>
-                                <input v-model="form.recommendation_remark_approved" ref="recommendation_status_approved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'APPROVED'">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <div class="custom-control custom-radio">
-                                <input v-model="form.recommendation_status" class="custom-control-input" value="DISAPPROVED" type="radio" id="recommendation_status_disapproved" name="recommendation_status">
-                                <label for="recommendation_status_disapproved" class="custom-control-label">Dissaproved due to</label>
-                                <input v-model="form.recommendation_remark_disapproved" ref="recommendation_status_disapproved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'DISAPPROVED'">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
-                            <label style="margin: 0;">Recommendation Officer</label>
-                            <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" :options="personalinformations" label="name"
-                            :reduce="personalinformations => personalinformations.id" :class="{ 'is-invalid': form.errors.has('personal_information_id') }"></v-select>
-                            <has-error :form="form" field="personal_information_id"></has-error>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <span v-if="form.vacation_balance == null && form.sick_balance == null" class="text-danger">Please Input Leave Credit Data in the Leave Credit Tab</span>
-                    <button type="submit" class="btn btn-primary" @click="form.status = 'final'" :disabled="form.vacation_balance == null && form.sick_balance == null">Finalize</button>
-                    <button type="submit" class="btn btn-secondary" @click="form.status = 'draft'">Save as draft</button>
-                </div>
-                </form>
             </div>
         </div>
-
     </div>
 </template>
-
 <script>
-
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-    });
+import axios from 'axios';
 
     export default {
         data() {
             return {
-                mode: null,
-                status: '',
-                personalinformations: [],
-                leavetypes: [],
-                prev_balance_total: 0.0,
-                less_total: 0.0,
-                balance_total: 0.0,
-                curr_vacation_balance: 0.0,
-                curr_sick_balance: 0.0,
-                leave_application_id: '',
+                editMode: false,
+                employees: [],
+                leave_types: [],
+                consecutive_dates: false, //consecutive dates or non-consecutive dates
+                days: [], // non-consecutive dates data
+                range: {start: null, end: null}, //consecutive dates data
+                credit_officer: {}, //credit officer data v-select
+                recommendation_officer: {}, //recommendation officer data v-select
+                loading:false,
+                fetching_dept_data: false,
+                fetching_salary_data: false,
                 form: new Form({
-                    'personal_information_id': null,
-                    'personal_information_id_7b': null,
-                    'personal_information_id_7c': null,
-                    'personal_information_id_7d': null,
-                    'recommendation_officer_id': null,
-                    'noted_by_id': null,
-                    'governor_id': null,
-                    'date_of_filing': moment(new Date()).format('YYYY-MM-DD'),
-                    'leave_type_id': null,
-                    'working_days': null,
-                    'spent': 'Within the Philippines',
-                    'spent_spec': '',
-                    'from': moment(new Date()).format('YYYY-MM-DD'),
-                    'to': moment(new Date()).format('YYYY-MM-DD'),
-                    'credit_as_of': moment(new Date()).format('YYYY-MM-DD'),
-                    'commutation': 'Requested',
-                    'vacation_balance': 0.0,
-                    'sick_balance': 0.0,
-                    'vacation_less': 0.0,
-                    'sick_less': 0.0,
-                    'status': '',
-                    'stage_status': null,
-                    'recommendation_status': null,
-                    'recommendation_remark_approved': null,
-                    'recommendation_remark_disapproved': null,
-                }),
-                options: {
-                    format: 'yyyy-MM-DD',
-                    useCurrent: false,
+                    'id': null,
+                    'personal_information_id':  null,
+                    'leave_type_id':null,
+                    'department':null,
+                    'position':null,
+                    'salary':null,
+                    'working_days':null,
+                    'date_of_filing': moment().format('YYYY-MM-DD'),
+                    'working_days':null,
+                    'spent':null,
+                    'spent_specified':null,
+                    'commutation':null,
+                    'inclusive_dates':{mode: 3, data: null},
+                    'credit_as_of':null,
+                    'vacation_balance':null,
+                    'vacation_less':null,
+                    'sick_balance':null,
+                    'sick_less':null,
+                    'credit_officer':{personal_information_id: null, name: null, position: null, date: null},
+                    'recommendation_officer':{personal_information_id: null, name: null, position: null, date: null},
+                    'recommendation_approved':null,
+                    'recommendation_disapproved_due_to':null,
+                    'leave_type_others':null,
+                    'final':true,
+                    'days_with_pay':null,
+                    'days_without_pay':null,
+                    'approved_for_others':null,
+                    'application_stage':null,
+               }),
+            }
+        },
+        beforeRouteEnter(to, from, next) {
+            if(to.query.id != null){
+                next( async (vm) => {
+                    try {
+                        await vm.getEmployees()
+                        await vm.getLeaveTypes()
+                        vm.setModeEdit()
+                        vm.getLeaveApplication(to.query.id)
+                    }catch(e){
+                        console.log(e)
+                    }
+                });
+            }else{
+                next(vm => {
+                    vm.getEmployees()
+                    vm.getLeaveTypes()
+                });
+            }
+        },
+        computed: {
+            mdates() {
+                return this.days.map(day => day.date)
+            },
+            attributes() {
+                return this.mdates.map(date => ({
+                    highlight: true,
+                    dates: date,
+                }));
+            },
+            dateSort(){
+                return this.days.sort((a, b) => a.date - b.date) //sort non-consecutive dates
+            }
+        },
+        watch: {
+            consecutive_dates: { //consecutive dates or non-consecutive dates data reset
+                handler: function(){
+                    if(this.consecutive_dates){
+                        this.form.inclusive_dates = {mode: 2, data: null}
+                    }else{
+                        this.form.inclusive_dates = {mode: 3, data: null}
+                    }
                 }
-            }
-        },
-        components: {
-            datePicker
-        },
-        beforeRouteEnter (to, from, next) {
-            if(to.query.id == null)
-            {
-                    next()
-            }
-            else if(to.query.id != null && to.query.mode == 1){
-                axios.post('api/editLeaveApplication/'+to.query.id)
-                .then(({data}) => {
-                    next(vm => vm.fetchData(data))
-                })
-                .catch(error => {
-                    console.log(error)
-                    Swal.fire(
-                        'Oops...',
-                        error.response.data.message,
-                        'error'
-                    )
-                })
-            }
+            },
+            credit_officer: { //credit officer data fetch and transform
+                handler: function(){
+                    if(this.credit_officer){
+                        this.form.credit_officer.name = this.credit_officer.fullName
+                        this.form.credit_officer.personal_information_id = this.credit_officer.id
+                        this.getOfficerDetails(2, this.credit_officer.id)
+                    }else{
+                        this.form.credit_officer = {personal_information_id: null, name: null, position: null, date: null}
+                    }
+                }
+            },
+            recommendation_officer: { //recommendation officer data fetch and transform
+                handler: function(){
+                    if(this.recommendation_officer){
+                        this.form.recommendation_officer.name = this.recommendation_officer.fullName
+                        this.form.recommendation_officer.personal_information_id = this.recommendation_officer.id
+                        this.getOfficerDetails(1, this.recommendation_officer.id)
+                    }else{
+                        this.form.recommendation_officer = {personal_information_id: null, name: null, position: null, date: null}
+                    }
+                }
+            },
         },
         methods: {
-            isNumberKey(evt) {
-                evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-                    evt.preventDefault();;
+
+            getOfficerDetails: function(mode, id){ // fetch officer details and set to form data recommendation_officer or credit_officer
+                // mode 1 is for recommendation officer details fetch
+                // mode 2 is for credit officer fetch
+                axios.get('api/leaveFormDepartmentAndPositions/'+id)
+                .then(response => {
+                    if(mode == 1){
+                        this.form.recommendation_officer.position = response.data.position
+                        this.form.recommendation_officer.date = moment().format('YYYY-MM-DD')
+                    }else if(mode == 2){
+                        this.form.credit_officer.position = response.data.position
+                        this.form.credit_officer.date = moment().format('YYYY-MM-DD')
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            },
+
+            //v-calendar on click dates
+            onDayClick(day) {
+                const idx = this.days.findIndex(d => d.id === day.id);
+                if (idx >= 0) {
+                    this.days.splice(idx, 1);
                 } else {
-                    return true;
+                    this.days.push({
+                        id: day.id,
+                        date: day.date,
+                    });
                 }
             },
-            calculate() {
-                this.curr_vacation_balance = parseFloat(this.form.vacation_balance) - parseFloat(this.form.vacation_less);
-                this.curr_sick_balance = parseFloat(this.form.sick_balance) - parseFloat(this.form.sick_less);
 
-                this.prev_balance_total = parseFloat(this.form.vacation_balance) + parseFloat(this.form.sick_balance);
-                this.less_total = parseFloat(this.form.vacation_less) + parseFloat(this.form.sick_less);
 
-                this.balance_total = parseFloat(this.curr_vacation_balance) + parseFloat(this.curr_sick_balance);
-            },
-            submitForm() {
+            //data post
+            submitForm: function(){
 
-                 if(this.form.recommendation_status != null && this.form.recommendation_officer_id == null)
-                {
+                if(this.consecutive_dates == true){ //if consecutive dates set form inclusive_dates data to range
+                    this.form.inclusive_dates.data = this.range
+                }else{ //if non-consecutive dates set form inclusive_dates data to days
+                    this.form.inclusive_dates.data = this.days
+                }
 
-                    Swal.fire(
-                        'Oops...',
-                        'Please select an Administrative Officer below the Recommendation section',
-                        'error'
-                    )
-
-                }else if(this.form.recommendation_status == null && this.form.recommendation_officer_id != null){
-
-                    Swal.fire(
-                        'Oops...',
-                        'Please Approve or Dissaprove Recommendation',
-                        'error'
-                    )
+                if(this.form.recommendation_approved == true){ //if recommendation_approved is null set application_stage to 'pending_noted_by'
+                    this.form.application_stage = 'pending_noted_by'
                 }else{
-
-                    this.$Progress.start();
-                    this.form.personal_information_id_7b = this.form.personal_information_id
-                    this.form.personal_information_id_7c = this.form.personal_information_id
-                    this.form.personal_information_id_7d = this.form.personal_information_id
-                    this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
-                                                this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
-
-                    this.form.post('api/leaveapplication')
-                    .then(({data}) => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'New leave application is created successfully',
-                        })
-                        this.$router.push({ path: '/leave-applications'});
-                        this.$Progress.finish();
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                        this.$Progress.fail();
-                    });
+                    this.form.application_stage = 'pending_recommendation' //else set application_stage to 'pending_recommendation'
                 }
-            },
-            submitEdits: function()
-            {
-                if(this.form.recommendation_status != null && this.form.recommendation_officer_id == null)
-                {
 
-                    Swal.fire(
-                        'Oops...',
-                        'Please select an Administrative Officer below the Recommendation section',
-                        'error'
-                    )
-
-                }else if(this.form.recommendation_status == null && this.form.recommendation_officer_id != null){
-
-                    Swal.fire(
-                        'Oops...',
-                        'Please Approve or Dissaprove Recommendation',
-                        'error'
-                    )
-
-                }else{
-                    Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This will save and restart the application process",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed'
-                    }).then((result) => {
-                        if(result.isDismissed == true)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Cancelled'
-                            });
-                        }else{
-                            this.$Progress.start();
-                            this.form.personal_information_id_7b = this.form.personal_information_id
-                            this.form.personal_information_id_7c = this.form.personal_information_id
-                            this.form.personal_information_id_7d = this.form.personal_information_id
-                            this.form.stage_status =    this.form.recommendation_officer_id != null && this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' :
-                                                        this.form.recommendation_officer_id != null && this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : 'Pending Recommendation'
-                            this.form.governor_id = null
-                            this.form.noted_by_id = null
-                            this.form.days_with_pay = null
-                            this.form.days_without_pay = null
-                            this.form.others = null
-                            this.form.disapproved_due_to = null
-
-                            axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                                .then(({data}) => {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: 'New leave application is updated successfully',
-                                    })
-                                    this.$router.push({ path: '/leave-applications'});
-                                    this.$Progress.finish();
-                                })
-                                .catch(error => {
-                                    console.log(error.response.data.message);
-                                    this.$Progress.fail();
-                                });
-                        }
+                this.loading = true
+                this.$Progress.start()
+                // console.log(this.form.inclusive_dates)
+                this.form.post('api/leaveapplication', this.form)
+                .then(response => {
+                    this.$Progress.finish()
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Leave Application Submitted'
                     })
-                }
-            },
-            loadFormData() {
-                axios.post('api/forleave')
-                    .then(({data}) => {
-                        this.personalinformations = data;
-                        this.form.personal_information_id == null ? '' :  this.get_balance()
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-                axios.get('api/getleavetypes')
-                    .then(({data}) => {
-                        this.leavetypes = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-
-            },
-
-            get_balance: function()
-            {
-                axios.get('api/getLeaveBalance?id=' + this.form.personal_information_id)
-                .then(({data}) => {
-                    this.form.vacation_balance = data.VL
-                    this.form.sick_balance = data.SL
-                    this.calculate()
+                    this.loading = false
+                    this.$router.push('/leave-applications')
                 })
+                .catch(e => {
+                    this.$Progress.fail()
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Error Submitting Leave Application'
+                    })
+                    console.log(e)
+                    this.loading = false
+                })
+            },
+
+            //data fetch
+
+            // employee fetch
+            getEmployees: function(){
+                axios.get('api/leaveFormEmployees')
+                .then(response => {
+                    this.employees = response.data
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+            },
+
+            getEmployeeDetails() {
+                Promise.all([
+                    this.getEmployeeDepartment(),
+                    this.getEmployeeSalary(),
+                    this.getEmployeeLeaveCredits(),
+                ])
                 .catch(error => {
-                    console.log(error)
+                    console.error("Error fetching employee details:", error);
+                    this.fetching_data = false
+                });
+            },
+
+            getEmployeeSalary() {
+                this.fetching_salary_data = true;
+                return axios.get(`api/leaveFormEmployeeSalary/${this.form.personal_information_id}`)
+                    .then(response => {
+                        this.form.salary = response.data.salary;
+                        this.fetching_salary_data = false;
+                    })
+                    .catch(error => {
+                        this.fetching_salary_data = false;
+                        console.error("Error fetching salary:", error);
+                    });
+            },
+
+            getEmployeeDepartment() {
+                this.fetching_dept_data = true;
+                return axios.get(`api/leaveFormDepartmentAndPositions/${this.form.personal_information_id}`)
+                    .then(response => {
+                        this.form.department = response.data.department;
+                        this.form.position = response.data.position;
+                        this.fetching_dept_data = false;
+                    })
+                    .catch(error => {
+                        this.fetching_dept_data = false;
+                        console.error("Error fetching department and position:", error);
+                    });
+            },
+
+            getEmployeeLeaveCredits() {
+                return axios.get(`api/leaveFormEmployeeLeaveCredits/${this.form.personal_information_id}`)
+                    .then(response => {
+                        this.form.vacation_balance = response.data.vl;
+                        this.form.sick_balance = response.data.sl;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching leave credits:", error);
+                    });
+            },
+
+            // leave type fetch
+            getLeaveTypes: function(){
+                axios.get('api/leaveFormLeaveTypes')
+                .then(response => {
+                    this.leave_types = response.data
+                })
+                .catch(e => {
+                    console.log(e)
                 })
             },
 
-            fetchData: function(data){
-               this.form.fill(data)
-               this.mode = 1
-               this.leave_application_id = data.id
+            setModeEdit: function(){
+                this.editMode = true
+            },
+
+            // update leave application
+            updateForm: function(){
+                if(this.consecutive_dates == true){ //if consecutive dates set form inclusive_dates data to range
+                    this.form.inclusive_dates.data = this.range
+                }else{ //if non-consecutive dates set form inclusive_dates data to days
+                    this.form.inclusive_dates.data = this.days
+                }
+
+                if(this.form.recommendation_approved == true){ //if recommendation_approved is null set application_stage to 'pending_noted_by'
+                    this.form.application_stage = 'pending_noted_by'
+                }else{
+                    this.form.application_stage = 'pending_recommendation' //else set application_stage to 'pending_recommendation'
+                }
+
+                this.loading = true
+                this.$Progress.start()
+                axios.patch('api/leaveapplication/'+this.form.id, this.form)
+                .then(response => {
+                    this.$Progress.finish()
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Leave Application Submitted'
+                    })
+                    this.loading = false
+                    this.$router.push('/leave-applications')
+                })
+                .catch(e => {
+                    this.$Progress.fail()
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Error Submitting Leave Application'
+                    })
+                    console.log(e)
+                    this.loading = false
+                })
+            },
+
+            getLeaveApplication: function(id){
+                axios.get('api/leaveFormEditLeaveApplication/'+id)
+                .then(response => {
+                    this.form.fill(response.data)
+                    this.recommendation_officer = this.employees.find(employee => employee.id == response.data.recommendation_officer.personal_information_id)
+                    this.credit_officer = this.employees.find(employee => employee.id == response.data.recommendation_officer.personal_information_id)
+                    if(response.data.inclusive_dates.mode == 2){
+                        this.range = response.data.inclusive_dates.data
+                        this.consecutive_dates = true
+                    }else{
+                        this.consecutive_dates = false
+                        this.days = this.form.inclusive_dates.data
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
             }
         },
-        created(){
-            this.$Progress.start();
-            this.loadFormData();
-            this.$Progress.finish();
-        },
-        mounted() {
-            console.log('Component mounted.')
+        mounted(){
+            this.getEmployees()
+            this.getLeaveTypes()
         }
     }
 </script>

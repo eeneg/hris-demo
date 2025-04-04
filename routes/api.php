@@ -90,12 +90,15 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('fetchSalarySched', 'Api\AppointmentController@fetchSalarySched');
     Route::post('printAppointmentRecords', 'Api\AppointmentController@printAppointmentRecords');
 
-    Route::get('getleavetypes', 'Api\LeaveTypeController@getleavetypes');
-    Route::post('editLeaveApplication/{id}', 'Api\LeaveApplicationController@edit');
-    Route::get('load_user', 'Api\LeaveApplicationController@loadUserRole');
-    Route::get('getAllLeave', 'Api\LeaveApplicationController@getAllLeave');
-    Route::post('searchLeave', 'Api\LeaveApplicationController@searchLeave');
-    Route::get('getLeaveBalance', 'Api\LeaveApplicationController@getLeaveBalance');
+    Route::post('leaveApplicationSearch', 'Api\LeaveApplicationController@searchLeaveApplications')->name('leave.search');
+    Route::get('leaveFormEmployees', 'Api\LeaveApplicationController@getEmployees')->name('leaveForm.employees');
+    Route::get('leaveFormLeaveTypes', 'Api\LeaveApplicationController@getLeaveTypes')->name('leaveForm.leaveTypes');
+    Route::get('leaveFormDepartmentAndPositions/{id}', 'Api\LeaveApplicationController@getDepartmentWithPositions')->name('leaveForm.departmentWithPositions');
+    Route::get('leaveFormEmployeeLeaveCredits/{id}', 'Api\LeaveApplicationController@getEmployeeLeaveCredits')->name('leaveForm.employeeLeaveCredits');
+    Route::get('leaveFormEmployeeSalary/{id}', 'Api\LeaveApplicationController@getEmployeeSalary')->name('leaveForm.employeeSalary');
+    Route::get('leaveFormEditLeaveApplication/{id}', 'Api\LeaveApplicationController@editLeaveApplication')->name('leaveForm.editLeaveApplication');
+    Route::patch('leaveReturnPreviousStage/{id}', 'Api\LeaveApplicationController@returnPreviousStage')->name('leaveForm.returnPreviousStage');
+    Route::get('leaveUserDepartment', 'Api\LeaveApplicationController@getUserDepartment');
 
     Route::post('acceptEditRequest', 'Api\RequestController@acceptEditRequest');
     Route::post('revertRequest', 'Api\RequestController@revertRequest');
@@ -157,11 +160,12 @@ Route::group(['middleware' => ['auth:employee-api']], function () {
     ]);
     Route::get('getLeaveApplications', 'Api\EmployeeController@getApplications');
     Route::get('getLeaveCredits', 'Api\EmployeeController@getLeaveCredits');
-    Route::get('getLeaveTypesForEmployee', 'Api\EmployeeController@getLeaveTypesForEmployee');
+    Route::get('getLeaveTypes', 'Api\LeaveApplicationController@getLeaveTypes');
     Route::post('submitLeaveApplication', 'Api\EmployeeController@submitLeaveApplication');
     Route::delete('deleteLeaveApplication/{id}', 'Api\EmployeeController@deleteLeaveApplication');
     Route::patch('editLeaveApplication/{id}', 'Api\EmployeeController@editLeaveApplication');
     Route::post('getLeaveApplication', 'Api\EmployeeController@getLeaveApplication');
+    Route::get('getEmployeeLeaveApplications/{id}', 'Api\EmployeeController@getEmployeeLeaveApplications');
     Route::get('editemployee', 'Api\EmployeeController@edit');
     Route::get('getpdsEdits', 'Api\EmployeeController@getpdsEdits');
     Route::post('cancelEdits', 'Api\EmployeeController@cancelEdits');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Department;
 use App\EmployeePDSEdit;
 use App\EmployeePDSEditRequest;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,11 @@ use App\LeaveType;
 use App\PersonalInformation;
 use App\ServiceRecord;
 use App\EmployeeServiceRecord;
+use App\Plantilla;
+use App\PlantillaContent;
+use App\Position;
+use App\SalaryGrade;
+use App\Setting;
 use Illuminate\Console\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +30,34 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return PersonalInformation::find(Auth::user()->id);
+        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first(); //Get the default plantilla for current plantilla year
+        $plantilla          =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first(); //Get the plantilla for the current plantilla year
+
+        $personal_info = PersonalInformation::
+            without(
+                'barcode',
+                'familybackground',
+                'residentialaddresstable',
+                'permanentaddresstable',
+                'children',
+                'educationalbackground',
+                'eligibilities',
+                'otherinfos',
+                'workexperiences',
+                'voluntaryworks',
+                'trainingprograms',
+                'pdsquestion'
+            )
+            ->find(Auth::user()->id);
+
+        $employee_plantilla = PlantillaContent::where('plantilla_id', $plantilla->id)->where('personal_information_id', Auth::user()->id)->first();
+
+        $position = Position::find($plantilla->position_id);
+        $department = $position ? Department::find($position->department_id) : null;
+        $salary = $employee_plantilla->salaryproposed->amount;
+
+        return array_merge($personal_info->toArray(), ['position' => $position?->title, 'department' => $department?->address, 'salary' => $salary]);
+
     }
 
     public function getpdsEdits(Request $request)
@@ -66,10 +99,10 @@ class EmployeeController extends Controller
 
     public function getLeaveCredits(){
         $data = LeaveCredit::where('personal_information_id', Auth::user()->id)
-        ->select('leave_credits.*', 'leave_types.title')
         ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
-        ->get()
-        ->map(fn($e) => ['title' => $e->title, 'balance' => $e->balance]);
+        ->select('leave_credits.balance', 'leave_types.title')
+        ->groupBy('leave_types.title')
+        ->pluck('balance', 'leave_types.title');
 
         return $data;
     }
@@ -195,6 +228,28 @@ class EmployeeController extends Controller
         $data = EmployeeServiceRecord::where('service_record_id', $serviceRecord->id)->orderBy('orderNo')->get();
 
         return $data;
+    }
+
+    public function getEmployeeLeaveApplications($id){
+        $leave = LeaveApplication::with('leavetype')->find($id);
+
+        $employee = PersonalInformation::without(
+            'barcode',
+            'familybackground',
+            'residentialaddresstable',
+            'permanentaddresstable',
+            'children',
+            'educationalbackground',
+            'eligibilities',
+            'otherinfos',
+            'workexperiences',
+            'voluntaryworks',
+            'trainingprograms',
+            'pdsquestion'
+        )
+        ->find($leave->personal_information_id);
+
+        return view('reports.leave_application_form', compact('employee', 'leave'));
     }
 
     /**

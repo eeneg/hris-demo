@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class LeaveApplicationResource extends ResourceCollection
@@ -19,46 +20,48 @@ class LeaveApplicationResource extends ResourceCollection
                 'id' => $item->id,
                 'personal_information_id' => $item->personal_information_id,
                 'personalinformation' => [
-                    'firstname' => $item->firstname,
-                    'middlename' => $item->middlename,
-                    'nameextension' => $item->nameextension,
-                    'surname' => $item->surname,
+                    'firstname' => $item->personalinformation->firstname,
+                    'middlename' => $item->personalinformation->middlename,
+                    'nameextension' => $item->personalinformation->nameextension,
+                    'surname' => $item->personalinformation->surname,
+                    'fullName' => $item->personalinformation->fullName,
                 ],
                 'leave_type_id' => $item->leave_type_id,
                 'leavetype' => [
-                    'abbreviation' => $item->abbreviation,
-                    'description' => $item->description,
-                    'max_duration' => $item->max_duration,
-                    'status' => $item->status,
-                    'title' => $item->title,
+                    'title' => $item->leavetype->title,
+                    'id'    => $item->leavetype->id,
                 ],
-                'role' => $item->role,
-                'dept' => $item->dept,
-                'recommendation_officer_id' => $item->recommendation_officer_id,
-                'noted_by_id' => $item->noted_by_id,
-                'governor_id' => $item->governor_id,
                 'date_of_filing' => $item->date_of_filing,
+                'department' => $item->department,
+                'position' => $item->position,
                 'working_days' => $item->working_days,
                 'spent' => $item->spent,
-                'spent_spec' => $item->spent_spec,
-                'commutation' => $item->commutation,
-                'from' => $item->from,
-                'to' => $item->to,
-                'credit_as_of' => $item->credit_as_of,
-                'vacation_balance' => $item->vacation_balance,
-                'sick_balance' => $item->sick_balance,
-                'vacation_less' => $item->vacation_less,
-                'sick_less' => $item->sick_less,
-                'recommendation' => $item->recommendation,
-                'days_with_pay' => $item->days_with_pay,
-                'days_without_pay' => $item->days_without_pay,
-                'others' => $item->others,
-                'disapproved_due_to' => $item->disapproved_due_to,
-                'status' => $item->status,
-                'stage_status' => $item->stage_status,
-                'recommendation_status' => $item->recommendation_status,
-                'recommendation_remark_approved' => $item->recommendation_remark_approved,
-                'recommendation_remark_disapproved' => $item->recommendation_remark_disapproved,
+                'spent_specified' => $item->spent_specified,
+                'inclusive_dates' => $item->inclusive_dates->mode == 2 ? Carbon::parse($item->inclusive_dates->data->start)->format('m-d-Y') . ' - ' . Carbon::parse($item->inclusive_dates->data->end)->format('m-d-Y') :
+                    collect($item->inclusive_dates->data)
+                        ->values()
+                        ->sort()
+                        ->map(fn ($date) => ['month'=> Carbon::parse($date->date)->setTimeZone('Asia/Manila')->format('Y-m'), 'date' => Carbon::parse($date->date)->setTimeZone('Asia/Manila')->format('d')])
+                        ->groupBy('month')
+                        ->map(function ($entry) {
+                            return Carbon::parse($entry[0]['month'])->format('M') . ' ' . collect($entry)->map(fn ($e) => $e['date'])->join(', ') . ' ' . Carbon::parse($entry[0]['month'])->format('Y');
+                    })->join(' - '),
+                'vacation_balance'                      => $item->vacation_balance,
+                'vacation_less'                         => $item->vacation_less,
+                'sick_balance'                          => $item->sick_balance,
+                'sick_less'                             => $item->sick_less,
+                'credit_officer'                        => $item->credit_officer,
+                'recommendation_officer'                => $item->recommendation_officer,
+                'recommendation_approved'               => $item->recommendation_approved,
+                'recommendation_disapproved_due_to'     => $item->recommendation_disapproved_due_to,
+                'noted_by_officer'                      => $item->noted_by_officer,
+                'noted_by_approved'                     => $item->noted_by_approved,
+                'noted_disapproved_due_to'              => $item->noted_disapproved_due_to,
+                'governor_approval_officer'             => $item->governor_approval_officer,
+                'governor_approved'                     => $item->governor_approved,
+                'gov_disapproved_due_to'                => $item->gov_disapproved_due_to,
+                'final'                                 => $item->final,
+                'application_stage'                     => $item->application_stage,
             ];
         });
     }

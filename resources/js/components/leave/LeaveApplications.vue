@@ -10,553 +10,510 @@
                     <div class="row mt-1">
                         <div class="col-md-6">
                             <h2 style="margin:0.5rem 0 0 0;line-height:1.2rem;">Leave Applications</h2>
-                            <small style="margin-left: 2px;">Create a leave application / View list of applications</small>
+                            <small style="margin-left: 2px;">Manage and review employee leave applications.</small>
                         </div>
                         <div class="form-group col-md-6 mt-2">
                             <router-link class="btn btn-primary float-right" to="/leave-form">Create <span><i class="fas fa-plus"></i></span></router-link>
                         </div>
                     </div>
-
-                    <div class="row mt-1 col-md-12">
-                        <div class="form-group col-md-6 mb-0">
-                            <v-select class="form-control form-control-border border-width-2" v-model="search.personal_information_id" placeholder="Select Employee" :options="personalinformations" label="name"
-                            :reduce="personalinformations => personalinformations.id"></v-select>
-                        </div>
-                        <div class="form-group col-md-6 mb-0">
-                            <v-select v-model="search.leave_type_id" placeholder="Select specific leave type" class="form-control form-control-border border-width-2" :options="leavetypes" label="title" :reduce="leavetypes => leavetypes.id"></v-select>
-                        </div>
-                    </div>
-
-                    <div class="row mt-1 col-md-12">
-                        <div class="form-group col-md-6 mb-0">
-                            <v-select class="form-control form-control-border border-width-2" aria-label="Default select example" v-model="search.stage_status" :options="stage_status" placeholder="Filter Status">
-                            </v-select>
-                        </div>
-                        <div class="form-group col-md-6 mb-0">
-                            <div class="form-group">
-                                <date-picker id="reckoning_date" :config="options" v-model="search.date_of_filing" class="form-control form-control-border border-width-2" placeholder="Date: (yyyy-mm-dd)"></date-picker>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-1 col-md-12">
-                        <div class="form-group col-md-6 mb-0">
-                            <button type="button" class="btn btn-danger btn-block" @click="clear()"><i class="fas fa-trash"></i> Clear</button>
-                        </div>
-                        <div class="form-group col-md-6 mb-0">
-                            <button type="button" class="btn btn-success btn-block" @click="filter_data()"><i class="fas fa-search"></i> Search</button>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-3">
-                            <div class="form-group mb-0">
-                                <div class="custom-control custom-radio d-inline">
-                                    <input v-model="search.status" @change="filter_data()" class="custom-control-input" type="radio" value="final" id="customRadio1" name="status">
-                                    <label for="customRadio1" class="custom-control-label">Final</label>
-                                </div>
-                                <div class="custom-control custom-radio d-inline ml-3">
-                                    <input v-model="search.status" @change="filter_data()" class="custom-control-input" type="radio" value="draft" id="customRadio2" name="status">
-                                    <label for="customRadio2" class="custom-control-label">Drafts</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="card-body table-responsive p-0" style="height: 600px;">
-                    <table class="table table-striped text-nowrap custom-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Type of leave</th>
-                                <th>Date of filing</th>
-                                <th>Status</th>
-                                <th>Remark</th>
-                                <th style="text-align: right;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(leaveapplication, index) in leaveapplications.data" :key="leaveapplication.id">
-                                <td>{{ leaveapplication.personalinformation.surname + ', ' + leaveapplication.personalinformation.firstname + ' ' + leaveapplication.personalinformation.middlename }}{{  leaveapplication.personalinformation.nameextension ? ', ' + leaveapplication.personalinformation.nameextension : '' }}</td>
-                                <td>{{ leaveapplication.leavetype.title }}</td>
-                                <td>{{ leaveapplication.date_of_filing }}</td>
-                                <td>{{ leaveapplication.stage_status }}</td>
-                                <td>
-                                    {{
-                                        leaveapplication.stage_status == 'Pending Noted By' ? leaveapplication.recommendation_remark_approved :
-                                        leaveapplication.stage_status == 'Recommendation Disapproved' ? leaveapplication.recommendation_remark_disapproved :
-                                        leaveapplication.stage_status == 'Disapproved by the Governor' ? leaveapplication.disapproved_due_to :
-                                        leaveapplication.sick_balance == 0 && leaveapplication.vacation_balance == 0 ? 'Leave Credits Uncalculated' : ''
-                                    }}
-                                </td>
-                                <td style="width: calc(100%-150px);">
-                                    <button type="button" class="btn btn-sm btn-primary btn-info dropdown-toggle right" style="float: right; !important" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Action
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a type="button" @click.prevent="viewApplication(leaveapplication)" class="dropdown-item">
-                                            View Application
-                                        </a>
-                                        <a v-if="user.role == 'Administrator' || user.role != 'Office Head'" type="button" @click.prevent="editLeaveApplication(leaveapplication)" class="dropdown-item">
-                                            Edit
-                                        </a>
-                                        <a type="button" v-if="leaveapplication.status != 'draft' && (user.role == 'Administrator' || user.role == 'Office Head')" class="dropdown-item" @click.prevent="recommendation(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                            Recommendation
-                                        </a>
-                                        <a type="button" v-if="leaveapplication.status != 'draft' && user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PHRMO' && leaveapplication.status != 'draft'" class="dropdown-item"  @click.prevent="noted_by(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                            Noted by
-                                        </a>
-                                         <a type="button" v-if=" leaveapplication.status != 'draft' && user.role == 'Administrator' || user.role == 'Office Head' && user.dept['title'] == 'PGO-Executive' && leaveapplication.status != 'draft'" class="dropdown-item" @click.prevent="governor(leaveapplication)" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                            For Governor's Approval
-                                        </a>
-                                        <a class="dropdown-item" @click.prevent="deleteModal(leaveapplication.id)" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="modal">
-                                            Delete
-                                        </a>
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <!-- employee name search -->
+                                            <input v-model="search.employee_name" @keyup.prevent="searchLeaveApplications" type="text" class="form-control" placeholder="Search Employee" autocomplete="off">
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer text-right" style="display: inherit; align-items: baseline;">
-                    <pagination size="default" :data="leaveapplications" @pagination-change-page="paginate" :limit="5">
-                        <span slot="prev-nav">&lt; Previous</span>
-	                    <span slot="next-nav">Next &gt;</span>
-                    </pagination>
-                    <span style="margin-left: 10px;">Showing {{ leaveapplications.meta && leaveapplications.meta.from | validateCount }} to {{ leaveapplications.meta && leaveapplications.meta.to | validateCount }} of {{ leaveapplications.meta && leaveapplications.meta.total }} records</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- modal -->
-        <div class="modal fade" id="leave_application_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content" style="overflow-y: auto;">
-                <div class="modal-header kuz-header">
-                    <h5 class="modal-title" id="modal-grade">Leave Application</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                    <form @submit.prevent="submit_mode == 'recommendation' ? review_recommendation(1) : submit_mode == 'noted_by' ? submit_noted_by(1) : submit_mode == 'gov' ? submit_governor(1) : ''" action="">
-                        <div class="modal-body">
-                            <div class="row" v-if="submit_mode == 'recommendation'">
-                                <div class="form-group col-md-6" style="position: relative;margin-bottom: 0.3rem;">
-                                    <label style="margin: 0;">Recommendation Officer</label>
-
-                                    <v-select class="form-control form-control-border border-width-2" v-model="form.recommendation_officer_id" placeholder="Select Employee" :options="personalinformations" item-text="label" label="name"
-                                    :reduce="personalinformations => personalinformations.id"></v-select>
-
-                                    <has-error :form="form" field="personal_information_id"></has-error>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <div class="custom-control custom-radio">
-                                        <input v-model="form.recommendation_status" value="APPROVED" class="custom-control-input" type="radio" id="recommendation_status_approved" name="recommendation_status">
-                                        <label for="recommendation_status_approved" class="custom-control-label">Approved</label>
-                                        <input v-model="form.recommendation_remark_approved" ref="recommendation_status_approved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'APPROVED'">
+                                    <div class="col-md-3 p-0">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-filter"></i>
+                                            </button>
+                                            <div class="dropdown-menu py-4 px-3" @click.stop>
+                                               <div class="row">
+                                                    <div class="col-md-12">
+                                                        <!-- leave status search selection start -->
+                                                        <h5 class="text-primary">Leave Status</h5>
+                                                        <div class="py-2" style="overflow: auto; max-height: 10rem; border: 1px solid #ccc; border-radius: 5px;">
+                                                            <ul style="list-style-type:none;padding: 0;margin-left: 20px; width: 16rem;">
+                                                                <li v-for="leave_stage in leave_stages" :key="leave_stage.data">
+                                                                    <label class="filter_check_box" :for="leave_stage.data">
+                                                                        <input type="checkbox" :name="leave_stage.data" :id="leave_stage.data" v-model="search.leave_stages" :value="leave_stage.data">
+                                                                        {{leave_stage.label}}
+                                                                    </label>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- leave status search selection end -->
+                                                    </div>
+                                                    <div class="col-md-12 mt-3">
+                                                        <!-- leave type search selection start -->
+                                                        <div class="dropdown-divider"></div>
+                                                        <h5 class="text-primary">Leave Type</h5>
+                                                        <div class="py-2" style="overflow: auto; max-height: 10rem; border: 1px solid #ccc; border-radius: 5px;">
+                                                            <ul style="list-style-type:none;padding: 0;margin-left: 20px; width: 16rem;">
+                                                                <li v-for="leave_type in leave_types" :key="leave_type.id">
+                                                                    <label class="filter_check_box" :for="leave_type.id">
+                                                                        <input type="checkbox" :name="leave_type.id" :id="leave_type.id" v-model="search.leave_types" :value="leave_type.id">
+                                                                        {{ leave_type.title }}
+                                                                    </label>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- leave type search selection end -->
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <!-- leave type department selection end -->
+                                                        <div class="dropdown-divider"></div>
+                                                        <h5 class="text-primary">Department</h5>
+                                                        <select class="input-group p-2" name="department" id="department" v-model="search.department">
+                                                            <option :value="null" selected>--Select--</option>
+                                                            <option :value="department.id" v-for="department in departments.data" :key="department.id">
+                                                                {{ department.title }}
+                                                            </option>
+                                                        </select>
+                                                        <!-- leave type department selection end -->
+                                                    </div>
+                                                    <div class="col-md-12 float-right">
+                                                        <div class="dropdown-divider"></div>
+                                                        <!-- apply filter button -->
+                                                        <div class="float-right">
+                                                            <button type="button" class="btn btn-danger" @click="resetFilter()">Reset</button>
+                                                            <button type="button" class="btn btn-primary" @click="searchLeaveApplications()">Apply Filter</button>
+                                                        </div>
+                                                    </div>
+                                               </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <div class="custom-control custom-radio">
-                                        <input v-model="form.recommendation_status" class="custom-control-input" value="DISAPPROVED" type="radio" id="recommendation_status_disapproved" name="recommendation_status">
-                                        <label for="recommendation_status_disapproved" class="custom-control-label">Dissaproved due to</label>
-                                        <input v-model="form.recommendation_remark_disapproved" ref="recommendation_status_disapproved" class="form-control form-control-border border-width-2" type="text" name="recommendation_remark" placeholder="Remark" :disabled="form.recommendation_status != 'DISAPPROVED'">
-                                    </div>
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-3"></div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Employee</th>
+                                                <th>Leave Type</th>
+                                                <th>Date of filing</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="leave_application in leave_applications.data" :key="leave_application.id">
+                                                <td>{{ leave_application.personalinformation.fullName }}</td>
+                                                <td>{{ leave_application.leavetype.title }}</td>
+                                                <td>{{ leave_application.date_of_filing }}</td>
+                                                <td class="text-md">
+                                                    <span v-if="leave_application.application_stage == 'pending_leave_credit_calculation'" class="badge badge-warning">Leave Credit Calculation</span>
+                                                    <span v-if="leave_application.application_stage == 'pending_recommendation'" class="badge badge-warning">Pending Recommendation</span>
+                                                    <span v-if="leave_application.application_stage == 'disapproved_recommendation'" class="badge badge-danger">Recommendation Disapproved</span>
+                                                    <span v-if="leave_application.application_stage == 'pending_noted_by'" class="badge badge-warning">Pending Noted By</span>
+                                                    <span v-if="leave_application.application_stage == 'noted_by_disapproved'" class="badge badge-danger">Noted By Disapproved</span>
+                                                    <span v-if="leave_application.application_stage == 'pending_governor_approval'" class="badge badge-warning">Pending Governor Approval</span>
+                                                    <span v-if="leave_application.application_stage == 'governor_disapproved'" class="badge badge-danger">Dissaproved by the Governor</span>
+                                                    <span v-if="leave_application.application_stage == 'approved'" class="badge badge-success">Approved</span>
+                                                    <span v-if="leave_application.state == 'draft'" class="badge badge-secondary">Draft</span>
+                                                </td>
+                                                <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                    {{
+                                                        leave_application.application_stage == 'disapproved_recommendation' ? leave_application.recommendation_disapproved_due_to :
+                                                        leave_application.application_stage == 'noted_by_disapproved' ? leave_application.noted_disapproved_due_to :
+                                                        leave_application.application_stage == 'governor_disapproved' ? leave_application.gov_disapproved_due_to : ''
+                                                    }}
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown show">
+                                                        <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            Action
+                                                        </a>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                            <a class="dropdown-item" role="button" @click="viewLeaveApplication(leave_application.id)">View</a>
+                                                            <a class="dropdown-item" role="button" @click="editLeaveApplication(leave_application.id, leave_application.application_stage)">Edit</a>
+                                                            <a
+                                                                class="dropdown-item"
+                                                                role="button"
 
-                            <div class="row col-md-12" v-if="submit_mode == 'noted_by'">
-                                <div class="col-md-4 form-group">
-                                    <label for="days_with_pay">Days with pay:</label>
-                                    <input v-model="form.days_with_pay" ref="days_with_pay" class="form-control form-control-border border-width-2" type="number" name="days_with_pay">
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label for="days_without_pay">Days without pay:</label>
-                                    <input v-model="form.days_without_pay" ref="days_without_pay" class="form-control form-control-border border-width-2" type="number" name="days_without_pay">
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label for="others">others (specify):</label>
-                                    <input v-model="form.others" ref="others" class="form-control form-control-border border-width-2" type="number" name="others">
-                                </div>
-                            </div>
-
-                            <div class="row" v-if="submit_mode == 'gov'">
-                                <div class="col-md-2 form-group custom-control custom-radio d-inline ml-3">
-                                    <input v-model="gov_approval" class="custom-control-input" type="radio" value="1" id="gov_approval" name="gov_approval">
-                                    <label for="gov_approval" class="custom-control-label">Approve</label>
-                                </div>
-                                <div class="col-md-2 form-group custom-control custom-radio d-inline ml-3">
-                                    <input v-model="gov_approval" class="custom-control-input" type="radio" value="0" id="gov_dissaproval" name="gov_approval">
-                                    <label for="gov_dissaproval" class="custom-control-label">Disapprove</label>
-                                </div>
-                            </div>
-
-                            <div class="row" v-if="submit_mode == 'gov' && gov_approval == 0">
-                                <div class="col-md-12 form-group">
-                                    <label for="disapproved_due_to">Disapproved due to:</label>
-                                    <input v-model="form.disapproved_due_to" ref="disapproved_due_to" class="form-control form-control-border border-width-2" type="text" name="disapproved_due_to">
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="row col-md-12" v-if="modal == true">
-                                <div class="col-md-6">
-                                    <p>Name:
-                                        <strong>
-                                            {{ leave_details.personalinformation.surname }},
-                                            {{ leave_details.personalinformation.firstname }}
-                                            {{ leave_details.personalinformation.middlename }}
-                                            {{ leave_details.personalinformation.nameextension }}
-                                        </strong>
-                                    </p>
-                                    <p>Date of filing: <strong> {{ leave_details.date_of_filing }} </strong></p>
-                                    <p>Type of leave: <strong> {{ leave_details.leavetype.title }} </strong></p>
-                                    <p>Number of working days applied: <strong> {{ leave_details.working_days }} </strong></p>
-                                    <p>
-                                        Where leave will be spent: <strong> {{ leave_details.spent }} </strong><br>
-                                        Remark: <strong> {{ leave_details.spent_spec }} </strong>
-                                    </p>
-                                    <p>Inclusive dates:
-                                       <strong> {{ leave_details.from }} - {{ leave_details.to }} </strong>
-                                    </p>
-                                    <p>Commutation: <strong> {{ leave_details.commutation }} </strong></p>
-
-                                     <p>Certification of Leave Credits as of: <strong> {{ leave_details.credit_as_of }} </strong></p>
-                                </div>
-
-                                <div class="col-md-6">
-
-                                    <p>Details of action on Application</p>
-                                    <table style="width:100%">
-                                        <tr>
-                                            <th></th>
-                                            <th>Vacation</th>
-                                            <th>Sick</th>
-                                            <th>Total</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Previous Balance</td>
-                                            <td>{{ leave_details.vacation_balance }}</td>
-                                            <td>{{ leave_details.sick_balance }}</td>
-                                            <td>{{ parseFloat(prev_balance_total).toFixed(2) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Less this Leave</td>
-                                            <td>{{ leave_details.vacation_less }}</td>
-                                            <td>{{ leave_details.sick_less }}</td>
-                                            <td>{{ parseFloat(less_total).toFixed(2) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Leave Balance</td>
-                                            <td>{{ curr_vacation_balance }}</td>
-                                            <td>{{ curr_sick_balance }}</td>
-                                            <td>{{ parseFloat(balance_total).toFixed(2) }}</td>
-                                        </tr>
+                                                                @click="takeAction(leave_application.id, leave_application.personal_information_id, leave_application.application_stage, leave_application)"
+                                                            >
+                                                                Resolve
+                                                            </a>
+                                                            <a class="dropdown-item text-danger" role="button" @click="deleteLeaveApplication(leave_application.id)">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
-
-                                    <br>
-
-                                    <p>
-                                        Reccomendation: <strong> {{ leave_details.recommendation_status }} </strong> <br>
-                                        Remark: <strong> {{
-                                                    leave_details.recommendation_status != 'APPROVED' ? leave_details.recommendation_remark_approved :
-                                                    leave_details.recommendation_status != 'DISAPPROVED' ? leave_details.recommendation_remark_disapproved : ''
-                                                }} </strong>
-
-                                    </p>
-
-                                    <p>
-                                        Noted By: <strong> {{ leave_details.noted_by_id != null && leave_details.noted_by_id != '' ? 'APPROVED' : 'PENDING' }} </strong><br>
-                                        Days with pay: <strong> {{ leave_details.days_with_pay }} </strong> <br>
-                                        Days without pay: <strong> {{ leave_details.days_without_pay }} </strong> <br>
-                                        Others: <strong> {{ leave_details.others }} </strong> <br>
-                                    </p>
-
-                                    <p>Governor Approval:
-                                       <strong> {{
-                                            leave_details.governor_id != null && leave_details.governor_id != '' &&
-                                            leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? 'DISAPPROVED' :
-                                            leave_details.governor_id != null && leave_details.governor_id != '' &&
-                                            leave_details.disapproved_due_to == null || leave_details.disapproved_due_to == '' ? 'APPROVED' : ''
-                                        }} </strong>
-                                        <br>
-                                        Disapproved due to:
-                                       <strong> {{ leave_details.disapproved_due_to != null && leave_details.disapproved_due_to != '' ? leave_details.disapproved_due_to : '' }} </strong>
-                                    </p>
-
+                                    <pagination size="default" :data="leave_applications" @pagination-change-page="searchLeaveApplications" :limit="5">
+                                        <span slot="prev-nav">&lt; Previous</span>
+                                        <span slot="next-nav">Next &gt;</span>
+                                    </pagination>
+                                    <span style="margin-left: 10px;">Page {{ leave_applications.meta && leave_applications.meta.current_page }} of {{ leave_applications.meta && leave_applications.meta.last_page }}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button v-if="submit_mode == 'recommendation' && form.stage_status != 'Pending Recommendation'" type="button" @click.prevent="review_recommendation(2)" class="btn btn-danger float-left">Undo Recommendation</button>
-                            <button v-if="submit_mode == 'noted_by' && form.stage_status != 'Pending Noted By'" type="button" @click.prevent="submit_noted_by(2)" class="btn btn-danger float-left">Undo Noted By</button>
-                            <button v-if="submit_mode == 'gov' && form.stage_status != 'Pending Governor Approval'" type="button" @click.prevent="submit_governor(2)" class="btn btn-danger float-left">Undo</button>
-                            <button v-if="submit_mode == 'noted_by'" type="button" @click.prevent="submit_noted_by(3)" class="btn btn-success float-left">Approve</button>
-                            <button v-if="submit_mode == 'gov'" type="submit" class="btn btn-primary">Save</button>
-                            <button v-if="submit_mode != 'view' && submit_mode != 'gov'" type="submit" class="btn btn-primary">{{ submit_mode == 'noted_by' ? 'Governors Approval' : 'Save Changes' }}</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- modal -->
 
         <!-- Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirm Password to Delete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12 p-2">
-                            <label for="password">Password</label>
-                            <input type="password"  v-model="passwordForm.password" class="form-control" id="password">
-                            <span v-if="errors.password">
-                                <p class="text-danger">Wrong Password</p>
-                            </span>
+        <div class="modal fade" id="resolve_modal" ref="leaveModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Leave Application</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+                <form @submit.prevent="submitLeave()" action="" ref="leave_form">
+                    <div class="modal-body p-0">
+                        <div class="row">
+                            <div class="col-md-12 px-5 py-2 ml-1">
+                                <div class="row">
+                                    <div class="col-md-12 p-0">
+                                        <h5 class="text-success">Leave Application Information</h5>
+                                    </div>
+                                    <div class="col-md-6 p-0">
+                                        <div class="col-md-12 p-0">
+                                            Name: <strong> {{ current_leave_application.name }} </strong>
+                                        </div>
+                                        <div class="col-md-12 p-0 mt-2">
+                                            Working Days: <strong> {{ current_leave_application.working_days }} </strong>
+                                        </div>
+                                        <div class="col-md-12 p-0 mt-2">
+                                            Inclusive Dates: <strong> {{ current_leave_application.inclusive_dates }} </strong>
+                                        </div>
+                                        <div class="col-md-12 p-0 mt-2">
+                                            Leave Type: <strong> {{ current_leave_application.leave_type.title }} </strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 p-0 mt-2">
+                                            Spent:
+                                            <strong>
+                                                {{
+                                                    current_leave_application.spent == "within_the_philippines" ? "Within the Philippines" :
+                                                    current_leave_application.spent == "abroad" ? "Abroad" :
+                                                    current_leave_application.spent == "in_hospital" ? "In Hospital" :
+                                                    current_leave_application.spent == "out_patient" ? "Out Patient" :
+                                                    current_leave_application.spent == "completion_of_masters_degree" ? "Completion of Masters Degree" :
+                                                    current_leave_application.spent == "board_examination_review" ? "Board Examination Review" :
+                                                    current_leave_application.spent == "monetization" ? "Monetization" :
+                                                    current_leave_application.spent == "terminal_leave" ? "Terminal Leave" : ""
+                                                }}
+                                            </strong>
+                                        </div>
+                                        <div class="col-md-12 p-0 mt-2">
+                                            Specified: <strong> {{ current_leave_application.spent_specified }} </strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <LeaveCreditCalculation
+                                    v-if="isModalOpen && current_application_stage == 'pending_leave_credit_calculation'"
+                                    :leave_application_id="leave_application_id"
+                                    :personal_information_id="personal_information_id"
+                                    :serverErrors="serverErrors"
+                                    ref="leave_credit_calculation"
+                                />
+                                <LeaveRecommendation
+                                    v-if="isModalOpen && current_application_stage == 'pending_recommendation'"
+                                    :leave_application_id="leave_application_id"
+                                    :personal_information_id="personal_information_id"
+                                    :serverErrors="serverErrors"
+                                    ref="recommendation"
+                                />
+                                <LeaveNotedBy
+                                    v-if="isModalOpen && current_application_stage == 'pending_noted_by'"
+                                    :leave_application_id="leave_application_id"
+                                    :personal_information_id="personal_information_id"
+                                    :serverErrors="serverErrors"
+                                    ref="noted_by"
+                                />
+                                <LeaveGovernorApproval
+                                    v-if="isModalOpen && current_application_stage == 'pending_governor_approval'"
+                                    :leave_application_id="leave_application_id"
+                                    :personal_information_id="personal_information_id"
+                                    :serverErrors="serverErrors"
+                                    ref="governor_approval"
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger float-left" @click="deleteLeaveApplication()">Delete</button>
-                </div>
-                </div>
-            </div>
+
+                    <div class="modal-footer d-flex">
+                        <div class="flex-grow-1" style="">
+                            <a class="back-link" v-if="current_application_stage != 'pending_leave_credit_calculation'" @click="returnStep()" style="float: left !important; hover:text-decoration: underline; color: blue;cursor: pointer;">Return to Previous Step</a>
+                        </div>
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" :disabled="loading">Submit <i class="fas fa-save"></i></button>
+                    </div>
+                </form>
+              </div>
+          </div>
         </div>
 
-
+        <!-- leave application format view -->
+        <iframe id="i" frameborder="0" hidden></iframe>
     </div>
 </template>
 
+<style>
+.back-link:hover {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
+.filter_check_box {
+    display: block;
+    cursor: pointer;
+}
+.filter_check_box:hover {
+    cursor: pointer;
+    text-shadow: 1px 1px 1px #bdbdbd
+}
+</style>
+
 <script>
+import LeaveCreditCalculation from './leaveApplicationPartials/LeaveCreditCalculation.vue';
+import LeaveRecommendation from './leaveApplicationPartials/LeaveRecommendation.vue';
+import LeaveNotedBy from './leaveApplicationPartials/LeaveNotedBy.vue';
+import LeaveGovernorApproval from './leaveApplicationPartials/LeaveGovernorApproval.vue';
 import axios from 'axios';
+import _ from 'lodash';
+import Swal from 'sweetalert2';
     export default {
         data() {
             return {
-                modal: false,
-                submit_mode: '',
-                search: '',
-                leavetypes: [],
-                leaveapplications: {},
-                leaveapplicationsdata: {},
-                personalinformations: [],
-                personal_information_id: '',
-                leave_application_id: '',
-                leave_details: {},
-                user: {id: '', role: '', dept:[]},
-                gov_approval: null,
-                stage_status: [
-                    'Pending Recommendation',
-                    'Recommendation Disapproved',
-                    'Pending Noted By',
-                    'Approved by the HR Head',
-                    'Pending Governor Approval',
-                    'Approved by the Governor',
-                    'Disapproved by the Governor',
+                leave_stages: [     //Leave stages selection data
+                    {
+                        data: 'pending_leave_credit_calculation',
+                        label: 'Leave Credit Calculation'
+                    },
+                    {   data: 'pending_recommendation',
+                        label: 'Pending Recommendation'
+                    },
+                    {   data: 'disapproved_recommendation',
+                        label: 'Recommendation Disapproved'
+                    },
+                    {
+                        data: 'pending_noted_by',
+                        label: 'Pending Noted By'
+                    },
+                    {
+                        data: 'pending_governor_approval',
+                        label: 'Pending Governor Approval'
+                    },
+                    {
+                        data: 'governor_disapproved',
+                        label: 'Disapproved by the Governor'
+                    },
+                    {
+                        data: 'approved',
+                        label: 'Approved'
+                    },
                 ],
-                form: new Form({
-                    'personal_information_id': '',
-                    'leave_type_id': '',
-                    'from': '',
-                    'to': '',
-                    'governor_id': '',
-                    'noted_by_id': '',
-                    'recommendation_officer_id': '',
-                    'recommendation_status': '',
-                    'recommendation_remark_approved': '',
-                    'recommendation_remark_disapproved': '',
-                    'stage_status': '',
-                    'days_with_pay': '',
-                    'days_without_pay': '',
-                    'others': '',
-                    'disapproved_due_to': ''
-                }),
-                curr_vacation_balance: '',
-                curr_sick_balance: '',
-                prev_balance_total: '',
-                less_total: '',
-                balance_total: '',
-                date: null,
-                search:{
-                    personal_information_id: null,
-                    leave_type_id: null,
-                    stage_status: null,
-                    date_of_filing: null,
-                    status: 'final',
+                current_leave_application: {
+                    name: "",
+                    working_days: "",
+                    spent: "",
+                    spent_specified: "",
+                    inclusive_dates: {},
+                    leave_type: {},
                 },
-                options: {
-                    format: 'yyyy-MM-DD',
-                    useCurrent: false,
+                leave_types: [], //leave types data
+                departments: [], //department data
+                search:{    //search data
+                    employee_name: null,
+                    leave_stages: [],
+                    leave_types: [],
+                    department: null
                 },
-                passwordForm: new Form({
-                    password: null,
-                    id: null
-                }),
-                errors: {}
+                leave_application_id: null, //leave application id
+                personal_information_id: null, //personal information id
+                current_application_stage: null, //used for conditional rendering of leave application form
+                leave_applications: {}, //leave application list
+                isModalOpen: false,
+                serverErrors: {}, // server errors from child components
+                loading: false, //loading state (disable submit button when true)
+                is_hr: true, // check if office user is hr
+                role: null // user role
             }
         },
         components: {
-            datePicker
+            datePicker,
+            LeaveCreditCalculation,
+            LeaveRecommendation,
+            LeaveNotedBy,
+            LeaveGovernorApproval
+        },
+        watch: {
+
         },
         methods: {
-            showDate(date) {
-                this.date = date
-            },
-            paginate(page = 1){
-                axios.get('api/leaveapplication?page=' + page)
-                .then(({data}) => {
-                    this.leaveapplications = data;
-                }).catch(error => {
-                    console.log(error.reponse.data.message);
-                    Swal.fire(
-                        'Oops...',
-                        'Something went wrong',
-                        'error'
-                    )
-                });
-            },
-            calculate() {
-                this.curr_vacation_balance = parseFloat(this.leave_details.vacation_balance) - parseFloat(this.leave_details.vacation_less);
-                this.curr_sick_balance = parseFloat(this.leave_details.sick_balance) - parseFloat(this.leave_details.sick_less);
 
-                this.prev_balance_total = parseFloat(this.leave_details.vacation_balance) + parseFloat(this.leave_details.sick_balance);
-                this.less_total = parseFloat(this.leave_details.vacation_less) + parseFloat(this.leave_details.sick_less);
-
-                this.balance_total = parseFloat(this.curr_vacation_balance) + parseFloat(this.curr_sick_balance);
+            // get user department for authorization
+            getUserDepartment: function(){
+                axios.get('/api/leaveUserDepartment')
+                .then(response => {
+                    this.is_hr = response.data.is_hr
+                    this.role = response.data.role
+                })
+                .catch(error => {
+                    console.log(error)
+                })
             },
 
-            clear: _.debounce(function(){
-
-                this.search = {
-                    personal_information_id: null,
-                    leave_type_id: null,
-                    stage_status: null,
-                    date_of_filing: null,
-                    status: 'final',
-                },
-                this.loadContent()
-
-            }, 100),
-
-            filter_data() {
-
+            // return application to previous step
+            returnStep: function(){
                 Swal.fire({
-                title: '<strong>Loading...</strong>',
-                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
-                icon: 'info',
-                willOpen () {
-                    Swal.showLoading ()
-                },
-                didClose () {
-                    Swal.hideLoading()
-                },
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    allowEnterKey: false,
-                    showConfirmButton: false
+                    title: 'Return to Previous Step?',
+                    html: "This will revert your application to an earlier stage, which may overwrite recent progress. <br><br><b>Are you sure you want to proceed?</b>",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, proceed!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.patch('/api/leaveReturnPreviousStage/'+this.leave_application_id, {application_stage: this.current_application_stage})
+                        .then(response => {
+                            this.getLeaveApplications()
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Leave application has been returned to the previous stage!'
+                            })
+                            this.closeModal()
+                        })
+                        .catch(error => {
+                            toast.fire({
+                                icon: 'error',
+                                title: 'Something went wrong!'
+                            })
+                            console.log(error)
+                        })
+                    }
                 })
+            },
 
-                this.$Progress.start()
-                axios.post('api/searchLeave', this.search)
-                .then(({data}) => {
-                    this.leaveapplications.data = data.data
-                    this.$Progress.finish()
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Done'
-                    })
-                    Swal.close()
-                })
-                .catch(e => {
-                    console.log(e)
-                    toast.fire({
-                        icon: 'error',
-                        title: 'Error'
-                    })
-                })
+            openModal() {
+                $(this.$refs.leaveModal).modal('show');
             },
-            loadContent() {
-                Swal.fire({
-                title: '<strong>Loading...</strong>',
-                html: 'Dont <u>reload</u> or <u>close</u> the application ...',
-                icon: 'info',
-                willOpen () {
-                    Swal.showLoading ()
-                },
-                didClose () {
-                    Swal.hideLoading()
-                },
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    allowEnterKey: false,
-                    showConfirmButton: false
-                })
+            closeModal() {
+                $(this.$refs.leaveModal).modal('hide');
+            },
 
-                axios.get('api/leaveapplication')
-                    .then( ({ data }) => {
-                        this.leaveapplications = data;
-                        this.leaveapplications.data = _.filter(data.data, {'status': this.search.status});
-                        Swal.close()
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-                axios.get('api/getleavetypes')
-                    .then(({data}) => {
-                        this.leavetypes = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-                axios.post('api/forleave')
-                    .then(({data}) => {
-                        this.personalinformations = data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-            },
-            getAllLeave: function(){
-                 axios.get('api/getAllLeave')
-                    .then(({data}) => {
-                        this.leaveapplicationsdata = data.data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    });
-            },
-            editLeaveApplication: function(leaveapplication)
-            {
-                if(leaveapplication.stage_status == 'Pending Recommendation')
-                {
-                    this.$router.push({path: '/leave-form', query: {id: leaveapplication.id, mode: 1}})
+            // edit leave application
+            editLeaveApplication: function(id, stage){
+                if(stage == "pending_leave_credit_calculation"){
+                    this.$router.push({path: '/leave-form', query:{id: id}})
                 }else{
-                    Swal.fire(
-                        'Oops...',
-                        'Cannot Edit Application at this point...',
-                        'error'
-                    )
+                    Swal.fire({
+                        title: 'You cannot edit this leave application',
+                        text: 'This leave application is already in the approval stage',
+                        icon: 'info',
+                        confirmButtonText: 'Ok'
+                    })
                 }
             },
-            deleteModal: function(id){
-                this.passwordForm.password = null
-                this.passwordForm.id = id
-                $('#deleteModal').modal('show')
+
+            // submit leave application recommendation/noted_by/governor_approval
+            async submitLeave() {
+                this.$Progress.start()
+                this.loading = true
+                let data = {};
+
+                if (this.current_application_stage === 'pending_leave_credit_calculation' && this.$refs.leave_credit_calculation) {
+                    data = await this.$refs.leave_credit_calculation.getFormData();
+                }
+
+                if (this.current_application_stage === 'pending_recommendation' && this.$refs.recommendation) {
+                    data = await this.$refs.recommendation.getFormData();
+                }
+
+                if(this.current_application_stage === 'pending_noted_by' && this.$refs.noted_by){
+                    data = await this.$refs.noted_by.getFormData();
+                }
+
+                if(this.current_application_stage == 'pending_governor_approval' && this.$refs.governor_approval){
+                    data = await this.$refs.governor_approval.getFormData();
+                }
+
+                axios.patch('api/leaveapplication/'+this.leave_application_id, data)
+                .then(e => {
+                    this.$Progress.finish()
+                    this.recommendation_approved = true
+                    toast.fire({
+                        icon: 'success',
+                        title: 'Leave application recommendation submitted successfully'
+                    })
+                    this.loading = false
+                    this.closeModal()
+                    this.getLeaveApplications()
+                })
+                .catch(e => {
+                    this.$Progress.fail()
+                    this.serverErrors = e.response.data.errors
+                    toast.fire({
+                        icon: 'error',
+                        title: 'Leave application recommendation submission failed'
+                    })
+                    this.loading = false
+                })
             },
-            deleteLeaveApplication: function()
-            {
+
+            // delete leave application
+            deleteLeaveApplication: function(id){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.delete('/api/leaveapplication/'+id)
+                        .then(response => {
+                            this.getLeaveApplications()
+                            toast.fire({
+                                icon: 'success',
+                                title: 'Leave application deleted successfully!'
+                            })
+                        })
+                        .catch(error => {
+                            toast.fire({
+                                icon: 'error',
+                                title: 'Something went wrong!'
+                            })
+                            console.log(error)
+                        })
+                    }
+                })
+            },
+
+            //view Leave Application
+            viewLeaveApplication: function(id){
 
                 Swal.fire({
-                    title: '<strong>LOADING...</strong>',
+                    title: '<strong>Loading data...</strong>',
                     html: 'Dont <u>reload</u> or <u>close</u> the application ...',
                     icon: 'info',
                     willOpen () {
@@ -571,503 +528,122 @@ import axios from 'axios';
                         showConfirmButton: false
                 })
 
-                this.$Progress.start()
-                axios.delete('api/leaveapplication/'+this.passwordForm.id+'?password='+this.passwordForm.password)
-                .then(response => {
+                axios.get('/api/leaveapplication/'+id)
+                .then(e => {
+                    Swal.close()
+                    var f = document.getElementById('i')
+                    f.contentWindow.document.write(e.data)
+                    setTimeout(function () {
+                        f.contentWindow.focus()
+                        f.contentWindow.print()
+
+                        f.contentWindow.document.open();
+                        f.contentWindow.document.write("");
+                        f.contentWindow.document.close();
+                    }, 500);
+                })
+                .catch(error => {
                     Swal.close()
                     toast.fire({
-                        icon: 'success',
-                        title: 'Deleted successfully'
-                    });
-
-                    this.loadContent()
-                    this.$Progress.finish()
-                    $('#deleteModal').modal('hide')
-                })
-                .catch(error => {
-                    Swal.close()
-                    this.errors = error.response.data.errors
-                    console.log(error)
-                    this.$Progress.finish()
-                    Swal.fire(
-                        'Oops...',
-                        'Something went wrong',
-                        'error'
-                    )
-                })
-            },
-            load_user: function()
-            {
-                axios.get('api/load_user')
-                .then(({data}) => {
-                    this.user.id = data['id']
-                    this.user.role = data['role']
-                    this.user.dept = data['dept']
-                })
-                .catch(error => {
+                        icon: 'error',
+                        title: 'Something went wrong!'
+                    })
                     console.log(error)
                 })
             },
-            viewApplication: function(leaveapplication){
-                this.leave_details = leaveapplication
-                this.calculate()
-                this.submit_mode = 'view'
-                this.modal = true
-                $('#leave_application_modal').modal('show')
+
+            // take action
+            takeAction: function(leave_application_id, personal_information_id, application_stage, leave_application){
+                this.leave_application_id = leave_application_id
+                this.personal_information_id = personal_information_id
+                this.current_application_stage = application_stage
+                this.current_leave_application.name = leave_application.personalinformation.fullName
+                this.current_leave_application.inclusive_dates = leave_application.inclusive_dates
+                this.current_leave_application.leave_type = leave_application.leavetype
+                this.current_leave_application.working_days = leave_application.working_days
+                this.current_leave_application.spent = leave_application.spent
+                this.current_leave_application.spent_specified = leave_application.spent_specified
+                $('#resolve_modal').modal('show')
             },
-            recommendation: function(leaveapplication)
-            {
-                this.form.reset()
-                this.leave_details = leaveapplication
-                this.form.fill(leaveapplication)
-                this.leave_application_id = leaveapplication.id
-                this.submit_mode = 'recommendation'
-                this.calculate()
 
-                if(this.form.stage_status == 'Pending Noted By' || this.form.stage_status == 'Recommendation Disapproved')
-                {
-                    Swal.fire({
-                    title: 'Ooops...',
-                    text: "Employee already has a recommendation!!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed to edit'
-                        }).then((result) => {
-                        if(result.isDismissed == true)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Cancelled'
-                            });
-                        }else{
-                            this.modal = true
-                            $('#leave_application_modal').modal('show')
-                        }
-                    })
-                }else if(this.form.stage_status == 'Pending Recommendation'){
-                    this.modal = true
-                    $('#leave_application_modal').modal('show')
-                }else{
-                    Swal.fire(
-                        'Oops...',
-                        'Cannot edit recommendation at this point',
-                        'error'
-                    )
-                }
-            },
-            review_recommendation: function(mode)
-            {
-
-                let save = false
-
-                switch(mode){
-                    case(1):
-                    {
-
-                        if(this.form.recommendation_officer_id != null && this.form.recommendation_status != null){
-                            this.form.stage_status = this.form.recommendation_status == 'APPROVED' ? 'Pending Noted By' : this.form.recommendation_status == 'DISAPPROVED' ? 'Recommendation Disapproved' : ''
-                            this.submit_reccomendation()
-                            break;
-                        }
-
-                        Swal.fire(
-                            'Oops...',
-                            this.form.recommendation_officer_id == null ? 'Recommendation Officer Required' : 'Recommendation needs to be Approved or Disapproved',
-                            'error'
-                        )
-
-                        break
-
-                    }
-                    case(2):
-                    {
-
-                        Swal.fire({
-                            title: 'Ooops...',
-                            text: "You cannot revert this!!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Proceed'
-                        }).then((result) => {
-                            if(result.isDismissed == true)
-                            {
-                                toast.fire({
-                                    icon: 'success',
-                                    title: 'Cancelled'
-                                });
-                            }else{
-
-                                this.form.recommendation_officer_id = null,
-                                this.form.recommendation_status = null,
-                                this.form.recommendation_remark_approved = null,
-                                this.form.recommendation_remark_disapproved = null,
-                                this.form.stage_status = 'Pending Recommendation'
-
-                                this.submit_reccomendation()
-
-                            }
-                        })
-
-                        break
-
-                    }
-                }
-            },
-            submit_reccomendation: function()
-            {
+            //search leave
+            searchLeaveApplications: _.debounce(function (page = 1){
                 this.$Progress.start()
-                axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
+                axios.post('/api/leaveApplicationSearch?page='+page, this.search)
                 .then(response => {
+                    this.leave_applications = response.data;
                     this.$Progress.finish()
-                    $('#leave_application_modal').modal('hide')
-                    toast.fire({
-                        icon: 'success',
-                        title: 'Submitted'
-                    });
-                    this.loadContent()
                 })
                 .catch(error => {
-                    console.log(error.response.data.message);
+                    this.$Progress.fail()
+                    console.log(error);
+                });
+            }, 300),
+
+            // reset filter
+            resetFilter: function(){
+                this.search = {
+                    employee_name: null,
+                    leave_stages: [],
+                    leave_types: [],
+                    department: null
+                }
+                this.getLeaveApplications()
+            },
+
+            //fetch data
+
+            //fetch leave applications
+            getLeaveApplications: function() {
+                this.$Progress.start()
+                axios.get('/api/leaveapplication')
+                .then(response => {
+                    this.$Progress.finish()
+                    this.leave_applications = response.data;
+                })
+                .catch(error => {
+                    this.$Progress.fail()
+                    console.log(error);
+                });
+            },
+
+            // fetch leave types
+            getLeaveTypes: function(){
+                axios.get('api/leaveFormLeaveTypes')
+                .then(response => {
+                    this.leave_types = response.data
+                })
+                .catch(e => {
+                    console.log(e)
                 })
             },
-            noted_by: function(leaveapplication)
-            {
 
-                this.form.reset()
-                this.leave_details = leaveapplication
-                this.form.fill(leaveapplication)
-                this.leave_application_id = leaveapplication.id
-                this.submit_mode = 'noted_by'
-                this.calculate()
-
-                if(leaveapplication.stage_status == 'Pending Noted By')
-                {
-
-                    this.modal = true
-                    $('#leave_application_modal').modal('show')
-
-                }else if(   leaveapplication.stage_status == 'Approved by the HR Head' ||
-                            leaveapplication.stage_status == 'Pending Governor Approval' ){
-
-                    Swal.fire({
-                    title: 'Ooops...',
-                    text: "Employee is already noted!!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed to edit'
-                        }).then((result) => {
-                        if(result.isDismissed == true)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Cancelled'
-                            });
-                        }else{
-
-                            this.modal = true
-                            $('#leave_application_modal').modal('show')
-
-                        }
-                    })
-
-                }else if(this.form.stage_status == 'Approved by the Governor' || this.form.stage_status == 'Disapproved by the Governor'){
-                    Swal.fire(
-                        'Oops...',
-                        'Cannot edit Noted By at this point',
-                        'error'
-                    )
-                }else{
-                    Swal.fire(
-                        'Oops...',
-                        leaveapplication.stage_status,
-                        'error'
-                    )
-                }
-
-            },
-            submit_noted_by: function(mode)
-            {
-
-                if(mode == 1)
-                {
-
-                    this.$Progress.start()
-
-                    this.form.noted_by_id = this.user.id
-                    this.form.stage_status = 'Pending Governor Approval'
-
-                    axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                    .then(response => {
-                        this.$Progress.finish()
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Submitted'
-                        });
-                        $('#leave_application_modal').modal('hide')
-                        this.loadContent()
-
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    })
-
-                }else if(mode == 2){
-
-                    if(this.form.stage_status == 'Disapproved by the Governor' || this.form.stage == 'Approved by the Governor')
-                    {
-
-                        Swal.fire(
-                            'Oops...',
-                            'Cannot undo Noted By at this stage',
-                            'error'
-                        )
-
-                    }else if(this.form.noted_by_id == null){
-
-                        Swal.fire(
-                            'Oops...',
-                            'Nothing to undo',
-                            'error'
-                        )
-
-                    }else{
-                        Swal.fire({
-                        title: 'Ooops...',
-                        text: "You cannot revert this!!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Proceed'
-                            }).then((result) => {
-                            if(result.isDismissed == true)
-                            {
-                                toast.fire({
-                                    icon: 'success',
-                                    title: 'Cancelled'
-                                });
-                            }else{
-
-                                this.$Progress.start()
-
-                                this.form.noted_by_id = null
-                                this.form.days_with_pay = null
-                                this.form.days_without_pay = null
-                                this.form.others = null
-                                this.form.stage_status = 'Pending Noted By'
-
-                                axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                                .then(response => {
-                                    this.$Progress.finish()
-                                    toast.fire({
-                                        icon: 'success',
-                                        title: 'Submitted'
-                                    });
-                                    $('#leave_application_modal').modal('hide')
-                                    this.loadContent()
-                                })
-                                .catch(error => {
-                                    console.log(error.response.data.message);
-                                })
-
-                            }
-                        })
-                    }
-
-
-                }else if(mode == 3){
-
-                    Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This will skip the Governors approval and approve the application ending the transaction",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed'
-                        }).then((result) => {
-                        if(result.isDismissed == true)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Cancelled'
-                            });
-                        }else{
-
-                            this.$Progress.start()
-
-                            this.form.noted_by_id = this.user.id
-                            this.form.stage_status = 'Approved by the HR Head'
-
-                            axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                            .then(response => {
-                                this.$Progress.finish()
-                                toast.fire({
-                                    icon: 'success',
-                                    title: 'Submitted'
-                                });
-                                $('#leave_application_modal').modal('hide')
-                                this.loadContent()
-                            })
-                            .catch(error => {
-                                console.log(error.response.data.message);
-                            })
-
-                        }
-                    })
-
-                }
-            },
-            governor: function(leaveapplication)
-            {
-                this.form.reset()
-                this.leave_details = leaveapplication
-                this.form.fill(leaveapplication)
-                this.leave_application_id = leaveapplication.id
-                this.submit_mode = 'gov'
-                this.calculate()
-
-                if(leaveapplication.stage_status == 'Disapproved by the Governor')
-                {
-                    this.gov_approval = 0
-                }
-
-                 if(leaveapplication.stage_status == 'Pending Governor Approval')
-                {
-
-                    this.modal = true
-                    $('#leave_application_modal').modal('show')
-
-                }else if(leaveapplication.stage_status == 'Approved by the Governor' || leaveapplication.stage_status == 'Disapproved by the Governor'){
-
-                    Swal.fire({
-                    title: 'Ooops...',
-                    text: "Employee leave is already reviewed!!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed to edit'
-                        }).then((result) => {
-                        if(result.isDismissed == true)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Cancelled'
-                            });
-                        }else{
-
-                            this.modal = true
-                            $('#leave_application_modal').modal('show')
-
-                        }
-                    })
-
-                }else{
-                    Swal.fire(
-                        'Oops...',
-                        leaveapplication.stage_status,
-                        'error'
-                    )
-                }
-            },
-            submit_governor: function(mode)
-            {
-                if(mode == 1)
-                {
-
-                    this.$Progress.start()
-
-                    this.form.governor_id = this.user.id
-
-                    if(this.gov_approval == 0)
-                    {
-                        this.form.stage_status = 'Disapproved by the Governor'
-                    }else{
-                        this.form.stage_status = 'Approved by the Governor'
-                        this.form.disapproved_due_to = null
-                    }
-
-                    axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                    .then(response => {
-                        this.$Progress.finish()
-                        toast.fire({
-                            icon: 'success',
-                            title: 'Submitted'
-                        });
-                        $('#leave_application_modal').modal('hide')
-                        this.loadContent()
-
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.message);
-                    })
-
-                }else if(mode == 2 && this.form.governor_id != null){
-
-
-                    Swal.fire({
-                    title: 'Ooops...',
-                    text: "You cannot revert this!!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Proceed'
-                        }).then((result) => {
-                        if(result.isDismissed == true)
-                        {
-                            toast.fire({
-                                icon: 'success',
-                                title: 'Cancelled'
-                            });
-                        }else{
-
-                            this.$Progress.start()
-
-                            this.form.governor_id = null
-                            this.form.disapproved_due_to = null
-                            this.form.stage_status = 'Pending Governor Approval'
-
-                            axios.patch('api/leaveapplication/'+this.leave_application_id, this.form)
-                            .then(response => {
-                                this.$Progress.finish()
-                                toast.fire({
-                                    icon: 'success',
-                                    title: 'Submitted'
-                                });
-                                $('#leave_application_modal').modal('hide')
-                                this.loadContent()
-                            })
-                            .catch(error => {
-                                console.log(error.response.data.message);
-                            })
-
-                        }
-                    })
-                }else if(mode == 2 && this.form.governor_id == null){
-                    Swal.fire(
-                        'Oops...',
-                        'Nothing to undo',
-                        'error'
-                    )
-                }
+            // fetch departments
+            getDepartments: function(){
+                axios.get('api/department')
+                .then(response => {
+                    this.departments = response.data
+                })
+                .catch(e => {
+                    console.log(e)
+                })
             }
         },
         created() {
-            this.$Progress.start()
-            this.load_user()
-            this.loadContent()
-            this.getAllLeave()
-            this.$Progress.finish()
+            this.getUserDepartment()
         },
         mounted() {
+            // Attach Bootstrap modal event listeners
+            $(this.$refs.leaveModal).on('shown.bs.modal', () => {
+                this.isModalOpen = true;
+            });
+
+            $(this.$refs.leaveModal).on('hidden.bs.modal', () => {
+                this.isModalOpen = false;
+            });
+            this.getLeaveApplications()
+            this.getLeaveTypes()
+            this.getDepartments()
             console.log('Component mounted.')
         }
     }

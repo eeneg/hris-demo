@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Add Item Modal -->
         <div class="modal fade" id="add-leavetype-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -69,7 +69,7 @@
                         <div class="modal-body">
                             <div class="form-group" style="margin-bottom: 0.3rem;">
                                 <label for="title" style="margin: 0;">Type</label>
-                                <input v-model="form.title" type="text" class="form-control form-control-border border-width-2" name="title" id="title" placeholder="Leave Type" requiredclass="form-control" 
+                                <input v-model="form.title" type="text" class="form-control form-control-border border-width-2" name="title" id="title" placeholder="Leave Type" requiredclass="form-control"
                                     :class="{ 'is-invalid': form.errors.has('title') }">
                                 <has-error :form="form" field="title"></has-error>
                             </div>
@@ -87,7 +87,8 @@
                                 <div class="col-4" style="padding-left: 5px;">
                                     <div class="form-group" style="margin-bottom: 0.3rem;">
                                         <label for="abbreviation" style="margin: 0;">Abbreviation</label>
-                                        <input v-model="form.abbreviation" type="text" class="form-control form-control-border border-width-2" name="abbreviation" id="abbreviation" placeholder="Abbreviation">
+                                        <input v-model="form.abbreviation" type="text" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': form.errors.has('abbreviation') }" name="abbreviation" id="abbreviation" placeholder="Abbreviation">
+                                        <has-error :form="form" field="abbreviation"></has-error>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +144,7 @@
             },
             addNewTypeModal() {
                 $('#add-leavetype-modal').modal('show');
-            }, 
+            },
             addLeaveType() {
                 this.$Progress.start();
                 this.form.post('api/leavetype')

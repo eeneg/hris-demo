@@ -32,7 +32,8 @@ class LeaveTypeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'unique:leave_types',
+            'title' => 'required|unique:leave_types',
+            'abbreviation' => 'required|unique:leave_types',
         ]);
 
         return LeaveType::create($request->all());
@@ -60,7 +61,8 @@ class LeaveTypeController extends Controller
     {
         $leavetype = LeaveType::findOrFail($id);
         $this->validate($request, [
-            'title' => 'unique:leave_types,title,'.$leavetype->id,
+            'title' => 'required|unique:leave_types,title,'.$leavetype->id,
+            'abbreviation' => 'required|unique:leave_types,abbreviation,'.$leavetype->id,
         ]);
         $leavetype->update($request->all());
     }
