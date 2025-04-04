@@ -346,32 +346,13 @@
                                         <div>
                                             <label for="religion">Religion</label>
                                         </div>
-                                        <select name="religion" id="religion" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': errors && errors.has('religion') }" v-model="form.religion" placeholder="Religion">
-                                            <option value="None">None</option>
-                                            <option value="Roman Catholic">Roman Catholic</option>
-                                            <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
-                                            <option value="Islam">Islam</option>
-                                            <option value="Evangelical (Born Again Christian)">Evangelical (Born Again Christian)</option>
-                                            <option value="Aglipayan (Philippine Independent Church)">Aglipayan (Philippine Independent Church)</option>
-                                            <option value="Seventh-day Adventist">Seventh-day Adventist</option>
-                                            <option value="Jehovah's Witnesses">Jehovah's Witnesses</option>
-                                            <option value="United Methodist">United Methodist</option>
-                                            <option value="Baptist">Baptist</option>
-                                            <option value="Pentecostal">Pentecostal</option>
-                                            <option value="Church of Christ">Church of Christ</option>
-                                            <option value="Latter-day Saints (Mormon)">Latter-day Saints (Mormon)</option>
-                                            <option value="Eastern Orthodox">Eastern Orthodox</option>
-                                            <option value="Buddhism">Buddhism</option>
-                                            <option value="Hinduism">Hinduism</option>
-                                            <option value="Judaism">Judaism</option>
-                                            <option value="Unitarian">Unitarian</option>
-                                            <option value="Scientology">Scientology</option>
-                                            <option value="Bahá'í Faith">Bahá'í Faith</option>
-                                            <option value="Animism/Indigenous Beliefs">Animism/Indigenous Beliefs</option>
-                                            <option value="Atheist">Atheist</option>
-                                            <option value="Agnostic">Agnostic</option>
-                                            <option value="Others">Others</option>
-                                        </select>
+                                        <v-select
+                                            v-model="form.religion"
+                                            :options="religions"
+                                            label="Religion"
+                                            class="form-control form-control-border border-width-2"
+                                            :class="{ 'is-invalid': errors && errors.has('religion') }"
+                                        ></v-select>
                                         <span>
                                             <strong class="text-danger" v-if="errors.has('religion')">Field Required</strong>
                                         </span>
@@ -1733,6 +1714,32 @@
                 oldData: {},
                 edits: [],
                 errors: new Errors(),
+                religions: [
+                    "None",
+                    "Roman Catholic",
+                    "Iglesia ni Cristo",
+                    "Islam",
+                    "Evangelical (Born Again Christian)",
+                    "Aglipayan (Philippine Independent Church)",
+                    "Seventh-day Adventist",
+                    "Jehovah's Witnesses",
+                    "United Methodist",
+                    "Baptist",
+                    "Pentecostal",
+                    "Church of Christ",
+                    "Latter-day Saints (Mormon)",
+                    "Eastern Orthodox",
+                    "Buddhism",
+                    "Hinduism",
+                    "Judaism",
+                    "Unitarian",
+                    "Scientology",
+                    "Bahá'í Faith",
+                    "Animism/Indigenous Beliefs",
+                    "Atheist",
+                    "Agnostic",
+                    "Others"
+                ],
                 indigenousTribes: [
                     //No
                     "No",
@@ -1885,6 +1892,22 @@
                     )
                 })
            }
+        },
+        watch: {
+            'form.indigenous_people': function(newValue, oldValue)
+            {
+                if(newValue === 'No')
+                {
+                    this.form.other_indigenous_people = '';
+                }
+            },
+            'form.disability': function(newValue, oldValue)
+            {
+                if(newValue === 'No')
+                {
+                    this.form.other_disability = '';
+                }
+            },
         },
         methods:
         {

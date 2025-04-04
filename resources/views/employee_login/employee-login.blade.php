@@ -45,6 +45,7 @@
                         <div class="form-label-group">
                             <select name="nameextension" id="emp_ext" class="form-control form-control-border @error('nameextension') is-invalid @enderror" name="nameextension">
                                 <option value="" disabled selected>Name Extension</option>
+                                <option value="">None</option>
                                 <option value="Jr." {{ old('nameextension') == 'Jr.' ? 'selected' : '' }}>Jr.</option>
                                 <option value="Sr." {{ old('nameextension') == 'Sr.' ? 'selected' : '' }}>Sr.</option>
                                 <option value="I"   {{ old('nameextension') == 'I' ? 'selected' : '' }}>I</option>

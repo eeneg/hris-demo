@@ -23,12 +23,17 @@
                     <div class="form-label-group">
                         <input id="emp_barcode" type="password" class="form-control input @error('barcode') is-invalid @enderror" name="barcode" placeholder="Scan Barcode" autofocus required>
                         <span class="underline"></span>
-                        <label class="text-muted label-input" for="emp_barcode">Scan Barcode</label>
+                        <label class="text-muted label-input" for="emp_barcode">Input Barcode</label>
                         @error('barcode')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            {{ __('Login') }}
+                        </button>
                     </div>
                 </form>
             </div>
