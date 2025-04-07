@@ -52,7 +52,7 @@ class EmployeeController extends Controller
 
         $employee_plantilla = PlantillaContent::where('plantilla_id', $plantilla->id)->where('personal_information_id', Auth::user()->id)->first();
 
-        $position = Position::find($plantilla->position_id);
+        $position = Position::find($employee_plantilla->position_id);
         $department = $position ? Department::find($position->department_id) : null;
         $salary = $employee_plantilla->salaryproposed->amount;
 

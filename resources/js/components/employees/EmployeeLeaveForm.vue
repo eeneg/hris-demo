@@ -251,6 +251,8 @@ import moment from 'moment';
                 .then(({data}) => {
                     this.form.personal_information_id = data.id
                     this.employee = data.fullName
+                    this.form.department = data.department
+                    this.form.position = data.position
                     this.form.salary = data.salary
                     this.$Progress.finish();
                 })
