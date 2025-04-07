@@ -260,8 +260,6 @@ import moment from 'moment';
                     console.log(e)
                 })
 
-                console.log(mode, id)
-
                 if(mode == 2)
                 {
                     this.getApplication(id)
@@ -307,8 +305,6 @@ import moment from 'moment';
                 }
 
                 this.form.stage_status = 'pending_recommendation'
-
-                console.log(this.form)
 
                 // this.$Progress.start();
 
