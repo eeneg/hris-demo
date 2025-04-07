@@ -108,6 +108,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('editleavesummary', 'Api\LeaveCreditController@editleavesummary');
     Route::post('slp_fl_leave', 'Api\LeaveCreditController@slp_fl_leave');
     Route::get('getEmployeesByDepartment/{id}', 'Api\LeaveCreditController@getEmployeesByDepartment');
+    Route::get('getLeaveTypes', 'Api\LeaveApplicationController@getLeaveTypes');
 
     Route::post('checkChanges', 'Api\LeaveApplicationController@checkChanges');
 
