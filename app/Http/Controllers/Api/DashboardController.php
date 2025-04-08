@@ -15,6 +15,7 @@ use App\Appointment;
 use App\Position;
 use App\Department;
 use App\PersonalInformation;
+use App\Reappointment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -40,22 +41,51 @@ class DashboardController extends Controller
             ->whereHas('personalinformation', function ($q) {
                 $q->whereRaw("DAYOFYEAR(STR_TO_DATE(CONCAT(YEARWEEK(NOW(), 1),'Monday'), '%x%v %W')) <= DAYOFYEAR(birthdate) AND DAYOFYEAR(STR_TO_DATE(CONCAT(YEARWEEK(NOW(), 1),'Sunday'), '%x%v %W')) >=  DAYOFYEAR(birthdate)");
             })->get();
-            
-        $onLeaveEmployees = LeaveApplication::has('personalinformation')->with('personalinformation')
-            ->whereBetweenColumns('from', ['from', 'to'])
+
+        $onLeaveEmployees = LeaveApplication::select(
+                'id',
+                'personal_information_id',
+                'leave_type_id',
+                'inclusive_dates',
+                'application_stage',
+            )
+            ->has('personalinformation')
+            ->with(['personalinformation' => function($query){
+                $query->without(
+                    'barcode',
+                    'familybackground',
+                    'residentialaddresstable',
+                    'permanentaddresstable',
+                    'children',
+                    'educationalbackground',
+                    'eligibilities',
+                    'otherinfos',
+                    'workexperiences',
+                    'voluntaryworks',
+                    'trainingprograms',
+                    'pdsquestion'
+                )
+                ->select(
+                    'id',
+                    'firstname',
+                    'surname',
+                    'picture'
+                );
+            }])
+            ->with(['leavetype' => function($query){
+                $query->select('id', 'title');
+            }])
             ->where(function($query){
-                $query->where('stage_status', 'Approved by the HR Head')
-                ->orWhere('stage_status', 'Approved by the Governor	');
+                $query->where('inclusive_dates->mode', 2)
+                    ->where('inclusive_dates->data->start', '<=', Carbon::now())
+                    ->where('inclusive_dates->data->end', '>=', Carbon::now());
             })
-            ->get()
-            ->map(function($employee){
-                return [
-                    'name' => $employee->personalinformation->firstname . ' '. $employee->personalinformation->surname,
-                    'leaveType' => LeaveType::find($employee->leave_type_id)->title,
-                    'dates' => $employee->from . ' - ' . $employee->to,
-                    'avatar' => $employee->personalinformation->picture
-                ];
-            });
+            ->orWhere(function($query){
+                $query->where('inclusive_dates->mode', 3)
+                    ->where('inclusive_dates->data', 'like', '%' . now()->toDateString() . '%');
+            })
+            ->where('application_stage', 'approved')
+            ->get();
 
         $newlyAppointedEmployees = Appointment::has('personalinformation')
             ->with('personalinformation')
@@ -74,6 +104,11 @@ class DashboardController extends Controller
                 ];
             });
 
+        $reappointments = Reappointment::whereBetween('termination_date', [
+            Carbon::now(),
+            Carbon::now()->addDays(30)
+        ])->orWhere('termination_date', '<', Carbon::now())->get();
+
         $data = [
             'newlyAppointedEmployees' => $newlyAppointedEmployees,
             'newlyAppointedEmployeesCount' => $newlyAppointedEmployees->count(),
@@ -83,8 +118,9 @@ class DashboardController extends Controller
             'retired_employees' => count($retired_employees),
             'birthdays' => new BirthdaysResource($birthdays),
             'audits' => Audit::with(['user'])->latest('created_at')->take(15)->get(),
-            'announcements' => Activity::whereType('announcement')->latest('created_at')->take(5)->get(),
-            'events' => Activity::whereType('event')->whereDate('time', '>=', now())->latest('time')->take(5)->get(),
+            'announcements' => Activity::with('attachments')->whereType('announcement')->latest('created_at')->take(5)->get(),
+            'events' => Activity::with('attachments')->whereType('event')->whereDate('time', '>=', now())->latest('time')->take(5)->get(),
+            'reappointments' => $reappointments
         ];
 
         return $data;

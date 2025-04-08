@@ -86,15 +86,25 @@
 							</div>
 						</div>
 						<!-- /.card-header -->
-						<div class="card-body">
+						<div class="card-body" style="overflow: auto; max-height: 28rem;">
 							<ul class="todo-list ui-sortable" data-widget="todo-list">
-								<li v-for="announcement in data_set.announcements">
+								<li class="mt-2" v-for="announcement in data_set.announcements">
 									<!-- drag handle -->
 									<a :href="'activities-edit?id=' + announcement.id">
 										<span class="handle ui-sortable-handle">
 											<i class="fas fa-bullhorn"></i>
 										</span>
 										<div class="text"> {{ announcement.title }} </div>
+                                        <div class="ml-3 mt-2" v-if="announcement.attachments.length > 0">
+                                            <label for="">Attachments:</label>
+                                            <ul>
+                                                <li v-for="file in announcement.attachments">
+                                                    <a :href="file.path + file.id + '.pdf'" class="" target="_blank" style="max-width: 200px;">
+                                                        {{ file.file_name }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
 									</a>
 								</li>
 							</ul>
@@ -116,9 +126,9 @@
 								</button>
 							</div>
 						</div>
-						<div class="card-body ">
+						<div class="card-body " style="overflow: auto; max-height: 28rem;">
 							<template v-for="(event, i) in data_set.events">
-								<div class="widget-49">
+								<div class="widget-49 border rounded p-2 cursor-pounter" role="button" data-toggle="collapse" :data-target="'#collapseExample'+i" aria-expanded="false" aria-controls="collapseExample">
 									<div class="widget-49-title-wrapper">
 										<div class="widget-49-date-primary">
 											<span class="widget-49-date-day">{{ event.time | moment_filter('DD') }}</span>
@@ -129,7 +139,19 @@
 											<span class="widget-49-meeting-time text-monospace">{{ event.time | moment_filter('LT') }} - {{ event.info.substring(0,30) }}</span>
 										</div>
 									</div>
-								</div>
+                                    <div class="collapse mt-2" :id="'collapseExample'+i" v-if="event.attachments.length > 0">
+                                        <div class="p-0">
+                                            <p>Attachments:</p>
+                                            <ul>
+                                                <li v-for="file in event.attachments">
+                                                    <a :href="file.path + file.id + '.pdf'" class="" target="_blank" style="max-width: 200px;">
+                                                        {{ file.file_name }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
 								<hr v-if="i !== data_set.events.length - 1">
 							</template>
 						</div>
@@ -153,7 +175,7 @@
 							</div>
 						</div>
 						<!-- /.card-header -->
-						<div class="card-body p-0">
+						<div class="card-body p-0" style="overflow: auto; max-height: 28rem; height: 28rem;">
 							<div class="col-md-12" style="display: flex; flex-wrap: wrap; max-height: 339.6px; overflow: auto;">
 								<div v-for="(employee, index) in data_set.newlyAppointedEmployees" :key="index" class="col-md-3 col-6" style="text-align: center; padding: 5px;">
 									<img :src="getAvatar(employee.avatar)" class="text-center rounded-circle" alt="avatar" width="100px" height="100px">
@@ -168,7 +190,7 @@
 						</div>
 						<!-- /.card-body -->
 						<div class="card-footer text-center">
-                            <router-link to="/appointments" class="nav-link float-right">View All Newly Appointed</router-link>
+                            <router-link to="/appointments" class="uppercase float-right">View All Newly Appointed</router-link>
 						</div>
 						<!-- /.card-footer -->
 					</div>
@@ -182,7 +204,7 @@
 							</div>
 						</div>
 						<!-- /.card-header -->
-						<div class="card-body">
+						<div class="card-body" style="overflow: auto; max-height: 28rem; height: 28rem;">
 							<div class="table-responsive">
 								<table class="table m-0 table-hover table-sm">
 									<thead>
@@ -239,24 +261,24 @@
 							</div>
 						</div>
 						<!-- /.card-header -->
-						<div class="card-body p-0">
+						<div class="card-body p-0" style="overflow: auto; max-height: 28rem; height: 28rem;">
 							<ul class="products-list product-list-in-card pl-2 pr-2">
 								<li class="item" v-for="employees in data_set.onLeaveEmployees" :key="employees.id">
 									<div class="product-img">
 										<img :src="getAvatar(employees.avatar)" alt="avatar" class="img-size-50">
 									</div>
 									<div class="product-info">
-										<a href="javascript:void(0)" class="product-title"> {{ employees.name }} <small class="product-description"> {{ employees.dates }} </small>
+										<a href="javascript:void(0)" class="product-title"> {{ employees.personalinformation.fullName }}
 										</a>
-										<span class="product-description"> {{ employees.leaveType }} </span>
+										<span class="product-description"> {{ employees.leavetype.title }} </span>
 									</div>
 								</li>
 								<!-- /.item -->
 							</ul>
 						</div>
 						<!-- /.card-body -->
-						<div class="card-footer text-center">
-							<router-link to="leave-applications" class="uppercase">View All On-Leave Employees</router-link>
+						<div class="card-footer clearfix">
+							<router-link to="leave-applications" class="uppercase float-right">View All On-Leave Employees</router-link>
 						</div>
 						<!-- /.card-footer -->
 					</div>
@@ -272,7 +294,7 @@
 							</div>
 						</div>
 						<!-- /.card-header -->
-						<div class="card-body p-0">
+						<div class="card-body p-0" style="overflow: auto; max-height: 28rem;">
 							<ul class="products-list product-list-in-card pl-2 pr-2">
 								<li class="item" v-for="employee in data_set.birthdays" :key="employee.fullName">
 									<div class="product-img">
@@ -292,7 +314,7 @@
 							</ul>
 						</div>
 						<!-- /.card-body -->
-						<div class="card-footer text-center">
+						<div class="card-footer text-center" style="height: 3rem;">
 							<!-- <a href="javascript:void(0)" class="uppercase">View All Birthdays This Month</a> -->
 						</div>
 						<!-- /.card-footer -->
@@ -347,6 +369,7 @@
 					data
 				}) => {
 					this.data_set = data;
+                    console.log(data)
 				}).catch(error => {
 					console.log(error.response.data.message);
 				});
