@@ -37,11 +37,11 @@ class CreateLeaveApplicationsTable extends Migration
             $table->json('recommendation_officer')->nullable();
             $table->boolean('recommendation_approved')->nullable(); //string to boolean
             $table->string('recommendation_disapproved_due_to')->nullable();//recommendation_remark_approved to recommendation_remark
-            $table->string('leave_type_others');
+            $table->string('leave_type_others')->nullable();
             $table->boolean('final');   //final or draft boolean
             $table->double('days_with_pay');
             $table->double('days_without_pay');
-            $table->string('approved_for_others');
+            $table->string('approved_for_others')->nullable();
             $table->json('noted_by_officer'); // noted by officer details (name, position, date)
             $table->boolean('noted_by_approved'); //boolean
             $table->string('noted_disapproved_due_to')->nullable(); //noted_disapproved_due_to remark

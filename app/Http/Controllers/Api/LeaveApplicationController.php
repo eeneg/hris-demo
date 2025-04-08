@@ -316,7 +316,6 @@ class LeaveApplicationController extends Controller
             'application_stage' => 'required',
             'days_with_pay' => 'required',
             'days_without_pay' => 'required',
-            'approved_for_others' => 'required',
         ],
         [
             'personal_information_id.required' => 'The employee field is required.',

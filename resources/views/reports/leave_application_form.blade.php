@@ -312,8 +312,29 @@
                         <div style="margin-left: 2%">
                             INCLUSIVE DATES
                         </div>
-                        <div style="border-bottom: 1px solid; width: 60%; height: 15px; margin-bottom: 10px; text-align:center">
-                            {{ 'asd' }}
+                        <div style="border-bottom: 1px solid; width: 60%; min-height: 15px; margin-bottom: 10px; text-align:center">
+                            @switch($leave->inclusive_dates->mode)
+                                @case(3)
+                                    @php
+                                        $date = collect($leave->inclusive_dates->data)
+                                                ->values()
+                                                ->sort()
+                                                ->map(fn ($date) => ['month'=> Carbon\Carbon::parse($date->date)->setTimeZone('Asia/Manila')->format('Y-m'), 'date' => Carbon\Carbon::parse($date->date)->setTimeZone('Asia/Manila')->format('d')])
+                                                ->groupBy('month')
+                                                ->map(function ($entry) {
+                                                    return Carbon\Carbon::parse($entry[0]['month'])->format('M') . ' ' . collect($entry)->map(fn ($e) => $e['date'])->join(', ') . ' ' . Carbon\Carbon::parse($entry[0]['month'])->format('Y');
+                                            })->join(' - ');
+                                    @endphp
+                                        {{ collect($date)->join(' , ') }}
+                                    @break
+                                @case(2)
+                                    {{
+                                        Carbon\Carbon::parse($leave->inclusive_dates->data->start)->format('F d, Y')
+                                        . ' to ' .
+                                        Carbon\Carbon::parse($leave->inclusive_dates->data->end)->format('F d, Y')
+                                    }}
+                                    @break
+                            @endswitch
                         </div>
                     </div>
                     <div class="ordinary-text" style="padding: 10px;">
