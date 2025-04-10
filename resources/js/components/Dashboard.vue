@@ -160,6 +160,59 @@
 						</div>
 					</div>
 				</section>
+                <section class="col-lg-12 connectedSortable ui-sortable">
+                    <div class="card card-margin">
+						<div class="card-header">
+							<h3 class="card-title">Reassigments</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-0" style="overflow: auto; max-height: 15rem; height: 15rem;">
+							<table class="table m-0 table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Assigned from</th>
+                                        <th>Reassigned to</th>
+                                        <th>Termination Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="cursor-pointer" v-for="reappointment in data_set.reappointments">
+                                        <td>
+                                            <div>
+                                                {{ reappointment.personalinformation.fullName }}
+                                            </div>
+                                            <div class="text-gray">
+                                                {{ reappointment.type }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="text-capitalize">{{ reappointment.dept_from }}</span>
+                                        </td>
+                                        <td>
+                                            {{ reappointment.dept_to }}
+                                        </td>
+                                        <td>
+                                            <span
+                                                :class="
+                                                    {
+                                                        'badge badge-warning' : checkDate(reappointment.termination_date) < 30,
+                                                        'badge badge-danger' : checkDate(reappointment.termination_date) < 0,
+                                                    }
+                                            ">
+                                                {{ reappointment.termination_date }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+						</div>
+					</div>
+                </section>
 				<!-- Left col -->
 				<section class="col-lg-8 connectedSortable ui-sortable">
 					<!-- Custom tabs (Charts with tabs)-->
@@ -364,12 +417,19 @@
 			}
 		},
 		methods: {
+            checkDate: function(date) {
+                const now = moment();
+                const target = moment(date);
+                const daysDiff = target.diff(now, 'days');
+
+                return daysDiff
+            },
+
 			loadData() {
 				axios.get('api/dashboard').then(({
 					data
 				}) => {
 					this.data_set = data;
-                    console.log(data)
 				}).catch(error => {
 					console.log(error.response.data.message);
 				});

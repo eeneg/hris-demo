@@ -104,10 +104,55 @@ class DashboardController extends Controller
                 ];
             });
 
-        $reappointments = Reappointment::whereBetween('termination_date', [
-            Carbon::now(),
-            Carbon::now()->addDays(30)
-        ])->orWhere('termination_date', '<', Carbon::now())->get();
+
+            $default_plantilla = Setting::where('title', 'Default Plantilla')->first();
+        $plantilla = Plantilla::where('year', $default_plantilla->value)->first();
+
+        $reappointments = Reappointment::
+        with([
+                'personalinformation' => function($query){
+                    $query->without(
+                        'barcode',
+                        'familybackground',
+                        'residentialaddresstable',
+                        'permanentaddresstable',
+                        'children',
+                        'educationalbackground',
+                        'eligibilities',
+                        'otherinfos',
+                        'workexperiences',
+                        'voluntaryworks',
+                        'trainingprograms',
+                        'pdsquestion'
+                    )
+                    ->select(
+                        'id',
+                        'firstname',
+                        'surname',
+                        'middlename',
+                        'nameextension',
+                        'picture'
+                    );
+                }
+            ])
+            ->select(
+                'reappointments.*',
+                'assigned_from_table.title as dept_from',
+                'assigned_to_table.title as dept_to',
+            )
+            ->leftJoin('plantilla_contents', 'reappointments.personal_information_id', '=', 'plantilla_contents.personal_information_id')
+            ->leftJoin('positions', 'plantilla_contents.position_id', '=', 'positions.id')
+            ->leftJoin('departments as assigned_from_table', 'positions.department_id', '=', 'assigned_from_table.id')
+            ->leftJoin('departments as assigned_to_table', 'reappointments.assigned_to', '=', 'assigned_to_table.id')
+            ->where('plantilla_contents.plantilla_id',$plantilla->id)
+            ->where(function($query){
+                $query->whereBetween('termination_date', [
+                    Carbon::now(),
+                    Carbon::now()->addDays(30)
+                ])
+                ->orWhere('termination_date', '<', Carbon::now());
+            })
+            ->get();
 
         $data = [
             'newlyAppointedEmployees' => $newlyAppointedEmployees,

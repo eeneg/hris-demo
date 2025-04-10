@@ -181,6 +181,11 @@ class PersonalInformation extends Authenticatable
         return $this->hasOne('App\SALN');
     }
 
+    public function reappointment()
+    {
+        return $this->hasMany('App\Reappointment', 'personal_information_id');
+    }
+
     public function getlatestplantillacontent()
     {
         return $this->plantillacontents()->latest()->first();

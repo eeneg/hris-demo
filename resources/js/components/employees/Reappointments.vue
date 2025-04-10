@@ -20,8 +20,10 @@
                           </div>
                       </div>
                       <div class="col-md-3">
-                        <button class="btn d-inline btn-success" @click="openAdvancedSearchModal">Advanced Search <i class="fas fa-search"></i></button>
-                        <button class="btn d-inline btn-warning" @click="print">Print <i class="fas fa-print"></i></button>
+                        <button type="button" class="btn btn-secondary" @click="openAdvancedSearchModal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                        <button class="btn d-inline btn-primary" @click="print"><i class="fas fa-print"></i></button>
                       </div>
                       <div class="col-md-5">
                           <button type="button" class="btn btn-primary float-right mb-3" @click.prevent="reappointment_modal()">
@@ -67,8 +69,18 @@
                                         </div>
                                       </td>
                                       <td class="text-center">{{ reappointment.effectivity_date }}</td>
-                                      <td class="text-center" :class="{'text-danger' : checkDate(reappointment.termination_date)}">
-                                        {{ reappointment.termination_date }}
+                                      <td>
+                                            <span
+                                                :class="
+                                                    {
+                                                        'badge badge-warning ' : checkDate(reappointment.termination_date) < 30,
+                                                        'badge badge-danger' : checkDate(reappointment.termination_date) < 0,
+                                                    }
+                                                "
+                                                style="font-size: 0.9rem;"
+                                            >
+                                                {{ reappointment.termination_date }}
+                                            </span>
                                       </td>
                                       <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
                                           <div class="btn-group">
@@ -189,12 +201,12 @@
                               <div class="row">
                                   <div class="form-group col-12">
                                       <label for="assigned_to">Reassign From</label>
-                                      <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('assigned_to') }" v-model="searchForm.assigned_from" :options="departments.data" label="title" placeholder="Reassign to" :reduce="departments => departments.id"></v-select>
+                                      <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('assigned_to') }" v-model="searchForm.assigned_from" :options="departments.data" label="title" placeholder="select employee" :reduce="departments => departments.id"></v-select>
                                       <has-error :form="searchForm" field="assigned_to"></has-error>
                                   </div>
                                   <div class="form-group col-12">
                                       <label for="assigned_to">Reassign To</label>
-                                      <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('assigned_to') }" v-model="searchForm.assigned_to" :options="departments.data" label="title" placeholder="Reassign to" :reduce="departments => departments.id"></v-select>
+                                      <v-select class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('assigned_to') }" v-model="searchForm.assigned_to" :options="departments.data" label="title" placeholder="select employee" :reduce="departments => departments.id"></v-select>
                                       <has-error :form="searchForm" field="assigned_to"></has-error>
                                   </div>
                                   <div class="form-group col-6">
@@ -290,7 +302,11 @@ export default {
       }, 600),
 
     checkDate: function(date) {
-        return moment().isBefore(moment(date)) && moment().diff(date, 'days') < 30;
+        const now = moment();
+        const target = moment(date);
+        const daysDiff = target.diff(now, 'days');
+
+        return daysDiff
     },
 
       openAdvancedSearchModal() {

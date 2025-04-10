@@ -22,6 +22,11 @@ class Reappointment extends Auditable
         'id', 'personal_information_id', 'assigned_from', 'assigned_to', 'type', 'position', 'duties', 'effectivity_date', 'termination_date'
     ];
 
+    public function personalinformation()
+    {
+        return $this->belongsTo(PersonalInformation::class, 'personal_information_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();
