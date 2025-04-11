@@ -12,6 +12,7 @@ use App\LeaveType;
 use App\PersonalInformation;
 use App\ServiceRecord;
 use App\EmployeeServiceRecord;
+use App\LeaveSummary;
 use App\Plantilla;
 use App\PlantillaContent;
 use App\Position;
@@ -250,6 +251,22 @@ class EmployeeController extends Controller
         ->find($leave->personal_information_id);
 
         return view('reports.leave_application_form', compact('employee', 'leave'));
+    }
+
+    public function getEmployeeLeaveCard(){
+        $vl = LeaveType::where('title', 'Vacation Leave')->first();
+        $sl = LeaveType::where('title', 'Sick Leave')->first();
+
+        $vl_balance = LeaveCredit::where('personal_information_id', Auth::user()->id)->where('leave_type_id', $vl->id)->first();
+        $sl_balance = LeaveCredit::where('personal_information_id', Auth::user()->id)->where('leave_type_id', $sl->id)->first();
+
+        $leave_card = LeaveSummary::where('personal_information_id', Auth::user()->id)->orderBy('sort')->get();
+
+        return json_encode([
+            'vl_balance' => $vl_balance ?? 0,
+            'sl_balance' => $sl_balance ?? 0,
+            'leave_card' => $leave_card
+        ]);
     }
 
     /**

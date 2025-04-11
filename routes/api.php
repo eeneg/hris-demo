@@ -169,6 +169,7 @@ Route::group(['middleware' => ['auth:employee-api']], function () {
     Route::get('getEmployeeLeaveApplications/{id}', 'Api\EmployeeController@getEmployeeLeaveApplications');
     Route::get('editemployee', 'Api\EmployeeController@edit');
     Route::get('getpdsEdits', 'Api\EmployeeController@getpdsEdits');
+    Route::get('getEmployeeLeaveCard', 'Api\EmployeeController@getEmployeeLeaveCard');
     Route::post('cancelEdits', 'Api\EmployeeController@cancelEdits');
     Route::get('getEmployeeServiceRecord', 'Api\EmployeeController@getEmployeeServiceRecord');
 });

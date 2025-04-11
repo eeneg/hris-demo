@@ -31,9 +31,11 @@
 
                 <!-- Reports -->
                 <div class="row mb-2">
+                    @if ($from && $to)
                     <div class="col-6">
                         <h3 class="m-0"><b>From </b> {{ $from }} to {{ $to }}</h3>
                     </div>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="col-12">

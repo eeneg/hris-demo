@@ -96,6 +96,7 @@ const routes = [
     { path: '/employee-leave-form', component: require('./components/employees/EmployeeLeaveForm.vue').default },
     { path: '/employee-service-record', component: require('./components/servicerecords/ServiceRecords.vue').default },
     { path: '/employee-view-service-record', component: require('./components/employees/EmployeeServiceRecord.vue').default },
+    { path: '/employee-view-leave-card', component: require('./components/employees/EmployeeLeaveCard.vue').default },
     { path: '/requests', component: require('./components/Requests.vue').default },
     { path: '/reports', component: require('./components/reports/Others.vue').default },
     { path: '/nosi', component: require('./components/reports/NOSI.vue').default },

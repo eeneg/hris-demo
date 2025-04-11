@@ -380,7 +380,13 @@
                             <li class="nav-item">
 								<router-link to="/employee-leave-applications" class="nav-link">
 									<i class="nav-icon fas fa-file purple"></i>
-									<p>Leave Application</p>
+									<p>Leave Applications</p>
+								</router-link>
+                            </li>
+                            <li class="nav-item">
+								<router-link to="/employee-view-leave-card" class="nav-link">
+									<i class="nav-icon fas fa-list purple"></i>
+									<p>Leave Card</p>
 								</router-link>
                             </li>
                             <li class="nav-item">
