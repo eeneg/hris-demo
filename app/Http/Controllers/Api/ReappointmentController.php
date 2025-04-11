@@ -102,7 +102,7 @@ class ReappointmentController extends Controller
         }
 
         if($request->sort){
-            $reappointment->orderBy('reappointments.'.$request->sort, 'desc');
+            $reappointment->orderBy('reappointments.'.$request->sort, $request->sort_type ?? 'desc');
         }else{
             $reappointment->orderBy('reappointments.created_at', 'desc');
         }

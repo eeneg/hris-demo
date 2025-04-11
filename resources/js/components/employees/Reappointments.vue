@@ -219,7 +219,7 @@
                                       <input class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('termination_date') }" type="date" v-model="searchForm.termination_date" name="termination_date">
                                       <has-error :form="searchForm" field="termination_date"></has-error>
                                   </div>
-                                  <div class="form-group col-6">
+                                  <div class="form-group col-4">
                                       <label for="type">Type</label>
                                       <select name="type" id="type" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('type') }" v-model="searchForm.type">
                                         <option value="Reassigned">Reassigned</option>
@@ -228,11 +228,18 @@
                                       </select>
                                       <has-error :form="searchForm" field="type"></has-error>
                                   </div>
-                                  <div class="form.group col-6">
+                                  <div class="form.group col-4">
                                     <label for="sort">Sort By</label>
                                     <select name="type" id="type" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('sort') }" v-model="searchForm.sort">
                                         <option value="termination_date" selected>Termination date</option>
                                         <option value="effectivity_date">Effectivity Date</option>
+                                      </select>
+                                  </div>
+                                  <div class="form.group col-4">
+                                    <label for="sort">Ascending/Descending</label>
+                                    <select name="type" id="type" class="form-control form-control-border border-width-2" :class="{ 'is-invalid': searchForm.errors.has('sort_type') }" v-model="searchForm.sort_type">
+                                        <option value="asc" selected>Ascending</option>
+                                        <option value="desc">Descending</option>
                                       </select>
                                   </div>
                               </div>
@@ -287,7 +294,8 @@ export default {
               'effectivity_date': '',
               'termination_date': '',
               'type': '',
-              'sort': ''
+              'sort': '',
+              'sort_type': '',
           })
       }
   },
