@@ -60,7 +60,7 @@
                     </table>
                 </div>
                 <div class="card-footer text-right" style="display: inherit; align-audits: baseline;">
-                    <pagination :data="audits" @pagination-change-page="getResults">
+                    <pagination :data="audits" @pagination-change-page="getResults" :limit="5">
                         <span slot="prev-nav">&lt; Previous</span>
 	                    <span slot="next-nav">Next &gt;</span>
                     </pagination>
