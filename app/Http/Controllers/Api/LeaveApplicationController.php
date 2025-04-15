@@ -449,7 +449,9 @@ class LeaveApplicationController extends Controller
                 'vacation_balance' => 'required',
                 'vacation_less' => 'required|numeric',
                 'sick_balance' => 'required|numeric',
-                'sick_less' => 'required'
+                'sick_less' => 'required',
+                'days_with_pay' => 'required',
+                'days_without_pay' => 'required',
             ],[
                 'name.required' => 'The officer field is required.',
                 'vacation_less.required' => 'This field is required.',
@@ -463,6 +465,8 @@ class LeaveApplicationController extends Controller
                 'vacation_less' => $request->input('vacation_less'),
                 'sick_balance' => $request->input('sick_balance'),
                 'sick_less' => $request->input('sick_less'),
+                'days_with_pay' => $request->input('days_with_pay'),
+                'days_without_pay' => $request->input('days_without_pay'),
                 'credit_officer' => [
                     'personal_information_id' => $request->input('personal_information_id'),
                     'name' => $request->input('name'),

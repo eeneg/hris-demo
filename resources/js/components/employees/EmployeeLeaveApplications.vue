@@ -14,18 +14,29 @@
                         <div class="col-md-6">
                             <button class="btn btn-primary float-right" @click="createApplication">Apply <i class="fas fa-plus"></i></button>
                         </div>
-                        <div class="col-md-6">
-                            <div class="d-flex">
-                                Vacation Leave: {{ credits['Vacation Leave'] }}
-                            </div>
-                            <div>
-                                Sick Leave: {{ credits['Sick Leave'] }}
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 <div class="card-body table-responsive p-0" style="height: 600px;">
+
+                    <div class="col-md-6 py-3">
+                        <div class="col-md-12 p-0">
+                            <div class="d-inline-block" style="width: 12rem;">
+                                {{ 'Vacation Leave Balance:' }}
+                            </div>
+                            <div class="d-inline-block">
+                                {{ credits['Vacation Leave'] ?? 0 }}
+                            </div>
+                        </div>
+                        <div class="col-md-12 p-0">
+                            <div class="d-inline-block" style="width: 12rem;">
+                                {{ 'Sick Leave Balance:' }}
+                            </div>
+                            <div class="d-inline-block">
+                                {{ credits['Sick Leave'] ?? 0 }}
+                            </div>
+                        </div>
+                    </div>
 
                     <table class="table table-striped text-nowrap custom-table">
                         <thead>

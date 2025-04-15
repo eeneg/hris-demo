@@ -67,6 +67,41 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="col-md-12">
+                        <hr>
+                        <h5 class="text-success">Days With/Without Pay</h5>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="days_with_pay">Days with Pay</label>
+                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.days_with_pay" :class="{ 'is-invalid': errors && errors.hasOwnProperty('days_with_pay') }" name="days_with_pay" id="days_with_pay">
+                                    <span class="text-danger" v-if="errors && errors.days_with_pay">
+                                        {{ errors.days_with_pay[0] ?? '' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="days_without_pay">Days without Pay</label>
+                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.days_without_pay" :class="{ 'is-invalid': errors && errors.hasOwnProperty('days_without_pay') }" name="days_without_pay" id="days_without_pay">
+                                    <span class="text-danger" v-if="errors && errors.days_without_pay">
+                                        {{ errors.days_without_pay[0] ?? '' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="approved_for_others">Others(Specify)</label>
+                                    <input type="text" class="form-control form-control-border border-width-2" v-model="form.approved_for_others" :class="{ 'is-invalid': errors && errors.hasOwnProperty('approved_for_others') }" name="approved_for_others" id="approved_for_others">
+                                    <span class="text-danger" v-if="errors && errors.approved_for_others">
+                                        {{ errors.approved_for_others[0] ?? '' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,6 +123,9 @@
                     sick_balance: null,
                     vacation_less: null,
                     sick_less: null,
+                    days_with_pay: null,
+                    days_without_pay: null,
+                    approved_for_others: null,
                     application_stage: 'pending_recommendation',
                     type: 'leave_credit_calculation',
                 }),
@@ -152,6 +190,9 @@
                     sick_balance: this.form.sick_balance,
                     vacation_less: this.form.vacation_less,
                     sick_less: this.form.sick_less,
+                    days_with_pay: this.form.days_with_pay,
+                    days_without_pay: this.form.days_without_pay,
+                    approved_for_others: this.form.approved_for_others,
                     application_stage: this.form.application_stage,
                     type: this.form.type,
                     application_stage: 'pending_recommendation',

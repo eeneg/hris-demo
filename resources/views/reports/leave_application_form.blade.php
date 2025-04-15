@@ -395,7 +395,7 @@
                             </table>
                         </div>
                         <div style="align-content: center; text-align: center; margin-top: 30px;">
-                            <div style="border-bottom: 1px solid; margin: auto; width: 50%;">
+                            <div style="border-bottom: 1px solid; margin: auto; width: 50%; font-size: 13px;">
                                 {{ @$leave->credit_officer->name }}
                             </div>
                             <div>
@@ -469,7 +469,7 @@
                         @endforeach
 
                             <div style="align-content: center; text-align: center; margin-top: 30px;">
-                                <div style="border-bottom: 1px solid; margin: auto; width: 65%;">
+                                <div style="border-bottom: 1px solid; margin: auto; width: 65%; font-size: 13px;">
                                     {{ @$leave->recommendation_officer->name }}
                                 </div>
                                 <div>
@@ -512,8 +512,9 @@
                         </div>
                         <div style="margin-top: 30px; text-align: center;">
                             <div style="margin: auto; width: 50%; min-width: 35%; border-bottom: 1px solid;">
-                                <span style="">
-                                    {{ @$leave->noted_by_officer->name }}
+                                <span style="font-size: 13px;">
+                                    {{-- {{ @$leave->noted_by_officer->name }} --}}
+                                    RAUL D. RAUT, EnP, JD
                                 </span>
                             </div>
                             <div>
@@ -561,8 +562,9 @@
                         </div>
                         <div style="margin-top: 28px; text-align: center;">
                             <div style="margin: auto; width: 50%; min-width: 35%; border-bottom: 1px solid;">
-                                <span style="">
+                                <span style="font-size: 13px;">
                                     {{-- {{ @$leave->governor_approved != 1 || $leave->governor_approved != 0 ? $leave->governor_approval_officer->name : '' }} --}}
+                                    YVONNE R. CAGAS
                                 </span>
                             </div>
                             <div>
