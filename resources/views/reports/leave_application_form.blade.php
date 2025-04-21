@@ -342,11 +342,11 @@
                             6.D COMMUTATION
                         </div>
                         <div class="leave-type">
-                            <input type="checkbox" class="box" {{ $leave->commutation == 'requested' ? 'checked' : '' }}>
+                            <input type="checkbox" class="box" {{ $leave->commutation == 'not_requested' ? 'checked' : '' }}>
                             Not Requested
                         </div>
                         <div class="leave-type">
-                            <input type="checkbox" class="box" {{ $leave->commutation == 'not_requested' ? 'checked' : '' }}>
+                            <input type="checkbox" class="box" {{ $leave->commutation == 'requested' ? 'checked' : '' }}>
                             Requested
                         </div>
                     </div>
