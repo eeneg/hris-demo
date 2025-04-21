@@ -99,7 +99,7 @@
                                 <div>
                                     (LAST)
                                 </div>
-                                <div style="margin-top: 5px;">
+                                <div style="margin-top: 5px; font-size: 13px;">
                                     {{ $employee->surname }}
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                                 <div>
                                     (FIRST)
                                 </div>
-                                <div style="margin-top: 5px;">
+                                <div style="margin-top: 5px; font-size: 13px;">
                                     {{ $employee->firstname }}
                                 </div>
                             </div>
@@ -115,7 +115,7 @@
                                 <div>
                                     (MIDDLE)
                                 </div>
-                                <div style="margin-top: 5px;">
+                                <div style="margin-top: 5px; font-size: 13px;">
                                     {{ $employee->middlename }}
                                 </div>
                             </div>
@@ -125,12 +125,12 @@
                 <div class="" style="height:15px;">
 
                 </div>
-                <div class="" style="font-size: 10px; display: grid; grid-template-columns: 30% 40% 30%; width: 100%; padding: 10px 0; border-top: 1px solid #000;border-bottom: 1px solid #000;">
+                <div class="" style="font-size: 10px; display: grid; grid-template-columns: 30% 50% 20%; width: 100%; padding: 10px 0; border-top: 1px solid #000;border-bottom: 1px solid #000;">
                     <div style="display: flex; width: 100%;">
                         <div style="">
                             3. DATE OF FILING
                         </div>
-                        <div style="width: 30%; margin-left: 5px; border-bottom: 1px solid;">
+                        <div style="width: 30%; margin-left: 5px; text-decoration: underline;">
                             {{$leave->date_of_filing}}
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                         <div>
                             4. POSITION
                         </div>
-                        <div style="margin-left: 5px; border-bottom: 1px solid;">
+                        <div style="margin-left: 5px; text-decoration: underline;">
                             {{ $leave->position }}
                         </div>
                     </div>
@@ -146,7 +146,7 @@
                         <div>
                             5. SALARY
                         </div>
-                        <div style="width: 30%; margin-left: 5px; border-bottom: 1px solid;">
+                        <div style="width: 30%; margin-left: 5px; text-decoration: underline;">
                             {{ $leave->salary }}
                         </div>
                     </div>
@@ -230,7 +230,7 @@
                                     <input type="checkbox" class="box" {{ $leave->spent == 'within_the_philippines' ? 'checked' : '' }}>
                                     Within the Philippines
                                 </div>
-                                <div style="width: 70%; border-bottom: 1px solid; height: 12px; text-align:center;">
+                                <div style="width: 70%; border-bottom: 1px solid; height: 12px; text-align:center; font-size: 10px;">
                                     @if ($leave->spent == 'within_the_philippines')
                                         {{ $leave->spent_specified }}
                                     @endif
@@ -241,7 +241,7 @@
                                     <input type="checkbox" class="box" {{ $leave->spent == 'abroad' ? 'checked' : '' }}>
                                     Abroad (Specify)
                                </div>
-                                <div style="width: 70%; border-bottom: 1px solid; height: 12px; text-align:center;">
+                                <div style="width: 70%; border-bottom: 1px solid; height: 12px; text-align:center; font-size: 10px;">
                                    @if ($leave->spent == 'abroad')
                                        {{ $leave->spent_specified }}
                                    @endif
@@ -255,9 +255,9 @@
                                      <input type="checkbox" class="box" {{ $leave->spent == 'in_hospital' ? 'checked' : '' }}>
                                      In Hospital (Specify Illness)
                                 </div>
-                                 <div style="width: 64%; border-bottom: 1px solid; height: 14px; text-align:center;">
+                                 <div style="width: 64%; border-bottom: 1px solid; height: 14px; text-align:center; font-size: 10px;">
                                      @if ($leave->spent == 'in_hospital')
-                                         {{ $leave->spent_spec }}
+                                         {{ $leave->spent_specified }}
                                      @endif
                                  </div>
                             </div>
@@ -266,9 +266,9 @@
                                      <input type="checkbox" class="box" {{ $leave->spent == 'out_patient' ? 'checked' : '' }}>
                                      Out Patient (Specify Illness)
                                 </div>
-                                 <div style="width: 64%; border-bottom: 1px solid; height: 15px; text-align:center;">
+                                 <div style="width: 64%; border-bottom: 1px solid; height: 15px; text-align:center; font-size: 10px;">
                                      @if ($leave->spent == 'out_patient')
-                                         {{ $leave->spent_spec }}
+                                         {{ $leave->spent_specified }}
                                      @endif
                                  </div>
                             </div>
