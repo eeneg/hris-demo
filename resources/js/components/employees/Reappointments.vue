@@ -10,93 +10,95 @@
               </div>
 
               <div class="card-body">
-                  <div class="row">
-                      <div class="col-md-4">
-                          <div class="input-group mb-3">
-                              <input type="text" name="search" id="search" class="form-control" placeholder="Search" v-model="searchForm.search" @keyup.prevent="searchReappointments()">
-                              <div class="input-group-append">
-                                  <div class="input-group-text"><i class="fas fa-search"></i></div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-3">
-                        <button type="button" class="btn btn-secondary" @click="openAdvancedSearchModal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-filter"></i>
-                        </button>
-                        <button class="btn d-inline btn-primary" @click="print"><i class="fas fa-print"></i></button>
-                      </div>
-                      <div class="col-md-5">
-                          <button type="button" class="btn btn-primary float-right mb-3" @click.prevent="reappointment_modal()">
-                                  Reassign <i class="fas fa-plus"></i>
-                          </button>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="card-body table-responsive p-0" style="height: 600px;">
-                          <table class="table table-striped text-nowrap custom-table">
-                              <thead>
-                                  <tr>
-                                      <th>Name</th>
-                                      <th class="text-center">Reassigned to</th>
-                                      <th class="text-center">Effectivity Date</th>
-                                      <th class="text-center">Termination Date</th>
-                                      <th>Action</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr v-for="(reappointment, index) in reappointments.data" :key="reappointment.id">
-                                      <td>
-                                        <div class="row p-0">
-                                            <div class="col-md-12">
-                                                {{ reappointment.name }}
+                  <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 p-0">
+                            <div class="input-group mb-3">
+                                <input type="text" name="search" id="search" class="form-control" placeholder="Search" v-model="searchForm.search" @keyup.prevent="searchReappointments()">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-search"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col px-2">
+                            <button type="button" class="btn btn-secondary" @click="openAdvancedSearchModal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                            <button class="btn d-inline btn-primary" @click="print"><i class="fas fa-print"></i></button>
+                        </div>
+                        <div class="col-md-5 p-0">
+                            <button type="button" class="btn btn-primary float-right mb-3" @click.prevent="reappointment_modal()">
+                                    Reassign <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card-body table-responsive p-0" style="height: 600px;">
+                            <table class="table table-striped text-nowrap custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th class="text-center">Reassigned to</th>
+                                        <th class="text-center">Effectivity Date</th>
+                                        <th class="text-center">Termination Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(reappointment, index) in reappointments.data" :key="reappointment.id">
+                                        <td>
+                                            <div class="row p-0">
+                                                <div class="col-md-12">
+                                                    {{ reappointment.name }}
+                                                </div>
+                                                <div class="col-md-12 text-gray">
+                                                    {{ reappointment.position }}
+                                                </div>
+                                                <div class="col-md-12 text-gray">
+                                                    <small><i>{{ reappointment.dept_from }}</i></small>
+                                                </div>
                                             </div>
-                                            <div class="col-md-12 text-gray">
-                                                {{ reappointment.position }}
+                                        </td>
+                                        <td>
+                                            <div class="row p-0 text-center">
+                                                <div class="col-md-12">
+                                                    {{ reappointment.dept_to }}
+                                                </div>
+                                                <div class="col-md-12 text-gray">
+                                                    {{ reappointment.type }}
+                                                </div>
                                             </div>
-                                            <div class="col-md-12 text-gray">
-                                                <small><i>{{ reappointment.dept_from }}</i></small>
+                                        </td>
+                                        <td class="text-center">{{ reappointment.effectivity_date }}</td>
+                                        <td>
+                                                <span
+                                                    :class="
+                                                        {
+                                                            'badge badge-warning ' : checkDate(reappointment.termination_date) < 30,
+                                                            'badge badge-danger' : checkDate(reappointment.termination_date) < 0,
+                                                        }
+                                                    "
+                                                    style="font-size: 0.9rem;"
+                                                >
+                                                    {{ reappointment.termination_date }}
+                                                </span>
+                                        </td>
+                                        <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" type="button" @click="edit_reappointments(reappointment)">Edit Appointment</a>
+                                                    <a class="dropdown-item" type="button" @click="delete_reappointment(reappointment.id)">Delete Appointment</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                      </td>
-                                      <td>
-                                        <div class="row p-0 text-center">
-                                            <div class="col-md-12">
-                                                {{ reappointment.dept_to }}
-                                            </div>
-                                            <div class="col-md-12 text-gray">
-                                                {{ reappointment.type }}
-                                            </div>
-                                        </div>
-                                      </td>
-                                      <td class="text-center">{{ reappointment.effectivity_date }}</td>
-                                      <td>
-                                            <span
-                                                :class="
-                                                    {
-                                                        'badge badge-warning ' : checkDate(reappointment.termination_date) < 30,
-                                                        'badge badge-danger' : checkDate(reappointment.termination_date) < 0,
-                                                    }
-                                                "
-                                                style="font-size: 0.9rem;"
-                                            >
-                                                {{ reappointment.termination_date }}
-                                            </span>
-                                      </td>
-                                      <td style="width: calc(100%-150px);" v-if="$gate.isAdministrator()">
-                                          <div class="btn-group">
-                                              <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                  Action
-                                              </button>
-                                              <div class="dropdown-menu">
-                                                  <a class="dropdown-item" type="button" @click="edit_reappointments(reappointment)">Edit Appointment</a>
-                                                  <a class="dropdown-item" type="button" @click="delete_reappointment(reappointment.id)">Delete Appointment</a>
-                                              </div>
-                                          </div>
-                                      </td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                      </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                   </div>
               </div>
 
