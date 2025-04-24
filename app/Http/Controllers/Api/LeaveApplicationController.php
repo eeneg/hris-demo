@@ -266,13 +266,15 @@ class LeaveApplicationController extends Controller
         $department_id = auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
                         UserAssignment::without('department')->where('user_id', auth('api')->user()->id)->first()->department_id : '';
 
-        $is_hr = null;
+        $is_hr = false;
+        $is_gov = false;
 
         if($department_id){
             $is_hr = Department::where('id', $department_id)->first()->title == env('HR_DEPARTMENT');
+            $is_gov = Department::where('id', $department_id)->first()->title == env('GOV_OFFICE');
         }
 
-        return ['is_hr' => $is_hr, 'role' => auth('api')->user()->role];
+        return ['is_hr' => $is_hr, 'is_gov' => $is_gov, 'role' => auth('api')->user()->role];
 
     }
 

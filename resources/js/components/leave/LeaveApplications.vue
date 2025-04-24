@@ -145,7 +145,6 @@
                                                             <a
                                                                 class="dropdown-item"
                                                                 role="button"
-
                                                                 @click="takeAction(leave_application.id, leave_application.personal_information_id, leave_application.application_stage, leave_application)"
                                                             >
                                                                 Resolve
@@ -222,6 +221,8 @@
                                             Specified: <strong> {{ current_leave_application.spent_specified }} </strong>
                                         </div>
                                     </div>
+                                    <div>
+                                </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -240,14 +241,14 @@
                                     ref="recommendation"
                                 />
                                 <LeaveNotedBy
-                                    v-if="isModalOpen && current_application_stage == 'pending_noted_by'"
+                                    v-if="isModalOpen && current_application_stage == 'pending_noted_by' && ((role == 'Office Head' && is_hr) || (role == 'Administrator' || role == 'Author'))"
                                     :leave_application_id="leave_application_id"
                                     :personal_information_id="personal_information_id"
                                     :serverErrors="serverErrors"
                                     ref="noted_by"
                                 />
                                 <LeaveGovernorApproval
-                                    v-if="isModalOpen && current_application_stage == 'pending_governor_approval'"
+                                    v-if="isModalOpen && current_application_stage == 'pending_governor_approval' && ((role == 'Office Head' && is_gov) || (role == 'Administrator' || role == 'Author'))"
                                     :leave_application_id="leave_application_id"
                                     :personal_information_id="personal_information_id"
                                     :serverErrors="serverErrors"
@@ -353,6 +354,7 @@ import Swal from 'sweetalert2';
                 serverErrors: {}, // server errors from child components
                 loading: false, //loading state (disable submit button when true)
                 is_hr: true, // check if office user is hr
+                is_gov: true, // check if office user is governor
                 role: null // user role
             }
         },
@@ -373,6 +375,7 @@ import Swal from 'sweetalert2';
                 axios.get('/api/leaveUserDepartment')
                 .then(response => {
                     this.is_hr = response.data.is_hr
+                    this.is_gov = response.data.is_gov
                     this.role = response.data.role
                 })
                 .catch(error => {
