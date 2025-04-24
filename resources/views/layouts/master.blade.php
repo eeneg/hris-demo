@@ -5,10 +5,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>HRIS - Davao del Sur</title>
+		<title>HRIS</title>{{-- old value:HRIS - Davao del Sur --}}
 
 		{{-- <script src="https://unpkg.com/pdfobject@2.2.4/pdfobject.min.js"></script> --}}
-		<link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/project_files/ddsICON.ico') }}" />
+		<link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/project_files/davsurian.ico') }}" />
 
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 		<link href="{{ asset('css/master.css') }}" rel="stylesheet">
@@ -62,10 +62,10 @@
 			</nav>
 			<!-- /.navbar -->
 			<!-- Main Sidebar Container -->
-			<aside class="main-sidebar sidebar-dark-primary elevation-4 fix">
+			<aside class="main-sidebar sidebar-light-primary elevation-4 fix">
 				<!-- Brand Logo -->
 				<a href="/" class="brand-link">
-					<img src="{{ asset('/storage/project_files/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
+					<img src="{{ asset('/storage/project_files/davsurian.jpg') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
 					<div style="line-height: 1.3;margin-bottom: -5px;">
 						<span class="brand-text font-weight-light" style="font-size: 13px;display: block;">Human Resource</span>
 						<span class="brand-text font-weight-light" style="font-size: 13px;display: block;">Information System</span>
@@ -81,7 +81,7 @@
                             <img src="{{ auth()->user()->avatar == "profile.png" ?  asset('/storage/project_files/profile.png') : asset('/storage/user_avatars/' . auth()->user()->avatar) }}" class="img-circle elevation-2" alt="User Image">
 						</div>
 						<div class="info">
-							<router-link to="/profile" class="d-block" style="background-color: unset !important;color: #C2C7D0 !important;">
+							<router-link to="/profile" class="d-block" style="background-color: unset !important;color: #3f3f3f !important;">
 								{{ auth()->user()->name }}
 								<p style="margin: 0;line-height: 0.6rem;font-size: 0.7rem;">{{ auth()->user()->role }}</p>
 							</router-link>

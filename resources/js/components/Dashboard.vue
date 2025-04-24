@@ -10,7 +10,7 @@
 			<div class="row">
 				<div class="col-lg-3 col-6">
 					<!-- small box -->
-					<div class="small-box bg-info">
+					<div class="small-box bg-cyan">
 						<div class="inner">
 							<h3>{{ data_set.vacant_positions }}</h3>
 							<p>Vacant Positions</p>
@@ -24,7 +24,7 @@
 				<!-- ./col -->
 				<div class="col-lg-3 col-6">
 					<!-- small box -->
-					<div class="small-box bg-success">
+					<div class="small-box bg-cyan">
 						<div class="inner">
 							<h3>{{ data_set.active_employees }}
 								<sup style="font-size: 20px"></sup>
@@ -41,7 +41,7 @@
 				<!-- ./col -->
 				<div class="col-lg-3 col-6">
 					<!-- small box -->
-					<div class="small-box bg-warning">
+					<div class="small-box bg-cyan">
 						<div class="inner">
 							<h3>{{data_set.newlyAppointedEmployeesCount}}</h3>
 							<p>Newly Appointed</p>
@@ -56,7 +56,7 @@
 				<!-- ./col -->
 				<div class="col-lg-3 col-6">
 					<!-- small box -->
-					<div class="small-box bg-danger">
+					<div class="small-box bg-cyan">
 						<div class="inner">
 							<h3>{{ data_set.retired_employees }}</h3>
 							<p>Retired Employees</p>
