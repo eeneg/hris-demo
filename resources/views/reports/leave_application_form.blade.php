@@ -349,6 +349,13 @@
                             <input type="checkbox" class="box" {{ $leave->commutation == 'requested' ? 'checked' : '' }}>
                             Requested
                         </div>
+                        <div style="align-content: center; text-align: center; margin-top: 20px;">
+                            <div style="border-bottom: 1px solid; margin: auto; width: 70%; font-size: 13px;">
+                            </div>
+                            <div>
+                                (Signature of Applicant)
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div style="border:1px solid; font-weight:bold; text-align:center; font-size: 15px;">
