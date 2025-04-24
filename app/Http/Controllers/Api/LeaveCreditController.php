@@ -12,6 +12,7 @@ use App\PersonalInformation;
 use App\Plantilla;
 use App\PlantillaContent;
 use App\Position;
+use App\Services\LeaveService;
 use App\Setting;
 use App\UserAssignment;
 use Carbon\Carbon;
@@ -21,6 +22,12 @@ use Illuminate\Support\Str;
 
 class LeaveCreditController extends Controller
 {
+
+    public function __construct(LeaveService $leaveService)
+    {
+        $this->leaveService = $leaveService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -72,26 +79,6 @@ class LeaveCreditController extends Controller
             ->orderBy('surname')
             ->get();
         }else{
-            // $employee = PlantillaContent::without('plantilla', 'salaryauthorized', 'salaryproposed', 'position')
-            // ->select(
-            //     'plantilla_contents.id',
-            //     'plantilla_contents.plantilla_id',
-            //     'plantilla_contents.personal_information_id',
-            //     'personal_informations.firstname',
-            //     'personal_informations.middlename',
-            //     'personal_informations.surname',
-            //     'personal_informations.nameextension',
-            //     'personal_informations.civilstatus',
-            //     'personal_informations.birthdate',
-            //     'personal_informations.retirement_date',
-            //     'personal_informations.status',
-            // )
-            // ->leftJoin('personal_informations', 'plantilla_contents.personal_information_id', '=', 'personal_informations.id')
-            // ->where('personal_information_id', '!=', null)
-            // ->where('plantilla_id', $plantilla->id)
-            // ->orderBy('surname')
-            // ->get();
-
             $employee = PersonalInformation::without(
                 'barcode',
                 'familybackground',
@@ -167,144 +154,7 @@ class LeaveCreditController extends Controller
      */
     public function show($id)
     {
-
-        $default_plantilla  =   Setting::without('user')->where('title', 'Default Plantilla')->first();
-        $plantilla          =   Plantilla::without('salaryproposedschedule', 'salaryauthorizedschedule')->where('year', $default_plantilla->value)->first();
-        $department_id      =   auth('api')->user()->role == 'Office User' || auth('api')->user()->role == 'Office Head'  ?
-                                UserAssignment::without('department')->where('user_id', auth('api')->user()->id)->first()->department_id : '';
-
-        $personalinformations = PersonalInformation::without(
-                'barcode',
-                'familybackground',
-                'residentialaddresstable',
-                'permanentaddresstable',
-                'children',
-                'educationalbackground',
-                'eligibilities',
-                'otherinfos',
-                'workexperiences',
-                'voluntaryworks',
-                'trainingprograms',
-                'pdsquestion'
-            )
-            ->find($id)
-            ->plantillacontents
-            ->filter(fn($e) => $e->plantilla_id == $plantilla->id)
-            ->map(fn ($e) => (object) ['position' => $e->position,  'salary' => $e->salaryauthorized])
-            ->first();
-
-        $leaveSummary = LeaveSummary::where('personal_information_id', $id)->orderBy('sort', 'ASC')->get();
-
-        $leaveCredit = DB::table('leave_credits')
-                            ->leftJoin('leave_types', 'leave_credits.leave_type_id', '=', 'leave_types.id')
-                            ->where('personal_information_id', $id)
-                            ->where(function ($query) {
-                                $query->where('leave_types.title', 'Sick Leave')
-                                ->orWhere('leave_types.title', 'Vacation Leave');
-                            })
-                            ->get();
-
-        $custom_leave = LeaveSummary::where('personal_information_id', $id)->whereNotNull('particulars->leave_type')
-                        ->where(function ($query) {
-                            $query->where('particulars->leave_type', 'PL')
-                            ->orWhere('particulars->leave_type', 'FL')
-                            ->orWhere('particulars->leave_type', 'SPL')
-                            ->orWhere('particulars->leave_type', 'SP')
-                            ->orWhere('particulars->leave_type', 'SOLO')
-                            ->orWhere('particulars->leave_type', 'UFL')
-                            ->orWhere('particulars->leave_type', 'PL');
-                        })
-                        ->get()
-                        ->map(function ($data) {
-                            $year = null;
-
-                            switch($data->period->mode) {
-                                case 1:
-                                case 4:
-                                    $year = Carbon::parse($data->period->data)->format('Y');
-                                    break;
-                                case 2:
-                                    $year = Carbon::parse($data->period->data->start)->format('Y');
-                                    break;
-                                case 3:
-                                    $year = Carbon::parse($data->period->data[0]->date)->format('Y');
-                                    break;
-                            }
-
-                            $particulars = $data->particulars;
-
-                            $particulars->year = $year;
-
-                            $data->particulars = $particulars;
-
-                            return $data->particulars;
-                        });
-
-        $violations = LeaveSummary::where('personal_information_id', $id)
-                        ->whereNotNull('particulars->leave_type')
-                        ->whereIn('particulars->leave_type', ['Undertime', 'Tardy', 'UA', 'AWOL', 'SLWOP', 'VLWOP'])
-                        ->get()
-                        ->map(function ($data) {
-                            $year = null;
-                            $month = null;
-
-                            switch($data->period->mode) {
-                                case 1:
-                                case 4:
-                                    $year = Carbon::parse($data->period->data)->format('Y');
-                                    $month = Carbon::parse($data->period->data)->format('F');
-                                    break;
-                                case 2:
-                                    $year = Carbon::parse($data->period->data->start)->format('Y');
-                                    $month = Carbon::parse($data->period->data->start)->format('F');
-                                    break;
-                                case 3:
-                                    $year = Carbon::parse($data->period->data[0]->date)->format('Y');
-                                    $month = Carbon::parse($data->period->data[0]->date)->format('F');
-                                    break;
-                            }
-
-                            $data->year = $year;
-                            $data->month = $month;
-
-                            return [
-                                'month' => $data->month,
-                                'year' => $data->year,
-                                'type' => $data->particulars->leave_type,
-                                'count' => $data->particulars->count ?? $data->particulars->days,
-                            ];
-                        });
-
-        // $vl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Vacation Leave')->first()->id)->first()->id;
-        // $sl = LeaveCredit::where('leave_type_id', LeaveType::where('title', 'Sick Leave')->first()->id)->first()->id;
-
-        $credits_anticipated = LeaveSummary::where('personal_information_id', $id)
-            ->where(function ($query) {
-                $query->whereNotNull('vl_earned')
-                ->where('vl_earned', '>', 0.0)
-                ->whereNotNull('sl_earned')
-                ->where('sl_earned', '>', 0.0)
-                ->where('sl_withpay', '=', 0.0)
-                ->where('vl_withpay', '=', 0.0);
-            })
-            ->where(function($query){
-                $query->where('period->mode', 4)
-                ->where('period->data', Carbon::now()->format('Y'));
-            })
-            ->first();
-
-        $vl = collect($leaveCredit->where('abbreviation', 'VL')->first())->put('anticipated', $credits_anticipated ? $credits_anticipated->vl_balance + 15 : null);
-        $sl = collect($leaveCredit->where('abbreviation', 'SL')->first())->put('anticipated', $credits_anticipated ? $credits_anticipated->sl_balance + 15 : null);
-
-        return [
-            'summary' => $leaveSummary,
-            'credit' => ['sl' => $sl, 'vl' => $vl],
-            'custom_leave' => LeaveSummary::countCustomLeave($custom_leave),
-            'violations' => LeaveSummary::violationCounter($violations),
-            'position' => $personalinformations->position ?? '',
-            'salary' => $personalinformations->salary ?? '',
-            'anticipated' => $credits_anticipated
-        ];
+        return response()->json($this->leaveService->getLeaveDetails($id));
     }
 
     public function getEmployeesByDepartment($id){
@@ -417,6 +267,7 @@ class LeaveCreditController extends Controller
         ->get();
 
         $correctionsCount = [];
+        $strings = [];
         $noCorrections = 0;
 
         foreach($employees as $employee){
@@ -427,18 +278,26 @@ class LeaveCreditController extends Controller
            if($employee->leavesummary){
                 foreach($employee->leavesummary->sortBy('sort') as $leave){
 
-                    $newVLBalance = round($prevVLBalance + $leave->vl_earned - $leave->vl_withpay, 3); // Correct balance calculation
-                    $newSLBalance = round($prevSLBalance + $leave->sl_earned - $leave->sl_withpay, 3); // Correct balance calculation
+                    $newVLBalance = round($prevVLBalance + $leave->vl_earned - (float)$leave->vl_withpay, 3); // Correct balance calculation
+                    $newSLBalance = round($prevSLBalance + $leave->sl_earned - (float)$leave->sl_withpay, 3); // Correct balance calculation
 
                     // Check if correction is needed
                     if ($leave->vl_balance !== $newVLBalance || $leave->sl_balance !== $newSLBalance) {
                         $corrections++;
+
+                        // LeaveSummary::find($leave->id)->update(['vl_balance' => $newVLBalance, 'sl_balance' => $newSLBalance]);
                     }
 
                     $prevVLBalance = $newVLBalance; // Carry over balance
                     $prevSLBalance = $newSLBalance; // Carry over balance
 
                 }
+
+                // $sl = LeaveType::where('abbreviation', 'SL')->first()->id;
+                // $vl = LeaveType::where('abbreviation', 'VL')->first()->id;
+
+                // $employee_vl = LeaveCredit::where('personal_information_id', $employee->id)->where('leave_type_id', $vl)->update(['balance' => $prevVLBalance]);
+                // $employee_sl = LeaveCredit::where('personal_information_id', $employee->id)->where('leave_type_id', $sl)->update(['balance' => $prevSLBalance]);
 
                 if($corrections > 0){
                     $correctionsCount[$employee->fullName] = $corrections;

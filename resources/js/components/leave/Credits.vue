@@ -28,7 +28,7 @@
                                 <button type="button" class="btn btn-warning" :disabled="selected_employee == null" @click="print_leave_card"><i class="fas fa-print"></i> Print</button>
                                 <button type="button" class="btn btn-info" @click="printByDept()">Print by Deparment <i class="fas fa-print"></i></button>
                                 <button type="button" class="btn btn-primary" :disabled="selected_employee == null" @click="[edit_mode = true, edited = true]"><i class="fas fa-edit"></i> Edit</button>
-                                <button type="button" class="btn btn-success" :disabled="edit_mode == false" @click="check_input()"><i class="fas fa-save"></i> Save</button>
+                                <button type="button" class="btn btn-success" :disabled="edit_mode == false || loading" @click="check_input()"><i class="fas fa-save"></i> Save</button>
                             </div>
                         </div>
                         <div class="col-md-12 mt-3">
@@ -39,8 +39,8 @@
                                     Civil Status: {{ selected_employee.civilstatus }} <br>
                                 </div>
                                 <div class="col-md-4">
-                                    Office: {{ position.title ?? '' }}<br>
-                                    Position: {{ dept.address ?? '' }}<br>
+                                    Office: {{ dept.address ?? '' }}<br>
+                                    Position: {{ position.title ?? '' }}<br>
                                     Salary Grade: {{ salary.grade ?? '' }}<br>
                                 </div>
                                 <div class="col-md-4">
@@ -732,7 +732,8 @@ import CreditsTable from './CreditsTable.vue'
                 vcalendar_date: null,
                 departments: [],
                 selected_dept: {},
-                employees_by_dept: {}
+                employees_by_dept: {},
+                loading: false, // disable save button when loading
             }
         },
         components: {
@@ -782,7 +783,11 @@ import CreditsTable from './CreditsTable.vue'
             },
             days: {
                 handler: function(){
-                    console.log(this.days)
+                }
+            },
+            selected_employee: {
+                handler: function(){
+                    this.edit_mode = false
                 }
             }
         },
@@ -967,22 +972,6 @@ import CreditsTable from './CreditsTable.vue'
 
             get_leave_info: function(edit){
 
-                Swal.fire({
-                    title: '<strong>LOADING...</strong>',
-                    html: 'Dont <u>reload</u> or <u>close</u> the application ...',
-                    icon: 'info',
-                    willOpen () {
-                        Swal.showLoading ()
-                    },
-                    didClose () {
-                        Swal.hideLoading()
-                    },
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        allowEnterKey: false,
-                        showConfirmButton: false
-                })
-
                 if(this.selected_employee !== null)
                 {
                     this.$Progress.start()
@@ -999,7 +988,7 @@ import CreditsTable from './CreditsTable.vue'
 
                         this.position = data.position ?? {}
 
-                        this.dept = data.position.department ?? {}
+                        this.dept = data.position?.department ?? {}
 
                         this.salary = data.salary ?? {}
 
@@ -1010,10 +999,8 @@ import CreditsTable from './CreditsTable.vue'
                             this.add_leave_data(-1)
                         }
 
-                        Swal.close()
                     })
                     .catch(e => {
-                        Swal.close()
                         console.log(e)
                     })
                 }
@@ -1167,9 +1154,11 @@ import CreditsTable from './CreditsTable.vue'
             },
 
 
-            check_input: _.debounce(function()
+            check_input: _.debounce(async function()
             {
-                this.handleCheckInput()
+                this.loading = true
+                this.validation = true
+                await this.handleCheckInput()
             }, 100),
 
             handleCheckInput: async function()
@@ -1178,8 +1167,6 @@ import CreditsTable from './CreditsTable.vue'
                     if(e.period == null || e.period.mode == null || e.period.mode == '')
                     {
                         this.validation = false
-                    }else{
-                        this.validation = true
                     }
                 })
 
@@ -1192,6 +1179,7 @@ import CreditsTable from './CreditsTable.vue'
                         icon:'error',
                         title: 'Period Empty'
                     })
+                    this.loading = false
                 }
             },
 
@@ -1227,11 +1215,12 @@ import CreditsTable from './CreditsTable.vue'
                     .then(e => {
                         this.edited = false
                         this.validation = true
-                        this.get_leave_info(true)
+                        this.loading = false
                         if(delete_save == false)
                         {
                             Swal.close()
                         }
+                        this.get_leave_info(true)
                         toast.fire({
                             icon:'success',
                             title: 'Saved'
@@ -1243,12 +1232,14 @@ import CreditsTable from './CreditsTable.vue'
                             icon:'error',
                             title: 'Something went wrong...'
                         })
+                        this.loading = false
                         console.log(e)
                     })
                 }else{
                     this.edited = false
                     this.validation = true
                     this.get_leave_info(true)
+                    this.loading = false
                     if(delete_save == false)
                     {
                         Swal.close()
