@@ -107,7 +107,7 @@
             <div class="">
                <div class="card-body login-card-body">
                   <div class="login-logo">
-                     <img src="/storage/project_files/davsur.png" alt="logo" width="120px" height="120px">
+                     <img src="/storage/project_files/davsurian.jpg" alt="logo" width="120px" height="120px">
                   </div>
                   <div class="title-container">
                      <p class="logo-title">Human Resource<br></p>
