@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <div class="col px-2">
-                            <button type="button" class="btn btn-secondary" @click="openAdvancedSearchModal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-secondary" @click="openAdvancedSearchModal">
                                 <i class="fas fa-filter"></i>
                             </button>
                             <button class="btn d-inline btn-primary" @click="print"><i class="fas fa-print"></i></button>

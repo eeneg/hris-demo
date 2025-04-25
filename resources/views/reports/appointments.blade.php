@@ -18,9 +18,9 @@
                 <div class="row mt-3 mb-5">
                     <div class="col-12 text-center">
                         <h4 class="m-0">Republic of the Philippines</h4>
-                        <h4 class="m-0 font-weight-bold">PROVINCE OF DAVAO DEL SUR</h4>
-                        <h5 class="m-0">Matti, Digos City</h5>
-                        <h4 class="m-0 font-weight-bold">Provincial Human Resource Management Office</h4>
+                        <h4 class="m-0">PROVINCE OF DAVAO DEL SUR</h4>
+                        <h5 class="m-0 font-weight-bold">Municipality of Santa Cruz</h5>
+                        <h4 class="m-0 font-weight-bold">Human Resource Management Office</h4>
                         <h1 class="m-0 font-weight-bold mt-5">"APPOINTMENT"</h1>
                     </div>
                 </div>

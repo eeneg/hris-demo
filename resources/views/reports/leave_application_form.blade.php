@@ -61,11 +61,11 @@
                     <div>
                         Republic of the Philippines
                     </div>
-                    <div style="font-weight: bold;">
+                    <div>
                         Province of Davao del Sur
                     </div>
-                    <div>
-                        Matti, Digos City
+                    <div class="font-weight-bold">
+                        Municipality of Santa Cruz
                     </div>
                 </div>
                 <div style="text-align: center; font-size: 13px;">
